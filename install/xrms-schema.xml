@@ -1,0 +1,3566 @@
+<?xml version="1.0"?>
+<schema version="0.3">
+  <table name="ControlledObject">
+    <field name="ControlledObject_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="ControlledObject_name" type="C" size="128">
+      <NOTNULL/>
+    </field>
+    <field name="on_what_table" type="C" size="128"/>
+    <field name="on_what_field" type="C" size="128"/>
+    <field name="user_field" type="C" size="32"/>
+    <field name="data_source_id" type="I" size="10">
+      <UNSIGNED/>
+    </field>
+    <index name="data_source_id">
+      <col>data_source_id</col>
+    </index>
+    <data>
+      <row><f>1</f><f>Company</f><f>companies</f><f>company_id</f><f></f><f>1</f></row>
+      <row><f>2</f><f>Contact</f><f>contacts</f><f>contact_id</f><f></f><f>1</f></row>
+      <row><f>3</f><f>Campaign</f><f>campaigns</f><f>campaign_id</f><f></f><f>1</f></row>
+      <row><f>4</f><f>Case</f><f>cases</f><f>case_id</f><f></f><f>1</f></row>
+      <row><f>5</f><f>Opportunity</f><f>opportunities</f><f>opportunity_id</f><f></f><f>1</f></row>
+      <row><f>6</f><f>Activity</f><f>activities</f><f>activity_id</f><f></f><f>1</f></row>
+      <row><f>7</f><f>File</f><f>files</f><f>file_id</f><f></f><f>1</f></row>
+      <row><f>8</f><f>Division</f><f>company_division</f><f>division_id</f><f></f><f>1</f></row>
+      <row><f>9</f><f>Administration</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>10</f><f>Email Template</f><f>email_templates</f><f>email_template_id</f><f></f><f>1</f></row>
+    </data>
+  </table>
+  <table name="ControlledObjectRelationship">
+    <field name="CORelationship_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="ChildControlledObject_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="ParentControlledObject_id" type="I" size="10">
+      <UNSIGNED/>
+    </field>
+    <field name="on_what_child_field" type="C" size="128"/>
+    <field name="on_what_parent_field" type="C" size="128"/>
+    <field name="cross_table" type="C" size="128"/>
+    <field name="singular" type="I" size="4"/>
+    <index name="ParentControlledObject_id">
+      <col>ParentControlledObject_id</col>
+    </index>
+    <index name="ChildControlledObject_id">
+      <col>ChildControlledObject_id</col>
+    </index>
+    <data>
+      <row><f>1</f><f>1</f><f></f><f></f><f></f><f></f><f>0</f></row>
+      <row><f>2</f><f>3</f><f></f><f></f><f></f><f></f><f>0</f></row>
+      <row><f>3</f><f>2</f><f>1</f><f></f><f></f><f></f><f>0</f></row>
+      <row><f>5</f><f>4</f><f>1</f><f></f><f></f><f></f><f>0</f></row>
+      <row><f>6</f><f>5</f><f>1</f><f></f><f></f><f></f><f>0</f></row>
+      <row><f>7</f><f>6</f><f>1</f><f></f><f></f><f></f><f>0</f></row>
+      <row><f>8</f><f>8</f><f>1</f><f></f><f></f><f></f><f>0</f></row>
+      <row><f>9</f><f>6</f><f>2</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>10</f><f>6</f><f>3</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>11</f><f>6</f><f>4</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>12</f><f>6</f><f>8</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>13</f><f>6</f><f>5</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>14</f><f>6</f><f>2</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>15</f><f>7</f><f>6</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>16</f><f>7</f><f>1</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>17</f><f>7</f><f>4</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>18</f><f>7</f><f>3</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>19</f><f>7</f><f>2</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>20</f><f>7</f><f>5</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>21</f><f>9</f><f></f><f></f><f></f><f></f><f>0</f></row>
+      <row><f>22</f><f>10</f><f>9</f><f></f><f></f><f></f><f></f></row>
+      <row><f>23</f><f>7</f><f>10</f><f></f><f></f><f></f><f>1</f></row>
+    </data>
+  </table>
+  <table name="GroupMember">
+    <field name="GroupMember_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="Group_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="ControlledObject_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="on_what_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="criteria_table" type="C" size="50"/>
+    <field name="criteria_resultfield" type="C" size="50"/>
+    <index name="Group_id">
+      <col>Group_id</col>
+    </index>
+    <index name="ControlledObject_id">
+      <col>ControlledObject_id</col>
+    </index>
+  </table>
+  <table name="GroupMemberCriteria">
+    <field name="GroupMemberCriteria_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="GroupMember_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="criteria_fieldname" type="C" size="60">
+      <NOTNULL/>
+    </field>
+    <field name="criteria_value" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="criteria_operator" type="C" size="8">
+      <NOTNULL/>
+      <DEFAULT value="="/>
+    </field>
+    <index name="GroupMember_id">
+      <col>GroupMember_id</col>
+    </index>
+  </table>
+  <table name="GroupUser">
+    <field name="GroupUser_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="Group_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="user_id" type="I" size="10">
+      <UNSIGNED/>
+    </field>
+    <field name="Role_id" type="I" size="10">
+      <UNSIGNED/>
+    </field>
+    <field name="ChildGroup_id" type="I" size="10">
+      <UNSIGNED/>
+    </field>
+    <index name="Group_id">
+      <col>Group_id</col>
+    </index>
+    <index name="Role_id">
+      <col>Role_id</col>
+    </index>
+    <index name="ChildGroup_id">
+      <col>ChildGroup_id</col>
+    </index>
+    <data>
+      <row><f>1</f><f>1</f><f>1</f><f>2</f><f></f></row>
+    </data>
+  </table>
+  <table name="Groups">
+    <field name="Group_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="Group_name" type="C" size="128">
+      <NOTNULL/>
+    </field>
+    <data>
+      <row><f>1</f><f>Users</f></row>
+    </data>
+  </table>
+  <table name="Permission">
+    <field name="Permission_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="Permission_name" type="C" size="64">
+      <NOTNULL/>
+    </field>
+    <field name="Permission_abbr" type="C" size="5">
+      <NOTNULL/>
+    </field>
+    <data>
+      <row><f>1</f><f>Create</f><f>C</f></row>
+      <row><f>2</f><f>Read</f><f>R</f></row>
+      <row><f>3</f><f>Update</f><f>U</f></row>
+      <row><f>4</f><f>Delete</f><f>D</f></row>
+      <row><f>5</f><f>Export</f><f>E</f></row>
+    </data>
+  </table>
+  <table name="Role">
+    <field name="Role_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="Role_name" type="C" size="128">
+      <NOTNULL/>
+    </field>
+    <data>
+      <row><f>1</f><f>User</f></row>
+      <row><f>2</f><f>Administrator</f></row>
+    </data>
+  </table>
+  <table name="RolePermission">
+    <field name="RolePermission_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="Role_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="CORelationship_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="Scope" type="C" size="5">
+      <NOTNULL/>
+      <DEFAULT value="World"/>
+    </field>
+    <field name="Permission_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="Inheritable_flag" type="I" size="4">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+    </field>
+    <index name="Role_id">
+      <col>Role_id</col>
+    </index>
+    <index name="CORelationship_id">
+      <col>CORelationship_id</col>
+    </index>
+    <index name="Permission_id">
+      <col>Permission_id</col>
+    </index>
+    <data>
+      <row><f>1</f><f>2</f><f>1</f><f>World</f><f>1</f><f>1</f></row>
+      <row><f>2</f><f>2</f><f>1</f><f>World</f><f>2</f><f>1</f></row>
+      <row><f>3</f><f>2</f><f>1</f><f>World</f><f>3</f><f>1</f></row>
+      <row><f>4</f><f>2</f><f>1</f><f>World</f><f>4</f><f>1</f></row>
+      <row><f>5</f><f>2</f><f>1</f><f>World</f><f>5</f><f>1</f></row>
+      <row><f>6</f><f>1</f><f>1</f><f>World</f><f>1</f><f>1</f></row>
+      <row><f>7</f><f>1</f><f>1</f><f>World</f><f>2</f><f>1</f></row>
+      <row><f>8</f><f>1</f><f>1</f><f>World</f><f>3</f><f>1</f></row>
+      <row><f>9</f><f>1</f><f>2</f><f>World</f><f>1</f><f>1</f></row>
+      <row><f>10</f><f>1</f><f>2</f><f>World</f><f>2</f><f>1</f></row>
+      <row><f>11</f><f>1</f><f>2</f><f>World</f><f>3</f><f>1</f></row>
+      <row><f>12</f><f>2</f><f>2</f><f>World</f><f>1</f><f>1</f></row>
+      <row><f>13</f><f>2</f><f>2</f><f>World</f><f>2</f><f>1</f></row>
+      <row><f>14</f><f>2</f><f>2</f><f>World</f><f>3</f><f>1</f></row>
+      <row><f>15</f><f>2</f><f>2</f><f>World</f><f>4</f><f>1</f></row>
+      <row><f>16</f><f>2</f><f>2</f><f>World</f><f>5</f><f>1</f></row>
+      <row><f>17</f><f>2</f><f>21</f><f>World</f><f>1</f><f>1</f></row>
+      <row><f>18</f><f>2</f><f>21</f><f>World</f><f>2</f><f>1</f></row>
+      <row><f>19</f><f>2</f><f>21</f><f>World</f><f>3</f><f>1</f></row>
+      <row><f>20</f><f>2</f><f>21</f><f>World</f><f>4</f><f>1</f></row>
+      <row><f>21</f><f>2</f><f>21</f><f>World</f><f>5</f><f>1</f></row>
+    </data>
+  </table>
+  <table name="account_statuses">
+    <field name="account_status_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="account_status_short_name" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="account_status_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="account_status_pretty_plural" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="account_status_display_html" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="account_status_record_status" type="C" size="1">
+      <DEFAULT value="a"/>
+    </field>
+    <data>
+      <row><f>1</f><f>N/A</f><f>N/A</f><f>N/A</f><f><![CDATA[<font color=#999999><b>N/A</b></font>]]></f><f>a</f></row>
+      <row><f>2</f><f>Closed</f><f>Closed</f><f>Closed</f><f><![CDATA[<font color=#cc0000><b>Closed</b></font>]]></f><f>a</f></row>
+      <row><f>3</f><f>Hold</f><f>Hold</f><f>Hold</f><f><![CDATA[<font color=#ff9933><b>Hold</b></font>]]></f><f>a</f></row>
+      <row><f>4</f><f>Approved</f><f>Approved</f><f>Approved</f><f><![CDATA[<font color=#009900><b>Approved</b></font>]]></f><f>a</f></row>
+    </data>
+  </table>
+  <table name="activities">
+    <field name="activity_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="activity_type_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="user_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="company_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="contact_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="address_id" type="I" size="10">
+      <UNSIGNED/>
+    </field>
+    <field name="on_what_table" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="on_what_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="on_what_status" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="activity_template_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="activity_title" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="activity_description" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="entered_at" type="T"/>
+    <field name="entered_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="last_modified_at" type="T"/>
+    <field name="last_modified_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="thread_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="followup_from_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="scheduled_at" type="T"/>
+    <field name="ends_at" type="T"/>
+    <field name="completed_at" type="T"/>
+    <field name="completed_by" type="I" size="11"/>
+    <field name="activity_status" type="C" size="1">
+      <DEFAULT value="o"/>
+    </field>
+    <field name="activity_record_status" type="C" size="1">
+      <DEFAULT value="a"/>
+    </field>
+    <field name="activity_recurrence_id" type="I" size="11">
+      <DEFAULT value="0"/>
+    </field>
+    <field name="activity_resolution_type_id" type="I" size="11"/>
+    <field name="activity_priority_id" type="I" size="11"/>
+    <field name="resolution_description" type="X"/>
+  </table>
+  <table name="activities_recurrence">
+    <field name="activity_recurrence_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="activity_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="start_datetime" type="T"/>
+    <field name="end_datetime" type="T"/>
+    <field name="end_count" type="I" size="11">
+      <DEFAULT value="0"/>
+    </field>
+    <field name="frequency" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="period" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="day_offset" type="I" size="11">
+      <DEFAULT value="0"/>
+    </field>
+    <field name="month_offset" type="I" size="11">
+      <DEFAULT value="0"/>
+    </field>
+    <field name="week_offset" type="I" size="11">
+      <DEFAULT value="0"/>
+    </field>
+    <field name="week_days" type="C" size="100"/>
+  </table>
+  <table name="activity_participant_positions">
+    <field name="activity_participant_position_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="activity_type_id" type="I" size="10">
+      <UNSIGNED/>
+    </field>
+    <field name="participant_position_name" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="global_flag" type="I" size="3">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <index name="activity_type_id">
+      <col>activity_type_id</col>
+    </index>
+    <data>
+      <row><f>1</f><f></f><f>Participant</f><f>1</f></row>
+      <row><f>2</f><f>1</f><f>Caller</f><f>0</f></row>
+      <row><f>3</f><f>2</f><f>Caller</f><f>0</f></row>
+      <row><f>4</f><f>3</f><f>To</f><f>0</f></row>
+      <row><f>5</f><f>3</f><f>From</f><f>0</f></row>
+      <row><f>6</f><f>3</f><f>CC</f><f>0</f></row>
+      <row><f>7</f><f>3</f><f>BCC</f><f>0</f></row>
+      <row><f>8</f><f>4</f><f>To</f><f>0</f></row>
+      <row><f>9</f><f>4</f><f>From</f><f>0</f></row>
+      <row><f>10</f><f>4</f><f>CC</f><f>0</f></row>
+      <row><f>11</f><f>4</f><f>BCC</f><f>0</f></row>
+      <row><f>12</f><f>5</f><f>To</f><f>0</f></row>
+      <row><f>13</f><f>5</f><f>From</f><f>0</f></row>
+      <row><f>14</f><f>6</f><f>To</f><f>0</f></row>
+      <row><f>15</f><f>6</f><f>From</f><f>0</f></row>
+      <row><f>16</f><f>7</f><f>To</f><f>0</f></row>
+      <row><f>17</f><f>7</f><f>From</f><f>0</f></row>
+      <row><f>18</f><f>8</f><f>To</f><f>0</f></row>
+      <row><f>19</f><f>8</f><f>From</f><f>0</f></row>
+    </data>
+  </table>
+  <table name="activity_participants">
+    <field name="activity_participant_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="activity_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="contact_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="activity_participant_position_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="ap_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <index name="activity_id">
+      <col>activity_id</col>
+    </index>
+    <index name="contact_id">
+      <col>contact_id</col>
+    </index>
+    <index name="activity_participant_position_id">
+      <col>activity_participant_position_id</col>
+    </index>
+  </table>
+  <table name="activity_resolution_types">
+    <field name="activity_resolution_type_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="resolution_short_name" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="resolution_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="resolution_type_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <field name="sort_order" type="I" size="4">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <data>
+      <row><f>1</f><f>Resolved</f><f>Closed/Resolved</f><f>a</f><f>1</f></row>
+      <row><f>2</f><f>Unresolved</f><f>Closed/Unresolved</f><f>a</f><f>2</f></row>
+      <row><f>3</f><f>Obsolete</f><f>Obsolete/Out of Date</f><f>a</f><f>3</f></row>
+      <row><f>4</f><f>Cancel</f><f>Cancelled</f><f>a</f><f>4</f></row>
+      <row><f>5</f><f>Complete</f><f>Completed</f><f>a</f><f>5</f></row>
+      <row><f>6</f><f>Duplicate</f><f>Closed/Duplicate</f><f>a</f><f>2</f></row>
+    </data>
+  </table>
+  <table name="activity_templates">
+    <field name="activity_template_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="role_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="activity_type_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="on_what_table" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="on_what_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="activity_title" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="activity_description" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="default_text" type="X"/>
+    <field name="duration" type="C" size="20">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+    </field>
+    <field name="sort_order" type="I" size="4">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+    </field>
+    <field name="activity_template_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+  </table>
+  <table name="activity_types">
+    <field name="activity_type_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="activity_type_short_name" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="activity_type_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="activity_type_pretty_plural" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="activity_type_display_html" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="activity_type_score_adjustment" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="activity_type_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <field name="sort_order" type="I" size="4">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+    </field>
+    <field name="user_editable_flag" type="I" size="4">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+    </field>
+    <data>
+      <row><f>1</f><f>CTO</f><f>call to</f><f>calls to</f><f>call to</f><f>0</f><f>a</f><f>1</f><f>0</f></row>
+      <row><f>2</f><f>CFR</f><f>call from</f><f>calls from</f><f>call from</f><f>0</f><f>a</f><f>2</f><f>0</f></row>
+      <row><f>3</f><f>ETO</f><f>e-mail to</f><f>e-mails to</f><f>e-mail to</f><f>0</f><f>a</f><f>3</f><f>0</f></row>
+      <row><f>4</f><f>EFR</f><f>e-mail from</f><f>e-mails from</f><f>e-mail from</f><f>0</f><f>a</f><f>4</f><f>0</f></row>
+      <row><f>5</f><f>FTO</f><f>fax to</f><f>faxes to</f><f>fax to</f><f>0</f><f>a</f><f>5</f><f>0</f></row>
+      <row><f>6</f><f>FFR</f><f>fax from</f><f>faxes from</f><f>fax from</f><f>0</f><f>a</f><f>6</f><f>0</f></row>
+      <row><f>7</f><f>LTT</f><f>letter to</f><f>letter to</f><f>letter to</f><f>0</f><f>a</f><f>7</f><f>0</f></row>
+      <row><f>8</f><f>LTF</f><f>letter from</f><f>letter from</f><f>letter from</f><f>0</f><f>a</f><f>8</f><f>0</f></row>
+      <row><f>9</f><f>INT</f><f>internal</f><f>internal</f><f>internal</f><f>0</f><f>a</f><f>9</f><f>0</f></row>
+      <row><f>10</f><f>PRO</f><f>process</f><f>process</f><f>process</f><f>0</f><f>a</f><f>10</f><f>0</f></row>
+      <row><f>11</f><f>SYS</f><f>system</f><f>system</f><f>system</f><f>0</f><f>a</f><f>11</f><f>0</f></row>
+    </data>
+  </table>
+  <table name="address_format_strings">
+    <field name="address_format_string_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="address_format_string" type="C" size="255"/>
+    <field name="address_format_string_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <data>
+      <row><f>1</f><f><![CDATA[$lines<br>$city, $province $postal_code<br>$country]]></f><f>a</f></row>
+      <row><f>2</f><f><![CDATA[$lines<br>$postal_code $city<br>$province<br>$country]]></f><f>a</f></row>
+      <row><f>3</f><f><![CDATA[$lines<br>$postal_code $city $province<br>$country]]></f><f>a</f></row>
+      <row><f>4</f><f><![CDATA[$lines<br>$city $province $postal_code<br>$country]]></f><f>a</f></row>
+      <row><f>5</f><f><![CDATA[$lines<br>$postal_code $province<br>$city<br>$country]]></f><f>a</f></row>
+      <row><f>6</f><f><![CDATA[$lines<br>$postal_code $city<br>$country]]></f><f>a</f></row>
+      <row><f>7</f><f><![CDATA[$postal_code $city<br>$lines<br>$country]]></f><f>a</f></row>
+      <row><f>8</f><f><![CDATA[$lines<br>$province<br>$city $postal_code<br>$country]]></f><f>a</f></row>
+      <row><f>9</f><f><![CDATA[$lines<br>$city<br>$province $postal_code<br>$country]]></f><f>a</f></row>
+      <row><f>10</f><f><![CDATA[$postal_code<br>$province $city<br>$lines<br>$country]]></f><f>a</f></row>
+      <row><f>11</f><f><![CDATA[$lines<br>$city $province<br>$postal_code<br>$country]]></f><f>a</f></row>
+      <row><f>12</f><f><![CDATA[$country $postal_code<br>$province $city<br>$lines]]></f><f>a</f></row>
+      <row><f>13</f><f><![CDATA[$lines<br>$city<br>$province<br>$postal_code<br>$country]]></f><f>a</f></row>
+      <row><f>14</f><f><![CDATA[$lines<br>$city $postal_code<br>$country]]></f><f>a</f></row>
+      <row><f>15</f><f><![CDATA[$lines<br>$city, $province $postal_code<br>$country]]></f><f>a</f></row>
+    </data>
+  </table>
+  <table name="address_types">
+    <field name="address_type_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="address_type" type="C" size="20">
+      <NOTNULL/>
+    </field>
+    <field name="address_type_sort_value" type="C" size="20">
+      <NOTNULL/>
+    </field>
+    <data>
+      <row><f>1</f><f>unknown</f><f>100</f></row>
+      <row><f>2</f><f>commercial</f><f>200</f></row>
+      <row><f>3</f><f>residential</f><f>300</f></row>
+    </data>
+  </table>
+  <table name="addresses">
+    <field name="address_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="company_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="country_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+    </field>
+    <field name="address_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="address_body" type="C" size="255">
+      <NOTNULL/>
+    </field>
+    <field name="line1" type="C" size="255">
+      <NOTNULL/>
+    </field>
+    <field name="line2" type="C" size="255">
+      <NOTNULL/>
+    </field>
+    <field name="city" type="C" size="255">
+      <NOTNULL/>
+    </field>
+    <field name="province" type="C" size="255">
+      <NOTNULL/>
+    </field>
+    <field name="postal_code" type="C" size="255">
+      <NOTNULL/>
+    </field>
+    <field name="address_type" type="C" size="20">
+      <NOTNULL/>
+      <DEFAULT value="unknown"/>
+    </field>
+    <field name="use_pretty_address" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="f"/>
+    </field>
+    <field name="offset" type="N"/>
+    <field name="daylight_savings_id" type="I" size="10">
+      <UNSIGNED/>
+    </field>
+    <field name="address_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <index name="company_id">
+      <col>company_id</col>
+    </index>
+    <index name="city">
+      <col>city</col>
+    </index>
+    <index name="province">
+      <col>province</col>
+    </index>
+    <index name="address_record_status">
+      <col>address_record_status</col>
+    </index>
+  </table>
+  <table name="audit_items">
+    <field name="audit_item_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="user_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="audit_item_type" type="C" size="50"/>
+    <field name="on_what_table" type="C" size="100"/>
+    <field name="on_what_id" type="C" size="10"/>
+    <field name="audit_item_timestamp" type="T"/>
+    <field name="audit_item_record_status" type="C" size="1">
+      <DEFAULT value="a"/>
+    </field>
+  </table>
+  <table name="campaign_statuses">
+    <field name="campaign_status_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="campaign_status_short_name" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="campaign_status_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="campaign_status_pretty_plural" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="campaign_status_display_html" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="campaign_status_record_status" type="C" size="3">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <data>
+      <row><f>1</f><f>NEW</f><f>New</f><f>New</f><f>New</f><f>a</f></row>
+      <row><f>2</f><f>PLAN</f><f>Planning</f><f>Planning</f><f>Planning</f><f>a</f></row>
+      <row><f>3</f><f>ACT</f><f>Active</f><f>Active</f><f>Active</f><f>a</f></row>
+      <row><f>4</f><f>CLO</f><f>Closed</f><f>Closed</f><f>Closed</f><f>a</f></row>
+    </data>
+  </table>
+  <table name="campaign_types">
+    <field name="campaign_type_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="campaign_type_short_name" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="campaign_type_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="campaign_type_pretty_plural" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="campaign_type_display_html" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="campaign_type_record_status" type="C" size="3">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <data>
+      <row><f>1</f><f>OTH</f><f>Other</f><f>Other</f><f>Other</f><f>a</f></row>
+      <row><f>2</f><f>EML</f><f>E-Mail</f><f>E-Mail</f><f>E-Mail</f><f>a</f></row>
+      <row><f>3</f><f>TEL</f><f>Phone</f><f>Phone</f><f>Phone</f><f>a</f></row>
+      <row><f>4</f><f>MAIL</f><f>Mail</f><f>Mail</f><f>Mail</f><f>a</f></row>
+      <row><f>5</f><f>EVT</f><f>Event</f><f>Event</f><f>Event</f><f>a</f></row>
+      <row><f>6</f><f>MAG</f><f>Magazine</f><f>Magazine</f><f>Magazine</f><f>a</f></row>
+      <row><f>7</f><f>TV</f><f>Television</f><f>Television</f><f>Television</f><f>a</f></row>
+    </data>
+  </table>
+  <table name="campaigns">
+    <field name="campaign_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="campaign_type_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="campaign_status_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="user_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="campaign_title" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="campaign_description" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="starts_at" type="T"/>
+    <field name="ends_at" type="T"/>
+    <field name="cost" type="N" size="8">
+      <NOTNULL/>
+      <DEFAULT value="0.01"/>
+    </field>
+    <field name="entered_at" type="T"/>
+    <field name="entered_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="last_modified_at" type="T"/>
+    <field name="last_modified_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="campaign_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+  </table>
+  <table name="case_priorities">
+    <field name="case_priority_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="case_priority_short_name" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="case_priority_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="case_priority_pretty_plural" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="case_priority_display_html" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="case_priority_score_adjustment" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="case_priority_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <data>
+      <row><f>1</f><f>CRIT</f><f>Critical</f><f>Critical</f><f>Critical</f><f>0</f><f>a</f></row>
+      <row><f>2</f><f>HIGH</f><f>High</f><f>High</f><f>High</f><f>0</f><f>a</f></row>
+      <row><f>3</f><f>MED</f><f>Medium</f><f>Medium</f><f>Medium</f><f>0</f><f>a</f></row>
+      <row><f>4</f><f>LOW</f><f>Low</f><f>Low</f><f>Low</f><f>0</f><f>a</f></row>
+    </data>
+  </table>
+  <table name="case_statuses">
+    <field name="case_status_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="sort_order" type="I" size="4">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+    </field>
+    <field name="status_open_indicator" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="o"/>
+    </field>
+    <field name="case_status_short_name" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="case_status_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="case_status_pretty_plural" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="case_status_display_html" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="case_status_long_desc" type="C" size="200">
+      <NOTNULL/>
+    </field>
+    <field name="case_type_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+    </field>
+    <field name="case_status_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <data>
+      <row><f>1</f><f>1</f><f>o</f><f>NEW</f><f>New</f><f>New</f><f>New</f><f></f><f>1</f><f>a</f></row>
+      <row><f>2</f><f>2</f><f>o</f><f>OPEN</f><f>Open</f><f>Open</f><f>Open</f><f></f><f>1</f><f>a</f></row>
+      <row><f>3</f><f>3</f><f>o</f><f>PRO</f><f>In Progress</f><f>In Progress</f><f>In Progress</f><f></f><f>1</f><f>a</f></row>
+      <row><f>4</f><f>4</f><f>c</f><f>FIN</f><f>Finished</f><f>Finished</f><f>Finished</f><f></f><f>1</f><f>a</f></row>
+      <row><f>5</f><f>5</f><f>c</f><f>CLO</f><f>Closed</f><f>Closed</f><f>Closed</f><f></f><f>1</f><f>a</f></row>
+    </data>
+  </table>
+  <table name="case_types">
+    <field name="case_type_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="case_type_short_name" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="case_type_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="case_type_pretty_plural" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="case_type_display_html" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="case_type_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <data>
+      <row><f>1</f><f>HELP</f><f>Help Item</f><f>Help Items</f><f>Help Item</f><f>a</f></row>
+      <row><f>2</f><f>BUG</f><f>Bug</f><f>Bugs</f><f>Bug</f><f>a</f></row>
+      <row><f>3</f><f>RFE</f><f>Feature Request</f><f>Feature Requests</f><f>Feature Request</f><f>a</f></row>
+    </data>
+  </table>
+  <table name="cases">
+    <field name="case_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="case_type_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="case_status_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="case_priority_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="company_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="division_id" type="I" size="11"/>
+    <field name="contact_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="user_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="priority" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="case_title" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="case_description" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="due_at" type="T"/>
+    <field name="entered_at" type="T"/>
+    <field name="entered_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="last_modified_at" type="T"/>
+    <field name="last_modified_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="owned_at" type="T"/>
+    <field name="owned_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="closed_at" type="T"/>
+    <field name="closed_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="case_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+  </table>
+  <table name="categories">
+    <field name="category_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="category_short_name" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="category_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="category_pretty_plural" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="category_display_html" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="category_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <data>
+      <row><f>1</f><f>TEST1</f><f>Test Category 1</f><f>Test Category 1</f><f>Test Category 1</f><f>a</f></row>
+      <row><f>2</f><f>TEST2</f><f>Test Category 2</f><f>Test Category 2</f><f>Test Category 2</f><f>a</f></row>
+      <row><f>3</f><f>TEST3</f><f>Test Category 3</f><f>Test Category 3</f><f>Test Category 3</f><f>a</f></row>
+    </data>
+  </table>
+  <table name="category_category_scope_map">
+    <field name="category_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="category_scope_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <data>
+      <row><f>1</f><f>1</f></row>
+      <row><f>1</f><f>2</f></row>
+      <row><f>1</f><f>3</f></row>
+      <row><f>1</f><f>4</f></row>
+      <row><f>1</f><f>5</f></row>
+      <row><f>2</f><f>1</f></row>
+      <row><f>2</f><f>2</f></row>
+      <row><f>2</f><f>3</f></row>
+      <row><f>2</f><f>4</f></row>
+      <row><f>2</f><f>5</f></row>
+      <row><f>3</f><f>1</f></row>
+      <row><f>3</f><f>2</f></row>
+      <row><f>3</f><f>3</f></row>
+      <row><f>3</f><f>4</f></row>
+      <row><f>3</f><f>5</f></row>
+    </data>
+  </table>
+  <table name="category_scopes">
+    <field name="category_scope_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="category_scope_short_name" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="category_scope_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="category_scope_pretty_plural" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="category_scope_display_html" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="on_what_table" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="category_scope_record_status" type="C" size="1">
+      <DEFAULT value="a"/>
+    </field>
+    <data>
+      <row><f>1</f><f>COMP</f><f>Company</f><f>Companies</f><f>Company</f><f>companies</f><f>a</f></row>
+      <row><f>2</f><f>CONT</f><f>Contact</f><f>Contacts</f><f>Contact</f><f>contacts</f><f>a</f></row>
+      <row><f>3</f><f>OPP</f><f>Opportunity</f><f>Opportunities</f><f>Opportunity</f><f>opportunities</f><f>a</f></row>
+      <row><f>4</f><f>CASE</f><f>Case</f><f>Cases</f><f>Case</f><f>cases</f><f>a</f></row>
+      <row><f>5</f><f>CAMP</f><f>Campaign</f><f>Campaigns</f><f>Campaign</f><f>campaigns</f><f>a</f></row>
+    </data>
+  </table>
+  <table name="companies">
+    <field name="company_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="user_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="company_source_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="industry_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="crm_status_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="rating_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="account_status_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="company_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="company_code" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="legal_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="tax_id" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="profile" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="phone" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="phone2" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="fax" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="url" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="employees" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="revenue" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="credit_limit" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="terms" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="entered_at" type="T"/>
+    <field name="entered_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="last_modified_at" type="T"/>
+    <field name="last_modified_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="default_primary_address" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="default_billing_address" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="default_shipping_address" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="default_payment_address" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="custom1" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="custom2" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="custom3" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="custom4" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="extref1" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="extref2" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="extref3" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="company_record_status" type="C" size="1">
+      <DEFAULT value="a"/>
+    </field>
+    <index name="company_record_status">
+      <col>company_record_status</col>
+    </index>
+  </table>
+  <table name="company_division">
+    <field name="division_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="company_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="address_id" type="I" size="11"/>
+    <field name="user_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="company_source_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="industry_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="division_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="description" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="entered_at" type="T"/>
+    <field name="entered_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="last_modified_at" type="T"/>
+    <field name="last_modified_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="custom1" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="custom2" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="custom3" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="custom4" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="division_record_status" type="C" size="1">
+      <DEFAULT value="a"/>
+    </field>
+  </table>
+  <table name="company_former_names">
+    <field name="company_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="namechange_at" type="T">
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="former_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="description" type="C" size="100"/>
+    <index name="company_id">
+      <col>company_id</col>
+    </index>
+  </table>
+  <table name="company_relationship">
+    <field name="company_from_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="relationship_type" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="company_to_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="established_at" type="T">
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <index name="company_from_id">
+      <col>company_from_id</col>
+      <col>company_to_id</col>
+    </index>
+  </table>
+  <table name="company_sources">
+    <field name="company_source_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="company_source_short_name" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="company_source_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="company_source_pretty_plural" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="company_source_display_html" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="company_source_record_status" type="C" size="1">
+      <DEFAULT value="a"/>
+    </field>
+    <field name="company_source_score_adjustment" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <data>
+      <row><f>1</f><f>OTH</f><f>Other</f><f>Other</f><f>Other</f><f>a</f><f>0</f></row>
+      <row><f>2</f><f>ADV</f><f>Advertisement</f><f>Advertisements</f><f>Advertisement</f><f>a</f><f>0</f></row>
+      <row><f>3</f><f>DM</f><f>Direct Mail</f><f>Direct Mail</f><f>Direct Mail</f><f>a</f><f>0</f></row>
+      <row><f>4</f><f>RAD</f><f>Radio</f><f>Radio</f><f>Radio</f><f>a</f><f>0</f></row>
+      <row><f>5</f><f>SE</f><f>Search Engine</f><f>Search Engines</f><f>Search Engine</f><f>a</f><f>0</f></row>
+      <row><f>6</f><f>SEM</f><f>Seminar</f><f>Seminars</f><f>Seminar</f><f>a</f><f>0</f></row>
+      <row><f>7</f><f>TEL</f><f>Telemarketing</f><f>Telemarketings</f><f>Telemarketing</f><f>a</f><f>0</f></row>
+      <row><f>8</f><f>TRD</f><f>Trade Show</f><f>Trade Shows</f><f>Trade Show</f><f>a</f><f>0</f></row>
+      <row><f>9</f><f>WEB</f><f>Web Site</f><f>Web Sites</f><f>Web Site</f><f>a</f><f>0</f></row>
+      <row><f>10</f><f>WOM</f><f>Word of Mouth</f><f>Word of Mouth</f><f>Word of Mouth</f><f>a</f><f>0</f></row>
+    </data>
+  </table>
+  <table name="company_types">
+    <field name="company_type_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="company_type_short_name" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="company_type_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="company_type_pretty_plural" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="company_type_display_html" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="company_type_record_status" type="C" size="1">
+      <DEFAULT value="a"/>
+    </field>
+    <data>
+      <row><f>1</f><f>CUST</f><f>Customer</f><f>Customers</f><f>Customer</f><f>a</f></row>
+      <row><f>2</f><f>VEND</f><f>Vendor</f><f>Vendors</f><f>Vendor</f><f>a</f></row>
+      <row><f>3</f><f>PART</f><f>Partner</f><f>Partners</f><f>Partner</f><f>a</f></row>
+      <row><f>4</f><f>COMP</f><f>Competitor</f><f>Competitors</f><f>Competitor</f><f>a</f></row>
+      <row><f>5</f><f>SPEC</f><f>Special</f><f>Special</f><f>Special</f><f>a</f></row>
+    </data>
+  </table>
+  <table name="contact_former_companies">
+    <field name="cfc_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="contact_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="companychange_at" type="T">
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="former_company_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <index name="contact_id">
+      <col>contact_id</col>
+    </index>
+    <index name="former_company_id">
+      <col>former_company_id</col>
+    </index>
+  </table>
+  <table name="contacts">
+    <field name="contact_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="company_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="division_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="address_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+    </field>
+    <field name="home_address_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+    </field>
+    <field name="salutation" type="C" size="20">
+      <NOTNULL/>
+    </field>
+    <field name="last_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="first_names" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="gender" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="u"/>
+    </field>
+    <field name="date_of_birth" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="summary" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="title" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="description" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="email" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="email_status" type="C" size="1">
+      <DEFAULT value="a"/>
+    </field>
+    <field name="work_phone" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="work_phone_ext" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="cell_phone" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="home_phone" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="fax" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="aol_name" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="yahoo_name" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="msn_name" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="interests" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="profile" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="custom1" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="custom2" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="custom3" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="custom4" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="entered_at" type="T"/>
+    <field name="entered_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="last_modified_at" type="T"/>
+    <field name="last_modified_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="contact_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <index name="company_id">
+      <col>company_id</col>
+    </index>
+    <index name="contact_record_status">
+      <col>contact_record_status</col>
+    </index>
+  </table>
+  <table name="countries">
+    <field name="country_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="address_format_string_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+    </field>
+    <field name="country_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="un_code" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="iso_code1" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="iso_code2" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="iso_code3" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="telephone_code" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="country_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <field name="phone_format" type="C" size="25">
+      <NOTNULL/>
+    </field>
+    <data>
+      <row><f>1</f><f>1</f><f></f><f></f><f></f><f></f><f></f><f></f><f>a</f><f></f></row>
+      <row><f>2</f><f>1</f><f>Afghanistan</f><f>004</f><f></f><f>AF</f><f>AFG</f><f>93</f><f>a</f><f></f></row>
+      <row><f>3</f><f>1</f><f>Albania</f><f>008</f><f></f><f>AL</f><f>ALB</f><f>355</f><f>a</f><f></f></row>
+      <row><f>4</f><f>1</f><f>Algeria</f><f>012</f><f></f><f>DZ</f><f>DZA</f><f>213</f><f>a</f><f></f></row>
+      <row><f>5</f><f>1</f><f>American Samoa</f><f>016</f><f></f><f>AS</f><f>ASM</f><f>684</f><f>a</f><f></f></row>
+      <row><f>6</f><f>1</f><f>Andorra</f><f>020</f><f></f><f>AD</f><f>AND</f><f>376</f><f>a</f><f></f></row>
+      <row><f>7</f><f>1</f><f>Angola</f><f>024</f><f></f><f>AO</f><f>AGO</f><f>244</f><f>a</f><f></f></row>
+      <row><f>8</f><f>1</f><f>Anguilla</f><f>660</f><f></f><f>AI</f><f>AIA</f><f>1 264</f><f>a</f><f></f></row>
+      <row><f>9</f><f>1</f><f>Antarctica</f><f>010</f><f></f><f>AQ</f><f>ATA</f><f>672</f><f>a</f><f></f></row>
+      <row><f>10</f><f>1</f><f>Antigua and Barbuda</f><f>028</f><f></f><f>AG</f><f>ATG</f><f>1 268</f><f>a</f><f></f></row>
+      <row><f>11</f><f>2</f><f>Argentina</f><f>032</f><f></f><f>AR</f><f>ARG</f><f>54</f><f>a</f><f></f></row>
+      <row><f>12</f><f>1</f><f>Armenia</f><f>051</f><f></f><f>AM</f><f>ARM</f><f>374</f><f>a</f><f></f></row>
+      <row><f>13</f><f>1</f><f>Aruba</f><f>533</f><f></f><f>AW</f><f>ABW</f><f>297</f><f>a</f><f></f></row>
+      <row><f>14</f><f>4</f><f>Australia</f><f>036</f><f></f><f>AU</f><f>AUS</f><f>61</f><f>a</f><f></f></row>
+      <row><f>15</f><f>6</f><f>Austria</f><f>040</f><f></f><f>AT</f><f>AUT</f><f>43</f><f>a</f><f></f></row>
+      <row><f>16</f><f>1</f><f>Azerbaijan</f><f>031</f><f></f><f>AZ</f><f>AZE</f><f>994</f><f>a</f><f></f></row>
+      <row><f>17</f><f>1</f><f>Bahamas</f><f>044</f><f></f><f>BS</f><f>BHS</f><f>1 242</f><f>a</f><f></f></row>
+      <row><f>18</f><f>6</f><f>Bahrain</f><f>048</f><f></f><f>BH</f><f>BHR</f><f>973</f><f>a</f><f></f></row>
+      <row><f>19</f><f>1</f><f>Bangladesh</f><f>050</f><f></f><f>BD</f><f>BGD</f><f>880</f><f>a</f><f></f></row>
+      <row><f>20</f><f>1</f><f>Barbados</f><f>052</f><f></f><f>BB</f><f>BRB</f><f>1 246</f><f>a</f><f></f></row>
+      <row><f>21</f><f>1</f><f>Belarus</f><f>112</f><f></f><f>BY</f><f>BLR</f><f>375</f><f>a</f><f></f></row>
+      <row><f>22</f><f>6</f><f>Belgium</f><f>056</f><f></f><f>BE</f><f>BEL</f><f>32</f><f>a</f><f></f></row>
+      <row><f>23</f><f>1</f><f>Belize</f><f>084</f><f></f><f>BZ</f><f>BLZ</f><f>501</f><f>a</f><f></f></row>
+      <row><f>24</f><f>1</f><f>Benin</f><f>204</f><f></f><f>BJ</f><f>BEN</f><f>229</f><f>a</f><f></f></row>
+      <row><f>25</f><f>1</f><f>Bermuda</f><f>060</f><f></f><f>BM</f><f>BMU</f><f>1 441</f><f>a</f><f></f></row>
+      <row><f>26</f><f>1</f><f>Bhutan</f><f>064</f><f></f><f>BT</f><f>BTN</f><f>975</f><f>a</f><f></f></row>
+      <row><f>27</f><f>1</f><f>Bolivia</f><f>068</f><f></f><f>BO</f><f>BOL</f><f>591</f><f>a</f><f></f></row>
+      <row><f>28</f><f>6</f><f>Bosnia and Herzegovina</f><f>070</f><f></f><f>BA</f><f>BIH</f><f>387</f><f>a</f><f></f></row>
+      <row><f>29</f><f>1</f><f>Botswana</f><f>072</f><f></f><f>BW</f><f>BWA</f><f>267</f><f>a</f><f></f></row>
+      <row><f>30</f><f>3</f><f>Brazil</f><f>076</f><f></f><f>BR</f><f>BRA</f><f>55</f><f>a</f><f></f></row>
+      <row><f>31</f><f>1</f><f>British Virgin Islands</f><f>092</f><f></f><f>VG</f><f>VGB</f><f>1 284</f><f>a</f><f></f></row>
+      <row><f>32</f><f>1</f><f>Brunei Darussalam</f><f>096</f><f></f><f>BN</f><f>BRN</f><f>673</f><f>a</f><f></f></row>
+      <row><f>33</f><f>6</f><f>Bulgaria</f><f>100</f><f></f><f>BG</f><f>BGR</f><f>359</f><f>a</f><f></f></row>
+      <row><f>34</f><f>1</f><f>Burkina Faso</f><f>854</f><f></f><f>BF</f><f>BFA</f><f>226</f><f>a</f><f></f></row>
+      <row><f>35</f><f>1</f><f>Burundi</f><f>108</f><f></f><f>BI</f><f>BDI</f><f>257</f><f>a</f><f></f></row>
+      <row><f>36</f><f>1</f><f>Cambodia</f><f>116</f><f></f><f>KH</f><f>KHM</f><f>855</f><f>a</f><f></f></row>
+      <row><f>37</f><f>1</f><f>Cameroon</f><f>120</f><f></f><f>CM</f><f>CMR</f><f>237</f><f>a</f><f></f></row>
+      <row><f>38</f><f>4</f><f>Canada</f><f>124</f><f></f><f>CA</f><f>CAN</f><f>1</f><f>a</f><f></f></row>
+      <row><f>39</f><f>1</f><f>Cape Verde</f><f>132</f><f></f><f>CV</f><f>CPV</f><f>238</f><f>a</f><f></f></row>
+      <row><f>40</f><f>1</f><f>Cayman Islands</f><f>136</f><f></f><f>KY</f><f>CYM</f><f>1 345</f><f>a</f><f></f></row>
+      <row><f>41</f><f>1</f><f>Central African Republic</f><f>140</f><f></f><f>CF</f><f>CAF</f><f>236</f><f>a</f><f></f></row>
+      <row><f>42</f><f>1</f><f>Chad</f><f>148</f><f></f><f>TD</f><f>TCD</f><f>235</f><f>a</f><f></f></row>
+      <row><f>43</f><f>1</f><f>Chile</f><f>152</f><f></f><f>CL</f><f>CHL</f><f>56</f><f>a</f><f></f></row>
+      <row><f>44</f><f>3</f><f>China</f><f>156</f><f></f><f>CN</f><f>CHN</f><f>86</f><f>a</f><f></f></row>
+      <row><f>45</f><f>1</f><f>Christmas Island</f><f>162</f><f></f><f>CX</f><f>CXR</f><f>61</f><f>a</f><f></f></row>
+      <row><f>46</f><f>1</f><f>Cocos (Keeling) Islands</f><f>166</f><f></f><f>CC</f><f>CCK</f><f>61</f><f>a</f><f></f></row>
+      <row><f>47</f><f>1</f><f>Colombia</f><f>170</f><f></f><f>CO</f><f>COL</f><f>57</f><f>a</f><f></f></row>
+      <row><f>48</f><f>1</f><f>Comoros</f><f>174</f><f></f><f>KM</f><f>COM</f><f>269</f><f>a</f><f></f></row>
+      <row><f>49</f><f>1</f><f>Congo</f><f>178</f><f></f><f>CG</f><f>COG</f><f>242</f><f>a</f><f></f></row>
+      <row><f>50</f><f>1</f><f>Cook Islands</f><f>184</f><f></f><f>CK</f><f>COK</f><f>682</f><f>a</f><f></f></row>
+      <row><f>51</f><f>1</f><f>Costa Rica</f><f>188</f><f></f><f>CR</f><f>CRI</f><f>506</f><f>a</f><f></f></row>
+      <row><f>52</f><f>1</f><f><![CDATA[Côte d’Ivoire]]></f><f>384</f><f></f><f>CI</f><f>CIV</f><f>225</f><f>a</f><f></f></row>
+      <row><f>53</f><f>6</f><f>Croatia</f><f>191</f><f></f><f>HR</f><f>HRV</f><f>385</f><f>a</f><f></f></row>
+      <row><f>54</f><f>1</f><f>Cuba</f><f>192</f><f></f><f>CU</f><f>CUB</f><f>53</f><f>a</f><f></f></row>
+      <row><f>55</f><f>1</f><f>Cyprus</f><f>196</f><f></f><f>CY</f><f>CYP</f><f>357</f><f>a</f><f></f></row>
+      <row><f>56</f><f>6</f><f>Czech Republic</f><f>203</f><f></f><f>CZ</f><f>CZE</f><f>420</f><f>a</f><f></f></row>
+      <row><f>57</f><f>1</f><f>Democratic People's Republic of Korea</f><f>408</f><f></f><f>KP</f><f>PRK</f><f>850</f><f>a</f><f></f></row>
+      <row><f>58</f><f>1</f><f>Democratic Republic of the Congo</f><f>180</f><f></f><f>CD</f><f>COD</f><f>243</f><f>a</f><f></f></row>
+      <row><f>59</f><f>5</f><f>Denmark</f><f>208</f><f></f><f>DK</f><f>DNK</f><f>45</f><f>a</f><f></f></row>
+      <row><f>60</f><f>1</f><f>Djibouti</f><f>262</f><f></f><f>DJ</f><f>DJI</f><f>253</f><f>a</f><f></f></row>
+      <row><f>61</f><f>1</f><f>Dominica</f><f>212</f><f></f><f>DM</f><f>DMA</f><f>1 767</f><f>a</f><f></f></row>
+      <row><f>62</f><f>1</f><f>Dominican Republic</f><f>214</f><f></f><f>DO</f><f>DOM</f><f>1 809</f><f>a</f><f></f></row>
+      <row><f>63</f><f>1</f><f>Ecuador</f><f>218</f><f></f><f>EC</f><f>ECU</f><f>593</f><f>a</f><f></f></row>
+      <row><f>64</f><f>6</f><f>Egypt</f><f>818</f><f></f><f>EG</f><f>EGY</f><f>20</f><f>a</f><f></f></row>
+      <row><f>65</f><f>1</f><f>El Salvador</f><f>222</f><f></f><f>SV</f><f>SLV</f><f>503</f><f>a</f><f></f></row>
+      <row><f>66</f><f>1</f><f>Equatorial Guinea</f><f>226</f><f></f><f>GQ</f><f>GNQ</f><f>240</f><f>a</f><f></f></row>
+      <row><f>67</f><f>1</f><f>Eritrea</f><f>232</f><f></f><f>ER</f><f>ERI</f><f>291</f><f>a</f><f></f></row>
+      <row><f>68</f><f>1</f><f>Estonia</f><f>233</f><f></f><f>EE</f><f>EST</f><f>372</f><f>a</f><f></f></row>
+      <row><f>69</f><f>1</f><f>Ethiopia</f><f>231</f><f></f><f>ET</f><f>ETH</f><f>251</f><f>a</f><f></f></row>
+      <row><f>70</f><f>1</f><f>Faeroe Islands</f><f>234</f><f></f><f>FO</f><f>FRO</f><f>298</f><f>a</f><f></f></row>
+      <row><f>71</f><f>1</f><f>Falkland Islands (Malvinas)</f><f>238</f><f></f><f>FK</f><f>FLK</f><f>500</f><f>a</f><f></f></row>
+      <row><f>72</f><f>1</f><f>Federated States of Micronesia</f><f>583</f><f></f><f>FM</f><f>FSM</f><f>691</f><f>a</f><f></f></row>
+      <row><f>73</f><f>1</f><f>Fiji</f><f>242</f><f></f><f>FJ</f><f>FJI</f><f>679</f><f>a</f><f></f></row>
+      <row><f>74</f><f>6</f><f>Finland</f><f>246</f><f></f><f>FI</f><f>FIN</f><f>358</f><f>a</f><f></f></row>
+      <row><f>75</f><f>6</f><f>France</f><f>250</f><f></f><f>FR</f><f>FRA</f><f>33</f><f>a</f><f></f></row>
+      <row><f>76</f><f>6</f><f>France, metropolitan</f><f>249</f><f></f><f>FX</f><f>FXX</f><f>33</f><f>a</f><f></f></row>
+      <row><f>77</f><f>1</f><f>French Guiana</f><f>254</f><f></f><f>GF</f><f>GUF</f><f>594</f><f>a</f><f></f></row>
+      <row><f>78</f><f>1</f><f>French Polynesia</f><f>258</f><f></f><f>PF</f><f>PYF</f><f>689</f><f>a</f><f></f></row>
+      <row><f>79</f><f>1</f><f>Gabon</f><f>266</f><f></f><f>GA</f><f>GAB</f><f>241</f><f>a</f><f></f></row>
+      <row><f>80</f><f>1</f><f>Gambia</f><f>270</f><f></f><f>GM</f><f>GMB</f><f>220</f><f>a</f><f></f></row>
+      <row><f>81</f><f>1</f><f>Georgia</f><f>268</f><f></f><f>GE</f><f>GEO</f><f>995</f><f>a</f><f></f></row>
+      <row><f>82</f><f>6</f><f>Germany</f><f>276</f><f></f><f>DE</f><f>DEU</f><f>49</f><f>a</f><f></f></row>
+      <row><f>83</f><f>1</f><f>Ghana</f><f>288</f><f></f><f>GH</f><f>GHA</f><f>233</f><f>a</f><f></f></row>
+      <row><f>84</f><f>1</f><f>Gibraltar</f><f>292</f><f></f><f>GI</f><f>GIB</f><f>350</f><f>a</f><f></f></row>
+      <row><f>85</f><f>6</f><f>Greece</f><f>300</f><f></f><f>GR</f><f>GRC</f><f>30</f><f>a</f><f></f></row>
+      <row><f>86</f><f>6</f><f>Greenland</f><f>304</f><f></f><f>GL</f><f>GRL</f><f>299</f><f>a</f><f></f></row>
+      <row><f>87</f><f>1</f><f>Grenada</f><f>308</f><f></f><f>GD</f><f>GRD</f><f>1 473</f><f>a</f><f></f></row>
+      <row><f>88</f><f>1</f><f>Guadeloupe</f><f>312</f><f></f><f>GP</f><f>GLP</f><f>590</f><f>a</f><f></f></row>
+      <row><f>89</f><f>1</f><f>Guam</f><f>316</f><f></f><f>GU</f><f>GUM</f><f>1 671</f><f>a</f><f></f></row>
+      <row><f>90</f><f>1</f><f>Guatemala</f><f>320</f><f></f><f>GT</f><f>GTM</f><f>502</f><f>a</f><f></f></row>
+      <row><f>91</f><f>1</f><f>Guinea</f><f>324</f><f></f><f>GN</f><f>GIN</f><f>224</f><f>a</f><f></f></row>
+      <row><f>92</f><f>1</f><f>Guinea-Bissau</f><f>624</f><f></f><f>GW</f><f>GNB</f><f>245</f><f>a</f><f></f></row>
+      <row><f>93</f><f>1</f><f>Guyana</f><f>328</f><f></f><f>GY</f><f>GUY</f><f>592</f><f>a</f><f></f></row>
+      <row><f>94</f><f>1</f><f>Haiti</f><f>332</f><f></f><f>HT</f><f>HTI</f><f>509</f><f>a</f><f></f></row>
+      <row><f>95</f><f>1</f><f>Holy See</f><f>336</f><f></f><f>VA</f><f>VAT</f><f>39</f><f>a</f><f></f></row>
+      <row><f>96</f><f>1</f><f>Honduras</f><f>340</f><f></f><f>HN</f><f>HND</f><f>504</f><f>a</f><f></f></row>
+      <row><f>97</f><f>4</f><f>Hong Kong Special Administrative Region of China</f><f>344</f><f></f><f>HK</f><f>HKG</f><f>852</f><f>a</f><f></f></row>
+      <row><f>98</f><f>7</f><f>Hungary</f><f>348</f><f></f><f>HU</f><f>HUN</f><f>36</f><f>a</f><f></f></row>
+      <row><f>99</f><f>6</f><f>Iceland</f><f>352</f><f></f><f>IS</f><f>ISL</f><f>354</f><f>a</f><f></f></row>
+      <row><f>100</f><f>8</f><f>India</f><f>356</f><f></f><f>IN</f><f>IND</f><f>91</f><f>a</f><f></f></row>
+      <row><f>101</f><f>9</f><f>Indonesia</f><f>360</f><f></f><f>ID</f><f>IDN</f><f>62</f><f>a</f><f></f></row>
+      <row><f>102</f><f>1</f><f>Iran</f><f>364</f><f></f><f>IR</f><f>IRN</f><f>98</f><f>a</f><f></f></row>
+      <row><f>103</f><f>1</f><f>Iraq</f><f>368</f><f></f><f>IQ</f><f>IRQ</f><f>964</f><f>a</f><f></f></row>
+      <row><f>104</f><f>4</f><f>Ireland</f><f>372</f><f></f><f>IE</f><f>IRL</f><f>353</f><f>a</f><f></f></row>
+      <row><f>105</f><f>6</f><f>Israel</f><f>376</f><f></f><f>IL</f><f>ISR</f><f>972</f><f>a</f><f></f></row>
+      <row><f>106</f><f>3</f><f>Italy</f><f>380</f><f></f><f>IT</f><f>ITA</f><f>39</f><f>a</f><f></f></row>
+      <row><f>107</f><f>1</f><f>Jamaica</f><f>388</f><f></f><f>JM</f><f>JAM</f><f>1 876</f><f>a</f><f></f></row>
+      <row><f>108</f><f>10</f><f>Japan</f><f>392</f><f></f><f>JP</f><f>JPN</f><f>81</f><f>a</f><f></f></row>
+      <row><f>109</f><f>6</f><f>Jordan</f><f>400</f><f></f><f>JO</f><f>JOR</f><f>962</f><f>a</f><f></f></row>
+      <row><f>110</f><f>1</f><f>Kazakhstan</f><f>398</f><f></f><f>KZ</f><f>KAZ</f><f>7</f><f>a</f><f></f></row>
+      <row><f>111</f><f>1</f><f>Kenya</f><f>404</f><f></f><f>KE</f><f>KEN</f><f>254</f><f>a</f><f></f></row>
+      <row><f>112</f><f>1</f><f>Kiribati</f><f>296</f><f></f><f>KI</f><f>KIR</f><f>686</f><f>a</f><f></f></row>
+      <row><f>113</f><f>2</f><f>Kuwait</f><f>414</f><f></f><f>KW</f><f>KWT</f><f>965</f><f>a</f><f></f></row>
+      <row><f>114</f><f>1</f><f>Kyrgyzstan</f><f>417</f><f></f><f>KG</f><f>KGZ</f><f>996</f><f>a</f><f></f></row>
+      <row><f>115</f><f>1</f><f>Lao People's Democratic Republic</f><f>418</f><f></f><f>LA</f><f>LAO</f><f>856</f><f>a</f><f></f></row>
+      <row><f>116</f><f>1</f><f>Latvia</f><f>428</f><f></f><f>LV</f><f>LVA</f><f>371</f><f>a</f><f></f></row>
+      <row><f>117</f><f>6</f><f>Lebanon</f><f>422</f><f></f><f>LB</f><f>LBN</f><f>961</f><f>a</f><f></f></row>
+      <row><f>118</f><f>1</f><f>Lesotho</f><f>426</f><f></f><f>LS</f><f>LSO</f><f>266</f><f>a</f><f></f></row>
+      <row><f>119</f><f>1</f><f>Liberia</f><f>430</f><f></f><f>LR</f><f>LBR</f><f>231</f><f>a</f><f></f></row>
+      <row><f>120</f><f>1</f><f>Libyan Arab Jamahiriya</f><f>434</f><f></f><f>LY</f><f>LBY</f><f>218</f><f>a</f><f></f></row>
+      <row><f>121</f><f>1</f><f>Liechtenstein</f><f>438</f><f></f><f>LI</f><f>LIE</f><f>423</f><f>a</f><f></f></row>
+      <row><f>122</f><f>1</f><f>Lithuania</f><f>440</f><f></f><f>LT</f><f>LTU</f><f>370</f><f>a</f><f></f></row>
+      <row><f>123</f><f>6</f><f>Luxembourg</f><f>442</f><f></f><f>LU</f><f>LUX</f><f>352</f><f>a</f><f></f></row>
+      <row><f>124</f><f>1</f><f>Macau</f><f>446</f><f></f><f>MO</f><f>MAC</f><f>853</f><f>a</f><f></f></row>
+      <row><f>125</f><f>1</f><f>Madagascar</f><f>450</f><f></f><f>MG</f><f>MDG</f><f>261</f><f>a</f><f></f></row>
+      <row><f>126</f><f>1</f><f>Malawi</f><f>454</f><f></f><f>MW</f><f>MWI</f><f>265</f><f>a</f><f></f></row>
+      <row><f>127</f><f>1</f><f>Malaysia</f><f>458</f><f></f><f>MY</f><f>MYS</f><f>60</f><f>a</f><f></f></row>
+      <row><f>128</f><f>1</f><f>Maldives</f><f>462</f><f></f><f>MV</f><f>MDV</f><f>960</f><f>a</f><f></f></row>
+      <row><f>129</f><f>1</f><f>Mali</f><f>466</f><f></f><f>ML</f><f>MLI</f><f>223</f><f>a</f><f></f></row>
+      <row><f>130</f><f>1</f><f>Malta</f><f>470</f><f></f><f>MT</f><f>MLT</f><f>356</f><f>a</f><f></f></row>
+      <row><f>131</f><f>1</f><f>Marshall Islands</f><f>584</f><f></f><f>MH</f><f>MHL</f><f>692</f><f>a</f><f></f></row>
+      <row><f>132</f><f>1</f><f>Martinique</f><f>474</f><f></f><f>MQ</f><f>MTQ</f><f>596</f><f>a</f><f></f></row>
+      <row><f>133</f><f>1</f><f>Mauritania</f><f>478</f><f></f><f>MR</f><f>MRT</f><f>222</f><f>a</f><f></f></row>
+      <row><f>134</f><f>1</f><f>Mauritius</f><f>480</f><f></f><f>MU</f><f>MUS</f><f>230</f><f>a</f><f></f></row>
+      <row><f>135</f><f>1</f><f>Mayotte</f><f>175</f><f></f><f>YT</f><f>MYT</f><f>269</f><f>a</f><f></f></row>
+      <row><f>136</f><f>3</f><f>Mexico</f><f>484</f><f></f><f>MX</f><f>MEX</f><f>52</f><f>a</f><f></f></row>
+      <row><f>137</f><f>1</f><f>Monaco</f><f>492</f><f></f><f>MC</f><f>MCO</f><f>377</f><f>a</f><f></f></row>
+      <row><f>138</f><f>1</f><f>Mongolia</f><f>496</f><f></f><f>MN</f><f>MNG</f><f>976</f><f>a</f><f></f></row>
+      <row><f>139</f><f>1</f><f>Montserrat</f><f>500</f><f></f><f>MS</f><f>MSR</f><f>1 664</f><f>a</f><f></f></row>
+      <row><f>140</f><f>1</f><f>Morocco</f><f>504</f><f></f><f>MA</f><f>MAR</f><f>212</f><f>a</f><f></f></row>
+      <row><f>141</f><f>1</f><f>Mozambique</f><f>508</f><f></f><f>MZ</f><f>MOZ</f><f>258</f><f>a</f><f></f></row>
+      <row><f>142</f><f>1</f><f>Myanmar</f><f>104</f><f></f><f>MM</f><f>MMR</f><f>95</f><f>a</f><f></f></row>
+      <row><f>143</f><f>1</f><f>Namibia</f><f>516</f><f></f><f>NA</f><f>NAM</f><f>264</f><f>a</f><f></f></row>
+      <row><f>144</f><f>1</f><f>Nauru</f><f>520</f><f></f><f>NR</f><f>NRU</f><f>674</f><f>a</f><f></f></row>
+      <row><f>145</f><f>1</f><f>Nepal</f><f>524</f><f></f><f>NP</f><f>NPL</f><f>977</f><f>a</f><f></f></row>
+      <row><f>146</f><f>6</f><f>Netherlands</f><f>528</f><f></f><f>NL</f><f>NLD</f><f>31</f><f>a</f><f></f></row>
+      <row><f>147</f><f>1</f><f>Netherlands Antilles</f><f>530</f><f></f><f>AN</f><f>ANT</f><f>599</f><f>a</f><f></f></row>
+      <row><f>148</f><f>1</f><f>New Caledonia</f><f>540</f><f></f><f>NC</f><f>NCL</f><f>687</f><f>a</f><f></f></row>
+      <row><f>149</f><f>8</f><f>New Zealand</f><f>554</f><f></f><f>NZ</f><f>NZL</f><f>64</f><f>a</f><f></f></row>
+      <row><f>150</f><f>1</f><f>Nicaragua</f><f>558</f><f></f><f>NI</f><f>NIC</f><f>505</f><f>a</f><f></f></row>
+      <row><f>151</f><f>1</f><f>Niger</f><f>562</f><f></f><f>NE</f><f>NER</f><f>227</f><f>a</f><f></f></row>
+      <row><f>152</f><f>1</f><f>Nigeria</f><f>566</f><f></f><f>NG</f><f>NGA</f><f>234</f><f>a</f><f></f></row>
+      <row><f>153</f><f>1</f><f>Niue</f><f>570</f><f></f><f>NU</f><f>NIU</f><f>683</f><f>a</f><f></f></row>
+      <row><f>154</f><f>1</f><f>Norfolk Island</f><f>574</f><f></f><f>NF</f><f>NFK</f><f>672</f><f>a</f><f></f></row>
+      <row><f>155</f><f>1</f><f>Northern Mariana Islands</f><f>580</f><f></f><f>MP</f><f>MNP</f><f>1 670</f><f>a</f><f></f></row>
+      <row><f>156</f><f>6</f><f>Norway</f><f>578</f><f></f><f>NO</f><f>NOR</f><f>47</f><f>a</f><f></f></row>
+      <row><f>157</f><f>2</f><f>Oman</f><f>512</f><f></f><f>OM</f><f>OMN</f><f>968</f><f>a</f><f></f></row>
+      <row><f>158</f><f>1</f><f>Pakistan</f><f>586</f><f></f><f>PK</f><f>PAK</f><f>92</f><f>a</f><f></f></row>
+      <row><f>159</f><f>1</f><f>Palau</f><f>585</f><f></f><f>PW</f><f>PLW</f><f>680</f><f>a</f><f></f></row>
+      <row><f>160</f><f>1</f><f>Panama</f><f>591</f><f></f><f>PA</f><f>PAN</f><f>507</f><f>a</f><f></f></row>
+      <row><f>161</f><f>1</f><f>Papua New Guinea</f><f>598</f><f></f><f>PG</f><f>PNG</f><f>675</f><f>a</f><f></f></row>
+      <row><f>162</f><f>1</f><f>Paraguay</f><f>600</f><f></f><f>PY</f><f>PRY</f><f>595</f><f>a</f><f></f></row>
+      <row><f>163</f><f>1</f><f>Peru</f><f>604</f><f></f><f>PE</f><f>PER</f><f>51</f><f>a</f><f></f></row>
+      <row><f>164</f><f>1</f><f>Philippines</f><f>608</f><f></f><f>PH</f><f>PHL</f><f>63</f><f>a</f><f></f></row>
+      <row><f>165</f><f>2</f><f>Poland</f><f>616</f><f></f><f>PL</f><f>POL</f><f>48</f><f>a</f><f></f></row>
+      <row><f>166</f><f>3</f><f>Portugal</f><f>620</f><f></f><f>PT</f><f>PRT</f><f>351</f><f>a</f><f></f></row>
+      <row><f>167</f><f>1</f><f>Puerto Rico</f><f>630</f><f></f><f>PR</f><f>PRI</f><f>1 787</f><f>a</f><f></f></row>
+      <row><f>168</f><f>6</f><f>Qatar</f><f>634</f><f></f><f>QA</f><f>QAT</f><f>974</f><f>a</f><f></f></row>
+      <row><f>169</f><f>11</f><f>Republic of Korea</f><f>410</f><f></f><f>KR</f><f>KOR</f><f>82</f><f>a</f><f></f></row>
+      <row><f>170</f><f>1</f><f>Republic of Moldova</f><f>498</f><f></f><f>MD</f><f>MDA</f><f>373</f><f>a</f><f></f></row>
+      <row><f>171</f><f>1</f><f><![CDATA[Réunion]]></f><f>638</f><f></f><f>RE</f><f>REU</f><f>262</f><f>a</f><f></f></row>
+      <row><f>172</f><f>6</f><f>Romania</f><f>642</f><f></f><f>RO</f><f>ROM</f><f>40</f><f>a</f><f></f></row>
+      <row><f>173</f><f>12</f><f>Russian Federation</f><f>643</f><f></f><f>RU</f><f>RUS</f><f>7</f><f>a</f><f></f></row>
+      <row><f>174</f><f>1</f><f>Rwanda</f><f>646</f><f></f><f>RW</f><f>RWA</f><f>250</f><f>a</f><f></f></row>
+      <row><f>175</f><f>1</f><f>Saint Helena</f><f>654</f><f></f><f>SH</f><f>SHN</f><f>290</f><f>a</f><f></f></row>
+      <row><f>176</f><f>1</f><f>Saint Kitts and Nevis</f><f>659</f><f></f><f>KN</f><f>KNA</f><f>1 869</f><f>a</f><f></f></row>
+      <row><f>177</f><f>1</f><f>Saint Lucia</f><f>662</f><f></f><f>LC</f><f>LCA</f><f>1 758</f><f>a</f><f></f></row>
+      <row><f>178</f><f>1</f><f>Saint Pierre and Miquelon</f><f>666</f><f></f><f>PM</f><f>SPM</f><f>508</f><f>a</f><f></f></row>
+      <row><f>179</f><f>1</f><f>Saint Vincent and the Grenadines</f><f>670</f><f></f><f>VC</f><f>VCT</f><f>1 784</f><f>a</f><f></f></row>
+      <row><f>180</f><f>1</f><f>Samoa</f><f>882</f><f></f><f>WS</f><f>WSM</f><f>685</f><f>a</f><f></f></row>
+      <row><f>181</f><f>1</f><f>San Marino</f><f>674</f><f></f><f>SM</f><f>SMR</f><f>378</f><f>a</f><f></f></row>
+      <row><f>182</f><f>1</f><f><![CDATA[São Tomé and Principe]]></f><f>678</f><f></f><f>ST</f><f>STP</f><f>239</f><f>a</f><f></f></row>
+      <row><f>183</f><f>6</f><f>Saudi Arabia</f><f>682</f><f></f><f>SA</f><f>SAU</f><f>966</f><f>a</f><f></f></row>
+      <row><f>184</f><f>1</f><f>Senegal</f><f>686</f><f></f><f>SN</f><f>SEN</f><f>221</f><f>a</f><f></f></row>
+      <row><f>185</f><f>1</f><f>Seychelles</f><f>690</f><f></f><f>SC</f><f>SYC</f><f>248</f><f>a</f><f></f></row>
+      <row><f>186</f><f>1</f><f>Sierra Leone</f><f>694</f><f></f><f>SL</f><f>SLE</f><f>232</f><f>a</f><f></f></row>
+      <row><f>187</f><f>6</f><f>Singapore</f><f>702</f><f></f><f>SG</f><f>SGP</f><f>65</f><f>a</f><f></f></row>
+      <row><f>188</f><f>6</f><f>Slovakia</f><f>703</f><f></f><f>SK</f><f>SVK</f><f>421</f><f>a</f><f></f></row>
+      <row><f>189</f><f>6</f><f>Slovenia</f><f>705</f><f></f><f>SI</f><f>SVN</f><f>386</f><f>a</f><f></f></row>
+      <row><f>190</f><f>1</f><f>Solomon Islands</f><f>90</f><f></f><f>SB</f><f>SLB</f><f>677</f><f>a</f><f></f></row>
+      <row><f>191</f><f>1</f><f>Somalia</f><f>706</f><f></f><f>SO</f><f>SOM</f><f>252</f><f>a</f><f></f></row>
+      <row><f>192</f><f>13</f><f>South Africa</f><f>710</f><f></f><f>ZA</f><f>ZAF</f><f>27</f><f>a</f><f></f></row>
+      <row><f>193</f><f>3</f><f>Spain</f><f>724</f><f></f><f>ES</f><f>ESP</f><f>34</f><f>a</f><f></f></row>
+      <row><f>194</f><f>1</f><f>Sri Lanka</f><f>144</f><f></f><f>LK</f><f>LKA</f><f>94</f><f>a</f><f></f></row>
+      <row><f>195</f><f>1</f><f>Sudan</f><f>736</f><f></f><f>SD</f><f>SDN</f><f>249</f><f>a</f><f></f></row>
+      <row><f>196</f><f>1</f><f>Suriname</f><f>740</f><f></f><f>SR</f><f>SUR</f><f>597</f><f>a</f><f></f></row>
+      <row><f>197</f><f>1</f><f>Swaziland</f><f>748</f><f></f><f>SZ</f><f>SWZ</f><f>268</f><f>a</f><f></f></row>
+      <row><f>198</f><f>6</f><f>Sweden</f><f>752</f><f></f><f>SE</f><f>SWE</f><f>46</f><f>a</f><f></f></row>
+      <row><f>199</f><f>6</f><f>Switzerland</f><f>756</f><f></f><f>CH</f><f>CHE</f><f>41</f><f>a</f><f></f></row>
+      <row><f>200</f><f>6</f><f>Syrian Arab Republic</f><f>760</f><f></f><f>SY</f><f>SYR</f><f>963</f><f>a</f><f></f></row>
+      <row><f>201</f><f>4</f><f>Taiwan</f><f>158</f><f></f><f>TW</f><f>TWN</f><f>886</f><f>a</f><f></f></row>
+      <row><f>202</f><f>1</f><f>Tajikistan</f><f>762</f><f></f><f>TJ</f><f>TJK</f><f>7</f><f>a</f><f></f></row>
+      <row><f>203</f><f>1</f><f>Thailand</f><f>764</f><f></f><f>TH</f><f>THA</f><f>66</f><f>a</f><f></f></row>
+      <row><f>204</f><f>14</f><f>The former Yugoslav Republic of Macedonia</f><f>807</f><f></f><f>MK</f><f>MKD</f><f>389</f><f>a</f><f></f></row>
+      <row><f>205</f><f>1</f><f>Togo</f><f>768</f><f></f><f>TG</f><f>TGO</f><f>228</f><f>a</f><f></f></row>
+      <row><f>206</f><f>1</f><f>Tonga</f><f>776</f><f></f><f>TO</f><f>TON</f><f>676</f><f>a</f><f></f></row>
+      <row><f>207</f><f>1</f><f>Trinidad and Tobago</f><f>780</f><f></f><f>TT</f><f>TTO</f><f>1 868</f><f>a</f><f></f></row>
+      <row><f>208</f><f>1</f><f>Tunisia</f><f>788</f><f></f><f>TN</f><f>TUN</f><f>216</f><f>a</f><f></f></row>
+      <row><f>209</f><f>6</f><f>Turkey</f><f>792</f><f></f><f>TR</f><f>TUR</f><f>90</f><f>a</f><f></f></row>
+      <row><f>210</f><f>1</f><f>Turkmenistan</f><f>795</f><f></f><f>TM</f><f>TKM</f><f>993</f><f>a</f><f></f></row>
+      <row><f>211</f><f>1</f><f>Turks and Caicos Islands</f><f>796</f><f></f><f>TC</f><f>TCA</f><f>1 649</f><f>a</f><f></f></row>
+      <row><f>212</f><f>1</f><f>Tuvalu</f><f>798</f><f></f><f>TV</f><f>TUV</f><f>688</f><f>a</f><f></f></row>
+      <row><f>213</f><f>1</f><f>Uganda</f><f>800</f><f></f><f>UG</f><f>UGA</f><f>256</f><f>a</f><f></f></row>
+      <row><f>214</f><f>11</f><f>Ukraine</f><f>804</f><f></f><f>UA</f><f>UKR</f><f>380</f><f>a</f><f></f></row>
+      <row><f>215</f><f>1</f><f>United Arab Emirates</f><f>784</f><f></f><f>AE</f><f>ARE</f><f>971</f><f>a</f><f></f></row>
+      <row><f>216</f><f>13</f><f>United Kingdom</f><f>826</f><f></f><f>GB</f><f>GBR</f><f>44</f><f>a</f><f></f></row>
+      <row><f>217</f><f>1</f><f>United Republic of Tanzania</f><f>834</f><f></f><f>TZ</f><f>TZA</f><f>255</f><f>a</f><f></f></row>
+      <row><f>218</f><f>15</f><f>United States</f><f>840</f><f></f><f>US</f><f>USA</f><f>1</f><f>a</f><f>(###) ###-####</f></row>
+      <row><f>219</f><f>15</f><f>United States Virgin Islands</f><f>850</f><f></f><f>VI</f><f>VIR</f><f>1 340</f><f>a</f><f></f></row>
+      <row><f>220</f><f>1</f><f>Uruguay</f><f>858</f><f></f><f>UY</f><f>URY</f><f>598</f><f>a</f><f></f></row>
+      <row><f>221</f><f>1</f><f>Uzbekistan</f><f>860</f><f></f><f>UZ</f><f>UZB</f><f>998</f><f>a</f><f></f></row>
+      <row><f>222</f><f>1</f><f>Vanuatu</f><f>548</f><f></f><f>VU</f><f>VUT</f><f>678</f><f>a</f><f></f></row>
+      <row><f>223</f><f>1</f><f>Venezuela</f><f>862</f><f></f><f>VE</f><f>VEN</f><f>58</f><f>a</f><f></f></row>
+      <row><f>224</f><f>1</f><f>Viet Nam</f><f>704</f><f></f><f>VN</f><f>VNM</f><f>84</f><f>a</f><f></f></row>
+      <row><f>225</f><f>6</f><f>Yemen</f><f>887</f><f></f><f>YE</f><f>YEM</f><f>967</f><f>a</f><f></f></row>
+      <row><f>226</f><f>1</f><f>Yugoslavia</f><f>891</f><f></f><f>YU</f><f>YUG</f><f>381</f><f>a</f><f></f></row>
+      <row><f>227</f><f>1</f><f>Zambia</f><f>894</f><f></f><f>ZM</f><f>ZMB</f><f>260</f><f>a</f><f></f></row>
+      <row><f>228</f><f>1</f><f>Zimbabwe</f><f>716</f><f></f><f>ZW</f><f>ZWE</f><f>263</f><f>a</f><f></f></row>
+    </data>
+  </table>
+  <table name="crm_statuses">
+    <field name="crm_status_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="crm_status_short_name" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="crm_status_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="crm_status_pretty_plural" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="crm_status_display_html" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="crm_status_record_status" type="C" size="1">
+      <DEFAULT value="a"/>
+    </field>
+    <data>
+      <row><f>1</f><f>Lead</f><f>Lead</f><f>Leads</f><f>Lead</f><f>a</f></row>
+      <row><f>2</f><f>Prospect</f><f>Prospect</f><f>Prospects</f><f>Prospect</f><f>a</f></row>
+      <row><f>3</f><f>Qualified</f><f>Qualified</f><f>Qualified</f><f>Qualified</f><f>a</f></row>
+      <row><f>4</f><f>Developed</f><f>Developed</f><f>Developed</f><f>Developed</f><f>a</f></row>
+      <row><f>5</f><f>Closed</f><f>Closed</f><f>Closed</f><f>Closed</f><f>a</f></row>
+    </data>
+  </table>
+  <table name="data_source">
+    <field name="data_source_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="data_source_name" type="C" size="128">
+      <NOTNULL/>
+    </field>
+    <data>
+      <row><f>1</f><f>XRMS</f></row>
+    </data>
+  </table>
+  <table name="email_template_type">
+    <field name="email_template_type_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="email_template_type_name" type="C" size="64">
+      <NOTNULL/>
+    </field>
+    <field name="modified_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="modified_on" type="T"/>
+    <field name="created_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="created_on" type="T"/>
+    <data>
+      <row><f>1</f><f>Email Merge Letter</f><f>0</f><f></f><f>0</f><f></f></row>
+    </data>
+  </table>
+  <table name="email_templates">
+    <field name="email_template_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="email_template_type_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="email_template_title" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="email_template_body" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="email_template_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <data>
+      <row><f>1</f><f>0</f><f>Blank Template</f><f></f><f>a</f></row>
+      <row><f>2</f><f>0</f><f>Introduction</f><f></f><f>a</f></row>
+      <row><f>3</f><f>0</f><f>Sales Pitch</f><f></f><f>a</f></row>
+      <row><f>4</f><f>0</f><f>Thanks for Your Business</f><f></f><f>a</f></row>
+      <row><f>5</f><f>0</f><f>Customer Service Inquiry</f><f></f><f>a</f></row>
+    </data>
+  </table>
+  <table name="entity_category_map">
+    <field name="category_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="on_what_table" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="on_what_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+  </table>
+  <table name="files">
+    <field name="file_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="file_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="file_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="file_description" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="file_filesystem_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="file_size" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="file_type" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="on_what_table" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="on_what_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="entered_at" type="T"/>
+    <field name="entered_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="last_modified_on" type="T">
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="last_modified_by" type="C" size="11">
+      <NOTNULL/>
+    </field>
+    <field name="file_record_status" type="C" size="1">
+      <DEFAULT value="a"/>
+    </field>
+  </table>
+  <table name="industries">
+    <field name="industry_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="industry_short_name" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="industry_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="industry_pretty_plural" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="industry_display_html" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="industry_record_status" type="C" size="1">
+      <DEFAULT value="a"/>
+    </field>
+    <data>
+      <row><f>1</f><f>OTH</f><f>Other</f><f>Other</f><f>Other</f><f>a</f></row>
+      <row><f>2</f><f>ADV</f><f>Advertising</f><f>Advertising</f><f>Advertising</f><f>a</f></row>
+      <row><f>3</f><f>ARCH</f><f>Architecture</f><f>Architecture</f><f>Architecture</f><f>a</f></row>
+      <row><f>4</f><f>CHEM</f><f>Chemicals</f><f>Chemicals</f><f>Chemicals</f><f>a</f></row>
+      <row><f>5</f><f>COM</f><f>Communications</f><f>Communications</f><f>Communications</f><f>a</f></row>
+      <row><f>6</f><f>COMP</f><f>Computers</f><f>Computers</f><f>Computers</f><f>a</f></row>
+      <row><f>7</f><f>CONST</f><f>Construction</f><f>Construction</f><f>Construction</f><f>a</f></row>
+      <row><f>8</f><f>CONS</f><f>Consulting</f><f>Consulting</f><f>Consulting</f><f>a</f></row>
+      <row><f>9</f><f>DIST</f><f>Distribution</f><f>Distribution</f><f>Distribution</f><f>a</f></row>
+      <row><f>10</f><f>EDU</f><f>Education</f><f>Education</f><f>Education</f><f>a</f></row>
+      <row><f>11</f><f>FIN</f><f>Finance</f><f>Finance</f><f>Finance</f><f>a</f></row>
+      <row><f>12</f><f>GOV</f><f>Government</f><f>Government</f><f>Government</f><f>a</f></row>
+      <row><f>13</f><f>HEAL</f><f>Healthcare</f><f>Healthcare</f><f>Healthcare</f><f>a</f></row>
+      <row><f>14</f><f>INS</f><f>Insurance</f><f>Insurance</f><f>Insurance</f><f>a</f></row>
+      <row><f>15</f><f>LEG</f><f>Legal</f><f>Legal</f><f>Legal</f><f>a</f></row>
+      <row><f>16</f><f>MAN</f><f>Manufacturing</f><f>Manufacturing</f><f>Manufacturing</f><f>a</f></row>
+      <row><f>17</f><f>NP</f><f>Non-Profit</f><f>Non-Profit</f><f>Non-Profit</f><f>a</f></row>
+      <row><f>18</f><f>RE</f><f>Real Estate</f><f>Real Estate</f><f>Real Estate</f><f>a</f></row>
+      <row><f>19</f><f>REST</f><f>Restaurant</f><f>Restaurant</f><f>Restaurant</f><f>a</f></row>
+      <row><f>20</f><f>RET</f><f>Retail</f><f>Retail</f><f>Retail</f><f>a</f></row>
+    </data>
+  </table>
+  <table name="notes">
+    <field name="note_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="note_description" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="on_what_table" type="C" size="100"/>
+    <field name="on_what_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="entered_at" type="T"/>
+    <field name="entered_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="note_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+  </table>
+  <table name="opportunities">
+    <field name="opportunity_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="opportunity_type_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+    </field>
+    <field name="opportunity_status_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="campaign_id" type="I" size="11"/>
+    <field name="company_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="division_id" type="I" size="11"/>
+    <field name="contact_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="user_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="opportunity_title" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="opportunity_description" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="next_step" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="size" type="N" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0.00"/>
+    </field>
+    <field name="probability" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="close_at" type="T"/>
+    <field name="entered_at" type="T"/>
+    <field name="entered_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="last_modified_at" type="T"/>
+    <field name="last_modified_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="owned_at" type="T"/>
+    <field name="owned_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="closed_at" type="T"/>
+    <field name="closed_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="opportunity_record_status" type="C" size="1">
+      <DEFAULT value="a"/>
+    </field>
+  </table>
+  <table name="opportunity_statuses">
+    <field name="opportunity_status_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="opportunity_type_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+    </field>
+    <field name="sort_order" type="I" size="4">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+    </field>
+    <field name="status_open_indicator" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="o"/>
+    </field>
+    <field name="opportunity_status_short_name" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="opportunity_status_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="opportunity_status_pretty_plural" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="opportunity_status_display_html" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="opportunity_status_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <field name="opportunity_status_long_desc" type="C" size="255">
+      <NOTNULL/>
+    </field>
+    <data>
+      <row><f>1</f><f>1</f><f>1</f><f>o</f><f>NEW</f><f>New</f><f>New</f><f>New</f><f>a</f><f></f></row>
+      <row><f>2</f><f>1</f><f>2</f><f>o</f><f>PRE</f><f>Preliminaries</f><f>Preliminaries</f><f>Preliminaries</f><f>a</f><f></f></row>
+      <row><f>3</f><f>1</f><f>3</f><f>o</f><f>DIS</f><f>Discussion</f><f>Discussion</f><f>Discussion</f><f>a</f><f></f></row>
+      <row><f>4</f><f>1</f><f>4</f><f>o</f><f>NEG</f><f>Negotiation</f><f>Negotiation</f><f>Negotiation</f><f>a</f><f></f></row>
+      <row><f>5</f><f>1</f><f>5</f><f>w</f><f>CLW</f><f>Closed/Won</f><f>Closed/Won</f><f>Closed/Won</f><f>a</f><f></f></row>
+      <row><f>6</f><f>1</f><f>6</f><f>l</f><f>CLL</f><f>Closed/Lost</f><f>Closed/Lost</f><f>Closed/Lost</f><f>a</f><f></f></row>
+      <row><f>7</f><f>1</f><f>6</f><f>l</f><f>CLL</f><f>Closed/Lost</f><f>Closed/Lost</f><f>Closed/Lost</f><f>a</f><f></f></row>
+    </data>
+  </table>
+  <table name="opportunity_types">
+    <field name="opportunity_type_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="opportunity_type_short_name" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="opportunity_type_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="opportunity_type_pretty_plural" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="opportunity_type_display_html" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="opportunity_type_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <data>
+      <row><f>1</f><f>sale</f><f>Sales Opportunity</f><f>Sales Opportunity</f><f>Sales Opportunity</f><f>a</f></row>
+    </data>
+  </table>
+  <table name="ratings">
+    <field name="rating_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="rating_short_name" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="rating_pretty_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="rating_pretty_plural" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="rating_display_html" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="rating_record_status" type="C" size="1">
+      <DEFAULT value="a"/>
+    </field>
+    <data>
+      <row><f>1</f><f>N/A</f><f>N/A</f><f>N/A</f><f><![CDATA[<font color=#999999><b>N/A</b></font>]]></f><f>a</f></row>
+      <row><f>2</f><f>Poor</f><f>Poor</f><f>Poor</f><f><![CDATA[<font color=#cc0000><b>Poor</b></font>]]></f><f>a</f></row>
+      <row><f>3</f><f>Fair</f><f>Fair</f><f>Fair</f><f><![CDATA[<font color=#ff9933><b>Fair</b></font>]]></f><f>a</f></row>
+      <row><f>4</f><f>Good</f><f>Good</f><f>Good</f><f><![CDATA[<font color=#009900><b>Good</b></font>]]></f><f>a</f></row>
+    </data>
+  </table>
+  <table name="recent_items">
+    <field name="recent_item_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="user_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="on_what_table" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="recent_action" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="on_what_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="recent_item_timestamp" type="T"/>
+  </table>
+  <table name="relationship_types">
+    <field name="relationship_type_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="relationship_name" type="C" size="48">
+      <NOTNULL/>
+    </field>
+    <field name="from_what_table" type="C" size="24">
+      <NOTNULL/>
+    </field>
+    <field name="to_what_table" type="C" size="24">
+      <NOTNULL/>
+    </field>
+    <field name="from_what_text" type="C" size="32">
+      <NOTNULL/>
+    </field>
+    <field name="to_what_text" type="C" size="32">
+      <NOTNULL/>
+    </field>
+    <field name="relationship_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <field name="pre_formatting" type="C" size="25"/>
+    <field name="post_formatting" type="C" size="25"/>
+    <data>
+      <row><f>1</f><f>company relationships</f><f>companies</f><f>companies</f><f>Acquired</f><f>Acquired by</f><f>a</f><f></f><f></f></row>
+      <row><f>2</f><f>company relationships</f><f>companies</f><f>companies</f><f>Retains Consultant</f><f>Consultant for</f><f>a</f><f></f><f></f></row>
+      <row><f>3</f><f>company relationships</f><f>companies</f><f>companies</f><f>Manufactures for</f><f>Uses Manufacturer</f><f>a</f><f></f><f></f></row>
+      <row><f>4</f><f>company relationships</f><f>companies</f><f>companies</f><f>Parent Company of</f><f>Subsidiary of</f><f>a</f><f></f><f></f></row>
+      <row><f>5</f><f>company relationships</f><f>companies</f><f>companies</f><f>Uses Supplier</f><f>Supplier for</f><f>a</f><f></f><f></f></row>
+      <row><f>6</f><f>company link</f><f>contacts</f><f>companies</f><f>Owns</f><f>Owned By</f><f>a</f><f><![CDATA[<b>]]></f><f><![CDATA[</b>]]></f></row>
+      <row><f>7</f><f>company link</f><f>contacts</f><f>companies</f><f>Manages</f><f>Managed By</f><f>a</f><f></f><f></f></row>
+      <row><f>8</f><f>company link</f><f>contacts</f><f>companies</f><f>Consultant for</f><f>Retains Consultant</f><f>a</f><f></f><f></f></row>
+    </data>
+  </table>
+  <table name="relationships">
+    <field name="relationship_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="from_what_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="to_what_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="relationship_type_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="established_at" type="T"/>
+    <field name="ended_on" type="T"/>
+    <field name="relationship_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <index name="from_what_id">
+      <col>from_what_id</col>
+    </index>
+    <index name="to_what_id">
+      <col>to_what_id</col>
+    </index>
+  </table>
+  <table name="salutations">
+    <field name="salutation_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="salutation" type="C" size="20">
+      <NOTNULL/>
+    </field>
+    <field name="salutation_sort_value" type="C" size="20">
+      <NOTNULL/>
+    </field>
+    <data>
+      <row><f>1</f><f>Mr.</f><f>100</f></row>
+      <row><f>2</f><f>Mrs.</f><f>103</f></row>
+      <row><f>3</f><f>Ms.</f><f>106</f></row>
+      <row><f>4</f><f>Miss</f><f>109</f></row>
+      <row><f>5</f><f>Dr.</f><f>112</f></row>
+      <row><f>6</f><f>-</f><f>113</f></row>
+      <row><f>100</f><f>A V M</f><f>200</f></row>
+      <row><f>101</f><f>Admiraal</f><f>203</f></row>
+      <row><f>102</f><f>Admiral</f><f>206</f></row>
+      <row><f>103</f><f>Air Cdre</f><f>209</f></row>
+      <row><f>104</f><f>Air Commodore</f><f>212</f></row>
+      <row><f>105</f><f>Air Marshal</f><f>215</f></row>
+      <row><f>106</f><f>Air Vice Marshal</f><f>218</f></row>
+      <row><f>107</f><f>Alderman</f><f>221</f></row>
+      <row><f>108</f><f>Alhaji</f><f>224</f></row>
+      <row><f>109</f><f>Ambassador</f><f>227</f></row>
+      <row><f>110</f><f>Baron</f><f>230</f></row>
+      <row><f>111</f><f>Barones</f><f>233</f></row>
+      <row><f>112</f><f>Brig</f><f>236</f></row>
+      <row><f>113</f><f>Brig Gen</f><f>239</f></row>
+      <row><f>114</f><f>Brig General</f><f>242</f></row>
+      <row><f>115</f><f>Brigadier</f><f>245</f></row>
+      <row><f>116</f><f>Brigadier General</f><f>248</f></row>
+      <row><f>117</f><f>Brother</f><f>251</f></row>
+      <row><f>118</f><f>Canon</f><f>254</f></row>
+      <row><f>119</f><f>Capt</f><f>257</f></row>
+      <row><f>120</f><f>Captain</f><f>260</f></row>
+      <row><f>121</f><f>Cardinal</f><f>263</f></row>
+      <row><f>122</f><f>Cdr</f><f>266</f></row>
+      <row><f>123</f><f>Chief</f><f>269</f></row>
+      <row><f>124</f><f>Cik</f><f>272</f></row>
+      <row><f>125</f><f>Cmdr</f><f>275</f></row>
+      <row><f>126</f><f>Col</f><f>278</f></row>
+      <row><f>127</f><f>Col Dr</f><f>281</f></row>
+      <row><f>128</f><f>Colonel</f><f>284</f></row>
+      <row><f>129</f><f>Commandant</f><f>287</f></row>
+      <row><f>130</f><f>Commander</f><f>290</f></row>
+      <row><f>131</f><f>Commissioner</f><f>293</f></row>
+      <row><f>132</f><f>Commodore</f><f>296</f></row>
+      <row><f>133</f><f>Comte</f><f>299</f></row>
+      <row><f>134</f><f>Comtessa</f><f>302</f></row>
+      <row><f>135</f><f>Congressman</f><f>305</f></row>
+      <row><f>136</f><f>Conseiller</f><f>308</f></row>
+      <row><f>137</f><f>Consul</f><f>311</f></row>
+      <row><f>138</f><f>Conte</f><f>314</f></row>
+      <row><f>139</f><f>Contessa</f><f>317</f></row>
+      <row><f>140</f><f>Corporal</f><f>320</f></row>
+      <row><f>141</f><f>Councillor</f><f>323</f></row>
+      <row><f>142</f><f>Count</f><f>326</f></row>
+      <row><f>143</f><f>Countess</f><f>329</f></row>
+      <row><f>144</f><f>Crown Prince</f><f>332</f></row>
+      <row><f>145</f><f>Crown Princess</f><f>335</f></row>
+      <row><f>146</f><f>Dame</f><f>338</f></row>
+      <row><f>147</f><f>Datin</f><f>341</f></row>
+      <row><f>148</f><f>Dato</f><f>344</f></row>
+      <row><f>149</f><f>Datuk</f><f>347</f></row>
+      <row><f>150</f><f>Datuk Seri</f><f>350</f></row>
+      <row><f>151</f><f>Deacon</f><f>353</f></row>
+      <row><f>152</f><f>Deaconess</f><f>356</f></row>
+      <row><f>153</f><f>Dean</f><f>359</f></row>
+      <row><f>154</f><f>Dhr</f><f>362</f></row>
+      <row><f>155</f><f>Dipl Ing</f><f>365</f></row>
+      <row><f>156</f><f>Doctor</f><f>368</f></row>
+      <row><f>157</f><f>Dott</f><f>371</f></row>
+      <row><f>158</f><f>Dott sa</f><f>374</f></row>
+      <row><f>159</f><f>Dr Ing</f><f>377</f></row>
+      <row><f>160</f><f>Dra</f><f>380</f></row>
+      <row><f>161</f><f>Drs</f><f>383</f></row>
+      <row><f>162</f><f>Embajador</f><f>386</f></row>
+      <row><f>163</f><f>Embajadora</f><f>389</f></row>
+      <row><f>164</f><f>En</f><f>392</f></row>
+      <row><f>165</f><f>Encik</f><f>395</f></row>
+      <row><f>166</f><f>Eng</f><f>398</f></row>
+      <row><f>167</f><f>Eur Ing</f><f>401</f></row>
+      <row><f>168</f><f>Exma Sra</f><f>404</f></row>
+      <row><f>169</f><f>Exmo Sr</f><f>407</f></row>
+      <row><f>170</f><f>F O</f><f>410</f></row>
+      <row><f>171</f><f>Father</f><f>413</f></row>
+      <row><f>172</f><f>First Lieutient</f><f>416</f></row>
+      <row><f>173</f><f>First Officer</f><f>419</f></row>
+      <row><f>174</f><f>Flt Lieut</f><f>422</f></row>
+      <row><f>175</f><f>Flying Officer</f><f>425</f></row>
+      <row><f>176</f><f>Fr</f><f>428</f></row>
+      <row><f>177</f><f>Frau</f><f>431</f></row>
+      <row><f>178</f><f>Fraulein</f><f>434</f></row>
+      <row><f>179</f><f>Fru</f><f>437</f></row>
+      <row><f>180</f><f>Gen</f><f>440</f></row>
+      <row><f>181</f><f>Generaal</f><f>443</f></row>
+      <row><f>182</f><f>General</f><f>446</f></row>
+      <row><f>183</f><f>Governor</f><f>449</f></row>
+      <row><f>184</f><f>Graaf</f><f>452</f></row>
+      <row><f>185</f><f>Gravin</f><f>455</f></row>
+      <row><f>186</f><f>Group Captain</f><f>458</f></row>
+      <row><f>187</f><f>Grp Capt</f><f>461</f></row>
+      <row><f>188</f><f>H E Dr</f><f>464</f></row>
+      <row><f>189</f><f>H H</f><f>467</f></row>
+      <row><f>190</f><f>H M</f><f>470</f></row>
+      <row><f>191</f><f>H R H</f><f>473</f></row>
+      <row><f>192</f><f>Hajah</f><f>476</f></row>
+      <row><f>193</f><f>Haji</f><f>479</f></row>
+      <row><f>194</f><f>Hajim</f><f>482</f></row>
+      <row><f>195</f><f>Her Highness</f><f>485</f></row>
+      <row><f>196</f><f>Her Majesty</f><f>488</f></row>
+      <row><f>197</f><f>Herr</f><f>491</f></row>
+      <row><f>198</f><f>High Chief</f><f>494</f></row>
+      <row><f>199</f><f>His Highness</f><f>497</f></row>
+      <row><f>200</f><f>His Holiness</f><f>500</f></row>
+      <row><f>201</f><f>His Majesty</f><f>503</f></row>
+      <row><f>202</f><f>Hon</f><f>506</f></row>
+      <row><f>203</f><f>Hr</f><f>509</f></row>
+      <row><f>204</f><f>Hra</f><f>512</f></row>
+      <row><f>205</f><f>Ing</f><f>515</f></row>
+      <row><f>206</f><f>Ir</f><f>518</f></row>
+      <row><f>207</f><f>Jonkheer</f><f>521</f></row>
+      <row><f>208</f><f>Judge</f><f>524</f></row>
+      <row><f>209</f><f>Justice</f><f>527</f></row>
+      <row><f>210</f><f>Khun Ying</f><f>530</f></row>
+      <row><f>211</f><f>Kolonel</f><f>533</f></row>
+      <row><f>212</f><f>Lady</f><f>536</f></row>
+      <row><f>213</f><f>Lcda</f><f>539</f></row>
+      <row><f>214</f><f>Lic</f><f>542</f></row>
+      <row><f>215</f><f>Lieut</f><f>545</f></row>
+      <row><f>216</f><f>Lieut Cdr</f><f>548</f></row>
+      <row><f>217</f><f>Lieut Col</f><f>551</f></row>
+      <row><f>218</f><f>Lieut Gen</f><f>554</f></row>
+      <row><f>219</f><f>Lord</f><f>557</f></row>
+      <row><f>220</f><f>M</f><f>560</f></row>
+      <row><f>221</f><f>M L</f><f>563</f></row>
+      <row><f>222</f><f>M R</f><f>566</f></row>
+      <row><f>223</f><f>Madame</f><f>569</f></row>
+      <row><f>224</f><f>Mademoiselle</f><f>572</f></row>
+      <row><f>225</f><f>Maj Gen</f><f>575</f></row>
+      <row><f>226</f><f>Major</f><f>578</f></row>
+      <row><f>227</f><f>Master</f><f>581</f></row>
+      <row><f>228</f><f>Mevrouw</f><f>584</f></row>
+      <row><f>229</f><f>Mlle</f><f>587</f></row>
+      <row><f>230</f><f>Mme</f><f>590</f></row>
+      <row><f>231</f><f>Monsieur</f><f>593</f></row>
+      <row><f>232</f><f>Monsignor</f><f>596</f></row>
+      <row><f>233</f><f>Mstr</f><f>599</f></row>
+      <row><f>234</f><f>Nti</f><f>602</f></row>
+      <row><f>235</f><f>Pastor</f><f>605</f></row>
+      <row><f>236</f><f>President</f><f>608</f></row>
+      <row><f>237</f><f>Prince</f><f>611</f></row>
+      <row><f>238</f><f>Princess</f><f>614</f></row>
+      <row><f>239</f><f>Princesse</f><f>617</f></row>
+      <row><f>240</f><f>Prinses</f><f>620</f></row>
+      <row><f>241</f><f>Prof</f><f>623</f></row>
+      <row><f>242</f><f>Prof Dr</f><f>626</f></row>
+      <row><f>243</f><f>Prof Sir</f><f>629</f></row>
+      <row><f>244</f><f>Professor</f><f>632</f></row>
+      <row><f>245</f><f>Puan</f><f>635</f></row>
+      <row><f>246</f><f>Puan Sri</f><f>638</f></row>
+      <row><f>247</f><f>Rabbi</f><f>641</f></row>
+      <row><f>248</f><f>Rear Admiral</f><f>644</f></row>
+      <row><f>249</f><f>Rev.</f><f>647</f></row>
+      <row><f>250</f><f>Rev Canon</f><f>650</f></row>
+      <row><f>251</f><f>Rev Dr</f><f>653</f></row>
+      <row><f>252</f><f>Rev Mother</f><f>656</f></row>
+      <row><f>253</f><f>Reverend</f><f>659</f></row>
+      <row><f>254</f><f>Rva</f><f>662</f></row>
+      <row><f>255</f><f>Senator</f><f>665</f></row>
+      <row><f>256</f><f>Sergeant</f><f>668</f></row>
+      <row><f>257</f><f>Sheikh</f><f>671</f></row>
+      <row><f>258</f><f>Sheikha</f><f>674</f></row>
+      <row><f>259</f><f>Sig</f><f>677</f></row>
+      <row><f>260</f><f>Sig na</f><f>680</f></row>
+      <row><f>261</f><f>Sig ra</f><f>683</f></row>
+      <row><f>262</f><f>Sir</f><f>686</f></row>
+      <row><f>263</f><f>Sister</f><f>689</f></row>
+      <row><f>264</f><f>Sqn Ldr</f><f>692</f></row>
+      <row><f>265</f><f>Sr</f><f>695</f></row>
+      <row><f>266</f><f>Sr D</f><f>698</f></row>
+      <row><f>267</f><f>Sra</f><f>701</f></row>
+      <row><f>268</f><f>Srta</f><f>704</f></row>
+      <row><f>269</f><f>Sultan</f><f>707</f></row>
+      <row><f>270</f><f>Tan Sri</f><f>710</f></row>
+      <row><f>271</f><f>Tan Sri Dato</f><f>713</f></row>
+      <row><f>272</f><f>Tengku</f><f>716</f></row>
+      <row><f>273</f><f>Teuku</f><f>719</f></row>
+      <row><f>274</f><f>Than Puying</f><f>722</f></row>
+      <row><f>275</f><f>The Hon Dr</f><f>725</f></row>
+      <row><f>276</f><f>The Hon Justice</f><f>728</f></row>
+      <row><f>277</f><f>The Hon Miss</f><f>731</f></row>
+      <row><f>278</f><f>The Hon Mr</f><f>734</f></row>
+      <row><f>279</f><f>The Hon Mrs</f><f>737</f></row>
+      <row><f>280</f><f>The Hon Ms</f><f>740</f></row>
+      <row><f>281</f><f>The Hon Sir</f><f>743</f></row>
+      <row><f>282</f><f>The Very Rev</f><f>746</f></row>
+      <row><f>283</f><f>Toh Puan</f><f>749</f></row>
+      <row><f>284</f><f>Tun</f><f>752</f></row>
+      <row><f>285</f><f>Vice Admiral</f><f>755</f></row>
+      <row><f>286</f><f>Viscount</f><f>758</f></row>
+      <row><f>287</f><f>Viscountess</f><f>761</f></row>
+    </data>
+  </table>
+  <table name="saved_actions">
+    <field name="saved_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="saved_title" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="user_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="on_what_table" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="saved_action" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="group_item" type="I" size="1">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="saved_data" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="saved_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <index name="user_id">
+      <col>user_id</col>
+    </index>
+    <index name="group_item">
+      <col>group_item</col>
+    </index>
+  </table>
+  <table name="system_parameters">
+    <field name="param_id" type="C" size="40">
+      <KEY/>
+    </field>
+    <field name="string_val" type="C" size="100"/>
+    <field name="int_val" type="I" size="11"/>
+    <field name="float_val" type="N"/>
+    <field name="datetime_val" type="T"/>
+    <field name="description" type="C" size="255"/>
+    <index name="param_id">
+      <UNIQUE/>
+      <col>param_id</col>
+    </index>
+    <data>
+      <row><f>Default GST Offset</f><f></f><f>-5</f><f></f><f></f><f>Default timezone offset</f></row>
+      <row><f>Audit Level</f><f></f><f>4</f><f></f><f></f><f><![CDATA[What level of audit logging should be performed.  0 - no logging, 1 - inserts & updates, 2 - and login/logout, 3 - and views, 4 - and searches]]></f></row>
+      <row><f>Activities Default Behavior</f><f>Fast</f><f></f><f></f><f></f><f>How will activities behave.  Options are Fast or Long.  Fast will keep user within current screen while Long will move to the activites/one screen for detailed description entry.</f></row>
+      <row><f>LDAP Version</f><f></f><f>2</f><f></f><f></f><f>Version of the LDAP server.  Will usually be 2 or 3.</f></row>
+      <row><f>RSS Feeds Enabled</f><f>n</f><f></f><f></f><f></f><f>Provide RSS Feeds.  y or n.</f></row>
+      <row><f>Maximum RSS Feed Entries</f><f></f><f>15</f><f></f><f></f><f>Maximum number of entries to include in any RSS feed.</f></row>
+      <row><f>Sender Email Address</f><f>xrms@example.com</f><f></f><f></f><f></f><f>Email address to use as the sender address when sending reports via email.</f></row>
+      <row><f>Reports--Use Horizontal Rule</f><f>y</f><f></f><f></f><f></f><f>Use horizontal rule on reports.</f></row>
+      <row><f>Reports--Show No Items Found</f><f>n</f><f></f><f></f><f></f><f>Show text for items with no result on reports.</f></row>
+      <row><f>Allow Unassigned Activities</f><f>n</f><f></f><f></f><f></f><f>Unassigned activities are useful when creating activity pools, but can result in activities erroneously created without accountability.</f></row>
+      <row><f>Display Item Technical Details</f><f>n</f><f></f><f></f><f></f><f>Expose ID numbers and other technical tidbits on production screens. Useful for developers tracking issues in production. Otherwise not necessary.</f></row>
+      <row><f>Show Logo</f><f>n</f><f></f><f></f><f></f><f>Controls custom logo display in the head of every page in XRMS.</f></row>
+      <row><f>Use Owl</f><f>n</f><f></f><f></f><f></f><f>Provide an experimental link to OWL, a file management utility that supports more features (like revisions) than xrms.  To use, install OWL from http://sourceforge.net/projects/owl in xrms/owl and set this parameter to y.</f></row>
+    </data>
+  </table>
+  <table name="system_parameters_options">
+    <field name="param_id" type="C" size="40">
+      <NOTNULL/>
+    </field>
+    <field name="string_val" type="C" size="100"/>
+    <field name="int_val" type="I" size="11"/>
+    <field name="float_val" type="N"/>
+    <field name="datetime_val" type="T"/>
+    <field name="sort_order" type="I" size="11"/>
+    <data>
+      <row><f>Audit Level</f><f></f><f>0</f><f></f><f></f><f>1</f></row>
+      <row><f>Audit Level</f><f></f><f>1</f><f></f><f></f><f>2</f></row>
+      <row><f>Audit Level</f><f></f><f>2</f><f></f><f></f><f>3</f></row>
+      <row><f>Audit Level</f><f></f><f>3</f><f></f><f></f><f>4</f></row>
+      <row><f>Audit Level</f><f></f><f>4</f><f></f><f></f><f>5</f></row>
+      <row><f>Activities Default Behavior</f><f>Fast</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>Activities Default Behavior</f><f>Long</f><f></f><f></f><f></f><f>2</f></row>
+      <row><f>LDAP Version</f><f></f><f>2</f><f></f><f></f><f>1</f></row>
+      <row><f>LDAP Version</f><f></f><f>3</f><f></f><f></f><f>2</f></row>
+      <row><f>RSS Feeds Enabled</f><f>n</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>RSS Feeds Enabled</f><f>y</f><f></f><f></f><f></f><f>2</f></row>
+      <row><f>Reports--Use Horizontal Rule</f><f>n</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>Reports--Use Horizontal Rule</f><f>y</f><f></f><f></f><f></f><f>2</f></row>
+      <row><f>Reports--Show No Items Found</f><f>n</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>Reports--Show No Items Found</f><f>y</f><f></f><f></f><f></f><f>2</f></row>
+      <row><f>Allow Unassigned Activities</f><f>n</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>Allow Unassigned Activities</f><f>y</f><f></f><f></f><f></f><f>2</f></row>
+      <row><f>Display Item Technical Details</f><f>n</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>Display Item Technical Details</f><f>y</f><f></f><f></f><f></f><f>2</f></row>
+      <row><f>Show Logo</f><f>n</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>Show Logo</f><f>y</f><f></f><f></f><f></f><f>2</f></row>
+      <row><f>Use Owl</f><f>n</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>Use Owl</f><f>y</f><f></f><f></f><f></f><f>2</f></row>
+    </data>
+  </table>
+  <table name="time_daylight_savings">
+    <field name="daylight_savings_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="start_position" type="C" size="5">
+      <NOTNULL/>
+    </field>
+    <field name="start_day" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="start_month" type="I" size="2">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="end_position" type="C" size="5">
+      <NOTNULL/>
+    </field>
+    <field name="end_day" type="C" size="10">
+      <NOTNULL/>
+    </field>
+    <field name="end_month" type="I" size="2">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="hour_shift" type="N">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="last_update" type="D">
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00"/>
+    </field>
+    <field name="current_hour_shift" type="N">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <data>
+      <row><f>1</f><f></f><f></f><f>0</f><f></f><f></f><f>0</f><f>0</f><f>2004-08-02</f><f>0</f></row>
+      <row><f>2</f><f></f><f></f><f>0</f><f></f><f></f><f>0</f><f>1</f><f>2004-08-02</f><f>1</f></row>
+      <row><f>3</f><f>first</f><f>Sunday</f><f>4</f><f>last</f><f>Sunday</f><f>0</f><f>1</f><f>2004-08-02</f><f>1</f></row>
+    </data>
+  </table>
+  <table name="time_zones">
+    <field name="time_zone_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="country_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="province" type="C" size="255"/>
+    <field name="city" type="C" size="255"/>
+    <field name="postal_code" type="C" size="24"/>
+    <field name="daylight_savings_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="offset" type="N">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="confirmed" type="C" size="1">
+      <NOTNULL/>
+    </field>
+    <index name="country_id">
+      <col>country_id</col>
+    </index>
+    <index name="province">
+      <col>province</col>
+    </index>
+    <data>
+      <row><f>1</f><f>218</f><f>AL</f><f></f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>2</f><f>218</f><f>AK</f><f></f><f></f><f>3</f><f>-9</f><f>n</f></row>
+      <row><f>3</f><f>218</f><f>AK</f><f>Anchorage</f><f></f><f>3</f><f>-9</f><f>y</f></row>
+      <row><f>4</f><f>218</f><f>AK</f><f>Bethel</f><f></f><f>3</f><f>-9</f><f>y</f></row>
+      <row><f>5</f><f>218</f><f>AK</f><f>College</f><f></f><f>3</f><f>-9</f><f>y</f></row>
+      <row><f>6</f><f>218</f><f>AK</f><f>Eielson AFB</f><f></f><f>3</f><f>-9</f><f>y</f></row>
+      <row><f>7</f><f>218</f><f>AK</f><f>Fairbanks</f><f></f><f>3</f><f>-9</f><f>y</f></row>
+      <row><f>8</f><f>218</f><f>AK</f><f>Juneau</f><f></f><f>3</f><f>-9</f><f>y</f></row>
+      <row><f>9</f><f>218</f><f>AK</f><f>Kalifornsky</f><f></f><f>3</f><f>-9</f><f>y</f></row>
+      <row><f>10</f><f>218</f><f>AK</f><f>Kenai</f><f></f><f>3</f><f>-9</f><f>y</f></row>
+      <row><f>11</f><f>218</f><f>AK</f><f>Ketchikan</f><f></f><f>3</f><f>-9</f><f>y</f></row>
+      <row><f>12</f><f>218</f><f>AK</f><f>Knik-Fairview</f><f></f><f>3</f><f>-9</f><f>y</f></row>
+      <row><f>13</f><f>218</f><f>AK</f><f>Kodiak</f><f></f><f>3</f><f>-9</f><f>y</f></row>
+      <row><f>14</f><f>218</f><f>AK</f><f>Lakes</f><f></f><f>3</f><f>-9</f><f>y</f></row>
+      <row><f>15</f><f>218</f><f>AK</f><f>Meadow Lakes</f><f></f><f>3</f><f>-9</f><f>y</f></row>
+      <row><f>16</f><f>218</f><f>AK</f><f>Sitka</f><f></f><f>3</f><f>-9</f><f>y</f></row>
+      <row><f>17</f><f>218</f><f>AK</f><f>Tanaina</f><f></f><f>3</f><f>-9</f><f>y</f></row>
+      <row><f>18</f><f>218</f><f>AK</f><f>Wasilla</f><f></f><f>3</f><f>-9</f><f>y</f></row>
+      <row><f>19</f><f>218</f><f>AZ</f><f></f><f></f><f>1</f><f>-7</f><f>y</f></row>
+      <row><f>20</f><f>218</f><f>AR</f><f></f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>21</f><f>218</f><f>CA</f><f></f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>22</f><f>218</f><f>CO</f><f></f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>23</f><f>218</f><f>CT</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>24</f><f>218</f><f>DE</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>25</f><f>218</f><f>FL</f><f></f><f></f><f>3</f><f>-5</f><f>n</f></row>
+      <row><f>26</f><f>218</f><f>FL</f><f>Alamonte Springs</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>27</f><f>218</f><f>FL</f><f>Boca Raton</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>28</f><f>218</f><f>FL</f><f>Boynton Beach</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>29</f><f>218</f><f>FL</f><f>Bradenton</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>30</f><f>218</f><f>FL</f><f>Cape Coral</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>31</f><f>218</f><f>FL</f><f>Clearwater</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>32</f><f>218</f><f>FL</f><f>Coral Gables</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>33</f><f>218</f><f>FL</f><f>Coral Springs</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>34</f><f>218</f><f>FL</f><f>Davie</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>35</f><f>218</f><f>FL</f><f>Daytona Beach</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>36</f><f>218</f><f>FL</f><f>Deerfield Beach</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>37</f><f>218</f><f>FL</f><f>Delray Beach</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>38</f><f>218</f><f>FL</f><f>Deltona</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>39</f><f>218</f><f>FL</f><f>Fort Lauderdale</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>40</f><f>218</f><f>FL</f><f>Fort Myers</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>41</f><f>218</f><f>FL</f><f>Gainesville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>42</f><f>218</f><f>FL</f><f>Hialeah</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>43</f><f>218</f><f>FL</f><f>Hollywood</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>44</f><f>218</f><f>FL</f><f>Jacksonville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>45</f><f>218</f><f>FL</f><f>Kissimmee</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>46</f><f>218</f><f>FL</f><f>Lakeland</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>47</f><f>218</f><f>FL</f><f>Largo</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>48</f><f>218</f><f>FL</f><f>Lauderhill</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>49</f><f>218</f><f>FL</f><f>Margate</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>50</f><f>218</f><f>FL</f><f>Melbourne</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>51</f><f>218</f><f>FL</f><f>Miami Beach</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>52</f><f>218</f><f>FL</f><f>Miami</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>53</f><f>218</f><f>FL</f><f>Miramar</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>54</f><f>218</f><f>FL</f><f>North Miami Beach</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>55</f><f>218</f><f>FL</f><f>North Miami</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>56</f><f>218</f><f>FL</f><f>Ocala</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>57</f><f>218</f><f>FL</f><f>Orlando</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>58</f><f>218</f><f>FL</f><f>Palm Bay</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>59</f><f>218</f><f>FL</f><f>Pembroke Pines</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>60</f><f>218</f><f>FL</f><f>Pensacola</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>61</f><f>218</f><f>FL</f><f>Plantation</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>62</f><f>218</f><f>FL</f><f>Pompano Beach</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>63</f><f>218</f><f>FL</f><f>Port Orange</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>64</f><f>218</f><f>FL</f><f>Port St. Lucie</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>65</f><f>218</f><f>FL</f><f>Sarasota</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>66</f><f>218</f><f>FL</f><f>St. Petersburg</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>67</f><f>218</f><f>FL</f><f>Sunrise</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>68</f><f>218</f><f>FL</f><f>Tallahassee</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>69</f><f>218</f><f>FL</f><f>Tamarac</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>70</f><f>218</f><f>FL</f><f>Tampa</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>71</f><f>218</f><f>FL</f><f>Titusville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>72</f><f>218</f><f>FL</f><f>West Palm Beach</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>73</f><f>218</f><f>FL</f><f>Weston</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>74</f><f>218</f><f>GA</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>75</f><f>218</f><f>HI</f><f></f><f></f><f>1</f><f>-10</f><f>y</f></row>
+      <row><f>76</f><f>218</f><f>ID</f><f></f><f></f><f>3</f><f>-7</f><f>n</f></row>
+      <row><f>77</f><f>218</f><f>ID</f><f>Ammon</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>78</f><f>218</f><f>ID</f><f>Blackfoot</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>79</f><f>218</f><f>ID</f><f>Boise</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>80</f><f>218</f><f>ID</f><f>Burley</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>81</f><f>218</f><f>ID</f><f>Caldwell</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>82</f><f>218</f><f>ID</f><f>Chubbuck</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>83</f><f>218</f><f>ID</f><f>Coeur d'Alene</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>84</f><f>218</f><f>ID</f><f>Eagle</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>85</f><f>218</f><f>ID</f><f>Garden</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>86</f><f>218</f><f>ID</f><f>Hailey</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>87</f><f>218</f><f>ID</f><f>Hayden</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>88</f><f>218</f><f>ID</f><f>Idaho Falls</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>89</f><f>218</f><f>ID</f><f>Jerome</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>90</f><f>218</f><f>ID</f><f>Lewiston</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>91</f><f>218</f><f>ID</f><f>Meridian</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>92</f><f>218</f><f>ID</f><f>Moscow</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>93</f><f>218</f><f>ID</f><f>Mountain Home</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>94</f><f>218</f><f>ID</f><f>Nampa</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>95</f><f>218</f><f>ID</f><f>Payette</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>96</f><f>218</f><f>ID</f><f>Pocatello</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>97</f><f>218</f><f>ID</f><f>Post Falls</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>98</f><f>218</f><f>ID</f><f>Rexburg</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>99</f><f>218</f><f>ID</f><f>Sandpoint</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>100</f><f>218</f><f>ID</f><f>Twin Falls</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>101</f><f>218</f><f>IL</f><f></f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>102</f><f>218</f><f>IN</f><f></f><f></f><f>1</f><f>-5</f><f>n</f></row>
+      <row><f>103</f><f>218</f><f>IN</f><f>Alexandria</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>104</f><f>218</f><f>IN</f><f>Anderson</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>105</f><f>218</f><f>IN</f><f>Angola</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>106</f><f>218</f><f>IN</f><f>Auburn</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>107</f><f>218</f><f>IN</f><f>Avon</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>108</f><f>218</f><f>IN</f><f>Batesville</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>109</f><f>218</f><f>IN</f><f>Bedford</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>110</f><f>218</f><f>IN</f><f>Beech Grove</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>111</f><f>218</f><f>IN</f><f>Bloomington</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>112</f><f>218</f><f>IN</f><f>Bluffton</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>113</f><f>218</f><f>IN</f><f>Boonville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>114</f><f>218</f><f>IN</f><f>Brazil</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>115</f><f>218</f><f>IN</f><f>Brownsburg</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>116</f><f>218</f><f>IN</f><f>Carmel</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>117</f><f>218</f><f>IN</f><f>Cedar Lake</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>118</f><f>218</f><f>IN</f><f>Charlestown</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>119</f><f>218</f><f>IN</f><f>Chesterton</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>120</f><f>218</f><f>IN</f><f>Clarksville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>121</f><f>218</f><f>IN</f><f>Columbia City</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>122</f><f>218</f><f>IN</f><f>Columbus</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>123</f><f>218</f><f>IN</f><f>Connersville</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>124</f><f>218</f><f>IN</f><f>Crawfordsville</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>125</f><f>218</f><f>IN</f><f>Crown Point</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>126</f><f>218</f><f>IN</f><f>Danville</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>127</f><f>218</f><f>IN</f><f>Decatur</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>128</f><f>218</f><f>IN</f><f>Dyer</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>129</f><f>218</f><f>IN</f><f>East Chicago</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>130</f><f>218</f><f>IN</f><f>Elkhart</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>131</f><f>218</f><f>IN</f><f>Elwood</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>132</f><f>218</f><f>IN</f><f>Evansville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>133</f><f>218</f><f>IN</f><f>Evansville</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>134</f><f>218</f><f>IN</f><f>Fishers</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>135</f><f>218</f><f>IN</f><f>Fort Wayne</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>136</f><f>218</f><f>IN</f><f>Frankfort</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>137</f><f>218</f><f>IN</f><f>Franklin</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>138</f><f>218</f><f>IN</f><f>Gary</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>139</f><f>218</f><f>IN</f><f>Gas City</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>140</f><f>218</f><f>IN</f><f>Goshen</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>141</f><f>218</f><f>IN</f><f>Greencastle</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>142</f><f>218</f><f>IN</f><f>Greenfield</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>143</f><f>218</f><f>IN</f><f>Greensburg</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>144</f><f>218</f><f>IN</f><f>Greenwood</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>145</f><f>218</f><f>IN</f><f>Griffith</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>146</f><f>218</f><f>IN</f><f>Hammond</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>147</f><f>218</f><f>IN</f><f>Hartford City</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>148</f><f>218</f><f>IN</f><f>Highland</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>149</f><f>218</f><f>IN</f><f>Hobart</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>150</f><f>218</f><f>IN</f><f>Huntington</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>151</f><f>218</f><f>IN</f><f>Indianapolis</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>152</f><f>218</f><f>IN</f><f>Jasper</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>153</f><f>218</f><f>IN</f><f>Jeffersonville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>154</f><f>218</f><f>IN</f><f>Kendallville</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>155</f><f>218</f><f>IN</f><f>Kokomo</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>156</f><f>218</f><f>IN</f><f>La Porte</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>157</f><f>218</f><f>IN</f><f>Lafayette</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>158</f><f>218</f><f>IN</f><f>Lake Station</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>159</f><f>218</f><f>IN</f><f>Lawrence</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>160</f><f>218</f><f>IN</f><f>Lebanon</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>161</f><f>218</f><f>IN</f><f>Logansport</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>162</f><f>218</f><f>IN</f><f>Lowell</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>163</f><f>218</f><f>IN</f><f>Madison</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>164</f><f>218</f><f>IN</f><f>Marion</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>165</f><f>218</f><f>IN</f><f>Martinsville</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>166</f><f>218</f><f>IN</f><f>Merillville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>167</f><f>218</f><f>IN</f><f>Michigan City</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>168</f><f>218</f><f>IN</f><f>Mishawaka</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>169</f><f>218</f><f>IN</f><f>Mooresville</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>170</f><f>218</f><f>IN</f><f>Mount Vernon</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>171</f><f>218</f><f>IN</f><f>Muncie</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>172</f><f>218</f><f>IN</f><f>Munster</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>173</f><f>218</f><f>IN</f><f>Nappanee</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>174</f><f>218</f><f>IN</f><f>New Albany</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>175</f><f>218</f><f>IN</f><f>New Castle</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>176</f><f>218</f><f>IN</f><f>New Haven</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>177</f><f>218</f><f>IN</f><f>Noblesville</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>178</f><f>218</f><f>IN</f><f>North Manchester</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>179</f><f>218</f><f>IN</f><f>North Vernon</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>180</f><f>218</f><f>IN</f><f>Peru</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>181</f><f>218</f><f>IN</f><f>Plainfield</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>182</f><f>218</f><f>IN</f><f>Plymouth</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>183</f><f>218</f><f>IN</f><f>Portage</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>184</f><f>218</f><f>IN</f><f>Portland</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>185</f><f>218</f><f>IN</f><f>Princeton</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>186</f><f>218</f><f>IN</f><f>Richmond</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>187</f><f>218</f><f>IN</f><f>Rochester</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>188</f><f>218</f><f>IN</f><f>Rushville</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>189</f><f>218</f><f>IN</f><f>Salem</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>190</f><f>218</f><f>IN</f><f>Schererville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>191</f><f>218</f><f>IN</f><f>Scottsburg</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>192</f><f>218</f><f>IN</f><f>Sellersburg</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>193</f><f>218</f><f>IN</f><f>Seymour</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>194</f><f>218</f><f>IN</f><f>Shelbyville</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>195</f><f>218</f><f>IN</f><f>South Bend</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>196</f><f>218</f><f>IN</f><f>Speedway</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>197</f><f>218</f><f>IN</f><f>St. John</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>198</f><f>218</f><f>IN</f><f>Tell City</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>199</f><f>218</f><f>IN</f><f>Terre Haute</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>200</f><f>218</f><f>IN</f><f>Valparaiso</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>201</f><f>218</f><f>IN</f><f>Vincennes</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>202</f><f>218</f><f>IN</f><f>Wabash</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>203</f><f>218</f><f>IN</f><f>Warsaw</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>204</f><f>218</f><f>IN</f><f>Washington</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>205</f><f>218</f><f>IN</f><f>West Lafayette</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>206</f><f>218</f><f>IN</f><f>Westfield</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>207</f><f>218</f><f>IN</f><f>Zionsville</f><f></f><f>1</f><f>-5</f><f>y</f></row>
+      <row><f>208</f><f>218</f><f>IA</f><f></f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>209</f><f>218</f><f>KS</f><f></f><f></f><f>3</f><f>-6</f><f>n</f></row>
+      <row><f>210</f><f>218</f><f>KS</f><f>Abilene</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>211</f><f>218</f><f>KS</f><f>Andover</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>212</f><f>218</f><f>KS</f><f>Arkansas City</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>213</f><f>218</f><f>KS</f><f>Atchison</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>214</f><f>218</f><f>KS</f><f>Augusta</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>215</f><f>218</f><f>KS</f><f>Bonner Springs</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>216</f><f>218</f><f>KS</f><f>Chanute</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>217</f><f>218</f><f>KS</f><f>Coffeyville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>218</f><f>218</f><f>KS</f><f>Derby</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>219</f><f>218</f><f>KS</f><f>Dodge City</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>220</f><f>218</f><f>KS</f><f>El Dorado</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>221</f><f>218</f><f>KS</f><f>Emporia</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>222</f><f>218</f><f>KS</f><f>Fort Scott</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>223</f><f>218</f><f>KS</f><f>Garden City</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>224</f><f>218</f><f>KS</f><f>Gardner</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>225</f><f>218</f><f>KS</f><f>Great Bend</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>226</f><f>218</f><f>KS</f><f>Hays</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>227</f><f>218</f><f>KS</f><f>Haysville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>228</f><f>218</f><f>KS</f><f>Hutchinson</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>229</f><f>218</f><f>KS</f><f>Independence</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>230</f><f>218</f><f>KS</f><f>Iola</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>231</f><f>218</f><f>KS</f><f>Junction City</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>232</f><f>218</f><f>KS</f><f>Kansas City</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>233</f><f>218</f><f>KS</f><f>Lansing</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>234</f><f>218</f><f>KS</f><f>Lawrence</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>235</f><f>218</f><f>KS</f><f>Leavenworth</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>236</f><f>218</f><f>KS</f><f>Leawood</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>237</f><f>218</f><f>KS</f><f>Lenexa</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>238</f><f>218</f><f>KS</f><f>Liberal</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>239</f><f>218</f><f>KS</f><f>Manhattan</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>240</f><f>218</f><f>KS</f><f>McPherson</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>241</f><f>218</f><f>KS</f><f>Merriam</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>242</f><f>218</f><f>KS</f><f>Mission</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>243</f><f>218</f><f>KS</f><f>Newton</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>244</f><f>218</f><f>KS</f><f>Olathe</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>245</f><f>218</f><f>KS</f><f>Ottowa</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>246</f><f>218</f><f>KS</f><f>Overland Park</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>247</f><f>218</f><f>KS</f><f>Parsons</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>248</f><f>218</f><f>KS</f><f>Pittsburg</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>249</f><f>218</f><f>KS</f><f>Prairie Village</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>250</f><f>218</f><f>KS</f><f>Pratt</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>251</f><f>218</f><f>KS</f><f>Roeland Park</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>252</f><f>218</f><f>KS</f><f>Salina</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>253</f><f>218</f><f>KS</f><f>Shawnee</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>254</f><f>218</f><f>KS</f><f>Topeka</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>255</f><f>218</f><f>KS</f><f>Wellington</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>256</f><f>218</f><f>KS</f><f>Wichita</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>257</f><f>218</f><f>KS</f><f>Winfield</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>258</f><f>218</f><f>KY</f><f></f><f></f><f>3</f><f>-5</f><f>n</f></row>
+      <row><f>259</f><f>218</f><f>KY</f><f>Alexandria</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>260</f><f>218</f><f>KY</f><f>Ashland</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>261</f><f>218</f><f>KY</f><f>Bardstown</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>262</f><f>218</f><f>KY</f><f>Berea</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>263</f><f>218</f><f>KY</f><f>Bowling Green</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>264</f><f>218</f><f>KY</f><f>Campbellsville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>265</f><f>218</f><f>KY</f><f>Covington</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>266</f><f>218</f><f>KY</f><f>Danville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>267</f><f>218</f><f>KY</f><f>Edgewood</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>268</f><f>218</f><f>KY</f><f>Elizabethtown</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>269</f><f>218</f><f>KY</f><f>Elsmere</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>270</f><f>218</f><f>KY</f><f>Erlanger</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>271</f><f>218</f><f>KY</f><f>Florence</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>272</f><f>218</f><f>KY</f><f>Fort Knox</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>273</f><f>218</f><f>KY</f><f>Fort Mitchell</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>274</f><f>218</f><f>KY</f><f>Fort Thomas</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>275</f><f>218</f><f>KY</f><f>Frankfort</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>276</f><f>218</f><f>KY</f><f>Franklin</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>277</f><f>218</f><f>KY</f><f>Georgetown</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>278</f><f>218</f><f>KY</f><f>Glasgow</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>279</f><f>218</f><f>KY</f><f>Harrodsburg</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>280</f><f>218</f><f>KY</f><f>Henderson</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>281</f><f>218</f><f>KY</f><f>Hopkinsville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>282</f><f>218</f><f>KY</f><f>Independence</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>283</f><f>218</f><f>KY</f><f>Jeffersontown</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>284</f><f>218</f><f>KY</f><f>Lawrenceburg</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>285</f><f>218</f><f>KY</f><f>Lexington-Fayette</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>286</f><f>218</f><f>KY</f><f>Louisville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>287</f><f>218</f><f>KY</f><f>Lyndon</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>288</f><f>218</f><f>KY</f><f>Madisonville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>289</f><f>218</f><f>KY</f><f>Mayfield</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>290</f><f>218</f><f>KY</f><f>Maysville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>291</f><f>218</f><f>KY</f><f>Middlesborough</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>292</f><f>218</f><f>KY</f><f>Mount Washington</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>293</f><f>218</f><f>KY</f><f>Murray</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>294</f><f>218</f><f>KY</f><f>Newport</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>295</f><f>218</f><f>KY</f><f>Nicholasville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>296</f><f>218</f><f>KY</f><f>Owensboro</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>297</f><f>218</f><f>KY</f><f>Paducah</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>298</f><f>218</f><f>KY</f><f>Paris</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>299</f><f>218</f><f>KY</f><f>Radcliff</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>300</f><f>218</f><f>KY</f><f>Richmond</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>301</f><f>218</f><f>KY</f><f>Shelbyville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>302</f><f>218</f><f>KY</f><f>Shepherdsville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>303</f><f>218</f><f>KY</f><f>Shively</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>304</f><f>218</f><f>KY</f><f>Somerset</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>305</f><f>218</f><f>KY</f><f>St. Matthews</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>306</f><f>218</f><f>KY</f><f>Winchester</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>307</f><f>218</f><f>LA</f><f></f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>308</f><f>218</f><f>ME</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>309</f><f>218</f><f>MD</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>310</f><f>218</f><f>MA</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>311</f><f>218</f><f>MI</f><f></f><f></f><f>3</f><f>-5</f><f>n</f></row>
+      <row><f>312</f><f>218</f><f>MI</f><f>Adrian</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>313</f><f>218</f><f>MI</f><f>Allen Park</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>314</f><f>218</f><f>MI</f><f>Anne Arbor</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>315</f><f>218</f><f>MI</f><f>Auburn Hills</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>316</f><f>218</f><f>MI</f><f>Battle Creek</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>317</f><f>218</f><f>MI</f><f>Bedford</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>318</f><f>218</f><f>MI</f><f>Birmingham</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>319</f><f>218</f><f>MI</f><f>Blackman</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>320</f><f>218</f><f>MI</f><f>Bloomfield</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>321</f><f>218</f><f>MI</f><f>Brownstown</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>322</f><f>218</f><f>MI</f><f>Burton</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>323</f><f>218</f><f>MI</f><f>Canton</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>324</f><f>218</f><f>MI</f><f>Chesterfield</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>325</f><f>218</f><f>MI</f><f>Clinton</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>326</f><f>218</f><f>MI</f><f>Commerce</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>327</f><f>218</f><f>MI</f><f>Davison</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>328</f><f>218</f><f>MI</f><f>Dearborn</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>329</f><f>218</f><f>MI</f><f>Delhi</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>330</f><f>218</f><f>MI</f><f>Delta</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>331</f><f>218</f><f>MI</f><f>Detroit</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>332</f><f>218</f><f>MI</f><f>East Lansing</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>333</f><f>218</f><f>MI</f><f>Eastpointe</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>334</f><f>218</f><f>MI</f><f>Farmington Hills</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>335</f><f>218</f><f>MI</f><f>Ferndale</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>336</f><f>218</f><f>MI</f><f>Flint</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>337</f><f>218</f><f>MI</f><f>Forest Hills</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>338</f><f>218</f><f>MI</f><f>Frenchtown</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>339</f><f>218</f><f>MI</f><f>Gaines</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>340</f><f>218</f><f>MI</f><f>Garden City</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>341</f><f>218</f><f>MI</f><f>Genesee</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>342</f><f>218</f><f>MI</f><f>Georgetown</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>343</f><f>218</f><f>MI</f><f>Grand Blanc</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>344</f><f>218</f><f>MI</f><f>Grand Rapids</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>345</f><f>218</f><f>MI</f><f>Hamburg</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>346</f><f>218</f><f>MI</f><f>Hamtramck</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>347</f><f>218</f><f>MI</f><f>Harrison</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>348</f><f>218</f><f>MI</f><f>Hazel Park</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>349</f><f>218</f><f>MI</f><f>Highland</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>350</f><f>218</f><f>MI</f><f>Holland</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>351</f><f>218</f><f>MI</f><f>Independence</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>352</f><f>218</f><f>MI</f><f>Inkster</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>353</f><f>218</f><f>MI</f><f>Jackson</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>354</f><f>218</f><f>MI</f><f>Kalamazoo</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>355</f><f>218</f><f>MI</f><f>Kentwood</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>356</f><f>218</f><f>MI</f><f>Lansing</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>357</f><f>218</f><f>MI</f><f>Lincoln Park</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>358</f><f>218</f><f>MI</f><f>Livonia</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>359</f><f>218</f><f>MI</f><f>Macomb</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>360</f><f>218</f><f>MI</f><f>Madison Heights</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>361</f><f>218</f><f>MI</f><f>Mariquette</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>362</f><f>218</f><f>MI</f><f>Meridian</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>363</f><f>218</f><f>MI</f><f>Midland</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>364</f><f>218</f><f>MI</f><f>Monroe</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>365</f><f>218</f><f>MI</f><f>Mount Morris</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>366</f><f>218</f><f>MI</f><f>Mount Pleasant</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>367</f><f>218</f><f>MI</f><f>Muskegon</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>368</f><f>218</f><f>MI</f><f>Northville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>369</f><f>218</f><f>MI</f><f>Norton Shores</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>370</f><f>218</f><f>MI</f><f>Novi</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>371</f><f>218</f><f>MI</f><f>Oak Park</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>372</f><f>218</f><f>MI</f><f>Okemos</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>373</f><f>218</f><f>MI</f><f>Orion</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>374</f><f>218</f><f>MI</f><f>Pittsfield</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>375</f><f>218</f><f>MI</f><f>Plainfield</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>376</f><f>218</f><f>MI</f><f>Plymouth</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>377</f><f>218</f><f>MI</f><f>Pontiac</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>378</f><f>218</f><f>MI</f><f>Port Huron</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>379</f><f>218</f><f>MI</f><f>Portage</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>380</f><f>218</f><f>MI</f><f>Redford</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>381</f><f>218</f><f>MI</f><f>Rochester Hills</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>382</f><f>218</f><f>MI</f><f>Romulus</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>383</f><f>218</f><f>MI</f><f>Roseville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>384</f><f>218</f><f>MI</f><f>Royal Oak</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>385</f><f>218</f><f>MI</f><f>Saginaw</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>386</f><f>218</f><f>MI</f><f>Shelby</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>387</f><f>218</f><f>MI</f><f>Southfield</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>388</f><f>218</f><f>MI</f><f>Southgate</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>389</f><f>218</f><f>MI</f><f>St. Clair Shores</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>390</f><f>218</f><f>MI</f><f>Sterling Heights</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>391</f><f>218</f><f>MI</f><f>Summit</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>392</f><f>218</f><f>MI</f><f>Taylor</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>393</f><f>218</f><f>MI</f><f>Trenton</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>394</f><f>218</f><f>MI</f><f>Troy</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>395</f><f>218</f><f>MI</f><f>Van Buren</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>396</f><f>218</f><f>MI</f><f>Walker</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>397</f><f>218</f><f>MI</f><f>Warren</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>398</f><f>218</f><f>MI</f><f>Washington</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>399</f><f>218</f><f>MI</f><f>Waterford</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>400</f><f>218</f><f>MI</f><f>Wayne</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>401</f><f>218</f><f>MI</f><f>West Bloomfield</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>402</f><f>218</f><f>MI</f><f>Westland</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>403</f><f>218</f><f>MI</f><f>White Lake</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>404</f><f>218</f><f>MI</f><f>Wyandotte</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>405</f><f>218</f><f>MI</f><f>Wyoming</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>406</f><f>218</f><f>MI</f><f>Ypsilanti</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>407</f><f>218</f><f>MN</f><f></f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>408</f><f>218</f><f>MS</f><f></f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>409</f><f>218</f><f>MO</f><f></f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>410</f><f>218</f><f>MT</f><f></f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>411</f><f>218</f><f>NE</f><f></f><f></f><f>3</f><f>-6</f><f>n</f></row>
+      <row><f>412</f><f>218</f><f>NE</f><f>Alliance</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>413</f><f>218</f><f>NE</f><f>Beatrice</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>414</f><f>218</f><f>NE</f><f>Bellevue</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>415</f><f>218</f><f>NE</f><f>Blair</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>416</f><f>218</f><f>NE</f><f>Chadron</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>417</f><f>218</f><f>NE</f><f>Chalco</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>418</f><f>218</f><f>NE</f><f>Columbus</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>419</f><f>218</f><f>NE</f><f>Crete</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>420</f><f>218</f><f>NE</f><f>Elkhorn</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>421</f><f>218</f><f>NE</f><f>Fremont</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>422</f><f>218</f><f>NE</f><f>Gering</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>423</f><f>218</f><f>NE</f><f>Grand Island</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>424</f><f>218</f><f>NE</f><f>Hastings</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>425</f><f>218</f><f>NE</f><f>Holdrege</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>426</f><f>218</f><f>NE</f><f>Kearney</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>427</f><f>218</f><f>NE</f><f>La Vista</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>428</f><f>218</f><f>NE</f><f>Lexington</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>429</f><f>218</f><f>NE</f><f>Lincoln</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>430</f><f>218</f><f>NE</f><f>McCook</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>431</f><f>218</f><f>NE</f><f>Nebraska City</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>432</f><f>218</f><f>NE</f><f>Norfolk</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>433</f><f>218</f><f>NE</f><f>North Platte</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>434</f><f>218</f><f>NE</f><f>Offutt AFB</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>435</f><f>218</f><f>NE</f><f>Omaha</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>436</f><f>218</f><f>NE</f><f>Papillion</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>437</f><f>218</f><f>NE</f><f>Plattsmouth</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>438</f><f>218</f><f>NE</f><f>Ralston</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>439</f><f>218</f><f>NE</f><f>Scottsbluff</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>440</f><f>218</f><f>NE</f><f>Seward</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>441</f><f>218</f><f>NE</f><f>Sidney</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>442</f><f>218</f><f>NE</f><f>South Sioux City</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>443</f><f>218</f><f>NE</f><f>York</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>444</f><f>218</f><f>NV</f><f></f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>445</f><f>218</f><f>NH</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>446</f><f>218</f><f>NJ</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>447</f><f>218</f><f>NM</f><f></f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>448</f><f>218</f><f>NY</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>449</f><f>218</f><f>NC</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>450</f><f>218</f><f>ND</f><f></f><f></f><f>3</f><f>-6</f><f>n</f></row>
+      <row><f>451</f><f>218</f><f>ND</f><f>Bismarck</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>452</f><f>218</f><f>ND</f><f>Devils Lake</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>453</f><f>218</f><f>ND</f><f>Dickinson</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>454</f><f>218</f><f>ND</f><f>Fargo</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>455</f><f>218</f><f>ND</f><f>Grand Forks</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>456</f><f>218</f><f>ND</f><f>Jamestown</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>457</f><f>218</f><f>ND</f><f>Mandan</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>458</f><f>218</f><f>ND</f><f>Minot</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>459</f><f>218</f><f>ND</f><f>Valley City</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>460</f><f>218</f><f>ND</f><f>Wahpeton</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>461</f><f>218</f><f>ND</f><f>West Fargo</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>462</f><f>218</f><f>ND</f><f>Williston</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>463</f><f>218</f><f>OH</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>464</f><f>218</f><f>OK</f><f></f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>465</f><f>218</f><f>OR</f><f></f><f></f><f>3</f><f>-8</f><f>n</f></row>
+      <row><f>466</f><f>218</f><f>OR</f><f>Albany</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>467</f><f>218</f><f>OR</f><f>Aloha</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>468</f><f>218</f><f>OR</f><f>Altamont</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>469</f><f>218</f><f>OR</f><f>Ashland</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>470</f><f>218</f><f>OR</f><f>Beaverton</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>471</f><f>218</f><f>OR</f><f>Bend</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>472</f><f>218</f><f>OR</f><f>Canby</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>473</f><f>218</f><f>OR</f><f>Cedar Mill</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>474</f><f>218</f><f>OR</f><f>Central Point</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>475</f><f>218</f><f>OR</f><f>City of The Dalles</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>476</f><f>218</f><f>OR</f><f>Coos Bay</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>477</f><f>218</f><f>OR</f><f>Corvalis</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>478</f><f>218</f><f>OR</f><f>Dallas</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>479</f><f>218</f><f>OR</f><f>Eugene</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>480</f><f>218</f><f>OR</f><f>Forest Grove</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>481</f><f>218</f><f>OR</f><f>Four Corners</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>482</f><f>218</f><f>OR</f><f>Gladstone</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>483</f><f>218</f><f>OR</f><f>Grants Pass</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>484</f><f>218</f><f>OR</f><f>Gresham</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>485</f><f>218</f><f>OR</f><f>Hayesville</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>486</f><f>218</f><f>OR</f><f>Hermiston</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>487</f><f>218</f><f>OR</f><f>Hillsboro</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>488</f><f>218</f><f>OR</f><f>Keizer</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>489</f><f>218</f><f>OR</f><f>Klamath Falls</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>490</f><f>218</f><f>OR</f><f>La Grande</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>491</f><f>218</f><f>OR</f><f>Lake Oswego</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>492</f><f>218</f><f>OR</f><f>Lebanon</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>493</f><f>218</f><f>OR</f><f>McMinnville</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>494</f><f>218</f><f>OR</f><f>Medford</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>495</f><f>218</f><f>OR</f><f>Milwaukie</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>496</f><f>218</f><f>OR</f><f>Newberg</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>497</f><f>218</f><f>OR</f><f>Oak Grove</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>498</f><f>218</f><f>OR</f><f>Oatfield</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>499</f><f>218</f><f>OR</f><f>Ontario</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>500</f><f>218</f><f>OR</f><f>Oregon City</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>501</f><f>218</f><f>OR</f><f>Pendleton</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>502</f><f>218</f><f>OR</f><f>Portland</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>503</f><f>218</f><f>OR</f><f>Redmond</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>504</f><f>218</f><f>OR</f><f>Roseburg</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>505</f><f>218</f><f>OR</f><f>Salem</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>506</f><f>218</f><f>OR</f><f>Sherwood</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>507</f><f>218</f><f>OR</f><f>Springfield</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>508</f><f>218</f><f>OR</f><f>Tigard</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>509</f><f>218</f><f>OR</f><f>Troutdale</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>510</f><f>218</f><f>OR</f><f>Tualatin</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>511</f><f>218</f><f>OR</f><f>West Linn</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>512</f><f>218</f><f>OR</f><f>Wilsonville</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>513</f><f>218</f><f>OR</f><f>Woddburn</f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>514</f><f>218</f><f>PA</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>515</f><f>218</f><f>PR</f><f></f><f></f><f>1</f><f>-4</f><f>y</f></row>
+      <row><f>516</f><f>218</f><f>RI</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>517</f><f>218</f><f>SC</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>518</f><f>218</f><f>SD</f><f></f><f></f><f>3</f><f>-6</f><f>n</f></row>
+      <row><f>519</f><f>218</f><f>SD</f><f>Aberdeen</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>520</f><f>218</f><f>SD</f><f>Brookings</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>521</f><f>218</f><f>SD</f><f>Huron</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>522</f><f>218</f><f>SD</f><f>Mitchell</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>523</f><f>218</f><f>SD</f><f>Pierre</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>524</f><f>218</f><f>SD</f><f>Rapid City</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>525</f><f>218</f><f>SD</f><f>Rapid Valley</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>526</f><f>218</f><f>SD</f><f>Sioux Falls</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>527</f><f>218</f><f>SD</f><f>Spearfish</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>528</f><f>218</f><f>SD</f><f>Vermillion</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>529</f><f>218</f><f>SD</f><f>Watertown</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>530</f><f>218</f><f>SD</f><f>Yankton</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>531</f><f>218</f><f>TN</f><f></f><f></f><f>3</f><f>-6</f><f>n</f></row>
+      <row><f>532</f><f>218</f><f>TN</f><f>Alcoa</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>533</f><f>218</f><f>TN</f><f>Athens</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>534</f><f>218</f><f>TN</f><f>Bartlett</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>535</f><f>218</f><f>TN</f><f>Bloomingdale</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>536</f><f>218</f><f>TN</f><f>Brentwood</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>537</f><f>218</f><f>TN</f><f>Bristol</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>538</f><f>218</f><f>TN</f><f>Brownsville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>539</f><f>218</f><f>TN</f><f>Chattanooga</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>540</f><f>218</f><f>TN</f><f>Clarksville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>541</f><f>218</f><f>TN</f><f>Cleveland</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>542</f><f>218</f><f>TN</f><f>Clinton</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>543</f><f>218</f><f>TN</f><f>Collegedale</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>544</f><f>218</f><f>TN</f><f>Collierville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>545</f><f>218</f><f>TN</f><f>Colonial Heights</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>546</f><f>218</f><f>TN</f><f>Columbia</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>547</f><f>218</f><f>TN</f><f>Cookeville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>548</f><f>218</f><f>TN</f><f>Covington</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>549</f><f>218</f><f>TN</f><f>Crossville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>550</f><f>218</f><f>TN</f><f>Dickson</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>551</f><f>218</f><f>TN</f><f>Dyersburg</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>552</f><f>218</f><f>TN</f><f>East Brainerd</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>553</f><f>218</f><f>TN</f><f>East Ridge</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>554</f><f>218</f><f>TN</f><f>Elizabethton</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>555</f><f>218</f><f>TN</f><f>Farragut</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>556</f><f>218</f><f>TN</f><f>Fayetteville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>557</f><f>218</f><f>TN</f><f>Franklin</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>558</f><f>218</f><f>TN</f><f>Gallatin</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>559</f><f>218</f><f>TN</f><f>Germantown</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>560</f><f>218</f><f>TN</f><f>Goodlettsville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>561</f><f>218</f><f>TN</f><f>Green Hill</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>562</f><f>218</f><f>TN</f><f>Greeneville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>563</f><f>218</f><f>TN</f><f>Harriman</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>564</f><f>218</f><f>TN</f><f>Harrison</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>565</f><f>218</f><f>TN</f><f>Hendersonville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>566</f><f>218</f><f>TN</f><f>Humboldt</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>567</f><f>218</f><f>TN</f><f>Jackson</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>568</f><f>218</f><f>TN</f><f>Jefferson City</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>569</f><f>218</f><f>TN</f><f>Johnson City</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>570</f><f>218</f><f>TN</f><f>Kingsport</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>571</f><f>218</f><f>TN</f><f>Knoxville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>572</f><f>218</f><f>TN</f><f>La Follette</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>573</f><f>218</f><f>TN</f><f>La Vergne</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>574</f><f>218</f><f>TN</f><f>Lakeland</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>575</f><f>218</f><f>TN</f><f>Lawrenceburg</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>576</f><f>218</f><f>TN</f><f>Lebanon</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>577</f><f>218</f><f>TN</f><f>Lenoir City</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>578</f><f>218</f><f>TN</f><f>Lewisburg</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>579</f><f>218</f><f>TN</f><f>Lexington</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>580</f><f>218</f><f>TN</f><f>Manchester</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>581</f><f>218</f><f>TN</f><f>Martin</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>582</f><f>218</f><f>TN</f><f>Maryville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>583</f><f>218</f><f>TN</f><f>McMinnville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>584</f><f>218</f><f>TN</f><f>Memphis</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>585</f><f>218</f><f>TN</f><f>Middle Valley</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>586</f><f>218</f><f>TN</f><f>Milan</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>587</f><f>218</f><f>TN</f><f>Millington</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>588</f><f>218</f><f>TN</f><f>Morristown</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>589</f><f>218</f><f>TN</f><f>Mount Juliet</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>590</f><f>218</f><f>TN</f><f>Murfreesboro</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>591</f><f>218</f><f>TN</f><f>Nashville-Davidson</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>592</f><f>218</f><f>TN</f><f>Newport</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>593</f><f>218</f><f>TN</f><f>Oak Ridge</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>594</f><f>218</f><f>TN</f><f>Paris</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>595</f><f>218</f><f>TN</f><f>Portland</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>596</f><f>218</f><f>TN</f><f>Pulaski</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>597</f><f>218</f><f>TN</f><f>Red Bank</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>598</f><f>218</f><f>TN</f><f>Ripley</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>599</f><f>218</f><f>TN</f><f>Savannah</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>600</f><f>218</f><f>TN</f><f>Sevierville</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>601</f><f>218</f><f>TN</f><f>Seymour</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>602</f><f>218</f><f>TN</f><f>Shelbyville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>603</f><f>218</f><f>TN</f><f>Signal Mountain</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>604</f><f>218</f><f>TN</f><f>Smyrna</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>605</f><f>218</f><f>TN</f><f>Soddy-Daisy</f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>606</f><f>218</f><f>TN</f><f>Spring Hill</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>607</f><f>218</f><f>TN</f><f>Springfield</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>608</f><f>218</f><f>TN</f><f>Tullahoma</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>609</f><f>218</f><f>TN</f><f>Union</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>610</f><f>218</f><f>TN</f><f>White House</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>611</f><f>218</f><f>TN</f><f>Winchester</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>612</f><f>218</f><f>TX</f><f></f><f></f><f>3</f><f>-6</f><f>n</f></row>
+      <row><f>613</f><f>218</f><f>TX</f><f>Abilene</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>614</f><f>218</f><f>TX</f><f>Allen</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>615</f><f>218</f><f>TX</f><f>Amarillo</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>616</f><f>218</f><f>TX</f><f>Arlington</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>617</f><f>218</f><f>TX</f><f>Atascocita</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>618</f><f>218</f><f>TX</f><f>Austin</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>619</f><f>218</f><f>TX</f><f>Baytown</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>620</f><f>218</f><f>TX</f><f>Beaumont</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>621</f><f>218</f><f>TX</f><f>Bedford</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>622</f><f>218</f><f>TX</f><f>Big Spring</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>623</f><f>218</f><f>TX</f><f>Brownsville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>624</f><f>218</f><f>TX</f><f>Bryan</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>625</f><f>218</f><f>TX</f><f>Carrollton</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>626</f><f>218</f><f>TX</f><f>Cedar Hill</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>627</f><f>218</f><f>TX</f><f>Cedar Park</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>628</f><f>218</f><f>TX</f><f>Channelview</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>629</f><f>218</f><f>TX</f><f>Cleburne</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>630</f><f>218</f><f>TX</f><f>College Station</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>631</f><f>218</f><f>TX</f><f>Conroe</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>632</f><f>218</f><f>TX</f><f>Coppell</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>633</f><f>218</f><f>TX</f><f>Copperas Cove</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>634</f><f>218</f><f>TX</f><f>Corpus Christi</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>635</f><f>218</f><f>TX</f><f>Corsicana</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>636</f><f>218</f><f>TX</f><f>Dallas</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>637</f><f>218</f><f>TX</f><f>Deer Park</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>638</f><f>218</f><f>TX</f><f>Del Rio</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>639</f><f>218</f><f>TX</f><f>Denton</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>640</f><f>218</f><f>TX</f><f>DeSoto</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>641</f><f>218</f><f>TX</f><f>Duncanville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>642</f><f>218</f><f>TX</f><f>Edinburg</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>643</f><f>218</f><f>TX</f><f>El Paso</f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>644</f><f>218</f><f>TX</f><f>Euless</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>645</f><f>218</f><f>TX</f><f>Farmers Branch</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>646</f><f>218</f><f>TX</f><f>Flower Mound</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>647</f><f>218</f><f>TX</f><f>Fort Hood</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>648</f><f>218</f><f>TX</f><f>Fort Worth</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>649</f><f>218</f><f>TX</f><f>Friendswood</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>650</f><f>218</f><f>TX</f><f>Frisco</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>651</f><f>218</f><f>TX</f><f>Galveston</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>652</f><f>218</f><f>TX</f><f>Garland</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>653</f><f>218</f><f>TX</f><f>Georgetown</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>654</f><f>218</f><f>TX</f><f>Grand Prairie</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>655</f><f>218</f><f>TX</f><f>Grapevine</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>656</f><f>218</f><f>TX</f><f>Haltom City</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>657</f><f>218</f><f>TX</f><f>Harlingen</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>658</f><f>218</f><f>TX</f><f>Houston</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>659</f><f>218</f><f>TX</f><f>Huntsville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>660</f><f>218</f><f>TX</f><f>Hurst</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>661</f><f>218</f><f>TX</f><f>Irving</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>662</f><f>218</f><f>TX</f><f>Keller</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>663</f><f>218</f><f>TX</f><f>Killeen</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>664</f><f>218</f><f>TX</f><f>Kingsville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>665</f><f>218</f><f>TX</f><f>La Porte</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>666</f><f>218</f><f>TX</f><f>Lake Jackson</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>667</f><f>218</f><f>TX</f><f>Lancaster</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>668</f><f>218</f><f>TX</f><f>Laredo</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>669</f><f>218</f><f>TX</f><f>League City</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>670</f><f>218</f><f>TX</f><f>Lewisville</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>671</f><f>218</f><f>TX</f><f>Longview</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>672</f><f>218</f><f>TX</f><f>Lubbock</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>673</f><f>218</f><f>TX</f><f>Lufkin</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>674</f><f>218</f><f>TX</f><f>Mansfield</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>675</f><f>218</f><f>TX</f><f>McAllen</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>676</f><f>218</f><f>TX</f><f>McKinney</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>677</f><f>218</f><f>TX</f><f>Mesquite</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>678</f><f>218</f><f>TX</f><f>Midland</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>679</f><f>218</f><f>TX</f><f>Mission Bend</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>680</f><f>218</f><f>TX</f><f>Mission</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>681</f><f>218</f><f>TX</f><f>Missouri City</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>682</f><f>218</f><f>TX</f><f>Nacogdoches</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>683</f><f>218</f><f>TX</f><f>New Braunfels</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>684</f><f>218</f><f>TX</f><f>North Richland Hills</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>685</f><f>218</f><f>TX</f><f>Odessa</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>686</f><f>218</f><f>TX</f><f>Paris</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>687</f><f>218</f><f>TX</f><f>Pasadena</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>688</f><f>218</f><f>TX</f><f>Pearland</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>689</f><f>218</f><f>TX</f><f>Pharr</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>690</f><f>218</f><f>TX</f><f>Plano</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>691</f><f>218</f><f>TX</f><f>Port Arthur</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>692</f><f>218</f><f>TX</f><f>Richardson</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>693</f><f>218</f><f>TX</f><f>Round Rock</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>694</f><f>218</f><f>TX</f><f>Rowlett</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>695</f><f>218</f><f>TX</f><f>San Angelo</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>696</f><f>218</f><f>TX</f><f>San Antonio</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>697</f><f>218</f><f>TX</f><f>San Juan</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>698</f><f>218</f><f>TX</f><f>San Marcos</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>699</f><f>218</f><f>TX</f><f>Sherman</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>700</f><f>218</f><f>TX</f><f>Socorro</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>701</f><f>218</f><f>TX</f><f>Spring</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>702</f><f>218</f><f>TX</f><f>Sugar Land</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>703</f><f>218</f><f>TX</f><f>Temple</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>704</f><f>218</f><f>TX</f><f>Texarkana</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>705</f><f>218</f><f>TX</f><f>Texas City</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>706</f><f>218</f><f>TX</f><f>The Colony</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>707</f><f>218</f><f>TX</f><f>The Woodlands</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>708</f><f>218</f><f>TX</f><f>Tyler</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>709</f><f>218</f><f>TX</f><f>Victoria</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>710</f><f>218</f><f>TX</f><f>Waco</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>711</f><f>218</f><f>TX</f><f>Weslaco</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>712</f><f>218</f><f>TX</f><f>Wichita Falls</f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>713</f><f>218</f><f>UT</f><f></f><f></f><f>3</f><f>-7</f><f>y</f></row>
+      <row><f>714</f><f>218</f><f>VT</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>715</f><f>218</f><f>VA</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>716</f><f>218</f><f>WA</f><f></f><f></f><f>3</f><f>-8</f><f>y</f></row>
+      <row><f>717</f><f>218</f><f>DC</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>718</f><f>218</f><f>WV</f><f></f><f></f><f>3</f><f>-5</f><f>y</f></row>
+      <row><f>719</f><f>218</f><f>WI</f><f></f><f></f><f>3</f><f>-6</f><f>y</f></row>
+      <row><f>720</f><f>218</f><f>WY</f><f></f><f></f><f>3</f><f>-7</f><f>y</f></row>
+    </data>
+  </table>
+  <table name="user_preference_type_options">
+    <field name="up_option_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="user_preference_type_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="option_value" type="C" size="255">
+      <NOTNULL/>
+    </field>
+    <field name="sort_order" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+      <UNSIGNED/>
+    </field>
+    <field name="option_record_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <field name="option_display" type="C" size="255">
+      <NOTNULL/>
+    </field>
+    <data>
+      <row><f>1</f><f>3</f><f>y</f><f>1</f><f>a</f><f>Yes</f></row>
+      <row><f>2</f><f>3</f><f>n</f><f>2</f><f>a</f><f>No</f></row>
+      <row><f>3</f><f>4</f><f>y</f><f>1</f><f>a</f><f>Yes</f></row>
+      <row><f>4</f><f>4</f><f>n</f><f>2</f><f>a</f><f>No</f></row>
+      <row><f>5</f><f>5</f><f>contains</f><f>1</f><f>a</f><f>Name Contains</f></row>
+      <row><f>6</f><f>5</f><f>starts</f><f>1</f><f>a</f><f>Name Starts With</f></row>
+      <row><f>7</f><f>5</f><f>ends</f><f>1</f><f>a</f><f>Name Ends With</f></row>
+      <row><f>8</f><f>5</f><f>matches</f><f>1</f><f>a</f><f>Name Exactly Matches</f></row>
+    </data>
+  </table>
+  <table name="user_preference_types">
+    <field name="user_preference_type_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="user_preference_name" type="C" size="64">
+      <NOTNULL/>
+    </field>
+    <field name="user_preference_pretty_name" type="C" size="128">
+      <NOTNULL/>
+    </field>
+    <field name="user_preference_description" type="C" size="255">
+      <NOTNULL/>
+    </field>
+    <field name="allow_multiple_flag" type="I" size="1">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="allow_user_edit_flag" type="I" size="1">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="user_preference_type_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <field name="preference_type_created_on" type="T">
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="user_preference_type_modified_on" type="T">
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="form_element_type" type="C" size="32">
+      <NOTNULL/>
+      <DEFAULT value="text"/>
+    </field>
+    <data>
+      <row><f>1</f><f>user_language</f><f>Language</f><f></f><f>0</f><f>1</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f></row>
+      <row><f>2</f><f>css_theme</f><f>Theme</f><f>Color and Layout Theme for XRMS</f><f>0</f><f>1</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f></row>
+      <row><f>3</f><f>hide_sf_img</f><f>Hide SourceForge Image</f><f>Hides the SourceForge Image which appears at the bottom of every page</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f></row>
+      <row><f>4</f><f>block_sf_link</f><f>Block SourceForge Link</f><f>Disables the SourceForge image and link which appears at the bottom of every page</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f></row>
+      <row><f>5</f><f>company_search_type</f><f>Company Search Type</f><f>Search method used when searching company names</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f></row>
+    </data>
+  </table>
+  <table name="user_preferences">
+    <field name="user_preference_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="user_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="user_preference_type_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="user_preference_name" type="C" size="255"/>
+    <field name="user_preference_value" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="user_preference_status" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="a"/>
+    </field>
+    <field name="user_preference_modified_on" type="T">
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="user_preference_created_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="user_preference_modified_by" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <index name="user_preference_type_id">
+      <col>user_preference_type_id</col>
+    </index>
+    <data>
+      <row><f>1</f><f>0</f><f>3</f><f></f><f>y</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>2</f><f>0</f><f>4</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>3</f><f>0</f><f>5</f><f></f><f>contains</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+    </data>
+  </table>
+  <table name="users">
+    <field name="user_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="user_contact_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="username" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="password" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="last_name" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="first_names" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="email" type="C" size="100">
+      <NOTNULL/>
+    </field>
+    <field name="language" type="C" size="50">
+      <NOTNULL/>
+      <DEFAULT value="english"/>
+    </field>
+    <field name="gmt_offset" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="last_hit" type="T"/>
+    <field name="user_record_status" type="C" size="1">
+      <DEFAULT value="a"/>
+    </field>
+    <index name="username">
+      <UNIQUE/>
+      <col>username</col>
+    </index>
+    <data>
+      <row><f>1</f><f>0</f><f>user1</f><f>24c9e15e52afc47c225b757e7bee1f9d</f><f>One</f><f>User</f><f>user1@somecompany.com</f><f>english</f><f>0</f><f></f><f>a</f></row>
+    </data>
+  </table>
+  <table name="workflow_history">
+    <field name="workflow_history_id" type="I" size="10">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="on_what_table" type="C" size="32">
+      <NOTNULL/>
+    </field>
+    <field name="on_what_id" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="old_status" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="new_status" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="status_change_timestamp" type="T">
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="status_change_by" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+  </table>
+</schema>
