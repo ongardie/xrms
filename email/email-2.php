@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.15 2005/07/22 17:30:11 braverock Exp $
+* $Id: email-2.php,v 1.16 2005/10/03 10:28:27 braverock Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -112,7 +112,6 @@ else
     $email_template_body = $rst->fields['email_template_body'];
 
     // Build data setup
-    $files_data['file_limit_sql']   = '';
     $files_data['on_what_table']    = 'email_templates';
     $files_data['on_what_id']       = $email_template_id;
 
@@ -367,6 +366,9 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.16  2005/10/03 10:28:27  braverock
+* - remove legacy file_limit_sql
+*
 * Revision 1.15  2005/07/22 17:30:11  braverock
 * - fix spelling of Attachment
 *
