@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.54 2005/09/21 20:56:48 vanmer Exp $
+ * $Id: database.php,v 1.55 2005/10/03 21:18:46 vanmer Exp $
  */
 
 /**
@@ -60,7 +60,7 @@ function misc_db_tables($con, $table_list) {
                on_what_table                           varchar(100) not null default '',
                recent_action                           varchar(100) not null default '',
                on_what_id                              int not null default 0,
-               recent_item_timestamp                   timestamp
+               recent_item_timestamp                   datetime
                )";
         //execute
         $rst = $con->execute($sql);
@@ -694,9 +694,9 @@ function company_db_tables($con, $table_list) {
               email_template_type_id int not null primary key auto_increment,
               email_template_type_name varchar(64) not null default '',
               modified_by int not null default '0',
-              modified_on timestamp not null,
+              modified_on datetime,
               created_by int not null default '0',
-              created_on timestamp not null default '00000000000000'
+              created_on datetime
               )";
         //execute
         $rst = $con->execute($sql);
@@ -1307,6 +1307,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.55  2005/10/03 21:18:46  vanmer
+ * - changed timestamp fields into datetime fields to reflect standard SQL fields
+ *
  * Revision 1.54  2005/09/21 20:56:48  vanmer
  * - added address_id to activity table, to allow tracking of location of an activity
  *
