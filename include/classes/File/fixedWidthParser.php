@@ -30,6 +30,12 @@ class fixedWidthParser extends csvParser {
 * @access private
 */
 var $_fieldFormat = null;
+var $_recordFormats = null;
+var $_recordIdentifier = null;
+
+function SetRecordFormats($map_data) {
+    $this->_recordFormats=$map_data;
+}
 
 function SetFieldFormat($format_array) {
     $this->_fieldFormat=$format_array;
@@ -37,8 +43,12 @@ function SetFieldFormat($format_array) {
         $headers[]=$field_data['name'];
     }
     $this->_myHeaders=$headers;
+    $this->_cvsHeaders=$headers;
 }
 
+function SetRecordIdentifier($record_identifier) {
+    $this->_recordIdentifier=$record_identifier;
+}
    
  /**
     * Method private mixed _getCSVrecord( file pointer, delimiter string )
@@ -81,7 +91,8 @@ function SetFieldFormat($format_array) {
         if (!$string) return false;
         $str_pos=0;
         $fields=array();
-        foreach ($this->_fieldFormat as $field_data) {
+        $field_format=$this->getFieldFormatForRecord($string);
+        foreach ($field_format as $field_data) {
             if (array_key_exists('length',$field_data)) {
                 $length=$field_data['length'];
                 $start=$str_pos;
@@ -94,6 +105,7 @@ function SetFieldFormat($format_array) {
                 //start one behind to ensure that initial character is included
                 $str_pos=$start-1;
             }
+
             //remove whitespace on either side of substr
             $fields[]=trim(substr($string, $str_pos, $length));
             $str_pos=$end;
@@ -101,6 +113,23 @@ function SetFieldFormat($format_array) {
         return $fields;
     }
 
+    function getFieldFormatForRecord($record) {
+        if (!$this->_recordFormats OR !$this->_recordIdentifier)
+            return $this->_fieldFormat;
+        else {
+            $start=$this->_recordIdentifier['start'];
+            $end=$this->_recordIdentifier['end'];
+            $length=$end-$start+1;
+            $str_pos=$start-1;
+            $value=trim(substr($record, $str_pos, $length));
+            if ($value)  $format=$this->_recordFormats[$value];
+            if ($format) {
+                //set headers to current format
+                $this->SetFieldFormat($format);
+            }
+            return $format;
+        }
+    }
 }
 
 ?>
