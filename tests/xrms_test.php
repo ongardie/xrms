@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_test.php,v 1.6 2005/10/01 08:24:41 vanmer Exp $
+ * $Id: xrms_test.php,v 1.7 2005/10/04 03:23:46 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -22,6 +22,7 @@ require_once("PHPUnit/GUI/HTML.php");
 
 require_once($include_directory.'classes/acl/tests/xrms_acl_test.php');
 require_once($include_directory.'classes/File/tests/files_test_class.php');
+require_once($include_directory.'classes/File/tests/fixed_width_parser_test.php');
 
 
 //global $options;
@@ -203,7 +204,7 @@ $suite_array[] = new PHPUnit_TestSuite( "FilesPropertiesTest" );
 $suite_array[] = new PHPUnit_TestSuite( "FilesFailuresTest" );
 $suite_array[] = new PHPUnit_TestSuite( "FilesObjectDisplay" );
 $suite_array[] = new PHPUnit_TestSuite( "FilesManipulationTest" );
-
+$suite_array[] = new PHPUnit_TestSuite( "FixedWidthParserTest" );
 
 $ret=do_hook_function('xrms_test_suite', $suite_array);
 
@@ -229,6 +230,9 @@ $display->show();
  */
 /*
  * $Log: xrms_test.php,v $
+ * Revision 1.7  2005/10/04 03:23:46  vanmer
+ * - added fixed width parser tests to xrms test suite
+ *
  * Revision 1.6  2005/10/01 08:24:41  vanmer
  * - changed to instantiate a new dbconnection for tests
  * - added ACL and file tests to list of tests
