@@ -91,11 +91,7 @@ $company_source_menu = $rst->getmenu2('company_source_id', $company_source_id, t
 $rst->close();
 
 // set up CRM Status selection menu
-$sql = "select crm_status_pretty_name, crm_status_id from
-crm_statuses where crm_status_record_status = 'a' order by crm_status_id";
-$rst = $con->execute($sql);
-$crm_status_menu = $rst->getmenu2('crm_status_id', $crm_status_id, true);
-$rst->close();
+$crm_status_menu = build_crm_status_menu($con, $crm_status_id, true);
 ?>
 <form action="companies-list.php" method=get>
 <table>
@@ -326,6 +322,9 @@ function nbsp($in)
 
 /**
  * $Log: companies-list.php,v $
+ * Revision 1.10  2005/10/04 23:21:44  vanmer
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ *
  * Revision 1.9  2005/03/21 13:40:58  maulani
  * - Remove redundant code by centralizing common user menu call
  *

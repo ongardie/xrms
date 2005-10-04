@@ -2,7 +2,7 @@
 /**
  * Edit company details
  *
- * $Id: edit.php,v 1.19 2005/08/17 20:02:23 ycreddy Exp $
+ * $Id: edit.php,v 1.20 2005/10/04 23:21:44 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -61,10 +61,7 @@ if ($rst) {
 
 $user_menu = get_user_menu($con, $user_id, false, 'user_id', false);
 
-$sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_id";
-$rst = $con->execute($sql2);
-$crm_status_menu = $rst->getmenu2('crm_status_id', $crm_status_id, false);
-$rst->close();
+$crm_status_menu = build_crm_status_menu($con, $crm_status_id);
 
 $sql2 = "select company_source_pretty_name, company_source_id from company_sources where company_source_record_status = 'a' order by company_source_pretty_name";
 $rst = $con->execute($sql2);
@@ -231,6 +228,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.20  2005/10/04 23:21:44  vanmer
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ *
  * Revision 1.19  2005/08/17 20:02:23  ycreddy
  * Expanded the Owner field
  *

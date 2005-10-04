@@ -3,7 +3,7 @@
  *
  * Companies by crm status report.
  *
- * $Id: companies-by-crm-status.php,v 1.13 2005/04/05 18:50:16 daturaarutad Exp $
+ * $Id: companies-by-crm-status.php,v 1.14 2005/10/04 23:21:44 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -98,7 +98,7 @@ function GetCompaniesByCRMStatusGraph($con, $user_id, $all_users) {
 	global $http_site_root, $tmp_export_directory, $session_user_id;
 
 	// calcul le tableau des valeurs verticales
-	$sql1 = "select crm_status_id, crm_status_pretty_plural from crm_statuses where crm_status_record_status = 'a'";
+	$sql1 = "select crm_status_id, crm_status_pretty_plural from crm_statuses where crm_status_record_status = 'a' order by sort_order";
 	$rst1 = $con->execute($sql1);
 	$graph_legend_array = array();
 	$array_of_company_count_values = array();
@@ -195,6 +195,9 @@ function GetCompaniesByCRMStatusGraph($con, $user_id, $all_users) {
 
 /**
  * $Log: companies-by-crm-status.php,v $
+ * Revision 1.14  2005/10/04 23:21:44  vanmer
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ *
  * Revision 1.13  2005/04/05 18:50:16  daturaarutad
  * added .jpg extension to graph images
  *

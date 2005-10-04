@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.91 2005/08/28 17:45:17 daturaarutad Exp $
+ * $Id: utils-interface.php,v 1.92 2005/10/04 23:21:44 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -473,6 +473,27 @@ function build_address_type_menu(&$con, $address_type='') {
     return $address_type_menu;
 } //end build_salutation_menu fn
 
+/**
+ * Retrieve menu of CRM Statuses
+ *
+ * @param  handle  $con database connection
+ * @param  integer $crm_status_id to set the menu to (default)
+ * @param  boolean $blank_crm_status include a blank area
+ * @return string  $crm_status_menu the html menu to display
+ */
+function build_crm_status_menu(&$con, $crm_status_id='', $blank_crm_status=false) {
+    $sql = "select crm_status_pretty_name, crm_status_id from crm_statuses where
+            crm_status_record_status = 'a' order by sort_order";
+    $rst = $con->execute($sql);
+    if (!$rst) {
+        db_error_handler($con, $sql);
+    }
+    $crm_status_menu = translate_menu($rst->getmenu2('crm_status_id', $crm_status_id, $blank_crm_status));
+    $rst->close();
+
+    return $crm_status_menu;
+} //end build_crm_status_menu fn
+
 /*****************************************************************************/
 /**
  * Function public string buildDataTable( array, [[array,] string] )
@@ -937,6 +958,9 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.92  2005/10/04 23:21:44  vanmer
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ *
  * Revision 1.91  2005/08/28 17:45:17  daturaarutad
  * put css class in quotes in render_tree_widget
  *

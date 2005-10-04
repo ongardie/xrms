@@ -6,7 +6,7 @@
  *
  * @todo Add ability to ctreate a Sales Opportunity for a new company
  *
- * $Id: new.php,v 1.18 2005/08/17 20:11:56 ycreddy Exp $
+ * $Id: new.php,v 1.19 2005/10/04 23:21:44 vanmer Exp $
  */
 
 /* Include required files */
@@ -67,10 +67,7 @@ $user_id = ($user_id > 0) ? $user_id : $session_user_id;
 
 $user_menu = get_user_menu($con, $user_id);
 
-$sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_id";
-$rst = $con->execute($sql2);
-$crm_status_menu = $rst->getmenu2('crm_status_id', $crm_status_id, false);
-$rst->close();
+$crm_status_menu = build_crm_status_menu($con, $crm_status_id);
 
 $sql2 = "select company_source_pretty_name, company_source_id from company_sources where company_source_record_status = 'a' order by company_source_pretty_name";
 $rst = $con->execute($sql2);
@@ -316,6 +313,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.19  2005/10/04 23:21:44  vanmer
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ *
  * Revision 1.18  2005/08/17 20:11:56  ycreddy
  * Custom Fields shown only if the labels have been changed
  *

@@ -14,5 +14,6 @@ $company_type_id = $_POST['company_type_id'];
 $crm_status_id = $_POST['crm_status_id'];
 $industry_id = $_POST['industry_id'];
 $company_source_id = $_POST['company_source_id'];
+//when this is finished, make sure to work out sort_order
 
 header("Location: $after_adding_new_companies_from_your_web_site_redirect_to_this_page");

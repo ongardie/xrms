@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.33 2005/09/29 14:37:18 vanmer Exp $
+ * $Id: data.php,v 1.34 2005/10/04 23:21:44 vanmer Exp $
  */
 
 /**
@@ -2642,15 +2642,15 @@ function company_db_data($con) {
 
     // crm_statuses
     if (confirm_no_records($con, 'crm_statuses')) {
-        $sql ="insert into crm_statuses (crm_status_short_name, crm_status_pretty_name, crm_status_pretty_plural, crm_status_display_html) values ('Lead', 'Lead', 'Leads', 'Lead')";
+        $sql ="insert into crm_statuses (sort_order, crm_status_short_name, crm_status_pretty_name, crm_status_pretty_plural, crm_status_display_html) values (1, 'Lead', 'Lead', 'Leads', 'Lead')";
         $rst = $con->execute($sql);
-        $sql ="insert into crm_statuses (crm_status_short_name, crm_status_pretty_name, crm_status_pretty_plural, crm_status_display_html) values ('Prospect', 'Prospect', 'Prospects', 'Prospect')";
+        $sql ="insert into crm_statuses (sort_order, crm_status_short_name, crm_status_pretty_name, crm_status_pretty_plural, crm_status_display_html) values (2, 'Prospect', 'Prospect', 'Prospects', 'Prospect')";
         $rst = $con->execute($sql);
-        $sql ="insert into crm_statuses (crm_status_short_name, crm_status_pretty_name, crm_status_pretty_plural, crm_status_display_html) values ('Qualified', 'Qualified', 'Qualified', 'Qualified')";
+        $sql ="insert into crm_statuses (sort_order, crm_status_short_name, crm_status_pretty_name, crm_status_pretty_plural, crm_status_display_html) values (3, 'Qualified', 'Qualified', 'Qualified', 'Qualified')";
         $rst = $con->execute($sql);
-        $sql ="insert into crm_statuses (crm_status_short_name, crm_status_pretty_name, crm_status_pretty_plural, crm_status_display_html) values ('Developed', 'Developed', 'Developed', 'Developed')";
+        $sql ="insert into crm_statuses (sort_order, crm_status_short_name, crm_status_pretty_name, crm_status_pretty_plural, crm_status_display_html) values (4, 'Developed', 'Developed', 'Developed', 'Developed')";
         $rst = $con->execute($sql);
-        $sql ="insert into crm_statuses (crm_status_short_name, crm_status_pretty_name, crm_status_pretty_plural, crm_status_display_html) values ('Closed', 'Closed', 'Closed', 'Closed')";
+        $sql ="insert into crm_statuses (sort_order, crm_status_short_name, crm_status_pretty_name, crm_status_pretty_plural, crm_status_display_html) values (5, 'Closed', 'Closed', 'Closed', 'Closed')";
         $rst = $con->execute($sql);
     }
 
@@ -2953,6 +2953,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.34  2005/10/04 23:21:44  vanmer
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ *
  * Revision 1.33  2005/09/29 14:37:18  vanmer
  * - requoted system activity properly
  *

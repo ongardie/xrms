@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: update.php,v 1.102 2005/10/03 21:20:43 vanmer Exp $
+ * $Id: update.php,v 1.103 2005/10/04 23:21:43 vanmer Exp $
  */
 
 // where do we include from
@@ -5077,6 +5077,30 @@ $sql = "ALTER TABLE `email_templates` CHANGE `modified_on` `modified_on` DATETIM
 CHANGE `created_on` `created_on` DATETIME";
 $rst = $con->execute($sql);
 
+// add sort order to crm statuses
+$sql = "ALTER TABLE crm_statuses ADD sort_order TINYINT NOT NULL DEFAULT '1' AFTER crm_status_id";
+if(($rst = $con->execute($sql)) !== false){ //error such as column already there
+	// get the id's of all rows with a record_status of 'a'
+	$sql = "SELECT crm_status_id FROM crm_statuses WHERE crm_status_record_status='a'";
+	$rst = $con->execute($sql);
+	
+	if(!$rst){
+		db_error_handler($con, $sql);
+	}else{
+		//use the id in the UPDATE statement to specify the row in the WHERE clause
+		//meanwhile, increment sort_order from 1 to the row count
+		$sort_order = 1;
+		while(!$rst->EOF){
+			$sql2 = 'UPDATE crm_statuses SET sort_order='.$sort_order.' WHERE crm_status_id='.$rst->fields['crm_status_id'];
+			$rst2 = $con->execute($sql2);
+			
+			$rst->movenext();
+			$sort_order++;
+		}
+	}
+}
+
+
 do_hook_function('xrms_update', $con);
 
 //close the database connection, because we don't need it anymore
@@ -5101,6 +5125,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.103  2005/10/04 23:21:43  vanmer
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ *
  * Revision 1.102  2005/10/03 21:20:43  vanmer
  * - added upgrade lines to change timestamp field into a datetime field
  *

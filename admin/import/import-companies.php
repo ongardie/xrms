@@ -13,7 +13,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: import-companies.php,v 1.16 2005/04/15 18:43:09 introspectshun Exp $
+ * $Id: import-companies.php,v 1.17 2005/10/04 23:21:43 vanmer Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -34,11 +34,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $user_menu = get_user_menu($con, $session_user_id);
 
-$sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where
-         crm_status_record_status = 'a' order by crm_status_id";
-$rst = $con->execute($sql2);
-$crm_status_menu = translate_menu($rst->getmenu2('crm_status_id', '', false));
-$rst->close();
+$crm_status_menu = build_crm_status_menu($con);
 
 $sql2 = "select company_source_pretty_name, company_source_id from company_sources where
          company_source_record_status = 'a' order by company_source_pretty_name";
@@ -167,6 +163,9 @@ if ($handle = opendir('.')) {
 <?php end_page();
 /**
  * $Log: import-companies.php,v $
+ * Revision 1.17  2005/10/04 23:21:43  vanmer
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ *
  * Revision 1.16  2005/04/15 18:43:09  introspectshun
  * - Updated quoting for better readability
  *

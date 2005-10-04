@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.76 2005/08/16 00:15:21 vanmer Exp $
+ * $Id: some.php,v 1.77 2005/10/04 23:21:44 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -417,10 +417,7 @@ $rst->close();
 if($advanced_search) {
 
     // crm_status_menu
-    $sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_pretty_name";
-    $rst = $con->execute($sql2);
-    $crm_status_menu = translate_menu($rst->getmenu2('crm_status_id', $crm_status_id, true));
-    $rst->close();
+    $crm_status_menu = build_crm_status_menu($con, $crm_status_id, true);
 
     // company_source_menu
     $sql2 = "select company_source_pretty_name, company_source_id from company_sources where company_source_record_status = 'a' order by company_source_pretty_name";
@@ -868,6 +865,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.77  2005/10/04 23:21:44  vanmer
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ *
  * Revision 1.76  2005/08/16 00:15:21  vanmer
  * - changed all phone searches to be contains instead of starts with
  * - added code to strip all formatting off phone searches

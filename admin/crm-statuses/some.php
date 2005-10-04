@@ -2,7 +2,7 @@
 /**
  * Show and edit the details for all crm statuses
  *
- * $Id: some.php,v 1.8 2004/11/26 17:18:51 braverock Exp $
+ * $Id: some.php,v 1.9 2005/10/04 23:21:43 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -17,11 +17,16 @@ $session_user_id = session_check( 'Admin' );
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "select * from crm_statuses where crm_status_record_status = 'a' order by crm_status_id";
+$sql = "select * from crm_statuses where crm_status_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql);
+
+$cnt = 1;
+$maxcnt = $rst->rowcount();
 
 if ($rst) {
     while (!$rst->EOF) {
+	$sort_order = $rst->fields['sort_order'];
+	  
         if (strlen($rst->fields['crm_status_display_html']) > 0) {
             $crm_status_display = _($rst->fields['crm_status_display_html']);
         } else {
@@ -29,6 +34,23 @@ if ($rst) {
         }
         $table_rows .= '<tr>';
         $table_rows .= '<td class=widget_content><a href=one.php?crm_status_id=' . $rst->fields['crm_status_id'] . '>' . $crm_status_display . '</a></td>';
+
+	//sets up ordering links in the table
+	$table_rows .= '<td class=widget_content>';
+	if ($sort_order != $cnt) {
+		$table_rows .= '<a href="' . $http_site_root
+			. '/admin/sort.php?direction=up&sort_order='
+			. $sort_order . '&table_name=crm_status'
+			. '&return_url=/admin/crm-statuses/some.php">'._("up").'</a> &nbsp; ';
+	}
+	if ($sort_order != $maxcnt) {
+		$table_rows .= '<a href="' . $http_site_root
+			. '/admin/sort.php?direction=down&sort_order='
+			. $sort_order . '&table_name=crm_status'
+			. '&return_url=/admin/crm-statuses/some.php">'._("down").'</a>';
+	}
+	$table_rows .= '</td>';
+	
         $table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -51,6 +73,7 @@ start_page($page_title);
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Name"); ?></td>
+		<td class=widget_label width=15%><?php echo _("Move"); ?></td>
             </tr>
             <?php  echo $table_rows; ?>
         </table>
@@ -96,6 +119,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.9  2005/10/04 23:21:43  vanmer
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ *
  * Revision 1.8  2004/11/26 17:18:51  braverock
  * - localized strings for i18n
  *
