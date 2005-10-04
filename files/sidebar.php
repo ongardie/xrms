@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.22 2005/10/01 05:11:33 jswalter Exp $
+ * $Id: sidebar.php,v 1.23 2005/10/04 23:01:26 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -25,10 +25,14 @@ else { $fileList=implode(",",$fileList); $file_limit_sql.=" AND files.file_id IN
 $file_limit_sql = '';
 
     // Build data setup
-    $files_data['entered_by']       = $session_user_id;
-    $files_data['on_what_table']    = $on_what_table;
-    $files_data['on_what_id']       = $on_what_id;
-
+    if (!$on_what_table AND !$on_what_id) {
+        //No attachment specified, so show users files
+        $files_data['entered_by']       = $session_user_id;
+    } else {
+        //show files attached to the currently view entity
+        $files_data['on_what_table']    = $on_what_table;
+        $files_data['on_what_id']       = $on_what_id;
+    }
     $file_sidebar_rst = get_file_records( $con, $files_data );
 
 
@@ -91,7 +95,7 @@ if(!$file_rows) {
 
     //put in the new button
     if (strlen($on_what_table)>0){
-        $new_file_button=render_create_button('New', 'submit');
+        $new_file_button=render_create_button('New', 'submit'); //, false, false, false, 'files'); uncomment extra parameters in order to check permission on files instead of whatever the file is attached to
         $file_rows .= "
                 <tr>
                 <form action='".$http_site_root."/files/new.php' method='post'>
@@ -111,6 +115,12 @@ if(!$file_rows) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.23  2005/10/04 23:01:26  vanmer
+ * - added check to ensure that entered_by parameter is not added to file list when viewing pages that aren't
+ * private/home.php
+ * - added commented parameters for New button files to allow check on files ACL controlled object instead of whatever
+ * the file is attached to
+ *
  * Revision 1.22  2005/10/01 05:11:33  jswalter
  *  - removed legacy code 'file_limit_sql'
  *
