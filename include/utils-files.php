@@ -7,7 +7,7 @@
  *
  * @author Walter Torres
  *
- * $Id: utils-files.php,v 1.9 2005/10/01 05:12:23 jswalter Exp $
+ * $Id: utils-files.php,v 1.10 2005/10/04 23:02:26 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -509,11 +509,13 @@ function modify_file_record( $con, $files_data )
   * @param adodbconnection $con handle to the database
   * @param  array  $files_data  with associative array defining file data
   * @param  string $file_array  name of $_FILES sub-array to use
+  * @param boolean $allow_acl_restriction specifying if extra IN clause should be added with list of allowed files from the ACL (defaults to true, add extra security clause)
   * @return mixed  $_results    recordset Found Records
   *                             boolean   Indicating success or failure
   */
-function get_file_records( $con, $files_data )
-{
+function get_file_records( $con, $files_data, $allow_acl_restriction=true )
+ {
+    global $session_user_id;
     // Right off the bat, if these are not set, we can't do anything!
     if ( (! $con)  ||  (! $files_data) )
         return false;
@@ -531,7 +533,6 @@ function get_file_records( $con, $files_data )
     */
     $_results = false;
 
-
     // We need one or the other to run this
     //if ( ($files_data['entered_by'])  ||  ($files_data['on_what_table']) )
     if (count($files_data))
@@ -539,6 +540,10 @@ function get_file_records( $con, $files_data )
         // build where clause from files_data
         foreach($files_data as $field => $value) {
             $where_clause[] = "$field = '$value'";
+        }
+        if ($where_clause AND $allow_acl_restriction) {
+            $list=acl_get_list($session_user_id, 'Read', false, 'files');
+            $where_clause[]="file_id IN (".implode(",",$list).")";
         }
 
         $where_sql = 'WHERE ' . join(" AND ", $where_clause);
@@ -585,6 +590,10 @@ function get_file_records( $con, $files_data )
 
 /**
  * $Log: utils-files.php,v $
+ * Revision 1.10  2005/10/04 23:02:26  vanmer
+ * - added parameter to control ACL security parameter to files SQL
+ * - added ACL list call to get list of allowed files added by default to all file queries
+ *
  * Revision 1.9  2005/10/01 05:12:23  jswalter
  *  - removed legacy code 'file_limit_sql'
  *
