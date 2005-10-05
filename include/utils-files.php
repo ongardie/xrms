@@ -7,7 +7,7 @@
  *
  * @author Walter Torres
  *
- * $Id: utils-files.php,v 1.10 2005/10/04 23:02:26 vanmer Exp $
+ * $Id: utils-files.php,v 1.11 2005/10/05 21:53:49 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -541,9 +541,14 @@ function get_file_records( $con, $files_data, $allow_acl_restriction=true )
         foreach($files_data as $field => $value) {
             $where_clause[] = "$field = '$value'";
         }
+
         if ($where_clause AND $allow_acl_restriction) {
             $list=acl_get_list($session_user_id, 'Read', false, 'files');
-            $where_clause[]="file_id IN (".implode(",",$list).")";
+            if ($list AND is_array($list)) {
+                $where_clause[]="file_id IN (".implode(",",$list).")";
+            } elseif (!$list) {
+                $where_clause[]="1 = 2";
+            }
         }
 
         $where_sql = 'WHERE ' . join(" AND ", $where_clause);
@@ -590,6 +595,9 @@ function get_file_records( $con, $files_data, $allow_acl_restriction=true )
 
 /**
  * $Log: utils-files.php,v $
+ * Revision 1.11  2005/10/05 21:53:49  vanmer
+ * - changed ACL control of files recordset to add a false clause if no file list was provided
+ *
  * Revision 1.10  2005/10/04 23:02:26  vanmer
  * - added parameter to control ACL security parameter to files SQL
  * - added ACL list call to get list of allowed files added by default to all file queries
