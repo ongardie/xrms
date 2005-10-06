@@ -6,7 +6,7 @@
  *
  * @todo Add ability to ctreate a Sales Opportunity for a new company
  *
- * $Id: new.php,v 1.19 2005/10/04 23:21:44 vanmer Exp $
+ * $Id: new.php,v 1.20 2005/10/06 04:30:06 vanmer Exp $
  */
 
 /* Include required files */
@@ -313,8 +313,11 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.20  2005/10/06 04:30:06  vanmer
+ * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
+ *
  * Revision 1.19  2005/10/04 23:21:44  vanmer
- * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro at ETSZONE
  *
  * Revision 1.18  2005/08/17 20:11:56  ycreddy
  * Custom Fields shown only if the labels have been changed

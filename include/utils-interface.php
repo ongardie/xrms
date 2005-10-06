@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.92 2005/10/04 23:21:44 vanmer Exp $
+ * $Id: utils-interface.php,v 1.93 2005/10/06 04:30:06 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -958,8 +958,11 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.93  2005/10/06 04:30:06  vanmer
+ * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
+ *
  * Revision 1.92  2005/10/04 23:21:44  vanmer
- * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro at ETSZONE
  *
  * Revision 1.91  2005/08/28 17:45:17  daturaarutad
  * put css class in quotes in render_tree_widget

@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.56 2005/10/04 23:21:44 vanmer Exp $
+ * $Id: database.php,v 1.57 2005/10/06 04:30:06 vanmer Exp $
  */
 
 /**
@@ -1308,8 +1308,11 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.57  2005/10/06 04:30:06  vanmer
+ * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
+ *
  * Revision 1.56  2005/10/04 23:21:44  vanmer
- * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro at ETSZONE
  *
  * Revision 1.55  2005/10/03 21:18:46  vanmer
  * - changed timestamp fields into datetime fields to reflect standard SQL fields

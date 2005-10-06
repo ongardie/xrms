@@ -322,8 +322,11 @@ function nbsp($in)
 
 /**
  * $Log: companies-list.php,v $
+ * Revision 1.11  2005/10/06 04:30:07  vanmer
+ * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
+ *
  * Revision 1.10  2005/10/04 23:21:44  vanmer
- * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro at ETSZONE
  *
  * Revision 1.9  2005/03/21 13:40:58  maulani
  * - Remove redundant code by centralizing common user menu call

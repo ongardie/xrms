@@ -2,7 +2,7 @@
 /**
  * Show and edit the details for all crm statuses
  *
- * $Id: some.php,v 1.9 2005/10/04 23:21:43 vanmer Exp $
+ * $Id: some.php,v 1.10 2005/10/06 04:30:06 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -119,8 +119,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.10  2005/10/06 04:30:06  vanmer
+ * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
+ *
  * Revision 1.9  2005/10/04 23:21:43  vanmer
- * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro at ETSZONE
  *
  * Revision 1.8  2004/11/26 17:18:51  braverock
  * - localized strings for i18n

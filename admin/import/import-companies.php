@@ -13,7 +13,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: import-companies.php,v 1.17 2005/10/04 23:21:43 vanmer Exp $
+ * $Id: import-companies.php,v 1.18 2005/10/06 04:30:06 vanmer Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -163,8 +163,11 @@ if ($handle = opendir('.')) {
 <?php end_page();
 /**
  * $Log: import-companies.php,v $
+ * Revision 1.18  2005/10/06 04:30:06  vanmer
+ * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
+ *
  * Revision 1.17  2005/10/04 23:21:43  vanmer
- * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro at ETSZONE
  *
  * Revision 1.16  2005/04/15 18:43:09  introspectshun
  * - Updated quoting for better readability

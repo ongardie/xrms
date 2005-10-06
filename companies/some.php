@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.77 2005/10/04 23:21:44 vanmer Exp $
+ * $Id: some.php,v 1.78 2005/10/06 04:30:06 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -865,8 +865,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.78  2005/10/06 04:30:06  vanmer
+ * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
+ *
  * Revision 1.77  2005/10/04 23:21:44  vanmer
- * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro at ETSZONE
  *
  * Revision 1.76  2005/08/16 00:15:21  vanmer
  * - changed all phone searches to be contains instead of starts with

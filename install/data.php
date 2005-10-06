@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.34 2005/10/04 23:21:44 vanmer Exp $
+ * $Id: data.php,v 1.35 2005/10/06 04:30:06 vanmer Exp $
  */
 
 /**
@@ -2953,8 +2953,11 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.35  2005/10/06 04:30:06  vanmer
+ * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
+ *
  * Revision 1.34  2005/10/04 23:21:44  vanmer
- * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro at ETSZONE
  *
  * Revision 1.33  2005/09/29 14:37:18  vanmer
  * - requoted system activity properly

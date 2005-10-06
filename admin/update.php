@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: update.php,v 1.103 2005/10/04 23:21:43 vanmer Exp $
+ * $Id: update.php,v 1.104 2005/10/06 04:30:06 vanmer Exp $
  */
 
 // where do we include from
@@ -5125,8 +5125,11 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.104  2005/10/06 04:30:06  vanmer
+ * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
+ *
  * Revision 1.103  2005/10/04 23:21:43  vanmer
- * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro
+ * Patch to allow sort_order on the company CRM status field, thanks to Diego Ongaro at ETSZONE
  *
  * Revision 1.102  2005/10/03 21:20:43  vanmer
  * - added upgrade lines to change timestamp field into a datetime field
