@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.126 2005/09/29 14:49:10 vanmer Exp $
+ * $Id: one.php,v 1.127 2005/10/08 21:07:52 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -486,6 +486,9 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Contact"); ?></td>
+                <input type=hidden name=add_participant>
+                <input type=hidden name=remove_participant>
+                <input type=hidden name=mailmerge_participant>
                 <td class=widget_content>
                     <?php
                         echo $contact_menu;
@@ -752,6 +755,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.127  2005/10/08 21:07:52  vanmer
+ * - added hidden variables to track actions for participants subsystem
+ *
  * Revision 1.126  2005/09/29 14:49:10  vanmer
  * - added lookup of activity template id, to provide to attachment sidebar
  *
