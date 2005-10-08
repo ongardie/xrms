@@ -96,7 +96,7 @@ TILLEND;
         //search returned no results, pass back to last page with msg recommend less letters
         if ($contact_rst->EOF) {
             $msg=urlencode(_("Failed to find any search results, perhaps try again with a less restrictive search."));
-            Header("Location: new_activity_participant.php?msg=$msg&activity_id=$activity_id&participant_position_id=$participant_position_id&activity_participant_action=newParticipant");
+            Header("Location: new_activity_participant.php?msg=$msg&activity_id=$activity_id&participant_position_id=$participant_position_id&activity_participant_action=newParticipant&return_url=".urlencode($return_url));
             exit;
         }
         
@@ -129,12 +129,14 @@ TILLEND;
         $ret=add_activity_participant($con, $activity_id, $contact_id, $participant_position_id);
         if (!$ret) {
             $msg=urlencode(_("Failed to add contact to activity."));
-            Header("Location: {$http_site_root}/activities/one.php?activity_id=$activity_id&msg=$msg");
-            exit;
         } else {
-            Header("Location: {$http_site_root}{$return_url}");
-            exit;
+            $msg=urlencode(_("Added contact to activity."));
         }
+        if (strpos($return_url,"?")===false) $return_url.="?";
+        else $return_url.="&";
+        $return_url.="msg=$msg";
+        Header("Location: {$http_site_root}{$return_url}");
+        exit;
     break;
     
     /* This case handles the automatic marking of an activity participant as deleted. */
@@ -143,13 +145,15 @@ TILLEND;
         $ret=delete_activity_participant($con, $activity_participant_id);
         if (!$ret) {
             $msg=urlencode(_("Failed to remove contact from activity."));
-            Header("Location: one.php?activity_id=$activity_id&msg=$msg");
-            exit;
         } else {
-            Header("Location: {$http_site_root}{$return_url}");
-            exit;
+            $msg=urlencode(_("Removed contact from activity."));
         }
-            
+        if (strpos($return_url,"?")===false) $return_url.="?";
+        else $return_url.="&";
+        $return_url.="msg=$msg";
+        Header("Location: {$http_site_root}{$return_url}");
+        exit;
+    break;
 }
 
 /* This is the main output of these pages.  This could eventually be made into a template which is included */
@@ -171,6 +175,10 @@ end_page();
 
 /*
  * $Log: new_activity_participant.php,v $
+ * Revision 1.3  2005/10/08 21:06:59  vanmer
+ * - altered to use return_url for return even if failure occurs
+ * - added msg when successfully adding a contact as a participant to an activity
+ *
  * Revision 1.2  2005/06/21 15:29:09  vanmer
  * - caused strings that needed translation to be translated, including participant positions
  *
