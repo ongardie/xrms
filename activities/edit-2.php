@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.73 2005/09/25 04:12:23 vanmer Exp $
+ * $Id: edit-2.php,v 1.74 2005/10/08 21:08:49 vanmer Exp $
  */
 
 //include required files
@@ -53,6 +53,9 @@ $arr_vars = array (
                    'followup' => arr_vars_POST_UNDEF ,
                    'recurrence' => arr_vars_POST_UNDEF ,
                    'change_attachment' => arr_vars_POST_UNDEF ,
+                   'add_participant' => arr_vars_POST_UNDEF ,
+                   'remove_participant' => arr_vars_POST_UNDEF ,
+                   'mailmerge_participant' => arr_vars_POST_UNDEF ,
                    'saveandnext' => arr_vars_POST_UNDEF ,
                    );
 
@@ -73,6 +76,15 @@ $on_what_table=$activity_on_what_table;
 
 if (!$return_url) {
     $return_url='/activities/some.php';
+}
+
+$participant_return_url=urlencode("/activities/one.php?activity_id=$activity_id&return_url=$return_url");
+if ($add_participant) {
+    $return_url="/activities/new_activity_participant.php?activity_id=$activity_id&return_url=$participant_return_url";
+} elseif ($remove_participant) {
+    $return_url="/activities/new_activity_participant.php?activity_participant_action=deleteActivityParticipant&activity_participant_id=$remove_participant&return_url=$participant_return_url";
+} elseif ($mailmerge_participant) {
+    $return_url="/email/email.php?scope=contact_list&contact_list=$mailmerge_participant&return_url=$participant_return_url";
 }
 
 if ($change_attachment) {
@@ -547,6 +559,10 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.74  2005/10/08 21:08:49  vanmer
+ * - changed participant subsystem to operate through activity edit-2, to allow changes on activity page to save
+ * before moving to add/remove/mail participants on the activity
+ *
  * Revision 1.73  2005/09/25 04:12:23  vanmer
  * - added ability to detach an activity from an on_what_table/on_what_id relationship using Detach button
  * - added case to check for $on_what_id before attempting to query for activity attachmetn
