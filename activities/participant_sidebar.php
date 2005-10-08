@@ -15,13 +15,37 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: participant_sidebar.php,v 1.7 2005/07/15 19:02:37 vanmer Exp $
+ * $Id: participant_sidebar.php,v 1.8 2005/10/08 21:09:51 vanmer Exp $
  */
 require_once($include_directory.'utils-activities.php');
+
+
 // add participant information block on sidebar
 if (!$activity_id) { $participant_block=''; return false; }
 $participant_return_url="/activities/one.php?activity_id=$activity_id";
-$participant_block = "<form action=new_activity_participant.php method=POST><input type=hidden name=activity_id value=$activity_id><input type=hidden name=return_url value=\"$participant_return_url\">";
+
+
+$participant_block=<<<TILLEND
+<script language="JavaScript" type="text/javascript">
+
+function addParticipant() {
+      document.forms[0].add_participant.value='true';
+      document.forms[0].submit();
+}
+
+function removeParticipant(part_id) {
+      document.forms[0].remove_participant.value=part_id;
+      document.forms[0].submit();
+}
+
+function mailmergeParticipants(contacts) {
+      document.forms[0].mailmerge_participant.value=contacts;
+      document.forms[0].submit();
+}
+</script>
+TILLEND;
+
+
 $participant_block .= '<table class=widget cellspacing=1 width="100%">
     <tr>
         <td class=widget_header colspan=5>Activity Participants</td>
@@ -38,20 +62,24 @@ if (!$participants) {
     $contact_ids=array();
     foreach ($participants as $participant_info) {
         $contact_ids[]=$participant_info['contact_id'];
-        $remove_link="new_activity_participant.php?activity_participant_action=deleteActivityParticipant&activity_participant_id={$participant_info['activity_participant_id']}&return_url=".urlencode($participant_return_url);
+        $remove_link="javascript: removeParticipant({$participant_info['activity_participant_id']});";
         $participant_block.="<tr><td class=widget_content><a href=\"$http_site_root/contacts/one.php?contact_id={$participant_info['contact_id']}\">{$participant_info['contact_name']}</a></td><td>"._($participant_info['participant_position_name'])."</td><td><a href=\"$remove_link\">"._("Remove")."</a></td></tr>";    
     }
 }
 if (count($contact_ids)>0) {
     $contacts=implode(",",$contact_ids);
 } else $contacts=false;
-$participant_block.="<tr><td colspan=$colspan class=widget_content_form_element><input type=submit value=\""._("Add New Participant")."\" class=button name=btAddParticipant>";
-if ($contacts) { $participant_block .= "<input type=button class=button onclick=\"javascript:location.href='$http_site_root/email/email.php?scope=contact_list&contact_list=$contacts'\" value=\""._("Mail Merge") ."\">"; }
+$participant_block.="<tr><td colspan=$colspan class=widget_content_form_element><input type=button onclick=\"addParticipant()\" value=\""._("Add New Participant")."\" class=button name=btAddParticipant>";
+if ($contacts) { $participant_block .= "<input type=button class=button onclick=\"mailmergeParticipants('$contacts');\" value=\""._("Mail Merge") ."\">"; }
 $participant_block.= "</td></tr>";
 $participant_block .= "\n</table></form>";
 
 /**
  * $Log: participant_sidebar.php,v $
+ * Revision 1.8  2005/10/08 21:09:51  vanmer
+ * - changed participant sidebar to use javascript instead of directly changing the location in the browser
+ * - sets form variables on activities/one.php and submits, so changes can be saved
+ *
  * Revision 1.7  2005/07/15 19:02:37  vanmer
  * - added link to each contact on participant name in participant sidebar
  *
