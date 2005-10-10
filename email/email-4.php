@@ -3,7 +3,9 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.26 2005/08/23 16:51:05 braverock Exp $
+* $Id: email-4.php,v 1.27 2005/10/10 12:31:05 braverock Exp $
+*
+* @todo use a more secure method than 'unlink' to delete files after sending them
 */
 
 require_once('include-locations-location.inc');
@@ -144,6 +146,7 @@ if ( $_SESSION['email_sent'] === false )
             }
 
             $output = $msg_body;
+            if (!$output) $output = ' ';
 
             $objSMTP->setBodyContent ( $output );
 
@@ -235,14 +238,19 @@ if ( $_SESSION['email_sent'] === false )
         db_error_handler($con, $sql);
     }
 
-    $con->close();
-}
+    if ( $attachment_list ) {
+        foreach ( $attachment_list as $_file1 ){
+            $old_fullPath = $GLOBALS['file_storage_directory'] . $_file1;
+            /** @todo eventually unlink should be replaced by a more secure method **/
+            unlink ($old_fullPath);
+        }
+    }
 
-// Message has been seant already!
-else
-{
+    $con->close();
+} else { // Message has been sent already!
     $feedback = '<p /><b>' . _("This email message has already been sent") . '.</b>';
 }
+
 
 $page_title = _("Messages Sent");
 start_page($page_title, true, $msg);
@@ -331,6 +339,11 @@ function getFile($file_to_open)
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.27  2005/10/10 12:31:05  braverock
+* - fix bug where no email sent if no body
+* - fix bug where temporary files are not deleted, causing security and collision problems
+*   - credit patches to Daniele Baudone (SF:dbaudone)
+*
 * Revision 1.26  2005/08/23 16:51:05  braverock
 * - fix typo in SetAttachment() call
 *
