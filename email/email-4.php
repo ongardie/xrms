@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.27 2005/10/10 12:31:05 braverock Exp $
+* $Id: email-4.php,v 1.28 2005/10/10 12:31:41 braverock Exp $
 *
 * @todo use a more secure method than 'unlink' to delete files after sending them
 */
@@ -339,6 +339,9 @@ function getFile($file_to_open)
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.28  2005/10/10 12:31:41  braverock
+* - remove trailing whitespace
+*
 * Revision 1.27  2005/10/10 12:31:05  braverock
 * - fix bug where no email sent if no body
 * - fix bug where temporary files are not deleted, causing security and collision problems
