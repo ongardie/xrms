@@ -6,8 +6,8 @@
  *
  * It is used to input a background image (img/logo.gif) into the header of every page, as a logo.
  */
- #page_header {
- 	background-image: url("../img/logo.png");
-	background-repeat: no-repeat;
-	background-position: 80%;
- }
+#page_header {
+    background-image: url(../img/xrmslogo-dark.png);
+    background-repeat: no-repeat;
+    background-position: 80%;
+}
