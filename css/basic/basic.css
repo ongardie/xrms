@@ -21,14 +21,6 @@
     margin: 0px;
 }
 /** ----------
- * ADDITION AND PLACEMENT OF LOGO
- */
-#page_header {
-    background-image: url(../../img/xrmslogo-dark.png);
-    background-repeat: no-repeat;
-    background-position: 80%;
-}
-/** ----------
  * FOREGROUND COLORS - black by default (body)
  */
 #navline,
