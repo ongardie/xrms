@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.149 2005/10/03 02:32:49 vanmer Exp $
+ * $Id: utils-misc.php,v 1.150 2005/10/13 17:27:24 jswalter Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -1907,7 +1907,28 @@ function add_process_entity($con, $entity, $entity_type, $title, $description, $
     return $entity_id;
 }
 
+ /**
+  * Converts all '<br>' & '<p> tags, with attributes, into NEWLINE characters
+  *
+  * @name brp2nl()
+  * @access public
+  * @category string_handling
+  *
+  * @static
+  * @final
+  *
+  * @param  int    $_string          String to convert
+  * @return mixed  $_string          Converted string
+  *
+  */
+function brp2nl($_string)
+{
+    /* Remove x|HTML PARAGRAPH tags, with attributes */
+    $_string = preg_replace("=[\n]?<[p][^>]*>[\n]?=i", "\n\n", $_string);
 
+    /* Remove x|HTML linebreak tags, with attributes */
+    return preg_replace("=[\n]?<[br][^>]*>[\n]?=i", "\n", $_string);
+}
 
 /**
  * Include the i18n files, as every file with output will need them
@@ -1924,6 +1945,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.150  2005/10/13 17:27:24  jswalter
+ *  - added 'brp2nl()' to convert HTML breaks into hard break
+ *
  * Revision 1.149  2005/10/03 02:32:49  vanmer
  * - changed to use proper whitespace characters so that PHP does not break
  *
