@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.150 2005/10/13 17:27:24 jswalter Exp $
+ * $Id: utils-misc.php,v 1.151 2005/10/16 19:47:08 maulani Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -181,9 +181,13 @@ function add_audit_item(&$con, $user_id, $audit_item_type, $on_what_table, $on_w
         $rec['audit_item_type'] = $audit_item_type;
         $rec['on_what_table'] = $on_what_table;
         $rec['on_what_id'] = $on_what_id;
-        if (isset($_SERVER['REMOTE_ADDR'])) {
-            $rec['remote_addr'] = $_SERVER['REMOTE_ADDR'];
-        }
+		if (isSet($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+			$rec['remote_addr'] = $_SERVER["HTTP_X_FORWARDED_FOR"];
+		} elseif (isSet($_SERVER["HTTP_CLIENT_IP"])) {
+			$rec['remote_addr'] = $_SERVER["HTTP_CLIENT_IP"];
+		} else {
+			$rec['remote_addr'] = $_SERVER["REMOTE_ADDR"];
+		}
         if (isset($_SERVER['REMOTE_PORT'])) {
             $rec['remote_port'] = $_SERVER['REMOTE_PORT'];
         }
@@ -1945,6 +1949,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.151  2005/10/16 19:47:08  maulani
+ * - Retrieve correct client IP address if XRMS is accessed thru a proxy
+ *
  * Revision 1.150  2005/10/13 17:27:24  jswalter
  *  - added 'brp2nl()' to convert HTML breaks into hard break
  *
