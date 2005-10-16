@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.35 2005/10/06 04:30:06 vanmer Exp $
+ * $Id: data.php,v 1.36 2005/10/16 19:51:37 maulani Exp $
  */
 
 /**
@@ -350,7 +350,7 @@ function misc_db_data($con) {
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'Honduras', '340', 'HN', 'HND', '504')";
         $rst = $con->execute($sql);
-        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (4, 'Hong Kong Special Administrative Region of China', '344', 'HK', 'HKG', '852')";
+        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (4, 'Hong Kong', '344', 'HK', 'HKG', '852')";
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (7, 'Hungary', '348', 'HU', 'HUN', '36')";
         $rst = $con->execute($sql);
@@ -404,7 +404,7 @@ function misc_db_data($con) {
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (6, 'Luxembourg', '442', 'LU', 'LUX', '352')";
         $rst = $con->execute($sql);
-        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'Macau', '446', 'MO', 'MAC', '853')";
+        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'Macao', '446', 'MO', 'MAC', '853')";
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'Madagascar', '450', 'MG', 'MDG', '261')";
         $rst = $con->execute($sql);
@@ -500,7 +500,7 @@ function misc_db_data($con) {
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'Réunion', '638', 'RE', 'REU', '262')";
         $rst = $con->execute($sql);
-        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (6, 'Romania', '642', 'RO', 'ROM', '40')";
+        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (6, 'Romania', '642', 'RO', 'ROU', '40')";
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (12, 'Russian Federation', '643', 'RU', 'RUS', '7')";
         $rst = $con->execute($sql);
@@ -608,11 +608,17 @@ function misc_db_data($con) {
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (6, 'Yemen', '887', 'YE', 'YEM', '967')";
         $rst = $con->execute($sql);
-        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'Yugoslavia', '891', 'YU', 'YUG', '381')";
+        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'Serbia and Montenegro', '891', 'CS', 'SCG', '381')";
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'Zambia', '894', 'ZM', 'ZMB', '260')";
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'Zimbabwe', '716', 'ZW', 'ZWE', '263')";
+        $rst = $con->execute($sql);
+        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (6, 'Occupied Palestinian Territory', '275', 'PS', 'PSE', '970')";
+        $rst = $con->execute($sql);
+        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (9, 'Timor-Leste', '626', 'TL', 'TLS', '670')";
+        $rst = $con->execute($sql);
+        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (6, 'land Islands', '248', 'AX', 'ALA', '670')";
         $rst = $con->execute($sql);
     }
 
@@ -2953,6 +2959,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.36  2005/10/16 19:51:37  maulani
+ * - Add additional countries to table
+ *
  * Revision 1.35  2005/10/06 04:30:06  vanmer
  * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
  *
