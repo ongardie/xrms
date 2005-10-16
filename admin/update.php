@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: update.php,v 1.104 2005/10/06 04:30:06 vanmer Exp $
+ * $Id: update.php,v 1.105 2005/10/16 19:52:38 maulani Exp $
  */
 
 // where do we include from
@@ -3701,6 +3701,9 @@ if ($currency) {
     $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='PR'";
     $con->execute($sql);
 
+    $sql="UPDATE countries set currency_code='JOD' WHERE iso_code2='PS'";
+    $con->execute($sql);
+
     $sql="UPDATE countries set currency_code='QAR' WHERE iso_code2='QA'";
     $con->execute($sql);
 
@@ -4664,6 +4667,14 @@ if ($currency) {
     $sql="UPDATE countries set currency_code='ZWD' WHERE iso_code2='ZW'";
     $con->execute($sql);
 
+    $sql="UPDATE countries set currency_code='IDR' WHERE iso_code2='TL'";
+    $con->execute($sql);
+
+    $sql="UPDATE countries set currency_code='CSD' WHERE iso_code2='CS'";
+    $con->execute($sql);
+
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='AX'";
+    $con->execute($sql);
 }
 
 //add division_id to opportunities table (for use in scoping opportunities by division)
@@ -5022,24 +5033,24 @@ $con->execute($sql);
 
 
 
-     if (confirm_no_records($con, 'activity_resolution_types')) {
-       $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Resolved' , 'Closed/Resolved', 1)";
-        $rst = $con->execute($sql);
-       $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Unresolved' , 'Closed/Unresolved', 2)";
-        $rst = $con->execute($sql);
-       $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Obsolete' , 'Obsolete/Out of Date', 3)";
-        $rst = $con->execute($sql);
-       $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Cancel' , 'Cancelled', 4)";
-        $rst = $con->execute($sql);
-       $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Complete' , 'Completed', 5)";
-        $rst = $con->execute($sql);
-      $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Duplicate' , 'Closed/Duplicate', 2)";
+if (confirm_no_records($con, 'activity_resolution_types')) {
+    $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Resolved' , 'Closed/Resolved', 1)";
     $rst = $con->execute($sql);
-        if ($rst) $msg .= _("Successfully added activity resolution types to activity resolution types table.").'<BR><BR>';
-        if (!$rst) {
-            db_error_handler ($con, $sql);
-        }
+    $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Unresolved' , 'Closed/Unresolved', 2)";
+    $rst = $con->execute($sql);
+    $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Obsolete' , 'Obsolete/Out of Date', 3)";
+    $rst = $con->execute($sql);
+    $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Cancel' , 'Cancelled', 4)";
+    $rst = $con->execute($sql);
+    $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Complete' , 'Completed', 5)";
+    $rst = $con->execute($sql);
+    $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Duplicate' , 'Closed/Duplicate', 2)";
+    $rst = $con->execute($sql);
+    if ($rst) $msg .= _("Successfully added activity resolution types to activity resolution types table.").'<BR><BR>';
+    if (!$rst) {
+        db_error_handler ($con, $sql);
     }
+}
 
 $sql = "ALTER TABLE files  ADD file_name VARCHAR( 100 ) NOT NULL";
 $rst = $con->execute($sql);
@@ -5051,6 +5062,35 @@ $rst = $con->execute($sql);
 $sql = "ALTER TABLE `campaign_statuses` ADD `sort_order` TINYINT DEFAULT '1' NOT NULL ";
 $rst = $con->execute($sql);
 
+// update ISO 3166-1 data
+$sql="UPDATE countries set iso_code3='ROU' WHERE iso_code2='RO'";
+$con->execute($sql);
+
+$sql="UPDATE countries set country_name='Hong Kong' WHERE iso_code2='HK'";
+$con->execute($sql);
+
+$sql="UPDATE countries set country_name='Macao' WHERE iso_code2='MO'";
+$con->execute($sql);
+
+$sql="UPDATE countries set country_name='Serbia and Montenegro', iso_code2='CS', iso_code3='SCG', currency_code='CSD' WHERE iso_code2='YU'";
+$con->execute($sql);
+
+// Add new countries
+$sql = "select count(*) as recCount from countries where iso_code2='PS'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Added New Countries.").'<BR><BR>';
+
+    $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (6, 'Occupied Palestinian Territory', '275', 'PS', 'PSE', '970')";
+    $rst = $con->execute($sql);
+    
+    $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (9, 'Timor-Leste', '626', 'TL', 'TLS', '670')";
+    $rst = $con->execute($sql);
+    
+    $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (6, 'land Islands', '248', 'AX', 'ALA', '670')";
+    $rst = $con->execute($sql);
+}
 
 $count=upgrade_system_parameter_user_preferences($con);
 if ($count) {
@@ -5125,6 +5165,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.105  2005/10/16 19:52:38  maulani
+ * - Add additional countries to list
+ *
  * Revision 1.104  2005/10/06 04:30:06  vanmer
  * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
  *
