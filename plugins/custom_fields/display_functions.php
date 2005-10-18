@@ -2,7 +2,7 @@
 
 require_once('cf_functions.php');
 
-function do_inline_edit_save ($type_name, $keyvalue) {
+function do_inline_edit_save ($type_name, $keyvalue, $subkeyvalue=false) {
 
 	# $_POST will have an instance_id field and a fields array, 
 	# indexed by field_id. If instance_id is zero, we need to 
@@ -12,7 +12,7 @@ function do_inline_edit_save ($type_name, $keyvalue) {
 	$instance_id = $_POST['instance_id'];
 	$object_id = type_name_to_object_id ($type_name);
 	
-	save_values ($values, $instance_id, $object_id, $keyvalue);
+	save_values ($values, $instance_id, $object_id, $keyvalue, $subkeyvalue);
 }
 
 function fetch_contact_name ($contact_id) {
@@ -152,7 +152,7 @@ function get_data_column ($object_id, $instance_id,
 	return get_column($object_id, $instance_id, $sidebar_only, "DATA", $col);
 }
 
-function get_display ($object_type, $keyvalue, $return_url) {
+function get_display ($object_type, $keyvalue, $return_url, $subkeyvalue=false) {
 
 	# Dispatch to correct routine
 	$con = connect();
@@ -165,15 +165,15 @@ function get_display ($object_type, $keyvalue, $return_url) {
 	switch ($display) {
 	
 	case 'sidebar':
-		return get_sidebar_display ($object_type, $keyvalue, $return_url);
+		return get_sidebar_display ($object_type, $keyvalue, $return_url, $subkeyvalue);
 		break;
 	
 	case 'inline':
-		return get_inline_display ($object_type, $keyvalue, $return_url);
+		return get_inline_display ($object_type, $keyvalue, $return_url, $subkeyvalue);
 		break;
 	
 	case 'section':
-		return get_section_display ($object_type, $keyvalue, $return_url);
+		return get_section_display ($object_type, $keyvalue, $return_url, $subkeyvalue);
 		break;
 	
 	default:
@@ -289,7 +289,7 @@ function get_formatted_data ($field_id, $instance_id) {
 	return $html;
 }
 
-function get_inline ($type_name, $keyvalue, $mode) {
+function get_inline ($type_name, $keyvalue, $mode, $subkeyvalue=false) {
 
 	# Return display or edit string depending upon $mode
 
@@ -305,6 +305,7 @@ function get_inline ($type_name, $keyvalue, $mode) {
 			WHERE	object_id = $object_id
 			AND		key_id = $keyvalue
 			AND		record_status = 'a'";
+	if ($subkeyvalue) $sql .= " AND subkey_id = $subkeyvalue";
 	$instance_id = $con->GetOne($sql);
 
 	# If in data mode and no instance_id, return empty string
@@ -327,18 +328,18 @@ function get_inline ($type_name, $keyvalue, $mode) {
 	}
 }
 
-function get_inline_display ($type_name, $keyvalue) {
+function get_inline_display ($type_name, $keyvalue, $subkeyvalue=false) {
 
 	# Return HTML for inline display
 	
-	return get_inline($type_name, $keyvalue, "DATA");
+	return get_inline($type_name, $keyvalue, "DATA", $subkeyvalue);
 }
 
-function get_inline_edit ($type_name, $keyvalue) {
+function get_inline_edit ($type_name, $keyvalue, $subkeyvalue=false) {
 	
 	# Return HTML for inline editing
 	
-	return get_inline($type_name, $keyvalue, "EDIT");
+	return get_inline($type_name, $keyvalue, "EDIT", $subkeyvalue);
 }
 
 function get_instance_buttons ($instance_id, $column_count, $return_url,
@@ -484,7 +485,7 @@ function get_object_type_select () {
 	return $rst->GetMenu("type_name", $current, False);
 }
 
-function get_new_button ($object_id, $keyvalue, $return_url) {
+function get_new_button ($object_id, $keyvalue, $return_url, $subkeyvalue=false) {
 
 	# Return code to create button for a new instance of object
 	
@@ -499,13 +500,14 @@ function get_new_button ($object_id, $keyvalue, $return_url) {
 			$html .= "object_id=$object_id&instance_id=0";
 			$html .= "&key_id=$keyvalue";
 			$html .= "&return_url=$return_url";
+			$html .= "&subkey_id=$subkeyvalue";
 			$html .= "'\">
 	";
 	
 	return $html;
 }
 
-function get_parent_name ($object_id, $keyvalue) {
+function get_parent_name ($object_id, $keyvalue, $subkeyvalue=false) {
 
 	# Return name of object's parent, formatted on a per-object-type basis
 	
@@ -546,7 +548,7 @@ function get_parent_name ($object_id, $keyvalue) {
 	}
 }
 
-function get_section_display ($type_name, $keyvalue, $return_url) {
+function get_section_display ($type_name, $keyvalue, $return_url, $subkeyvalue=false) {
 
 	$con = connect();
 
@@ -587,6 +589,7 @@ function get_section_display ($type_name, $keyvalue, $return_url) {
 				WHERE	object_id = $object_id
 				AND		key_id = $keyvalue
 				AND		record_status = 'a'";
+		if ($subkeyvalue) $sql.= " AND subkey_id = $subkeyvalue";
 		$instances_list = $con->GetCol($sql);
 		
 		# Now create row for each instance, each row of which contains 
@@ -600,7 +603,7 @@ function get_section_display ($type_name, $keyvalue, $return_url) {
           <tr>
             <td>
 		";
-         $html .= get_new_button ($object_id, $keyvalue, $return_url);
+         $html .= get_new_button ($object_id, $keyvalue, $return_url, $subkeyvalue);
 		 $html .= "
             </td>
           </tr>
@@ -611,7 +614,7 @@ function get_section_display ($type_name, $keyvalue, $return_url) {
 	return $html;
 }
 
-function get_sidebar_display ($object_type, $keyvalue, $return_url) {
+function get_sidebar_display ($object_type, $keyvalue, $return_url, $subkeyvalue=false) {
 
 
 	# Returns HTML to display sidebars for objects of $object_type.
@@ -652,6 +655,8 @@ function get_sidebar_display ($object_type, $keyvalue, $return_url) {
 				WHERE	object_id = $object_id
 				AND	key_id = $keyvalue
 				AND		record_status = 'a'";
+		if ($subkeyvalue) $sql .= " subkey_id = $subkeyvalue";
+
 		$instances_rst = execute_sql($sql);
 		while (!$instances_rst->EOF) {
 			
@@ -691,6 +696,7 @@ function get_sidebar_display ($object_type, $keyvalue, $return_url) {
 							$html .= "$http_site_root/plugins/custom_fields/edit.php?";
 							$html .= "object_id=$object_id&instance_id=0";
 							$html .= "&key_id=$keyvalue";
+							$html .= "&subkey_id=$subkeyvalue";
 							$html .= "&return_url=$return_url";
 							$html .= "'\">
 					</td>
@@ -702,7 +708,7 @@ function get_sidebar_display ($object_type, $keyvalue, $return_url) {
 	return $html;
 }
 
-function save_values ($values, $instance_id, $object_id, $key_id) {
+function save_values ($values, $instance_id, $object_id, $key_id, $subkey_id) {
 
 	# Saves the values passed in the $values array (as $field_id=>$value
 	# pairs). Creates new instance_id if necessary.
@@ -725,6 +731,8 @@ function save_values ($values, $instance_id, $object_id, $key_id) {
 		$rec = array();
 		$rec['object_id'] = $object_id;
 		$rec['key_id'] = $key_id;
+		if ($subkey_id) $rec['subkey_id']=$subkey_id;
+
                 $sql = $con->getInsertSQL($tbl, $rec);
 		if (!$sql OR !execute_sql($sql)) {
 			db_error_handler ($con, "Error creating new instance");
