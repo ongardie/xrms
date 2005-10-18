@@ -165,12 +165,16 @@ foreach ($defined_info_objects as $info_type_id=>$display_on) {
 		
 		# Get key_id
 		$key_id = (0 == $contact_id) ? $company_id : $contact_id;
+		 if ($company_id) $subkey_id = $division_id;
+		 else $subkey_id=false;
 		
 		# Create instance
 		echo "\t\tCreating instance...<br>";
 		$rec = array();
 		$rec['object_id'] = $object_id;
 		$rec['key_id'] = $key_id;
+		if ($subkey_id) $rec['subkey_id']=$subkey_id;
+
 		$tbl = "cf_instances";
 		if (!$con->AutoExecute($tbl, $rec, 'INSERT')) {
 			db_error_handler ($con, "Error creating new instance");
