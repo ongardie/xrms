@@ -51,6 +51,7 @@ CREATE TABLE `cf_instances` (
   `instance_id` int(11) NOT NULL auto_increment,
   `object_id` int(11) NOT NULL default '0',
   `key_id` int(11) NOT NULL default '0',
+  `subkey_id` int(11),
   `record_status` char(1) NOT NULL default 'a',
   PRIMARY KEY  (`instance_id`)
 ) ENGINE=MyISAM;
