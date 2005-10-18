@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2004 The XRMS Project Team
  *
- * $Id: setup.php,v 1.1 2005/10/02 23:57:33 vanmer Exp $
+ * $Id: setup.php,v 1.2 2005/10/18 21:34:00 vanmer Exp $
  */
 
 
@@ -68,35 +68,35 @@ function custom_fields_install ($con) {
 #}
 
 function company_accounting_inline_display () {
-	global $xrms_file_root, $company_id;
+	global $xrms_file_root, $company_id, $division_id;
 	include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
-	return get_display("company_accounting", $company_id, "");
+	return get_display("company_accounting", $company_id, "", $division_id);
 }
 
 function company_accounting_inline_edit () {
-	global $xrms_file_root, $company_id;
+	global $xrms_file_root, $company_id, $division_id;
 	include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
-	return get_inline_edit("company_accounting", $company_id);
+	return get_inline_edit("company_accounting", $company_id, $division_id);
 }
 
 function company_edit_2 () {
-	global $xrms_file_root, $company_id;
+	global $xrms_file_root, $company_id, $division_id;
 	include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
-	do_inline_edit_save("company_accounting", $company_id);
+	do_inline_edit_save("company_accounting", $company_id, $division_id);
 }
 
 function company_content_bottom ($_sidebar) {
-	global $xrms_file_root, $company_id;
+	global $xrms_file_root, $company_id, $division_id;
 	include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
 	$return_url = urlencode($_SERVER['PHP_SELF']."?company_id=$company_id");
-	return get_display("company_content_bottom", $company_id, $return_url);
+	return get_display("company_content_bottom", $company_id, $return_url, $division_id);
 }
 
 function company_sidebar_bottom () {
-	global $xrms_file_root, $company_id;
+	global $xrms_file_root, $company_id, $division_id;
 	include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
 	$return_url = urlencode($_SERVER['PHP_SELF']."?company_id=$company_id");
-	return get_display("company_sidebar_bottom", $company_id, $return_url);
+	return get_display("company_sidebar_bottom", $company_id, $return_url, $division_id);
 }
 
 function contact_accounting_inline_display () {
