@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: edit.php,v 1.1 2005/10/02 23:57:33 vanmer Exp $
+ * $Id: edit.php,v 1.2 2005/10/18 21:33:23 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -27,7 +27,7 @@ extract ($_GET);
 # this is a new instance then we'll have an object_id but instance_id
 # will be zero). So: if we have an instance_id then get object_id.
 if ($instance_id) {
-	$sql = "SELECT object_id, key_id
+	$sql = "SELECT object_id, key_id, subkey_id
 			FROM	cf_instances
 			WHERE	instance_id = $instance_id
 			AND 	record_status = 'a'";
@@ -63,7 +63,7 @@ $sql = "SELECT	object_name
 $object_name = $con->GetOne($sql);
 
 # Generate page title
-$parent_name = get_parent_name($object_id, $key_id);
+$parent_name = get_parent_name($object_id, $key_id, $subkey_id);
 $page_title = "$parent_name: $object_name";
 
 # Display
@@ -76,6 +76,7 @@ start_page($page_title, true, $msg);
       <input type=hidden name=return_url value=<?php  echo urlencode($return_url); ?>>
       <input type=hidden name=object_id value=<?php  echo $object_id; ?>>
       <input type=hidden name=key_id value=<?php  echo $key_id; ?>>
+      <input type=hidden name=subkey_id value=<?php echo $subkey_id; ?>>
       <input type=hidden name=instance_id value=<?php  echo $instance_id; ?>>
 	  <table class=widget cellspacing=1>
 		<tr>
@@ -123,6 +124,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.2  2005/10/18 21:33:23  vanmer
+ * - added subkey restriction to edit and edit processing pages
+ *
  * Revision 1.1  2005/10/02 23:57:33  vanmer
  * - Initial Revison of the custom_fields plugin, thanks to Keith Edmunds
  *

@@ -2,7 +2,7 @@
 /**
  * Insert item details into the database
  *
- * $Id: edit-2.php,v 1.1 2005/10/02 23:57:33 vanmer Exp $
+ * $Id: edit-2.php,v 1.2 2005/10/18 21:33:23 vanmer Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -29,13 +29,16 @@ $values = $_POST['fields'];
 assert($object_id);
 assert($key_id);
 
-save_values ($values, $instance_id, $object_id, $key_id);
+save_values ($values, $instance_id, $object_id, $key_id, $subkey_id);
 
 $return_url = urldecode($return_url);
 header("Location: $return_url");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.2  2005/10/18 21:33:23  vanmer
+ * - added subkey restriction to edit and edit processing pages
+ *
  * Revision 1.1  2005/10/02 23:57:33  vanmer
  * - Initial Revison of the custom_fields plugin, thanks to Keith Edmunds
  *
