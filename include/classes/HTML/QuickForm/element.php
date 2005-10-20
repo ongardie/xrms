@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: element.php,v 1.1 2005/01/13 20:42:30 vanmer Exp $
+// $Id: element.php,v 1.2 2005/10/20 16:25:09 daturaarutad Exp $
 
 require_once('HTML/Common.php');
 
@@ -245,10 +245,11 @@ class HTML_QuickForm_element extends HTML_Common
             return '';
         } else {
             $id = $this->getAttribute('id');
-            return '<input type="hidden"' .
-                   (isset($id)? ' id="' . $id . '"': '') .
-                   ' name="' . $this->getName() . '"' .
-                   ' value="' . htmlspecialchars($this->getValue()) . '" />';
+            return '<input' . $this->_getAttrString(array(
+                       'type'  => 'hidden',
+                       'name'  => $this->getName(),
+                       'value' => $this->getValue()
+                   ) + (isset($id)? array('id' => $id): array())) . ' />';
         }
     }
 

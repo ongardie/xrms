@@ -18,7 +18,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: Default.php,v 1.1 2005/01/13 20:43:32 vanmer Exp $
+// $Id: Default.php,v 1.2 2005/10/20 16:25:10 daturaarutad Exp $
 
 require_once('HTML/QuickForm/Renderer.php');
 
@@ -154,7 +154,9 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     */
     function toHtml()
     {
-        return $this->_html;
+        // _hiddenHtml is cleared in finishForm(), so this only matters when
+        // finishForm() was not called (e.g. group::toHtml(), bug #3511)
+        return $this->_hiddenHtml . $this->_html;
     } // end func toHtml
     
    /**
@@ -191,6 +193,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
         } else {
             $this->_html .= $this->_hiddenHtml;
         }
+        $this->_hiddenHtml = '';
         $this->_html = str_replace('{content}', $this->_html, $html);
         // add a validation script
         if ('' != ($script = $form->getValidationScript())) {

@@ -16,7 +16,7 @@
 // | Author: Alexey Borzov <avb@php.net>                                  |
 // +----------------------------------------------------------------------+
 //
-// $Id: Compare.php,v 1.1 2005/01/13 20:45:19 vanmer Exp $
+// $Id: Compare.php,v 1.2 2005/10/20 16:25:10 daturaarutad Exp $
 
 require_once 'HTML/QuickForm/Rule.php';
 
@@ -28,7 +28,7 @@ require_once 'HTML/QuickForm/Rule.php';
  * 
  * @access public
  * @package HTML_QuickForm
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 class HTML_QuickForm_Rule_Compare extends HTML_QuickForm_Rule
 {

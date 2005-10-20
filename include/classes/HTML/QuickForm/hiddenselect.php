@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: hiddenselect.php,v 1.1 2005/01/13 20:42:30 vanmer Exp $
+// $Id: hiddenselect.php,v 1.2 2005/10/20 16:25:09 daturaarutad Exp $
 
 require_once('HTML/QuickForm/select.php');
 
@@ -79,7 +79,11 @@ class HTML_QuickForm_hiddenselect extends HTML_QuickForm_select
         foreach ($this->_values as $key => $val) {
             for ($i = 0, $optCount = count($this->_options); $i < $optCount; $i++) {
                 if ($val == $this->_options[$i]['attr']['value']) {
-                    $strHtml .= $tabs . '<input type="hidden" name="' . $name . '" value="' . $val . '" />' . "\n";
+                    $strHtml .= $tabs . '<input' . $this->_getAttrString(array(
+                        'type'  => 'hidden',
+                        'name'  => $name,
+                        'value' => $val
+                    )) . " />\n" ;
                 }
             }
         }

@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: group.php,v 1.1 2005/01/13 20:42:30 vanmer Exp $
+// $Id: group.php,v 1.2 2005/10/20 16:25:09 daturaarutad Exp $
 
 require_once("HTML/QuickForm/element.php");
 
@@ -151,9 +151,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      */
     function setValue($value)
     {
-        if (empty($this->_elements)) {
-            $this->_createElements();
-        }
+        $this->_createElementsIfNotExist();
         foreach (array_keys($this->_elements) as $key) {
             if (!$this->_appendName) {
                 $v = $this->_elements[$key]->_findValue($value);
@@ -163,7 +161,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
 
             } else {
                 $elementName = $this->_elements[$key]->getName();
-                $index       = (!empty($elementName)) ? $elementName : $key;
+                $index       = strlen($elementName) ? $elementName : $key;
                 if (is_array($value)) {
                     if (isset($value[$index])) {
                         $this->_elements[$key]->onQuickFormEvent('setGroupValue', $value[$index], $this);
@@ -208,7 +206,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
                     if (!is_array($value)) {
                         $value = is_null($value)? array(): array($value);
                     }
-                    if ('' == $elementName) {
+                    if ('' === $elementName) {
                         $value[] = $v;
                     } else {
                         $value[$elementName] = $v;
@@ -250,6 +248,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      */
     function &getElements()
     {
+        $this->_createElementsIfNotExist();
         return $this->_elements;
     } // end func getElements
 
@@ -266,9 +265,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      */
     function getGroupType()
     {
-        if (empty($this->_elements)) {
-            $this->_createElements();
-        }
+        $this->_createElementsIfNotExist();
         $prevType = '';
         foreach (array_keys($this->_elements) as $key) {
             $type = $this->_elements[$key]->getType();
@@ -312,9 +309,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      */
     function getElementName($index)
     {
-        if (empty($this->_elements)) {
-            $this->_createElements();
-        }
+        $this->_createElementsIfNotExist();
         $elementName = false;
         if (is_int($index) && isset($this->_elements[$index])) {
             $elementName = $this->_elements[$index]->getName();
@@ -358,9 +353,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     function getFrozenHtml()
     {
         $flags = array();
-        if (empty($this->_elements)) {
-            $this->_createElements();
-        }
+        $this->_createElementsIfNotExist();
         foreach (array_keys($this->_elements) as $key) {
             if (false === ($flags[$key] = $this->_elements[$key]->isFrozen())) {
                 $this->_elements[$key]->freeze();
@@ -392,15 +385,13 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     {
         switch ($event) {
             case 'updateValue':
-                if (empty($this->_elements)) {
-                    $this->_createElements();
-                }
+                $this->_createElementsIfNotExist();
                 foreach (array_keys($this->_elements) as $key) {
                     if ($this->_appendName) {
                         $elementName = $this->_elements[$key]->getName();
                         if (is_null($elementName)) {
                             $this->_elements[$key]->setName($this->getName());
-                        } elseif ('' == $elementName) {
+                        } elseif ('' === $elementName) {
                             $this->_elements[$key]->setName($this->getName() . '[' . $key . ']');
                         } else {
                             $this->_elements[$key]->setName($this->getName() . '[' . $elementName . ']');
@@ -433,9 +424,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     */
     function accept(&$renderer, $required = false, $error = null)
     {
-        if (empty($this->_elements)) {
-            $this->_createElements();
-        }
+        $this->_createElementsIfNotExist();
         $renderer->startGroup($this, $required, $error);
         $name = $this->getName();
         foreach (array_keys($this->_elements) as $key) {
@@ -477,7 +466,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
             if ($this->_appendName) {
                 if (is_null($elementName)) {
                     $this->_elements[$key]->setName($this->getName());
-                } elseif ('' == $elementName) {
+                } elseif ('' === $elementName) {
                     $this->_elements[$key]->setName($this->getName() . '[' . $key . ']');
                 } else {
                     $this->_elements[$key]->setName($this->getName() . '[' . $elementName . ']');
@@ -499,7 +488,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
                     // just like getValue(), but should work OK every time here
                     if (is_null($elementName)) {
                         $value = $v;
-                    } elseif ('' == $elementName) {
+                    } elseif ('' === $elementName) {
                         $value[] = $v;
                     } else {
                         $value[$elementName] = $v;
@@ -528,6 +517,28 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     function _createElements()
     {
         // abstract
+    }
+
+    // }}}
+    // {{{ _createElementsIfNotExist()
+
+   /**
+    * A wrapper around _createElements()
+    *
+    * This method calls _createElements() if the group's _elements array
+    * is empty. It also performs some updates, e.g. freezes the created
+    * elements if the group is already frozen.
+    *
+    * @access private
+    */
+    function _createElementsIfNotExist()
+    {
+        if (empty($this->_elements)) {
+            $this->_createElements();
+            if ($this->_flagFrozen) {
+                $this->freeze();
+            }
+        }
     }
 
     // }}}

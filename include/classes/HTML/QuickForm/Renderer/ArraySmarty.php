@@ -18,7 +18,7 @@
 // |          Thomas Schulz <ths@4bconsult.de>                            |
 // +----------------------------------------------------------------------+
 //
-// $Id: ArraySmarty.php,v 1.1 2005/01/13 20:43:32 vanmer Exp $
+// $Id: ArraySmarty.php,v 1.2 2005/10/20 16:25:10 daturaarutad Exp $
 
 require_once 'HTML/QuickForm/Renderer/Array.php';
 
@@ -171,10 +171,10 @@ class HTML_QuickForm_Renderer_ArraySmarty extends HTML_QuickForm_Renderer_Array
             // we don't need the elements, see the array structure
             unset($ret['elements']);
         }
-        if (!empty($this->_required)){
+        if (($required || $error) && !empty($this->_required)){
             $this->_renderRequired($ret['label'], $ret['html'], $required, $error);
         }
-        if (!empty($this->_error)) {
+        if ($error && !empty($this->_error)) {
             $this->_renderError($ret['label'], $ret['html'], $error);
             $ret['error'] = $error;
         }

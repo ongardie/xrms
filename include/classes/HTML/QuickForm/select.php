@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: select.php,v 1.1 2005/01/13 20:42:46 vanmer Exp $
+// $Id: select.php,v 1.2 2005/10/20 16:25:09 daturaarutad Exp $
 
 require_once('HTML/QuickForm/element.php');
 
@@ -512,7 +512,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
         if (is_array($this->_values)) {
             foreach ($this->_values as $key => $val) {
                 for ($i = 0, $optCount = count($this->_options); $i < $optCount; $i++) {
-                    if ($val == $this->_options[$i]['attr']['value']) {
+                    if ((string)$val == (string)$this->_options[$i]['attr']['value']) {
                         $value[$key] = $this->_options[$i]['text'];
                         break;
                     }
@@ -525,13 +525,16 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
             // Only use id attribute if doing single hidden input
             if (1 == count($value)) {
                 $id     = $this->getAttribute('id');
-                $idAttr = isset($id)? ' id="' . $id . '"': '';
+                $idAttr = isset($id)? array('id' => $id): array();
             } else {
-                $idAttr = '';
+                $idAttr = array();
             }
             foreach ($value as $key => $item) {
-                $html .= '<input type="hidden"' . $idAttr . ' name="' . 
-                    $name . '" value="' . $this->_values[$key] . '" />';
+                $html .= '<input' . $this->_getAttrString(array(
+                             'type'  => 'hidden',
+                             'name'  => $name,
+                             'value' => $this->_values[$key]
+                         ) + $idAttr) . ' />';
             }
         }
         return $html;
@@ -572,6 +575,30 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
         }
     }
     
+    // }}}
+    // {{{ onQuickFormEvent()
+
+    function onQuickFormEvent($event, $arg, &$caller)
+    {
+        if ('updateValue' == $event) {
+            $value = $this->_findValue($caller->_constantValues);
+            if (null === $value) {
+                $value = $this->_findValue($caller->_submitValues);
+                // Fix for bug #4465
+                // XXX: should we push this to element::onQuickFormEvent()?
+                if (null === $value && !$caller->isSubmitted()) {
+                    $value = $this->_findValue($caller->_defaultValues);
+                }
+            }
+            if (null !== $value) {
+                $this->setValue($value);
+            }
+            return true;
+        } else {
+            return parent::onQuickFormEvent($event, $arg, $caller);
+        }
+    }
+
     // }}}
 } //end class HTML_QuickForm_select
 ?>

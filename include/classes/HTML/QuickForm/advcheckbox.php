@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: advcheckbox.php,v 1.1 2005/01/13 20:42:29 vanmer Exp $
+// $Id: advcheckbox.php,v 1.2 2005/10/20 16:25:09 daturaarutad Exp $
 
 require_once('HTML/QuickForm/checkbox.php');
 
@@ -197,8 +197,12 @@ class HTML_QuickForm_advcheckbox extends HTML_QuickForm_checkbox
                 'name'    => $this->getPrivateName($oldName),
                 'onclick' => $this->getOnclickJs($oldName) . ' ' . $oldJs
             ));
-            $html = parent::toHtml() . '<input type="hidden" name="' . $oldName . 
-                    '" value="' . $this->getValue() . '" />';
+            $html = parent::toHtml() . '<input' .
+                    $this->_getAttrString(array(
+                        'type'  => 'hidden', 
+                        'name'  => $oldName, 
+                        'value' => $this->getValue()
+                    )) . ' />';
             // revert the name and JS, in case this method will be called once more
             $this->updateAttributes(array(
                 'name'    => $oldName, 

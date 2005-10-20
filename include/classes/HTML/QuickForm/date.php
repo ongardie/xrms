@@ -18,7 +18,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: date.php,v 1.1 2005/01/13 20:42:29 vanmer Exp $
+// $Id: date.php,v 1.2 2005/10/20 16:25:09 daturaarutad Exp $
 
 require_once 'HTML/QuickForm/group.php';
 require_once 'HTML/QuickForm/select.php';
@@ -111,13 +111,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         'fr'    => array (
             'weekdays_short'=> array ('Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'),
             'weekdays_long' => array ('Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'),
-            'months_short'  => array ('Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'),
-            'months_long'   => array ('Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre')
-        ),
-        'fr'    => array (
-            'weekdays_short'=> array ('Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'),
-            'weekdays_long' => array ('Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'),
-            'months_short'  => array ('Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'),
+            'months_short'  => array ('Jan', 'F&#xe9;v', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Ao&#xfb;t', 'Sep', 'Oct', 'Nov', 'D&#xe9;c'),
             'months_long'   => array ('Janvier', 'F&#xe9;vrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Ao&#xfb;t', 'Septembre', 'Octobre', 'Novembre', 'D&#xe9;cembre')
         ),
         'hu'    => array (
@@ -148,7 +142,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
             'weekdays_short'=> array ('Dom', 'Lun', 'Mar', 'Mi&#xe9;', 'Jue', 'Vie', 'S&#xe1;b'),
             'weekdays_long' => array ('Domingo', 'Lunes', 'Martes', 'Mi&#xe9;rcoles', 'Jueves', 'Viernes', 'S&#xe1;bado'),
             'months_short'  => array ('Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'),
-            'months_long'   => array ('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septimbre', 'Octubre', 'Noviembre', 'Diciembre')
+            'months_long'   => array ('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre')
         ),
         'da'    => array (
             'weekdays_short'=> array ('S&#xf8;n', 'Man', 'Tir', 'Ons', 'Tor', 'Fre', 'L&#xf8;r'),
@@ -221,7 +215,31 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
             'weekdays_long' => array('&#x41d;&#x435;&#x434;&#x456;&#x43b;&#x44f;', '&#x41f;&#x43e;&#x43d;&#x435;&#x434;&#x456;&#x43b;&#x43e;&#x43a;', '&#x412;&#x456;&#x432;&#x442;&#x43e;&#x440;&#x43e;&#x43a;', '&#x421;&#x435;&#x440;&#x435;&#x434;&#x430;', '&#x427;&#x435;&#x442;&#x432;&#x435;&#x440;', '&#x41f;\'&#x44f;&#x442;&#x43d;&#x438;&#x446;&#x44f;', '&#x421;&#x443;&#x431;&#x43e;&#x442;&#x430;'),
             'months_short'  => array('&#x421;&#x456;&#x447;', '&#x41b;&#x44e;&#x442;', '&#x411;&#x435;&#x440;', '&#x41a;&#x432;&#x456;', '&#x422;&#x440;&#x430;', '&#x427;&#x435;&#x440;', '&#x41b;&#x438;&#x43f;', '&#x421;&#x435;&#x440;', '&#x412;&#x435;&#x440;', '&#x416;&#x43e;&#x432;', '&#x41b;&#x438;&#x441;', '&#x413;&#x440;&#x443;'),
             'months_long'   => array('&#x421;&#x456;&#x447;&#x435;&#x43d;&#x44c;', '&#x41b;&#x44e;&#x442;&#x438;&#x439;', '&#x411;&#x435;&#x440;&#x435;&#x437;&#x435;&#x43d;&#x44c;', '&#x41a;&#x432;&#x456;&#x442;&#x435;&#x43d;&#x44c;', '&#x422;&#x440;&#x430;&#x432;&#x435;&#x43d;&#x44c;', '&#x427;&#x435;&#x440;&#x432;&#x435;&#x43d;&#x44c;', '&#x41b;&#x438;&#x43f;&#x435;&#x43d;&#x44c;', '&#x421;&#x435;&#x440;&#x43f;&#x435;&#x43d;&#x44c;', '&#x412;&#x435;&#x440;&#x435;&#x441;&#x435;&#x43d;&#x44c;', '&#x416;&#x43e;&#x432;&#x442;&#x435;&#x43d;&#x44c;', '&#x41b;&#x438;&#x441;&#x442;&#x43e;&#x43f;&#x430;&#x434;', '&#x413;&#x440;&#x443;&#x434;&#x435;&#x43d;&#x44c;')
-        )
+        ),
+        'ro'    => array (
+            'weekdays_short'=> array ('Dum', 'Lun', 'Mar', 'Mie', 'Joi', 'Vin', 'Sam'),
+            'weekdays_long' => array ('Duminica', 'Luni', 'Marti', 'Miercuri', 'Joi', 'Vineri', 'Sambata'),
+            'months_short'  => array ('Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'),
+            'months_long'   => array ('Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie')
+        ),
+        'he'    => array (
+            'weekdays_short'=> array ('&#1512;&#1488;&#1513;&#1493;&#1503;', '&#1513;&#1504;&#1497;', '&#1513;&#1500;&#1497;&#1513;&#1497;', '&#1512;&#1489;&#1497;&#1506;&#1497;', '&#1495;&#1502;&#1497;&#1513;&#1497;', '&#1513;&#1497;&#1513;&#1497;', '&#1513;&#1489;&#1514;'),
+            'weekdays_long' => array ('&#1497;&#1493;&#1501; &#1512;&#1488;&#1513;&#1493;&#1503;', '&#1497;&#1493;&#1501; &#1513;&#1504;&#1497;', '&#1497;&#1493;&#1501; &#1513;&#1500;&#1497;&#1513;&#1497;', '&#1497;&#1493;&#1501; &#1512;&#1489;&#1497;&#1506;&#1497;', '&#1497;&#1493;&#1501; &#1495;&#1502;&#1497;&#1513;&#1497;', '&#1497;&#1493;&#1501; &#1513;&#1497;&#1513;&#1497;', '&#1513;&#1489;&#1514;'),
+            'months_short'  => array ('&#1497;&#1504;&#1493;&#1488;&#1512;', '&#1508;&#1489;&#1512;&#1493;&#1488;&#1512;', '&#1502;&#1512;&#1509;', '&#1488;&#1508;&#1512;&#1497;&#1500;', '&#1502;&#1488;&#1497;', '&#1497;&#1493;&#1504;&#1497;', '&#1497;&#1493;&#1500;&#1497;', '&#1488;&#1493;&#1490;&#1493;&#1505;&#1496;', '&#1505;&#1508;&#1496;&#1502;&#1489;&#1512;', '&#1488;&#1493;&#1511;&#1496;&#1493;&#1489;&#1512;', '&#1504;&#1493;&#1489;&#1502;&#1489;&#1512;', '&#1491;&#1510;&#1502;&#1489;&#1512;'),
+            'months_long'   => array ('&#1497;&#1504;&#1493;&#1488;&#1512;', '&#1508;&#1489;&#1512;&#1493;&#1488;&#1512;', '&#1502;&#1512;&#1509;', '&#1488;&#1508;&#1512;&#1497;&#1500;', '&#1502;&#1488;&#1497;', '&#1497;&#1493;&#1504;&#1497;', '&#1497;&#1493;&#1500;&#1497;', '&#1488;&#1493;&#1490;&#1493;&#1505;&#1496;', '&#1505;&#1508;&#1496;&#1502;&#1489;&#1512;', '&#1488;&#1493;&#1511;&#1496;&#1493;&#1489;&#1512;', '&#1504;&#1493;&#1489;&#1502;&#1489;&#1512;', '&#1491;&#1510;&#1502;&#1489;&#1512;')
+        ),
+        'sv'    => array (
+            'weekdays_short'=> array ('S&#xf6;n', 'M&#xe5;n', 'Tis', 'Ons', 'Tor', 'Fre', 'L&#xf6;r'),
+            'weekdays_long' => array ('S&#xf6;ndag', 'M&#xe5;ndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'L&#xf6;rdag'),
+            'months_short'  => array ('Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'),
+            'months_long'   => array ('Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December')
+        ),
+        'pt'    => array (
+            'weekdays_short'=> array ('Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'S&aacute;b'),
+            'weekdays_long' => array ('Domingo', 'Segunda-feira', 'Ter&ccedil;a-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'S&aacute;bado'),
+            'months_short'  => array ('Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'),
+            'months_long'   => array ('Janeiro', 'Fevereiro', 'Mar&ccedil;o', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro')
+        )    
     );
 
     // }}}
@@ -316,6 +334,10 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
                     case 'h':
                         $options = $this->_createOptionList(1, 12);
                         break;
+                    case 'g':
+                        $options = $this->_createOptionList(1, 12);
+                        array_walk($options, create_function('&$v,$k', '$v = intval($v);'));
+                        break;
                     case 'H':
                         $options = $this->_createOptionList(0, 23);
                         break;
@@ -330,6 +352,9 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
                         break;
                     case 'A':
                         $options = array('AM' => 'AM', 'PM' => 'PM');
+                        break;
+                    case 'W':
+                        $options = $this->_createOptionList(1, 53);
                         break;
                     case '\\':
                         $backslash  = true;
@@ -348,9 +373,15 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
                     }
                     $separator = '';
                     // Should we add an empty option to the top of the select?
-                    if ($this->_options['addEmptyOption']) {
-                        // Preserve the keys
-                        $options = array($this->_options['emptyOptionValue'] => $this->_options['emptyOptionText']) + $options;
+                    if (!is_array($this->_options['addEmptyOption']) && $this->_options['addEmptyOption'] || 
+                        is_array($this->_options['addEmptyOption']) && !empty($this->_options['addEmptyOption'][$sign])) {
+
+                        // Using '+' array operator to preserve the keys
+                        if (is_array($this->_options['emptyOptionText']) && !empty($this->_options['emptyOptionText'][$sign])) {
+                            $options = array($this->_options['emptyOptionValue'] => $this->_options['emptyOptionText'][$sign]) + $options;
+                        } else {
+                            $options = array($this->_options['emptyOptionValue'] => $this->_options['emptyOptionText']) + $options;
+                        }
                     }
                     $this->_elements[] =& new HTML_QuickForm_select($sign, null, $options, $this->getAttributes());
                 }
@@ -391,7 +422,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
                 $value = strtotime($value);
             }
             // might be a unix epoch, then we fill all possible values
-            $arr = explode('-', date('w-d-n-Y-h-H-i-s-a-A', (int)$value));
+            $arr = explode('-', date('w-d-n-Y-h-H-i-s-a-A-W', (int)$value));
             $value = array(
                 'D' => $arr[0],
                 'l' => $arr[0],
@@ -402,11 +433,13 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
                 'Y' => $arr[3],
                 'y' => $arr[3],
                 'h' => $arr[4],
+                'g' => $arr[4],
                 'H' => $arr[5],
                 'i' => $arr[6],
                 's' => $arr[7],
                 'a' => $arr[8],
-                'A' => $arr[9]
+                'A' => $arr[9],
+                'W' => $arr[10]
             );
         }
         parent::setValue($value);
@@ -419,9 +452,9 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
     {
         include_once('HTML/QuickForm/Renderer/Default.php');
         $renderer =& new HTML_QuickForm_Renderer_Default();
-        $renderer->setElementTemplate($this->_wrap[0] . '{element}' . $this->_wrap[1]);
+        $renderer->setElementTemplate('{element}');
         parent::accept($renderer);
-        return $renderer->toHtml();
+        return $this->_wrap[0] . $renderer->toHtml() . $this->_wrap[1];
     }
 
     // }}}

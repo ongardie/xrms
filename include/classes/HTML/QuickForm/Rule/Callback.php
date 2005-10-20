@@ -16,7 +16,7 @@
 // | Authors: Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: Callback.php,v 1.1 2005/01/13 20:45:19 vanmer Exp $
+// $Id: Callback.php,v 1.2 2005/10/20 16:25:10 daturaarutad Exp $
 
 require_once('HTML/QuickForm/Rule.php');
 
