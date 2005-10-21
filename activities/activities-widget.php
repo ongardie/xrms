@@ -475,17 +475,17 @@ if('list' != $activities_widget_type) {
     $sql_session_var = $form_name . '_activities_sql';
     $_SESSION[$sql_session_var] = $activity_sql;
 
+    $pager = new GUP_Pager($con, $activity_sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true, true);
 
     $endrows = $end_rows .
                 "<tr><td class=widget_content_form_element colspan=20>
                 $pager_columns_button
                 <input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _("Calendar View") ."\">
-                <input type=button class=button onclick=\"javascript: exportIt();\" value=\"" . _("Export") ."\">
+".$pager->GetAndUseExportButton()."
                 <input type=button class=button onclick=\"javascript: bulkEmailActivity();\" value=\"" . _("Mail Merge") . "\">
                 <input type=button class=button onclick=\"javascript: location.href='$http_site_root/activities/browse-next.php?browse=true&sql_session_var=$sql_session_var';\" value=\"" . _("Browse") . "\"></td>
                 </tr>\n";
 
-    $pager = new GUP_Pager($con, $activity_sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true, true);
     if(is_array($default_sort)) {
         $pager->SetDefaultSortColumn($default_sort);
 
@@ -800,6 +800,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.40  2005/10/21 18:45:19  vanmer
+* - patch to fix export of activities pager, thanks to tomver at SF
+*
 * Revision 1.39  2005/09/23 16:07:36  daturaarutad
 * add default sort parameter to GetActivitiesWidget()
 *
