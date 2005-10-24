@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.38 2005/08/28 16:37:25 braverock Exp $
+ * $Id: some.php,v 1.39 2005/10/24 22:04:25 daturaarutad Exp $
  */
 
 //include required files
@@ -69,6 +69,8 @@ $f_case         = false;
 $sql = "SELECT "
       . $con->Concat($con->qstr('<a id="'), 'file_pretty_name', $con->qstr('" href="' . $http_site_root . '/files/one.php?return_url=/private/home.php&amp;file_id='), 'file_id', $con->qstr('">'), "file_pretty_name", "'</a>'")
       . " AS name, file_description as description, file_pretty_name, ";
+
+$sql .= concat_hook_function('file_get_search_fields_sql');
 
 switch ($file_on_what) {
     case "contacts" : {
@@ -479,6 +481,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.39  2005/10/24 22:04:25  daturaarutad
+ * add hook for file_get_search_fields_sql
+ *
  * Revision 1.38  2005/08/28 16:37:25  braverock
  * - fix colspan on recently viewed table
  *
