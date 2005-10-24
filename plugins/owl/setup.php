@@ -37,6 +37,8 @@ function xrms_plugin_init_owl() {
     $xrms_plugin_hooks['file_browse_files']['owl'] = 'fn_browse_files';
     $xrms_plugin_hooks['file_search_files']['owl'] = 'fn_search_files';
     $xrms_plugin_hooks['file_get_search_fields_html']['owl'] = 'fn_get_search_fields_html';
+    $xrms_plugin_hooks['xrms_update']['owl'] = 'owl_xrms_update';
+
 }
 
 
@@ -288,6 +290,27 @@ function fn_search_files(&$params) {
 	$params[0] =  OWL_Search_Files($owl_search_string, $file_data);
 }
 
+/**
+* This function is called by XRMS whenever the admin updates the databases
+*/
+function owl_xrms_update($con) {
+
+    global $http_site_root;
+
+    $columns=$con->MetaColumns('files', true);
+
+    if(!array_key_exists('EXTERNAL_ID',$columns)) {
+
+        $update_sql = "ALTER TABLE files ADD external_id INT(11) DEFAULT 0";
+
+        $rst=$con->execute($update_sql);
+
+        if (!$rst) db_error_handler($con, $update_sql);
+    }
+}
+
+
+
 // You can use this for adding new API fns
 function fn_template() {
 /*
@@ -307,6 +330,9 @@ function fn_template() {
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.4  2005/10/24 21:53:29  daturaarutad
+ * add hook to add external_id to XRMS files table
+ *
  * Revision 1.3  2005/09/23 20:35:17  daturaarutad
  * add new hooks and fix old ones
  *
