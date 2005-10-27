@@ -8,7 +8,7 @@
 // | Email         walter@torres.ws                                         |
 // | Web           http://web.php-yacs.org                                  |
 // | Mirror        http://php-yacs.sourceforge.net/                         |
-// | $Id: csvParser.php,v 1.1 2005/07/06 18:12:39 jswalter Exp $             |
+// | $Id: csvParser.php,v 1.2 2005/10/27 19:14:47 jswalter Exp $             |
 // +------------------------------------------------------------------------+
 // | This source file is subject to version 3.00 of the PHP License,        |
 // | that is available at http://www.php.net/license/3_0.txt.               |
@@ -42,8 +42,8 @@
  * @author      Walter Torres <walter@torres.ws>
  * @contributor Aaron Van Meerten
  *
- * @version   $Id: csvParser.php,v 1.1 2005/07/06 18:12:39 jswalter Exp $
- * @date      $Date: 2005/07/06 18:12:39 $
+ * @version   $Id: csvParser.php,v 1.2 2005/10/27 19:14:47 jswalter Exp $
+ * @date      $Date: 2005/10/27 19:14:47 $
  *
  * @copyright (c) 2004 Walter Torres
  * @license   Licensed under the GNU GPL. For full terms see the file COPYING.
@@ -262,7 +262,7 @@
  *
  * @extends File
  *
- * @date  $Date: 2005/07/06 18:12:39 $
+ * @date  $Date: 2005/10/27 19:14:47 $
  *
  * @todo Have this class extend FILE to utilize common File operations
  *
@@ -491,6 +491,34 @@ class csvParser //extends File
     * @since 2.04
     */
     var $_errCode = null;
+
+   /**
+    * Property private string $_errLogPath
+    *
+    * Full System Path to place error log file
+    *
+    * @name $_errLogPath
+    * @var string
+    * @property private string Full System Path to place error log file
+    *
+    * @access private
+    * @since 2.04
+    */
+    var $_errLogPath = '/tmp';
+
+   /**
+    * Property private string $_errLogFileName
+    *
+    * Error log file name
+    *
+    * @name $_errLogFileName
+    * @var string
+    * @property private string Error log file name
+    *
+    * @access private
+    * @since 2.04
+    */
+    var $_errLogFileName = 'csv_parser_err.log';
 
    /**
     * Property private boolean $_parseSuccess
@@ -1808,6 +1836,56 @@ class csvParser //extends File
 // ==========================================================
 // Error handling methods
 
+// {{{ setErrLogPath
+   /**
+    * Method private void setErrLogPath( string )
+    *
+    * Sets error message
+    *
+    * @name setErrLogPath()
+    * @access private
+    * @category Error handling
+    *
+    * @uses $_errLogPath   String  Full System Path to place error log file
+    * @static
+    * @final .
+    *
+    * @param  const  $conErrCode  Constant defining error
+    * @return void
+    *
+    * @since 1.1
+    */
+    function setErrLogPath ( $_errLogPath = false)
+    {
+        if ( $_errLogPath )
+            $this->_errLogPath = $_errLogPath;
+    }
+// }}}
+// {{{ setErrLogFileName
+   /**
+    * Method private void setErrLogFileName( string )
+    *
+    * Sets error message
+    *
+    * @name setErrLogFileName())
+    * @access private
+    * @category Error handling
+    *
+    * @uses $_errLogFileName   String  Error log file name
+    * @static
+    * @final .
+    *
+    * @param  const  $_errLogFileName  Error log file name
+    * @return void
+    *
+    * @since 1.1
+    */
+    function setErrLogFileName ( $_errLogFileName = false)
+    {
+        if ( $_errLogFileName )
+            $this->_errLogFileName = $_errLogFileName;
+    }
+// }}}
 // {{{ _flagError
    /**
     * Method private void _flagError( string, bool )
@@ -1818,15 +1896,17 @@ class csvParser //extends File
     * @access private
     * @category Error handling
     *
-    * @uses $_parseSuccess   Boolean Class Property Succss or failure on parsing given file
-    * @uses _setErrorMsg() Sets error message based upon given parameter
+    * @uses $_parseSuccess     Class Property Succss or failure on parsing given file
+    * @uses _setErrorMsg()     Sets error message based upon given parameter
+    * @uses $_errLogPath       Full System Path to place error log file
+    * @uses $_errLogFileName   Error log file name
     * @uses constant LOG_TYPE_FILE
     * @static
     * @final .
     *
     * @param  const  $conErrCode  Constant defining error
     * @param  bool   $bolAddLog   Add message to error log, or not
-    * @param  const  $logType     Constatnt defineg where to error
+    * @param  const  $logType     Constant defining where to place error msg
     * @return void
     *
     * @since 1.0
@@ -1846,9 +1926,8 @@ class csvParser //extends File
             {
                 $_errMsg  = date("n/j/Y g:i:s A") . "\t";
                 $_errMsg .= $this->getErrorMsg() . "\n";
-                error_log( $_errMsg, $logType, 'logs/statements.err' );
+                error_log( $_errMsg, $logType, $this->_errLogPath . '/' . $this->_errLogFileName );
             }
-
         }
     }
 // }}}
@@ -2055,6 +2134,10 @@ class csvParser //extends File
 
 /**
   * $Log: csvParser.php,v $
+  * Revision 1.2  2005/10/27 19:14:47  jswalter
+  *  - added '$_errLogFileName' & '$_errLogPath' as Class properties
+  *  - added 'setErrLogPath()' & 'setErrLogFileName()' methods to define these properties
+  *
   * Revision 1.1  2005/07/06 18:12:39  jswalter
   *  - initial commit to sourceforge
   *  - these files come from php-yacs.org
