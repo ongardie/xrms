@@ -5,7 +5,7 @@
  * Form to enter a new password for a user
  * @todo - add javascript validation on the save.
  *
- * $Id: change-password.php,v 1.10 2005/07/22 15:45:24 braverock Exp $
+ * $Id: change-password.php,v 1.11 2005/11/01 02:23:14 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -16,7 +16,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-
+getGlobalVar($msg, 'msg');
 //
 // become Admin aware - Don't accept the user to edit from the URL
 // for non-Admin types.
@@ -28,7 +28,7 @@ if (check_user_role(false, $session_user_id, 'Administrator')) {
 }
 
 $page_title = _("Change Password");
-start_page($page_title);
+start_page($page_title, true, $msg);
 
 ?>
 
@@ -71,6 +71,9 @@ end_page();
 
 /**
  *$Log: change-password.php,v $
+ *Revision 1.11  2005/11/01 02:23:14  vanmer
+ *- added output of msg to change password
+ *
  *Revision 1.10  2005/07/22 15:45:24  braverock
  *- add additional result set error handling and more informative error msgs
  *- remove trailing whitespace
