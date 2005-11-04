@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.74 2005/10/08 21:08:49 vanmer Exp $
+ * $Id: edit-2.php,v 1.75 2005/11/04 16:27:52 braverock Exp $
  */
 
 //include required files
@@ -91,10 +91,10 @@ if ($change_attachment) {
     if ($change_attachment=='true') {
         $return_url="/activities/activity-reconnect.php?activity_id=$activity_id";
     } elseif ($change_attachment=='detach') {
-    	$return_msg=_("Successfully detached activity");
-    	$return_url="/activities/one.php?activity_id=$activity_id&msg=".urlencode($return_msg);
-    	$on_what_id=0;
-	$on_what_table=NULL;
+        $return_msg=_("Successfully detached activity");
+        $return_url="/activities/one.php?activity_id=$activity_id&msg=".urlencode($return_msg);
+        $on_what_id=0;
+        $on_what_table=NULL;
     }
 }
 // set the correct activity status flag
@@ -119,11 +119,11 @@ if (!$scheduled_at) {
     $scheduled_at = strtotime(date('Y-m-d'));
 }
 
-// set ends_at to scheduled_at if it is empty
-$ends_at = strtotime($ends_at);
+// set ends_at to current time if it is empty
 if (!$ends_at) {
-    $ends_at = $scheduled_at;
+    $ends_at = date('Y-m-d H:i:s');
 }
+$ends_at = strtotime($ends_at);
 
 // make sure ends_at is later than scheduled at
 if ($scheduled_at > $ends_at) {
@@ -394,7 +394,7 @@ if ($table_name !== "attached to") {
 
     $old_status = $rst->fields[$table_name . '_status_id'];
 
-    
+
     //check if there are open activities left
     $where=array();
     $where[]="on_what_status='$old_status'";
@@ -404,7 +404,7 @@ if ($table_name !== "attached to") {
     $where[]="activity_record_status='a'";
     if ($contact_id) { $where[]="contact_id=$contact_id"; }
     if ($company_id) { $where[]="company_id=$company_id"; }
-    
+
     $wherestr=implode(" and ", $where);
     $sql = "select * from activities where $wherestr";
 
@@ -514,7 +514,7 @@ if ($activity_status == 'o') {
 }
 if ($company_id) {
     $email_return=urlencode('/companies/one.php?company_id='.$company_id);
-} else { 
+} else {
     $email_return=urlencode('/activities/some.php');
 }
 
@@ -559,6 +559,10 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.75  2005/11/04 16:27:52  braverock
+ * - set ends_at time to current time if it is empty.
+ * - rationalizes ends_at for activities like phone calls or long-overdue activities
+ *
  * Revision 1.74  2005/10/08 21:08:49  vanmer
  * - changed participant subsystem to operate through activity edit-2, to allow changes on activity page to save
  * before moving to add/remove/mail participants on the activity
