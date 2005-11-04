@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.127 2005/10/08 21:07:52 vanmer Exp $
+ * $Id: one.php,v 1.128 2005/11/04 16:26:50 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -88,6 +88,20 @@ if ($activity_rst) {
 if(!$thread_id) {
     $thread_id = $activity_id;
 }
+
+//check for uncompleted activity with equal start and end times
+if (!strlen($completed_at)) {
+    //check if ends_at is in the past
+    if (strtotime($ends_at)<time()) {
+        //check if start and end time are equal
+        if ($ends_at=$scheduled_at) {
+           //clear $ends_at
+           $ends_at='';
+           // hopefully the user will pick an ends_at time in the UI
+           // otherwise, activities/edit-2.php will set the ends_at to the current time
+        }
+    }
+} // end time rationalization on uncompleted activities
 
 $sql = "SELECT activity_recurrence_id FROM activities_recurrence where activity_id=$activity_id";
 $recurrence_rst=$con->execute($sql);
@@ -583,7 +597,7 @@ function logTime() {
                 <td class=widget_label_right><?php echo _("Entered By"); ?></td>
                 <td class=widget_content_form_element><?php echo $entered_by_firstname.' '.$entered_by_lastname.' '._("on").' '.$entered_at; ?></td>
             </tr>
-      	    <?php if ($last_modified_by) { ?>
+            <?php if ($last_modified_by) { ?>
             <tr>
                 <td class=widget_label_right><?php echo _("Last Modified By"); ?></td>
                 <td class=widget_content_form_element><?php echo $last_modified_by_firstname.' '.$last_modified_by_lastname.' '._("on").' '.$last_modified_at; ?></td>
@@ -755,6 +769,11 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.128  2005/11/04 16:26:50  braverock
+ * - clear ends_at time if scheduled and end times are the same
+ *   and activity uncompleted
+ * - rationalizes time for activities like phone calls
+ *
  * Revision 1.127  2005/10/08 21:07:52  vanmer
  * - added hidden variables to track actions for participants subsystem
  *
