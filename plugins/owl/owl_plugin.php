@@ -23,7 +23,7 @@
 // reason is that this file gets loaded often!
 
 global $owl_location;
-$owl_location = '/home/www/owl/intranet/lib/';
+$owl_location = '/home/www/owl/intranet';
 
 
 /**
@@ -100,7 +100,7 @@ function op_get_xrms_file_id(&$params) {
 /** 
 * Get Extra HTML rows for display in files/one.php
 *   
-* @param array (0 => $pager);
+* @param array ('pager' => $pager);
 *   
 * @return array ('pager' => 'pager object with modify callback set');
 */
@@ -114,7 +114,7 @@ function op_search_files_callback(&$params) {
     require_once($include_directory . 'utils-files.php');
 
 	if(is_array($params) && count($params) == 1) {
-		$pager 		= $params[0];
+		$pager 		= $params['pager'];
 	} else {
 		echo "error in param count";
 		return null;
@@ -125,7 +125,7 @@ function op_search_files_callback(&$params) {
 	if($owl_search_string) {
 		$pager->AddModifyDataCallback('OWLFileDataCallback');
 	}
-	$params[0] = $pager;
+	$params['pager'] = $pager;
 
 }
 /** 
@@ -137,13 +137,14 @@ function op_search_files_callback(&$params) {
 */
 function OWLFileDataCallback($rows) {
     global $msg;
-    $file_plugin_params = array($rows);
+    $file_plugin_params = array('rows' => $rows);
+
     do_hook_function('file_search_files', $file_plugin_params);
     if($file_plugin_params['error_status']) {
         $msg = $file_plugin_params['error_text'];
     }
 
-    return $file_plugin_params[0];
+    return $file_plugin_params['rows'];
 }
 
 
@@ -207,7 +208,7 @@ function op_owl_xrms_update($con) {
 /**
 * Get Extra HTML rows for display in files/one.php
 *
-* @param array (0 => $file_info)
+* @param array ('file_info' => $file_info)
 *
 * @return array ('file_one_html' => '<html>', 
 *				 'file_one_html_post' => 'html after the one.php form', 
@@ -216,10 +217,10 @@ function op_owl_xrms_update($con) {
 function op_get_one_file_html(&$params) {
 	global $http_site_root;
 	global $owl_location;
-	require_once($owl_location . 'OWL_API.php');
+	require_once($owl_location . '/lib/OWL_API.php');
 
 	if(is_array($params) && count($params) == 1) {
-		$file_info 		= $params[0];
+		$file_info 		= $params['file_info'];
 	} else {
 		echo "error in param count";
 		return null;
@@ -311,7 +312,7 @@ END;
 /** 
 * Add a file to OWL
 *   
-* @param array (0 => $file_field_name, 1 => $file_info);
+* @param array ('file_field_name' => $file_field_name, 'file_info' => $file_info);
 *   
 * @return array ('external_id' => 'The OWL file ID', 
 *                'other owl_fields' => 'other OWL file fields', 
@@ -320,11 +321,11 @@ END;
 */
 function op_add_file(&$params) {
 	global $owl_location;
-	require_once($owl_location . 'OWL_API.php');
+	require_once($owl_location . '/lib/OWL_API.php');
 
 	if(is_array($params) && count($params) == 2) {
-		$file_field_name = $params[0];
-		$file_info 		= $params[1];
+		$file_field_name = $params['file_field_name'];
+		$file_info 		= $params['file_info'];
 
 		// Simply read the parent_id from the session (It is only ever set in the Browse function)
 		if($file_info['on_what_table'] && $file_info['on_what_id']) {
@@ -336,7 +337,11 @@ function op_add_file(&$params) {
 		echo "error in param count";
 		return null;
 	}
-	$params =  OWL_Add_File($file_field_name, $file_info);
+
+	$file_info =  OWL_Add_File($file_field_name, $file_info);
+
+	$params['file_info'] = $file_info;
+	$params['file_stored'] = $file_info['file_stored'];
 
 	global $owl_error;
 	$params = array_merge($params, $owl_error);
@@ -347,7 +352,7 @@ function op_add_file(&$params) {
 /** 
 * Update a file's information or file in OWL
 *   
-* @param array (0 => $file_field_name, 1 => $file_info);
+* @param array ('file_field_name' => $file_field_name, 'file_info' => $file_info);
 *   
 * @return array ('external_id' => 'The OWL file ID', 
 *                'other owl_fields' => 'other OWL file fields', 
@@ -356,11 +361,11 @@ function op_add_file(&$params) {
 */
 function op_upd_file(&$params) {
 	global $owl_location;
-	require_once($owl_location . 'OWL_API.php');
+	require_once($owl_location . '/lib/OWL_API.php');
 
 	if(is_array($params) && count($params) == 2) {
-		$file_field_name = $params[0];
-		$file_info 		= $params[1];
+		$file_field_name = $params['file_field_name'];
+		$file_info 		= $params['file_info'];
 
 		// Simply read the parent_id from the session (It is only ever set in the Browse function)
 		if($file_info['on_what_table'] && $file_info['on_what_id']) {
@@ -374,17 +379,14 @@ function op_upd_file(&$params) {
 		echo "error in param count";
 		return null;
 	}
-	$params =  OWL_Upd_File($file_field_name, $file_info);
+
+	$file_info =  OWL_Upd_File($file_field_name, $file_info);
+	$params['file_info'] = $file_info;
+	$params['file_stored'] = $file_info['file_stored'];
 
 	global $owl_error;
 	$params = array_merge($params, $owl_error);
 }
-
-
-
-
-
-
 
 
 
@@ -398,10 +400,10 @@ function op_upd_file(&$params) {
 */
 function op_delete_file(&$params) {
 	global $owl_location;
-	require_once($owl_location . 'OWL_API.php');
+	require_once($owl_location . '/lib/OWL_API.php');
 
 	if(is_array($params) && count($params) > 1) {
-		$file_info 		= $params[1];
+		$file_info 		= $params['file_info'];
 
 	} else {
 		echo "error in param count";
@@ -420,17 +422,17 @@ function op_delete_file(&$params) {
 /** 
 * Add a Folder in OWL
 *   
-* @param array (0 => $folder_info);
+* @param array ('folder_info' => $folder_info);
 *   
 * @return array ('error_status' => 'boolean indicating error status',
 *                'error_text' => 'text of the error message')
 */
 function op_add_folder(&$params) {
 	global $owl_location;
-	require_once($owl_location . 'OWL_API.php');
+	require_once($owl_location . '/lib/OWL_API.php');
 
 	if(is_array($params) && count($params) == 1) {
-		$folder_info 		= $params[0];
+		$folder_info 		= $params['folder_info'];
 
 		// Simply read the parent_id from the session (It is only ever set in the Browse function)
 		if($folder_info['on_what_table'] && $folder_info['on_what_id']) {
@@ -443,7 +445,8 @@ function op_add_folder(&$params) {
 		return null;
 	}
 	global $owl_error;
-	$params =  OWL_Add_Folder($folder_info);
+	$folder_info =  OWL_Add_Folder($folder_info);
+	$params['folder_info'] = $folder_info;
 	$params = array_merge($params, $owl_error);
 }
 
@@ -451,26 +454,34 @@ function op_add_folder(&$params) {
 /** 
 * Download a file in OWL (send to the browser)
 *   
-* @param array (0 => $file_info);
+* @param array ('file_info' => $file_info);
 *   
 * @return array ('error_status' => 'boolean indicating error status',
 *                'error_text' => 'text of the error message')
 */
 function op_download_file(&$params) { 
 	global $owl_location; 
-	require_once($owl_location . 'OWL_API.php'); 
+	require_once($owl_location . '/lib/OWL_API.php'); 
 
 	getGlobalVar($selected_version, 'selected_version');
 
+
+	if(is_array($params) && count($params) == 1) {
+		$file_info 		= $params['file_info'];
+	} else {
+		echo "error in param count";
+		return null;
+	}
+
 	global $owl_error;
-	$params =  OWL_Download_File($params['file_info']['external_id'], $selected_version);
+	$params =  OWL_Download_File($file_info['external_id'], $selected_version);
 	$params = array_merge($params, $owl_error);
 }
 
 /** 
 * Browse files (pager) 
 *   
-* @param array (0 => $rst, 1 => $on_what_table, 2 => $on_what_id);
+* @param array ('rst' => $rst, 'on_what_table' => $on_what_table, 'on_what_id' => $on_what_id);
 *   
 * @return array ('file_rows' => 'pager content',
 *				 'error_status' => 'boolean indicating error status',
@@ -479,14 +490,14 @@ function op_download_file(&$params) {
 function op_browse_files(&$params) {
 	global $http_site_root;
 	global $owl_location;
-	require_once($owl_location . 'OWL_API.php');
+	require_once($owl_location . '/lib/OWL_API.php');
 	require_once('folders_lib.php');
 
 	if(is_array($params) && count($params) == 3) {
 
-		$rst = $params[0];
-		$on_what_table = $params[1];
-		$on_what_id = $params[2];
+		$rst = $params['rst'];
+		$on_what_table = $params['on_what_table'];
+		$on_what_id = $params['on_what_id'];
 
 		if($on_what_table) {
 			$return_url = "/$on_what_table/one.php?" . make_singular($on_what_table) . "_id=".$on_what_id."&owl_parent_id=$owl_parent_id";
@@ -503,6 +514,7 @@ function op_browse_files(&$params) {
 		/* 	The lowdown on owl_parent_id:
 			This variable tracks where in the hierarchy a user is.
 			A seperate copy is kept in the user's session for 'regular use', which I suppose is their 'home directory'
+			This is the only place it's set by a form var, otherwise it's read from session
 		*/
 
 		$owl_parent_id  = $_GET['owl_parent_id'];
@@ -664,17 +676,17 @@ function op_search_files(&$params) {
 	getGlobalVar($owl_search_string, 'owl_search_string');
 
 	global $owl_location;
-	require_once($owl_location . 'OWL_API.php');
+	require_once($owl_location . '/lib/OWL_API.php');
 
 	if(is_array($params) && count($params) == 1) {
 
-        $file_data = $params[0];
+        $rows = $params['rows'];
 
 	} else {
 		echo "error in param count";
 		return null;
 	}
-	$params[0] =  OWL_Search_Files($owl_search_string, $file_data);
+	$params['rows'] =  OWL_Search_Files($owl_search_string, $rows);
 	global $owl_error;
 	$params = array_merge($params, $owl_error);
 }
@@ -683,7 +695,7 @@ function op_search_files(&$params) {
 /** 
 * Get a file's info from OWL
 *   
-* @param array (0 => $file_info);
+* @param array ('file_info' => $file_info);
 *   
 * @return array ('file_info' => 'file info containing OWLs data',
 *				 'error_status' => 'boolean indicating error status',
@@ -691,10 +703,10 @@ function op_search_files(&$params) {
 */
 function op_get_file_info(&$params) {
 	global $owl_location;
-	require_once($owl_location . 'OWL_API.php');
+	require_once($owl_location . '/lib/OWL_API.php');
 
 	if(is_array($params) && count($params) == 1) {
-		$file_info 		= $params[0];
+		$file_info 		= $params['file_info'];
 	} else {
 		echo "error in param count";
 		return null;
@@ -723,12 +735,15 @@ function op_template(&$params) {
 		return null;
 	}
 	$params =  OWL_Function($folder_info);
-	*/
 }
+	*/
 
 
 /**
  * $Log: owl_plugin.php,v $
+ * Revision 1.2  2005/11/09 22:31:00  daturaarutad
+ * updated API to use named keys
+ *
  * Revision 1.1  2005/11/09 19:23:51  daturaarutad
  * Main interface to OWL_API.php
  *
