@@ -2,7 +2,7 @@
 /**
  * Form for creating a new folder
  *
- * $Id: new_folder.php,v 1.2 2005/09/23 20:41:51 daturaarutad Exp $
+ * $Id: new_folder.php,v 1.3 2005/11/09 19:26:21 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -17,9 +17,12 @@ $session_user_id = session_check('','Create');
 
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
-$on_what_table = $_POST['on_what_table'];
-$on_what_id    = $_POST['on_what_id'];
-$return_url    = $_POST['return_url'];
+// Inbound DB info
+getGlobalVar($on_what_table, 'on_what_table');
+getGlobalVar($on_what_id, 'on_what_id');
+getGlobalVar($return_url, 'return_url');
+
+
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -31,7 +34,6 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 
 
-/*
 if ($on_what_table == 'opportunities') {
     $sql = "select opportunity_title as attached_to_name from opportunities where opportunity_id = $on_what_id";
 } elseif ($on_what_table == 'cases') {
@@ -55,7 +57,6 @@ if ($rst) {
   $rst->close();
 }
 
-*/
 $con->close();
 
 $page_title = _("Attach Folder");
@@ -140,6 +141,9 @@ end_page();
 
 /**
  * $Log: new_folder.php,v $
+ * Revision 1.3  2005/11/09 19:26:21  daturaarutad
+ * use getGlobalVar instead of $_POST for CGI params
+ *
  * Revision 1.2  2005/09/23 20:41:51  daturaarutad
  * tidy up comments
  *
