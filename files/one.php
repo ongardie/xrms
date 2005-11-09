@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.18 2005/09/23 19:47:03 daturaarutad Exp $
+ * $Id: one.php,v 1.19 2005/11/09 22:36:32 daturaarutad Exp $
  */
 
 //include required files
@@ -14,52 +14,59 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$file_id = $_GET['file_id'];
+getGlobalVar($file_id, 'file_id');
+
 $on_what_id=$file_id;
 
 $session_user_id = session_check();
+
 // get call arguments
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 getGlobalVar($return_url, 'return_url');
 $out_return_url=urlencode($return_url);
-/*
-if ( isset($_GET['return_url']) ) {
-    $return_url = $_GET['return_url'];
-} else {
-    $return_url = '';
-}
-*/
+
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
 update_recent_items($con, $session_user_id, "files", $file_id);
 
-// files plugin hook
-$plugin_params = array('external_id' => $file_id);
-do_hook_function('file_get_xrms_file_id', $plugin_params);
-if($plugin_params['file_id']) {
-    $file_id = $plugin_params['file_id'];
-}
 
-
-$sql = "select * from files, users where files.entered_by = users.user_id and file_id = $file_id";
+// SQL Query (Note: the files.* may be selecting fields in use by a plugin such as OWL)
+$sql = "select files.*, users.username, users.user_id from files, users where files.entered_by = users.user_id and file_id = $file_id";
 
 $rst = $con->execute($sql);
 
 //echo $sql;
 
+$file_info = array();
+
 if ($rst) {
-    $file_pretty_name = $rst->fields['file_pretty_name'];
-    $file_description = $rst->fields['file_description'];
-    $entered_at = $con->userdate($rst->fields['entered_at']);
-    $username = $rst->fields['username'];
-    $file_size = pretty_filesize($rst->fields['file_size']);
+    $file_info = $rst->fields;
+    $file_info['entered_at'] = $con->userdate($rst->fields['entered_at']);
+    $file_info['file_size'] = pretty_filesize($rst->fields['file_size']);
     $rst->close();
 }
 
+$file_plugin_params = array('file_info' => $file_info);
+do_hook_function('file_get_file_info', &$file_plugin_params);
+$file_info =  $file_plugin_params['file_info'];
+
+
+if($file_plugin_params['error_status']) {
+    $error = true;
+    $msg = $file_plugin_params['error_text'];
+} else {
+	$file_plugin_params = array('file_info' => $file_info);
+	do_hook_function('file_get_one_file_html', &$file_plugin_params);
+	$file_one_html = $file_plugin_params['file_one_html'];
+	$file_one_html_post = $file_plugin_params['file_one_html_post'];
+	$extra_download_args = $file_plugin_params['file_one_extra_download_args'];
+}	
+
+
 $con->close();
 
-$page_title = _("File Details").': '. $file_pretty_name;
+$page_title = _("File Details").': '. $file_info['file_pretty_name'];
 start_page($page_title, true, $msg);
 
 ?>
@@ -69,37 +76,38 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 
-        <form enctype="multipart/form-data" action=edit-2.php onsubmit="javascript: return validate();" method=post>
-        <input type=hidden name=return_url value="<?php  echo $return_url ?>">
-        <input type=hidden name=file_id value="<?php  echo $file_id ?>">
+        <form enctype="multipart/form-data" action=edit-2.php onsubmit="javascript: return validate();" name="Files_One" method=post>
+        <input type=hidden name=return_url value="<?php  echo $return_url; ?>">
+        <input type=hidden name=file_id value="<?php  echo $file_info['file_id']; ?>">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2><?php echo _("File Information");?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("ID"); ?></td>
-                <td class=widget_content_form_element><?php  echo $file_id ?></td>
+                <td class=widget_content_form_element><?php  echo $file_info['file_id']; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("File Name"); ?></td>
-                <td class=widget_content_form_element><input type=text size=40 name=file_pretty_name value="<?php  echo $file_pretty_name ?>"></td>
+                <td class=widget_content_form_element><input type=text size=40 name=file_pretty_name value="<?php  echo $file_info['file_pretty_name']; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Uploaded"); ?></td>
-                <td class=widget_content_form_element><?php  echo $entered_at ?> by <?php echo $username; ?></td>
+                <td class=widget_content_form_element><?php  echo $file_info['entered_at']; ?> by <?php echo $file_info['username']; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Size"); ?></td>
-                <td class=widget_content_form_element><?php  echo $file_size ?></td>
+                <td class=widget_content_form_element><?php  echo $file_info['file_size']; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Description"); ?></td>
-                <td class=widget_content_form_element><textarea rows=10 cols=100 name=file_description><?php  echo $file_description ?></textarea></td>
+                <td class=widget_content_form_element><textarea rows=10 cols=100 name=file_description><?php  echo $file_info['file_description']; ?></textarea></td>
             </tr>
+			<?php echo $file_one_html; ?>
             <tr>
                 <td class=widget_label_right><?php echo _("Change Date"); ?></td>
                 <td class=widget_content_form_element>
-                    <input type=text ID="f_date_c" name=file_entered_at value="<?php  echo $entered_at; ?>">
+                    <input type=text ID="f_date_c" name=file_entered_at value="<?php  echo $file_info['entered_at']; ?>">
                     <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
                 </td>
             </tr>
@@ -109,12 +117,13 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2> <?php echo render_edit_button("Save Changes", 'submit'); ?>
- <?php echo render_read_button("Download",'button',"javascript: window.open('download.php?file_id=$file_id');") ?> 
- <?php echo render_delete_button("Delete",'button',"javascript: location.href='delete.php?return_url=$out_return_url&file_id=$file_id';") ?></td>
+ <?php echo render_read_button("Download",'button',"javascript: window.open('download.php?file_id={$file_info['file_id']}&$extra_download_args');") ?> 
+ <?php echo render_delete_button("Delete",'button',"javascript: location.href='delete.php?return_url=$out_return_url&file_id={$file_info['file_id']}';") ?></td>
             </tr>
         </table>
         </form>
 
+			<?php echo $file_one_html_post; ?>
     </div>
 
         <!-- right column //-->
@@ -171,6 +180,9 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.19  2005/11/09 22:36:32  daturaarutad
+ *add hooks for files plugin
+ *
  *Revision 1.18  2005/09/23 19:47:03  daturaarutad
  *updated for file plugin (owl support)
  *

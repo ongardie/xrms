@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.39 2005/10/24 22:04:25 daturaarutad Exp $
+ * $Id: some.php,v 1.40 2005/11/09 22:36:48 daturaarutad Exp $
  */
 
 //include required files
@@ -32,6 +32,7 @@ getGlobalVar($saved_title, 'saved_title');
 getGlobalVar($group_item, 'group_item');
 getGlobalVar($delete_saved, 'delete_saved');
 
+global $msg;
 
 /*********** SAVED SEARCH BEGIN **********************/
 load_saved_search_vars($con, $on_what_table, $saved_id, $delete_saved);
@@ -293,6 +294,69 @@ if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'files', '', 4);
 }
 
+
+
+
+if (get_system_parameter($con, 'Use Owl') == 'y') {
+  echo "<input class=button type=button onclick='javascript: owl()' value='"._("Owl File Management")."'><br><br>";
+}
+
+
+
+// Set up $pager_widget
+$columns = array();
+$columns[] = array('name' => _("Name"), 'index_sql' => 'name', 'sql_sort_column' => 'file_pretty_name');
+$columns[] = array('name' => _("Description"), 'index_sql' => 'description');
+
+if($f_contact) $columns[] = array('name' => _("Contact"), 'index_sql' => 'contact');
+if($f_campaign) $columns[] = array('name' => _("Campaign"), 'index_sql' => 'campaign');
+if($f_opportunity) $columns[] = array('name' => _("Opportunity"), 'index_sql' => 'opportunity');
+if($f_case) $columns[] = array('name' => _("Case"), 'index_sql' => 'case_name');
+if($f_company) $columns[] = array('name' => _("Company"), 'index_sql' => 'company');
+
+$columns[] = array('name' => _("Date"), 'index_sql' => 'date');
+$columns[] = array('name' => _("ID"), 'index_sql' => 'ID');
+
+$endrows = "<tr><td class=widget_content_form_element colspan=10>
+            <input type=button class=button onclick=\"javascript: exportIt();\" value="._("Export").">
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
+
+$pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'FileForm', 'FilePager', $columns, false, true);
+
+
+$file_plugin_params = array('pager' => $pager);
+do_hook_function('file_search_files_callback', $file_plugin_params);
+$pager = $file_plugin_params['pager'];
+
+
+if($file_plugin_params['error_status']) {
+   $msg .= $file_plugin_params['error_text'];
+}
+	
+/*
+
+function FileDataCallback($rows) {
+	global $msg;
+    $file_plugin_params = array($rows);
+    do_hook_function('file_search_files', $file_plugin_params);
+
+	if($file_plugin_params['error_status']) {
+	    $msg = $file_plugin_params['error_text'];
+	}
+
+    return $file_plugin_params[0];
+}
+
+$pager->AddModifyDataCallback('FileDataCallback');
+*/
+
+$pager->AddEndRows($endrows);
+$pager_widget = $pager->Render($system_rows_per_page);
+
+$con->close();
+
+
+
 $page_title = _("Files");
 start_page($page_title, true, $msg);
 
@@ -367,52 +431,10 @@ $plugin_search_rows = concat_hook_function('file_get_search_fields_html');
         </tr>
       </table>
         <p>
-<?php
-
-if (get_system_parameter($con, 'Use Owl') == 'y') {
-  echo "<input class=button type=button onclick='javascript: owl()' value='"._("Owl File Management")."'><br><br>";
-}
 
 
+<?php echo $pager_widget; ?>
 
-
-
-
-$columns = array();
-$columns[] = array('name' => _("Name"), 'index_sql' => 'name', 'sql_sort_column' => 'file_pretty_name');
-$columns[] = array('name' => _("Description"), 'index_sql' => 'description');
-
-if($f_contact) $columns[] = array('name' => _("Contact"), 'index_sql' => 'contact');
-if($f_campaign) $columns[] = array('name' => _("Campaign"), 'index_sql' => 'campaign');
-if($f_opportunity) $columns[] = array('name' => _("Opportunity"), 'index_sql' => 'opportunity');
-if($f_case) $columns[] = array('name' => _("Case"), 'index_sql' => 'case_name');
-if($f_company) $columns[] = array('name' => _("Company"), 'index_sql' => 'company');
-
-$columns[] = array('name' => _("Date"), 'index_sql' => 'date');
-$columns[] = array('name' => _("ID"), 'index_sql' => 'ID');
-
-$endrows = "<tr><td class=widget_content_form_element colspan=10>
-            <input type=button class=button onclick=\"javascript: exportIt();\" value="._("Export").">
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
-
-$pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'FileForm', 'FilePager', $columns, false);
-
-
-function FileDataCallback($rows) {
-    $params = array($rows);
-    do_hook_function('file_search_files', $params);
-    return $params[0];
-}
-
-$pager->AddModifyDataCallback('FileDataCallback');
-
-
-$pager->AddEndRows($endrows);
-$pager->Render($system_rows_per_page);
-
-$con->close();
-
-?>
 
     </form>
     </div>
@@ -481,6 +503,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.40  2005/11/09 22:36:48  daturaarutad
+ * add hooks for files plugin
+ *
  * Revision 1.39  2005/10/24 22:04:25  daturaarutad
  * add hook for file_get_search_fields_sql
  *

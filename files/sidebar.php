@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.23 2005/10/04 23:01:26 vanmer Exp $
+ * $Id: sidebar.php,v 1.24 2005/11/09 22:36:39 daturaarutad Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -38,7 +38,7 @@ $file_limit_sql = '';
 
 
 // files plugin hook
-$plugin_params = array($file_sidebar_rst);
+$plugin_params = array('rst' => $file_sidebar_rst, 'on_what_table' => $on_what_table, 'on_what_id' => $on_what_id);
 do_hook_function('file_browse_files', $plugin_params);
 $file_rows = $plugin_params['file_rows'];
 
@@ -109,12 +109,16 @@ if(!$file_rows) {
                 </tr>";
     }
 
+
     //now close the table, we're done
     $file_rows .= "        </table>\n</div>";
 }
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.24  2005/11/09 22:36:39  daturaarutad
+ * add hooks for files plugin
+ *
  * Revision 1.23  2005/10/04 23:01:26  vanmer
  * - added check to ensure that entered_by parameter is not added to file list when viewing pages that aren't
  * private/home.php

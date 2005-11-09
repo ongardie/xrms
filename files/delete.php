@@ -21,11 +21,18 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $sql = "SELECT * FROM files WHERE file_id = $file_id";
 $rst = $con->execute($sql);
 
+$file_info = $rst->fields;
+
 $rec = array();
 $rec['file_record_status'] = 'd';
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
+
+
+$file_plugin_params = array('file_info', $file_info);
+do_hook_function('file_delete_file', &$file_plugin_params);
+
 
 // uncomment the following line to remove files from the filesystem
 // when they are deleted by a user. Use with caution.

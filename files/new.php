@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.19 2005/09/23 19:42:10 daturaarutad Exp $
+ * $Id: new.php,v 1.20 2005/11/09 22:35:57 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -66,55 +66,56 @@ if ( $_POST['act'] == 'up' )
 
         // files plugin hook allows external storage of files.  see plugins/owl/README for example
         // params: (file_field_name, record associative array)
-        $file_plugin_params = array('file1', $rec);
+        $file_plugin_params = array('file_field_name' => 'file1', 'file_info' => $rec);
 
 
         do_hook_function('file_add_file', &$file_plugin_params);
 
         // external_id gets set by the hook
-        if($file_plugin_params['external_id']) {
-            $rec['external_id'] = $file_plugin_params['external_id'];
-        }
-       
+		$rec = $file_plugin_params['file_info'];
 
+	   if($file_plugin_params['error_status']) {
+	       $msg .= $file_plugin_params['error_text'];
+		} else {
 
+	        // Make DB connection
+	        $con = &adonewconnection($xrms_db_dbtype);
+	        $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+	        // $con->debug = 1;
+	
+	        // INSERT values into table
+	        $tbl = 'files';
+	        $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 
-        // Make DB connection
-        $con = &adonewconnection($xrms_db_dbtype);
-        $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-        // $con->debug = 1;
-
-        // INSERT values into table
-        $tbl = 'files';
-        $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-        $con->execute($ins);
-
-        // What ID where we given
-        $file_id = $con->insert_id();
-
-        // If the file was not stored by a plugin...
-        if(!$file_plugin_params['file_stored']) {
-
-            if ( $objUpFile = getFileUpLoad ( 'file1' ) ) {
-
-                // Now we need to UPDATE that same record
-                // update the file record
-                $sql = "SELECT * FROM files WHERE file_id = $file_id";
-                $rst = $con->execute($sql);
-
-                // We need to RENAME the 'file_filesystem_name' name with the record ID
-                $rec = array();
-                $rec['file_filesystem_name'] = $file_id . '_' . $file_name;
-
-                $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-                $con->execute($upd);
-                $con->close();
-
-                // The file needs to be renamed to add the record index to it
-                rename_file ( $file_name, $rec['file_filesystem_name'] );
-            }
-        }
-    }
+	        $con->execute($ins);
+	
+	        // What ID where we given
+	        $file_id = $con->insert_id();
+	
+	        // If the file was not stored by a plugin...
+	        if(!$file_plugin_params['file_stored']) {
+	
+	            if ( $objUpFile = getFileUpLoad ( 'file1' ) ) {
+	
+	                // Now we need to UPDATE that same record
+	                // update the file record
+	                $sql = "SELECT * FROM files WHERE file_id = $file_id";
+	                $rst = $con->execute($sql);
+	
+	                // We need to RENAME the 'file_filesystem_name' name with the record ID
+	                $rec = array();
+	                $rec['file_filesystem_name'] = $file_id . '_' . $file_name;
+	
+	                $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	                $con->execute($upd);
+	                $con->close();
+	
+	                // The file needs to be renamed to add the record index to it
+	                rename_file ( $file_name, $rec['file_filesystem_name'] );
+	            }
+	        }
+	    }
+	}
 
     if (! $msg)
     {
@@ -130,9 +131,9 @@ if ( $_POST['act'] == 'up' )
 // First time through here, or we have an error to fix
 
     // Inbound DB info
-    $on_what_table = $_POST['on_what_table'];
-    $on_what_id    = $_POST['on_what_id'];
-    $return_url    = $_POST['return_url'];
+	getGlobalVar($on_what_table, 'on_what_table');
+	getGlobalVar($on_what_id, 'on_what_id');
+	getGlobalVar($return_url, 'return_url');
 
     $con = &adonewconnection($xrms_db_dbtype);
     $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -208,6 +209,9 @@ if ( $_POST['act'] == 'up' )
 
 /**
  * $Log: new.php,v $
+ * Revision 1.20  2005/11/09 22:35:57  daturaarutad
+ * add hooks for files plugin
+ *
  * Revision 1.19  2005/09/23 19:42:10  daturaarutad
  * updated for file plugin (owl support)
  *

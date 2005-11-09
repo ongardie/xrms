@@ -5,7 +5,7 @@
  * Files that have been stored on the server are downloaded to
  * the user's default location.
  *
- * $Id: download.php,v 1.18 2005/09/23 19:40:49 daturaarutad Exp $
+ * $Id: download.php,v 1.19 2005/11/09 22:35:42 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -43,7 +43,6 @@ if ($rst) {
     $entered_by             = $con->userdate($rst->fields['entered_by']);
     $file_size              = pretty_filesize($rst->fields['file_size']);
     $file_size_actual       = $rst->fields['file_size'];
-    $external_id            = $rst->fields['external_id'];
   } else {
     $file_pretty_name       = '';
     $file_filesystem_name   = '';
@@ -53,7 +52,6 @@ if ($rst) {
     $entered_by             = '';
     $file_size              = '';
     $file_size_actual       = 0;
-    $external_id            = '';
   }
   $rst->close();
 } else {
@@ -78,14 +76,13 @@ $disposition = "attachment"; // "inline" to view file in browser or "attachment"
 
 
 // files plugin hook
-$plugin_params = array('file_id' => $external_id);
-do_hook_function('file_get_file', $plugin_params);
-if($plugin_params['name']) {
-    $file_original_name = $plugin_params['name'];
-} else {
-    $file_to_open = $file_storage_directory . $file_filesystem_name;
-    $file_original_name = str_replace($file_id . '_', '', $file_filesystem_name);
-}
+// hook is expected to exit() after sending the file to the browser!
+$plugin_params = array('file_info' => $rst->fields);
+do_hook_function('file_download_file', $plugin_params);
+
+
+$file_to_open = $file_storage_directory . $file_filesystem_name;
+$file_original_name = str_replace($file_id . '_', '', $file_filesystem_name);
 
 
 
@@ -96,32 +93,30 @@ $mime_type_array=explode('/',$file_type);
 //send download headers, don't force pop-up download dialog on browser
 SendDownloadHeaders($mime_type_array[0],$mime_type_array[1], $file_original_name, false, $file_size_actual);
 
-if($plugin_params['data']) {
-    echo $plugin_params['data'];
-} else {
-
-	$chunksize=1*(1024*1024);
+$chunksize=1*(1024*1024);
 	
-	//open and output file contents
-	if (is_file($file_to_open)){
-	    $fp = fopen($file_to_open, 'rb');
-	    if ($fp) {
-	        while (!feof($fp)) {
-	            $buffer = fread($fp, $chunksize);
-	            print $buffer;
-	        } //end while
-	        fclose ($fp);
-	    } else {
-	        //file open failed
-	        //should put an error here
-	    }
-	} //end is_file test, should error if this isn't a file
-}
+//open and output file contents
+if (is_file($file_to_open)){
+    $fp = fopen($file_to_open, 'rb');
+    if ($fp) {
+        while (!feof($fp)) {
+            $buffer = fread($fp, $chunksize);
+            print $buffer;
+        } //end while
+        fclose ($fp);
+    } else {
+        //file open failed
+        //should put an error here
+    }
+} //end is_file test, should error if this isn't a file
 
 exit();
 
 /**
  * $Log: download.php,v $
+ * Revision 1.19  2005/11/09 22:35:42  daturaarutad
+ * add hooks for files plugin
+ *
  * Revision 1.18  2005/09/23 19:40:49  daturaarutad
  * updated for file plugin (owl support)
  *
