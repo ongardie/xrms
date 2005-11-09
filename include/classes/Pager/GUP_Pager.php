@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.37 2005/09/09 22:38:16 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.38 2005/11/09 23:05:25 daturaarutad Exp $
  */
 
 
@@ -211,6 +211,8 @@ class GUP_Pager {
     /**
 	* private method to determine the proper sort column and set up the SQL ORDER BY clause
 	*
+	* This allows 
+	*
     * @param boolean Whether or not this is the first call
 	*/
 	function PrepareSort() {
@@ -286,7 +288,10 @@ class GUP_Pager {
 	*
 	* @param integer number of rows to display in this pager
 	*/
-	function Render($rows=10) {
+	function Render($rows=0) {
+        if(!$rows) {
+            $rows = 10;
+        }
 
         // sort must come before Render_JS()
         $this->PrepareSort();
@@ -295,6 +300,7 @@ class GUP_Pager {
 			ob_start();
 		}
 
+		// ahoy!
 		echo "<a name=\"{$this->pager_id}\"></a>\n";
 
 		// output the Javascript functions for sorting and submitting
@@ -312,8 +318,8 @@ class GUP_Pager {
 
 
 		$this->GetData();
-
 		//print_r($this->data);
+
 
 		// if group mode or there is data and we're not at the first and last page simultaneously (only one page!)
         if (isset($this->group_mode)) {
@@ -371,6 +377,16 @@ class GUP_Pager {
 
         // finalize the order_by (it could be changed by PrepareSort prior to this moment)
         $this->sql .= $this->order_by;
+
+
+		// If there is a modify function (operates on the whole dataset), get all records in the SQL query below.
+		if($this->modify_data_functions) {
+			$this->get_only_visible =false;
+		}
+
+
+
+
 
 		$cache_name = $this->pager_id . '_data';
 
@@ -499,6 +515,19 @@ class GUP_Pager {
 		// store the column_info array for pager-export.php always, becuase they may have changed columns but not needed to re-calculate data
 		$_SESSION[$this->pager_id . '_columns'] = $this->column_info;
 
+
+		// data is now in $this->data
+		if($this->modify_data_functions) {
+			foreach($this->modify_data_functions as $fn) {
+				if(function_exists($fn)) 
+					$this->data = call_user_func($fn, $this->data);
+
+					// experimental!  this makes the page count be based on $this->data instead of $this->rs
+					$this->rs = false;
+			}
+		}
+
+
 		// if sort column is one of the calculated ones...do this thingy 
 		if($this->using_cache || !$this->get_only_visible) {
 			// in the same dir as us...
@@ -571,13 +600,6 @@ class GUP_Pager {
 				$this->group_select_widget .= ">$id ($v)</option>";
 			}
 			$this->group_select_widget .= '</select>';
-		}
-		// data is now in $this->data
-		if($this->modify_data_functions) {
-			foreach($this->modify_data_functions as $fn) {
-				if(function_exists($fn)) 
-					$this->data = call_user_func($fn, $this->data);
-			}
 		}
 	}
 	function AddModifyDataCallback($fn) {
@@ -977,7 +999,7 @@ END;
       if (!$this->db->pageExecuteCountRows) return '';
       $lastPage = $this->LastPageNo;
       // *** updated to return an empty string if there's an empty rs
-      if ($lastPage == -1) {
+      if ($lastPage < 1) {
         $lastPage = 1;
         return '&nbsp;';
       } // check for empty rs.
@@ -1200,6 +1222,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.38  2005/11/09 23:05:25  daturaarutad
+ * do not show page count if no records returned ever; allow modify_data_functions callbacks to change number of records; always get all data if a modify_data_function callback is set (note, this is not the row-by-row callback)
+ *
  * Revision 1.37  2005/09/09 22:38:16  daturaarutad
  * Add SetDefaultSortColumn(), which allows override of default_sort field.  Moved sort code into PrepareSort, which is called at beginning of Render().
  *
