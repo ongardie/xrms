@@ -27,7 +27,7 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.14 2005/11/14 20:16:48 daturaarutad Exp $
+ * $Id: Pager_Columns.php,v 1.15 2005/11/14 20:45:41 daturaarutad Exp $
  */
 
 class Pager_Columns {
@@ -38,9 +38,6 @@ class Pager_Columns {
     var $form_id;
 
     function Pager_Columns($pager_name, $pager_columns, $default_columns, $form_id) {
-
-        global $session_user_id;
-        $con=get_xrms_dbconnection();
 
         getGlobalVar($new_columns_view, $pager_name . '_New_Columns_View');
 
@@ -72,14 +69,6 @@ class Pager_Columns {
             //$user_columns = array(explode(',' $new_columns));
 
             // set it in the session
-            if (!is_array(get_user_preference_type($con, $pager_name . '_columns_view'))) {
-                add_user_preference_type($con, $pager_name . '_columns_view', '', '', true, false);
-            }
-            $new_columns = str_replace(',,', ',', $new_columns);
-            if (empty($new_columns)) {
-                $new_columns = 'empty';
-            }
-            set_user_preference($con, $session_user_id, $pager_name . '_columns_view', $new_columns);
             $_SESSION[$pager_name . '_columns_view'] = $user_columns;
         }
 
@@ -97,23 +86,11 @@ class Pager_Columns {
     }
 
     function GetUserColumnNames() {
-        global $session_user_id;
-        $con=get_xrms_dbconnection();
 
         // User Columns will come from the session or default list passed in
         if($_SESSION[$this->pager_name . '_columns_view']) {
             return $_SESSION[$this->pager_name . '_columns_view'];
         } else {
-            $columns = get_user_preference($con, $session_user_id, $this->pager_name . '_columns_view');
-        
-            if (strlen($columns) > 0) {
-                if ($columns == 'empty') {
-                    $columns = array();
-                } else {
-                    $columns = split(',', $columns);
-                }
-                return $columns;
-            }
             return $this->default_columns;
         }
     }
@@ -286,8 +263,8 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
- * Revision 1.14  2005/11/14 20:16:48  daturaarutad
- * fckeditor/
+ * Revision 1.15  2005/11/14 20:45:41  daturaarutad
+ * fix accidental commit
  *
  * Revision 1.13  2005/08/28 18:06:04  braverock
  * - romove colspan from Layouts tag

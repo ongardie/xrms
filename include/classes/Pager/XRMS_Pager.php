@@ -48,6 +48,7 @@ class XRMS_Pager {
     var $selected_column = 1;
     var $selected_column_html = '*';
     var $page = 'Page';
+    var $linkSelectedColor = 'red';
     var $cache = 0;  #secs to cache with CachePageExecute()
     var $how_many_rows;
 	// adodb_pager code end
@@ -87,7 +88,6 @@ class XRMS_Pager {
         getGlobalVar($this->current_sort_order, $pager_id . '_current_sort_order');
         getGlobalVar($this->next_page, $pager_id . '_next_page');
         getGlobalVar($this->resort, $pager_id . '_resort');
-        getGlobalVar($this->group, $pager_id . '_group');
         getGlobalVar($this->maximize, $pager_id . '_maximize');
 
         if (!strlen($this->sort_column) > 0) {
@@ -110,7 +110,6 @@ class XRMS_Pager {
         $order_by = " order by " . $this->sort_column;
 
         $order_by .= " " . $this->sort_order;
-		$sql .= " $order_by";
 
         // store current page in session
         if (isset($this->next_page)) {
@@ -137,11 +136,10 @@ class XRMS_Pager {
             if($column_header['total']) {
                 $this->TotalColumns[$column_header['index']] = 0;
             }
+
         }
 
-		// If we are grouping, get the list of IDs to group on
-		
-
+		$sql .= " $order_by";
 
 		// adodb_pager code begin
       	$this->sql = $sql;
@@ -228,7 +226,7 @@ class XRMS_Pager {
 
       for($i=$start; $i <= $end; $i++) {
         if ($this->rs->AbsolutePage() == $i)
-        $numbers .= "<b>$i</b>  ";
+        $numbers .= "<font color=$this->linkSelectedColor><b>$i</b></font>  ";
         else
         $numbers .= "<a href='javascript:{$this->pager_id}_submitForm(" . $i . ");'>" . $i . "</a> ";
         // $numbers .= "<a href=$PHP_SELF?$link=$i>$i</a>  ";
@@ -342,14 +340,9 @@ class XRMS_Pager {
         $this->Render_First(false);
         $this->Render_Prev(false);
       }
-	  if($this->group) {
-	  	echo "<select name=bob><option>hi</option><option>mom</option></select>";
-
-	  } else {
-      	if ($this->showPageLinks){
-        	$this->Render_PageLinks();
-      	}
-	  }
+      if ($this->showPageLinks){
+        $this->Render_PageLinks();
+      }
       if (!$this->rs->AtLastPage()) {
         $this->Render_Next();
         $this->Render_Last();
@@ -362,7 +355,7 @@ class XRMS_Pager {
       return $s;
     }
     //-------------------
-    // This is the page_count
+    // This is the footer
     function RenderPageCount()
     {
       if (!$this->db->pageExecuteCountRows) return '';
@@ -382,31 +375,19 @@ class XRMS_Pager {
 	
 
     //------------------------------------------------------
-    function RenderLayout($page_nav,$grid,$page_count,$attributes='class=widget cellspacing=1 cellpadding=0 border=0 width="100%"')
+    // overridden to add export and mail merge
+    function RenderLayout($header,$grid,$footer,$attributes='class=widget cellspacing=1 cellpadding=0 border=0 width="100%"')
     {
 		$colspan = count($this->column_info);
 		if($this->maximize) {
-			$size_buttons =  "<a href=javascript:{$this->pager_id}_unmaximize();>(show paged)</a>";
-
-        	//echo "<table class=widget cellspacing=1 cellpadding=0 border=0 width=\"100%\">
-			//		<tr><td colspan=$colspan class=widget_header align=left>" . $this->caption . "<a href=javascript:{$this->pager_id}_unmaximize();>(show paged)</a></td></tr>\n";
+        	echo "<table {$attributes} ><tr><td colspan=$colspan class=widget_header>" . $this->caption . "<a href=javascript:{$this->pager_id}_unmaximize();>(show paged)</a></td></tr>\n";
 		} else {
-			$size_buttons =  "<a href=javascript:{$this->pager_id}_maximize();>(show all)</a>";
+        	echo "<table {$attributes} ><tr><td colspan=$colspan class=widget_header>" . $this->caption . "<a href=javascript:{$this->pager_id}_maximize();>(show all)</a></td></tr>\n";
 		}
-
-       	echo "<table class=widget cellspacing=1 cellpadding=0 border=0 width=\"100%\">
-				<tr><td colspan=$colspan class=widget_header align=left>
-					<table width=\"100%\" cellspacing=0 cellpadding=0 border=0>
-						<tr><td class=widget_header align=left>{$this->caption}</td>
-							<td class=widget_header align=right>$size_buttons</td>
-						</tr>
-					</table>
-				</td></tr>\n";
-
-        if ($page_nav != '&nbsp;') {
+        if ($header != '&nbsp;') {
             echo "<tr><td colspan=$colspan>".
             "<table border=0 cellpadding=0 cellspacing=0 width=\"100%\">".
-            "<tr><td class=widget_label align=left>$page_count </td><td align=right class=widget_label>$page_nav </td></tr>".
+            "<tr><td class=widget_label> $footer </td><td align=right class=widget_label> $header </td></tr>".
             "</table>".
             "</td></tr>\n";
         }
@@ -415,6 +396,13 @@ class XRMS_Pager {
 
 		if($this->EndRows) { echo $this->EndRows; }
 
+/*
+        if ($this->how_many_rows > 0)
+        {
+            echo "<tr><td class=widget_content_form_element colspan=50><input type=button class=button onclick=\"javascript: exportIt();\" value='Export'> ";
+            echo "<input type=button class=button onclick=\"javascript: bulkEmail();\" value='Mail Merge'></td></tr>";
+        }
+*/
 
         echo "</table>";
     }
@@ -452,12 +440,6 @@ class XRMS_Pager {
 				document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
                 document.{$this->form_id}.submit();
 			}
-	        function {$this->pager_id}_group(groupColumn) {
-                document.{$this->form_id}.{$this->pager_id}_group.value = groupColumn;
-                document.{$this->form_id}.{$this->pager_id}_next_page.value = '';
-				document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
-                document.{$this->form_id}.submit();
-			}
 		
 
             //-->
@@ -466,7 +448,6 @@ class XRMS_Pager {
             <input type=hidden name={$this->pager_id}_use_post_vars value=1>
             <input type=hidden name={$this->pager_id}_next_page value="{$this->next_page}">
             <input type=hidden name={$this->pager_id}_resort value="0">
-            <input type=hidden name={$this->pager_id}_group value="">
             <input type=hidden name={$this->pager_id}_current_sort_column value="{$this->sort_column}">
             <input type=hidden name={$this->pager_id}_sort_column value="{$this->sort_column}">
             <input type=hidden name={$this->pager_id}_current_sort_order value="{$this->sort_order}">
@@ -501,17 +482,17 @@ END;
         }
 
         if (!$rs->EOF && (!$rs->AtFirstPage() || !$rs->AtLastPage()))
-        $page_nav = $this->RenderNav();
+        $header = $this->RenderNav();
         else
-        $page_nav = "&nbsp;";
+        $header = "&nbsp;";
 
         $grid = $this->RenderGrid();
-        $page_count = $this->RenderPageCount();
+        $footer = $this->RenderPageCount();
         $this->how_many_rows = $rs->recordcount();
         $rs->Close();
         $this->rs = false;
 
-        $this->RenderLayout($page_nav,$grid,$page_count);
+        $this->RenderLayout($header,$grid,$footer);
 
 		// adodb_pager code end
 		//parent::Render($rows);
@@ -596,27 +577,17 @@ function rs2html(&$rs,$ztabhtml=false,$zheaderarray=false,$htmlspecialchars=true
         else $fname = htmlspecialchars($field->name);
         $typearr[$i] = $rs->MetaType($field->type,$field->max_length);
         //print " $field->name $field->type $typearr[$i] ";
-
+        // no &nbsp; here... we don't want the link visible
         if (strlen($fname)==0) $fname = '';
+        // *** and here below we just want stylized <td> elements, not <th>'s
+        // *** also we need to make these headers re-sort the results if asked
+        $hdr .= "<td class=widget_label ><a href='javascript: " . $pager_id . "resort($i);' ><b>$fname</b></a>";
 
-		$group_html = '';
-		if($this->column_info[$i]['group']) {
-			$group_html = "<a href='javascript: " . $pager_id . "group($i);'><b>(G)</b>";
-		}
-
-		$selected_column_header_html = '';
         if ($i == $selected_column) {
-			$selected_column_header_html = $selected_column_html;
-		}
+            $hdr .= $selected_column_html;
+        }
 
-		//if($group_html || $selected_column_header_html) {
-		if($group_html || $i == $selected_column) {
-        	$hdr .= "<td class=widget_label><table cellpadding=0 cellspacing=0><tr><td class=widget_label ><a href='javascript: " . $pager_id . "resort($i);' ><b>$fname</b></a></td>";
-            $hdr .= "<td class=widget_label>$selected_column_header_html</td><td class=widget_label> $group_html</td></tr></table></td>";
-        } else {
-        	$hdr .= "<td class=widget_label ><a href='javascript: " . $pager_id . "resort($i);' ><b>$fname</b></a>";
-		}
-
+        $hdr .= "</td>";
     }
 
     // *** added <tr> and </tr> tags around $hdr
