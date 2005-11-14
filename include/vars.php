@@ -6,13 +6,17 @@ if ( !defined('IN_XRMS') )
   exit;
 }
 
+DEFINE("TTF_DIR","/usr/X11R6/lib/X11/fonts/truetype/");
+
+
+
 /**
  * XRMS system configuration file
  *
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.38 2005/09/22 13:09:18 braverock Exp $
+ * $Id: vars.php,v 1.39 2005/11/14 20:16:48 daturaarutad Exp $
  */
 
 /**
@@ -30,17 +34,26 @@ if ( !defined('IN_XRMS') )
  *  follow the instructions in the install/INSTALL file
  *  and on the screen in the install scripts.
  */
+
+/*
+$xrms_db_dbtype = 'mssql';
+$xrms_db_server = '10.3.1.42:3145';
+$xrms_db_username = 'crms';
+$xrms_db_password = 'crms';
+$xrms_db_dbname = 'crmsrel';
+*/
+
 $xrms_db_dbtype = 'mysql';
 $xrms_db_server = 'localhost';
-$xrms_db_username = 'your_mysql_username';
-$xrms_db_password = 'your_mysql_password';
-$xrms_db_dbname = 'your_mysql_database';
+$xrms_db_username = 'xrms';
+$xrms_db_password = 't3chn0';
+$xrms_db_dbname = 'xrms';
 
 // where is this application, web-wise? (no trailing slash)
-$http_site_root = "http://www.example.com/xrms";
+$http_site_root = "http://bassloada.braverock.com/xrms";
 
 //where is the appliation in the filesystem (no trailing slash)
-$xrms_file_root = "/full/path/to/xrms";
+$xrms_file_root = "/www/xrms";
 
 
 /***  File Upload controls ***/
@@ -207,6 +220,7 @@ $xrms_use_ldap = false; //set to true if you want ldap authenthication
  *   symbol and country code
  * @global string $xrms_default_language
  */
+$xrms_default_language = 'fr_FR';
 $xrms_default_language = 'en_US';
 
 /**
@@ -292,4 +306,36 @@ $use_php_iconv = false;
  */
 $use_self_contacts = false;
 
-//?>
+/**
+ * Define the meaning of a newline
+ */
+$NEWLINE = "\n\r";
+
+/**
+ * use_owl - provide an experimental link to OWL, a file
+ * management system.
+ *
+ * OWL is a file management system that supports more features,
+ * including revisions, than xrms.
+ *
+ * To use, install OWL from http://sourceforge.net/projects/owl in xrms/owl, then
+ * set the following variable to true. You'll get a link
+ * from the 'files' menu (xrms/files/some.php) in xrms to OWL.
+ */
+$use_owl = false;
+
+/**
+ * xrms_sql_limit - Defines the number of records to return while
+ * using SelectLimit statements.
+ */
+$xrms_sql_limit = 1;
+
+
+/**
+ * fckeditor - Defines the location of the FCKEditor code
+ */
+global $include_directory;
+$fckeditor_location = $include_directory . '/fckeditor/';
+
+
+?>

@@ -10,7 +10,7 @@
 	* @author Justin Cooper <justin@braverock.com>
 	* @todo
 	*
-	* $Id: ADOdb_QuickForm_Controller.php,v 1.6 2005/08/01 20:32:53 daturaarutad Exp $
+	* $Id: ADOdb_QuickForm_Controller.php,v 1.7 2005/11/14 20:16:48 daturaarutad Exp $
 	*/
 
 
@@ -96,7 +96,7 @@
 
 						$object_id = $this->View->GetPrimaryKeyValue($this->Models[$j]);
 						if(!$this->Models[$j]->Read($object_id)) {
-                            $this->msg .= _("QuickForm Read Failed for " . $this->Models[$j]->GetTableName());
+                            $this->msg .= _("QuickForm Read Failed for " . $this->Models[$j]->GetTableName()) . " id:$object_id";
                         }
 						$this->View->AddModel($this->Models[$j]);
 					}
@@ -114,7 +114,7 @@
 						$object_id = $this->View->GetPrimaryKeyValue($this->Models[$j]);
 
 						if(!$this->Models[$j]->Read($object_id)) {
-                            $this->msg .= _("QuickForm Read Failed for " . $this->Models[$j]->GetTableName());
+                            $this->msg .= _("QuickForm Read Failed for " . $this->Models[$j]->GetTableName()). " id:$object_id";
                         }
 						$this->View->AddModel($this->Models[$j]);
 					}
@@ -129,7 +129,7 @@
 					for($j=0; $j<count($this->Models); $j++) {
 						$object_id = $this->View->GetPrimaryKeyValue($this->Models[$j]);
 						if(!$this->Models[$j]->Read($object_id)) {
-                            $this->msg .= _("QuickForm Read Failed for " . $this->Models[$j]->GetTableName());
+                            $this->msg .= _("QuickForm Read Failed for " . $this->Models[$j]->GetTableName()). " id:$object_id";
                         }
 						$this->View->AddModel($this->Models[$j]);
 					}
@@ -141,11 +141,11 @@
 					for($j=0; $j<count($this->Models); $j++) {
 						$object_id = $this->View->GetPrimaryKeyValue($this->Models[$j]);
 						if(!$this->Models[$j]->Write($object_id)) {
-                            $this->msg .= _("QuickForm Write Failed for " . $this->Models[$j]->GetTableName());
+                            $this->msg .= _("QuickForm Write Failed for " . $this->Models[$j]->GetTableName()). " id:$object_id";
                             break;
                         }
 						if(!$this->Models[$j]->Read($object_id)) {
-                            $this->msg .= _("QuickForm Re-Read Failed for " . $this->Models[$j]->GetTableName());
+                            $this->msg .= _("QuickForm Re-Read Failed for " . $this->Models[$j]->GetTableName()). " id:$object_id";
                             break;
                         }
 					}
@@ -180,7 +180,7 @@
                             $this->msg .= _("QuickForm Create Failed for " . $this->Models[$j]->GetTableName());
                         }
 						if(!$this->Models[$j]->Read($model_id)) {
-                            $this->msg .= _("QuickForm Read Failed for " . $this->Models[$j]->GetTableName());
+                            $this->msg .= _("QuickForm Read Failed for " . $this->Models[$j]->GetTableName()). " id:$model_id";
                         }
 					}
                     if(!$this->msg) {

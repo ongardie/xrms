@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.18 2005/09/08 20:29:10 daturaarutad Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.19 2005/11/14 20:16:48 daturaarutad Exp $
  */
 
 
@@ -18,6 +18,7 @@
 	require_once 'HTML/QuickForm/Renderer/Default.php';
 	require_once "ADOdb_QuickForm_Controller.php";
 	require_once "ADOdb_QuickForm_Model.php";
+	require_once "ADOdb_QuickForm_config.php";
 
 	PEAR::setErrorHandling(PEAR_ERROR_TRIGGER, E_USER_WARNING);
 
@@ -493,6 +494,12 @@ END;
 							$form->addElement('html', $field_name);
 							break;
 
+                        case 'fckeditor':
+
+                            $form->registerElementType('fckeditor', dirname(__FILE__) . '/ADOdb_QuickForm_fckeditor.php', 'HTML_QuickForm_fckeditor');
+							$form->addElement('fckeditor',  $field_name, $field['displayName'], null);
+                            break;
+
 						case 'custom':
 							$form->addElement('static',  $field_name, $field['displayName'], $field['customElement']);
 							break;
@@ -691,6 +698,9 @@ END;
 
 /**
 * $Log: ADOdb_QuickForm.php,v $
+* Revision 1.19  2005/11/14 20:16:48  daturaarutad
+* fckeditor/
+*
 * Revision 1.18  2005/09/08 20:29:10  daturaarutad
 * change element_template, removing align and valign
 *

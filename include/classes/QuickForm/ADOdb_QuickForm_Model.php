@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.16 2005/08/01 20:29:16 daturaarutad Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.17 2005/11/14 20:16:48 daturaarutad Exp $
 */
 
 
@@ -617,7 +617,7 @@ class ADOdb_QuickForm_Model {
 			$columns = $this->GetColumns();
 	
    			$sql="select $columns from $tablename where $primarykeyname = $id";
-	
+
 			$dbh = $this->DBStructure['dbh']; 
    			$this->rst = $dbh->execute($sql);
 	
@@ -774,6 +774,9 @@ class ADOdb_QuickForm_Model {
 
 /**
 * $Log: ADOdb_QuickForm_Model.php,v $
+* Revision 1.17  2005/11/14 20:16:48  daturaarutad
+* fckeditor/
+*
 * Revision 1.16  2005/08/01 20:29:16  daturaarutad
 * changed SetDisplayOrders to work with new ReSort function
 *
