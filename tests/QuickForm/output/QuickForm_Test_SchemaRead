@@ -1,0 +1,69 @@
+<pre>Array
+(
+    [0] => Array
+        (
+            [name] => qf_id
+            [type] => primarykey
+            [displayOrder] => 0
+            [displayName] => qf_id
+        )
+
+    [1] => Array
+        (
+            [name] => user_id
+            [type] => int
+            [displayOrder] => 1
+            [displayName] => user_id
+        )
+
+    [2] => Array
+        (
+            [name] => title
+            [type] => varchar
+            [displayOrder] => 2
+            [displayName] => title
+        )
+
+    [3] => Array
+        (
+            [name] => description
+            [type] => text
+            [displayOrder] => 3
+            [displayName] => description
+        )
+
+    [4] => Array
+        (
+            [name] => entered_at
+            [type] => datetime
+            [displayOrder] => 4
+            [displayName] => entered_at
+        )
+
+    [5] => Array
+        (
+            [name] => entered_by
+            [type] => int
+            [displayOrder] => 5
+            [displayName] => entered_by
+        )
+
+    [6] => Array
+        (
+            [name] => status
+            [type] => char
+            [displayOrder] => 6
+            [displayName] => status
+        )
+
+    [7] => Array
+        (
+            [name] => qf_test_record_status
+            [type] => char
+            [displayOrder] => 7
+            [displayName] => qf_test_record_status
+        )
+
+)
+
+</pre>

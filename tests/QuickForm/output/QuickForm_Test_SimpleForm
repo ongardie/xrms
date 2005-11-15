@@ -1,0 +1,77 @@
+
+<form action="/xrms/tests/QuickForm/QuickForm_test.php" method="post" name="Edit Note" id="Edit Note">
+<table border="0" class="widget"><tr><td colspan="2" class="widget_header">Edit Note</td> </tr>
+
+	<tr>
+		<td class="widget_content widget_label_right">user_id</td>
+		<td valign="top" align="left" class="widget_content_form_element"><input name="user_id" type="text" /></td>
+	</tr>
+	<tr>
+		<td class="widget_content widget_label_right">title</td>
+		<td valign="top" align="left" class="widget_content_form_element"><input name="title" type="text" /></td>
+	</tr>
+	<tr>
+		<td class="widget_content widget_label_right">description</td>
+		<td valign="top" align="left" class="widget_content_form_element"><input name="description" type="text" /></td>
+	</tr>
+	<tr>
+		<td class="widget_content widget_label_right">Entered At</td>
+		<td valign="top" align="left" class="widget_content_form_element"><input id="entered_at" name="entered_at" type="text" /> <input id="f_trigger_0" style="CURSOR: hand" border="0" type="image" src="http://bassloada.braverock.com/xrms/img/cal.gif" /></td>
+	</tr>
+	<tr>
+		<td class="widget_content widget_label_right">Entered By</td>
+		<td valign="top" align="left" class="widget_content_form_element"><select name="entered_by">
+	<option value="1">brian</option>
+	<option value="2">peter</option>
+	<option value="3">testuser</option>
+	<option value="4">bob</option>
+	<option value="5">kholz</option>
+	<option value="6">mgruber</option>
+	<option value="7">dchungbin</option>
+	<option value="8">sunilsub</option>
+	<option value="9">datura</option>
+	<option value="10">test1</option>
+	<option value="11">test2</option>
+	<option value="12">test3</option>
+	<option value="13">test4</option>
+	<option value="14">test5</option>
+	<option value="15">test6</option>
+	<option value="16">test8</option>
+	<option value="17">test9</option>
+	<option value="18">test10</option>
+	<option value="19">guest</option>
+	<option value="20">website</option>
+</select></td>
+	</tr>
+	<tr>
+		<td class="widget_content widget_label_right">status</td>
+		<td valign="top" align="left" class="widget_content_form_element"><input name="status" type="text" /></td>
+	</tr>
+	<tr>
+		<td class="widget_content widget_label_right">qf_test_record_status</td>
+		<td valign="top" align="left" class="widget_content_form_element"><input name="qf_test_record_status" type="text" /></td>
+	</tr>
+	<tr>
+		<td class="widget_content widget_label_right"></td>
+		<td valign="top" align="left" class="widget_content_form_element"><input id="btnSubmit" class="button" name="btnSubmit" value="A B C" type="submit" /></td>
+	</tr><input name="qf_id" type="hidden" value="" />
+<input name="form_action" type="hidden" value="create" />
+<input name="return_url" type="hidden" value="" />
+
+</table>
+</form>							<script language="JavaScript" type="text/javascript">
+								Calendar.setup({
+	      						inputField     :    "entered_at",      // id of the input field
+	      						ifFormat       :    "%Y-%m-%d %H:%M:%S",       // format of the input field
+	      						showsTime      :    true,            // will display a time selector
+	      						button         :    "f_trigger_0",   // trigger for the calendar (button ID)
+	      						singleClick    :    true,           // double-click mode
+	      						step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+	      						align          :    "Bl"           // alignment (defaults to "Bl")
+								})
+							</script>       		<script language="JavaScript" type="text/javascript">
+           			document.forms["Edit Note"].btnDelete.onclick = function() {
+           			    document.forms["Edit Note"].form_action.value = 'delete';
+           			    document.forms["Edit Note"].submit();
+           			} 
+       		</script>
