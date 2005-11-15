@@ -7,7 +7,7 @@
  *
  *
  * @author Aaron van Meerten
- * $Id: one_email_template.php,v 1.3 2005/07/01 16:15:08 vanmer Exp $
+ * $Id: one_email_template.php,v 1.4 2005/11/15 12:38:31 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -21,9 +21,9 @@ require_once $include_directory."classes/QuickForm/ADOdb_QuickForm.php";
 $session_user_id = session_check();
 
 
-		// we need this for the companies foreign key lookup
-	  $con = &adonewconnection($xrms_db_dbtype);
-	  $con->nconnect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+                // we need this for the companies foreign key lookup
+          $con = &adonewconnection($xrms_db_dbtype);
+          $con->nconnect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
 
 getGlobalVar($return_url, 'return_url');
@@ -37,11 +37,11 @@ start_page($page_title);
   $model = new ADOdb_QuickForm_Model();
   $model->ReadSchemaFromDB($con, 'email_templates');
 
-	$model->SetDisplayNames(array('email_template_type_id' => _("Email Template Type"), 
-														'email_template_title' => _("Title"), 
-														'email_template_body' => _("Body")));
+        $model->SetDisplayNames(array('email_template_type_id' => _("Email Template Type"),
+                                                                                                                'email_template_title' => _("Title"),
+                                                                                                                'email_template_body' => _("Body")));
 
-	$model->SetForeignKeyField('email_template_type_id', _("Email Template Type"), 'email_template_type', 'email_template_type_id', 'email_template_type_name');
+        $model->SetForeignKeyField('email_template_type_id', _("Email Template Type"), 'email_template_type', 'email_template_type_id', 'email_template_type_name');
         $model->SetFieldType('email_template_record_status', 'db_only');
         $model->SetFieldType('email_template_body', 'textarea','cols=50 rows=10');
 
@@ -59,7 +59,7 @@ if ($_GET['form_action']=='edit') {
     $template_return_url=$return_url;
     $return_url=current_page();
     $file_sidebar_label=_("Attached Files");
-    require_once($include_directory.'../files/sidebar.php');
+    require_once($xrms_file_root.'/files/sidebar.php');
     $return_url=$template_return_url;
 } else {
     $file_rows='';
@@ -75,7 +75,7 @@ if ($_GET['form_action']=='edit') {
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
     <tr>
         <td class=lcol width=30% valign=top>
-					<?php echo $template_form_html; ?>
+                                        <?php echo $template_form_html; ?>
         </td>
     </tr>
 </table>
@@ -88,6 +88,9 @@ if ($_GET['form_action']=='edit') {
 
 /**
  * $Log: one_email_template.php,v $
+ * Revision 1.4  2005/11/15 12:38:31  braverock
+ * - move include of files sidebar to $xrms_file_root from $include_directory
+ *
  * Revision 1.3  2005/07/01 16:15:08  vanmer
  * - explicitly set file sidebar title
  *
