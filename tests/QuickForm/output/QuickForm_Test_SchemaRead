@@ -10,10 +10,10 @@
 
     [1] => Array
         (
-            [name] => user_id
+            [name] => case_type_id
             [type] => int
             [displayOrder] => 1
-            [displayName] => user_id
+            [displayName] => case_type_id
         )
 
     [2] => Array
@@ -42,25 +42,49 @@
 
     [5] => Array
         (
-            [name] => entered_by
-            [type] => int
+            [name] => status
+            [type] => char
             [displayOrder] => 5
-            [displayName] => entered_by
+            [displayName] => status
         )
 
     [6] => Array
         (
-            [name] => status
-            [type] => char
+            [name] => qf_test_filename
+            [type] => varchar
             [displayOrder] => 6
-            [displayName] => status
+            [displayName] => qf_test_filename
         )
 
     [7] => Array
         (
+            [name] => qf_test_filetype
+            [type] => varchar
+            [displayOrder] => 7
+            [displayName] => qf_test_filetype
+        )
+
+    [8] => Array
+        (
+            [name] => qf_test_filesize
+            [type] => int
+            [displayOrder] => 8
+            [displayName] => qf_test_filesize
+        )
+
+    [9] => Array
+        (
+            [name] => qf_test_filedata
+            [type] => longblob
+            [displayOrder] => 9
+            [displayName] => qf_test_filedata
+        )
+
+    [10] => Array
+        (
             [name] => qf_test_record_status
             [type] => char
-            [displayOrder] => 7
+            [displayOrder] => 10
             [displayName] => qf_test_record_status
         )
 
