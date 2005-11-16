@@ -194,7 +194,7 @@ function op_owl_xrms_update($con) {
   							external_id int(11) NOT NULL default '0',
   							PRIMARY KEY  (id),
   							UNIQUE KEY folderid_index (id)
-						) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+						);"
 
 
         $rst=$con->execute($create_sql);
@@ -741,6 +741,9 @@ function op_template(&$params) {
 
 /**
  * $Log: owl_plugin.php,v $
+ * Revision 1.3  2005/11/16 23:39:04  daturaarutad
+ * remove mysql specific database code to CREATE TABLE sql
+ *
  * Revision 1.2  2005/11/09 22:31:00  daturaarutad
  * updated API to use named keys
  *
