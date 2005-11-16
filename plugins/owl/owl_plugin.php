@@ -176,7 +176,7 @@ function op_owl_xrms_update($con) {
 	$tables=$con->MetaTables('TABLES');
 
 	// owl_folders table
-	if(!array_key_exists('folders',$tables)) {
+	if(!in_array('folders',$tables)) {
 
         $create_sql = "
 						CREATE TABLE folders (
@@ -194,7 +194,7 @@ function op_owl_xrms_update($con) {
   							external_id int(11) NOT NULL default '0',
   							PRIMARY KEY  (id),
   							UNIQUE KEY folderid_index (id)
-						);"
+						);";
 
 
         $rst=$con->execute($create_sql);
@@ -741,6 +741,9 @@ function op_template(&$params) {
 
 /**
  * $Log: owl_plugin.php,v $
+ * Revision 1.4  2005/11/16 23:47:26  daturaarutad
+ * fix previous commit
+ *
  * Revision 1.3  2005/11/16 23:39:04  daturaarutad
  * remove mysql specific database code to CREATE TABLE sql
  *
