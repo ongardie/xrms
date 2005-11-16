@@ -26,7 +26,7 @@
  *      #login-box - centered login form
  *      #ContentFullWidth large container, no sidebar
  *
- * $Id: layout.css,v 1.6 2005/08/16 00:35:44 vanmer Exp $
+ * $Id: layout.css,v 1.7 2005/11/16 22:11:46 daturaarutad Exp $
  */
 body {
     margin: 0px;
@@ -54,7 +54,7 @@ body {
 #Main {
     /* position is important for positioning of Sidebar */
     position: relative;
-    z-index: 1;         /* below Sidebar and Content */
+    z-index: 0;         /* below Sidebar and Content */
     clear: both;
     margin: 2px;
     min-width: 40em;
