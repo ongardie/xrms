@@ -3,7 +3,7 @@
  * Test harness for the XRMS GUP_QuickForm 
  *
  * @todo
- * $Id: QuickForm_test.php,v 1.1 2005/11/15 22:53:23 daturaarutad Exp $
+ * $Id: QuickForm_test.php,v 1.2 2005/11/16 18:35:17 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -52,12 +52,15 @@ Class XRMSQuickFormTest extends PHPUnit_TestCase {
 
        $sql = "CREATE TABLE qf_test (
                 qf_id int(11) NOT NULL auto_increment,
-                user_id int(11) NOT NULL default '0',
+                case_type_id int(11) NOT NULL default '0',
                 title varchar(100) NOT NULL default '',
                 description text,
                 entered_at datetime default NULL,
-                entered_by int(11) NOT NULL default '0',
                 status char(1) default 'o',
+                qf_test_filename varchar(255) default NULL,
+                qf_test_filetype varchar(255) default NULL,    
+                qf_test_filesize int(11) default NULL,
+                qf_test_filedata longblob,                             
                 qf_test_record_status char(1) default 'a',
                 PRIMARY KEY  (qf_id)
                 ) TYPE=MyISAM;";
@@ -124,18 +127,23 @@ Class XRMSQuickFormTest extends PHPUnit_TestCase {
 
     function test_SimpleForm() {
 
-
 	    $model = new ADOdb_QuickForm_Model();
 	    $model->ReadSchemaFromDB($this->con, 'qf_test');
-	    $model->SetDisplayNames(array('note_description' => _('Description'),
+	    $model->SetDisplayNames(array('description' => _('Description'),
 	                                  'on_what_table' => _('On what table'),
 	                                  'on_what_id' => _('On what id'),
 	                                  'entered_at' => _('Entered At'),
-	                                  'entered_by' => _('Entered By'),
-	                                  'note_record_status' => _('Status'),
+	                                  'qf_test_record_status' => _('Status'),
         ));
 	
-	    $model->SetForeignKeyField('entered_by', 'Entered By', 'users', 'user_id', 'username');
+	    $model->SetForeignKeyField('case_type_id', 'Case Type', 'case_types', 'case_type_id', 'case_type_pretty_name');
+        $model->SetFileField('qf_test_filedata', 'qf_test_filename', 'qf_test_filetype', 'qf_test_filesize', 'www.test.com');
+        $model->SetFieldType('qf_test_filetype', 'hidden');
+        $model->SetFieldType('qf_test_filesize', 'hidden');
+
+        $model->SetDisplayOrders(array('description','case_type_id','status','title'));
+
+
 	
 	
 	    $view = new ADOdb_QuickForm_View($this->con, _('Edit Note'), 'POST');
@@ -150,11 +158,6 @@ Class XRMSQuickFormTest extends PHPUnit_TestCase {
     }
 
 
-   function test_basic_pager() {
-        $con = $this->con;
-        global $session_user_id;
-        $session_user_id=$this->session_user_id;        
-    }
 
     // simple comparison of $output to the contents of $filename
     // writes bad file to $filename.bad for easy updating
@@ -167,11 +170,10 @@ Class XRMSQuickFormTest extends PHPUnit_TestCase {
             fwrite($handle, $output);
             fclose($handle);
 
-            echo "Bad Form: " . WrapForm($output);
+            echo "Failed test: $filename" . WrapForm($output);
             $this->assertTrue(false, "$filename Mismatch.");
         }
     }
-
 
 
 
@@ -224,6 +226,9 @@ $display->show();
  */
 /*
  * $Log: QuickForm_test.php,v $
+ * Revision 1.2  2005/11/16 18:35:17  daturaarutad
+ * newer better faster
+ *
  * Revision 1.1  2005/11/15 22:53:23  daturaarutad
  * first tests
  *
