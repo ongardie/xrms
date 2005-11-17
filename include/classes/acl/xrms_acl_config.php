@@ -5,7 +5,7 @@
  * Design copyright 2004 Explorer Fund Advisors
  * All Rights Reserved
  *
- * $Id: xrms_acl_config.php,v 1.7 2005/08/11 22:27:45 vanmer Exp $
+ * $Id: xrms_acl_config.php,v 1.8 2005/11/17 23:54:44 daturaarutad Exp $
  */
 
 /**
@@ -54,7 +54,7 @@ function xrms_acl_auth_callback(&$authInfo, $data_source_name) {
     global $options;
     if ($data_source_name=='default' OR $data_source_name=='XRMS') {
         $mycon=get_xrms_dbconnection();
-        if ($mycon AND (strpos(get_class($mycon),'adodb')==0)) {
+        if ($mycon AND (strpos(strtolower(get_class($mycon)),'adodb')==0)) {
             return $mycon;
         } else {
             $authInfo=$options;
@@ -70,7 +70,7 @@ function xrms_acl_auth_callback(&$authInfo, $data_source_name) {
         return $option_value;
     } else {
         if (count($pluginInfo[$data_source_name])>0) {
-	   if ($pluginInfo[$data_source_name]['dbconnection'] AND (substr(get_class($pluginInfo[$data_source_name]['dbconnection']),0,5)=='adodb')) {
+	   if ($pluginInfo[$data_source_name]['dbconnection'] AND (substr(strtolower(get_class($pluginInfo[$data_source_name]['dbconnection'])),0,5)=='adodb')) {
 	       return $pluginInfo[$data_source_name]['dbconnection'];
 	   }
            $authInfo[$data_source_name]=$pluginInfo[$data_source_name];
@@ -81,6 +81,9 @@ function xrms_acl_auth_callback(&$authInfo, $data_source_name) {
  
 /**
  * $Log: xrms_acl_config.php,v $
+ * Revision 1.8  2005/11/17 23:54:44  daturaarutad
+ * add strtolower to get_class calls on $con for php5
+ *
  * Revision 1.7  2005/08/11 22:27:45  vanmer
  * - added code to allow an application to return dbconnection in the pluginInfo array
  *
