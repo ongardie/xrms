@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.19 2005/11/09 22:36:32 daturaarutad Exp $
+ * $Id: one.php,v 1.20 2005/11/17 16:47:52 daturaarutad Exp $
  */
 
 //include required files
@@ -44,8 +44,38 @@ if ($rst) {
     $file_info = $rst->fields;
     $file_info['entered_at'] = $con->userdate($rst->fields['entered_at']);
     $file_info['file_size'] = pretty_filesize($rst->fields['file_size']);
+    $on_what_table = $rst->fields['on_what_table'];
+    $on_what_id = $rst->fields['on_what_id'];
+
     $rst->close();
 }
+
+
+
+// add selection of attached_to entity
+$table_name = table_name($on_what_table);
+$table_name = $con->Concat(implode(", ' ', ", table_name($on_what_table)));
+$table_singular = make_singular($on_what_table);
+
+if ($table_singular AND $table_name)
+{
+   $sql1 = "SELECT $table_name
+           AS attached_to_name from $on_what_table
+           WHERE {$table_singular}_id=$on_what_id";
+}
+
+$rst1 = $con->execute($sql1);
+
+if ($rst1) {
+  if ( !$rst1->EOF ) {
+        $attached_to_name = $rst1->fields['attached_to_name'];
+     } else {
+        $attached_to_name = '';
+     }
+  $rst1->close();
+}
+
+
 
 $file_plugin_params = array('file_info' => $file_info);
 do_hook_function('file_get_file_info', &$file_plugin_params);
@@ -86,6 +116,14 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_label_right><?php echo _("ID"); ?></td>
                 <td class=widget_content_form_element><?php  echo $file_info['file_id']; ?></td>
+            </tr>
+            <tr>
+                <td class="widget_label_right">
+                    <?php echo _("Attached to"); ?>
+                    <?php  echo $table_singular ?>
+                </td>
+                <td class=clear><a href="<?php  echo $http_site_root?>/<?php  echo $on_what_table?>/one.php?<?php  echo $table_singular?>_id=<?php echo $on_what_id;; ?>"><?php echo $attached_to_name; ?></td>
+                </td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("File Name"); ?></td>
@@ -180,6 +218,9 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.20  2005/11/17 16:47:52  daturaarutad
+ *added patch by dbaudone which shows attached to: field
+ *
  *Revision 1.19  2005/11/09 22:36:32  daturaarutad
  *add hooks for files plugin
  *
