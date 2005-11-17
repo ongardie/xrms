@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.17 2005/11/14 20:16:48 daturaarutad Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.18 2005/11/17 18:11:25 daturaarutad Exp $
 */
 
 
@@ -72,6 +72,11 @@ class ADOdb_QuickForm_Model {
 		print_r($columns);
 		echo"</pre>";
 		*/
+        if(is_array($columns)) {
+            echo "ADOdb_QuickForm error: no columns found for table $tablename dbh $dbh<br>";
+            return false;
+        }
+        
 		
 		foreach($columns as $column) {
 
@@ -774,6 +779,9 @@ class ADOdb_QuickForm_Model {
 
 /**
 * $Log: ADOdb_QuickForm_Model.php,v $
+* Revision 1.18  2005/11/17 18:11:25  daturaarutad
+* Throw error if no columns found in ReadSchema()
+*
 * Revision 1.17  2005/11/14 20:16:48  daturaarutad
 * fckeditor/
 *
