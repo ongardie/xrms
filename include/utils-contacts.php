@@ -7,7 +7,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-contacts.php,v 1.1 2005/11/18 20:04:48 vanmer Exp $
+ * $Id: utils-contacts.php,v 1.2 2005/11/18 20:34:38 vanmer Exp $
  *
  */
 
@@ -206,6 +206,8 @@ function get_contact($con, $contact_id, $return_rst=false) {
  * @return boolean specifying if update succeeded
  */
 function update_contact($con, $contact, $contact_id=false, $contact_rst=false) {
+    global $session_user_id;
+
     if (!$contact) return false;
     if (!$contact_rst) {
         $contact_rst=get_contact($con, $contact_id, true);
@@ -215,6 +217,10 @@ function update_contact($con, $contact, $contact_id=false, $contact_rst=false) {
     /** CLEAN INCOMING DATA FIELDS ***/
     $contact_phone_fields=array('work_phone','cell_phone','home_phone','fax');
     $phone_clean_count=clean_phone_fields($contact, $contact_phone_fields);
+
+    $rec['last_modified_at'] = time();
+    $rec['last_modified_by'] = $session_user_id;
+
 
     $upd = $con->GetUpdateSQL($contact_rst, $contact, false, get_magic_quotes_gpc());
     if ($upd) {        
@@ -261,6 +267,9 @@ function delete_contact($con, $contact_id, $delete_from_database=false) {
 
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.2  2005/11/18 20:34:38  vanmer
+ * - changed to updated contact modified by/time for update_contact
+ *
  * Revision 1.1  2005/11/18 20:04:48  vanmer
  * -Initial revision of an API for managing contacts in XRMS
  *
