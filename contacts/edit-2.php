@@ -2,13 +2,14 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.29 2005/09/25 05:42:06 vanmer Exp $
+ * $Id: edit-2.php,v 1.30 2005/11/18 20:35:23 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'utils-contacts.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
@@ -59,9 +60,8 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug=1;
 
-$sql = "SELECT * FROM contacts WHERE contact_id = $contact_id";
-$rst = $con->execute($sql);
-$company_id=$rst->fields['company_id'];
+$contact_rst=get_contact($con, $contact_id, true);
+$company_id=$contact_rst->fields['company_id'];
 
 if ($_POST['btChangeAddress']) {
     $return_url="../companies/addresses.php?company_id=$company_id&edit_contact_id=$contact_id"; 
@@ -101,11 +101,11 @@ $rec['summary'] = $summary;
 $rec['title'] = $title;
 $rec['description'] = $description;
 $rec['email'] = $email;
-$rec['work_phone'] = preg_replace("/[^\d]/", '', $work_phone);
-$rec['work_phone_ext'] = preg_replace("/[^\d]/", '', $work_phone_ext);
-$rec['cell_phone'] = preg_replace("/[^\d]/", '', $cell_phone);
-$rec['home_phone'] = preg_replace("/[^\d]/", '', $home_phone);
-$rec['fax'] = preg_replace("/[^\d]/", '', $fax);
+$rec['work_phone'] = $work_phone;
+$rec['work_phone_ext'] =$work_phone_ext;
+$rec['cell_phone'] = $cell_phone;
+$rec['home_phone'] = $home_phone;
+$rec['fax'] = $fax;
 /*
 IM fields, now handled through plugin
 $rec['aol_name'] = $aol_name;
@@ -117,12 +117,15 @@ $rec['gender'] = $gender;
 $rec['date_of_birth'] = $date_of_birth;
 $rec['tax_id'] = $tax_id;
 $rec['profile'] = $profile;
-$rec['custom1'] = $custom1;
-$rec['custom2'] = $custom2;
-$rec['custom3'] = $custom3;
-$rec['custom4'] = $custom4;
-$rec['last_modified_at'] = time();
-$rec['last_modified_by'] = $session_user_id;
+
+if ($custom1)
+    $rec['custom1'] = $custom1;
+if ($custom2)
+    $rec['custom2'] = $custom2;
+if ($custom3)
+    $rec['custom3'] = $custom3;
+if ($custom4)
+    $rec['custom4'] = $custom4;
 
 if ($salutation != '0') {
     $rec['salutation'] = $salutation;
@@ -130,13 +133,7 @@ if ($salutation != '0') {
     $rec['salutation'] = '';
 }
 
-$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-$con->execute($upd);
-
-$param = array($rst, $rec);
-do_hook_function('contact_edit_2', $param);
-
-add_audit_item($con, $session_user_id, 'updated', 'contacts', $contact_id, 1);
+$ret=update_contact($con, $rec, $contact_id, $contact_rst);
 
 if (!$return_url) {
     $return_url="one.php?msg=saved&contact_id=$contact_id";
@@ -145,6 +142,9 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.30  2005/11/18 20:35:23  vanmer
+ * - changed to use contact API for updating contact
+ *
  * Revision 1.29  2005/09/25 05:42:06  vanmer
  * - removed IM field references from all contact pages (now handled by plugin)
  * - added custom field hook for contacts new.php
