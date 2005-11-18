@@ -2,13 +2,14 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.30 2005/09/25 05:42:06 vanmer Exp $
+ * $Id: new-2.php,v 1.31 2005/11/18 20:35:07 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'utils-contacts.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
@@ -44,17 +45,6 @@ $arr_vars = array ( // local var name             // session variable name, flag
 
 // get all posted in variables
 arr_vars_get_all ( $arr_vars , true);
-
-//avoid nulls on the custom1-4 fields
-$custom1 = array_key_exists('custom1',$_POST) ? $_POST['custom1'] : "";
-$custom2 = array_key_exists('custom2',$_POST) ? $_POST['custom2'] : "";
-$custom3 = array_key_exists('custom3',$_POST) ? $_POST['custom3'] : "";
-$custom4 = array_key_exists('custom4',$_POST) ? $_POST['custom4'] : "";
-
-//avoid nulls on the IM fields, although these should be moved to a plugin
-$aol_name   = array_key_exists('aol_name',$_POST) ? $_POST['aol_name'] : "";
-$yahoo_name = array_key_exists('yahoo_name',$_POST) ? $_POST['yahoo_name'] : "";
-$msn_name   = array_key_exists('msn_name',$_POST) ? $_POST['msn_name'] : "";
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -126,11 +116,11 @@ $rec['summary'] = $summary;
 $rec['title'] = $title;
 $rec['description'] = $description;
 $rec['email'] = $email;
-$rec['work_phone'] = preg_replace("/[^\d]/", '', $work_phone);
-$rec['work_phone_ext'] = preg_replace("/[^\d]/", '', $work_phone_ext);
-$rec['cell_phone'] = preg_replace("/[^\d]/", '', $cell_phone);
-$rec['home_phone'] = preg_replace("/[^\d]/", '', $home_phone);
-$rec['fax'] = preg_replace("/[^\d]/", '', $fax);
+$rec['work_phone'] = $work_phone;
+$rec['work_phone_ext'] = $work_phone_ext;
+$rec['cell_phone'] = $cell_phone;
+$rec['home_phone'] = $home_phone;
+$rec['fax'] = $fax;
 /*
 ignore IM fields, now done through plugin
 $rec['aol_name'] = $aol_name;
@@ -143,33 +133,21 @@ $rec['gender'] = $gender;
 $rec['date_of_birth'] = $date_of_birth;
 $rec['tax_id'] = $tax_id;
 $rec['profile'] = $profile;
-$rec['custom1'] = $custom1;
-$rec['custom2'] = $custom2;
-$rec['custom3'] = $custom3;
-$rec['custom4'] = $custom4;
+if ($custom1)
+    $rec['custom1'] = $custom1;
+if ($custom2)
+    $rec['custom2'] = $custom2;
+if ($custom3)
+    $rec['custom3'] = $custom3;
+if ($custom4)
+    $rec['custom4'] = $custom4;
 $rec['entered_by'] = $session_user_id;
 $rec['entered_at'] = time();
 $rec['last_modified_at'] = time();
 $rec['last_modified_by'] = $session_user_id;
 $rec['home_address_id']=$home_address_id;
 
-$tbl = 'contacts';
-$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-$rst = $con->execute($ins);
-if ($rst) {
-    $contact_id = $con->Insert_ID();
-    $rec['contact_id']=$contact_id;
-
-    add_audit_item($con, $session_user_id, 'created', 'contacts', $contact_id, 1);
-
-    //add to recently viewed list
-    update_recent_items($con, $session_user_id, "contacts", $contact_id);
-
-    do_hook_function('contact_new_2', $rec);
-} else {
-    db_error_handler($con, $ins);
-}
-
+$contact_id=add_contact($con, $rec);
 $con->close();
 
 if ($edit_address == "on") {
@@ -184,6 +162,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.31  2005/11/18 20:35:07  vanmer
+ * - changed to use contact API for adding new contact
+ *
  * Revision 1.30  2005/09/25 05:42:06  vanmer
  * - removed IM field references from all contact pages (now handled by plugin)
  * - added custom field hook for contacts new.php
