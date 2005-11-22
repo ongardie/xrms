@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: update.php,v 1.105 2005/10/16 19:52:38 maulani Exp $
+ * $Id: update.php,v 1.106 2005/11/22 17:21:39 jswalter Exp $
  */
 
 // where do we include from
@@ -5007,10 +5007,10 @@ install_default_activity_participant_positions($con);
 
 $sql = "SELECT activity_type_id FROM activity_types WHERE activity_type_short_name='SYS'";
 $rst=$con->execute($sql);
-if ($rst->EOF) { 
-    $sql = "INSERT INTO activity_types( activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order, user_editable_flag ) values ('SYS', 'system', 'system', 'system',11,0)"; 
-    $rst=$con->execute($sql); 
-    if (!$rst) {db_error_handler($con, $sql); } 
+if ($rst->EOF) {
+    $sql = "INSERT INTO activity_types( activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order, user_editable_flag ) values ('SYS', 'system', 'system', 'system',11,0)";
+    $rst=$con->execute($sql);
+    if (!$rst) {db_error_handler($con, $sql); }
 }
 
 $sql = "UPDATE activity_types SET user_editable_flag=0 WHERE ((activity_type_short_name='CTO') OR (activity_type_short_name='CFR') OR (activity_type_short_name='ETO') OR (activity_type_short_name='EFR') OR (activity_type_short_name='PRO') OR (activity_type_short_name='INT') OR (activity_type_short_name='SYS') OR (activity_type_short_name='FFR') OR (activity_type_short_name='FTO') OR (activity_type_short_name='LTT') OR (activity_type_short_name='LTF') OR (activity_type_short_name='MTG'))";
@@ -5084,10 +5084,10 @@ if ($recCount == 0) {
 
     $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (6, 'Occupied Palestinian Territory', '275', 'PS', 'PSE', '970')";
     $rst = $con->execute($sql);
-    
+
     $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (9, 'Timor-Leste', '626', 'TL', 'TLS', '670')";
     $rst = $con->execute($sql);
-    
+
     $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (6, 'land Islands', '248', 'AX', 'ALA', '670')";
     $rst = $con->execute($sql);
 }
@@ -5120,25 +5120,32 @@ $rst = $con->execute($sql);
 // add sort order to crm statuses
 $sql = "ALTER TABLE crm_statuses ADD sort_order TINYINT NOT NULL DEFAULT '1' AFTER crm_status_id";
 if(($rst = $con->execute($sql)) !== false){ //error such as column already there
-	// get the id's of all rows with a record_status of 'a'
-	$sql = "SELECT crm_status_id FROM crm_statuses WHERE crm_status_record_status='a'";
-	$rst = $con->execute($sql);
-	
-	if(!$rst){
-		db_error_handler($con, $sql);
-	}else{
-		//use the id in the UPDATE statement to specify the row in the WHERE clause
-		//meanwhile, increment sort_order from 1 to the row count
-		$sort_order = 1;
-		while(!$rst->EOF){
-			$sql2 = 'UPDATE crm_statuses SET sort_order='.$sort_order.' WHERE crm_status_id='.$rst->fields['crm_status_id'];
-			$rst2 = $con->execute($sql2);
-			
-			$rst->movenext();
-			$sort_order++;
-		}
-	}
+    // get the id's of all rows with a record_status of 'a'
+    $sql = "SELECT crm_status_id FROM crm_statuses WHERE crm_status_record_status='a'";
+    $rst = $con->execute($sql);
+
+    if(!$rst){
+        db_error_handler($con, $sql);
+    }else{
+        //use the id in the UPDATE statement to specify the row in the WHERE clause
+        //meanwhile, increment sort_order from 1 to the row count
+        $sort_order = 1;
+        while(!$rst->EOF){
+            $sql2 = 'UPDATE crm_statuses SET sort_order='.$sort_order.' WHERE crm_status_id='.$rst->fields['crm_status_id'];
+            $rst2 = $con->execute($sql2);
+
+            $rst->movenext();
+            $sort_order++;
+        }
+    }
 }
+
+// New fields for Contact Table
+$sql = "ALTER TABLE contacts
+                ADD extref1 VARCHAR( 50 ) AFTER custom4 ,
+                ADD extref2 VARCHAR( 50 ) AFTER extref1 ,
+                ADD extref3 VARCHAR( 50 ) AFTER extref2" ;
+$rst = $con->execute($sql);
 
 
 do_hook_function('xrms_update', $con);
@@ -5165,6 +5172,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.106  2005/11/22 17:21:39  jswalter
+ *  - added 'extref1' thru 3 to 'contacts' table
+ *
  * Revision 1.105  2005/10/16 19:52:38  maulani
  * - Add additional countries to list
  *
