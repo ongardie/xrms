@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: update.php,v 1.106 2005/11/22 17:21:39 jswalter Exp $
+ * $Id: update.php,v 1.107 2005/11/22 17:49:48 jswalter Exp $
  */
 
 // where do we include from
@@ -5148,6 +5148,17 @@ $sql = "ALTER TABLE contacts
 $rst = $con->execute($sql);
 
 
+// New address type
+$sql = "   INSERT INTO address_types
+     ( address_type_id , address_type , address_type_sort_value )
+   VALUES
+     ( '', 'shipping', '400' )";
+$rst = $con->execute($sql);
+
+
+
+
+
 do_hook_function('xrms_update', $con);
 
 //close the database connection, because we don't need it anymore
@@ -5172,6 +5183,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.107  2005/11/22 17:49:48  jswalter
+ *  - added new address type - "shipping"
+ *
  * Revision 1.106  2005/11/22 17:21:39  jswalter
  *  - added 'extref1' thru 3 to 'contacts' table
  *
