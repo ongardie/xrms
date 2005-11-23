@@ -7,32 +7,9 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-contacts.php,v 1.2 2005/11/18 20:34:38 vanmer Exp $
+ * $Id: utils-contacts.php,v 1.3 2005/11/23 17:34:21 jswalter Exp $
  *
  */
-
-
-/**********************************************************************/
-/**
- *
- * Strips many fields in array of phone field formatting strings, taking an array by reference and modifying its contents
- *
- * @param array $array to modify and clean the phone fields in (by references)
- * @param array $array of array_keys in the first array which correspond to phone fields
- *
- * @return integer $count of fields where phone fields were cleaned
- */
-
-function clean_phone_fields(&$fields, $phone_fields) {
-    $count=0;
-    foreach ($phone_fields as $pf) {
-        if (array_key_exists($pf, $fields)) {
-            $fields[$pf]=preg_replace("/[^\d]/", '', $fields[$pf]);
-            $count++;
-        }
-    }
-    return $count;
-}
 
 
 /**********************************************************************/
@@ -55,7 +32,7 @@ function add_contact($con, $contact) {
     $contact['custom2'] = array_key_exists('custom2',$contact) ? $contact['custom2'] : "";
     $contact['custom3'] = array_key_exists('custom3',$contact) ? $contact['custom3'] : "";
     $contact['custom4'] = array_key_exists('custom4',$contact) ? $contact['custom4'] : "";
-    
+
     //avoid nulls on the IM fields, although these should be moved to a plugin
     $contact['aol_name']   = array_key_exists('aol_name',$contact) ? $contact['aol_name'] : "";
     $contact['yahoo_name'] = array_key_exists('yahoo_name',$contact) ? $contact['yahoo_name'] : "";
@@ -223,16 +200,16 @@ function update_contact($con, $contact, $contact_id=false, $contact_rst=false) {
 
 
     $upd = $con->GetUpdateSQL($contact_rst, $contact, false, get_magic_quotes_gpc());
-    if ($upd) {        
+    if ($upd) {
         $rst=$con->execute($upd);
         if (!$rst) { db_error_handler($con, $upd); return false; }
     }
-    
+
 
     //this will run whether or not base contact changed
     $param = array($contact_rst, $contact);
     do_hook_function('contact_edit_2', $param);
-    
+
     add_audit_item($con, $session_user_id, 'updated', 'contacts', $contact_id, 1);
 
     return true;
@@ -258,7 +235,7 @@ function delete_contact($con, $contact_id, $delete_from_database=false) {
         $sql = "UPDATE contacts SET contact_record_status=" . $con->qstr('d');
     }
     $sql .= "  WHERE contact_id=$contact_id";
-    
+
     $rst=$con->execute($sql);
     if (!$rst) { db_error_handler($con, $sql); return false; }
 
@@ -267,11 +244,14 @@ function delete_contact($con, $contact_id, $delete_from_database=false) {
 
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.3  2005/11/23 17:34:21  jswalter
+ *  - moved 'clean_phone_fields()' to "utils-misc.php"
+ *
  * Revision 1.2  2005/11/18 20:34:38  vanmer
  * - changed to updated contact modified by/time for update_contact
  *
  * Revision 1.1  2005/11/18 20:04:48  vanmer
  * -Initial revision of an API for managing contacts in XRMS
  *
-**/ 
+**/
  ?>
