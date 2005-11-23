@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.152 2005/10/16 20:13:57 maulani Exp $
+ * $Id: utils-misc.php,v 1.153 2005/11/23 17:32:00 jswalter Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -181,15 +181,15 @@ function add_audit_item(&$con, $user_id, $audit_item_type, $on_what_table, $on_w
         $rec['audit_item_type'] = $audit_item_type;
         $rec['on_what_table'] = $on_what_table;
         $rec['on_what_id'] = $on_what_id;
-		if (isSet($_SERVER["HTTP_X_FORWARDED_FOR"])) {
-			$rec['remote_addr'] = $_SERVER["HTTP_X_FORWARDED_FOR"];
-		} elseif (isSet($_SERVER["HTTP_CLIENT_IP"])) {
-			$rec['remote_addr'] = $_SERVER["HTTP_CLIENT_IP"];
-		} elseif (isSet($_SERVER["HTTP_PC_REMOTE_ADDR"])) {
-			$rec['remote_addr'] = $_SERVER["HTTP_PC_REMOTE_ADDR"];
-		} else {
-			$rec['remote_addr'] = $_SERVER["REMOTE_ADDR"];
-		}
+        if (isSet($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+            $rec['remote_addr'] = $_SERVER["HTTP_X_FORWARDED_FOR"];
+        } elseif (isSet($_SERVER["HTTP_CLIENT_IP"])) {
+            $rec['remote_addr'] = $_SERVER["HTTP_CLIENT_IP"];
+        } elseif (isSet($_SERVER["HTTP_PC_REMOTE_ADDR"])) {
+            $rec['remote_addr'] = $_SERVER["HTTP_PC_REMOTE_ADDR"];
+        } else {
+            $rec['remote_addr'] = $_SERVER["REMOTE_ADDR"];
+        }
         if (isset($_SERVER['REMOTE_PORT'])) {
             $rec['remote_port'] = $_SERVER['REMOTE_PORT'];
         }
@@ -844,6 +844,28 @@ function get_formatted_phone ($con, $address_id, $phone, $country_id=false) {
     }
 }
 
+/**
+ *
+ * Strips many fields in array of phone field formatting strings, taking an array by reference and modifying its contents
+ *
+ * @param array $array to modify and clean the phone fields in (by references)
+ * @param array $array of array_keys in the first array which correspond to phone fields
+ *
+ * @return integer $count of fields where phone fields were cleaned
+ */
+
+function clean_phone_fields(&$fields, $phone_fields) {
+    $count=0;
+    foreach ($phone_fields as $pf) {
+        if (array_key_exists($pf, $fields)) {
+            $fields[$pf]=preg_replace("/[^\d]/", '', $fields[$pf]);
+            $count++;
+        }
+    }
+    return $count;
+}
+
+/**********************************************************************/
 
 /**
  * This function returns an HTML select widget with the addresses available for a company
@@ -1951,6 +1973,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.153  2005/11/23 17:32:00  jswalter
+ *  - moved 'clean_phone_fields()' from "utils-contacts.php"
+ *
  * Revision 1.152  2005/10/16 20:13:57  maulani
  * - Fix IP address retrieve for some Apache 2.0 installs
  *
