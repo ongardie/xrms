@@ -39,8 +39,8 @@ global $auto_user, $auto_pass, $auto_expire_days, $auto_expire_hours,
 // $auto_key	= array('changeme','andme','metoo','toomany','omigod');
 
 // a document about login security linked from login page
-// provide your own, or copy security.en.php someplace and change this link
-   $login_doc	= '../plugins/login_auto/security.en.php';
+// provide your own, or copy security.php someplace and change this link
+   $login_doc	= '../plugins/login_auto/security.php';
 //   $login_doc	= '';
 
 // customize the link text for the security document, or leave the default
