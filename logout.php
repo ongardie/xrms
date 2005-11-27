@@ -2,7 +2,7 @@
 /**
  * Logout
  *
- * $Id: logout.php,v 1.5 2004/09/21 18:14:32 introspectshun Exp $
+ * $Id: logout.php,v 1.6 2005/11/27 14:17:20 braverock Exp $
  */
 
 require_once('include-locations.inc');
@@ -23,6 +23,8 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 add_audit_item($con, $session_user_id, 'logout', '', '', 2);
 
 $con->close();
+
+do_hook('logout');
 
 //
 // Note: session_start is not needed here, as session_check()

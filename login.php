@@ -2,7 +2,7 @@
 /**
  * Display login screen
  *
- * $Id: login.php,v 1.13 2005/05/25 05:42:37 alanbach Exp $
+ * $Id: login.php,v 1.14 2005/11/27 14:17:20 braverock Exp $
  */
 require_once('include-locations.inc');
 
@@ -17,6 +17,8 @@ if ( isset($_GET['target']) ) {
 } else {
   $target = '';
 }
+
+do_hook('login_cookie');
 
 /* This code does not work and should not be nessacary
     // add check here to make sure that the $target is inside our file tree
@@ -58,6 +60,7 @@ start_page($page_title, false, $msg);
                 <td class=widget_content_form_element_center colspan=2><input class=button type=submit value="<?php echo _("Login"); ?>"></td>
         </tr>
 </table>
+<?php do_hook('login_form'); ?>
 </form>
 </div>
 
@@ -79,6 +82,11 @@ end_page();
 
 /**
  * $Log: login.php,v $
+ * Revision 1.14  2005/11/27 14:17:20  braverock
+ * - added hooks to support more advanced login/logout functionality
+ *   - patches provided by Brendon Baumgartner <brendon@brendon.com>
+ *   - support for login_auto plugin
+ *
  * Revision 1.13  2005/05/25 05:42:37  alanbach
  * Automatic RTL/LTR patch
  *

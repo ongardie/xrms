@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.24 2005/05/25 18:36:01 braverock Exp $
+ * $Id: login-2.php,v 1.25 2005/11/27 14:17:20 braverock Exp $
  */
 require_once('include-locations.inc');
 
@@ -12,9 +12,9 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$username = $_POST['username'];
+$username = $_REQUEST['username'];
 $password = $_POST['password'];
-$target   = $_POST['target'];
+$target   = $_REQUEST['target'];
     if ($target== '') {
         $target=$http_site_root.'/private/home.php';
     }
@@ -48,6 +48,9 @@ EOQ;
     exit;
 }
 // $con->debug = 1;
+
+// this hook is untested with ldap. Works okay authenticating to the DB
+do_hook ('login_before');
 
 $ldapok = true;
 if ($xrms_use_ldap) {
@@ -106,9 +109,10 @@ if ($xrms_use_ldap) {
      }
 
 } else {
+
      //We are using db to check the password
-     $password = md5($password);
-     $sql = "select * from users where username = " . $con->qstr($username, get_magic_quotes_gpc()) . " AND password = " . $con->qstr($password, get_magic_quotes_gpc()) . " AND user_record_status = 'a'";
+     $password_hash = md5($password);
+     $sql = "select * from users where username = " . $con->qstr($username, get_magic_quotes_gpc()) . " AND password = " . $con->qstr($password_hash, get_magic_quotes_gpc()) . " AND user_record_status = 'a'";
      $rst = $con->execute($sql);
      if (!$rst) {
          db_error_handler ($con,$sql);
@@ -141,6 +145,8 @@ if ($rst && !$rst->EOF && $ldapok) {
     // audit
     add_audit_item($con, $session_user_id, 'login', '', '', 2);
 
+    do_hook ('login_verified');
+
     // redirect
     header("Location: $target");
 } else {
@@ -149,6 +155,11 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.25  2005/11/27 14:17:20  braverock
+ * - added hooks to support more advanced login/logout functionality
+ *   - patches provided by Brendon Baumgartner <brendon@brendon.com>
+ *   - support for login_auto plugin
+ *
  * Revision 1.24  2005/05/25 18:36:01  braverock
  * - add user_contact_id = 0 if it isn't set
  *
