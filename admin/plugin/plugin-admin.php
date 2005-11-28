@@ -15,7 +15,7 @@
  * @author Philippe Mingo
  * @author Brian Peterson
  *
- * $Id: plugin-admin.php,v 1.6 2004/08/04 10:54:33 cpsource Exp $
+ * $Id: plugin-admin.php,v 1.7 2005/11/28 18:46:16 daturaarutad Exp $
  * @package xrms
  * @subpackage plugins
  */
@@ -168,9 +168,10 @@ function parseConfig( $cfg_file ) {
 $cfgfile = $include_directory.'/plugin-cfg.php';
 
 $page_title = _("Plugin Administration");
-start_page($page_title);
 
 $newcfg = array();
+
+ob_start();
 
 echo "<p><br><br>\n<form method=post name=plugin-admin>\n"
     . "<table align=center cellspacing=0>\n"
@@ -281,24 +282,27 @@ if ($plugin_submit == 'true') {
         }
         fwrite( $fp, '?>' );
         fclose( $fp );
-        echo '<tr><td class=widget_content>'.
-             '<font size=+1><br>'.
-             'plugin-cfg.php '._("Config written successfully.").
-             '</font>'.
-             '</td></tr>';
+        $status_msg =  _("Config written successfully.");
     } else {
-        echo '<tr><td class=widget_content>'.
-             '<font size=+1><br>'.
-             'plugin-cfg.php '._("Config file can't be opened. Please check vars.php.").
-             '</font>'.
-             '</td></tr>';
+        $status_msg =  _("Config file can't be opened. Please check vars.php.");
     }
 } //end write check
-
 echo '</table></form></p>';
+
+$output = ob_get_contents();
+ob_end_clean();
+
+
+
+start_page($page_title, true, $status_msg);
+echo $output;
+
 
 /**
  * $Log: plugin-admin.php,v $
+ * Revision 1.7  2005/11/28 18:46:16  daturaarutad
+ * move status message to top of page
+ *
  * Revision 1.6  2004/08/04 10:54:33  cpsource
  * - Resolve undefined usage of plugin_submit
  *   Fix bug 1001879 to add hacking check to generated file.
