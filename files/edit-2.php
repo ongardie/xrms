@@ -2,7 +2,7 @@
 /**
  * Insert Updated File information into the database
  *
- * $Id: edit-2.php,v 1.7 2005/11/09 22:36:24 daturaarutad Exp $
+ * $Id: edit-2.php,v 1.8 2005/11/29 20:04:19 daturaarutad Exp $
  */
 
 //include required files
@@ -122,12 +122,20 @@ if($error) {
 	header("Location: $http_site_root/files/one.php?file_id=$file_id&msg=$msg&return_url=$return_url");
 } else {
 	$msg = 'saved';
+    if(false === strpos($return_url, 'php?')) {
+        $sep = '?';
+    } else {
+        $sep = '&';
+    }
 
-	header("Location: " . $http_site_root . $return_url . "&msg=$msg");
+	header("Location: " . $http_site_root . $return_url . $sep . "msg=$msg");
 }
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.8  2005/11/29 20:04:19  daturaarutad
+ * check for ? in return_url
+ *
  * Revision 1.7  2005/11/09 22:36:24  daturaarutad
  * add hooks for files plugin
  *
