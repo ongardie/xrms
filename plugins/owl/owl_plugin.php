@@ -23,7 +23,7 @@
 // reason is that this file gets loaded often!
 
 global $owl_location;
-$owl_location = '/home/www/owl/intranet';
+$owl_location = '/www/owl/intranet';
 
 
 /**
@@ -499,13 +499,6 @@ function op_browse_files(&$params) {
 		$on_what_table = $params['on_what_table'];
 		$on_what_id = $params['on_what_id'];
 
-		if($on_what_table) {
-			$return_url = "/$on_what_table/one.php?" . make_singular($on_what_table) . "_id=".$on_what_id."&owl_parent_id=$owl_parent_id";
-		} else {
-			$return_url = current_page();
-		}
-
-
 		$file_data = $rst->GetArray();
 
 		$folder_data = GetFolders($on_what_table, $on_what_id);
@@ -530,6 +523,14 @@ function op_browse_files(&$params) {
 
 		if(!$owl_parent_id) $owl_parent_id = 0;
 
+
+		if($on_what_table) {
+			$return_url = urlencode("/$on_what_table/one.php?" . make_singular($on_what_table) . "_id=".$on_what_id."&owl_parent_id=$owl_parent_id");
+		} else {
+			$return_url = urlencode("/private/home.php");
+		}
+
+
 		$owl_data = OWL_Browse_Files($owl_parent_id, $file_data, $folder_data);
 		//print("<pre>");
 		//print_r($file_data);
@@ -545,9 +546,13 @@ function op_browse_files(&$params) {
 			if($owl_row['is_folder']) {
 				
 				$owl_data[$k]['file_size'] = '';
-				// at some point this will be a link to current page + owl_parent_id=$folder_id
-				$folder_link = $http_site_root . current_page('owl_parent_id=' . $owl_data[$k]['id']);
-				//if('?' != substr($folder_link, -1)) $folder_link .= '?';
+
+				// folder link always sets a new owl_parent_id
+                if($on_what_table) {
+                    $folder_link = "$http_site_root/$on_what_table/one.php?" . make_singular($on_what_table) . "_id=$on_what_id&owl_parent_id={$owl_data[$k]['id']}";
+                } else {
+			        $folder_link = "$http_site_root/private/home.php?owl_parent_id={$owl_data[$k]['id']}";
+                }
 
 				$owl_data[$k]['file_pretty_name'] = "<img src=\"$default->owl_graphics_url/$default->system_ButtonStyle/icon_filetype/folder_closed.gif\"></img>&nbsp;<a href='$folder_link'>{$owl_data[$k]['name']}</a>";
 
@@ -588,7 +593,7 @@ function op_browse_files(&$params) {
 				//$owl_data[$k]['file_pretty_name'] = "<img src=\"$default->owl_graphics_url/$default->sButtonStyle/icon_filetype/$sDispIcon\" border=\"0\" alt=\"\"></img>&nbsp;";
 				//}
 				
-				$owl_data[$k]['file_pretty_name'] = "<img src=\"$default->owl_graphics_url/$default->system_ButtonStyle/icon_filetype/$sDispIcon\" border=\"0\" alt=\"\"></img>&nbsp;<a href='$http_site_root/files/one.php?file_id={$owl_data[$k]['file_id']}&return_url=". current_page() . "' alt=\"File Name: " .$owl_data[$k]['file_name'] . "\" title=\"File Name: " .$owl_data[$k]['file_name'] . "\">" . $owl_data[$k]['file_pretty_name'] . '</a>';
+				$owl_data[$k]['file_pretty_name'] = "<img src=\"$default->owl_graphics_url/$default->system_ButtonStyle/icon_filetype/$sDispIcon\" border=\"0\" alt=\"\"></img>&nbsp;<a href='$http_site_root/files/one.php?file_id={$owl_data[$k]['file_id']}&return_url=$return_url' alt=\"File Name: " .$owl_data[$k]['file_name'] . "\" title=\"File Name: " .$owl_data[$k]['file_name'] . "\">" . $owl_data[$k]['file_pretty_name'] . '</a>';
 				//print("<pre>");
 				//print_r($owl_data);
 				//print_r($default);
@@ -741,6 +746,9 @@ function op_template(&$params) {
 
 /**
  * $Log: owl_plugin.php,v $
+ * Revision 1.5  2005/11/29 20:01:36  daturaarutad
+ * fix $msg and owl_parent_id handling in links (browse function)
+ *
  * Revision 1.4  2005/11/16 23:47:26  daturaarutad
  * fix previous commit
  *
