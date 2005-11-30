@@ -5,11 +5,14 @@
  */
 require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
+require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'utils-misc.php');
+$con=get_xrms_dbconnection();
 
 $data_filenames= array($xrms_file_root.'/install/data.php', $xrms_file_root.'/include/classes/acl/acl_install.php');
 $output_filename = $xrms_file_root.'/locale/datastrings.php';
 
-// Add more table names to $tables_to_extract if they are loaded by data.php
+// Add more table names to $tables_to_extract if they contain strings
 // and translation is required.
 
 $tables_to_extract = array("account_statuses",
@@ -33,34 +36,54 @@ $tables_to_extract = array("account_statuses",
                            "Role",
                            );
     $strings = array();
-foreach ($data_filenames as $data_filename) {
-    $file = file_get_contents($data_filename);
-    foreach ($tables_to_extract as $t)
-    {
-    // extract values from the insert into statements 
-        if (preg_match_all("/insert\s+into\s+$t.*values\s+\((.*)\)\s*(?:\"|\')\s*;/Ui",$file,$matches))
-        {
-            foreach ($matches[1] as $m)
-            {
-    // get the single values
-                            $matched_val = split(',',$m);
-                            foreach ($matched_val as $mv)
-                            {
-                                    $mv = trim($mv);
-    // if the strings is not numeric, it is longer than 1 (3 including the quotes) or it isn't a short
-    // code which at the moment I have assumed to be uppercase strings of length <=5 (<=7 including quotes)
-                                    if (!is_numeric($mv) && strlen($mv) > 3 && !(strtoupper($mv)==$mv && strlen($mv) <= 7))
-                                    {
-                                            $strings[]= tag_remove($mv);
-                                    }
-                            }
-                            
-            }
-        }
+    //loop on each table
+    foreach ($tables_to_extract as $t) {
+    	//get column info for table
+	$col_info=$con->MetaColumns($t);
+	$str_cols=array();
+		//loop on columns
+		foreach ($col_info as $col) {
+			switch ($col->type) {
+				//only take varchar fields
+				case 'varchar':
+					//ensure that field is longer than 10 characters (short names)
+					if ($col->max_length > 10) {
+						$str_cols[]=$col->name;
+					}
+				break;
+			}
+		}
+	//make sure we found any columns in this table
+	if (count($str_cols)>0) {
+		$col_str=implode(", ", $str_cols);
+		//select only the varchar fields from the table
+		$sql= "SELECT $col_str FROM $t";
+		$rst = $con->execute($sql);
+		if (!$rst) db_error_handler($con, $sql);
+		while (!$rst->EOF) {
+			//loop on fields
+			foreach ($rst->fields as $fkey=>$mv) {
+				//trim spaces and tags
+				$mv=trim(tag_remove($mv));
+				//make sure field has more than one character
+				if ($mv AND (strlen($mv)>1)) {
+					//if we pass the above test, add to the list of strings
+					$strings[]=$mv;
+				}
+			}
+			//next character
+			$rst->movenext();
+		}
+		$rst->close();
+	}
     }
-}
+
+//ensure that strings are unique
 $output_strings=array_unique($strings);
+//and sorted
 sort($output_strings);
+
+//write them to our file
 $fp = fopen($output_filename,'w') or die("Unable to open output file $output_filename\n");
 fwrite($fp, "<?php\n");
 fwrite($fp, '/**
@@ -71,7 +94,7 @@ fwrite($fp, '/**
  * php ./getdatastrings.php
  * from the locale directory
  *
- * $Id: getdatastrings.php,v 1.6 2005/06/30 04:47:18 vanmer Exp $
+ * $Id: getdatastrings.php,v 1.7 2005/11/30 00:36:02 vanmer Exp $
  */'."\n");
 foreach ($output_strings as $s)
 {
@@ -82,10 +105,10 @@ fwrite($fp, "?>\n");
 fclose($fp);
 
 /* removes the html <x> tags from strings $s */
-
+if (!function_exists('tag_remove')) {
 function tag_remove($s)
 {
 	return preg_replace('/<[^>]*>/U',"",$s);
 }
-
+}
 ?>
