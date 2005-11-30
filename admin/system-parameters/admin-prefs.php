@@ -5,7 +5,7 @@
  * Administration screen for managing default system preferences
  *
  *
- * $Id: admin-prefs.php,v 1.3 2005/07/08 18:49:39 vanmer Exp $
+ * $Id: admin-prefs.php,v 1.4 2005/11/30 00:46:49 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -43,9 +43,10 @@ switch ($prefs_action) {
                 //handle single preferences
                 $user_preference_name= $type_info['user_preference_name'];
                 $user_preference_type_id= $type_info['user_preference_type_id'];
+                $read_only = $type_info['read_only'];
                 $fetch_name=str_replace(' ','_',$user_preference_name);
                getGlobalVar($preference_value, $fetch_name);
-                if ($preference_value OR ($preference_value!=get_admin_preference($con, $user_preference_type_id))) {
+                if (!$read_only AND ($preference_value OR ($preference_value!=get_admin_preference($con, $user_preference_type_id)))) {
                     $ret=set_admin_preference($con, $user_preference_type_id, $preference_value);
                     if (!$ret) $msg.=_("Failed to set preference value for preference") . ' ' .$user_preference_name;
                 }
@@ -75,6 +76,9 @@ end_page();
 
 /**
   * $Log: admin-prefs.php,v $
+  * Revision 1.4  2005/11/30 00:46:49  vanmer
+  * - added check for read-only options, do not attempt to save any option that is read-only
+  *
   * Revision 1.3  2005/07/08 18:49:39  vanmer
   * - ensure proper unsetting of parameters after save of preferences occurs
   *
