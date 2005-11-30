@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.93 2005/10/06 04:30:06 vanmer Exp $
+ * $Id: utils-interface.php,v 1.94 2005/11/30 00:44:50 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -779,9 +779,10 @@ function get_user_menu(&$con, $user_id='', $blank_user=false, $fieldname='user_i
  *
  * @return string $html with html element defined by parameters
  */
-function create_form_element($element_type, $element_name, $element_value=false, $element_extra_attributes='', $element_length=false, $element_height=false, $possible_values=false, $show_blank_first=false) {
+function create_form_element($element_type, $element_name, $element_value=false, $element_extra_attributes='', $element_length=false, $element_height=false, $possible_values=false, $show_blank_first=false, $read_only=false) {
 if (!$element_type) return false;
 if (!$element_name) return false;
+if ($read_only) $element_extra_attributes.=' readonly disabled';
 
 switch ($element_type) {
   case "checkbox":
@@ -958,6 +959,9 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.94  2005/11/30 00:44:50  vanmer
+ * - added read_only option for rendering form elements
+ *
  * Revision 1.93  2005/10/06 04:30:06  vanmer
  * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
  *
