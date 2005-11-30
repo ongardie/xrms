@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.18 2005/09/29 14:42:39 vanmer Exp $
+ * $Id: install.php,v 1.19 2005/11/30 00:42:11 vanmer Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -267,17 +267,27 @@ if($xrms_db_dbtype=="mysql"){
   };
 }
 
-// create the database tables
-create_db_tables($con);
+//use extracted XML file to create and execute the table structure SQL statements
+require_once($include_directory . 'adodb/adodb-xmlschema.inc.php' );
 
-// install ACL data
-install_upgrade_acl($con);
+$schemaFile='xrms-schema.xml';
+$schema = new adoSchema($con);
+$schema->seperateDataSQL=true;
+$schema->ParseSchemaFile( $schemaFile );
+$structure_sql=$schema->sqlArray;
+$data_sql=$schema->getDataSQL();
 
-// create the database data
-create_db_data($con);
+//INSTALL STRUCTURE
+foreach ($structure_sql as $sql) {
+	$rst=$con->execute($sql);
+	if (!$rst) db_error_handler($con, $sql);
+}
 
-// install activity participant positions
-install_default_activity_participant_positions($con);
+//INSTALL DATA
+foreach ($data_sql as $sql) {
+	$rst=$con->execute($sql);
+	if (!$rst) db_error_handler($con, $sql);
+}
 
 //run plugin installation, pass adodb database connection
 do_hook_function('xrms_install', $con);
@@ -310,6 +320,11 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.19  2005/11/30 00:42:11  vanmer
+ *- changed install to use adodb xml schema file instead of database and data functions with
+ *hardcoded SQL
+ *- installs structure and then data from xrms-schema.xml in the install directory
+ *
  *Revision 1.18  2005/09/29 14:42:39  vanmer
  *- changed to install default partipant positions on install
  *
