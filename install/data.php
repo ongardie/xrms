@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.36 2005/10/16 19:51:37 maulani Exp $
+ * $Id: data.php,v 1.37 2005/11/30 00:43:12 vanmer Exp $
  */
 
 /**
@@ -2939,6 +2939,14 @@ function user_preferences_db_data($con) {
     if (!$ret) {
         set_admin_preference($con, $company_search_type, 'contains');
     }
+
+    $s=_("XRMS Version");
+    $s=_("XRMS Version (read-only)");
+    $xrms_version_type=add_user_preference_type($con, 'xrms_version', "XRMS Version", "XRMS Version (read-only)", false, false, 'text', true);
+    $ret=get_admin_preference($con, $xrms_version_type);
+    if (!$ret) {
+        set_admin_preference($con, $xrms_version_type, '1.0');
+    }
 }
 
 /**
@@ -2959,6 +2967,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.37  2005/11/30 00:43:12  vanmer
+ * - added XRMS version option
+ *
  * Revision 1.36  2005/10/16 19:51:37  maulani
  * - Add additional countries to table
  *
