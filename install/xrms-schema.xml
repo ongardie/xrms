@@ -56,8 +56,8 @@
       <col>ChildControlledObject_id</col>
     </index>
     <data>
-      <row><f>1</f><f>1</f><f></f><f></f><f></f><f></f><f>0</f></row>
-      <row><f>2</f><f>3</f><f></f><f></f><f></f><f></f><f>0</f></row>
+      <row><f>1</f><f>1</f><f>0</f><f></f><f></f><f></f><f>0</f></row>
+      <row><f>2</f><f>3</f><f>0</f><f></f><f></f><f></f><f>0</f></row>
       <row><f>3</f><f>2</f><f>1</f><f></f><f></f><f></f><f>0</f></row>
       <row><f>5</f><f>4</f><f>1</f><f></f><f></f><f></f><f>0</f></row>
       <row><f>6</f><f>5</f><f>1</f><f></f><f></f><f></f><f>0</f></row>
@@ -75,8 +75,8 @@
       <row><f>18</f><f>7</f><f>3</f><f></f><f></f><f></f><f>1</f></row>
       <row><f>19</f><f>7</f><f>2</f><f></f><f></f><f></f><f>1</f></row>
       <row><f>20</f><f>7</f><f>5</f><f></f><f></f><f></f><f>1</f></row>
-      <row><f>21</f><f>9</f><f></f><f></f><f></f><f></f><f>0</f></row>
-      <row><f>22</f><f>10</f><f>9</f><f></f><f></f><f></f><f></f></row>
+      <row><f>21</f><f>9</f><f>0</f><f></f><f></f><f></f><f>0</f></row>
+      <row><f>22</f><f>10</f><f>9</f><f></f><f></f><f></f><f>0</f></row>
       <row><f>23</f><f>7</f><f>10</f><f></f><f></f><f></f><f>1</f></row>
     </data>
   </table>
@@ -164,7 +164,7 @@
       <col>ChildGroup_id</col>
     </index>
     <data>
-      <row><f>1</f><f>1</f><f>1</f><f>2</f><f></f></row>
+      <row><f>1</f><f>1</f><f>1</f><f>2</f><f>0</f></row>
     </data>
   </table>
   <table name="Groups">
@@ -276,6 +276,18 @@
       <row><f>21</f><f>2</f><f>21</f><f>World</f><f>5</f><f>1</f></row>
     </data>
   </table>
+  <table name="TEST">
+    <field name="TEST_ID" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="TEST_STRING" type="C" size="32"/>
+    <field name="TEST_VALUE" type="N" size="10"/>
+    <field name="TEST_FLAG" type="I" size="1"/>
+    <data>
+      <row><f>1</f><f>TEST</f><f>12</f><f>1</f></row>
+    </data>
+  </table>
   <table name="account_statuses">
     <field name="account_status_id" type="I" size="11">
       <KEY/>
@@ -345,9 +357,7 @@
     <field name="activity_title" type="C" size="100">
       <NOTNULL/>
     </field>
-    <field name="activity_description" type="X">
-      <NOTNULL/>
-    </field>
+    <field name="activity_description" type="X"/>
     <field name="entered_at" type="T"/>
     <field name="entered_by" type="I" size="11">
       <NOTNULL/>
@@ -436,7 +446,7 @@
       <col>activity_type_id</col>
     </index>
     <data>
-      <row><f>1</f><f></f><f>Participant</f><f>1</f></row>
+      <row><f>1</f><f>0</f><f>Participant</f><f>1</f></row>
       <row><f>2</f><f>1</f><f>Caller</f><f>0</f></row>
       <row><f>3</f><f>2</f><f>Caller</f><f>0</f></row>
       <row><f>4</f><f>3</f><f>To</f><f>0</f></row>
@@ -543,9 +553,7 @@
     <field name="activity_title" type="C" size="100">
       <NOTNULL/>
     </field>
-    <field name="activity_description" type="X">
-      <NOTNULL/>
-    </field>
+    <field name="activity_description" type="X"/>
     <field name="default_text" type="X"/>
     <field name="duration" type="C" size="20">
       <NOTNULL/>
@@ -559,6 +567,8 @@
       <NOTNULL/>
       <DEFAULT value="a"/>
     </field>
+    <field name="workflow_entity" type="C" size="32"/>
+    <field name="workflow_entity_type" type="I" size="11"/>
   </table>
   <table name="activity_types">
     <field name="activity_type_id" type="I" size="11">
@@ -633,6 +643,7 @@
       <row><f>13</f><f><![CDATA[$lines<br>$city<br>$province<br>$postal_code<br>$country]]></f><f>a</f></row>
       <row><f>14</f><f><![CDATA[$lines<br>$city $postal_code<br>$country]]></f><f>a</f></row>
       <row><f>15</f><f><![CDATA[$lines<br>$city, $province $postal_code<br>$country]]></f><f>a</f></row>
+      <row><f>16</f><f></f><f>a</f></row>
     </data>
   </table>
   <table name="address_types">
@@ -650,6 +661,17 @@
       <row><f>1</f><f>unknown</f><f>100</f></row>
       <row><f>2</f><f>commercial</f><f>200</f></row>
       <row><f>3</f><f>residential</f><f>300</f></row>
+      <row><f>4</f><f>shipping</f><f>400</f></row>
+      <row><f>5</f><f>shipping</f><f>400</f></row>
+      <row><f>6</f><f>shipping</f><f>400</f></row>
+      <row><f>7</f><f>shipping</f><f>400</f></row>
+      <row><f>8</f><f>shipping</f><f>400</f></row>
+      <row><f>9</f><f>shipping</f><f>400</f></row>
+      <row><f>10</f><f>shipping</f><f>400</f></row>
+      <row><f>11</f><f>shipping</f><f>400</f></row>
+      <row><f>12</f><f>shipping</f><f>400</f></row>
+      <row><f>13</f><f>shipping</f><f>400</f></row>
+      <row><f>14</f><f>shipping</f><f>400</f></row>
     </data>
   </table>
   <table name="addresses">
@@ -694,7 +716,7 @@
       <NOTNULL/>
       <DEFAULT value="f"/>
     </field>
-    <field name="offset" type="N"/>
+    <field name="offset" type="N" size="10"/>
     <field name="daylight_savings_id" type="I" size="10">
       <UNSIGNED/>
     </field>
@@ -728,14 +750,32 @@
     <field name="on_what_table" type="C" size="100"/>
     <field name="on_what_id" type="C" size="10"/>
     <field name="audit_item_timestamp" type="T"/>
+    <field name="remote_addr" type="C" size="40"/>
+    <field name="remote_port" type="I" size="6"/>
+    <field name="session_id" type="C" size="50"/>
     <field name="audit_item_record_status" type="C" size="1">
       <DEFAULT value="a"/>
     </field>
+    <data>
+      <row><f>1</f><f>1</f><f>login</f><f></f><f></f><f>2005-11-28 15:44:53</f><f></f><f>0</f><f></f><f>a</f></row>
+      <row><f>2</f><f>1</f><f>logout</f><f></f><f></f><f>2005-11-28 15:58:17</f><f>66.78.71.49</f><f>59285</f><f></f><f>a</f></row>
+      <row><f>3</f><f>1</f><f>login</f><f></f><f></f><f>2005-11-28 15:58:26</f><f>66.78.71.49</f><f>59285</f><f></f><f>a</f></row>
+      <row><f>4</f><f>1</f><f>logout</f><f></f><f></f><f>2005-11-28 15:58:53</f><f>66.78.71.49</f><f>59285</f><f></f><f>a</f></row>
+      <row><f>5</f><f>1</f><f>login</f><f></f><f></f><f>2005-11-28 15:59:08</f><f>66.78.71.49</f><f>59285</f><f></f><f>a</f></row>
+      <row><f>6</f><f>1</f><f>login</f><f></f><f></f><f>2005-11-29 16:03:25</f><f>66.78.70.101</f><f>53632</f><f></f><f>a</f></row>
+      <row><f>7</f><f>1</f><f>login</f><f></f><f></f><f>2005-11-29 17:28:08</f><f>66.78.70.101</f><f>53792</f><f></f><f>a</f></row>
+      <row><f>8</f><f>1</f><f>logout</f><f></f><f></f><f>2005-11-29 18:38:41</f><f>66.78.70.101</f><f>53939</f><f></f><f>a</f></row>
+      <row><f>9</f><f>1</f><f>login</f><f></f><f></f><f>2005-11-29 18:38:45</f><f>66.78.70.101</f><f>53944</f><f></f><f>a</f></row>
+    </data>
   </table>
   <table name="campaign_statuses">
     <field name="campaign_status_id" type="I" size="11">
       <KEY/>
       <AUTOINCREMENT/>
+    </field>
+    <field name="status_open_indicator" type="C" size="1">
+      <NOTNULL/>
+      <DEFAULT value="o"/>
     </field>
     <field name="campaign_status_short_name" type="C" size="10">
       <NOTNULL/>
@@ -753,11 +793,15 @@
       <NOTNULL/>
       <DEFAULT value="a"/>
     </field>
+    <field name="sort_order" type="I" size="4">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+    </field>
     <data>
-      <row><f>1</f><f>NEW</f><f>New</f><f>New</f><f>New</f><f>a</f></row>
-      <row><f>2</f><f>PLAN</f><f>Planning</f><f>Planning</f><f>Planning</f><f>a</f></row>
-      <row><f>3</f><f>ACT</f><f>Active</f><f>Active</f><f>Active</f><f>a</f></row>
-      <row><f>4</f><f>CLO</f><f>Closed</f><f>Closed</f><f>Closed</f><f>a</f></row>
+      <row><f>1</f><f>o</f><f>NEW</f><f>New</f><f>New</f><f>New</f><f>a</f><f>1</f></row>
+      <row><f>2</f><f>o</f><f>PLAN</f><f>Planning</f><f>Planning</f><f>Planning</f><f>a</f><f>1</f></row>
+      <row><f>3</f><f>o</f><f>ACT</f><f>Active</f><f>Active</f><f>Active</f><f>a</f><f>1</f></row>
+      <row><f>4</f><f>c</f><f>CLO</f><f>Closed</f><f>Closed</f><f>Closed</f><f>a</f><f>1</f></row>
     </data>
   </table>
   <table name="campaign_types">
@@ -811,14 +855,12 @@
     <field name="campaign_title" type="C" size="100">
       <NOTNULL/>
     </field>
-    <field name="campaign_description" type="X">
-      <NOTNULL/>
-    </field>
+    <field name="campaign_description" type="X"/>
     <field name="starts_at" type="T"/>
     <field name="ends_at" type="T"/>
     <field name="cost" type="N" size="8">
       <NOTNULL/>
-      <DEFAULT value="0.01"/>
+      <DEFAULT value="0"/>
     </field>
     <field name="entered_at" type="T"/>
     <field name="entered_by" type="I" size="11">
@@ -903,6 +945,39 @@
       <NOTNULL/>
       <DEFAULT value="a"/>
     </field>
+    <index name="case_type_id">
+      <col>case_type_id</col>
+    </index>
+    <index name="case_type_id_2">
+      <col>case_type_id</col>
+    </index>
+    <index name="case_type_id_3">
+      <col>case_type_id</col>
+    </index>
+    <index name="case_type_id_4">
+      <col>case_type_id</col>
+    </index>
+    <index name="case_type_id_5">
+      <col>case_type_id</col>
+    </index>
+    <index name="case_type_id_6">
+      <col>case_type_id</col>
+    </index>
+    <index name="case_type_id_7">
+      <col>case_type_id</col>
+    </index>
+    <index name="case_type_id_8">
+      <col>case_type_id</col>
+    </index>
+    <index name="case_type_id_9">
+      <col>case_type_id</col>
+    </index>
+    <index name="case_type_id_10">
+      <col>case_type_id</col>
+    </index>
+    <index name="case_type_id_11">
+      <col>case_type_id</col>
+    </index>
     <data>
       <row><f>1</f><f>1</f><f>o</f><f>NEW</f><f>New</f><f>New</f><f>New</f><f></f><f>1</f><f>a</f></row>
       <row><f>2</f><f>2</f><f>o</f><f>OPEN</f><f>Open</f><f>Open</f><f>Open</f><f></f><f>1</f><f>a</f></row>
@@ -975,9 +1050,7 @@
     <field name="case_title" type="C" size="100">
       <NOTNULL/>
     </field>
-    <field name="case_description" type="X">
-      <NOTNULL/>
-    </field>
+    <field name="case_description" type="X"/>
     <field name="due_at" type="T"/>
     <field name="entered_at" type="T"/>
     <field name="entered_by" type="I" size="11">
@@ -1130,9 +1203,7 @@
     <field name="tax_id" type="C" size="100">
       <NOTNULL/>
     </field>
-    <field name="profile" type="X">
-      <NOTNULL/>
-    </field>
+    <field name="profile" type="X"/>
     <field name="phone" type="C" size="50">
       <NOTNULL/>
     </field>
@@ -1238,9 +1309,7 @@
     <field name="division_name" type="C" size="100">
       <NOTNULL/>
     </field>
-    <field name="description" type="X">
-      <NOTNULL/>
-    </field>
+    <field name="description" type="X"/>
     <field name="entered_at" type="T"/>
     <field name="entered_by" type="I" size="11">
       <NOTNULL/>
@@ -1412,9 +1481,8 @@
       <NOTNULL/>
       <DEFAULT value="1"/>
     </field>
-    <field name="home_address_id" type="I" size="11">
-      <NOTNULL/>
-      <DEFAULT value="1"/>
+    <field name="home_address_id" type="I" size="10">
+      <UNSIGNED/>
     </field>
     <field name="salutation" type="C" size="20">
       <NOTNULL/>
@@ -1475,9 +1543,7 @@
     <field name="interests" type="C" size="50">
       <NOTNULL/>
     </field>
-    <field name="profile" type="X">
-      <NOTNULL/>
-    </field>
+    <field name="profile" type="X"/>
     <field name="custom1" type="C" size="50">
       <NOTNULL/>
     </field>
@@ -1490,6 +1556,9 @@
     <field name="custom4" type="C" size="50">
       <NOTNULL/>
     </field>
+    <field name="extref1" type="C" size="50"/>
+    <field name="extref2" type="C" size="50"/>
+    <field name="extref3" type="C" size="50"/>
     <field name="entered_at" type="T"/>
     <field name="entered_by" type="I" size="11">
       <NOTNULL/>
@@ -1504,6 +1573,7 @@
       <NOTNULL/>
       <DEFAULT value="a"/>
     </field>
+    <field name="tax_id" type="C" size="32"/>
     <index name="company_id">
       <col>company_id</col>
     </index>
@@ -1545,241 +1615,249 @@
     <field name="phone_format" type="C" size="25">
       <NOTNULL/>
     </field>
+    <field name="currency_code" type="C" size="3"/>
     <data>
-      <row><f>1</f><f>1</f><f></f><f></f><f></f><f></f><f></f><f></f><f>a</f><f></f></row>
-      <row><f>2</f><f>1</f><f>Afghanistan</f><f>004</f><f></f><f>AF</f><f>AFG</f><f>93</f><f>a</f><f></f></row>
-      <row><f>3</f><f>1</f><f>Albania</f><f>008</f><f></f><f>AL</f><f>ALB</f><f>355</f><f>a</f><f></f></row>
-      <row><f>4</f><f>1</f><f>Algeria</f><f>012</f><f></f><f>DZ</f><f>DZA</f><f>213</f><f>a</f><f></f></row>
-      <row><f>5</f><f>1</f><f>American Samoa</f><f>016</f><f></f><f>AS</f><f>ASM</f><f>684</f><f>a</f><f></f></row>
-      <row><f>6</f><f>1</f><f>Andorra</f><f>020</f><f></f><f>AD</f><f>AND</f><f>376</f><f>a</f><f></f></row>
-      <row><f>7</f><f>1</f><f>Angola</f><f>024</f><f></f><f>AO</f><f>AGO</f><f>244</f><f>a</f><f></f></row>
-      <row><f>8</f><f>1</f><f>Anguilla</f><f>660</f><f></f><f>AI</f><f>AIA</f><f>1 264</f><f>a</f><f></f></row>
-      <row><f>9</f><f>1</f><f>Antarctica</f><f>010</f><f></f><f>AQ</f><f>ATA</f><f>672</f><f>a</f><f></f></row>
-      <row><f>10</f><f>1</f><f>Antigua and Barbuda</f><f>028</f><f></f><f>AG</f><f>ATG</f><f>1 268</f><f>a</f><f></f></row>
-      <row><f>11</f><f>2</f><f>Argentina</f><f>032</f><f></f><f>AR</f><f>ARG</f><f>54</f><f>a</f><f></f></row>
-      <row><f>12</f><f>1</f><f>Armenia</f><f>051</f><f></f><f>AM</f><f>ARM</f><f>374</f><f>a</f><f></f></row>
-      <row><f>13</f><f>1</f><f>Aruba</f><f>533</f><f></f><f>AW</f><f>ABW</f><f>297</f><f>a</f><f></f></row>
-      <row><f>14</f><f>4</f><f>Australia</f><f>036</f><f></f><f>AU</f><f>AUS</f><f>61</f><f>a</f><f></f></row>
-      <row><f>15</f><f>6</f><f>Austria</f><f>040</f><f></f><f>AT</f><f>AUT</f><f>43</f><f>a</f><f></f></row>
-      <row><f>16</f><f>1</f><f>Azerbaijan</f><f>031</f><f></f><f>AZ</f><f>AZE</f><f>994</f><f>a</f><f></f></row>
-      <row><f>17</f><f>1</f><f>Bahamas</f><f>044</f><f></f><f>BS</f><f>BHS</f><f>1 242</f><f>a</f><f></f></row>
-      <row><f>18</f><f>6</f><f>Bahrain</f><f>048</f><f></f><f>BH</f><f>BHR</f><f>973</f><f>a</f><f></f></row>
-      <row><f>19</f><f>1</f><f>Bangladesh</f><f>050</f><f></f><f>BD</f><f>BGD</f><f>880</f><f>a</f><f></f></row>
-      <row><f>20</f><f>1</f><f>Barbados</f><f>052</f><f></f><f>BB</f><f>BRB</f><f>1 246</f><f>a</f><f></f></row>
-      <row><f>21</f><f>1</f><f>Belarus</f><f>112</f><f></f><f>BY</f><f>BLR</f><f>375</f><f>a</f><f></f></row>
-      <row><f>22</f><f>6</f><f>Belgium</f><f>056</f><f></f><f>BE</f><f>BEL</f><f>32</f><f>a</f><f></f></row>
-      <row><f>23</f><f>1</f><f>Belize</f><f>084</f><f></f><f>BZ</f><f>BLZ</f><f>501</f><f>a</f><f></f></row>
-      <row><f>24</f><f>1</f><f>Benin</f><f>204</f><f></f><f>BJ</f><f>BEN</f><f>229</f><f>a</f><f></f></row>
-      <row><f>25</f><f>1</f><f>Bermuda</f><f>060</f><f></f><f>BM</f><f>BMU</f><f>1 441</f><f>a</f><f></f></row>
-      <row><f>26</f><f>1</f><f>Bhutan</f><f>064</f><f></f><f>BT</f><f>BTN</f><f>975</f><f>a</f><f></f></row>
-      <row><f>27</f><f>1</f><f>Bolivia</f><f>068</f><f></f><f>BO</f><f>BOL</f><f>591</f><f>a</f><f></f></row>
-      <row><f>28</f><f>6</f><f>Bosnia and Herzegovina</f><f>070</f><f></f><f>BA</f><f>BIH</f><f>387</f><f>a</f><f></f></row>
-      <row><f>29</f><f>1</f><f>Botswana</f><f>072</f><f></f><f>BW</f><f>BWA</f><f>267</f><f>a</f><f></f></row>
-      <row><f>30</f><f>3</f><f>Brazil</f><f>076</f><f></f><f>BR</f><f>BRA</f><f>55</f><f>a</f><f></f></row>
-      <row><f>31</f><f>1</f><f>British Virgin Islands</f><f>092</f><f></f><f>VG</f><f>VGB</f><f>1 284</f><f>a</f><f></f></row>
-      <row><f>32</f><f>1</f><f>Brunei Darussalam</f><f>096</f><f></f><f>BN</f><f>BRN</f><f>673</f><f>a</f><f></f></row>
-      <row><f>33</f><f>6</f><f>Bulgaria</f><f>100</f><f></f><f>BG</f><f>BGR</f><f>359</f><f>a</f><f></f></row>
-      <row><f>34</f><f>1</f><f>Burkina Faso</f><f>854</f><f></f><f>BF</f><f>BFA</f><f>226</f><f>a</f><f></f></row>
-      <row><f>35</f><f>1</f><f>Burundi</f><f>108</f><f></f><f>BI</f><f>BDI</f><f>257</f><f>a</f><f></f></row>
-      <row><f>36</f><f>1</f><f>Cambodia</f><f>116</f><f></f><f>KH</f><f>KHM</f><f>855</f><f>a</f><f></f></row>
-      <row><f>37</f><f>1</f><f>Cameroon</f><f>120</f><f></f><f>CM</f><f>CMR</f><f>237</f><f>a</f><f></f></row>
-      <row><f>38</f><f>4</f><f>Canada</f><f>124</f><f></f><f>CA</f><f>CAN</f><f>1</f><f>a</f><f></f></row>
-      <row><f>39</f><f>1</f><f>Cape Verde</f><f>132</f><f></f><f>CV</f><f>CPV</f><f>238</f><f>a</f><f></f></row>
-      <row><f>40</f><f>1</f><f>Cayman Islands</f><f>136</f><f></f><f>KY</f><f>CYM</f><f>1 345</f><f>a</f><f></f></row>
-      <row><f>41</f><f>1</f><f>Central African Republic</f><f>140</f><f></f><f>CF</f><f>CAF</f><f>236</f><f>a</f><f></f></row>
-      <row><f>42</f><f>1</f><f>Chad</f><f>148</f><f></f><f>TD</f><f>TCD</f><f>235</f><f>a</f><f></f></row>
-      <row><f>43</f><f>1</f><f>Chile</f><f>152</f><f></f><f>CL</f><f>CHL</f><f>56</f><f>a</f><f></f></row>
-      <row><f>44</f><f>3</f><f>China</f><f>156</f><f></f><f>CN</f><f>CHN</f><f>86</f><f>a</f><f></f></row>
-      <row><f>45</f><f>1</f><f>Christmas Island</f><f>162</f><f></f><f>CX</f><f>CXR</f><f>61</f><f>a</f><f></f></row>
-      <row><f>46</f><f>1</f><f>Cocos (Keeling) Islands</f><f>166</f><f></f><f>CC</f><f>CCK</f><f>61</f><f>a</f><f></f></row>
-      <row><f>47</f><f>1</f><f>Colombia</f><f>170</f><f></f><f>CO</f><f>COL</f><f>57</f><f>a</f><f></f></row>
-      <row><f>48</f><f>1</f><f>Comoros</f><f>174</f><f></f><f>KM</f><f>COM</f><f>269</f><f>a</f><f></f></row>
-      <row><f>49</f><f>1</f><f>Congo</f><f>178</f><f></f><f>CG</f><f>COG</f><f>242</f><f>a</f><f></f></row>
-      <row><f>50</f><f>1</f><f>Cook Islands</f><f>184</f><f></f><f>CK</f><f>COK</f><f>682</f><f>a</f><f></f></row>
-      <row><f>51</f><f>1</f><f>Costa Rica</f><f>188</f><f></f><f>CR</f><f>CRI</f><f>506</f><f>a</f><f></f></row>
-      <row><f>52</f><f>1</f><f><![CDATA[CÙte díIvoire]]></f><f>384</f><f></f><f>CI</f><f>CIV</f><f>225</f><f>a</f><f></f></row>
-      <row><f>53</f><f>6</f><f>Croatia</f><f>191</f><f></f><f>HR</f><f>HRV</f><f>385</f><f>a</f><f></f></row>
-      <row><f>54</f><f>1</f><f>Cuba</f><f>192</f><f></f><f>CU</f><f>CUB</f><f>53</f><f>a</f><f></f></row>
-      <row><f>55</f><f>1</f><f>Cyprus</f><f>196</f><f></f><f>CY</f><f>CYP</f><f>357</f><f>a</f><f></f></row>
-      <row><f>56</f><f>6</f><f>Czech Republic</f><f>203</f><f></f><f>CZ</f><f>CZE</f><f>420</f><f>a</f><f></f></row>
-      <row><f>57</f><f>1</f><f>Democratic People's Republic of Korea</f><f>408</f><f></f><f>KP</f><f>PRK</f><f>850</f><f>a</f><f></f></row>
-      <row><f>58</f><f>1</f><f>Democratic Republic of the Congo</f><f>180</f><f></f><f>CD</f><f>COD</f><f>243</f><f>a</f><f></f></row>
-      <row><f>59</f><f>5</f><f>Denmark</f><f>208</f><f></f><f>DK</f><f>DNK</f><f>45</f><f>a</f><f></f></row>
-      <row><f>60</f><f>1</f><f>Djibouti</f><f>262</f><f></f><f>DJ</f><f>DJI</f><f>253</f><f>a</f><f></f></row>
-      <row><f>61</f><f>1</f><f>Dominica</f><f>212</f><f></f><f>DM</f><f>DMA</f><f>1 767</f><f>a</f><f></f></row>
-      <row><f>62</f><f>1</f><f>Dominican Republic</f><f>214</f><f></f><f>DO</f><f>DOM</f><f>1 809</f><f>a</f><f></f></row>
-      <row><f>63</f><f>1</f><f>Ecuador</f><f>218</f><f></f><f>EC</f><f>ECU</f><f>593</f><f>a</f><f></f></row>
-      <row><f>64</f><f>6</f><f>Egypt</f><f>818</f><f></f><f>EG</f><f>EGY</f><f>20</f><f>a</f><f></f></row>
-      <row><f>65</f><f>1</f><f>El Salvador</f><f>222</f><f></f><f>SV</f><f>SLV</f><f>503</f><f>a</f><f></f></row>
-      <row><f>66</f><f>1</f><f>Equatorial Guinea</f><f>226</f><f></f><f>GQ</f><f>GNQ</f><f>240</f><f>a</f><f></f></row>
-      <row><f>67</f><f>1</f><f>Eritrea</f><f>232</f><f></f><f>ER</f><f>ERI</f><f>291</f><f>a</f><f></f></row>
-      <row><f>68</f><f>1</f><f>Estonia</f><f>233</f><f></f><f>EE</f><f>EST</f><f>372</f><f>a</f><f></f></row>
-      <row><f>69</f><f>1</f><f>Ethiopia</f><f>231</f><f></f><f>ET</f><f>ETH</f><f>251</f><f>a</f><f></f></row>
-      <row><f>70</f><f>1</f><f>Faeroe Islands</f><f>234</f><f></f><f>FO</f><f>FRO</f><f>298</f><f>a</f><f></f></row>
-      <row><f>71</f><f>1</f><f>Falkland Islands (Malvinas)</f><f>238</f><f></f><f>FK</f><f>FLK</f><f>500</f><f>a</f><f></f></row>
-      <row><f>72</f><f>1</f><f>Federated States of Micronesia</f><f>583</f><f></f><f>FM</f><f>FSM</f><f>691</f><f>a</f><f></f></row>
-      <row><f>73</f><f>1</f><f>Fiji</f><f>242</f><f></f><f>FJ</f><f>FJI</f><f>679</f><f>a</f><f></f></row>
-      <row><f>74</f><f>6</f><f>Finland</f><f>246</f><f></f><f>FI</f><f>FIN</f><f>358</f><f>a</f><f></f></row>
-      <row><f>75</f><f>6</f><f>France</f><f>250</f><f></f><f>FR</f><f>FRA</f><f>33</f><f>a</f><f></f></row>
-      <row><f>76</f><f>6</f><f>France, metropolitan</f><f>249</f><f></f><f>FX</f><f>FXX</f><f>33</f><f>a</f><f></f></row>
-      <row><f>77</f><f>1</f><f>French Guiana</f><f>254</f><f></f><f>GF</f><f>GUF</f><f>594</f><f>a</f><f></f></row>
-      <row><f>78</f><f>1</f><f>French Polynesia</f><f>258</f><f></f><f>PF</f><f>PYF</f><f>689</f><f>a</f><f></f></row>
-      <row><f>79</f><f>1</f><f>Gabon</f><f>266</f><f></f><f>GA</f><f>GAB</f><f>241</f><f>a</f><f></f></row>
-      <row><f>80</f><f>1</f><f>Gambia</f><f>270</f><f></f><f>GM</f><f>GMB</f><f>220</f><f>a</f><f></f></row>
-      <row><f>81</f><f>1</f><f>Georgia</f><f>268</f><f></f><f>GE</f><f>GEO</f><f>995</f><f>a</f><f></f></row>
-      <row><f>82</f><f>6</f><f>Germany</f><f>276</f><f></f><f>DE</f><f>DEU</f><f>49</f><f>a</f><f></f></row>
-      <row><f>83</f><f>1</f><f>Ghana</f><f>288</f><f></f><f>GH</f><f>GHA</f><f>233</f><f>a</f><f></f></row>
-      <row><f>84</f><f>1</f><f>Gibraltar</f><f>292</f><f></f><f>GI</f><f>GIB</f><f>350</f><f>a</f><f></f></row>
-      <row><f>85</f><f>6</f><f>Greece</f><f>300</f><f></f><f>GR</f><f>GRC</f><f>30</f><f>a</f><f></f></row>
-      <row><f>86</f><f>6</f><f>Greenland</f><f>304</f><f></f><f>GL</f><f>GRL</f><f>299</f><f>a</f><f></f></row>
-      <row><f>87</f><f>1</f><f>Grenada</f><f>308</f><f></f><f>GD</f><f>GRD</f><f>1 473</f><f>a</f><f></f></row>
-      <row><f>88</f><f>1</f><f>Guadeloupe</f><f>312</f><f></f><f>GP</f><f>GLP</f><f>590</f><f>a</f><f></f></row>
-      <row><f>89</f><f>1</f><f>Guam</f><f>316</f><f></f><f>GU</f><f>GUM</f><f>1 671</f><f>a</f><f></f></row>
-      <row><f>90</f><f>1</f><f>Guatemala</f><f>320</f><f></f><f>GT</f><f>GTM</f><f>502</f><f>a</f><f></f></row>
-      <row><f>91</f><f>1</f><f>Guinea</f><f>324</f><f></f><f>GN</f><f>GIN</f><f>224</f><f>a</f><f></f></row>
-      <row><f>92</f><f>1</f><f>Guinea-Bissau</f><f>624</f><f></f><f>GW</f><f>GNB</f><f>245</f><f>a</f><f></f></row>
-      <row><f>93</f><f>1</f><f>Guyana</f><f>328</f><f></f><f>GY</f><f>GUY</f><f>592</f><f>a</f><f></f></row>
-      <row><f>94</f><f>1</f><f>Haiti</f><f>332</f><f></f><f>HT</f><f>HTI</f><f>509</f><f>a</f><f></f></row>
-      <row><f>95</f><f>1</f><f>Holy See</f><f>336</f><f></f><f>VA</f><f>VAT</f><f>39</f><f>a</f><f></f></row>
-      <row><f>96</f><f>1</f><f>Honduras</f><f>340</f><f></f><f>HN</f><f>HND</f><f>504</f><f>a</f><f></f></row>
-      <row><f>97</f><f>4</f><f>Hong Kong Special Administrative Region of China</f><f>344</f><f></f><f>HK</f><f>HKG</f><f>852</f><f>a</f><f></f></row>
-      <row><f>98</f><f>7</f><f>Hungary</f><f>348</f><f></f><f>HU</f><f>HUN</f><f>36</f><f>a</f><f></f></row>
-      <row><f>99</f><f>6</f><f>Iceland</f><f>352</f><f></f><f>IS</f><f>ISL</f><f>354</f><f>a</f><f></f></row>
-      <row><f>100</f><f>8</f><f>India</f><f>356</f><f></f><f>IN</f><f>IND</f><f>91</f><f>a</f><f></f></row>
-      <row><f>101</f><f>9</f><f>Indonesia</f><f>360</f><f></f><f>ID</f><f>IDN</f><f>62</f><f>a</f><f></f></row>
-      <row><f>102</f><f>1</f><f>Iran</f><f>364</f><f></f><f>IR</f><f>IRN</f><f>98</f><f>a</f><f></f></row>
-      <row><f>103</f><f>1</f><f>Iraq</f><f>368</f><f></f><f>IQ</f><f>IRQ</f><f>964</f><f>a</f><f></f></row>
-      <row><f>104</f><f>4</f><f>Ireland</f><f>372</f><f></f><f>IE</f><f>IRL</f><f>353</f><f>a</f><f></f></row>
-      <row><f>105</f><f>6</f><f>Israel</f><f>376</f><f></f><f>IL</f><f>ISR</f><f>972</f><f>a</f><f></f></row>
-      <row><f>106</f><f>3</f><f>Italy</f><f>380</f><f></f><f>IT</f><f>ITA</f><f>39</f><f>a</f><f></f></row>
-      <row><f>107</f><f>1</f><f>Jamaica</f><f>388</f><f></f><f>JM</f><f>JAM</f><f>1 876</f><f>a</f><f></f></row>
-      <row><f>108</f><f>10</f><f>Japan</f><f>392</f><f></f><f>JP</f><f>JPN</f><f>81</f><f>a</f><f></f></row>
-      <row><f>109</f><f>6</f><f>Jordan</f><f>400</f><f></f><f>JO</f><f>JOR</f><f>962</f><f>a</f><f></f></row>
-      <row><f>110</f><f>1</f><f>Kazakhstan</f><f>398</f><f></f><f>KZ</f><f>KAZ</f><f>7</f><f>a</f><f></f></row>
-      <row><f>111</f><f>1</f><f>Kenya</f><f>404</f><f></f><f>KE</f><f>KEN</f><f>254</f><f>a</f><f></f></row>
-      <row><f>112</f><f>1</f><f>Kiribati</f><f>296</f><f></f><f>KI</f><f>KIR</f><f>686</f><f>a</f><f></f></row>
-      <row><f>113</f><f>2</f><f>Kuwait</f><f>414</f><f></f><f>KW</f><f>KWT</f><f>965</f><f>a</f><f></f></row>
-      <row><f>114</f><f>1</f><f>Kyrgyzstan</f><f>417</f><f></f><f>KG</f><f>KGZ</f><f>996</f><f>a</f><f></f></row>
-      <row><f>115</f><f>1</f><f>Lao People's Democratic Republic</f><f>418</f><f></f><f>LA</f><f>LAO</f><f>856</f><f>a</f><f></f></row>
-      <row><f>116</f><f>1</f><f>Latvia</f><f>428</f><f></f><f>LV</f><f>LVA</f><f>371</f><f>a</f><f></f></row>
-      <row><f>117</f><f>6</f><f>Lebanon</f><f>422</f><f></f><f>LB</f><f>LBN</f><f>961</f><f>a</f><f></f></row>
-      <row><f>118</f><f>1</f><f>Lesotho</f><f>426</f><f></f><f>LS</f><f>LSO</f><f>266</f><f>a</f><f></f></row>
-      <row><f>119</f><f>1</f><f>Liberia</f><f>430</f><f></f><f>LR</f><f>LBR</f><f>231</f><f>a</f><f></f></row>
-      <row><f>120</f><f>1</f><f>Libyan Arab Jamahiriya</f><f>434</f><f></f><f>LY</f><f>LBY</f><f>218</f><f>a</f><f></f></row>
-      <row><f>121</f><f>1</f><f>Liechtenstein</f><f>438</f><f></f><f>LI</f><f>LIE</f><f>423</f><f>a</f><f></f></row>
-      <row><f>122</f><f>1</f><f>Lithuania</f><f>440</f><f></f><f>LT</f><f>LTU</f><f>370</f><f>a</f><f></f></row>
-      <row><f>123</f><f>6</f><f>Luxembourg</f><f>442</f><f></f><f>LU</f><f>LUX</f><f>352</f><f>a</f><f></f></row>
-      <row><f>124</f><f>1</f><f>Macau</f><f>446</f><f></f><f>MO</f><f>MAC</f><f>853</f><f>a</f><f></f></row>
-      <row><f>125</f><f>1</f><f>Madagascar</f><f>450</f><f></f><f>MG</f><f>MDG</f><f>261</f><f>a</f><f></f></row>
-      <row><f>126</f><f>1</f><f>Malawi</f><f>454</f><f></f><f>MW</f><f>MWI</f><f>265</f><f>a</f><f></f></row>
-      <row><f>127</f><f>1</f><f>Malaysia</f><f>458</f><f></f><f>MY</f><f>MYS</f><f>60</f><f>a</f><f></f></row>
-      <row><f>128</f><f>1</f><f>Maldives</f><f>462</f><f></f><f>MV</f><f>MDV</f><f>960</f><f>a</f><f></f></row>
-      <row><f>129</f><f>1</f><f>Mali</f><f>466</f><f></f><f>ML</f><f>MLI</f><f>223</f><f>a</f><f></f></row>
-      <row><f>130</f><f>1</f><f>Malta</f><f>470</f><f></f><f>MT</f><f>MLT</f><f>356</f><f>a</f><f></f></row>
-      <row><f>131</f><f>1</f><f>Marshall Islands</f><f>584</f><f></f><f>MH</f><f>MHL</f><f>692</f><f>a</f><f></f></row>
-      <row><f>132</f><f>1</f><f>Martinique</f><f>474</f><f></f><f>MQ</f><f>MTQ</f><f>596</f><f>a</f><f></f></row>
-      <row><f>133</f><f>1</f><f>Mauritania</f><f>478</f><f></f><f>MR</f><f>MRT</f><f>222</f><f>a</f><f></f></row>
-      <row><f>134</f><f>1</f><f>Mauritius</f><f>480</f><f></f><f>MU</f><f>MUS</f><f>230</f><f>a</f><f></f></row>
-      <row><f>135</f><f>1</f><f>Mayotte</f><f>175</f><f></f><f>YT</f><f>MYT</f><f>269</f><f>a</f><f></f></row>
-      <row><f>136</f><f>3</f><f>Mexico</f><f>484</f><f></f><f>MX</f><f>MEX</f><f>52</f><f>a</f><f></f></row>
-      <row><f>137</f><f>1</f><f>Monaco</f><f>492</f><f></f><f>MC</f><f>MCO</f><f>377</f><f>a</f><f></f></row>
-      <row><f>138</f><f>1</f><f>Mongolia</f><f>496</f><f></f><f>MN</f><f>MNG</f><f>976</f><f>a</f><f></f></row>
-      <row><f>139</f><f>1</f><f>Montserrat</f><f>500</f><f></f><f>MS</f><f>MSR</f><f>1 664</f><f>a</f><f></f></row>
-      <row><f>140</f><f>1</f><f>Morocco</f><f>504</f><f></f><f>MA</f><f>MAR</f><f>212</f><f>a</f><f></f></row>
-      <row><f>141</f><f>1</f><f>Mozambique</f><f>508</f><f></f><f>MZ</f><f>MOZ</f><f>258</f><f>a</f><f></f></row>
-      <row><f>142</f><f>1</f><f>Myanmar</f><f>104</f><f></f><f>MM</f><f>MMR</f><f>95</f><f>a</f><f></f></row>
-      <row><f>143</f><f>1</f><f>Namibia</f><f>516</f><f></f><f>NA</f><f>NAM</f><f>264</f><f>a</f><f></f></row>
-      <row><f>144</f><f>1</f><f>Nauru</f><f>520</f><f></f><f>NR</f><f>NRU</f><f>674</f><f>a</f><f></f></row>
-      <row><f>145</f><f>1</f><f>Nepal</f><f>524</f><f></f><f>NP</f><f>NPL</f><f>977</f><f>a</f><f></f></row>
-      <row><f>146</f><f>6</f><f>Netherlands</f><f>528</f><f></f><f>NL</f><f>NLD</f><f>31</f><f>a</f><f></f></row>
-      <row><f>147</f><f>1</f><f>Netherlands Antilles</f><f>530</f><f></f><f>AN</f><f>ANT</f><f>599</f><f>a</f><f></f></row>
-      <row><f>148</f><f>1</f><f>New Caledonia</f><f>540</f><f></f><f>NC</f><f>NCL</f><f>687</f><f>a</f><f></f></row>
-      <row><f>149</f><f>8</f><f>New Zealand</f><f>554</f><f></f><f>NZ</f><f>NZL</f><f>64</f><f>a</f><f></f></row>
-      <row><f>150</f><f>1</f><f>Nicaragua</f><f>558</f><f></f><f>NI</f><f>NIC</f><f>505</f><f>a</f><f></f></row>
-      <row><f>151</f><f>1</f><f>Niger</f><f>562</f><f></f><f>NE</f><f>NER</f><f>227</f><f>a</f><f></f></row>
-      <row><f>152</f><f>1</f><f>Nigeria</f><f>566</f><f></f><f>NG</f><f>NGA</f><f>234</f><f>a</f><f></f></row>
-      <row><f>153</f><f>1</f><f>Niue</f><f>570</f><f></f><f>NU</f><f>NIU</f><f>683</f><f>a</f><f></f></row>
-      <row><f>154</f><f>1</f><f>Norfolk Island</f><f>574</f><f></f><f>NF</f><f>NFK</f><f>672</f><f>a</f><f></f></row>
-      <row><f>155</f><f>1</f><f>Northern Mariana Islands</f><f>580</f><f></f><f>MP</f><f>MNP</f><f>1 670</f><f>a</f><f></f></row>
-      <row><f>156</f><f>6</f><f>Norway</f><f>578</f><f></f><f>NO</f><f>NOR</f><f>47</f><f>a</f><f></f></row>
-      <row><f>157</f><f>2</f><f>Oman</f><f>512</f><f></f><f>OM</f><f>OMN</f><f>968</f><f>a</f><f></f></row>
-      <row><f>158</f><f>1</f><f>Pakistan</f><f>586</f><f></f><f>PK</f><f>PAK</f><f>92</f><f>a</f><f></f></row>
-      <row><f>159</f><f>1</f><f>Palau</f><f>585</f><f></f><f>PW</f><f>PLW</f><f>680</f><f>a</f><f></f></row>
-      <row><f>160</f><f>1</f><f>Panama</f><f>591</f><f></f><f>PA</f><f>PAN</f><f>507</f><f>a</f><f></f></row>
-      <row><f>161</f><f>1</f><f>Papua New Guinea</f><f>598</f><f></f><f>PG</f><f>PNG</f><f>675</f><f>a</f><f></f></row>
-      <row><f>162</f><f>1</f><f>Paraguay</f><f>600</f><f></f><f>PY</f><f>PRY</f><f>595</f><f>a</f><f></f></row>
-      <row><f>163</f><f>1</f><f>Peru</f><f>604</f><f></f><f>PE</f><f>PER</f><f>51</f><f>a</f><f></f></row>
-      <row><f>164</f><f>1</f><f>Philippines</f><f>608</f><f></f><f>PH</f><f>PHL</f><f>63</f><f>a</f><f></f></row>
-      <row><f>165</f><f>2</f><f>Poland</f><f>616</f><f></f><f>PL</f><f>POL</f><f>48</f><f>a</f><f></f></row>
-      <row><f>166</f><f>3</f><f>Portugal</f><f>620</f><f></f><f>PT</f><f>PRT</f><f>351</f><f>a</f><f></f></row>
-      <row><f>167</f><f>1</f><f>Puerto Rico</f><f>630</f><f></f><f>PR</f><f>PRI</f><f>1 787</f><f>a</f><f></f></row>
-      <row><f>168</f><f>6</f><f>Qatar</f><f>634</f><f></f><f>QA</f><f>QAT</f><f>974</f><f>a</f><f></f></row>
-      <row><f>169</f><f>11</f><f>Republic of Korea</f><f>410</f><f></f><f>KR</f><f>KOR</f><f>82</f><f>a</f><f></f></row>
-      <row><f>170</f><f>1</f><f>Republic of Moldova</f><f>498</f><f></f><f>MD</f><f>MDA</f><f>373</f><f>a</f><f></f></row>
-      <row><f>171</f><f>1</f><f><![CDATA[RÈunion]]></f><f>638</f><f></f><f>RE</f><f>REU</f><f>262</f><f>a</f><f></f></row>
-      <row><f>172</f><f>6</f><f>Romania</f><f>642</f><f></f><f>RO</f><f>ROM</f><f>40</f><f>a</f><f></f></row>
-      <row><f>173</f><f>12</f><f>Russian Federation</f><f>643</f><f></f><f>RU</f><f>RUS</f><f>7</f><f>a</f><f></f></row>
-      <row><f>174</f><f>1</f><f>Rwanda</f><f>646</f><f></f><f>RW</f><f>RWA</f><f>250</f><f>a</f><f></f></row>
-      <row><f>175</f><f>1</f><f>Saint Helena</f><f>654</f><f></f><f>SH</f><f>SHN</f><f>290</f><f>a</f><f></f></row>
-      <row><f>176</f><f>1</f><f>Saint Kitts and Nevis</f><f>659</f><f></f><f>KN</f><f>KNA</f><f>1 869</f><f>a</f><f></f></row>
-      <row><f>177</f><f>1</f><f>Saint Lucia</f><f>662</f><f></f><f>LC</f><f>LCA</f><f>1 758</f><f>a</f><f></f></row>
-      <row><f>178</f><f>1</f><f>Saint Pierre and Miquelon</f><f>666</f><f></f><f>PM</f><f>SPM</f><f>508</f><f>a</f><f></f></row>
-      <row><f>179</f><f>1</f><f>Saint Vincent and the Grenadines</f><f>670</f><f></f><f>VC</f><f>VCT</f><f>1 784</f><f>a</f><f></f></row>
-      <row><f>180</f><f>1</f><f>Samoa</f><f>882</f><f></f><f>WS</f><f>WSM</f><f>685</f><f>a</f><f></f></row>
-      <row><f>181</f><f>1</f><f>San Marino</f><f>674</f><f></f><f>SM</f><f>SMR</f><f>378</f><f>a</f><f></f></row>
-      <row><f>182</f><f>1</f><f><![CDATA[S„o TomÈ and Principe]]></f><f>678</f><f></f><f>ST</f><f>STP</f><f>239</f><f>a</f><f></f></row>
-      <row><f>183</f><f>6</f><f>Saudi Arabia</f><f>682</f><f></f><f>SA</f><f>SAU</f><f>966</f><f>a</f><f></f></row>
-      <row><f>184</f><f>1</f><f>Senegal</f><f>686</f><f></f><f>SN</f><f>SEN</f><f>221</f><f>a</f><f></f></row>
-      <row><f>185</f><f>1</f><f>Seychelles</f><f>690</f><f></f><f>SC</f><f>SYC</f><f>248</f><f>a</f><f></f></row>
-      <row><f>186</f><f>1</f><f>Sierra Leone</f><f>694</f><f></f><f>SL</f><f>SLE</f><f>232</f><f>a</f><f></f></row>
-      <row><f>187</f><f>6</f><f>Singapore</f><f>702</f><f></f><f>SG</f><f>SGP</f><f>65</f><f>a</f><f></f></row>
-      <row><f>188</f><f>6</f><f>Slovakia</f><f>703</f><f></f><f>SK</f><f>SVK</f><f>421</f><f>a</f><f></f></row>
-      <row><f>189</f><f>6</f><f>Slovenia</f><f>705</f><f></f><f>SI</f><f>SVN</f><f>386</f><f>a</f><f></f></row>
-      <row><f>190</f><f>1</f><f>Solomon Islands</f><f>90</f><f></f><f>SB</f><f>SLB</f><f>677</f><f>a</f><f></f></row>
-      <row><f>191</f><f>1</f><f>Somalia</f><f>706</f><f></f><f>SO</f><f>SOM</f><f>252</f><f>a</f><f></f></row>
-      <row><f>192</f><f>13</f><f>South Africa</f><f>710</f><f></f><f>ZA</f><f>ZAF</f><f>27</f><f>a</f><f></f></row>
-      <row><f>193</f><f>3</f><f>Spain</f><f>724</f><f></f><f>ES</f><f>ESP</f><f>34</f><f>a</f><f></f></row>
-      <row><f>194</f><f>1</f><f>Sri Lanka</f><f>144</f><f></f><f>LK</f><f>LKA</f><f>94</f><f>a</f><f></f></row>
-      <row><f>195</f><f>1</f><f>Sudan</f><f>736</f><f></f><f>SD</f><f>SDN</f><f>249</f><f>a</f><f></f></row>
-      <row><f>196</f><f>1</f><f>Suriname</f><f>740</f><f></f><f>SR</f><f>SUR</f><f>597</f><f>a</f><f></f></row>
-      <row><f>197</f><f>1</f><f>Swaziland</f><f>748</f><f></f><f>SZ</f><f>SWZ</f><f>268</f><f>a</f><f></f></row>
-      <row><f>198</f><f>6</f><f>Sweden</f><f>752</f><f></f><f>SE</f><f>SWE</f><f>46</f><f>a</f><f></f></row>
-      <row><f>199</f><f>6</f><f>Switzerland</f><f>756</f><f></f><f>CH</f><f>CHE</f><f>41</f><f>a</f><f></f></row>
-      <row><f>200</f><f>6</f><f>Syrian Arab Republic</f><f>760</f><f></f><f>SY</f><f>SYR</f><f>963</f><f>a</f><f></f></row>
-      <row><f>201</f><f>4</f><f>Taiwan</f><f>158</f><f></f><f>TW</f><f>TWN</f><f>886</f><f>a</f><f></f></row>
-      <row><f>202</f><f>1</f><f>Tajikistan</f><f>762</f><f></f><f>TJ</f><f>TJK</f><f>7</f><f>a</f><f></f></row>
-      <row><f>203</f><f>1</f><f>Thailand</f><f>764</f><f></f><f>TH</f><f>THA</f><f>66</f><f>a</f><f></f></row>
-      <row><f>204</f><f>14</f><f>The former Yugoslav Republic of Macedonia</f><f>807</f><f></f><f>MK</f><f>MKD</f><f>389</f><f>a</f><f></f></row>
-      <row><f>205</f><f>1</f><f>Togo</f><f>768</f><f></f><f>TG</f><f>TGO</f><f>228</f><f>a</f><f></f></row>
-      <row><f>206</f><f>1</f><f>Tonga</f><f>776</f><f></f><f>TO</f><f>TON</f><f>676</f><f>a</f><f></f></row>
-      <row><f>207</f><f>1</f><f>Trinidad and Tobago</f><f>780</f><f></f><f>TT</f><f>TTO</f><f>1 868</f><f>a</f><f></f></row>
-      <row><f>208</f><f>1</f><f>Tunisia</f><f>788</f><f></f><f>TN</f><f>TUN</f><f>216</f><f>a</f><f></f></row>
-      <row><f>209</f><f>6</f><f>Turkey</f><f>792</f><f></f><f>TR</f><f>TUR</f><f>90</f><f>a</f><f></f></row>
-      <row><f>210</f><f>1</f><f>Turkmenistan</f><f>795</f><f></f><f>TM</f><f>TKM</f><f>993</f><f>a</f><f></f></row>
-      <row><f>211</f><f>1</f><f>Turks and Caicos Islands</f><f>796</f><f></f><f>TC</f><f>TCA</f><f>1 649</f><f>a</f><f></f></row>
-      <row><f>212</f><f>1</f><f>Tuvalu</f><f>798</f><f></f><f>TV</f><f>TUV</f><f>688</f><f>a</f><f></f></row>
-      <row><f>213</f><f>1</f><f>Uganda</f><f>800</f><f></f><f>UG</f><f>UGA</f><f>256</f><f>a</f><f></f></row>
-      <row><f>214</f><f>11</f><f>Ukraine</f><f>804</f><f></f><f>UA</f><f>UKR</f><f>380</f><f>a</f><f></f></row>
-      <row><f>215</f><f>1</f><f>United Arab Emirates</f><f>784</f><f></f><f>AE</f><f>ARE</f><f>971</f><f>a</f><f></f></row>
-      <row><f>216</f><f>13</f><f>United Kingdom</f><f>826</f><f></f><f>GB</f><f>GBR</f><f>44</f><f>a</f><f></f></row>
-      <row><f>217</f><f>1</f><f>United Republic of Tanzania</f><f>834</f><f></f><f>TZ</f><f>TZA</f><f>255</f><f>a</f><f></f></row>
-      <row><f>218</f><f>15</f><f>United States</f><f>840</f><f></f><f>US</f><f>USA</f><f>1</f><f>a</f><f>(###) ###-####</f></row>
-      <row><f>219</f><f>15</f><f>United States Virgin Islands</f><f>850</f><f></f><f>VI</f><f>VIR</f><f>1 340</f><f>a</f><f></f></row>
-      <row><f>220</f><f>1</f><f>Uruguay</f><f>858</f><f></f><f>UY</f><f>URY</f><f>598</f><f>a</f><f></f></row>
-      <row><f>221</f><f>1</f><f>Uzbekistan</f><f>860</f><f></f><f>UZ</f><f>UZB</f><f>998</f><f>a</f><f></f></row>
-      <row><f>222</f><f>1</f><f>Vanuatu</f><f>548</f><f></f><f>VU</f><f>VUT</f><f>678</f><f>a</f><f></f></row>
-      <row><f>223</f><f>1</f><f>Venezuela</f><f>862</f><f></f><f>VE</f><f>VEN</f><f>58</f><f>a</f><f></f></row>
-      <row><f>224</f><f>1</f><f>Viet Nam</f><f>704</f><f></f><f>VN</f><f>VNM</f><f>84</f><f>a</f><f></f></row>
-      <row><f>225</f><f>6</f><f>Yemen</f><f>887</f><f></f><f>YE</f><f>YEM</f><f>967</f><f>a</f><f></f></row>
-      <row><f>226</f><f>1</f><f>Yugoslavia</f><f>891</f><f></f><f>YU</f><f>YUG</f><f>381</f><f>a</f><f></f></row>
-      <row><f>227</f><f>1</f><f>Zambia</f><f>894</f><f></f><f>ZM</f><f>ZMB</f><f>260</f><f>a</f><f></f></row>
-      <row><f>228</f><f>1</f><f>Zimbabwe</f><f>716</f><f></f><f>ZW</f><f>ZWE</f><f>263</f><f>a</f><f></f></row>
+      <row><f>1</f><f>1</f><f></f><f></f><f></f><f></f><f></f><f></f><f>a</f><f></f><f></f></row>
+      <row><f>2</f><f>1</f><f>Afghanistan</f><f>004</f><f></f><f>AF</f><f>AFG</f><f>93</f><f>a</f><f></f><f></f></row>
+      <row><f>3</f><f>1</f><f>Albania</f><f>008</f><f></f><f>AL</f><f>ALB</f><f>355</f><f>a</f><f></f><f></f></row>
+      <row><f>4</f><f>1</f><f>Algeria</f><f>012</f><f></f><f>DZ</f><f>DZA</f><f>213</f><f>a</f><f></f><f></f></row>
+      <row><f>5</f><f>1</f><f>American Samoa</f><f>016</f><f></f><f>AS</f><f>ASM</f><f>684</f><f>a</f><f></f><f></f></row>
+      <row><f>6</f><f>1</f><f>Andorra</f><f>020</f><f></f><f>AD</f><f>AND</f><f>376</f><f>a</f><f></f><f></f></row>
+      <row><f>7</f><f>1</f><f>Angola</f><f>024</f><f></f><f>AO</f><f>AGO</f><f>244</f><f>a</f><f></f><f></f></row>
+      <row><f>8</f><f>1</f><f>Anguilla</f><f>660</f><f></f><f>AI</f><f>AIA</f><f>1 264</f><f>a</f><f></f><f></f></row>
+      <row><f>9</f><f>1</f><f>Antarctica</f><f>010</f><f></f><f>AQ</f><f>ATA</f><f>672</f><f>a</f><f></f><f></f></row>
+      <row><f>10</f><f>1</f><f>Antigua and Barbuda</f><f>028</f><f></f><f>AG</f><f>ATG</f><f>1 268</f><f>a</f><f></f><f></f></row>
+      <row><f>11</f><f>2</f><f>Argentina</f><f>032</f><f></f><f>AR</f><f>ARG</f><f>54</f><f>a</f><f></f><f></f></row>
+      <row><f>12</f><f>1</f><f>Armenia</f><f>051</f><f></f><f>AM</f><f>ARM</f><f>374</f><f>a</f><f></f><f></f></row>
+      <row><f>13</f><f>1</f><f>Aruba</f><f>533</f><f></f><f>AW</f><f>ABW</f><f>297</f><f>a</f><f></f><f></f></row>
+      <row><f>14</f><f>4</f><f>Australia</f><f>036</f><f></f><f>AU</f><f>AUS</f><f>61</f><f>a</f><f></f><f></f></row>
+      <row><f>15</f><f>6</f><f>Austria</f><f>040</f><f></f><f>AT</f><f>AUT</f><f>43</f><f>a</f><f></f><f></f></row>
+      <row><f>16</f><f>1</f><f>Azerbaijan</f><f>031</f><f></f><f>AZ</f><f>AZE</f><f>994</f><f>a</f><f></f><f></f></row>
+      <row><f>17</f><f>1</f><f>Bahamas</f><f>044</f><f></f><f>BS</f><f>BHS</f><f>1 242</f><f>a</f><f></f><f></f></row>
+      <row><f>18</f><f>6</f><f>Bahrain</f><f>048</f><f></f><f>BH</f><f>BHR</f><f>973</f><f>a</f><f></f><f></f></row>
+      <row><f>19</f><f>1</f><f>Bangladesh</f><f>050</f><f></f><f>BD</f><f>BGD</f><f>880</f><f>a</f><f></f><f></f></row>
+      <row><f>20</f><f>1</f><f>Barbados</f><f>052</f><f></f><f>BB</f><f>BRB</f><f>1 246</f><f>a</f><f></f><f></f></row>
+      <row><f>21</f><f>1</f><f>Belarus</f><f>112</f><f></f><f>BY</f><f>BLR</f><f>375</f><f>a</f><f></f><f></f></row>
+      <row><f>22</f><f>6</f><f>Belgium</f><f>056</f><f></f><f>BE</f><f>BEL</f><f>32</f><f>a</f><f></f><f></f></row>
+      <row><f>23</f><f>1</f><f>Belize</f><f>084</f><f></f><f>BZ</f><f>BLZ</f><f>501</f><f>a</f><f></f><f></f></row>
+      <row><f>24</f><f>1</f><f>Benin</f><f>204</f><f></f><f>BJ</f><f>BEN</f><f>229</f><f>a</f><f></f><f></f></row>
+      <row><f>25</f><f>1</f><f>Bermuda</f><f>060</f><f></f><f>BM</f><f>BMU</f><f>1 441</f><f>a</f><f></f><f></f></row>
+      <row><f>26</f><f>1</f><f>Bhutan</f><f>064</f><f></f><f>BT</f><f>BTN</f><f>975</f><f>a</f><f></f><f></f></row>
+      <row><f>27</f><f>1</f><f>Bolivia</f><f>068</f><f></f><f>BO</f><f>BOL</f><f>591</f><f>a</f><f></f><f></f></row>
+      <row><f>28</f><f>6</f><f>Bosnia and Herzegovina</f><f>070</f><f></f><f>BA</f><f>BIH</f><f>387</f><f>a</f><f></f><f></f></row>
+      <row><f>29</f><f>1</f><f>Botswana</f><f>072</f><f></f><f>BW</f><f>BWA</f><f>267</f><f>a</f><f></f><f></f></row>
+      <row><f>30</f><f>3</f><f>Brazil</f><f>076</f><f></f><f>BR</f><f>BRA</f><f>55</f><f>a</f><f></f><f></f></row>
+      <row><f>31</f><f>1</f><f>British Virgin Islands</f><f>092</f><f></f><f>VG</f><f>VGB</f><f>1 284</f><f>a</f><f></f><f></f></row>
+      <row><f>32</f><f>1</f><f>Brunei Darussalam</f><f>096</f><f></f><f>BN</f><f>BRN</f><f>673</f><f>a</f><f></f><f></f></row>
+      <row><f>33</f><f>6</f><f>Bulgaria</f><f>100</f><f></f><f>BG</f><f>BGR</f><f>359</f><f>a</f><f></f><f></f></row>
+      <row><f>34</f><f>1</f><f>Burkina Faso</f><f>854</f><f></f><f>BF</f><f>BFA</f><f>226</f><f>a</f><f></f><f></f></row>
+      <row><f>35</f><f>1</f><f>Burundi</f><f>108</f><f></f><f>BI</f><f>BDI</f><f>257</f><f>a</f><f></f><f></f></row>
+      <row><f>36</f><f>1</f><f>Cambodia</f><f>116</f><f></f><f>KH</f><f>KHM</f><f>855</f><f>a</f><f></f><f></f></row>
+      <row><f>37</f><f>1</f><f>Cameroon</f><f>120</f><f></f><f>CM</f><f>CMR</f><f>237</f><f>a</f><f></f><f></f></row>
+      <row><f>38</f><f>4</f><f>Canada</f><f>124</f><f></f><f>CA</f><f>CAN</f><f>1</f><f>a</f><f></f><f></f></row>
+      <row><f>39</f><f>1</f><f>Cape Verde</f><f>132</f><f></f><f>CV</f><f>CPV</f><f>238</f><f>a</f><f></f><f></f></row>
+      <row><f>40</f><f>1</f><f>Cayman Islands</f><f>136</f><f></f><f>KY</f><f>CYM</f><f>1 345</f><f>a</f><f></f><f></f></row>
+      <row><f>41</f><f>1</f><f>Central African Republic</f><f>140</f><f></f><f>CF</f><f>CAF</f><f>236</f><f>a</f><f></f><f></f></row>
+      <row><f>42</f><f>1</f><f>Chad</f><f>148</f><f></f><f>TD</f><f>TCD</f><f>235</f><f>a</f><f></f><f></f></row>
+      <row><f>43</f><f>1</f><f>Chile</f><f>152</f><f></f><f>CL</f><f>CHL</f><f>56</f><f>a</f><f></f><f></f></row>
+      <row><f>44</f><f>3</f><f>China</f><f>156</f><f></f><f>CN</f><f>CHN</f><f>86</f><f>a</f><f></f><f></f></row>
+      <row><f>45</f><f>1</f><f>Christmas Island</f><f>162</f><f></f><f>CX</f><f>CXR</f><f>61</f><f>a</f><f></f><f></f></row>
+      <row><f>46</f><f>1</f><f>Cocos (Keeling) Islands</f><f>166</f><f></f><f>CC</f><f>CCK</f><f>61</f><f>a</f><f></f><f></f></row>
+      <row><f>47</f><f>1</f><f>Colombia</f><f>170</f><f></f><f>CO</f><f>COL</f><f>57</f><f>a</f><f></f><f></f></row>
+      <row><f>48</f><f>1</f><f>Comoros</f><f>174</f><f></f><f>KM</f><f>COM</f><f>269</f><f>a</f><f></f><f></f></row>
+      <row><f>49</f><f>1</f><f>Congo</f><f>178</f><f></f><f>CG</f><f>COG</f><f>242</f><f>a</f><f></f><f></f></row>
+      <row><f>50</f><f>1</f><f>Cook Islands</f><f>184</f><f></f><f>CK</f><f>COK</f><f>682</f><f>a</f><f></f><f></f></row>
+      <row><f>51</f><f>1</f><f>Costa Rica</f><f>188</f><f></f><f>CR</f><f>CRI</f><f>506</f><f>a</f><f></f><f></f></row>
+      <row><f>52</f><f>1</f><f><![CDATA[CÙte díIvoire]]></f><f>384</f><f></f><f>CI</f><f>CIV</f><f>225</f><f>a</f><f></f><f></f></row>
+      <row><f>53</f><f>6</f><f>Croatia</f><f>191</f><f></f><f>HR</f><f>HRV</f><f>385</f><f>a</f><f></f><f></f></row>
+      <row><f>54</f><f>1</f><f>Cuba</f><f>192</f><f></f><f>CU</f><f>CUB</f><f>53</f><f>a</f><f></f><f></f></row>
+      <row><f>55</f><f>1</f><f>Cyprus</f><f>196</f><f></f><f>CY</f><f>CYP</f><f>357</f><f>a</f><f></f><f></f></row>
+      <row><f>56</f><f>6</f><f>Czech Republic</f><f>203</f><f></f><f>CZ</f><f>CZE</f><f>420</f><f>a</f><f></f><f></f></row>
+      <row><f>57</f><f>1</f><f>Democratic People's Republic of Korea</f><f>408</f><f></f><f>KP</f><f>PRK</f><f>850</f><f>a</f><f></f><f></f></row>
+      <row><f>58</f><f>1</f><f>Democratic Republic of the Congo</f><f>180</f><f></f><f>CD</f><f>COD</f><f>243</f><f>a</f><f></f><f></f></row>
+      <row><f>59</f><f>5</f><f>Denmark</f><f>208</f><f></f><f>DK</f><f>DNK</f><f>45</f><f>a</f><f></f><f></f></row>
+      <row><f>60</f><f>1</f><f>Djibouti</f><f>262</f><f></f><f>DJ</f><f>DJI</f><f>253</f><f>a</f><f></f><f></f></row>
+      <row><f>61</f><f>1</f><f>Dominica</f><f>212</f><f></f><f>DM</f><f>DMA</f><f>1 767</f><f>a</f><f></f><f></f></row>
+      <row><f>62</f><f>1</f><f>Dominican Republic</f><f>214</f><f></f><f>DO</f><f>DOM</f><f>1 809</f><f>a</f><f></f><f></f></row>
+      <row><f>63</f><f>1</f><f>Ecuador</f><f>218</f><f></f><f>EC</f><f>ECU</f><f>593</f><f>a</f><f></f><f></f></row>
+      <row><f>64</f><f>6</f><f>Egypt</f><f>818</f><f></f><f>EG</f><f>EGY</f><f>20</f><f>a</f><f></f><f></f></row>
+      <row><f>65</f><f>1</f><f>El Salvador</f><f>222</f><f></f><f>SV</f><f>SLV</f><f>503</f><f>a</f><f></f><f></f></row>
+      <row><f>66</f><f>1</f><f>Equatorial Guinea</f><f>226</f><f></f><f>GQ</f><f>GNQ</f><f>240</f><f>a</f><f></f><f></f></row>
+      <row><f>67</f><f>1</f><f>Eritrea</f><f>232</f><f></f><f>ER</f><f>ERI</f><f>291</f><f>a</f><f></f><f></f></row>
+      <row><f>68</f><f>1</f><f>Estonia</f><f>233</f><f></f><f>EE</f><f>EST</f><f>372</f><f>a</f><f></f><f></f></row>
+      <row><f>69</f><f>1</f><f>Ethiopia</f><f>231</f><f></f><f>ET</f><f>ETH</f><f>251</f><f>a</f><f></f><f></f></row>
+      <row><f>70</f><f>1</f><f>Faeroe Islands</f><f>234</f><f></f><f>FO</f><f>FRO</f><f>298</f><f>a</f><f></f><f></f></row>
+      <row><f>71</f><f>1</f><f>Falkland Islands (Malvinas)</f><f>238</f><f></f><f>FK</f><f>FLK</f><f>500</f><f>a</f><f></f><f></f></row>
+      <row><f>72</f><f>1</f><f>Federated States of Micronesia</f><f>583</f><f></f><f>FM</f><f>FSM</f><f>691</f><f>a</f><f></f><f></f></row>
+      <row><f>73</f><f>1</f><f>Fiji</f><f>242</f><f></f><f>FJ</f><f>FJI</f><f>679</f><f>a</f><f></f><f></f></row>
+      <row><f>74</f><f>6</f><f>Finland</f><f>246</f><f></f><f>FI</f><f>FIN</f><f>358</f><f>a</f><f></f><f></f></row>
+      <row><f>75</f><f>6</f><f>France</f><f>250</f><f></f><f>FR</f><f>FRA</f><f>33</f><f>a</f><f></f><f></f></row>
+      <row><f>76</f><f>6</f><f>France, metropolitan</f><f>249</f><f></f><f>FX</f><f>FXX</f><f>33</f><f>a</f><f></f><f></f></row>
+      <row><f>77</f><f>1</f><f>French Guiana</f><f>254</f><f></f><f>GF</f><f>GUF</f><f>594</f><f>a</f><f></f><f></f></row>
+      <row><f>78</f><f>1</f><f>French Polynesia</f><f>258</f><f></f><f>PF</f><f>PYF</f><f>689</f><f>a</f><f></f><f></f></row>
+      <row><f>79</f><f>1</f><f>Gabon</f><f>266</f><f></f><f>GA</f><f>GAB</f><f>241</f><f>a</f><f></f><f></f></row>
+      <row><f>80</f><f>1</f><f>Gambia</f><f>270</f><f></f><f>GM</f><f>GMB</f><f>220</f><f>a</f><f></f><f></f></row>
+      <row><f>81</f><f>1</f><f>Georgia</f><f>268</f><f></f><f>GE</f><f>GEO</f><f>995</f><f>a</f><f></f><f></f></row>
+      <row><f>82</f><f>6</f><f>Germany</f><f>276</f><f></f><f>DE</f><f>DEU</f><f>49</f><f>a</f><f></f><f></f></row>
+      <row><f>83</f><f>1</f><f>Ghana</f><f>288</f><f></f><f>GH</f><f>GHA</f><f>233</f><f>a</f><f></f><f></f></row>
+      <row><f>84</f><f>1</f><f>Gibraltar</f><f>292</f><f></f><f>GI</f><f>GIB</f><f>350</f><f>a</f><f></f><f></f></row>
+      <row><f>85</f><f>6</f><f>Greece</f><f>300</f><f></f><f>GR</f><f>GRC</f><f>30</f><f>a</f><f></f><f></f></row>
+      <row><f>86</f><f>6</f><f>Greenland</f><f>304</f><f></f><f>GL</f><f>GRL</f><f>299</f><f>a</f><f></f><f></f></row>
+      <row><f>87</f><f>1</f><f>Grenada</f><f>308</f><f></f><f>GD</f><f>GRD</f><f>1 473</f><f>a</f><f></f><f></f></row>
+      <row><f>88</f><f>1</f><f>Guadeloupe</f><f>312</f><f></f><f>GP</f><f>GLP</f><f>590</f><f>a</f><f></f><f></f></row>
+      <row><f>89</f><f>1</f><f>Guam</f><f>316</f><f></f><f>GU</f><f>GUM</f><f>1 671</f><f>a</f><f></f><f></f></row>
+      <row><f>90</f><f>1</f><f>Guatemala</f><f>320</f><f></f><f>GT</f><f>GTM</f><f>502</f><f>a</f><f></f><f></f></row>
+      <row><f>91</f><f>1</f><f>Guinea</f><f>324</f><f></f><f>GN</f><f>GIN</f><f>224</f><f>a</f><f></f><f></f></row>
+      <row><f>92</f><f>1</f><f>Guinea-Bissau</f><f>624</f><f></f><f>GW</f><f>GNB</f><f>245</f><f>a</f><f></f><f></f></row>
+      <row><f>93</f><f>1</f><f>Guyana</f><f>328</f><f></f><f>GY</f><f>GUY</f><f>592</f><f>a</f><f></f><f></f></row>
+      <row><f>94</f><f>1</f><f>Haiti</f><f>332</f><f></f><f>HT</f><f>HTI</f><f>509</f><f>a</f><f></f><f></f></row>
+      <row><f>95</f><f>1</f><f>Holy See</f><f>336</f><f></f><f>VA</f><f>VAT</f><f>39</f><f>a</f><f></f><f></f></row>
+      <row><f>96</f><f>1</f><f>Honduras</f><f>340</f><f></f><f>HN</f><f>HND</f><f>504</f><f>a</f><f></f><f></f></row>
+      <row><f>97</f><f>4</f><f>Hong Kong</f><f>344</f><f></f><f>HK</f><f>HKG</f><f>852</f><f>a</f><f></f><f></f></row>
+      <row><f>98</f><f>7</f><f>Hungary</f><f>348</f><f></f><f>HU</f><f>HUN</f><f>36</f><f>a</f><f></f><f></f></row>
+      <row><f>99</f><f>6</f><f>Iceland</f><f>352</f><f></f><f>IS</f><f>ISL</f><f>354</f><f>a</f><f></f><f></f></row>
+      <row><f>100</f><f>8</f><f>India</f><f>356</f><f></f><f>IN</f><f>IND</f><f>91</f><f>a</f><f></f><f></f></row>
+      <row><f>101</f><f>9</f><f>Indonesia</f><f>360</f><f></f><f>ID</f><f>IDN</f><f>62</f><f>a</f><f></f><f></f></row>
+      <row><f>102</f><f>1</f><f>Iran</f><f>364</f><f></f><f>IR</f><f>IRN</f><f>98</f><f>a</f><f></f><f></f></row>
+      <row><f>103</f><f>1</f><f>Iraq</f><f>368</f><f></f><f>IQ</f><f>IRQ</f><f>964</f><f>a</f><f></f><f></f></row>
+      <row><f>104</f><f>4</f><f>Ireland</f><f>372</f><f></f><f>IE</f><f>IRL</f><f>353</f><f>a</f><f></f><f></f></row>
+      <row><f>105</f><f>6</f><f>Israel</f><f>376</f><f></f><f>IL</f><f>ISR</f><f>972</f><f>a</f><f></f><f></f></row>
+      <row><f>106</f><f>3</f><f>Italy</f><f>380</f><f></f><f>IT</f><f>ITA</f><f>39</f><f>a</f><f></f><f></f></row>
+      <row><f>107</f><f>1</f><f>Jamaica</f><f>388</f><f></f><f>JM</f><f>JAM</f><f>1 876</f><f>a</f><f></f><f></f></row>
+      <row><f>108</f><f>10</f><f>Japan</f><f>392</f><f></f><f>JP</f><f>JPN</f><f>81</f><f>a</f><f></f><f></f></row>
+      <row><f>109</f><f>6</f><f>Jordan</f><f>400</f><f></f><f>JO</f><f>JOR</f><f>962</f><f>a</f><f></f><f></f></row>
+      <row><f>110</f><f>1</f><f>Kazakhstan</f><f>398</f><f></f><f>KZ</f><f>KAZ</f><f>7</f><f>a</f><f></f><f></f></row>
+      <row><f>111</f><f>1</f><f>Kenya</f><f>404</f><f></f><f>KE</f><f>KEN</f><f>254</f><f>a</f><f></f><f></f></row>
+      <row><f>112</f><f>1</f><f>Kiribati</f><f>296</f><f></f><f>KI</f><f>KIR</f><f>686</f><f>a</f><f></f><f></f></row>
+      <row><f>113</f><f>2</f><f>Kuwait</f><f>414</f><f></f><f>KW</f><f>KWT</f><f>965</f><f>a</f><f></f><f></f></row>
+      <row><f>114</f><f>1</f><f>Kyrgyzstan</f><f>417</f><f></f><f>KG</f><f>KGZ</f><f>996</f><f>a</f><f></f><f></f></row>
+      <row><f>115</f><f>1</f><f>Lao People's Democratic Republic</f><f>418</f><f></f><f>LA</f><f>LAO</f><f>856</f><f>a</f><f></f><f></f></row>
+      <row><f>116</f><f>1</f><f>Latvia</f><f>428</f><f></f><f>LV</f><f>LVA</f><f>371</f><f>a</f><f></f><f></f></row>
+      <row><f>117</f><f>6</f><f>Lebanon</f><f>422</f><f></f><f>LB</f><f>LBN</f><f>961</f><f>a</f><f></f><f></f></row>
+      <row><f>118</f><f>1</f><f>Lesotho</f><f>426</f><f></f><f>LS</f><f>LSO</f><f>266</f><f>a</f><f></f><f></f></row>
+      <row><f>119</f><f>1</f><f>Liberia</f><f>430</f><f></f><f>LR</f><f>LBR</f><f>231</f><f>a</f><f></f><f></f></row>
+      <row><f>120</f><f>1</f><f>Libyan Arab Jamahiriya</f><f>434</f><f></f><f>LY</f><f>LBY</f><f>218</f><f>a</f><f></f><f></f></row>
+      <row><f>121</f><f>1</f><f>Liechtenstein</f><f>438</f><f></f><f>LI</f><f>LIE</f><f>423</f><f>a</f><f></f><f></f></row>
+      <row><f>122</f><f>1</f><f>Lithuania</f><f>440</f><f></f><f>LT</f><f>LTU</f><f>370</f><f>a</f><f></f><f></f></row>
+      <row><f>123</f><f>6</f><f>Luxembourg</f><f>442</f><f></f><f>LU</f><f>LUX</f><f>352</f><f>a</f><f></f><f></f></row>
+      <row><f>124</f><f>1</f><f>Macao</f><f>446</f><f></f><f>MO</f><f>MAC</f><f>853</f><f>a</f><f></f><f></f></row>
+      <row><f>125</f><f>1</f><f>Madagascar</f><f>450</f><f></f><f>MG</f><f>MDG</f><f>261</f><f>a</f><f></f><f></f></row>
+      <row><f>126</f><f>1</f><f>Malawi</f><f>454</f><f></f><f>MW</f><f>MWI</f><f>265</f><f>a</f><f></f><f></f></row>
+      <row><f>127</f><f>1</f><f>Malaysia</f><f>458</f><f></f><f>MY</f><f>MYS</f><f>60</f><f>a</f><f></f><f></f></row>
+      <row><f>128</f><f>1</f><f>Maldives</f><f>462</f><f></f><f>MV</f><f>MDV</f><f>960</f><f>a</f><f></f><f></f></row>
+      <row><f>129</f><f>1</f><f>Mali</f><f>466</f><f></f><f>ML</f><f>MLI</f><f>223</f><f>a</f><f></f><f></f></row>
+      <row><f>130</f><f>1</f><f>Malta</f><f>470</f><f></f><f>MT</f><f>MLT</f><f>356</f><f>a</f><f></f><f></f></row>
+      <row><f>131</f><f>1</f><f>Marshall Islands</f><f>584</f><f></f><f>MH</f><f>MHL</f><f>692</f><f>a</f><f></f><f></f></row>
+      <row><f>132</f><f>1</f><f>Martinique</f><f>474</f><f></f><f>MQ</f><f>MTQ</f><f>596</f><f>a</f><f></f><f></f></row>
+      <row><f>133</f><f>1</f><f>Mauritania</f><f>478</f><f></f><f>MR</f><f>MRT</f><f>222</f><f>a</f><f></f><f></f></row>
+      <row><f>134</f><f>1</f><f>Mauritius</f><f>480</f><f></f><f>MU</f><f>MUS</f><f>230</f><f>a</f><f></f><f></f></row>
+      <row><f>135</f><f>1</f><f>Mayotte</f><f>175</f><f></f><f>YT</f><f>MYT</f><f>269</f><f>a</f><f></f><f></f></row>
+      <row><f>136</f><f>3</f><f>Mexico</f><f>484</f><f></f><f>MX</f><f>MEX</f><f>52</f><f>a</f><f></f><f></f></row>
+      <row><f>137</f><f>1</f><f>Monaco</f><f>492</f><f></f><f>MC</f><f>MCO</f><f>377</f><f>a</f><f></f><f></f></row>
+      <row><f>138</f><f>1</f><f>Mongolia</f><f>496</f><f></f><f>MN</f><f>MNG</f><f>976</f><f>a</f><f></f><f></f></row>
+      <row><f>139</f><f>1</f><f>Montserrat</f><f>500</f><f></f><f>MS</f><f>MSR</f><f>1 664</f><f>a</f><f></f><f></f></row>
+      <row><f>140</f><f>1</f><f>Morocco</f><f>504</f><f></f><f>MA</f><f>MAR</f><f>212</f><f>a</f><f></f><f></f></row>
+      <row><f>141</f><f>1</f><f>Mozambique</f><f>508</f><f></f><f>MZ</f><f>MOZ</f><f>258</f><f>a</f><f></f><f></f></row>
+      <row><f>142</f><f>1</f><f>Myanmar</f><f>104</f><f></f><f>MM</f><f>MMR</f><f>95</f><f>a</f><f></f><f></f></row>
+      <row><f>143</f><f>1</f><f>Namibia</f><f>516</f><f></f><f>NA</f><f>NAM</f><f>264</f><f>a</f><f></f><f></f></row>
+      <row><f>144</f><f>1</f><f>Nauru</f><f>520</f><f></f><f>NR</f><f>NRU</f><f>674</f><f>a</f><f></f><f></f></row>
+      <row><f>145</f><f>1</f><f>Nepal</f><f>524</f><f></f><f>NP</f><f>NPL</f><f>977</f><f>a</f><f></f><f></f></row>
+      <row><f>146</f><f>6</f><f>Netherlands</f><f>528</f><f></f><f>NL</f><f>NLD</f><f>31</f><f>a</f><f></f><f></f></row>
+      <row><f>147</f><f>1</f><f>Netherlands Antilles</f><f>530</f><f></f><f>AN</f><f>ANT</f><f>599</f><f>a</f><f></f><f></f></row>
+      <row><f>148</f><f>1</f><f>New Caledonia</f><f>540</f><f></f><f>NC</f><f>NCL</f><f>687</f><f>a</f><f></f><f></f></row>
+      <row><f>149</f><f>8</f><f>New Zealand</f><f>554</f><f></f><f>NZ</f><f>NZL</f><f>64</f><f>a</f><f></f><f></f></row>
+      <row><f>150</f><f>1</f><f>Nicaragua</f><f>558</f><f></f><f>NI</f><f>NIC</f><f>505</f><f>a</f><f></f><f></f></row>
+      <row><f>151</f><f>1</f><f>Niger</f><f>562</f><f></f><f>NE</f><f>NER</f><f>227</f><f>a</f><f></f><f></f></row>
+      <row><f>152</f><f>1</f><f>Nigeria</f><f>566</f><f></f><f>NG</f><f>NGA</f><f>234</f><f>a</f><f></f><f></f></row>
+      <row><f>153</f><f>1</f><f>Niue</f><f>570</f><f></f><f>NU</f><f>NIU</f><f>683</f><f>a</f><f></f><f></f></row>
+      <row><f>154</f><f>1</f><f>Norfolk Island</f><f>574</f><f></f><f>NF</f><f>NFK</f><f>672</f><f>a</f><f></f><f></f></row>
+      <row><f>155</f><f>1</f><f>Northern Mariana Islands</f><f>580</f><f></f><f>MP</f><f>MNP</f><f>1 670</f><f>a</f><f></f><f></f></row>
+      <row><f>156</f><f>6</f><f>Norway</f><f>578</f><f></f><f>NO</f><f>NOR</f><f>47</f><f>a</f><f></f><f></f></row>
+      <row><f>157</f><f>2</f><f>Oman</f><f>512</f><f></f><f>OM</f><f>OMN</f><f>968</f><f>a</f><f></f><f></f></row>
+      <row><f>158</f><f>1</f><f>Pakistan</f><f>586</f><f></f><f>PK</f><f>PAK</f><f>92</f><f>a</f><f></f><f></f></row>
+      <row><f>159</f><f>1</f><f>Palau</f><f>585</f><f></f><f>PW</f><f>PLW</f><f>680</f><f>a</f><f></f><f></f></row>
+      <row><f>160</f><f>1</f><f>Panama</f><f>591</f><f></f><f>PA</f><f>PAN</f><f>507</f><f>a</f><f></f><f></f></row>
+      <row><f>161</f><f>1</f><f>Papua New Guinea</f><f>598</f><f></f><f>PG</f><f>PNG</f><f>675</f><f>a</f><f></f><f></f></row>
+      <row><f>162</f><f>1</f><f>Paraguay</f><f>600</f><f></f><f>PY</f><f>PRY</f><f>595</f><f>a</f><f></f><f></f></row>
+      <row><f>163</f><f>1</f><f>Peru</f><f>604</f><f></f><f>PE</f><f>PER</f><f>51</f><f>a</f><f></f><f></f></row>
+      <row><f>164</f><f>1</f><f>Philippines</f><f>608</f><f></f><f>PH</f><f>PHL</f><f>63</f><f>a</f><f></f><f></f></row>
+      <row><f>165</f><f>2</f><f>Poland</f><f>616</f><f></f><f>PL</f><f>POL</f><f>48</f><f>a</f><f></f><f></f></row>
+      <row><f>166</f><f>3</f><f>Portugal</f><f>620</f><f></f><f>PT</f><f>PRT</f><f>351</f><f>a</f><f></f><f></f></row>
+      <row><f>167</f><f>1</f><f>Puerto Rico</f><f>630</f><f></f><f>PR</f><f>PRI</f><f>1 787</f><f>a</f><f></f><f></f></row>
+      <row><f>168</f><f>6</f><f>Qatar</f><f>634</f><f></f><f>QA</f><f>QAT</f><f>974</f><f>a</f><f></f><f></f></row>
+      <row><f>169</f><f>11</f><f>Republic of Korea</f><f>410</f><f></f><f>KR</f><f>KOR</f><f>82</f><f>a</f><f></f><f></f></row>
+      <row><f>170</f><f>1</f><f>Republic of Moldova</f><f>498</f><f></f><f>MD</f><f>MDA</f><f>373</f><f>a</f><f></f><f></f></row>
+      <row><f>171</f><f>1</f><f><![CDATA[RÈunion]]></f><f>638</f><f></f><f>RE</f><f>REU</f><f>262</f><f>a</f><f></f><f></f></row>
+      <row><f>172</f><f>6</f><f>Romania</f><f>642</f><f></f><f>RO</f><f>ROU</f><f>40</f><f>a</f><f></f><f></f></row>
+      <row><f>173</f><f>12</f><f>Russian Federation</f><f>643</f><f></f><f>RU</f><f>RUS</f><f>7</f><f>a</f><f></f><f></f></row>
+      <row><f>174</f><f>1</f><f>Rwanda</f><f>646</f><f></f><f>RW</f><f>RWA</f><f>250</f><f>a</f><f></f><f></f></row>
+      <row><f>175</f><f>1</f><f>Saint Helena</f><f>654</f><f></f><f>SH</f><f>SHN</f><f>290</f><f>a</f><f></f><f></f></row>
+      <row><f>176</f><f>1</f><f>Saint Kitts and Nevis</f><f>659</f><f></f><f>KN</f><f>KNA</f><f>1 869</f><f>a</f><f></f><f></f></row>
+      <row><f>177</f><f>1</f><f>Saint Lucia</f><f>662</f><f></f><f>LC</f><f>LCA</f><f>1 758</f><f>a</f><f></f><f></f></row>
+      <row><f>178</f><f>1</f><f>Saint Pierre and Miquelon</f><f>666</f><f></f><f>PM</f><f>SPM</f><f>508</f><f>a</f><f></f><f></f></row>
+      <row><f>179</f><f>1</f><f>Saint Vincent and the Grenadines</f><f>670</f><f></f><f>VC</f><f>VCT</f><f>1 784</f><f>a</f><f></f><f></f></row>
+      <row><f>180</f><f>1</f><f>Samoa</f><f>882</f><f></f><f>WS</f><f>WSM</f><f>685</f><f>a</f><f></f><f></f></row>
+      <row><f>181</f><f>1</f><f>San Marino</f><f>674</f><f></f><f>SM</f><f>SMR</f><f>378</f><f>a</f><f></f><f></f></row>
+      <row><f>182</f><f>1</f><f><![CDATA[S„o TomÈ and Principe]]></f><f>678</f><f></f><f>ST</f><f>STP</f><f>239</f><f>a</f><f></f><f></f></row>
+      <row><f>183</f><f>6</f><f>Saudi Arabia</f><f>682</f><f></f><f>SA</f><f>SAU</f><f>966</f><f>a</f><f></f><f></f></row>
+      <row><f>184</f><f>1</f><f>Senegal</f><f>686</f><f></f><f>SN</f><f>SEN</f><f>221</f><f>a</f><f></f><f></f></row>
+      <row><f>185</f><f>1</f><f>Seychelles</f><f>690</f><f></f><f>SC</f><f>SYC</f><f>248</f><f>a</f><f></f><f></f></row>
+      <row><f>186</f><f>1</f><f>Sierra Leone</f><f>694</f><f></f><f>SL</f><f>SLE</f><f>232</f><f>a</f><f></f><f></f></row>
+      <row><f>187</f><f>6</f><f>Singapore</f><f>702</f><f></f><f>SG</f><f>SGP</f><f>65</f><f>a</f><f></f><f></f></row>
+      <row><f>188</f><f>6</f><f>Slovakia</f><f>703</f><f></f><f>SK</f><f>SVK</f><f>421</f><f>a</f><f></f><f></f></row>
+      <row><f>189</f><f>6</f><f>Slovenia</f><f>705</f><f></f><f>SI</f><f>SVN</f><f>386</f><f>a</f><f></f><f></f></row>
+      <row><f>190</f><f>1</f><f>Solomon Islands</f><f>90</f><f></f><f>SB</f><f>SLB</f><f>677</f><f>a</f><f></f><f></f></row>
+      <row><f>191</f><f>1</f><f>Somalia</f><f>706</f><f></f><f>SO</f><f>SOM</f><f>252</f><f>a</f><f></f><f></f></row>
+      <row><f>192</f><f>13</f><f>South Africa</f><f>710</f><f></f><f>ZA</f><f>ZAF</f><f>27</f><f>a</f><f></f><f></f></row>
+      <row><f>193</f><f>3</f><f>Spain</f><f>724</f><f></f><f>ES</f><f>ESP</f><f>34</f><f>a</f><f></f><f></f></row>
+      <row><f>194</f><f>1</f><f>Sri Lanka</f><f>144</f><f></f><f>LK</f><f>LKA</f><f>94</f><f>a</f><f></f><f></f></row>
+      <row><f>195</f><f>1</f><f>Sudan</f><f>736</f><f></f><f>SD</f><f>SDN</f><f>249</f><f>a</f><f></f><f></f></row>
+      <row><f>196</f><f>1</f><f>Suriname</f><f>740</f><f></f><f>SR</f><f>SUR</f><f>597</f><f>a</f><f></f><f></f></row>
+      <row><f>197</f><f>1</f><f>Swaziland</f><f>748</f><f></f><f>SZ</f><f>SWZ</f><f>268</f><f>a</f><f></f><f></f></row>
+      <row><f>198</f><f>6</f><f>Sweden</f><f>752</f><f></f><f>SE</f><f>SWE</f><f>46</f><f>a</f><f></f><f></f></row>
+      <row><f>199</f><f>6</f><f>Switzerland</f><f>756</f><f></f><f>CH</f><f>CHE</f><f>41</f><f>a</f><f></f><f></f></row>
+      <row><f>200</f><f>6</f><f>Syrian Arab Republic</f><f>760</f><f></f><f>SY</f><f>SYR</f><f>963</f><f>a</f><f></f><f></f></row>
+      <row><f>201</f><f>4</f><f>Taiwan</f><f>158</f><f></f><f>TW</f><f>TWN</f><f>886</f><f>a</f><f></f><f></f></row>
+      <row><f>202</f><f>1</f><f>Tajikistan</f><f>762</f><f></f><f>TJ</f><f>TJK</f><f>7</f><f>a</f><f></f><f></f></row>
+      <row><f>203</f><f>1</f><f>Thailand</f><f>764</f><f></f><f>TH</f><f>THA</f><f>66</f><f>a</f><f></f><f></f></row>
+      <row><f>204</f><f>14</f><f>The former Yugoslav Republic of Macedonia</f><f>807</f><f></f><f>MK</f><f>MKD</f><f>389</f><f>a</f><f></f><f></f></row>
+      <row><f>205</f><f>1</f><f>Togo</f><f>768</f><f></f><f>TG</f><f>TGO</f><f>228</f><f>a</f><f></f><f></f></row>
+      <row><f>206</f><f>1</f><f>Tonga</f><f>776</f><f></f><f>TO</f><f>TON</f><f>676</f><f>a</f><f></f><f></f></row>
+      <row><f>207</f><f>1</f><f>Trinidad and Tobago</f><f>780</f><f></f><f>TT</f><f>TTO</f><f>1 868</f><f>a</f><f></f><f></f></row>
+      <row><f>208</f><f>1</f><f>Tunisia</f><f>788</f><f></f><f>TN</f><f>TUN</f><f>216</f><f>a</f><f></f><f></f></row>
+      <row><f>209</f><f>6</f><f>Turkey</f><f>792</f><f></f><f>TR</f><f>TUR</f><f>90</f><f>a</f><f></f><f></f></row>
+      <row><f>210</f><f>1</f><f>Turkmenistan</f><f>795</f><f></f><f>TM</f><f>TKM</f><f>993</f><f>a</f><f></f><f></f></row>
+      <row><f>211</f><f>1</f><f>Turks and Caicos Islands</f><f>796</f><f></f><f>TC</f><f>TCA</f><f>1 649</f><f>a</f><f></f><f></f></row>
+      <row><f>212</f><f>1</f><f>Tuvalu</f><f>798</f><f></f><f>TV</f><f>TUV</f><f>688</f><f>a</f><f></f><f></f></row>
+      <row><f>213</f><f>1</f><f>Uganda</f><f>800</f><f></f><f>UG</f><f>UGA</f><f>256</f><f>a</f><f></f><f></f></row>
+      <row><f>214</f><f>11</f><f>Ukraine</f><f>804</f><f></f><f>UA</f><f>UKR</f><f>380</f><f>a</f><f></f><f></f></row>
+      <row><f>215</f><f>1</f><f>United Arab Emirates</f><f>784</f><f></f><f>AE</f><f>ARE</f><f>971</f><f>a</f><f></f><f></f></row>
+      <row><f>216</f><f>13</f><f>United Kingdom</f><f>826</f><f></f><f>GB</f><f>GBR</f><f>44</f><f>a</f><f></f><f></f></row>
+      <row><f>217</f><f>1</f><f>United Republic of Tanzania</f><f>834</f><f></f><f>TZ</f><f>TZA</f><f>255</f><f>a</f><f></f><f></f></row>
+      <row><f>218</f><f>15</f><f>United States</f><f>840</f><f></f><f>US</f><f>USA</f><f>1</f><f>a</f><f>(###) ###-####</f><f></f></row>
+      <row><f>219</f><f>15</f><f>United States Virgin Islands</f><f>850</f><f></f><f>VI</f><f>VIR</f><f>1 340</f><f>a</f><f></f><f></f></row>
+      <row><f>220</f><f>1</f><f>Uruguay</f><f>858</f><f></f><f>UY</f><f>URY</f><f>598</f><f>a</f><f></f><f></f></row>
+      <row><f>221</f><f>1</f><f>Uzbekistan</f><f>860</f><f></f><f>UZ</f><f>UZB</f><f>998</f><f>a</f><f></f><f></f></row>
+      <row><f>222</f><f>1</f><f>Vanuatu</f><f>548</f><f></f><f>VU</f><f>VUT</f><f>678</f><f>a</f><f></f><f></f></row>
+      <row><f>223</f><f>1</f><f>Venezuela</f><f>862</f><f></f><f>VE</f><f>VEN</f><f>58</f><f>a</f><f></f><f></f></row>
+      <row><f>224</f><f>1</f><f>Viet Nam</f><f>704</f><f></f><f>VN</f><f>VNM</f><f>84</f><f>a</f><f></f><f></f></row>
+      <row><f>225</f><f>6</f><f>Yemen</f><f>887</f><f></f><f>YE</f><f>YEM</f><f>967</f><f>a</f><f></f><f></f></row>
+      <row><f>226</f><f>1</f><f>Serbia and Montenegro</f><f>891</f><f></f><f>CS</f><f>SCG</f><f>381</f><f>a</f><f></f><f></f></row>
+      <row><f>227</f><f>1</f><f>Zambia</f><f>894</f><f></f><f>ZM</f><f>ZMB</f><f>260</f><f>a</f><f></f><f></f></row>
+      <row><f>228</f><f>1</f><f>Zimbabwe</f><f>716</f><f></f><f>ZW</f><f>ZWE</f><f>263</f><f>a</f><f></f><f></f></row>
+      <row><f>229</f><f>6</f><f>Occupied Palestinian Territory</f><f>275</f><f></f><f>PS</f><f>PSE</f><f>970</f><f>a</f><f></f><f></f></row>
+      <row><f>230</f><f>9</f><f>Timor-Leste</f><f>626</f><f></f><f>TL</f><f>TLS</f><f>670</f><f>a</f><f></f><f></f></row>
+      <row><f>231</f><f>6</f><f>Åland Islands</f><f>248</f><f></f><f>AX</f><f>ALA</f><f>670</f><f>a</f><f></f><f></f></row>
     </data>
   </table>
   <table name="crm_statuses">
     <field name="crm_status_id" type="I" size="11">
       <KEY/>
       <AUTOINCREMENT/>
+    </field>
+    <field name="sort_order" type="I" size="4">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
     </field>
     <field name="crm_status_short_name" type="C" size="10">
       <NOTNULL/>
@@ -1797,11 +1875,11 @@
       <DEFAULT value="a"/>
     </field>
     <data>
-      <row><f>1</f><f>Lead</f><f>Lead</f><f>Leads</f><f>Lead</f><f>a</f></row>
-      <row><f>2</f><f>Prospect</f><f>Prospect</f><f>Prospects</f><f>Prospect</f><f>a</f></row>
-      <row><f>3</f><f>Qualified</f><f>Qualified</f><f>Qualified</f><f>Qualified</f><f>a</f></row>
-      <row><f>4</f><f>Developed</f><f>Developed</f><f>Developed</f><f>Developed</f><f>a</f></row>
-      <row><f>5</f><f>Closed</f><f>Closed</f><f>Closed</f><f>Closed</f><f>a</f></row>
+      <row><f>1</f><f>1</f><f>Lead</f><f>Lead</f><f>Leads</f><f>Lead</f><f>a</f></row>
+      <row><f>2</f><f>2</f><f>Prospect</f><f>Prospect</f><f>Prospects</f><f>Prospect</f><f>a</f></row>
+      <row><f>3</f><f>3</f><f>Qualified</f><f>Qualified</f><f>Qualified</f><f>Qualified</f><f>a</f></row>
+      <row><f>4</f><f>4</f><f>Developed</f><f>Developed</f><f>Developed</f><f>Developed</f><f>a</f></row>
+      <row><f>5</f><f>5</f><f>Closed</f><f>Closed</f><f>Closed</f><f>Closed</f><f>a</f></row>
     </data>
   </table>
   <table name="data_source">
@@ -1836,7 +1914,7 @@
     </field>
     <field name="created_on" type="T"/>
     <data>
-      <row><f>1</f><f>Email Merge Letter</f><f>0</f><f></f><f>0</f><f></f></row>
+      <row><f>1</f><f>Email Merge Letter</f><f>0</f><f>0000-00-00 00:00:00</f><f>0</f><f>0000-00-00 00:00:00</f></row>
     </data>
   </table>
   <table name="email_templates">
@@ -1851,9 +1929,7 @@
     <field name="email_template_title" type="C" size="100">
       <NOTNULL/>
     </field>
-    <field name="email_template_body" type="X">
-      <NOTNULL/>
-    </field>
+    <field name="email_template_body" type="X"/>
     <field name="email_template_record_status" type="C" size="1">
       <NOTNULL/>
       <DEFAULT value="a"/>
@@ -1890,9 +1966,7 @@
     <field name="file_pretty_name" type="C" size="100">
       <NOTNULL/>
     </field>
-    <field name="file_description" type="X">
-      <NOTNULL/>
-    </field>
+    <field name="file_description" type="X"/>
     <field name="file_filesystem_name" type="C" size="100">
       <NOTNULL/>
     </field>
@@ -1974,9 +2048,7 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="note_description" type="X">
-      <NOTNULL/>
-    </field>
+    <field name="note_description" type="X"/>
     <field name="on_what_table" type="C" size="100"/>
     <field name="on_what_id" type="I" size="11">
       <NOTNULL/>
@@ -2022,15 +2094,13 @@
     <field name="opportunity_title" type="C" size="100">
       <NOTNULL/>
     </field>
-    <field name="opportunity_description" type="X">
-      <NOTNULL/>
-    </field>
+    <field name="opportunity_description" type="X"/>
     <field name="next_step" type="C" size="100">
       <NOTNULL/>
     </field>
     <field name="size" type="N" size="10">
       <NOTNULL/>
-      <DEFAULT value="0.00"/>
+      <DEFAULT value="0"/>
     </field>
     <field name="probability" type="I" size="11">
       <NOTNULL/>
@@ -2102,9 +2172,9 @@
       <row><f>2</f><f>1</f><f>2</f><f>o</f><f>PRE</f><f>Preliminaries</f><f>Preliminaries</f><f>Preliminaries</f><f>a</f><f></f></row>
       <row><f>3</f><f>1</f><f>3</f><f>o</f><f>DIS</f><f>Discussion</f><f>Discussion</f><f>Discussion</f><f>a</f><f></f></row>
       <row><f>4</f><f>1</f><f>4</f><f>o</f><f>NEG</f><f>Negotiation</f><f>Negotiation</f><f>Negotiation</f><f>a</f><f></f></row>
-      <row><f>5</f><f>1</f><f>5</f><f>w</f><f>CLW</f><f>Closed/Won</f><f>Closed/Won</f><f>Closed/Won</f><f>a</f><f></f></row>
-      <row><f>6</f><f>1</f><f>6</f><f>l</f><f>CLL</f><f>Closed/Lost</f><f>Closed/Lost</f><f>Closed/Lost</f><f>a</f><f></f></row>
-      <row><f>7</f><f>1</f><f>6</f><f>l</f><f>CLL</f><f>Closed/Lost</f><f>Closed/Lost</f><f>Closed/Lost</f><f>a</f><f></f></row>
+      <row><f>5</f><f>1</f><f>5</f><f>c</f><f>CLW</f><f>Closed/Won</f><f>Closed/Won</f><f>Closed/Won</f><f>a</f><f></f></row>
+      <row><f>6</f><f>1</f><f>6</f><f>c</f><f>CLL</f><f>Closed/Lost</f><f>Closed/Lost</f><f>Closed/Lost</f><f>a</f><f></f></row>
+      <row><f>7</f><f>1</f><f>6</f><f>c</f><f>CLL</f><f>Closed/Lost</f><f>Closed/Lost</f><f>Closed/Lost</f><f>a</f><f></f></row>
     </data>
   </table>
   <table name="opportunity_types">
@@ -2484,9 +2554,7 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="saved_data" type="X">
-      <NOTNULL/>
-    </field>
+    <field name="saved_data" type="X"/>
     <field name="saved_status" type="C" size="1">
       <NOTNULL/>
       <DEFAULT value="a"/>
@@ -2504,7 +2572,7 @@
     </field>
     <field name="string_val" type="C" size="100"/>
     <field name="int_val" type="I" size="11"/>
-    <field name="float_val" type="N"/>
+    <field name="float_val" type="N" size="10"/>
     <field name="datetime_val" type="T"/>
     <field name="description" type="C" size="255"/>
     <index name="param_id">
@@ -2512,19 +2580,19 @@
       <col>param_id</col>
     </index>
     <data>
-      <row><f>Default GST Offset</f><f></f><f>-5</f><f></f><f></f><f>Default timezone offset</f></row>
-      <row><f>Audit Level</f><f></f><f>4</f><f></f><f></f><f><![CDATA[What level of audit logging should be performed.  0 - no logging, 1 - inserts & updates, 2 - and login/logout, 3 - and views, 4 - and searches]]></f></row>
-      <row><f>Activities Default Behavior</f><f>Fast</f><f></f><f></f><f></f><f>How will activities behave.  Options are Fast or Long.  Fast will keep user within current screen while Long will move to the activites/one screen for detailed description entry.</f></row>
-      <row><f>LDAP Version</f><f></f><f>2</f><f></f><f></f><f>Version of the LDAP server.  Will usually be 2 or 3.</f></row>
-      <row><f>RSS Feeds Enabled</f><f>n</f><f></f><f></f><f></f><f>Provide RSS Feeds.  y or n.</f></row>
-      <row><f>Maximum RSS Feed Entries</f><f></f><f>15</f><f></f><f></f><f>Maximum number of entries to include in any RSS feed.</f></row>
-      <row><f>Sender Email Address</f><f>xrms@example.com</f><f></f><f></f><f></f><f>Email address to use as the sender address when sending reports via email.</f></row>
-      <row><f>Reports--Use Horizontal Rule</f><f>y</f><f></f><f></f><f></f><f>Use horizontal rule on reports.</f></row>
-      <row><f>Reports--Show No Items Found</f><f>n</f><f></f><f></f><f></f><f>Show text for items with no result on reports.</f></row>
-      <row><f>Allow Unassigned Activities</f><f>n</f><f></f><f></f><f></f><f>Unassigned activities are useful when creating activity pools, but can result in activities erroneously created without accountability.</f></row>
-      <row><f>Display Item Technical Details</f><f>n</f><f></f><f></f><f></f><f>Expose ID numbers and other technical tidbits on production screens. Useful for developers tracking issues in production. Otherwise not necessary.</f></row>
-      <row><f>Show Logo</f><f>n</f><f></f><f></f><f></f><f>Controls custom logo display in the head of every page in XRMS.</f></row>
-      <row><f>Use Owl</f><f>n</f><f></f><f></f><f></f><f>Provide an experimental link to OWL, a file management utility that supports more features (like revisions) than xrms.  To use, install OWL from http://sourceforge.net/projects/owl in xrms/owl and set this parameter to y.</f></row>
+      <row><f>Default GST Offset</f><f></f><f>-5</f><f>0</f><f>0000-00-00 00:00:00</f><f>Default timezone offset</f></row>
+      <row><f>Audit Level</f><f></f><f>4</f><f>0</f><f>0000-00-00 00:00:00</f><f><![CDATA[What level of audit logging should be performed.  0 - no logging, 1 - inserts & updates, 2 - and login/logout, 3 - and views, 4 - and searches]]></f></row>
+      <row><f>Activities Default Behavior</f><f>Fast</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>How will activities behave.  Options are Fast or Long.  Fast will keep user within current screen while Long will move to the activites/one screen for detailed description entry.</f></row>
+      <row><f>LDAP Version</f><f></f><f>2</f><f>0</f><f>0000-00-00 00:00:00</f><f>Version of the LDAP server.  Will usually be 2 or 3.</f></row>
+      <row><f>RSS Feeds Enabled</f><f>n</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>Provide RSS Feeds.  y or n.</f></row>
+      <row><f>Maximum RSS Feed Entries</f><f></f><f>15</f><f>0</f><f>0000-00-00 00:00:00</f><f>Maximum number of entries to include in any RSS feed.</f></row>
+      <row><f>Sender Email Address</f><f>xrms@example.com</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>Email address to use as the sender address when sending reports via email.</f></row>
+      <row><f>Reports--Use Horizontal Rule</f><f>y</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>Use horizontal rule on reports.</f></row>
+      <row><f>Reports--Show No Items Found</f><f>n</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>Show text for items with no result on reports.</f></row>
+      <row><f>Allow Unassigned Activities</f><f>n</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>Unassigned activities are useful when creating activity pools, but can result in activities erroneously created without accountability.</f></row>
+      <row><f>Display Item Technical Details</f><f>n</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>Expose ID numbers and other technical tidbits on production screens. Useful for developers tracking issues in production. Otherwise not necessary.</f></row>
+      <row><f>Show Logo</f><f>n</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>Controls custom logo display in the head of every page in XRMS.</f></row>
+      <row><f>Use Owl</f><f>n</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>Provide an experimental link to OWL, a file management utility that supports more features (like revisions) than xrms.  To use, install OWL from http://sourceforge.net/projects/owl in xrms/owl and set this parameter to y.</f></row>
     </data>
   </table>
   <table name="system_parameters_options">
@@ -2533,33 +2601,33 @@
     </field>
     <field name="string_val" type="C" size="100"/>
     <field name="int_val" type="I" size="11"/>
-    <field name="float_val" type="N"/>
+    <field name="float_val" type="N" size="10"/>
     <field name="datetime_val" type="T"/>
     <field name="sort_order" type="I" size="11"/>
     <data>
-      <row><f>Audit Level</f><f></f><f>0</f><f></f><f></f><f>1</f></row>
-      <row><f>Audit Level</f><f></f><f>1</f><f></f><f></f><f>2</f></row>
-      <row><f>Audit Level</f><f></f><f>2</f><f></f><f></f><f>3</f></row>
-      <row><f>Audit Level</f><f></f><f>3</f><f></f><f></f><f>4</f></row>
-      <row><f>Audit Level</f><f></f><f>4</f><f></f><f></f><f>5</f></row>
-      <row><f>Activities Default Behavior</f><f>Fast</f><f></f><f></f><f></f><f>1</f></row>
-      <row><f>Activities Default Behavior</f><f>Long</f><f></f><f></f><f></f><f>2</f></row>
-      <row><f>LDAP Version</f><f></f><f>2</f><f></f><f></f><f>1</f></row>
-      <row><f>LDAP Version</f><f></f><f>3</f><f></f><f></f><f>2</f></row>
-      <row><f>RSS Feeds Enabled</f><f>n</f><f></f><f></f><f></f><f>1</f></row>
-      <row><f>RSS Feeds Enabled</f><f>y</f><f></f><f></f><f></f><f>2</f></row>
-      <row><f>Reports--Use Horizontal Rule</f><f>n</f><f></f><f></f><f></f><f>1</f></row>
-      <row><f>Reports--Use Horizontal Rule</f><f>y</f><f></f><f></f><f></f><f>2</f></row>
-      <row><f>Reports--Show No Items Found</f><f>n</f><f></f><f></f><f></f><f>1</f></row>
-      <row><f>Reports--Show No Items Found</f><f>y</f><f></f><f></f><f></f><f>2</f></row>
-      <row><f>Allow Unassigned Activities</f><f>n</f><f></f><f></f><f></f><f>1</f></row>
-      <row><f>Allow Unassigned Activities</f><f>y</f><f></f><f></f><f></f><f>2</f></row>
-      <row><f>Display Item Technical Details</f><f>n</f><f></f><f></f><f></f><f>1</f></row>
-      <row><f>Display Item Technical Details</f><f>y</f><f></f><f></f><f></f><f>2</f></row>
-      <row><f>Show Logo</f><f>n</f><f></f><f></f><f></f><f>1</f></row>
-      <row><f>Show Logo</f><f>y</f><f></f><f></f><f></f><f>2</f></row>
-      <row><f>Use Owl</f><f>n</f><f></f><f></f><f></f><f>1</f></row>
-      <row><f>Use Owl</f><f>y</f><f></f><f></f><f></f><f>2</f></row>
+      <row><f>Audit Level</f><f></f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>1</f></row>
+      <row><f>Audit Level</f><f></f><f>1</f><f>0</f><f>0000-00-00 00:00:00</f><f>2</f></row>
+      <row><f>Audit Level</f><f></f><f>2</f><f>0</f><f>0000-00-00 00:00:00</f><f>3</f></row>
+      <row><f>Audit Level</f><f></f><f>3</f><f>0</f><f>0000-00-00 00:00:00</f><f>4</f></row>
+      <row><f>Audit Level</f><f></f><f>4</f><f>0</f><f>0000-00-00 00:00:00</f><f>5</f></row>
+      <row><f>Activities Default Behavior</f><f>Fast</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>1</f></row>
+      <row><f>Activities Default Behavior</f><f>Long</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>2</f></row>
+      <row><f>LDAP Version</f><f></f><f>2</f><f>0</f><f>0000-00-00 00:00:00</f><f>1</f></row>
+      <row><f>LDAP Version</f><f></f><f>3</f><f>0</f><f>0000-00-00 00:00:00</f><f>2</f></row>
+      <row><f>RSS Feeds Enabled</f><f>n</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>1</f></row>
+      <row><f>RSS Feeds Enabled</f><f>y</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>2</f></row>
+      <row><f>Reports--Use Horizontal Rule</f><f>n</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>1</f></row>
+      <row><f>Reports--Use Horizontal Rule</f><f>y</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>2</f></row>
+      <row><f>Reports--Show No Items Found</f><f>n</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>1</f></row>
+      <row><f>Reports--Show No Items Found</f><f>y</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>2</f></row>
+      <row><f>Allow Unassigned Activities</f><f>n</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>1</f></row>
+      <row><f>Allow Unassigned Activities</f><f>y</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>2</f></row>
+      <row><f>Display Item Technical Details</f><f>n</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>1</f></row>
+      <row><f>Display Item Technical Details</f><f>y</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>2</f></row>
+      <row><f>Show Logo</f><f>n</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>1</f></row>
+      <row><f>Show Logo</f><f>y</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>2</f></row>
+      <row><f>Use Owl</f><f>n</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>1</f></row>
+      <row><f>Use Owl</f><f>y</f><f>0</f><f>0</f><f>0000-00-00 00:00:00</f><f>2</f></row>
     </data>
   </table>
   <table name="time_daylight_savings">
@@ -2587,7 +2655,7 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="hour_shift" type="N">
+    <field name="hour_shift" type="N" size="10">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -2595,7 +2663,7 @@
       <NOTNULL/>
       <DEFAULT value="0000-00-00"/>
     </field>
-    <field name="current_hour_shift" type="N">
+    <field name="current_hour_shift" type="N" size="10">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -2621,7 +2689,7 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="offset" type="N">
+    <field name="offset" type="N" size="10">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -3392,6 +3460,28 @@
       <row><f>6</f><f>5</f><f>starts</f><f>1</f><f>a</f><f>Name Starts With</f></row>
       <row><f>7</f><f>5</f><f>ends</f><f>1</f><f>a</f><f>Name Ends With</f></row>
       <row><f>8</f><f>5</f><f>matches</f><f>1</f><f>a</f><f>Name Exactly Matches</f></row>
+      <row><f>9</f><f>8</f><f>1</f><f>2</f><f>a</f><f>1</f></row>
+      <row><f>10</f><f>8</f><f>2</f><f>3</f><f>a</f><f>2</f></row>
+      <row><f>11</f><f>8</f><f>3</f><f>4</f><f>a</f><f>3</f></row>
+      <row><f>12</f><f>8</f><f>4</f><f>5</f><f>a</f><f>4</f></row>
+      <row><f>13</f><f>9</f><f>Fast</f><f>1</f><f>a</f><f>Fast</f></row>
+      <row><f>14</f><f>9</f><f>Long</f><f>2</f><f>a</f><f>Long</f></row>
+      <row><f>15</f><f>10</f><f>2</f><f>1</f><f>a</f><f>2</f></row>
+      <row><f>16</f><f>10</f><f>3</f><f>2</f><f>a</f><f>3</f></row>
+      <row><f>17</f><f>11</f><f>n</f><f>1</f><f>a</f><f>No</f></row>
+      <row><f>18</f><f>11</f><f>y</f><f>2</f><f>a</f><f>Yes</f></row>
+      <row><f>19</f><f>14</f><f>n</f><f>1</f><f>a</f><f>No</f></row>
+      <row><f>20</f><f>14</f><f>y</f><f>2</f><f>a</f><f>Yes</f></row>
+      <row><f>21</f><f>15</f><f>n</f><f>1</f><f>a</f><f>No</f></row>
+      <row><f>22</f><f>15</f><f>y</f><f>2</f><f>a</f><f>Yes</f></row>
+      <row><f>23</f><f>16</f><f>n</f><f>1</f><f>a</f><f>No</f></row>
+      <row><f>24</f><f>16</f><f>y</f><f>2</f><f>a</f><f>Yes</f></row>
+      <row><f>25</f><f>17</f><f>n</f><f>1</f><f>a</f><f>No</f></row>
+      <row><f>26</f><f>17</f><f>y</f><f>2</f><f>a</f><f>Yes</f></row>
+      <row><f>27</f><f>18</f><f>n</f><f>1</f><f>a</f><f>No</f></row>
+      <row><f>28</f><f>18</f><f>y</f><f>2</f><f>a</f><f>Yes</f></row>
+      <row><f>29</f><f>19</f><f>n</f><f>1</f><f>a</f><f>No</f></row>
+      <row><f>30</f><f>19</f><f>y</f><f>2</f><f>a</f><f>Yes</f></row>
     </data>
   </table>
   <table name="user_preference_types">
@@ -3433,12 +3523,30 @@
       <NOTNULL/>
       <DEFAULT value="text"/>
     </field>
+    <field name="read_only" type="I" size="1">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
     <data>
-      <row><f>1</f><f>user_language</f><f>Language</f><f></f><f>0</f><f>1</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f></row>
-      <row><f>2</f><f>css_theme</f><f>Theme</f><f>Color and Layout Theme for XRMS</f><f>0</f><f>1</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f></row>
-      <row><f>3</f><f>hide_sf_img</f><f>Hide SourceForge Image</f><f>Hides the SourceForge Image which appears at the bottom of every page</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f></row>
-      <row><f>4</f><f>block_sf_link</f><f>Block SourceForge Link</f><f>Disables the SourceForge image and link which appears at the bottom of every page</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f></row>
-      <row><f>5</f><f>company_search_type</f><f>Company Search Type</f><f>Search method used when searching company names</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f></row>
+      <row><f>1</f><f>user_language</f><f>Language</f><f></f><f>0</f><f>1</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
+      <row><f>2</f><f>css_theme</f><f>Theme</f><f>Color and Layout Theme for XRMS</f><f>0</f><f>1</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
+      <row><f>3</f><f>hide_sf_img</f><f>Hide SourceForge Image</f><f>Hides the SourceForge Image which appears at the bottom of every page</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
+      <row><f>4</f><f>block_sf_link</f><f>Block SourceForge Link</f><f>Disables the SourceForge image and link which appears at the bottom of every page</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
+      <row><f>5</f><f>company_search_type</f><f>Company Search Type</f><f>Search method used when searching company names</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
+      <row><f>7</f><f>Default GST Offset</f><f>Default GST Offset</f><f>Default timezone offset</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>text</f><f>0</f></row>
+      <row><f>8</f><f>Audit Level</f><f>Audit Level</f><f><![CDATA[What level of audit logging should be performed.  0 - no logging, 1 - inserts & updates, 2 - and login/logout, 3 - and views, 4 - and searches]]></f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
+      <row><f>9</f><f>Activities Default Behavior</f><f>Activities Default Behavior</f><f>How will activities behave.  Options are Fast or Long.  Fast will keep user within current screen while Long will move to the activites/one screen for detailed description entry.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
+      <row><f>10</f><f>LDAP Version</f><f>LDAP Version</f><f>Version of the LDAP server.  Will usually be 2 or 3.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
+      <row><f>11</f><f>RSS Feeds Enabled</f><f>RSS Feeds Enabled</f><f>Provide RSS Feeds.  y or n.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
+      <row><f>12</f><f>Maximum RSS Feed Entries</f><f>Maximum RSS Feed Entries</f><f>Maximum number of entries to include in any RSS feed.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>text</f><f>0</f></row>
+      <row><f>13</f><f>Sender Email Address</f><f>Sender Email Address</f><f>Email address to use as the sender address when sending reports via email.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>text</f><f>0</f></row>
+      <row><f>14</f><f>Reports--Use Horizontal Rule</f><f>Reports--Use Horizontal Rule</f><f>Use horizontal rule on reports.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
+      <row><f>15</f><f>Reports--Show No Items Found</f><f>Reports--Show No Items Found</f><f>Show text for items with no result on reports.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
+      <row><f>16</f><f>Allow Unassigned Activities</f><f>Allow Unassigned Activities</f><f>Unassigned activities are useful when creating activity pools, but can result in activities erroneously created without accountability.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
+      <row><f>17</f><f>Display Item Technical Details</f><f>Display Item Technical Details</f><f>Expose ID numbers and other technical tidbits on production screens. Useful for developers tracking issues in production. Otherwise not necessary.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
+      <row><f>18</f><f>Show Logo</f><f>Show Logo</f><f>Controls custom logo display in the head of every page in XRMS.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
+      <row><f>19</f><f>Use Owl</f><f>Use Owl</f><f>Provide an experimental link to OWL, a file management utility that supports more features (like revisions) than xrms.  To use, install OWL from http://sourceforge.net/projects/owl in xrms/owl and set this parameter to y.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
+      <row><f>21</f><f>xrms_version</f><f>XRMS Version</f><f>XRMS Version (read-only)</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>text</f><f>1</f></row>
     </data>
   </table>
   <table name="user_preferences">
@@ -3457,9 +3565,7 @@
       <UNSIGNED/>
     </field>
     <field name="user_preference_name" type="C" size="255"/>
-    <field name="user_preference_value" type="X">
-      <NOTNULL/>
-    </field>
+    <field name="user_preference_value" type="X"/>
     <field name="user_preference_status" type="C" size="1">
       <NOTNULL/>
       <DEFAULT value="a"/>
@@ -3483,6 +3589,24 @@
       <row><f>1</f><f>0</f><f>3</f><f></f><f>y</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
       <row><f>2</f><f>0</f><f>4</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
       <row><f>3</f><f>0</f><f>5</f><f></f><f>contains</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>4</f><f>0</f><f>6</f><f></f><f>1.0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>5</f><f>0</f><f>7</f><f></f><f>-5</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>6</f><f>0</f><f>8</f><f></f><f>4</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>7</f><f>0</f><f>9</f><f></f><f>Fast</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>8</f><f>0</f><f>10</f><f></f><f>2</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>9</f><f>0</f><f>11</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>10</f><f>0</f><f>12</f><f></f><f>15</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>11</f><f>0</f><f>13</f><f></f><f>xrms@example.com</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>12</f><f>0</f><f>14</f><f></f><f>y</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>13</f><f>0</f><f>15</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>14</f><f>0</f><f>16</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>15</f><f>0</f><f>17</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>16</f><f>0</f><f>18</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>17</f><f>0</f><f>19</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>18</f><f>0</f><f>20</f><f></f><f>1.0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>19</f><f>0</f><f>1</f><f></f><f>en_US</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>20</f><f>0</f><f>2</f><f></f><f>basic</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>21</f><f>0</f><f>21</f><f></f><f>1.0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
     </data>
   </table>
   <table name="users">
@@ -3526,7 +3650,7 @@
       <col>username</col>
     </index>
     <data>
-      <row><f>1</f><f>0</f><f>user1</f><f>24c9e15e52afc47c225b757e7bee1f9d</f><f>One</f><f>User</f><f>user1@somecompany.com</f><f>english</f><f>0</f><f></f><f>a</f></row>
+      <row><f>1</f><f>0</f><f>user1</f><f>24c9e15e52afc47c225b757e7bee1f9d</f><f>One</f><f>User</f><f>user1@somecompany.com</f><f>english</f><f>0</f><f>0000-00-00 00:00:00</f><f>a</f></row>
     </data>
   </table>
   <table name="workflow_history">
