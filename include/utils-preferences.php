@@ -18,7 +18,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-preferences.php,v 1.10 2005/08/05 22:13:23 vanmer Exp $
+ * $Id: utils-preferences.php,v 1.11 2005/11/30 00:45:20 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -308,6 +308,8 @@ function render_preference_form_element($con, $user_preference_type_id, $element
     $element_type=$type_info['form_element_type'];
     $element_name=$type_info['user_preference_name'];
     $element_label=$type_info['user_preference_pretty_name'];
+    $read_only=$type_info['read_only'];
+
     $show_blank_first=false;
     $element_length=false;
     $element_height=false;
@@ -323,7 +325,7 @@ function render_preference_form_element($con, $user_preference_type_id, $element
             if (!$element_type) $element_type='text';
         break;
     }
-    $element=create_form_element($element_type, $element_name, $element_value, $element_extra_attributes, $element_length, $element_height, $possible_values, $show_blank_first);
+    $element=create_form_element($element_type, $element_name, $element_value, $element_extra_attributes, $element_length, $element_height, $possible_values, $show_blank_first, $read_only);
 
     return $element;    
 
@@ -519,6 +521,8 @@ function get_user_preference_type($con, $type_name=false, $type_id=false, $retur
   * @param string $user_preference_description optionally providing description for user preference (used for user edit)
   * @param boolean $allow_multiple optionally specifying if user option can have multiple entires (defaults to false, only allow single entry)
   * @param boolean $allow_user_edit optionally specifying if preference should be included in the UI for editing (defaults to false, do not show in user UI)
+  * @param string $form_element_type optionally specifying what type of field should be displayed in the UI, defaults to text
+  * @param boolean $read_only optionally specifying if preference should be included in the UI for as read-only (not editable) (defaults to false, allow edit in UI)
   * @return integer with database id of newly created preference type (or pre-existing id), or false for failure
 **/
 function add_user_preference_type($con, 
@@ -527,7 +531,8 @@ function add_user_preference_type($con,
                                                                     $user_preference_description=false, 
                                                                     $allow_multiple=false,
                                                                     $allow_user_edit=false, 
-                                                                    $form_element_type=false) {
+                                                                    $form_element_type=false,
+                                                                    $read_only=false) {
     if (!$user_preference_name) {
         //if no preference name is specified, fail
         return false;
@@ -550,6 +555,9 @@ function add_user_preference_type($con,
     
     if ($allow_user_edit)
         $preference_type['allow_user_edit_flag']=1;
+
+    if ($read_only)
+        $preference_type['read_only']=1;
     
     if ($form_element_type)
         $preference_type['form_element_type']=$form_element_type;
@@ -733,6 +741,9 @@ function move_system_parameters($con, $fields) {
 
 /**
  * $Log: utils-preferences.php,v $
+ * Revision 1.11  2005/11/30 00:45:20  vanmer
+ * - added read-only option for preferences
+ *
  * Revision 1.10  2005/08/05 22:13:23  vanmer
  * - added check to ensure that db connection is avaible when loading preferences
  *
