@@ -2,7 +2,7 @@
 /**
  * install/extract-util.php - This page should be used by developers and administrators to extract an xml schema
  *
- * $Id: extract-xml.php,v 1.1 2005/10/03 21:19:58 vanmer Exp $
+ * $Id: extract-xml.php,v 1.2 2005/11/30 00:40:09 vanmer Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -65,12 +65,19 @@ $schema = new adoSchema( $con );
 $schemastring= $schema->ExtractSchema(true);
 
 //send download headers, don't force pop-up download dialog on browser
-SendDownloadHeaders('text','xml', 'xrms-schema.xml', true, strlen($schemastring));
-
-echo $schemastring;
+//SendDownloadHeaders('text','xml', 'xrms-schema.xml', true, strlen($schemastring));
+$out_path=$include_path."../tmp/xrms-schema.xml";
+$fpath=fopen($out_path, 'w');
+$ret=fwrite($fpath, $schemastring, strlen($schemastring));
+fclose($fpath);
+echo "Placed Schema in $out_path";
 
 /**
  *$Log: extract-xml.php,v $
+ *Revision 1.2  2005/11/30 00:40:09  vanmer
+ *- changed to extract XML to a file in the temporary directory instead of downloading to the
+ *client
+ *
  *Revision 1.1  2005/10/03 21:19:58  vanmer
  *- Adding application to use XML schema for install of XRMS tables
  *- Commit includes extract file to get current database into XML form
