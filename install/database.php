@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.57 2005/10/06 04:30:06 vanmer Exp $
+ * $Id: database.php,v 1.58 2005/11/30 00:43:41 vanmer Exp $
  */
 
 /**
@@ -293,6 +293,7 @@ function user_db_tables($con, $table_list) {
         `user_preference_description` VARCHAR( 255 ) NOT NULL ,
         `allow_multiple_flag` TINYINT( 1 ) DEFAULT '0' NOT NULL ,
         `allow_user_edit_flag` TINYINT( 1 ) DEFAULT '0' NOT NULL ,
+        `read_only` TINYINT( 1 ) DEFAULT '0' NOT NULL ,
         `user_preference_type_status` CHAR( 1 ) DEFAULT 'a' NOT NULL ,
         `preference_type_created_on` DATETIME NOT NULL ,
         `user_preference_type_modified_on` DATETIME NOT NULL ,
@@ -1308,6 +1309,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.58  2005/11/30 00:43:41  vanmer
+ * - added read-only flag for preferences
+ *
  * Revision 1.57  2005/10/06 04:30:06  vanmer
  * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
  *
