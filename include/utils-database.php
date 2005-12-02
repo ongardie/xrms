@@ -6,8 +6,9 @@
  * Almost all files in the system include this file.
  *
  * @author Beth Macknik
+ * @package XRMS_API
  *
- * $Id: utils-database.php,v 1.17 2005/08/05 21:33:56 vanmer Exp $
+ * $Id: utils-database.php,v 1.18 2005/12/02 00:55:20 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -122,6 +123,13 @@ function table_name($table) {
     }
 }
 
+/**
+ * Function that generates a URL to the one.php page based on a database table and ID passed in
+ *
+ * @param string $table with tablename of the entity
+ * @param integer $id with ID to pass to the one.php page
+ * @return URL relative to $http_site_root
+**/
 function table_one_url($table, $id) {
     $singular=make_singular($table);
     $field_name=$singular.'_id';
@@ -136,11 +144,24 @@ function table_one_url($table, $id) {
     return $return_url;
 }
 
+/**
+ * Function that generates a URL to the some.php page based on a database table passed in
+ *
+ * @param string $table with tablename of the entity
+ * @return string with URL relative to $http_site_root
+**/
 function table_some_url($table) {
     $singular=make_singular($table);
     $return_url="/$singular/some.php";
 }
 
+/**
+ * Function to execute a SQL file statement by statement using the ; character as a separator
+ *
+ * @param adodbconnection $con with handle to the database
+ * @param string $file_path with path to SQL file to open and execute
+ * @return boolean indicating success of SQL file open operation
+**/
 function execute_batch_sql_file($con, $file_path) {
     if (file_exists($file_path)) {
         $fh = fopen($file_path, 'r');
@@ -170,8 +191,6 @@ function execute_batch_sql_file($con, $file_path) {
 
 /*****************************************************************************/
 /**
- * function portfolio_gpg
- *
  * Provides an adodbconnection handle for the XRMS database
  *
  * @return adodbconnection $con connected to XRMS database
@@ -212,6 +231,10 @@ register_shutdown_function('db_con_cleanup');
 /*****************************************************************************/
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.18  2005/12/02 00:55:20  vanmer
+ * - added more PHP doc to utils-database
+ * - added XRMS_API package tag
+ *
  * Revision 1.17  2005/08/05 21:33:56  vanmer
  * - added function to create string for company name search.  Queries system preferences and adds % to the string
  * according the preference
