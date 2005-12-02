@@ -6,8 +6,9 @@
  * This file should be included anywhere companies need to be created or modified
  *
  * @author Aaron van Meerten
+ * @package XRMS_API
  *
- * $Id: utils-companies.php,v 1.1 2005/11/22 20:38:34 jswalter Exp $
+ * $Id: utils-companies.php,v 1.2 2005/12/02 01:53:32 vanmer Exp $
  *
  */
 
@@ -164,6 +165,9 @@ function delete_company($con, $company_id, $delete_from_database=false) {
 
  /**
  * $Log: utils-companies.php,v $
+ * Revision 1.2  2005/12/02 01:53:32  vanmer
+ * - added XRMS_API package tag
+ *
  * Revision 1.1  2005/11/22 20:38:34  jswalter
  *  - Initial revision of an API for managing companies in XRMS
  *

@@ -6,8 +6,9 @@
  * This file should be included anywhere contacts need to be created or modified
  *
  * @author Aaron van Meerten
+ * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.3 2005/11/23 17:34:21 jswalter Exp $
+ * $Id: utils-contacts.php,v 1.4 2005/12/02 01:50:18 vanmer Exp $
  *
  */
 
@@ -244,6 +245,9 @@ function delete_contact($con, $contact_id, $delete_from_database=false) {
 
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.4  2005/12/02 01:50:18  vanmer
+ * - added XRMS_API package tag
+ *
  * Revision 1.3  2005/11/23 17:34:21  jswalter
  *  - moved 'clean_phone_fields()' to "utils-misc.php"
  *

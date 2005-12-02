@@ -5,9 +5,11 @@
  * Functions in this file may be used throughout XRMS.
  * Almost all files in the system include this file.
  *
+ * @package XRMS_API
+ *
  * @author Walter Torres
  *
- * $Id: utils-files.php,v 1.11 2005/10/05 21:53:49 vanmer Exp $
+ * $Id: utils-files.php,v 1.12 2005/12/02 01:49:23 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -595,6 +597,9 @@ function get_file_records( $con, $files_data, $allow_acl_restriction=true )
 
 /**
  * $Log: utils-files.php,v $
+ * Revision 1.12  2005/12/02 01:49:23  vanmer
+ * - added XRMS_API package tag
+ *
  * Revision 1.11  2005/10/05 21:53:49  vanmer
  * - changed ACL control of files recordset to add a false clause if no file list was provided
  *

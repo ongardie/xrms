@@ -2,7 +2,9 @@
 /**
  * Utility functions for manipulating users
  *
- * $Id: utils-users.php,v 1.3 2005/09/26 01:17:17 vanmer Exp $
+ * @package XRMS_API
+ *
+ * $Id: utils-users.php,v 1.4 2005/12/02 01:47:47 vanmer Exp $
  */
 
 /**
@@ -89,6 +91,9 @@ function get_xrms_user($con, $username=false, $user_id=false) {
 
 /**
  * $Log: utils-users.php,v $
+ * Revision 1.4  2005/12/02 01:47:47  vanmer
+ * - added XRMS_API package tag
+ *
  * Revision 1.3  2005/09/26 01:17:17  vanmer
  * - added more errors if user already exists, if password or last name are not specified
  *
