@@ -22,8 +22,8 @@ start_page();
 <h3> 
 QuickForm example 1
 </h3>
-<p>
-Simple example showing usage of QuickForm for the 'notes' table.</p>
+<p> Simple example showing usage of QuickForm for the 'notes' table.</p>
+<p> This example also makes use of the fckeditor for the description field.</p>
 <p>See also: <a href="QuickForm.ex.2.php">QuickForm.ex.2.php</a></p>
 
 <?php
@@ -50,6 +50,8 @@ if(check_user_role(false, $session_user_id, 'Administrator')) {
 
     $model->SetForeignKeyField('entered_by', 'Entered By', 'users', 'user_id', 'username');
 
+    $model->SetFieldType('note_description', 'fckeditor');
+
 
 
 
@@ -62,10 +64,13 @@ if(check_user_role(false, $session_user_id, 'Administrator')) {
 
     $con->close();
 
-echo "
-        $form_html
+echo <<<END
 
-";
+<div id="Main">
+    <?php echo $form_html; ?>
+</div>
+END;
+
 
 
 	
