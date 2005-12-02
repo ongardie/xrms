@@ -12,7 +12,7 @@ if ( !defined('IN_XRMS') )
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.40 2005/11/14 20:33:48 daturaarutad Exp $
+ * $Id: vars.php,v 1.41 2005/12/02 19:05:12 daturaarutad Exp $
  */
 
 /**
@@ -297,6 +297,7 @@ $use_self_contacts = false;
  */
 global $include_directory;
 $fckeditor_location = $include_directory . '/fckeditor/';
+$fckeditor_location_url =  $http_site_root . '/include/fckeditor/';
 
 
 //?>
