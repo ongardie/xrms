@@ -1,10 +1,12 @@
 <?php
-// $Id: common.php,v 1.2 2005/04/13 14:24:03 gpowers Exp $
+// $Id: common.php,v 1.3 2005/12/02 19:40:00 daturaarutad Exp $
 
 // This function generates the common prologue and header
 // for the various templates.
 
+global $include_directory;
 require_once('../../include-locations.inc');
+
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -71,11 +73,12 @@ function template_common_epilogue($args)
 </table>
 
 <?php
+    
   if($args['history'])
   {
     $sidebar_box .= '<tr><td class=widget_content><a href="'. historyURL($args['history']). '">'.
          TMPL_ViewDocHistory . '</a></td></tr>';
-  }
+  }  
   if($args['twin'] != '')
   {
     if(count($twin = $pagestore->twinpages($args['twin'])))
@@ -123,7 +126,7 @@ function template_common_epilogue($args)
                 <form method="get" action="<?php print $FindScript; ?>">
                   <input type="hidden" name="action" value="find" />
                   <input type="text" name="find" size="20" />
-                  <input type="submit" value="<?php echo _("Seach"); ?>" />
+                  <input type="submit" value="<?php echo _("Search"); ?>" />
                 </form>
             </td>
           </tr>
@@ -133,9 +136,68 @@ function template_common_epilogue($args)
                 <td class=widget_header>
                     <?php echo _("Options"); ?>
                 </td>
+            </tr>                        
+            <tr>
+            <td>
+<b><?=$args['twin']?> </b>
+            </td>
             </tr>
-                <?php echo html_toolbar_top( !empty($path[1])?$path[1]:'' ); ?>
-                <?php echo $sidebar_box; ?>
+            <?php echo $sidebar_box; ?>   
+            <tr>
+            <td>
+                <a href="index.php?action=delete&page=<?=urlencode($args['twin'])?>"><?=_("Delete")?></a>
+            </td>
+            </tr>
+            <tr>
+            <td>
+                <br>
+            </td>
+            </tr>
+            <tr>
+            <td>
+<b><?php echo _("Documents"); ?></b><br>
+            </td>
+            </tr>
+            <tr>
+                <td class=widget_content>                                
+<?php                
+
+# Lista dos documentos
+global $http_site_root;
+global $xrms_db_server,$xrms_db_username,$xrms_db_password,$xrms_db_dbname;
+
+$WKDB = new WikiDB(0,$xrms_db_server,$xrms_db_username,$xrms_db_password,$xrms_db_dbname);
+
+$sql = "select distinct title from tavi_pages";
+$rs = $WKDB->query($sql);
+if ($rs) {
+    $list = array();
+    while(($result = $WKDB->result($rs)))
+    {
+      $list[] = array($result[0]);
+      echo "<a href=\"$http_site_root/plugins/tavi/index.php?page=$result[0]\">$result[0]</a><br>";
+    }
+
+}
+?>                    
+                <br><br>
+                </td>
+            </tr>
+            
+            <?php echo html_toolbar_top( !empty($path[1])?$path[1]:'' ); ?>
+                             
+        </table>
+        <table class=widget cellspacing=1>
+            <tr>
+                <td class=widget_header>
+                    <?php echo _("New"); ?>
+                </td>
+            </tr>                        
+            <tr>
+            <td>
+                <input id="title" type="text" name="title" value=""> <input onclick="document.location='<?php echo $http_site_root; ?>/plugins/tavi/index.php?action=edit&page=' + document.getElementById('title').value" type="button" name="new" value="<?=_("New")?>">
+            </td>
+            </tr>
         </table>
       </div>
 <?php

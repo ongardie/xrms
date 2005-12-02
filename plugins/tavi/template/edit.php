@@ -1,5 +1,5 @@
 <?php
-// $Id: edit.php,v 1.1 2005/04/12 20:45:13 gpowers Exp $
+// $Id: edit.php,v 1.2 2005/12/02 19:40:00 daturaarutad Exp $
 
 require_once(TemplateDir . '/common.php');
 
@@ -45,12 +45,25 @@ function template_edit($args)
 <?php  if($args['archive'])
     {?>
   <input type="hidden" name="archive" value="1" />
-<?php  }?>
-  <textarea name="document" rows="<?php
-    print $EditRows; ?>" cols="<?php
-    print $EditCols; ?>" wrap="virtual"><?php
-  print str_replace('<', '&lt;', str_replace('&', '&amp;', $args['text']));
-?></textarea><br />
+<?php  }
+
+global $fckeditor_location_url;
+global $fckeditor_location;
+
+include("$fckeditor_location/fckeditor.php") ;
+        
+$sBasePath = "$http_site_root/plugins/tavi/fckeditor/";
+
+$oFCKeditor = new FCKeditor('document') ;
+$oFCKeditor->BasePath	= $fckeditor_location_url ;
+$oFCKeditor->Height = 600;
+$oFCKeditor->Width = 700;        
+$oFCKeditor->Value		= $args['text'];
+$oFCKeditor->Create() ;
+
+
+?>
+  <br />
   <?php echo TMPL_SummaryOfChange; ?>
   <input type="text" name="comment" size="40" value="" /><br />
   <?php echo TMPL_AddToCategory; ?>

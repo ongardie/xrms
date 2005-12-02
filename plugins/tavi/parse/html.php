@@ -1,5 +1,5 @@
 <?php
-// $Id: html.php,v 1.1 2005/04/12 20:45:12 gpowers Exp $
+// $Id: html.php,v 1.2 2005/12/02 19:40:00 daturaarutad Exp $
 
 // These functions take wiki entities like 'bold_begin' or 'ref' and return
 //   HTML representing these entities.  They are used throught this script
@@ -354,10 +354,7 @@ function html_parents_top($path)
 function html_toolbar_top($path)
 {
   global $HomePage, $PrefsScript;
-  return '<tr><td class=widget_content>' . html_ref($HomePage, $HomePage)
-         . '</td></tr><tr><td class=widget_content>' .
-         html_ref(PARSE_RecentChanges, PARSE_RecentChanges)
-	 . '</td></tr><tr><td class=widget_content>' .
+  return '<tr><td class=widget_content>' .
          (($path!="")? html_parents_top($path)
 	 . '</td></tr><tr><td class=widget_content>' : '') .
          '<a href="' . $PrefsScript . '">'. PARSE_Preferences

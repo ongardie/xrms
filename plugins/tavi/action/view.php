@@ -1,5 +1,5 @@
 <?php
-// $Id: view.php,v 1.1 2005/04/12 20:45:10 gpowers Exp $
+// $Id: view.php,v 1.2 2005/12/02 19:40:00 daturaarutad Exp $
 
 require('parse/main.php');
 require('parse/macros.php');
@@ -20,7 +20,7 @@ function action_view()
   gen_headers($pg->time);
 
   template_view(array('page'      => $page,
-                      'html'      => parseText($pg->text, $ParseEngine, $page),
+                      'html'      => $pg->text,
                       'editable'  => $pg->mutable,
                       'timestamp' => $pg->time,
                       'archive'   => $version != '',

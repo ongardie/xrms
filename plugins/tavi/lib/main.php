@@ -1,5 +1,19 @@
 <?php
-// $Id: main.php,v 1.1 2005/04/12 20:45:12 gpowers Exp $
+// $Id: main.php,v 1.2 2005/12/02 19:40:00 daturaarutad Exp $
+
+
+global $include_directory;
+require_once('../../include-locations.inc');
+
+require_once($include_directory . 'vars.php');
+require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'confgoto.php');
+
+
+
 
 // Harvest script parameters and other variables.  We do this even if
 // register_globals=on; this way, we force the variables to be defined.
@@ -90,7 +104,8 @@ $ActionList = array(
                 'prefs'   => array('action/prefs.php', 'action_prefs', 'view'),
                 'macro'   => array('action/macro.php', 'action_macro', 'search'),
                 'rss'     => array('action/rss.php', 'action_rss', 'view'),
-                'style'   => array('action/style.php', 'action_style', '')
+                'style'   => array('action/style.php', 'action_style', ''),
+                'delete'  => array('action/delete.php', 'action_delete', '')
               );
 
 // Default action and page names.
@@ -111,8 +126,8 @@ if($ActionList[$action][2] != '')
 
 // Dispatch the appropriate action.
 if(!empty($ActionList[$action]))
-{
-  include($ActionList[$action][0]);
+{    
+  include($ActionList[$action][0]); 
   $ActionList[$action][1]();
 }
 
