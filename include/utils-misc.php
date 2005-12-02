@@ -8,7 +8,8 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.154 2005/12/02 00:31:32 vanmer Exp $
+ * @package XRMS_API
+ * $Id: utils-misc.php,v 1.155 2005/12/02 00:44:25 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -1978,6 +1979,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.155  2005/12/02 00:44:25  vanmer
+ * - added phpdoc package
+ *
  * Revision 1.154  2005/12/02 00:31:32  vanmer
  * - added more PHPDoc to utils-misc
  *
