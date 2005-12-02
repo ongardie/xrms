@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.20 2005/12/02 21:59:08 vanmer Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.21 2005/12/02 22:33:12 vanmer Exp $
  */
 
 
@@ -406,6 +406,7 @@
 					case 'double unsigned':
 					case 'text':
 					case 'time':
+					default:
  						$form->addElement('text', $field_name, $field['displayName'], $field['attributes']);
  						break;
 					case 'longtext':
@@ -509,8 +510,6 @@ END;
 							// for this, we don't display anything
 							break;
 	
-	        			default:
-							echo "ADOdb_QuickForm Warning: no match found for {$field['type']}<br/>\n";
 				}
 			}
 		}
@@ -700,6 +699,9 @@ END;
 
 /**
 * $Log: ADOdb_QuickForm.php,v $
+* Revision 1.21  2005/12/02 22:33:12  vanmer
+* - changed default handling for form fields to display contents as a text field, instead of displaying an error
+*
 * Revision 1.20  2005/12/02 21:59:08  vanmer
 * - added handling for bigint and decimal database field types
 *
