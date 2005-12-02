@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.30 2005/09/21 21:11:41 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.31 2005/12/02 00:22:58 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -19,10 +19,16 @@
    
 class xrms_acl {
     //Connection object for use throughout the entire ACL object
+    /* @var $DBConnection contains the database handle to the database containing the main ACL tables */
     var $DBConnection=false;
     //Options for connection, used to instantiate the DB connection
+    /* @var $DBOptions associative array keyed by datasource name, of database connection information.  Main datasource should be key 'default', with database connection information.  Required keys for each datasource are 'db_dbtype', 'db_server', 'db_username', 'db_password', 'db_dbname' */
     var $DBOptions=array();
+    
+    /* @var $authCallBacks array containing strings with callback functions which will return database handles or DB auth information */
     var $authCallbacks=array();
+
+    /* @var $context_data_source_name is normally 'default', used to determine which datasource to use when no datasource is provided for a controlled object */
     var $context_data_source_name='default';
 
     /*****************************************************************************/
@@ -114,9 +120,9 @@ class xrms_acl {
     }
 
     /*****************************************************************************/
-    /** function get_authCallbacks()
+    /** function add_authCallbacks()
      *
-     * Returns the list of authCallbacks provided by parent application for access to databases
+     * Adds an authCallback function by which a parent application can provide access to databases
      *
      * @param string $callback with name of callback function to add
      * @return boolean reflecting success of adding new callback, false means the callback already existed in the list
@@ -431,7 +437,9 @@ class xrms_acl {
     /*****************************************************************************/
     /** function get_controlled_object_data
      *
-     * Returns array of fields contained within a particular controlled object
+     * Returns array of fields contained within a particular controlled object.  
+     * Builds a query based on table for the controlled object, as well a SQL restriction clause based on restrictionFields passed in.
+     * Using parameters, this function can be coaxed into returning the database handle and recordset object instead of just an array of fields
      *
      * @param integer ControlledObject_id for which to find parents
      * @param integer on_what_id to specify which particular ControlledObject to check
@@ -1489,7 +1497,7 @@ class xrms_acl {
       * Returns data for the controlled object based on the searched-for string or id
       *
       * @param string ControlledObject_name with text to search for within the names of controlled objects
-      * @return integer ControlledObject_id identifying the controlled object in the database or false if not found
+      * @return array with data about a ControlledObject or false if not found
       * 
       */
     function get_controlled_object($ControlledObject_name=false, $ControlledObject_id=false, $fuzzy=true, $on_what_table=false) {
@@ -1663,11 +1671,13 @@ class xrms_acl {
      /*****************************************************************************/
      /** function get_controlled_object_relationship
        *
-       * Searches for a particular controlled object relationship or a set of group_member_id's based on parameters
+       * Searches for a particular controlled object relationship based on parameters
        *
        * @param integer ParentControlledObject_id to specify which object is the parent in the relationship
        * @param integer ChildControlledObject_id to specify which object is the child in the relationship
-       * @return integer CORelationship_id with new identifier for new entry for the relationship or false if duplicate/failed (or array if no on_what_id is specified)
+       * @param integer CORelationship_id with particular database identifier for the desired controlled object relationship
+       * @param boolean $IncludeControlledObject indicating whether the Controlled Object tables and fields for child and parent should be included in the data returned.  Extra fields returned are parent_table, parent_field, and all the controlled object table fields for the child in the relationship.  Defaults to false, only return controlled object relationship fields
+       * @return array with data about controlled object relationship or false if relationship is not found
        *
        */
     function get_controlled_object_relationship($ParentControlledObject_id=false, 
@@ -2458,6 +2468,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.31  2005/12/02 00:22:58  vanmer
+ * - better PHPDoc for ACL
+ *
  * Revision 1.30  2005/09/21 21:11:41  vanmer
  * - removed blank stub functions (unneeded)
  * - ensured that all functions have php docblocks, and they are rational
