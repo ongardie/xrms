@@ -13,20 +13,11 @@ global $http_site_root;
 
 // Defined in XRMS
 global $fckeditor_location;
-global $file_path_to_fckeditor;
+global $fckeditor_location_url;
 
-global $file_path_to_fckeditor;
-$file_path_to_fckeditor = $fckeditor_location;
-
-// This is the web site path
-global $web_path_to_fckeditor;
-$web_path_to_fckeditor = $http_site_root . '/include/fckeditor/';
 
 global $fckeditor_height;
 $fckeditor_height = '400';
-
-
-
 
 
 ?>

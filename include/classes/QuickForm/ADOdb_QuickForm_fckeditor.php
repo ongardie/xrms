@@ -4,16 +4,15 @@
 * Extends the HTML_QuickForm_element to utilize the FCKEditor for WYWIWYG editing
 *
 *
-* $Id: ADOdb_QuickForm_fckeditor.php,v 1.1 2005/11/14 19:43:15 daturaarutad Exp $
+* $Id: ADOdb_QuickForm_fckeditor.php,v 1.2 2005/12/02 19:24:35 daturaarutad Exp $
 */
 
 require_once("HTML/QuickForm/element.php");
 require_once("ADOdb_QuickForm_config.php");
 
 
-// Set in ADOdb_QuickForm_config.php
-global $file_path_to_fckeditor;
-include("$file_path_to_fckeditor/fckeditor.php") ;
+global $fckeditor_location;
+include("$fckeditor_location/fckeditor.php") ;
 
 
 
@@ -186,12 +185,12 @@ class HTML_QuickForm_fckeditor extends HTML_QuickForm_element
             return $this->getFrozenHtml();
         } else {
 
-            global $web_path_to_fckeditor;
+            global $fckeditor_location_url;
             global $fckeditor_height;
 
             $oFCKeditor = new FCKeditor($this->_attributes['name']) ;
     
-            $oFCKeditor->BasePath   = $web_path_to_fckeditor;
+            $oFCKeditor->BasePath   = $fckeditor_location_url;
             $oFCKeditor->Value      = $this->_value;
 
             if($fckeditor_height) {
