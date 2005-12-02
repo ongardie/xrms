@@ -17,8 +17,9 @@
  * preferences set.
  *
  * @author Aaron van Meerten
+ * @package XRMS_API
  *
- * $Id: utils-preferences.php,v 1.11 2005/11/30 00:45:20 vanmer Exp $
+ * $Id: utils-preferences.php,v 1.12 2005/12/02 01:45:22 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -58,6 +59,7 @@ function set_user_preference(&$con, $user_id, $preference_type, $preference_valu
     $preference_record['user_preference_status']='a';
     $preference_record['user_preference_type_id']=$preference_type;
     $preference_record['user_preference_value']=$preference_value;
+    $preference_record['user_preference_modified_on']=time();
     $preference_record['user_id']=$user_id;
      
     if ($preference_name)
@@ -285,6 +287,13 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
     if (!$pref_rst) { db_error_handler( $con, $sql); return false; }
     return true;
 }
+
+
+/**
+ * This function returns a string with the HTML to change/edit multiple user preference entries of a single type
+ * @todo make this work right instead of using print_rs
+ *
+**/
 function render_preference_form_multi_element($con, $user_id, $user_preference_type_id, $type_info=false) {
     if (!$user_preference_type_id) return false;
     if (!$type_info) {
@@ -300,6 +309,17 @@ function render_preference_form_multi_element($con, $user_id, $user_preference_t
     }
 }
 
+/**
+ * This function returns a string with the HTML to change/edit a user preference entry
+ * 
+ * @param adodbconnection $con
+ * @param integer $user_preference_type_id with type of user preference to render form element
+ * @param integer $element_value with existing user preference value, if one exists
+ * @param array $type_info with data about user preference type (retrieved if not provided)
+ * @param string $element_extra_attributes with extra parameters to add inside the input element tag
+ * @return string with HTML for preference form element
+ *
+**/
 function render_preference_form_element($con, $user_preference_type_id, $element_value=false, $type_info=false, $element_extra_attributes='') {
     if (!$user_preference_type_id AND !$type_info) return false;
     if (!$type_info) {
@@ -331,6 +351,11 @@ function render_preference_form_element($con, $user_preference_type_id, $element
 
 }
 
+/**
+ * This function returns an array of possible css themes with the name also as the array key
+ * Used when rendering the CSS theme selector in the user preferences 
+ *
+**/
 function get_css_theme_possible_values() {
     $themes=get_css_themes();
     if ($themes) {
@@ -343,6 +368,11 @@ function get_css_theme_possible_values() {
     return false;
 }
 
+/**
+ * This function returns an array of possible languages with the language name as the value, and the language code as the key
+ * Used when rendering the language selector in the user preference
+ *
+**/
 function get_language_possible_values() {
     global $languages;
     global $xrms_file_root;
@@ -357,6 +387,18 @@ function get_language_possible_values() {
     return $possible_values;
 }
 
+/**
+ * This function returns an array of possible options for a user preference type, based on ID or info
+ * Used when rendering the HTML table of user preferences
+ * This is where custom user preferences output can be done (like languages and CSS)
+ * Plugins can also add option values using a hook in this function
+ *
+ * @param adodbconnection $con with handle to the database
+ * @param integer $user_preference_type_id with identifier for the user preference type
+ * @param array $type_info with data about the user preference type (will be retrieved if not provided)
+ * @return associative array with option value as the key and display name as the value
+ *
+**/
 function get_preference_possible_values($con, $user_preference_type_id, $type_info=false) {
     if (!$user_preference_type_id) return false;
     
@@ -385,6 +427,15 @@ function get_preference_possible_values($con, $user_preference_type_id, $type_in
     return $options;
 }
 
+/**
+ * This function returns an array of user preference options
+ *
+ * @param adodbconnection $con with handle to the database
+ * @param integer $user_preference_type_id to retrieve options for
+ * @param boolean $show_all optionally specifying if deleted options should be shown (defaults to false, only show active options)
+ * @param boolean $return_possible_values specifying if return is an array of option values, keyed by db id (default) or an array of display values, keyed by option value (true)
+ * @return array with option data keyed by database identifier or option value, or false if failure occurs
+**/
 function get_preference_options($con, $user_preference_type_id, $show_all=false, $return_possible_values=false) {
     if (!$user_preference_type_id) return false;
     $sql = "SELECT * FROM user_preference_type_options WHERE user_preference_type_id=$user_preference_type_id";
@@ -415,7 +466,17 @@ function get_preference_options($con, $user_preference_type_id, $show_all=false,
     return false;
 }
 
-function add_preference_option($con, $user_preference_type_id, $option_value, $option_display=false, $sort_order=1) {
+/**
+ * This function adds an option to the list of possible values that a user preference type can have
+ *
+ * @param adodbconnection $con with handle to the database
+ * @param integer $user_preference_type_id with ID of the user preference type to add an option for
+ * @param string $option_value with value to add as an option for user preference type
+ * @param string $option_display with string to show as display name for the option value
+ * @param integer $sort_order to determine what order option is shown in, defaults to 1, shown with first options
+ * @return integer $key with database identifier of the newly added key, or existing id, or false if addition failed
+ **/
+ function add_preference_option($con, $user_preference_type_id, $option_value, $option_display=false, $sort_order=1) {
     if (!$user_preference_type_id OR !$option_value) return false;
     
     $options=get_preference_options($con, $user_preference_type_id, true);
@@ -451,6 +512,9 @@ function add_preference_option($con, $user_preference_type_id, $option_value, $o
     return false;    
 }
 
+/**
+ * This function deletes an entry as an option for a user preference type, based on value and preference type
+**/
 function delete_preference_option($con, $user_preference_type_id, $option_value, $delete_from_database=false) {
     $options=get_preference_options($con, $user_preference_type_id);
     $key = array_search($option_value, $options);
@@ -465,6 +529,7 @@ function delete_preference_option($con, $user_preference_type_id, $option_value,
     }
     return false;
 }
+
 /**
  * Get data about a user preference type
  *
@@ -620,18 +685,36 @@ function list_user_preference_types($con, $show_only_active=true){
     } else return false;    
 }
 
+/**
+ * This function is a wrapper for get_user_preferences_table forcing user_id to 0, to show system preferences
+ * @param adodbconnection $con with handle to the database
+ * @return system preferences table
+**/
 function get_admin_preferences_table($con) {
     return get_user_preferences_table($con, 0);
 }
 
+/**
+ * This function is a wrapper for get_user_preferences forcing user_id to 0, to retrieve system preference
+**/
 function get_admin_preference($con, $preference_type, $preference_name=false, $show_all=false) {
     return get_user_preference($con, 0, $preference_type, $preference_name, $show_all);
 }
 
+/**
+ * This function is a wrapper for set_user_preferences forcing user_id to 0, to set system preference
+**/
 function set_admin_preference($con, $preference_type, $preference_value, $preference_name=false, $set_default=false) {
     return set_user_preference($con, 0, $preference_type, $preference_value, $preference_name, $set_default);
 }
 
+/**
+ * This function renders HTML with the preferences and options for a user, with their current preferences selected
+ *
+ * @param adodbconnection $con with handle to the database
+ * @param integer $user_id with user for which to retrieve preferences (defaults to false, fetch from global session_user_id)
+ * @return string with HTML table of user preferences and options
+**/
 function get_user_preferences_table($con, $user_id=false) {
     global $session_user_id;
     global $msg;
@@ -685,6 +768,12 @@ function get_user_preferences_table($con, $user_id=false) {
     return $user_preferences_table;
 }
 
+/**
+ * This function is intended to be run on XRMS installs which still use the deprecated system parameters subsystem,.
+ * This code upgrades all system parameters into system preferences, with their options and values intact
+ *
+ * @param adodbconnection $con with handle to the database to upgrade
+**/
 function upgrade_system_parameter_user_preferences($con) {
     $sql = "SELECT * FROM system_parameters";
     $rst=$con->execute($sql);
@@ -702,6 +791,13 @@ function upgrade_system_parameter_user_preferences($con) {
     return $count;
 }
 
+/**
+ * This function is intended to be run on XRMS installs which still use the deprecated system parameters subsystem,.
+ * This code upgrades one set of system parameters into system preferences, with its options and value intact
+ *
+ * @param adodbconnection $con with handle to the database to upgrade
+ * @param array $fields with previous system parameter fields
+**/
 function move_system_parameters($con, $fields) {
     $param = $fields['param_id'];
     $description = $fields['description'];
@@ -741,6 +837,10 @@ function move_system_parameters($con, $fields) {
 
 /**
  * $Log: utils-preferences.php,v $
+ * Revision 1.12  2005/12/02 01:45:22  vanmer
+ * - added more PHPDoc to preferences API
+ * - added XRMS_API package tag
+ *
  * Revision 1.11  2005/11/30 00:45:20  vanmer
  * - added read-only option for preferences
  *
