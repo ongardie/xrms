@@ -2,7 +2,9 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.94 2005/11/30 00:44:50 vanmer Exp $
+ * @package XRMS_API
+ *
+ * $Id: utils-interface.php,v 1.95 2005/12/02 01:13:54 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -98,6 +100,10 @@ function status_msg($msg) {
   }
 } //end status_msg fn
 
+/**
+ * Function to create a URL string relative to $http_site_root, with optional text and title
+ *
+**/
 function http_root_href($url, $text, $title = NULL) {
     global $http_site_root;
     if ( empty($title) )
@@ -107,6 +113,10 @@ function http_root_href($url, $text, $title = NULL) {
     return '<a title="'.$title.'" href="'.$http_site_root.$url.'">'.$text.'</a>';
 }
 
+/**
+ * Function to create stylesheet links that will work for multiple browsers
+ *
+**/
 function css_link($url, $name = null, $alt = true, $mtype = 'screen') {
     global $http_site_root;
 
@@ -150,7 +160,11 @@ function css_link($url, $name = null, $alt = true, $mtype = 'screen') {
     return '    <link '.$media.$title.$rel.'type="text/css" '.$href." />\n";
 }
 
-function list_files($cssdir,$cssroot) {
+/**
+ * Function to list files within a css directory, used when querying for theme directories
+ *
+**/
+function list_css_files($cssdir,$cssroot) {
     if (!$cssroot OR !$cssdir) return false;
    if (is_dir($cssdir)) {
         $files=array();
@@ -170,6 +184,10 @@ function list_files($cssdir,$cssroot) {
     return false;
 }
 
+/**
+ * Function to retrieve the available css themes from the disk, or from the session if they have already be read
+ *
+**/
 function get_css_themes() {
     global $http_site_root;
     global $xrms_file_root;
@@ -189,7 +207,7 @@ function get_css_themes() {
                     $csssubdir=$cssdir.DIRECTORY_SEPARATOR.$file;
                     if (is_dir($csssubdir)){
 
-                        $css_files=list_files($csssubdir, "$cssroot/$file");
+                        $css_files=list_css_files($csssubdir, "$cssroot/$file");
                         $css_themes[$file]=$css_files;
                     }
                 }
@@ -294,28 +312,6 @@ function start_page($page_title = '', $show_navbar = true, $msg = '', $show_topn
   }
   } //end check for topnav variable
 } // end start_page fn
-
-
-//hack to fake ACL authentication until acl is completely integrated
-if (!function_exists('check_object_permission_bool')) {
-    function check_object_permission_bool($user, $object=false, $action='Read', $table=false) {
-        return true;
-    }
-}
-
-//hack to fake ACL authentication until acl is completely integrated
-if (!function_exists('check_permission_bool')) {
-    function check_permission_bool($user, $object=false, $id, $action='Read', $table=false) {
-        return true;
-    }
-}
-
-//hack to fake ACL authentication until acl is completely integrated
-if (!function_exists('acl_get_list')) {
-    function acl_get_list($user, $object) {
-        return true;
-    }
-}
 
 /**
  * function render_nav_line
@@ -599,7 +595,6 @@ function buildDataTable ( $aryRecordSet = null,
  * JScalendar calendar widget settings
  * Patch by Miguel Gonçalves ( Mig77 at users.sourceforge.net)
  */
-
 function jscalendar_includes() {
 
     global $http_site_root;
@@ -619,6 +614,11 @@ EOQ;
 
 } //end jscalendar_includes fn
 
+/**
+ * Function to add javascript include for the tooltips widget, ensure that this widget is only output once
+ * Can be set to echo (by default) or return HTML string
+ *
+**/
 function javascript_tooltips_include($output=true) {
     global $javascript_tooltips_included;
     $ret=false;
@@ -635,6 +635,11 @@ EOQ;
     return $ret;
 }
 
+/**
+ * Function to add javascript include for the mktree widget, ensure that this widget is only output once
+ * Can be set to echo (by default) or return HTML string
+ *
+**/
 function javascript_mktree_include($output=true) {
     global $javascript_mktree_included;
     $ret=false;
@@ -651,26 +656,56 @@ EOQ;
     return $ret;
 }
 
+/**
+ * This function is a wrapper for render_ACL_button to query for Update permission on an object
+**/
 function render_edit_button($text='Edit', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
     return render_ACL_button('Update', $text, $type, $onclick, $name, $id, $_table, $_id);
 }
 
+/**
+ * This function is a wrapper for render_ACL_button to query for Export permission on an object
+**/
 function render_export_button($text='Export', $type='button', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
     return render_ACL_button('Export', $text, $type, $onclick, $name, $id, $_table, $_id);
 }
 
+/**
+ * This function is a wrapper for render_ACL_button to query for Delete permission on an object
+**/
 function render_delete_button($text='Delete', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
     return render_ACL_button('Delete', $text, $type, $onclick, $name, $id, $_table, $_id);
 }
 
+/**
+ * This function is a wrapper for render_ACL_button to query for Read permission on an object
+**/
 function render_read_button($text='Read', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
     return render_ACL_button('Read', $text, $type, $onclick, $name, $id, $_table, $_id);
 }
 
+/**
+ * This function is a wrapper for render_ACL_button to query for Create permission on an object
+**/
 function render_create_button($text='Create', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
     return render_ACL_button('Create', $text, $type, $onclick, $name, $id, $_table, $_id);
 }
 
+/**
+ * Function to render action buttons wrapper with an ACL permission check.  
+ * This function can be used directly or the wrapper functions for each basic type of button (create, read, update, delete and export).  
+ * Will return either a string with the button if permission is granted, or a blank string if not permission is given
+ * 
+ * @param string $action with string describing the action ('Create', 'Read', 'Update', 'Delete', 'Export') the button will have 
+ * @param string $text with text to display on the button
+ * @param string $type with type of HTML input this button will be, defaults to 'submit'
+ * @param string $onclick with string for onclick handler for the button
+ * @param string $name with HTML name of the button
+ * @param integer $id optionally providing database identifier for the entity the action would apply to (otherwise uses global $on_what_id)
+ * @param string $_table optionally providing tablename the entity in question exists in (otherwise uses global $on_what_table)
+ *
+ * @return string with HTML for button, or blank string if no permission is granted
+**/
 function render_ACL_button($action, $text='Create', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
     global $on_what_table;
     global $session_user_id;
@@ -690,6 +725,10 @@ function render_ACL_button($action, $text='Create', $type='submit', $onclick=fal
     return render_button($text, $type, $onclick, $name, $id);
 }
 
+/**
+ * Function to create a string with the HTML for an input button
+ *
+**/
 function render_button($text='Edit', $type='submit', $onclick=false, $name=false, $id=false) {
     $text=_($text);
     $ret= "<input class=button value=\"$text\"";
@@ -959,6 +998,10 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.95  2005/12/02 01:13:54  vanmer
+ * - added more PHPDoc comments
+ * - added XRMS_API package tag
+ *
  * Revision 1.94  2005/11/30 00:44:50  vanmer
  * - added read_only option for rendering form elements
  *
