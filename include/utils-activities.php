@@ -7,8 +7,9 @@
  * This file should be included anywhere activities need to be created or modified
  *
  * @author Aaron van Meerten
+ * @package XRMS_API
  *
- * $Id: utils-activities.php,v 1.21 2005/09/21 19:59:57 vanmer Exp $
+ * $Id: utils-activities.php,v 1.22 2005/12/02 00:47:37 vanmer Exp $
 
  */
 
@@ -547,6 +548,15 @@ function delete_activity_participant($con, $activity_participant_id, $delete_fro
     else return true;
 }
 
+/**
+ * Function to retrieve data about an activity type
+ *
+ * @param adodbconnection $con with handle to the database
+ * @param string $short_name with short identifier to search for activity type
+ * @param string $pretty_name with descriptive identifier for activity type
+ * @param integer $type_id with integer identifier for the activity type
+ * @param array with data about activity type, or false if not found
+**/
 function get_activity_type($con, $short_name=false, $pretty_name=false, $type_id=false) {
     if (!$short_name AND !$pretty_name AND !$type_id) return false;
     $sql = "SELECT * FROM activity_types";
@@ -568,7 +578,19 @@ function get_activity_type($con, $short_name=false, $pretty_name=false, $type_id
 
     return false;
 }
-
+/**
+ * Function to add to add an activity type to the system, based on parameters
+ *
+ * @param $con handle to the database
+ * @param $short_name with short string identifier for activity type.  This will be unique, ideally
+ * @param $pretty_name with descriptive name for the activity type
+ * @param $pretty_plural with plural version of the descriptive name
+ * @param $display_html with HTML to display for the activity type name
+ * @param $score_adjustment optionally providing a score adjustment associated with this activity type (defaults to 0)
+ * @param $sort_order optionally providing a sort order entry for this activity type.  Defaults to 1, or place with top activity types
+ * @param $user_editable optionally specifying if the activity type can be edited by the administrator or is a locked system activity type (defaults to true, administrators may edit this activity type)
+ * @return integer $activity_type_id with existing or newly added activity type, or false for error
+**/
 function add_activity_type($con, $short_name, $pretty_name, $pretty_plural, $display_html, $score_adjustment=0, $sort_order=1, $user_editable=true) {
     if (!$con) return false;
     if (!$short_name) return false;
@@ -605,6 +627,12 @@ function add_activity_type($con, $short_name, $pretty_name, $pretty_plural, $dis
     }
 }
 
+/**
+ * Function to install the default participant positions into the database, including string definition for translation.
+ * Checks to ensure that positions are not already installed, so can be run safely more than once on a database
+ *
+ * @param adodbconnection $con with handle to the database where the types should be installed
+**/
 function install_default_activity_participant_positions($con) {
     //set these variables in order to allow localization of these strings.  New positions should also be added in this manner
     $s=_("Caller");
@@ -647,6 +675,16 @@ function install_default_activity_participant_positions($con) {
 
 }
 
+/**
+ * Function to retrieve a user_id which can be said to be the least busy user holding the specified role.
+ * Least busy is defined as the least number of open activities before the due date specified
+ * Every user holding the specified role in the ACL will be examined
+ *
+ * @param adodbconnection $con with handle to the database where the ACL tables are stored
+ * @param integer $role_id with identifier for role which users should hold
+ * @param date $due_date with date to cut off activities at, for the purpose of counting open activities
+ * @return $user_id with user identifier who is least busy, or false for failure
+**/
 function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
     global $session_user_id;
     //hack to return the current user if no role was specified
@@ -671,6 +709,10 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.22  2005/12/02 00:47:37  vanmer
+  * - added more PHPDoc comments
+  * - added XRMS_API package tag
+  *
   * Revision 1.21  2005/09/21 19:59:57  vanmer
   * - added address_id to add_activity function, to allow location to be set on an activity
   *
