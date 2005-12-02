@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.19 2005/11/14 20:16:48 daturaarutad Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.20 2005/12/02 21:59:08 vanmer Exp $
  */
 
 
@@ -395,9 +395,11 @@
 						break;
 					case 'int':
 					case 'smallint':
+					case 'bigint':
 					case 'tinyint':
 					case 'double':
 					case 'float':
+					case 'decimal':
 					case 'string':
 					case 'varchar':
 					case 'char':
@@ -698,6 +700,9 @@ END;
 
 /**
 * $Log: ADOdb_QuickForm.php,v $
+* Revision 1.20  2005/12/02 21:59:08  vanmer
+* - added handling for bigint and decimal database field types
+*
 * Revision 1.19  2005/11/14 20:16:48  daturaarutad
 * fckeditor/
 *
