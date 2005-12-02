@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.153 2005/11/23 17:32:00 jswalter Exp $
+ * $Id: utils-misc.php,v 1.154 2005/12/02 00:31:32 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -170,6 +170,7 @@ function current_audit_level(&$con) {
  * @param  string  $audit_item_type
  * @param  string  $on_what_table   where are we in the interface?
  * @param  integer $on_what_id what record are we viewing
+ * @param  integer $level optionally specifying what level of item is this (used to determine if item will be logged or placed in the db).  Defaults to 4.
  * @return void
  */
 function add_audit_item(&$con, $user_id, $audit_item_type, $on_what_table, $on_what_id, $level=4) {
@@ -1835,7 +1836,11 @@ function add_workflow_history($con, $on_what_table, $on_what_id, $old_status, $n
     }
     return false;
 }
-
+/**
+ * Function to add to workflow entity to the system.  This function creates the new case/opportunity in the workflow, based on data from an activity_template of the 'process' type
+ * @todo This should be hacked eventually to use the add_ API for the entities being added, but for now this uses a GetInsertSQL statement
+ *
+**/
 function add_process_entity($con, $entity, $entity_type, $title, $description, $company_id, $contact_id, $on_what_table, $on_what_id, $user_id=false) {
 
     if (!$entity OR !$entity_type) return false;
@@ -1973,6 +1978,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.154  2005/12/02 00:31:32  vanmer
+ * - added more PHPDoc to utils-misc
+ *
  * Revision 1.153  2005/11/23 17:32:00  jswalter
  *  - moved 'clean_phone_fields()' from "utils-contacts.php"
  *
