@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.155 2005/12/02 00:44:25 vanmer Exp $
+ * $Id: utils-misc.php,v 1.156 2005/12/03 00:27:27 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -38,6 +38,15 @@ function session_startup () {
   $sessid = session_id();
   if ( empty( $sessid ) ) {
     // only call session_start once
+    //check for system preference to store sessions in the database
+    $con = get_xrms_dbconnection();
+    $session_flag=get_admin_preference($con, 'session_storage_type');
+    if ($session_flag=='db') {
+        require_once($include_directory.'utils-database.php');
+        session_set_save_handler("sessao_open", "sessao_close", "sessao_read", "sessao_write", "sessao_destroy", "sessao_gc");
+    }
+    $con->close();
+
     global $xrms_system_id;
     session_name($xrms_system_id);
     session_start();
@@ -1979,6 +1988,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.156  2005/12/03 00:27:27  vanmer
+ * - added ability to handle session data in the XRMS database
+ *
  * Revision 1.155  2005/12/02 00:44:25  vanmer
  * - added phpdoc package
  *
