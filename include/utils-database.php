@@ -8,7 +8,7 @@
  * @author Beth Macknik
  * @package XRMS_API
  *
- * $Id: utils-database.php,v 1.18 2005/12/02 00:55:20 vanmer Exp $
+ * $Id: utils-database.php,v 1.19 2005/12/03 00:25:37 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -224,6 +224,126 @@ function db_con_cleanup() {
     }
 }
 
+/** SESSION HANDLING CODE, PORTED TO ADOdb FROM COMMENTS ON PHP.NET FROM  rafael dot tz at uol dot com dot br 
+25-Jul-2003 11:38
+**/
+function check_session_table($con, $table_list=false) {
+    global $include_directory;
+    require_once($include_directory . 'adodb/adodb-datadict.inc.php');
+    $dict = NewDataDictionary( $con );
+    if (!$table_list) $table_list = list_db_tables($con);
+      $table_name='sessions';
+      if (!in_array($table_name,$table_list)) {
+        //define details of the table in the fields array
+        $table_fields=array();
+        $table_fields[]=array('NAME'=>'session_id','TYPE'=>'C','SIZE'=>255,'NOTNULL'=>'NOTNULL','KEY'=>'KEY');
+        $table_fields[]=array('NAME'=>'last_updated','TYPE'=>'T', 'NOTNULL'=>'NOTNULL', 'INDEX'=>'INDEX');
+        $table_fields[]=array('NAME'=>'data_value','TYPE'=>'X');
+        
+        //no global table options needed, so setting to false
+        $table_opts=false;
+
+        $sql=$dict->CreateTableSQL( $table_name, $table_fields, $table_opts );
+
+        //create an index on the last_updated field, for easy queryability
+        $index_name='last_update';
+        $index_options=array();
+        $index_columns[]='last_updated';
+        $index_sql=$dict->CreateIndexSQL( $index_name, $table_name, $index_columns, $index_options );
+
+        //merge create and index SQL
+        $sql = array_merge($sql, $index_sql);
+        foreach ($sql AS $sql_line) {
+            $rst=$con->execute($sql_line);
+            if (!$rst) db_error_handler($con, $sql_line);
+        }
+        return _("Added sessions table");
+    } 
+    return '';
+}
+
+function sessao_open($aSavaPath, $aSessionName)
+{
+       global $aTime;
+
+       sessao_gc( $aTime );
+       return True;
+}
+
+function sessao_close()
+{
+       return True;
+}
+
+function sessao_read( $aKey )
+{
+        $table_name='sessions';
+        $con=get_xrms_dbconnection();
+       $sql = "SELECT data_value FROM sessions WHERE session_id=".$con->qstr($aKey);
+        $rst=$con->execute($sql);
+       if($rst AND !$rst->EOF)
+       {
+            $data=$rst->fields['data_value'];
+            $rst->close();
+            $con->close();
+             return $data;
+       } ELSE {
+            $data=array();
+            $data['session_id']=$aKey;
+            $data['last_updated']=time();
+            $data['data_value']='';
+
+            $sql = $con->getInsertSQL($table_name, $data);
+            if ($sql) {
+                $rst=$con->execute($sql);
+            }
+             $con->close();
+             return "";
+       }
+}
+
+function sessao_write( $aKey, $aVal )
+{
+        $con=get_xrms_dbconnection();
+//       $aVal = addslashes( $aVal );
+        $data=array();
+        $data['data_value']=$aVal;
+        $data['last_update']=time();
+       $sql = "SELECT data_value, last_updated FROM sessions WHERE session_id=".$con->qstr($aKey);
+       $rst=$con->execute($sql);
+       if ($rst) {
+            $upd=$con->getUpdateSQL($rst, $data);
+            if ($upd) { 
+                $upd_rst=$con->execute($upd);
+                if (!$upd_rst) { db_error_handler($con, $upd); }
+            }
+            $rst->close();
+        }
+        $con->close();
+       return True;
+}
+
+function sessao_destroy( $aKey )
+{
+        $con=get_xrms_dbconnection();
+        $sql = "DELETE FROM sessions WHERE session_id=".$con->qstr($aKey);
+        $rst=$con->execute($sql);
+        $con->close();
+       return True;
+}
+
+function sessao_gc( $aMaxLifeTime )
+{
+        $con=get_xrms_dbconnection();
+        
+        $sql = "DELETE FROM sessions WHERE (($time - last_updated) > $aMaxLifeTime)";
+        $rst=$con->execute($sql);
+        $con->close();
+       return True;
+}
+
+
+
 //make sure the db connection cleanup gets run at the end of the script execution
 register_shutdown_function('db_con_cleanup');
 
@@ -231,6 +351,9 @@ register_shutdown_function('db_con_cleanup');
 /*****************************************************************************/
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.19  2005/12/03 00:25:37  vanmer
+ * - added code to handle session data in the XRMS database
+ *
  * Revision 1.18  2005/12/02 00:55:20  vanmer
  * - added more PHP doc to utils-database
  * - added XRMS_API package tag
