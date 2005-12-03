@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.37 2005/11/30 00:43:12 vanmer Exp $
+ * $Id: data.php,v 1.38 2005/12/03 00:21:39 vanmer Exp $
  */
 
 /**
@@ -2947,6 +2947,20 @@ function user_preferences_db_data($con) {
     if (!$ret) {
         set_admin_preference($con, $xrms_version_type, '1.0');
     }
+
+    $s=_("Session Data Storage Type");
+    $s =_( "Storage method for application session data.  Standard uses default settings.  Database stores session data in the sessions table with in the XRMS database.");
+    $s=_("Standard");
+    $s=_("Database");
+    $session_storage_type=add_user_preference_type($con, 'session_storage_type', "Session Data Storage Type", "Storage method for application session data.  Standard uses default settings.  Database stores session data in the sessions table with in the XRMS database.", false, false, 'select');
+    add_preference_option($con, $session_storage_type, 'standard', 'Standard');
+    add_preference_option($con, $session_storage_type, 'db', 'Database');
+    $ret=get_admin_preference($con, $session_storage_type);
+    if (!$ret) {
+        set_admin_preference($con, $session_storage_type, 'standard');
+    }
+
+
 }
 
 /**
@@ -2967,6 +2981,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.38  2005/12/03 00:21:39  vanmer
+ * - added system preference for storing user sessions in the database
+ *
  * Revision 1.37  2005/11/30 00:43:12  vanmer
  * - added XRMS version option
  *
