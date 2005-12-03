@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.156 2005/12/03 00:27:27 vanmer Exp $
+ * $Id: utils-misc.php,v 1.157 2005/12/03 20:40:33 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -35,6 +35,7 @@ $_SERVER['PHP_SELF'] = strip_tags($_SERVER['PHP_SELF']);
  * is not created unless a session is started, unlike $_POST, $_GET and such
  */
 function session_startup () {
+  global $include_directory;
   $sessid = session_id();
   if ( empty( $sessid ) ) {
     // only call session_start once
@@ -1988,6 +1989,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.157  2005/12/03 20:40:33  vanmer
+ * - added needed global declaration
+ *
  * Revision 1.156  2005/12/03 00:27:27  vanmer
  * - added ability to handle session data in the XRMS database
  *
