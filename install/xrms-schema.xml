@@ -276,18 +276,6 @@
       <row><f>21</f><f>2</f><f>21</f><f>World</f><f>5</f><f>1</f></row>
     </data>
   </table>
-  <table name="TEST">
-    <field name="TEST_ID" type="I" size="11">
-      <KEY/>
-      <AUTOINCREMENT/>
-    </field>
-    <field name="TEST_STRING" type="C" size="32"/>
-    <field name="TEST_VALUE" type="N" size="10"/>
-    <field name="TEST_FLAG" type="I" size="1"/>
-    <data>
-      <row><f>1</f><f>TEST</f><f>12</f><f>1</f></row>
-    </data>
-  </table>
   <table name="account_statuses">
     <field name="account_status_id" type="I" size="11">
       <KEY/>
@@ -392,6 +380,23 @@
     <field name="activity_resolution_type_id" type="I" size="11"/>
     <field name="activity_priority_id" type="I" size="11"/>
     <field name="resolution_description" type="X"/>
+    <index name="act_comp_indx">
+      <col>company_id</col>
+    </index>
+    <index name="act_contact_indx">
+      <col>contact_id</col>
+    </index>
+    <index name="act_company_idx">
+      <col>company_id</col>
+    </index>
+    <index name="act_cocouser_idx">
+      <col>user_id</col>
+      <col>contact_id</col>
+      <col>company_id</col>
+    </index>
+    <index name="act_contact_idx">
+      <col>contact_id</col>
+    </index>
   </table>
   <table name="activities_recurrence">
     <field name="activity_recurrence_id" type="I" size="11">
@@ -443,6 +448,9 @@
       <UNSIGNED/>
     </field>
     <index name="activity_type_id">
+      <col>activity_type_id</col>
+    </index>
+    <index name="actpartpos_id_indx">
       <col>activity_type_id</col>
     </index>
     <data>
@@ -499,6 +507,15 @@
       <col>contact_id</col>
     </index>
     <index name="activity_participant_position_id">
+      <col>activity_participant_position_id</col>
+    </index>
+    <index name="actpart_id_indx">
+      <col>activity_id</col>
+    </index>
+    <index name="actpart_contact_indx">
+      <col>contact_id</col>
+    </index>
+    <index name="actpart_posid_indx">
       <col>activity_participant_position_id</col>
     </index>
   </table>
@@ -672,6 +689,7 @@
       <row><f>12</f><f>shipping</f><f>400</f></row>
       <row><f>13</f><f>shipping</f><f>400</f></row>
       <row><f>14</f><f>shipping</f><f>400</f></row>
+      <row><f>15</f><f>shipping</f><f>400</f></row>
     </data>
   </table>
   <table name="addresses">
@@ -756,17 +774,6 @@
     <field name="audit_item_record_status" type="C" size="1">
       <DEFAULT value="a"/>
     </field>
-    <data>
-      <row><f>1</f><f>1</f><f>login</f><f></f><f></f><f>2005-11-28 15:44:53</f><f></f><f>0</f><f></f><f>a</f></row>
-      <row><f>2</f><f>1</f><f>logout</f><f></f><f></f><f>2005-11-28 15:58:17</f><f>66.78.71.49</f><f>59285</f><f></f><f>a</f></row>
-      <row><f>3</f><f>1</f><f>login</f><f></f><f></f><f>2005-11-28 15:58:26</f><f>66.78.71.49</f><f>59285</f><f></f><f>a</f></row>
-      <row><f>4</f><f>1</f><f>logout</f><f></f><f></f><f>2005-11-28 15:58:53</f><f>66.78.71.49</f><f>59285</f><f></f><f>a</f></row>
-      <row><f>5</f><f>1</f><f>login</f><f></f><f></f><f>2005-11-28 15:59:08</f><f>66.78.71.49</f><f>59285</f><f></f><f>a</f></row>
-      <row><f>6</f><f>1</f><f>login</f><f></f><f></f><f>2005-11-29 16:03:25</f><f>66.78.70.101</f><f>53632</f><f></f><f>a</f></row>
-      <row><f>7</f><f>1</f><f>login</f><f></f><f></f><f>2005-11-29 17:28:08</f><f>66.78.70.101</f><f>53792</f><f></f><f>a</f></row>
-      <row><f>8</f><f>1</f><f>logout</f><f></f><f></f><f>2005-11-29 18:38:41</f><f>66.78.70.101</f><f>53939</f><f></f><f>a</f></row>
-      <row><f>9</f><f>1</f><f>login</f><f></f><f></f><f>2005-11-29 18:38:45</f><f>66.78.70.101</f><f>53944</f><f></f><f>a</f></row>
-    </data>
   </table>
   <table name="campaign_statuses">
     <field name="campaign_status_id" type="I" size="11">
@@ -976,6 +983,9 @@
       <col>case_type_id</col>
     </index>
     <index name="case_type_id_11">
+      <col>case_type_id</col>
+    </index>
+    <index name="case_type_id_12">
       <col>case_type_id</col>
     </index>
     <data>
@@ -1283,6 +1293,9 @@
     <index name="company_record_status">
       <col>company_record_status</col>
     </index>
+    <index name="CompanyName">
+      <col>company_name</col>
+    </index>
   </table>
   <table name="company_division">
     <field name="division_id" type="I" size="11">
@@ -1579,6 +1592,13 @@
     </index>
     <index name="contact_record_status">
       <col>contact_record_status</col>
+    </index>
+    <index name="contacts26">
+      <col>address_id</col>
+      <col>contact_record_status</col>
+      <col>contact_id</col>
+      <col>last_name</col>
+      <col>first_names</col>
     </index>
   </table>
   <table name="countries">
@@ -2566,6 +2586,19 @@
       <col>group_item</col>
     </index>
   </table>
+  <table name="sessions">
+    <field name="session_id" type="C" size="255">
+      <KEY/>
+    </field>
+    <field name="last_updated" type="T">
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="data_value" type="X"/>
+    <index name="last_update">
+      <col>last_updated</col>
+    </index>
+  </table>
   <table name="system_parameters">
     <field name="param_id" type="C" size="40">
       <KEY/>
@@ -3482,6 +3515,8 @@
       <row><f>28</f><f>18</f><f>y</f><f>2</f><f>a</f><f>Yes</f></row>
       <row><f>29</f><f>19</f><f>n</f><f>1</f><f>a</f><f>No</f></row>
       <row><f>30</f><f>19</f><f>y</f><f>2</f><f>a</f><f>Yes</f></row>
+      <row><f>31</f><f>21</f><f>standard</f><f>1</f><f>a</f><f>Standard</f></row>
+      <row><f>32</f><f>21</f><f>db</f><f>1</f><f>a</f><f>Database</f></row>
     </data>
   </table>
   <table name="user_preference_types">
@@ -3546,7 +3581,8 @@
       <row><f>17</f><f>Display Item Technical Details</f><f>Display Item Technical Details</f><f>Expose ID numbers and other technical tidbits on production screens. Useful for developers tracking issues in production. Otherwise not necessary.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
       <row><f>18</f><f>Show Logo</f><f>Show Logo</f><f>Controls custom logo display in the head of every page in XRMS.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
       <row><f>19</f><f>Use Owl</f><f>Use Owl</f><f>Provide an experimental link to OWL, a file management utility that supports more features (like revisions) than xrms.  To use, install OWL from http://sourceforge.net/projects/owl in xrms/owl and set this parameter to y.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
-      <row><f>21</f><f>xrms_version</f><f>XRMS Version</f><f>XRMS Version (read-only)</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>text</f><f>1</f></row>
+      <row><f>20</f><f>xrms_version</f><f>XRMS Version</f><f>XRMS Version (read-only)</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>text</f><f>1</f></row>
+      <row><f>21</f><f>session_storage_type</f><f>Session Data Storage Type</f><f>Storage method for application session data.  Standard uses default settings.  Database stores session data in the sessions table with in the XRMS database.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
     </data>
   </table>
   <table name="user_preferences">
@@ -3601,12 +3637,13 @@
       <row><f>13</f><f>0</f><f>15</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
       <row><f>14</f><f>0</f><f>16</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
       <row><f>15</f><f>0</f><f>17</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>16</f><f>0</f><f>18</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>16</f><f>0</f><f>18</f><f></f><f>y</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
       <row><f>17</f><f>0</f><f>19</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
       <row><f>18</f><f>0</f><f>20</f><f></f><f>1.0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
       <row><f>19</f><f>0</f><f>1</f><f></f><f>en_US</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
       <row><f>20</f><f>0</f><f>2</f><f></f><f>basic</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>21</f><f>0</f><f>21</f><f></f><f>1.0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>21</f><f>0</f><f>20</f><f></f><f>1.0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>24</f><f>0</f><f>21</f><f></f><f>standard</f><f>a</f><f>2005-12-02 18:30:07</f><f>0</f><f>0</f></row>
     </data>
   </table>
   <table name="users">
