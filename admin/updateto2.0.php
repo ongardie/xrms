@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.1 2005/12/03 00:22:50 vanmer Exp $
+ * $Id: updateto2.0.php,v 1.2 2005/12/05 21:04:45 vanmer Exp $
  */
 
 // where do we include from
@@ -5201,6 +5201,15 @@ $rst = $con->execute($sql);
 $sql = "CREATE INDEX act_cocouser_idx ON activities (user_id, contact_id, company_id);";
 $rst = $con->execute($sql);
 
+//ensure that IM fields can be NULL
+$sql = "ALTER TABLE `contacts` CHANGE `aol_name` `aol_name` VARCHAR( 50 ) ,
+CHANGE `yahoo_name` `yahoo_name` VARCHAR( 50 ) ,
+CHANGE `msn_name` `msn_name` VARCHAR( 50 )";
+
+$rst = $con->execute($sql);
+
+
+
 //check to see if session table has been added
 $msg .= check_session_table($con, $table_list);
 
@@ -5232,6 +5241,9 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.2  2005/12/05 21:04:45  vanmer
+ * - added code to allow nulls for IM fields
+ *
  * Revision 1.1  2005/12/03 00:22:50  vanmer
  * - moved from update.php to updateto2.0.php to reflect upgrade to new 2.0 requirements for upgrades
  *
