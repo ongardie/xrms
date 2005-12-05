@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.4 2005/12/02 01:50:18 vanmer Exp $
+ * $Id: utils-contacts.php,v 1.5 2005/12/05 21:10:46 jswalter Exp $
  *
  */
 
@@ -33,13 +33,6 @@ function add_contact($con, $contact) {
     $contact['custom2'] = array_key_exists('custom2',$contact) ? $contact['custom2'] : "";
     $contact['custom3'] = array_key_exists('custom3',$contact) ? $contact['custom3'] : "";
     $contact['custom4'] = array_key_exists('custom4',$contact) ? $contact['custom4'] : "";
-
-    //avoid nulls on the IM fields, although these should be moved to a plugin
-    $contact['aol_name']   = array_key_exists('aol_name',$contact) ? $contact['aol_name'] : "";
-    $contact['yahoo_name'] = array_key_exists('yahoo_name',$contact) ? $contact['yahoo_name'] : "";
-    $contact['msn_name']   = array_key_exists('msn_name',$contact) ? $contact['msn_name'] : "";
-
-
 
     //set contact defaults
     $now=time();
@@ -245,6 +238,9 @@ function delete_contact($con, $contact_id, $delete_from_database=false) {
 
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.5  2005/12/05 21:10:46  jswalter
+ *  - removed IM fields from 'add_contacts'
+ *
  * Revision 1.4  2005/12/02 01:50:18  vanmer
  * - added XRMS_API package tag
  *
