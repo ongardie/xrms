@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.40 2005/11/09 22:36:48 daturaarutad Exp $
+ * $Id: some.php,v 1.41 2005/12/05 16:55:08 daturaarutad Exp $
  */
 
 //include required files
@@ -66,6 +66,7 @@ $f_campaign     = false;
 $f_company      = false;
 $f_opportunity  = false;
 $f_case         = false;
+$f_activity     = false;
 
 $sql = "SELECT "
       . $con->Concat($con->qstr('<a id="'), 'file_pretty_name', $con->qstr('" href="' . $http_site_root . '/files/one.php?return_url=/private/home.php&amp;file_id='), 'file_id', $con->qstr('">'), "file_pretty_name", "'</a>'")
@@ -122,9 +123,21 @@ switch ($file_on_what) {
         $f_company  = true;
         break;
     }
+    case "activities" : {
+        $sql .= ' '.$con->Concat("'<a href=\"$http_site_root/activities/one.php?return_url=/private/home.php&amp;activity_id='", "activity_id", "'\">'", "act.activity_title", "'</a>'")
+              . " AS activity, "
+              . $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&amp;contact_id='", "cont.contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
+              . " AS contact, "
+              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
+              . " AS company, ";
+        $f_activity = true;
+        $f_contact  = true;
+        $f_company  = true;
+        break;
+    }
     default : {
         $sql .= "";
-        }
+    }
 }
 
 $sql .= $con->SQLDate('Y-m-d','f.entered_at') . " AS date," .
@@ -138,6 +151,7 @@ switch ($file_on_what) {
     case "campaigns" : { $from .= "campaigns camp, "; break; }
     case "opportunities" : { $from .= "opportunities opp, companies c, "; break; }
     case "cases" : { $from .= " cases, companies c, "; break; }
+    case "activities" : { $from .= "activities act, contacts cont, companies c, "; break; }
 }
 $from .= "files f, users u ";
 
@@ -149,6 +163,7 @@ switch ($file_on_what) {
     case "campaigns" : { $where .= "and f.on_what_table = 'campaigns' and f.on_what_id = camp.campaign_id  "; break; }
     case "opportunities" : { $where .= "and f.on_what_table = 'opportunities' and f.on_what_id = opp.opportunity_id and opp.company_id = c.company_id "; break; }
     case "cases" : { $where .= "and f.on_what_table = 'cases' and f.on_what_id = cases.case_id and cases.company_id = c.company_id "; break; }
+    case "activities" : { $where .= "and f.on_what_table = 'activities' and f.on_what_id = act.activity_id and act.contact_id = cont.contact_id and act.company_id = c.company_id "; break; }
 }
 $where .= "and file_record_status = 'a'";
 
@@ -205,6 +220,11 @@ switch ($file_on_what) {
             $where .= " and cases.case_title like " . $con->qstr('%' . $file_on_what_name . '%', get_magic_quotes_gpc());
             break;
         }
+    case "activities" : {
+            $criteria_count++;
+            $where .= " and act.activity_title like " . $con->qstr('%' . $file_on_what_name . '%', get_magic_quotes_gpc());
+            break;
+    }
 }
 
 if (strlen($file_date) > 0) {
@@ -313,6 +333,7 @@ if($f_campaign) $columns[] = array('name' => _("Campaign"), 'index_sql' => 'camp
 if($f_opportunity) $columns[] = array('name' => _("Opportunity"), 'index_sql' => 'opportunity');
 if($f_case) $columns[] = array('name' => _("Case"), 'index_sql' => 'case_name');
 if($f_company) $columns[] = array('name' => _("Company"), 'index_sql' => 'company');
+if($f_activity) $columns[] = array('name' => _("Activity"), 'index_sql' => 'activity');
 
 $columns[] = array('name' => _("Date"), 'index_sql' => 'date');
 $columns[] = array('name' => _("ID"), 'index_sql' => 'ID');
@@ -392,6 +413,7 @@ $plugin_search_rows = concat_hook_function('file_get_search_fields_html');
                         <option value="campaigns"<?php if ($file_on_what == "campaigns") { echo " selected"; } ?>><?php echo _("Campaigns"); ?></option>
                         <option value="opportunities"<?php if ($file_on_what == "opportunities") { echo " selected"; } ?>><?php echo _("Opportunities"); ?></option>
                         <option value="cases"<?php if ($file_on_what == "cases") { echo " selected"; } ?>><?php echo _("Cases"); ?></option>
+                        <option value="activities"<?php if ($file_on_what == "activities") { echo " selected"; } ?>><?php echo _("Activities"); ?></option
                     </select>
                 </td>
         </tr>
@@ -503,6 +525,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.41  2005/12/05 16:55:08  daturaarutad
+ * add activities to on_what_table searching
+ *
  * Revision 1.40  2005/11/09 22:36:48  daturaarutad
  * add hooks for files plugin
  *
