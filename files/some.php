@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.41 2005/12/05 16:55:08 daturaarutad Exp $
+ * $Id: some.php,v 1.42 2005/12/05 20:45:19 daturaarutad Exp $
  */
 
 //include required files
@@ -338,10 +338,6 @@ if($f_activity) $columns[] = array('name' => _("Activity"), 'index_sql' => 'acti
 $columns[] = array('name' => _("Date"), 'index_sql' => 'date');
 $columns[] = array('name' => _("ID"), 'index_sql' => 'ID');
 
-$endrows = "<tr><td class=widget_content_form_element colspan=10>
-            <input type=button class=button onclick=\"javascript: exportIt();\" value="._("Export").">
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
-
 $pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'FileForm', 'FilePager', $columns, false, true);
 
 
@@ -371,7 +367,6 @@ function FileDataCallback($rows) {
 $pager->AddModifyDataCallback('FileDataCallback');
 */
 
-$pager->AddEndRows($endrows);
 $pager_widget = $pager->Render($system_rows_per_page);
 
 $con->close();
@@ -525,6 +520,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.42  2005/12/05 20:45:19  daturaarutad
+ * removed export and mail merge buttons
+ *
  * Revision 1.41  2005/12/05 16:55:08  daturaarutad
  * add activities to on_what_table searching
  *
