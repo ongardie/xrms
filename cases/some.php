@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.38 2005/08/28 16:22:20 braverock Exp $
+ * $Id: some.php,v 1.39 2005/12/06 23:16:07 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -188,8 +188,9 @@ if (strlen($recently_viewed_table_rows) == 0) {
 
 $user_menu = get_user_menu($con, $user_id, true);
 
-$sql2 = "select case_status_pretty_name, case_status_id from case_statuses where case_status_record_status = 'a' order by case_status_id";
+$sql2 = "select " . $con->concat('case_type_pretty_name',$con->qstr(' - '), 'case_status_pretty_name') .", case_status_id from case_statuses JOIN case_types ON case_statuses.case_type_id=case_types.case_type_id where case_status_record_status = 'a' order by case_statuses.case_type_id, sort_order";
 $rst = $con->execute($sql2);
+if (!$rst) { db_error_handler($con, $sql2); }
 $case_status_menu = $rst->getmenu2('case_status_id', $case_status_id, true);
 $rst->close();
 
@@ -411,6 +412,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.39  2005/12/06 23:16:07  vanmer
+ * - added case type to status dropdown
+ * - added order by for status dropdown (may not work with sql server)
+ *
  * Revision 1.38  2005/08/28 16:22:20  braverock
  * - fix incorrect colspan
  *
