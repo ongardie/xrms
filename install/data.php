@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.38 2005/12/03 00:21:39 vanmer Exp $
+ * $Id: data.php,v 1.39 2005/12/06 22:39:22 vanmer Exp $
  */
 
 /**
@@ -18,86 +18,6 @@
  *
  */
 function misc_db_data($con) {
-    // system_parameters
-    if (confirm_no_records($con, 'system_parameters')) {
-        $sql ="insert into system_parameters (param_id, int_val, description) values ('Default GST Offset', -5, 'Default timezone offset')";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters (param_id, int_val, description) values ('Audit Level', 4, 'What level of audit logging should be performed.  0 - no logging, 1 - inserts & updates, 2 - and login/logout, 3 - and views, 4 - and searches')";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters (param_id, string_val, description) values ('Activities Default Behavior', 'Fast', 'How will activities behave.  Options are Fast or Long.  Fast will keep user within current screen while Long will move to the activites/one screen for detailed description entry.')";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters (param_id, int_val, description) values ('LDAP Version', 2, 'Version of the LDAP server.  Will usually be 2 or 3.')";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters (param_id, string_val, description) values ('RSS Feeds Enabled', 'n', 'Provide RSS Feeds.  y or n.')";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters (param_id, int_val, description) values ('Maximum RSS Feed Entries', 15, 'Maximum number of entries to include in any RSS feed.')";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters (param_id, string_val, description) values ('Sender Email Address', 'xrms@example.com', 'Email address to use as the sender address when sending reports via email.')";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters (param_id, string_val, description) values ('Reports--Use Horizontal Rule', 'y', 'Use horizontal rule on reports.')";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters (param_id, string_val, description) values ('Reports--Show No Items Found', 'n', 'Show text for items with no result on reports.')";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters (param_id, string_val, description) values ('Allow Unassigned Activities', 'n', 'Unassigned activities are useful when creating activity pools, but can result in activities erroneously created without accountability.')";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters (param_id, string_val, description) values ('Display Item Technical Details', 'n', 'Expose ID numbers and other technical tidbits on production screens. Useful for developers tracking issues in production. Otherwise not necessary.')";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters (param_id, string_val, description) values ('Show Logo', 'n', 'Controls custom logo display in the head of every page in XRMS.')";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters (param_id, string_val, description) values ('Use Owl', 'n', 'Provide an experimental link to OWL, a file management utility that supports more features (like revisions) than xrms.  To use, install OWL from http://sourceforge.net/projects/owl in xrms/owl and set this parameter to y.')";
-        $rst = $con->execute($sql);
-    }
-
-    // system_parameters_options
-    if (confirm_no_records($con, 'system_parameters_options')) {
-        $sql ="insert into system_parameters_options (param_id, int_val, sort_order) values ('Audit Level', 0, 1)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, int_val, sort_order) values ('Audit Level', 1, 2)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, int_val, sort_order) values ('Audit Level', 2, 3)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, int_val, sort_order) values ('Audit Level', 3, 4)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, int_val, sort_order) values ('Audit Level', 4, 5)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Activities Default Behavior', 'Fast', 1)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Activities Default Behavior', 'Long', 2)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, int_val, sort_order) values ('LDAP Version', 2, 1)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, int_val, sort_order) values ('LDAP Version', 3, 2)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('RSS Feeds Enabled', 'n', 1)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('RSS Feeds Enabled', 'y', 2)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Reports--Use Horizontal Rule', 'n', 1)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Reports--Use Horizontal Rule', 'y', 2)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Reports--Show No Items Found', 'n', 1)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Reports--Show No Items Found', 'y', 2)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Allow Unassigned Activities', 'n', 1)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Allow Unassigned Activities', 'y', 2)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Display Item Technical Details', 'n', 1)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Display Item Technical Details', 'y', 2)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Show Logo', 'n', 1)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Show Logo', 'y', 2)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Use Owl', 'n', 1)";
-        $rst = $con->execute($sql);
-        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Use Owl', 'y', 2)";
-        $rst = $con->execute($sql);
-    }
-
     // categories
     if (confirm_no_records($con, 'categories')) {
         $sql ="insert into categories (category_short_name, category_pretty_name, category_pretty_plural, category_display_html) values ('TEST1', 'Test Category 1', 'Test Category 1', 'Test Category 1')";
@@ -2981,6 +2901,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.39  2005/12/06 22:39:22  vanmer
+ * - removed system parameters from old install data
+ *
  * Revision 1.38  2005/12/03 00:21:39  vanmer
  * - added system preference for storing user sessions in the database
  *
