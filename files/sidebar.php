@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.24 2005/11/09 22:36:39 daturaarutad Exp $
+ * $Id: sidebar.php,v 1.25 2005/12/06 19:08:05 daturaarutad Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -12,6 +12,14 @@ if ( !defined('IN_XRMS') )
 }
 
 require_once($include_directory . 'utils-files.php');
+
+// Set up the pager to display the current dir's data
+global $include_directory;
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+
+global $return_url;
+
+
 
 
 /*
@@ -26,7 +34,7 @@ $file_limit_sql = '';
 
     // Build data setup
     if (!$on_what_table AND !$on_what_id) {
-        //No attachment specified, so show users files
+        //No attachment specified, so show users files (private/home.php)
         $files_data['entered_by']       = $session_user_id;
     } else {
         //show files attached to the currently view entity
@@ -47,75 +55,77 @@ if(!$file_rows) {
     if (!$file_sidebar_label) {
         $file_sidebar_label=_("Files");
     }
-        if (!$return_url) {
-            $return_url="/$on_what_table/one.php?".make_singular($on_what_table)."_id=".$on_what_id;
-        }
-    $file_rows = "<div id='file_sidebar'>
-                    <table class=widget cellspacing=1 width=\"100%\">
-                        <tr>
-                            <td class=widget_header colspan=4>"._("Files")."</td>
-                        </tr>
-                        <tr>
-                            <td class=widget_label>"._("Name")."</td>
-                            <td class=widget_label>"._("Size")."</td>
-                            <td class=widget_label>"._("Owner")."</td>
-                            <td class=widget_label>"._("Date")."</td>
-                        </tr>\n";
+    if (!$return_url) {
+        $return_url="/$on_what_table/one.php?".make_singular($on_what_table)."_id=".$on_what_id;
+    }
+
+    $files = array();
 
     if (strlen($file_sidebar_rst->fields['username']) > 0) {
         while (!$file_sidebar_rst->EOF) {
 
           // get contact id
-          $user_contact_id = $file_sidebar_rst->fields['user_contact_id'];
+          $file_info['name'] = "<a href='$http_site_root/files/one.php?file_id={$file_sidebar_rst->fields['file_id']}&return_url=". urlencode($return_url) . "' title='". $file_sidebar_rst->fields['file_pretty_name']. "'>" . substr( $file_sidebar_rst->fields['file_pretty_name'], 0, 20) .  '</a>';
+          $file_info['size'] = $file_sidebar_rst->fields['file_size'];
+          $file_info['owner'] =  $file_sidebar_rst->fields['username'];
+          $file_info['date'] = $con->userdate($file_sidebar_rst->fields['entered_at']);
 
-            $file_rows .= "
-                 <tr>";
-            if ($file_sidebar_rst->fields['file_size'] == "0")
-              {
-                    $file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?file_id={$file_sidebar_rst->fields['file_id']}&return_url=". urlencode($return_url) . "' title='". $file_sidebar_rst->fields['file_pretty_name']. "'>" . substr( $file_sidebar_rst->fields['file_pretty_name'], 0, 20) . '</a></b></td>';
-                    $file_rows .= '<td class=non_uploaded_file><b>' . pretty_filesize($file_sidebar_rst->fields['file_size']) . '</b></td>';
-                    $file_rows .= '<td class=non_uploaded_file><b>' . $file_sidebar_rst->fields['username'] . '</b></td>';
-                    $file_rows .= '<td class=non_uploaded_file><b>' . $con->userdate($file_sidebar_rst->fields['entered_at']) . '</b></td>';
-              }
-            else
-              {
-                    $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?file_id={$file_sidebar_rst->fields['file_id']}&return_url=". urlencode($return_url) . "' title='". $file_sidebar_rst->fields['file_pretty_name']. "'>" . substr( $file_sidebar_rst->fields['file_pretty_name'], 0, 20) .  '</a></td>';
-                    $file_rows .= '<td class=widget_content>' . pretty_filesize($file_sidebar_rst->fields['file_size']) . '</td>';
-                    $file_rows .= '<td class=widget_content>' . $file_sidebar_rst->fields['username'] . '</td>';
-                    $file_rows .= '<td class=widget_content>' . $con->userdate($file_sidebar_rst->fields['entered_at']) . '</td>';
-              }
-            $file_rows .= "
-                 </tr>";
-            $file_sidebar_rst->movenext();
+          $files[] = $file_info;
+
+          $file_sidebar_rst->movenext();
         }
         $file_sidebar_rst->close();
-    } else {
-        $file_rows .= "            <tr> <td class=widget_content colspan=4> "._("No attached files")." </td> </tr>\n";
-    }
+    } 
+
+    $columns=array();
+    $columns[] = array('name' => 'Name', 'index_calc' => 'name');
+    $columns[] = array('name' => 'Size', 'index_calc' => 'size', 'type' => 'filesize');
+    $columns[] = array('name' => 'Owner', 'index_calc' => 'owner');
+    $columns[] = array('name' => 'Date', 'index_calc' => 'date');
+
+    if(!$file_sidebar_default_columns) $file_sidebar_default_columns = array('name', 'size','owner', 'date');
+
+    $file_pager_columns = new Pager_Columns('Files_Sidebar', $columns, $file_sidebar_default_columns, 'Files_Sidebar_Form');
+    $file_pager_columns_button = $file_pager_columns->GetSelectableColumnsButton();
+    $file_pager_columns_selects = $file_pager_columns->GetSelectableColumnsWidget();
+
+    $columns = $file_pager_columns->GetUserColumns('default');
+    $colspan = count($columns);
+    
+
+    $pager = new GUP_Pager($con, null, $files, $file_sidebar_label, 'Files_Sidebar_Form', 'Files_Sidebar', $columns, false, true);
+
 
     //put in the new button
     if (strlen($on_what_table)>0){
-        $new_file_button=render_create_button('New', 'submit'); //, false, false, false, 'files'); uncomment extra parameters in order to check permission on files instead of whatever the file is attached to
-        $file_rows .= "
-                <tr>
-                <form action='".$http_site_root."/files/new.php' method='post'>
-                    <td class=widget_content_form_element colspan=4>
-                            <input type=hidden name=on_what_table value='$on_what_table'>
-                            <input type=hidden name=on_what_id value='$on_what_id'>
-                            <input type=hidden name=return_url value='$return_url'>
-                            $new_file_button
-                    </td>
-                </form>
-                </tr>";
+        $new_file_button=render_create_button('New', 'button', "javascript: location.href='$http_site_root/files/new.php?on_what_table=$on_what_table&on_what_id=$on_what_id&return_url=$return_url';"); //, false, false, false, 'files'); uncomment extra parameters in order to check permission on files instead of whatever the file is attached threfo
+
     }
+    $end_rows = "
+                <tr>
+                    <td class=widget_content_form_element colspan=$colspan>
+                            $new_file_button
+                            $file_pager_columns_button
+                    </td>
+                </tr>";
 
 
-    //now close the table, we're done
-    $file_rows .= "        </table>\n</div>";
+    $pager->AddEndRows($end_rows);
+
+    $file_rows = "<form name=Files_Sidebar_Form method=POST>
+                    $file_pager_columns_selects
+                    <input type=hidden name=contact_id value=$contact_id>
+                    <input type=hidden name=company_id value=$company_id>
+                    <input type=hidden name=division_id value=$division_id>\n" 
+                    .  $pager->Render() . " 
+                  </form>\n";
 }
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.25  2005/12/06 19:08:05  daturaarutad
+ * update to use pager for display
+ *
  * Revision 1.24  2005/11/09 22:36:39  daturaarutad
  * add hooks for files plugin
  *
