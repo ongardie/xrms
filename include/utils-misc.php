@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.158 2005/12/06 21:49:39 vanmer Exp $
+ * $Id: utils-misc.php,v 1.159 2005/12/06 22:34:39 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -568,115 +568,15 @@ exit;
 
 /**
  * Retrieve a value from the system_parameters.
+ * Now a wrapper to get_admin_preference from the user preferences code
  *
  * @param handle &$con handle to the database connection
  * @param string $param System Parameter to be retrieved
  */
 function get_system_parameter(&$con, $param) {
     $ret=get_admin_preference($con, $param);
-    if ($ret===false) {
-        $func_name='get_system_parameter';
-        $params=array($param);
-        if (function_cache_bool($func_name, $params)) {
-            return function_cache_get($func_name, $params);
-        }
-        $sql ="select string_val, int_val, float_val, datetime_val from system_parameters where param_id='$param'";
-        $sysst = $con->execute($sql);
-        if ($sysst) {
-
-        // is the requested record in the database ???
-        if ( $sysst->RecordCount() == 1 ) {
-            // yes - it was found
-
-            $string_val   = $sysst->fields['string_val'];
-            $int_val      = $sysst->fields['int_val'];
-            $float_val    = $sysst->fields['float_val'];
-            $datetime_val = $sysst->fields['datetime_val'];
-
-            if (!is_null($string_val)) {
-                $my_val=$string_val;
-            } elseif (!is_null($int_val)) {
-                $my_val=$int_val;
-            } elseif (!is_null($float_val)) {
-                $my_val=$float_val;
-            } elseif (!is_null($datetime_val)) {
-                $my_val=$datetime_val;
-            } else {
-                echo _('Failure to get system parameter ') . $param . _('.  The data entry appears to be corrupted.');
-                return false;
-            }
-
-        } else {
-            // no - it was not found
-
-            echo _('Failure to get system parameter ') . $param . _('.  Make sure you have run the administration update.');
-            return false;
-
-        } // if ( $sysst->RecordCount() > 0 ) ...
-
-        // close the recordset
-        $sysst->close();
-
-        } else {
-            //there was a problem, notify the user
-            db_error_handler ($con, $sql);
-            return false;
-        }
-        function_cache_set($func_name, $params, $my_val, false);
-        return $my_val;
-    } else return $ret;
+    return $ret;
 } //end fn get_system_parameter
-
-/**
- * Set a value in the system_parameters.
- *
- * @param handle &$con    handle to the database connection
- * @param string $param   System Parameter to be changed
- * @param mixed  $new_val value to change the parameter to
- */
-function set_system_parameter(&$con, $param, $new_val) {
-
-    // First, determine which field is appropriate for the set.
-    $sql ="select string_val, int_val, float_val, datetime_val from system_parameters where param_id='$param'";
-    $sysst = $con->execute($sql);
-    if ($sysst){
-        $string_val = $sysst->fields['string_val'];
-        $int_val = $sysst->fields['int_val'];
-        $float_val = $sysst->fields['float_val'];
-        $datetime_val = $sysst->fields['datetime_val'];
-        if (!is_null($string_val)) {
-            $my_field='string_val';
-            $set_val = $new_val;
-        } elseif (!is_null($int_val)) {
-            $my_field='int_val';
-            $set_val = $new_val;
-        } elseif (!is_null($float_val)) {
-            $my_field='float_val';
-            $set_val = $new_val;
-        } elseif (!is_null($datetime_val)) {
-            $my_field='datetime_val';
-            $set_val = $new_val;
-        }
-        $sysst->close();
-    } else {
-        //there was a problem, notify the user
-        db_error_handler ($con, $sql);
-    }
-    $sql ="SELECT * FROM system_parameters WHERE param_id='$param'";
-    $rst = $con->execute($sql);
-
-    $rec = array();
-    $rec[$my_field] = $set_val;
-
-    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-    if ($upd !='') {
-        $sysst = $con->execute($upd);
-        if (!$sysst){
-            //there was a problem, notify the user
-            db_error_handler ($con, $upd);
-        }
-    }
-} //end fn set_system_parameter
 
 /**
  * function db_error_handler : display the error to the user
@@ -1989,6 +1889,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.159  2005/12/06 22:34:39  vanmer
+ * - removed system parameter functions, changed get_system_parameter to only be a wrapper function
+ *
  * Revision 1.158  2005/12/06 21:49:39  vanmer
  * - added require_once for utils-database before first call to get_xrms_dbconnection
  *
