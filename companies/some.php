@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.79 2005/12/06 21:26:06 vanmer Exp $
+ * $Id: some.php,v 1.80 2005/12/06 21:39:18 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -555,24 +555,30 @@ if (!$advanced_search) {
         </tr>
         <tr>
             <td class=widget_content_form_element>
-                <?php echo _("!")?>
-                <?php if ($not_name) { echo ' <input type=checkbox name="not_name" value=1 checked>'; } 
-                      else   { echo ' <input type=checkbox name="not_name" value=1>';}?>
+                <?php if ($advanced_search) {
+                    echo _("!"); echo ' <input type=checkbox name="not_name" value=1';
+                    if ($not_name) { echo ' checked'; } 
+                    echo '>';
+                 } ?>
                 <input type=text name="company_name" size=15 value="<?php  echo $company_name; ?>">
             </td>
             <td class=widget_content_form_element>
-                <?php echo _("!")?>
-                <?php if ($not_user) { echo ' <input type=checkbox name="not_user" value=1 checked>'; } 
-                      else   { echo ' <input type=checkbox name="not_user" value=1>';}?>
+                <?php if ($advanced_search) {
+                    echo _("!"); echo ' <input type=checkbox name="not_user" value=1';
+                    if ($not_user) { echo ' checked'; } 
+                    echo '>';
+                 } ?>
                 <?php  echo $user_menu; ?>
             </td>
             <td class=widget_content_form_element>
                 <?php  echo $company_category_menu; ?>
             </td>
             <td class=widget_content_form_element>
-                <?php echo _("!")?>
-                <?php if ($not_industry) { echo ' <input type=checkbox name="not_industry" value=1 checked>'; } 
-                      else   { echo ' <input type=checkbox name="not_industry" value=1>';}?>
+                <?php if ($advanced_search) {
+                    echo _("!"); echo ' <input type=checkbox name="not_industry" value=1';
+                    if ($not_industry) { echo ' checked'; } 
+                    echo '>';
+                 } ?>
                 <?php  echo $industry_menu; ?>
             </td>
         </tr>
@@ -591,27 +597,35 @@ if (!$advanced_search) {
         </tr>
         <tr>
             <td class=widget_content_form_element>
-                <?php echo _("!")?>
-                <?php if ($not_phone) { echo ' <input type=checkbox name="not_phone" value=1 checked>'; } 
-                      else   { echo ' <input type=checkbox name="not_phone" value=1>';}?>
+                <?php if ($advanced_search) {
+                    echo _("!"); echo ' <input type=checkbox name="not_phone" value=1';
+                    if ($not_phone) { echo ' checked'; } 
+                    echo '>';
+                 } ?>
                 <input type=text name="phone_search" size=10 value="<?php  echo $phone_search; ?>">
             </td>
             <td class=widget_content_form_element>
-                <?php echo _("!")?>
-                <?php if ($not_city) { echo ' <input type=checkbox name="not_city" value=1 checked>'; } 
-                      else   { echo ' <input type=checkbox name="not_city" value=1>';}?>
+                <?php if ($advanced_search) {
+                    echo _("!"); echo ' <input type=checkbox name="not_city" value=1';
+                    if ($not_city) { echo ' checked'; } 
+                    echo '>';
+                 } ?>
                 <input type=text name="city" size=10 value="<?php  echo $city; ?>">
             </td>
             <td class=widget_content_form_element>
-                <?php echo _("!")?>
-                <?php if ($not_state) { echo ' <input type=checkbox name="not_state" value=1 checked>'; } 
-                      else   { echo ' <input type=checkbox name="not_state" value=1>';}?>
+                <?php if ($advanced_search) {
+                    echo _("!"); echo ' <input type=checkbox name="not_state" value=1';
+                    if ($not_state) { echo ' checked'; } 
+                    echo '>';
+                 } ?>
                 <input type=text name="state" size=5 value="<?php echo $state; ?>">
             </td>
             <td class=widget_content_form_element>
-                <?php echo _("!")?>
-                <?php if ($not_country) { echo ' <input type=checkbox name="not_country" value=1 checked>'; } 
-                      else   { echo ' <input type=checkbox name="not_country" value=1>';}?>
+                <?php if ($advanced_search) {
+                    echo _("!"); echo ' <input type=checkbox name="not_country" value=1';
+                    if ($not_country) { echo ' checked'; } 
+                    echo '>';
+                 } ?>
                 <?php echo $country_menu ?>
             </td>
         </tr>
@@ -916,7 +930,7 @@ $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
             " . $pager->GetAndUseExportButton() .  "
             <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\">
-
+	    <input type=button class=button onclick=\"javascript: bulkSnailMail();\" value=\""._("Snail Mail Merge")."\">
 </td></tr>";
 
 $pager->AddEndRows($endrows);
@@ -1020,6 +1034,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.80  2005/12/06 21:39:18  vanmer
+ * - updated negative criteria to only appear in advanced search
+ *
  * Revision 1.79  2005/12/06 21:26:06  vanmer
  * - patch from dbaudone for companies advanced search
  * - adds ability to specify negative criterion
