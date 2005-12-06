@@ -2,7 +2,7 @@
 /**
  * install/extract-util.php - This page should be used by developers and administrators to extract an xml schema
  *
- * $Id: extract-xml.php,v 1.2 2005/11/30 00:40:09 vanmer Exp $
+ * $Id: extract-xml.php,v 1.3 2005/12/06 22:32:14 vanmer Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -66,7 +66,7 @@ $schemastring= $schema->ExtractSchema(true);
 
 //send download headers, don't force pop-up download dialog on browser
 //SendDownloadHeaders('text','xml', 'xrms-schema.xml', true, strlen($schemastring));
-$out_path=$include_path."../tmp/xrms-schema.xml";
+$out_path=$tmp_upload_directory."xrms-schema.xml";
 $fpath=fopen($out_path, 'w');
 $ret=fwrite($fpath, $schemastring, strlen($schemastring));
 fclose($fpath);
@@ -74,6 +74,9 @@ echo "Placed Schema in $out_path";
 
 /**
  *$Log: extract-xml.php,v $
+ *Revision 1.3  2005/12/06 22:32:14  vanmer
+ *- changed to save xml schema file in the upload directory
+ *
  *Revision 1.2  2005/11/30 00:40:09  vanmer
  *- changed to extract XML to a file in the temporary directory instead of downloading to the
  *client
