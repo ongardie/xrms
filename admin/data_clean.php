@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @todo: Active companies should always have active addresses
  *
- * $Id: data_clean.php,v 1.12 2005/01/23 21:47:58 maulani Exp $
+ * $Id: data_clean.php,v 1.13 2005/12/06 22:40:20 vanmer Exp $
  */
 
 // where do we include from
@@ -326,27 +326,6 @@ if ($companies_to_fix > 0) {
     }
 }
 
-// Fix Activities Default Behavior system parameter if it has been corrupted
-// by a bug in SetSystemParameters
-$sql = "SELECT param_id, string_val ";
-$sql .= "FROM system_parameters ";
-$sql .= "WHERE param_id = 'Activities Default Behavior' ";
-$sql .= "AND string_val != 'Fast' ";
-$sql .= "AND string_val != 'Long' ";
-$rst = $con->execute($sql);
-$to_fix = $rst->RecordCount();
-if ($to_fix > 0) {
-    $msg .= "Reset a valid value for corrupt Activities Default Behavior entry.<BR><BR>";
-
-	$sql2 = "SELECT * FROM system_parameters WHERE param_id = 'Activities Default Behavior'";
-	$rst2 = $con->execute($sql2);
-	$rec = array();
-	$rec['string_val'] = 'Fast';
-	
-	$upd = $con->GetUpdateSQL($rst2, $rec, false, get_magic_quotes_gpc());
-	$con->execute($upd);
-}
-
 //close the database connection, because we don't need it anymore
 $con->close();
 
@@ -367,6 +346,9 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.13  2005/12/06 22:40:20  vanmer
+ * - removed data_clean code that deals with system parameters
+ *
  * Revision 1.12  2005/01/23 21:47:58  maulani
  * - Move vars.php to load earlier in the file to address bug 1105960.
  *   For an unknown reason, vars.php must load before the utils and adodb
