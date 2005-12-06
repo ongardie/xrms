@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.157 2005/12/03 20:40:33 vanmer Exp $
+ * $Id: utils-misc.php,v 1.158 2005/12/06 21:49:39 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -40,10 +40,10 @@ function session_startup () {
   if ( empty( $sessid ) ) {
     // only call session_start once
     //check for system preference to store sessions in the database
+    require_once($include_directory.'utils-database.php');
     $con = get_xrms_dbconnection();
     $session_flag=get_admin_preference($con, 'session_storage_type');
     if ($session_flag=='db') {
-        require_once($include_directory.'utils-database.php');
         session_set_save_handler("sessao_open", "sessao_close", "sessao_read", "sessao_write", "sessao_destroy", "sessao_gc");
     }
     $con->close();
@@ -1989,6 +1989,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.158  2005/12/06 21:49:39  vanmer
+ * - added require_once for utils-database before first call to get_xrms_dbconnection
+ *
  * Revision 1.157  2005/12/03 20:40:33  vanmer
  * - added needed global declaration
  *
