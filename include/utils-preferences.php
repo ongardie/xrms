@@ -19,7 +19,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-preferences.php,v 1.12 2005/12/02 01:45:22 vanmer Exp $
+ * $Id: utils-preferences.php,v 1.13 2005/12/06 22:36:01 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -778,7 +778,8 @@ function upgrade_system_parameter_user_preferences($con) {
     $sql = "SELECT * FROM system_parameters";
     $rst=$con->execute($sql);
     $count=0;
-    if (!$rst) { db_error_handler($con, $sql);  return false; }
+    //no table available, or some other error occured, so return false
+    if (!$rst) { return false; }
     while (!$rst->EOF) {
         $param = $rst->fields['param_id'];
         $type=get_user_preference_type($con, $param);
@@ -837,6 +838,9 @@ function move_system_parameters($con, $fields) {
 
 /**
  * $Log: utils-preferences.php,v $
+ * Revision 1.13  2005/12/06 22:36:01  vanmer
+ * - added check to ensure that system parameter table exists before attempting to upgrade it to system preferences
+ *
  * Revision 1.12  2005/12/02 01:45:22  vanmer
  * - added more PHPDoc to preferences API
  * - added XRMS_API package tag
