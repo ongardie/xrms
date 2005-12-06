@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.42 2005/09/25 05:42:06 vanmer Exp $
+ * $Id: edit.php,v 1.43 2005/12/06 22:30:20 jswalter Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -103,7 +103,7 @@ if ($rst) {
     $rst->close();
 }
 
-$salutation_menu = build_salutation_menu($con, $salutation);
+$salutation_menu = build_salutation_menu($con, $salutation, true);
 
 $sql = "select count(contact_id) as contact_count from contacts where company_id = $company_id and contact_record_status = 'a'";
 $rst = $con->execute($sql);
@@ -320,6 +320,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.43  2005/12/06 22:30:20  jswalter
+ *  - modified 'build_salutation_menu()' to force BLANK as first menu item
+ *
  * Revision 1.42  2005/09/25 05:42:06  vanmer
  * - removed IM field references from all contact pages (now handled by plugin)
  * - added custom field hook for contacts new.php
