@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.38 2005/11/09 23:05:25 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.39 2005/12/06 18:04:20 daturaarutad Exp $
  */
 
 
@@ -837,6 +837,8 @@ END;
                         echo "<td class='$row_classnames {$col_classnames[$j]}'>" . format_date($this->data[$i][$this->column_info[$j]['index']]) . "</td>\n";
                     } elseif('int' == $this->column_info[$j]['type']) {
                         echo "<td class='$row_classnames {$col_classnames[$j]}'>" . number_format($this->data[$i][$this->column_info[$j]['index']], 0, '.',',') . "</td>\n";
+                    } elseif('filesize' == $this->column_info[$j]['type']) {
+                        echo "<td class='$row_classnames {$col_classnames[$j]}'>" . pretty_filesize($this->data[$i][$this->column_info[$j]['index']], 0, '.',',') . "</td>\n";
                     } else {
                         echo "<td class='$row_classnames {$col_classnames[$j]}'>" . $this->data[$i][$this->column_info[$j]['index']] . "</td>\n";
                     }
@@ -1222,6 +1224,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.39  2005/12/06 18:04:20  daturaarutad
+ * add filesize as available column type for rendering
+ *
  * Revision 1.38  2005/11/09 23:05:25  daturaarutad
  * do not show page count if no records returned ever; allow modify_data_functions callbacks to change number of records; always get all data if a modify_data_function callback is set (note, this is not the row-by-row callback)
  *
