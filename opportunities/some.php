@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.62 2005/09/23 21:07:27 daturaarutad Exp $
+ * $Id: some.php,v 1.63 2005/12/06 23:25:10 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -262,7 +262,7 @@ if (strlen($recently_viewed_table_rows) == 0) {
 
 $user_menu = get_user_menu($con, $user_id, true);
 
-$sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status = 'a' order by opportunity_status_id";
+$sql2 = "select " . $con->concat('opportunity_type_pretty_name', $con->qstr(' - '), 'opportunity_status_pretty_name') . ", opportunity_status_id from opportunity_statuses join opportunity_types ON opportunity_statuses.opportunity_type_id=opportunity_types.opportunity_type_id where opportunity_status_record_status = 'a' order by opportunity_statuses.opportunity_type_id, sort_order";
 $rst = $con->execute($sql2);
 $opportunity_status_menu = $rst->getmenu2('opportunity_status_id', $opportunity_status_id, true);
 $rst->close();
@@ -498,6 +498,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.63  2005/12/06 23:25:10  vanmer
+ * - added opportunity type name to list of statuses
+ * - changed sort order of statuses to reflect table sort_order column
+ * - may not work in SQL server
+ *
  * Revision 1.62  2005/09/23 21:07:27  daturaarutad
  * add db_error_handler()
  *
