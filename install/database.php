@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.58 2005/11/30 00:43:41 vanmer Exp $
+ * $Id: database.php,v 1.59 2005/12/06 22:39:37 vanmer Exp $
  */
 
 /**
@@ -18,40 +18,6 @@
  *
  */
 function misc_db_tables($con, $table_list) {
-    // system_parameters
-    if (!in_array('system_parameters',$table_list)) {
-        $sql ="create table system_parameters (
-               param_id                                varchar(40) not null unique,
-               string_val                              varchar(100),
-               int_val                                 int,
-               float_val                               float,
-               datetime_val                            datetime,
-               description                             varchar(255)
-               )";
-        //execute
-        $rst = $con->execute($sql);
-        if (!$rst) {
-            db_error_handler ($con, $sql);
-        }
-    }
-
-    // system_parameters_options
-    if (!in_array('system_parameters_options',$table_list)) {
-        $sql ="create table system_parameters_options (
-               param_id                                varchar(40) not null,
-               string_val                              varchar(100),
-               int_val                                 int,
-               float_val                               float,
-               datetime_val                            datetime,
-               sort_order                              int
-               )";
-        //execute
-        $rst = $con->execute($sql);
-        if (!$rst) {
-            db_error_handler ($con, $sql);
-        }
-    }
-
     // recent_items
     if (!in_array('recent_items',$table_list)) {
         $sql ="create table recent_items (
@@ -1309,6 +1275,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.59  2005/12/06 22:39:37  vanmer
+ * - removed system parameters tables from database structure
+ *
  * Revision 1.58  2005/11/30 00:43:41  vanmer
  * - added read-only flag for preferences
  *
