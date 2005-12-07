@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.159 2005/12/06 22:34:39 vanmer Exp $
+ * $Id: utils-misc.php,v 1.160 2005/12/07 00:19:36 jswalter Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -1874,6 +1874,46 @@ function brp2nl($_string)
     return preg_replace("=[\n]?<[br][^>]*>[\n]?=i", "\n", $_string);
 }
 
+
+ /**
+  * Returns an array containing all the values of $arr1  which
+  * have matching keys that are present in $arr2.
+  *
+  * PHP 5 now has a function named 'array_intersect_key'.
+  * The main difference between that and this is that this
+  * method will only return kys that have values.
+  *
+  * @name array_intersect_key_2()
+  * @access public
+  * @category array_handling
+  *
+  * @author Silvio Ginter
+  * @URL php.net/manual/en/function.array-intersect-key.php
+  *
+  * @static
+  * @final
+  *
+  * @param  array  $arr1    Primary array
+  * @param  array  $arr2    Secondary array, pull data from here
+  * @return mixed  $_string          Converted string
+  *
+  */
+function array_intersect_key_2($arr1, $arr2) {
+   $res = array();
+   foreach($arr1 as $key=>$value) {
+       $push = true;
+       for ($i = 1; $i < func_num_args(); $i++) {
+           $actArray = func_get_arg($i);
+           if (gettype($actArray) != 'array') return false;
+           if (!array_key_exists($key, $actArray)) $push = false;
+       }
+       if ($push && $arr2[$key]) $res[$key] = $arr2[$key];
+   }
+   return $res;
+};
+
+
+
 /**
  * Include the i18n files, as every file with output will need them
  *
@@ -1887,8 +1927,13 @@ require_once($include_directory . 'i18n.php');
 require_once($include_directory . 'utils-database.php');
 
 
+// ============================================================================
+
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.160  2005/12/07 00:19:36  jswalter
+ *  - added 'array_intersect_key_2()' to handle intersection of arrays
+ *
  * Revision 1.159  2005/12/06 22:34:39  vanmer
  * - removed system parameter functions, changed get_system_parameter to only be a wrapper function
  *
