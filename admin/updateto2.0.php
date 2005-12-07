@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.3 2005/12/06 22:38:00 vanmer Exp $
+ * $Id: updateto2.0.php,v 1.4 2005/12/07 19:32:04 vanmer Exp $
  */
 
 // where do we include from
@@ -4748,8 +4748,8 @@ if ($owl_pref) {
 $msg .= check_session_table($con, $table_list);
 
 
-//FINAL STEP BEFORE WE ARE AT 2.0, SET XRMS VERSION TO 2.0 IN PREFERENCES TABLE
-//set_admin_preference($con, 'xrms_version', '2.0');
+//FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
+//set_admin_preference($con, 'xrms_version', '2.0.0');
 
 do_hook_function('xrms_update', $con);
 
@@ -4775,6 +4775,9 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.4  2005/12/07 19:32:04  vanmer
+ * - added .0 to version number
+ *
  * Revision 1.3  2005/12/06 22:38:00  vanmer
  * - removed all system parameter code, added SQL to remove system parameter tables
  * - removed owl system preference
