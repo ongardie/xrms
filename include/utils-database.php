@@ -8,7 +8,7 @@
  * @author Beth Macknik
  * @package XRMS_API
  *
- * $Id: utils-database.php,v 1.20 2005/12/07 00:18:13 jswalter Exp $
+ * $Id: utils-database.php,v 1.21 2005/12/07 17:00:28 jswalter Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -224,7 +224,7 @@ function db_con_cleanup() {
     }
 }
 
-/** SESSION HANDLING CODE, PORTED TO ADOdb FROM COMMENTS ON PHP.NET FROM  rafael dot tz at uol dot com dot br 
+/** SESSION HANDLING CODE, PORTED TO ADOdb FROM COMMENTS ON PHP.NET FROM  rafael dot tz at uol dot com dot br
 25-Jul-2003 11:38
 **/
 function check_session_table($con, $table_list=false) {
@@ -239,7 +239,7 @@ function check_session_table($con, $table_list=false) {
         $table_fields[]=array('NAME'=>'session_id','TYPE'=>'C','SIZE'=>255,'NOTNULL'=>'NOTNULL','KEY'=>'KEY');
         $table_fields[]=array('NAME'=>'last_updated','TYPE'=>'T', 'NOTNULL'=>'NOTNULL', 'INDEX'=>'INDEX');
         $table_fields[]=array('NAME'=>'data_value','TYPE'=>'X');
-        
+
         //no global table options needed, so setting to false
         $table_opts=false;
 
@@ -258,7 +258,7 @@ function check_session_table($con, $table_list=false) {
             if (!$rst) db_error_handler($con, $sql_line);
         }
         return _("Added sessions table");
-    } 
+    }
     return '';
 }
 
@@ -313,7 +313,7 @@ function sessao_write( $aKey, $aVal )
        $rst=$con->execute($sql);
        if ($rst) {
             $upd=$con->getUpdateSQL($rst, $data);
-            if ($upd) { 
+            if ($upd) {
                 $upd_rst=$con->execute($upd);
                 if (!$upd_rst) { db_error_handler($con, $upd); }
             }
@@ -335,7 +335,7 @@ function sessao_destroy( $aKey )
 function sessao_gc( $aMaxLifeTime )
 {
         $con=get_xrms_dbconnection();
-        
+
         $sql = "DELETE FROM sessions WHERE (($time - last_updated) > $aMaxLifeTime)";
         $rst=$con->execute($sql);
         $con->close();
@@ -709,9 +709,6 @@ function __record_insert ( $_objCon, $_strTableName, $_aryData )
   */
 function __record_update ( $_objCon, $_strTableName, $_identifier, $_aryData, $return_recordset = false, $_deleteRecord = false )
 {
-
-do_print_r ( $return_recordset );
-
    /**
     * Default return value
     *
@@ -960,6 +957,9 @@ function __record_delete ( $_objCon, $_strTableName, $_identifier, $_aryData )
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.21  2005/12/07 17:00:28  jswalter
+ *  - removed left over debug code
+ *
  * Revision 1.20  2005/12/07 00:18:13  jswalter
  *  - added new API methods to handle and process field names vs table names
  *  - added '__record_insert()' as a generic INSERT record method
