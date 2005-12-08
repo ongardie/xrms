@@ -3462,7 +3462,8 @@
       <row><f>27</f><f>18</f><f>n</f><f>1</f><f>a</f><f>No</f></row>
       <row><f>28</f><f>18</f><f>y</f><f>2</f><f>a</f><f>Yes</f></row>
       <row><f>31</f><f>21</f><f>standard</f><f>1</f><f>a</f><f>Standard</f></row>
-      <row><f>32</f><f>21</f><f>db</f><f>1</f><f>a</f><f>Database</f></row>
+      <row><f>32</f><f>21</f><f>db</f><f>1</f><f>a</f><f>Database (XRMS)</f></row>
+      <row><f>33</f><f>21</f><f>adodb-session</f><f>1</f><f>a</f><f>Database (ADOdb)</f></row>
     </data>
   </table>
   <table name="user_preference_types">
@@ -3527,7 +3528,7 @@
       <row><f>17</f><f>Display Item Technical Details</f><f>Display Item Technical Details</f><f>Expose ID numbers and other technical tidbits on production screens. Useful for developers tracking issues in production. Otherwise not necessary.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
       <row><f>18</f><f>Show Logo</f><f>Show Logo</f><f>Controls custom logo display in the head of every page in XRMS.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
       <row><f>20</f><f>xrms_version</f><f>XRMS Version</f><f>XRMS Version (read-only)</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>text</f><f>1</f></row>
-      <row><f>21</f><f>session_storage_type</f><f>Session Data Storage Type</f><f>Storage method for application session data.  Standard uses default settings.  Database stores session data in the sessions table with in the XRMS database.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
+      <row><f>21</f><f>session_storage_type</f><f>Session Data Storage Type</f><f>Controls where the PHP session data is stored (files or database).  Changing this parameter will cause all currently logged in users to be logged out.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
     </data>
   </table>
   <table name="user_preferences">
