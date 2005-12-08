@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.160 2005/12/07 00:19:36 jswalter Exp $
+ * $Id: utils-misc.php,v 1.161 2005/12/08 05:21:47 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -36,6 +36,7 @@ $_SERVER['PHP_SELF'] = strip_tags($_SERVER['PHP_SELF']);
  */
 function session_startup () {
   global $include_directory;
+
   $sessid = session_id();
   if ( empty( $sessid ) ) {
     // only call session_start once
@@ -43,8 +44,31 @@ function session_startup () {
     require_once($include_directory.'utils-database.php');
     $con = get_xrms_dbconnection();
     $session_flag=get_admin_preference($con, 'session_storage_type');
-    if ($session_flag=='db') {
-        session_set_save_handler("sessao_open", "sessao_close", "sessao_read", "sessao_write", "sessao_destroy", "sessao_gc");
+    switch ($session_flag) {
+      case 'adodb-session':
+        //make sure we have connection information
+        global $xrms_db_dbtype, $xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname;
+        $table_list=$con->MetaTables();
+        require_once($include_directory.'adodb/session/adodb-session.php');
+        $table_name='adodb_sessions';
+        ADODB_Session::driver($xrms_db_dbtype);
+        ADODB_Session::host($xrms_db_server);
+        ADODB_Session::user($xrms_db_username);
+        ADODB_Session::password($xrms_db_password);
+        ADODB_Session::database($xrms_db_dbname);
+        ADODB_Session::table('adodb_sessions');
+        ADODB_Session::open('xrms_sessions',$xrms_system_id);
+        //make sure table exists
+        if (!in_array($table_name,$table_list)) { 
+            //make sure adodb session table exists
+            require_once($include_directory.'adodb/adodb-xmlschema.inc.php'); 
+            $schemaFile=$include_directory.'adodb/session/adodb_sessions_schema.xml';
+            adodb_session_create_table($schemaFile); 
+        }
+        break;
+        case 'db':
+            session_set_save_handler("sessao_open", "sessao_close", "sessao_read", "sessao_write", "sessao_destroy", "sessao_gc");
+        break;
     }
     $con->close();
 
@@ -1931,6 +1955,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.161  2005/12/08 05:21:47  vanmer
+ * - Initial revision of database handling of session data using adodb session functions as an option
+ *
  * Revision 1.160  2005/12/07 00:19:36  jswalter
  *  - added 'array_intersect_key_2()' to handle intersection of arrays
  *
