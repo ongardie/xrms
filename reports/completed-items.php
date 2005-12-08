@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: completed-items.php,v 1.16 2005/03/21 13:40:58 maulani Exp $
+ * $Id: completed-items.php,v 1.17 2005/12/08 23:39:09 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -319,7 +319,7 @@ foreach ($userArray as $key => $user_id) {
     } // End Opportunities
     if (($type == "cases") || ($type == "all")) {
         $sql = "SELECT * from cases, case_statuses where
-                status_open_indicator = 'c'
+                status_open_indicator != 'o'
                 and case_record_status = 'a'
                 and case_statuses.case_status_id = cases.case_status_id
                 and user_id = $user_id
@@ -386,6 +386,9 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: completed-items.php,v $
+ * Revision 1.17  2005/12/08 23:39:09  vanmer
+ * - changed completed item report to correct reflect open indicator codes for case statuses
+ *
  * Revision 1.16  2005/03/21 13:40:58  maulani
  * - Remove redundant code by centralizing common user menu call
  *
