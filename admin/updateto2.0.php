@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.4 2005/12/07 19:32:04 vanmer Exp $
+ * $Id: updateto2.0.php,v 1.5 2005/12/08 23:54:28 vanmer Exp $
  */
 
 // where do we include from
@@ -21,6 +21,8 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-activities.php');
+require_once($include_directory . 'utils-companies.php');
+require_once($include_directory . 'utils-contacts.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 //this file isn't in the $include_directory, so navigate to it directly
@@ -113,21 +115,24 @@ $rst = $con->execute($sql);
 $sql = "ALTER TABLE `case_statuses` ADD `case_type_id` INT DEFAULT '1' NOT NULL AFTER `case_status_display_html`";
 $rst = $con->execute($sql);
 //add an index
-$sql = "ALTER TABLE `case_statuses` ADD INDEX ( `case_type_id` ) ";
-$rst = $con->execute($sql);
+//this should only be added once, so commenting for the time being, already exists in the schema
+//$sql = "ALTER TABLE `case_statuses` ADD INDEX ( `case_type_id` ) ";
+//$rst = $con->execute($sql);
 // end
 
-//set "CLOSED" case status_open_indicator to "c"
+//set "CLOSED" case status_open_indicator to "r"
 //This is used for reports/open-items.php and reports/completed-items.php reports
-//This sets the default "Closed" campaign status with a status_open_indicator of "c" for "Closed"
+//This sets the default "Closed" campaign status with a status_open_indicator of "r" for "Closed/Resolved"
 $sql = "SELECT * FROM case_statuses WHERE case_status_short_name='CLO'";
 $rst = $con->execute($sql);
 
 $rec = array();
-$rec['status_open_indicator'] = 'c';
+$rec['status_open_indicator'] = 'r';
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-$con->execute($upd);
+if ($upd) {
+    $con->execute($upd);
+}
 // end
 
 //add sort order to case_statuses
@@ -4674,24 +4679,8 @@ $sql = "ALTER TABLE contacts
 $rst = $con->execute($sql);
 
 
-// New address type
-$sql = "   INSERT INTO address_types
-     ( address_type_id , address_type , address_type_sort_value )
-   VALUES
-     ( '', 'shipping', '400' )";
-$rst = $con->execute($sql);
-
 //ADD INDEXES TO XRMS, TO IMPROVE PERFORMANCE OF QUERIES
 $sql = "CREATE INDEX CompanyName ON companies ( company_name);";
-$rst = $con->execute($sql);
-
-$sql = "CREATE INDEX actpart_id_indx    ON activity_participants(activity_id);";
-$rst = $con->execute($sql);
-
-$sql = "CREATE INDEX actpart_contact_indx ON activity_participants(contact_id);";
-$rst = $con->execute($sql);
-
-$sql = "CREATE INDEX actpart_posid_indx ON activity_participants(activity_participant_position_id);";
 $rst = $con->execute($sql);
 
 $sql = "CREATE INDEX actpartpos_id_indx ON activity_participant_positions(activity_type_id);";
@@ -4740,13 +4729,15 @@ if ($owl_pref) {
 
     $sql = "DELETE FROM user_preference_types WHERE user_preference_type_id=$owl_pref_id";
     $rst = $con->execute($sql);
-    $msg .= _("Removed deprecated Owl preference, now entirely controlled by Owl Plugin");
+    $msg .= _("Removed deprecated Owl preference, now entirely controlled by Owl Plugin") . '<br>';
 }
 
 
 //check to see if session table has been added
 $msg .= check_session_table($con, $table_list);
 
+//ensure that company_id 1 is Unknown Company
+$msg .= update_unknown_company($con);
 
 //FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
 //set_admin_preference($con, 'xrms_version', '2.0.0');
@@ -4775,6 +4766,12 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.5  2005/12/08 23:54:28  vanmer
+ * - changed case status open indicator to use new updated code for closed statuses
+ * - removed add index on case type id, since multiple indexes are added (each time update is run)
+ * - added br to the remove owl system preference output
+ * - added code to create new Unknown Company for contacts with no company_id (company_id 1 is used)
+ *
  * Revision 1.4  2005/12/07 19:32:04  vanmer
  * - added .0 to version number
  *
