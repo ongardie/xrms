@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <schema version="0.3">
   <table name="ControlledObject">
     <field name="ControlledObject_id" type="I" size="10">
