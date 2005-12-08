@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.39 2005/12/06 22:39:22 vanmer Exp $
+ * $Id: data.php,v 1.40 2005/12/08 05:23:37 vanmer Exp $
  */
 
 /**
@@ -2869,12 +2869,14 @@ function user_preferences_db_data($con) {
     }
 
     $s=_("Session Data Storage Type");
-    $s =_( "Storage method for application session data.  Standard uses default settings.  Database stores session data in the sessions table with in the XRMS database.");
+    $s =_( "Controls where the PHP session data is stored (files or database).  Changing this parameter will cause all currently logged in users to be logged out.");
     $s=_("Standard");
-    $s=_("Database");
-    $session_storage_type=add_user_preference_type($con, 'session_storage_type', "Session Data Storage Type", "Storage method for application session data.  Standard uses default settings.  Database stores session data in the sessions table with in the XRMS database.", false, false, 'select');
+    $s=_("Database (XRMS)");
+    $s=_("Database (ADOdb)");
+    $session_storage_type=add_user_preference_type($con, 'session_storage_type', "Session Data Storage Type", "Controls where the PHP session data is stored (files or database).  Changing this parameter will cause all currently logged in users to be logged out.", false, false, 'select');
     add_preference_option($con, $session_storage_type, 'standard', 'Standard');
-    add_preference_option($con, $session_storage_type, 'db', 'Database');
+    add_preference_option($con, $session_storage_type, 'db', 'Database (XRMS)');
+    add_preference_option($con, $session_storage_type, 'adodb-session', 'Database (ADOdb)');
     $ret=get_admin_preference($con, $session_storage_type);
     if (!$ret) {
         set_admin_preference($con, $session_storage_type, 'standard');
@@ -2901,6 +2903,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.40  2005/12/08 05:23:37  vanmer
+ * - added options for db handling of session data through XRMS or adodb to system preferences
+ *
  * Revision 1.39  2005/12/06 22:39:22  vanmer
  * - removed system parameters from old install data
  *
