@@ -509,15 +509,6 @@
     <index name="activity_participant_position_id">
       <col>activity_participant_position_id</col>
     </index>
-    <index name="actpart_id_indx">
-      <col>activity_id</col>
-    </index>
-    <index name="actpart_contact_indx">
-      <col>contact_id</col>
-    </index>
-    <index name="actpart_posid_indx">
-      <col>activity_participant_position_id</col>
-    </index>
   </table>
   <table name="activity_resolution_types">
     <field name="activity_resolution_type_id" type="I" size="11">
@@ -678,20 +669,6 @@
       <row><f>1</f><f>unknown</f><f>100</f></row>
       <row><f>2</f><f>commercial</f><f>200</f></row>
       <row><f>3</f><f>residential</f><f>300</f></row>
-      <row><f>4</f><f>shipping</f><f>400</f></row>
-      <row><f>5</f><f>shipping</f><f>400</f></row>
-      <row><f>6</f><f>shipping</f><f>400</f></row>
-      <row><f>7</f><f>shipping</f><f>400</f></row>
-      <row><f>8</f><f>shipping</f><f>400</f></row>
-      <row><f>9</f><f>shipping</f><f>400</f></row>
-      <row><f>10</f><f>shipping</f><f>400</f></row>
-      <row><f>11</f><f>shipping</f><f>400</f></row>
-      <row><f>12</f><f>shipping</f><f>400</f></row>
-      <row><f>13</f><f>shipping</f><f>400</f></row>
-      <row><f>14</f><f>shipping</f><f>400</f></row>
-      <row><f>15</f><f>shipping</f><f>400</f></row>
-      <row><f>16</f><f>shipping</f><f>400</f></row>
-      <row><f>17</f><f>shipping</f><f>400</f></row>
     </data>
   </table>
   <table name="addresses">
@@ -957,50 +934,11 @@
     <index name="case_type_id">
       <col>case_type_id</col>
     </index>
-    <index name="case_type_id_2">
-      <col>case_type_id</col>
-    </index>
-    <index name="case_type_id_3">
-      <col>case_type_id</col>
-    </index>
-    <index name="case_type_id_4">
-      <col>case_type_id</col>
-    </index>
-    <index name="case_type_id_5">
-      <col>case_type_id</col>
-    </index>
-    <index name="case_type_id_6">
-      <col>case_type_id</col>
-    </index>
-    <index name="case_type_id_7">
-      <col>case_type_id</col>
-    </index>
-    <index name="case_type_id_8">
-      <col>case_type_id</col>
-    </index>
-    <index name="case_type_id_9">
-      <col>case_type_id</col>
-    </index>
-    <index name="case_type_id_10">
-      <col>case_type_id</col>
-    </index>
-    <index name="case_type_id_11">
-      <col>case_type_id</col>
-    </index>
-    <index name="case_type_id_12">
-      <col>case_type_id</col>
-    </index>
-    <index name="case_type_id_13">
-      <col>case_type_id</col>
-    </index>
-    <index name="case_type_id_14">
-      <col>case_type_id</col>
-    </index>
     <data>
       <row><f>1</f><f>1</f><f>o</f><f>NEW</f><f>New</f><f>New</f><f>New</f><f></f><f>1</f><f>a</f></row>
       <row><f>2</f><f>2</f><f>o</f><f>OPEN</f><f>Open</f><f>Open</f><f>Open</f><f></f><f>1</f><f>a</f></row>
       <row><f>3</f><f>3</f><f>o</f><f>PRO</f><f>In Progress</f><f>In Progress</f><f>In Progress</f><f></f><f>1</f><f>a</f></row>
-      <row><f>4</f><f>4</f><f>c</f><f>FIN</f><f>Finished</f><f>Finished</f><f>Finished</f><f></f><f>1</f><f>a</f></row>
+      <row><f>4</f><f>4</f><f>r</f><f>FIN</f><f>Finished</f><f>Finished</f><f>Finished</f><f></f><f>1</f><f>a</f></row>
       <row><f>5</f><f>5</f><f>r</f><f>CLO</f><f>Closed</f><f>Closed</f><f>Closed</f><f></f><f>1</f><f>a</f></row>
       <row><f>6</f><f>1</f><f>o</f><f>NEW</f><f>New</f><f>New</f><f>New</f><f>New Bug Report</f><f>2</f><f>a</f></row>
       <row><f>7</f><f>2</f><f>o</f><f>PRO</f><f>In Progress</f><f>In Progress</f><f>In Progress</f><f>Bug Report In Progress</f><f>2</f><f>a</f></row>
@@ -1310,6 +1248,9 @@
     <index name="CompanyName">
       <col>company_name</col>
     </index>
+    <data>
+      <row><f>1</f><f>1</f><f>1</f><f>1</f><f>1</f><f>3</f><f>4</f><f>Unknown Company</f><f>NOCOMPANY</f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f>0</f><f>0</f><f>2005-12-08 14:53:52</f><f>1</f><f>2005-12-08 14:53:52</f><f>1</f><f>0</f><f>0</f><f>0</f><f>0</f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f>a</f></row>
+    </data>
   </table>
   <table name="company_division">
     <field name="division_id" type="I" size="11">
@@ -2202,7 +2143,6 @@
       <row><f>4</f><f>1</f><f>4</f><f>o</f><f>NEG</f><f>Negotiation</f><f>Negotiation</f><f>Negotiation</f><f>a</f><f></f></row>
       <row><f>5</f><f>1</f><f>5</f><f>w</f><f>CLW</f><f>Closed/Won</f><f>Closed/Won</f><f>Closed/Won</f><f>a</f><f></f></row>
       <row><f>6</f><f>1</f><f>6</f><f>l</f><f>CLL</f><f>Closed/Lost</f><f>Closed/Lost</f><f>Closed/Lost</f><f>a</f><f></f></row>
-      <row><f>7</f><f>1</f><f>6</f><f>c</f><f>CLL</f><f>Closed/Lost</f><f>Closed/Lost</f><f>Closed/Lost</f><f>d</f><f></f></row>
     </data>
   </table>
   <table name="opportunity_types">
