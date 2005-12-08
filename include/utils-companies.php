@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-companies.php,v 1.3 2005/12/08 22:09:05 jswalter Exp $
+ * $Id: utils-companies.php,v 1.4 2005/12/08 22:49:47 vanmer Exp $
  *
  */
 
@@ -130,8 +130,18 @@ function add_company($con, $company_data)
     {
         // Session data
         global $session_user_id;
-
-
+        $table='companies';
+        $sql = $con->getInsertSQL($table, $company_data);
+        if ($sql) {
+            $rst=$con->execute($sql);
+            if (!$rst) {db_error_handler($con, $sql); return false; }
+            else {
+                $ret=$con->Insert_ID();
+                if ($ret)
+                    return $ret;
+                else return true;
+            }
+        } else return false;
     }
 
     // return what we have
@@ -263,8 +273,105 @@ function delete_company($con, $company_id, $delete_from_database=false) {
     return true;
 }
 
+function update_unknown_company($con) {
+    $sql = "SELECT * FROM companies WHERE company_id=1";
+    $rst=$con->execute($sql);
+    if (!$rst) { db_error_handler($con, $sql); return false; }
+
+        $now=time();
+        $unknown_company_data=array('company_id'=>1, 'company_name'=>'Unknown Company');
+        $unknown_company_data['company_record_status']='a';
+        $unknown_company_data['industry_id']=1;
+        $unknown_company_data['crm_status_id']=1;
+        $unknown_company_data['rating_id']=3;
+        $unknown_company_data['account_status_id']=4;
+        $unknown_company_data['company_source_id']=1;
+        $unknown_company_data['company_code']='NOCOMPANY';
+        $unknown_company_data['user_id']=1;
+        $unknown_company_data['entered_by']=1;
+        $unknown_company_data['last_modified_by']=1;
+        $unknown_company_data['entered_at']=$now;
+        $unknown_company_data['last_modified_at']=$now;
+
+//default_primary_address, default_billing_address, default_shipping_address, default_payment_address, user_id, company_source_id, crm_status_id, industry_id, account_status_id, rating_id, company_name, company_code, profile,entered_at, entered_by, last_modified_at, last_modified_by
+
+    if (!$rst->EOF) {
+        //already ran this upgrade, so return
+        if ($rst->fields['company_name']=='Unknown Company') return '';
+
+        //company exists, so if it's either the sample data default of Bushwood Components, or a deleted company, change the company key, then add new Unknown Company
+        if (($rst->fields['company_name'] =='Bushwood Components') OR ($rst->fields['company_record_status']=='d')) {
+            $ret=change_company_key($con, 1, false, $rst);
+            if (!$ret) return _("Failed to upgrade company entry for unknown company.") . '  ' ._("New contacts with no company will be attach to Company:") .  " {$rst->fields['company_name']} " ._("by default").'<br>';
+        }
+    }
+
+    //adding new company, since either old company has been moved or no old company was found
+    $new_company_id=add_company($con, $unknown_company_data);
+    if ($new_company_id) {
+        return _("Upgraded company entry for Unknown Company.  New contacts will be attached here if no company is specified.") . '<br>';
+    } else {
+        return _("Failed to upgrade company entry for unknown company.");
+    }
+}
+
+function change_company_key($con, $old_company_id, $new_company_id=false, $company_rst=false) {
+    if (!$company_rst) {
+        $sql = "SELECT * FROM companies WHERE company_id=$old_company_id";
+        $company_rst=$con->execute($sql);
+    }
+    $company_data=$company_rst->fields;
+    //unset old company id
+    unset($company_data['company_id']);
+    if ($new_company_id) {
+        $company_data['company_id']=$new_company_id;
+    }
+    $ret=add_company($con, $company_data);
+    if (!$ret) {
+        //error moving company, so fail
+        return false;
+    }
+    $new_company_id = $ret;
+
+    //move all entities related to company
+    $ret=change_company_key_related_tables($con, $old_company_id, $new_company_id);
+
+    //let plugins also have a chance to update their keys
+    $param=array($old_company_id, $new_company_id);
+    do_hook_function('change_company_key',$param);
+
+    if (!$ret) {
+        //remove new company, updates did not succeed, remove new company from the database
+        delete_company($con, $new_company_id);
+        return false;
+    } else {
+        //update succeeded, remove old company from database entirely
+        delete_company($con, $old_company_id, true);
+        return true;
+    }
+}
+
+function change_company_key_related_tables($con, $old_company_id, $new_company_id) {
+    $table_list = list_db_tables($con);
+    foreach ($table_list as $table) {
+        $columns=$con->MetaColumns($table);
+        if (($table!='companies') AND array_key_exists('COMPANY_ID',$columns)) {
+            $sql = "UPDATE $table SET company_id=$new_company_id WHERE company_id=$old_company_id";
+            $rst=$con->execute($sql);
+            if (!$rst) { db_error_handler($con, $sql); return false; }
+        }
+    }
+    return true;
+}
+
  /**
  * $Log: utils-companies.php,v $
+ * Revision 1.4  2005/12/08 22:49:47  vanmer
+ * - added a working function (with no checks) for add_company
+ * - this should be updated to do all the relevant checks and add sensible defaults
+ * - added function to add a new unknown company at company_id 1, moving whatever company was already on company_id 1 to a new slot
+ * - added code to change the key of a company from one company_id to another
+ *
  * Revision 1.3  2005/12/08 22:09:05  jswalter
  *  - 'find_company()' is orginal and has not been modified
  *  - 'add_update_contact()' is new and does not work yet
