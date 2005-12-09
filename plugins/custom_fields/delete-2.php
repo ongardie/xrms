@@ -2,7 +2,7 @@
 /**
  * Mark a note as deleted
  *
- * $Id: delete-2.php,v 1.1 2005/10/02 23:57:33 vanmer Exp $
+ * $Id: delete-2.php,v 1.2 2005/12/09 07:49:55 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -37,13 +37,16 @@ if (!$con->AutoExecute($tbl, $rec, 'UPDATE', "instance_id = $instance_id")) {
 	db_error_handler ($con, "Error deleting record");
 }
 
-$con->close();
+connect($con);
 
 $return_url = urldecode($return_url);
 header("Location: $return_url");
 
 /**
  * $Log: delete-2.php,v $
+ * Revision 1.2  2005/12/09 07:49:55  vanmer
+ * - changed to use new connect parameter to close dbconnection if opened by the custom fields plugin
+ *
  * Revision 1.1  2005/10/02 23:57:33  vanmer
  * - Initial Revison of the custom_fields plugin, thanks to Keith Edmunds
  *
