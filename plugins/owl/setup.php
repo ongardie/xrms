@@ -32,6 +32,7 @@ function xrms_plugin_init_owl() {
     $xrms_plugin_hooks['file_get_file_info']['owl'] = 'fn_get_file_info';
     $xrms_plugin_hooks['file_get_one_file_html']['owl'] = 'fn_get_one_file_html';
     $xrms_plugin_hooks['file_add_folder']['owl'] = 'fn_add_folder';
+    $xrms_plugin_hooks['file_delete_folder']['owl'] = 'fn_delete_folder';
     $xrms_plugin_hooks['file_download_file']['owl'] = 'fn_download_file';
     $xrms_plugin_hooks['file_get_xrms_file_id']['owl'] = 'fn_get_xrms_file_id';
     $xrms_plugin_hooks['file_browse_files']['owl'] = 'fn_browse_files';
@@ -131,6 +132,11 @@ function fn_add_folder(&$params) {
 	return op_add_folder($params);
 }
 
+function fn_delete_folder(&$params) {
+	require_once('owl_plugin.php');
+	return op_delete_folder($params);
+}
+
 function fn_download_file(&$params) { 
 	require_once('owl_plugin.php');
 	return op_download_file($params);
@@ -177,6 +183,9 @@ function fn_template() {
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.6  2005/12/09 19:23:23  daturaarutad
+ * add delete hook
+ *
  * Revision 1.5  2005/11/09 22:31:00  daturaarutad
  * updated API to use named keys
  *
