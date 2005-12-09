@@ -2,16 +2,25 @@
 
 $cf_plugin_version = "X1.0";
 
-function connect () {
+function connect ($dbconnection=false) {
 
 	# Connect to database, return connection object.
 	
 	global $xrms_db_server, $xrms_db_username, $xrms_db_password;
 	global $xrms_db_dbname, $xrms_db_dbtype, $con;
+
+    static $opened_con=false;
+
+    //hack to check dbconnection status before closing connection
+    if ($dbconnection AND $opened_con) {
+        $dbconnection->close();
+        return true;
+    }
 	
 	if (!$con) {
 		$con = &adonewconnection($xrms_db_dbtype);
 		$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+        $opened_con=true;
 	}
 	//$con->debug = 1;
 	return $con;
