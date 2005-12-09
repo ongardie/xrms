@@ -328,11 +328,14 @@ function op_add_file(&$params) {
 		$file_info 		= $params['file_info'];
 
 		// Simply read the parent_id from the session (It is only ever set in the Browse function)
+        // Each company/activity/contact etc. has it's owl 'current directory' stored in the session
 		if($file_info['on_what_table'] && $file_info['on_what_id']) {
 			$file_info['parent_id']	= $_SESSION[$file_info['on_what_table']][$file_info['on_what_id']]['owl_parent_id'];
 		} else {
+            // private/home.php also has a cwd
 			$file_info['parent_id'] = $_SESSION['owl_parent_id'];
 		}
+
 	} else {
 		echo "error in param count";
 		return null;
@@ -452,6 +455,46 @@ function op_add_folder(&$params) {
 
 
 /** 
+* Delete a folder from OWL
+*   
+* @param array ('folder_info' => $folder_info);
+*   
+* @return array ('error_status' => 'boolean indicating error status',
+*                'error_text' => 'text of the error message')
+*/
+function op_delete_folder(&$params) {
+	global $owl_location;
+	require_once($owl_location . '/lib/OWL_API.php');
+
+	if(is_array($params) && count($params) == 1) {
+		$folder_info 		= $params['folder_info'];
+
+	} else {
+		echo "error in param count";
+		return null;
+	}
+	global $owl_error;
+	$folder_info =  OWL_Delete_Folder($folder_info);
+
+
+
+
+
+    // you need to get the list of files and folders that were deleted and delete them from XRMS!
+
+
+
+
+
+
+	$params['folder_info'] = $folder_info;
+
+
+	$params = array_merge($params, $owl_error);
+}
+
+
+/** 
 * Download a file in OWL (send to the browser)
 *   
 * @param array ('file_info' => $file_info);
@@ -490,6 +533,7 @@ function op_download_file(&$params) {
 function op_browse_files(&$params) {
 	global $http_site_root;
 	global $owl_location;
+    global $owl_error;
 	require_once($owl_location . '/lib/OWL_API.php');
 	require_once('folders_lib.php');
 
@@ -501,7 +545,6 @@ function op_browse_files(&$params) {
 
 		$file_data = $rst->GetArray();
 
-		$folder_data = GetFolders($on_what_table, $on_what_id);
 
 		
 		/* 	The lowdown on owl_parent_id:
@@ -521,7 +564,28 @@ function op_browse_files(&$params) {
 			}
 		}
 
-		if(!$owl_parent_id) $owl_parent_id = 0;
+
+        //echo "GetEntityFolderID($on_what_table, $on_what_id)<br>";
+        $entity_folder_id = GetEntityFolderID($on_what_table, $on_what_id);
+        if(!$entity_folder_id) {
+            $params['file_rows'] = " ";
+
+            $params = array_merge($params, $owl_error);
+            return $params;
+        }
+
+        //echo "entity folder is $entity_folder_id<br>";
+
+		if(!$owl_parent_id) {
+            $owl_parent_id = $entity_folder_id;
+        }
+
+        //echo "Using $owl_parent_id as owl_parent_id<br>";
+
+
+
+		//$folder_data = GetFolders($on_what_table, $on_what_id);
+		$folder_data = GetFolders(null, null, "parent_id = $owl_parent_id");
 
 
 		if($on_what_table) {
@@ -530,11 +594,20 @@ function op_browse_files(&$params) {
 			$return_url = urlencode("/private/home.php");
 		}
 
+        //$folder_caption = BuildFolderPath($folder_data, $owl_parent_id);
+        $path_info = BuildFolderPath($folder_data, $owl_parent_id);
+        $folder_caption = $path_info['path'];
+        $folder_name = $path_info['current_folder'];
+
 
 		$owl_data = OWL_Browse_Files($owl_parent_id, $file_data, $folder_data);
-		//print("<pre>");
-		//print_r($file_data);
-		//print("</pre>");
+
+        if($owl_parent_id == $entity_folder_id) {
+            // this is bad... the ".. (folder)" should be handled differently...change later
+            array_shift($owl_data);
+        } 
+	
+
 
 		// ADDED By BOZZ
 		global $default;
@@ -544,7 +617,8 @@ function op_browse_files(&$params) {
 		foreach($owl_data as $k => $owl_row) {
 
 			if($owl_row['is_folder']) {
-				
+
+			
 				$owl_data[$k]['file_size'] = '';
 
 				// folder link always sets a new owl_parent_id
@@ -553,8 +627,8 @@ function op_browse_files(&$params) {
                 } else {
 			        $folder_link = "$http_site_root/private/home.php?owl_parent_id={$owl_data[$k]['id']}";
                 }
-
-				$owl_data[$k]['file_pretty_name'] = "<img src=\"$default->owl_graphics_url/$default->system_ButtonStyle/icon_filetype/folder_closed.gif\"></img>&nbsp;<a href='$folder_link'>{$owl_data[$k]['name']}</a>";
+                // the <!-- 0 --> is so that the pager will sort folders before files, alphabetically
+				$owl_data[$k]['file_pretty_name'] = "<!-- 0 {$owl_data[$k]['file_pretty_name']} --><img src=\"$default->owl_graphics_url/$default->system_ButtonStyle/icon_filetype/folder_closed.gif\"></img>&nbsp;<a href='$folder_link'>{$owl_data[$k]['name']}</a>";
 
 			} else {
 
@@ -593,7 +667,8 @@ function op_browse_files(&$params) {
 				//$owl_data[$k]['file_pretty_name'] = "<img src=\"$default->owl_graphics_url/$default->sButtonStyle/icon_filetype/$sDispIcon\" border=\"0\" alt=\"\"></img>&nbsp;";
 				//}
 				
-				$owl_data[$k]['file_pretty_name'] = "<img src=\"$default->owl_graphics_url/$default->system_ButtonStyle/icon_filetype/$sDispIcon\" border=\"0\" alt=\"\"></img>&nbsp;<a href='$http_site_root/files/one.php?file_id={$owl_data[$k]['file_id']}&return_url=$return_url' alt=\"File Name: " .$owl_data[$k]['file_name'] . "\" title=\"File Name: " .$owl_data[$k]['file_name'] . "\">" . $owl_data[$k]['file_pretty_name'] . '</a>';
+                // the <!-- 1 --> is so that the pager will sort folders before files, alphabetically
+				$owl_data[$k]['file_pretty_name'] = "<!-- 1 {$owl_data[$k]['file_pretty_name']} --><img src=\"$default->owl_graphics_url/$default->system_ButtonStyle/icon_filetype/$sDispIcon\" border=\"0\" alt=\"\"></img>&nbsp;<a href='$http_site_root/files/one.php?file_id={$owl_data[$k]['file_id']}&return_url=$return_url' alt=\"File Name: " .$owl_data[$k]['file_name'] . "\" title=\"File Name: " .$owl_data[$k]['file_name'] . "\">" . $owl_data[$k]['file_pretty_name'] . '</a>';
 				//print("<pre>");
 				//print_r($owl_data);
 				//print_r($default);
@@ -614,7 +689,7 @@ function op_browse_files(&$params) {
         $columns[] = array('name' => 'Owner', 'index_calc' => 'username');
         $columns[] = array('name' => 'Date', 'index_calc' => 'entered_at');
 
-        $caption= _('Files');
+        $caption = _("Files in $folder_caption");
 
         $pager = new GUP_Pager($con, null, $owl_data, $caption, 'Files_Sidebar_Form', 'Files_Sidebar', $columns, false, true);
 
@@ -624,6 +699,10 @@ function op_browse_files(&$params) {
 
         $new_file_button=render_create_button(_('Add File'), 'button', "javascript:location.href='$http_site_root/files/new.php?on_what_table=$on_what_table&on_what_id=$on_what_id&return_url=$return_url'");
         $new_folder_button=render_create_button(_('Add Folder'), 'button', "javascript:location.href='$http_site_root/plugins/owl/new_folder.php?on_what_table=$on_what_table&on_what_id=$on_what_id&return_url=$return_url'");
+
+        if($folder_name) {
+            $delete_folder_button=render_delete_button(_("Delete Folder - $folder_name"), 'button', "javascript:location.href='$http_site_root/plugins/owl/delete_folder.php?on_what_table=$on_what_table&on_what_id=$on_what_id&folder_id=$owl_parent_id&return_url=$return_url'", false, false, 'folders', $owl_parent_id);
+        }
 
 
 		// not sure about this, but let's store the owl_parent_id in the session for add new file/folder
@@ -641,9 +720,10 @@ function op_browse_files(&$params) {
 
         $endrows =  "
                 <tr>
-                    <td colspan=4 class=widget_content_form_element>
+                    <td colspan=$colspan class=widget_content_form_element>
                             $new_file_button
                             $new_folder_button
+                            $delete_folder_button
                     </td>
 				</tr> ";
 
@@ -746,6 +826,9 @@ function op_template(&$params) {
 
 /**
  * $Log: owl_plugin.php,v $
+ * Revision 1.6  2005/12/09 19:26:16  daturaarutad
+ * add path view and delete button to browse sidebar
+ *
  * Revision 1.5  2005/11/29 20:01:36  daturaarutad
  * fix $msg and owl_parent_id handling in links (browse function)
  *
