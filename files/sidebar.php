@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.25 2005/12/06 19:08:05 daturaarutad Exp $
+ * $Id: sidebar.php,v 1.26 2005/12/09 19:26:47 daturaarutad Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -50,8 +50,12 @@ $plugin_params = array('rst' => $file_sidebar_rst, 'on_what_table' => $on_what_t
 do_hook_function('file_browse_files', $plugin_params);
 $file_rows = $plugin_params['file_rows'];
 
+if($plugin_params['error_status']) {
+        $msg = $plugin_params['error_text'];
+}
 
-if(!$file_rows) {
+
+if(!$file_rows && !$file_rows['error_status']) {
     if (!$file_sidebar_label) {
         $file_sidebar_label=_("Files");
     }
@@ -123,6 +127,9 @@ if(!$file_rows) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.26  2005/12/09 19:26:47  daturaarutad
+ * display error msg from plugin if exists
+ *
  * Revision 1.25  2005/12/06 19:08:05  daturaarutad
  * update to use pager for display
  *
