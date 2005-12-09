@@ -2,7 +2,7 @@
 /**
  * owl/new_folder-2.php - This file adds new folders to the system
  *
- * $Id: new_folder-2.php,v 1.3 2005/11/09 22:31:00 daturaarutad Exp $
+ * $Id: new_folder-2.php,v 1.4 2005/12/09 19:24:43 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -52,10 +52,17 @@ $rec = $folder_plugin_params['folder_info'];
 
 $error = false;
 
+if (strpos($return_url,'?')!==false) {
+    $sep='&';
+} else {
+    $sep='?';
+}
+
+
 if($folder_plugin_params['error_status']) {
     $error = true;
     $msg = $folder_plugin_params['error_text'];
-	header("Location: " . $http_site_root . $return_url . "&msg=" . htmlentities($msg));
+	header("Location: " . $http_site_root . $return_url . $sep . "msg=" . htmlentities($msg));
 } else {
 
 	$tbl = 'folders';
@@ -72,11 +79,14 @@ if($folder_plugin_params['error_status']) {
 
 	$con->close();
 
-	header("Location: " . $http_site_root . $return_url);
+	header("Location: " . $http_site_root . $return_url . $sep . "msg=" . _('Folder Created Successfully'));
 }
 
 /**
  * $Log: new_folder-2.php,v $
+ * Revision 1.4  2005/12/09 19:24:43  daturaarutad
+ * use $sep for ? vs & in return url
+ *
  * Revision 1.3  2005/11/09 22:31:00  daturaarutad
  * updated API to use named keys
  *
