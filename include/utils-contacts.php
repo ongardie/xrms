@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.6 2005/12/07 00:14:53 jswalter Exp $
+ * $Id: utils-contacts.php,v 1.7 2005/12/10 20:09:34 vanmer Exp $
  *
  */
 
@@ -370,7 +370,7 @@ function update_contact($con, $contact, $contact_id = false, $contact_rst = fals
     $rec['last_modified_by'] = $session_user_id;
 
 
-    $upd = $con->GetUpdateSQL($contact_rst, $contact, false, get_magic_quotes_gpc());
+    $upd = $con->GetUpdateSQL($contact_rst, $contact);
     if ($upd) {
         $rst=$con->execute($upd);
         if (!$rst) { db_error_handler($con, $upd); return false; }
@@ -423,6 +423,9 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.7  2005/12/10 20:09:34  vanmer
+ * - removed parameters to getUpdateSQL, to allow update of contact with strange characters
+ *
  * Revision 1.6  2005/12/07 00:14:53  jswalter
  *  - added new method 'add_update_contact()' to replace the existing add() and update() methods
  *  - modified 'add_contact()' to be a BC wrapper for 'add_update_contact()'
