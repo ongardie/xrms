@@ -8,7 +8,7 @@
  * @author Beth Macknik
  * @package XRMS_API
  *
- * $Id: utils-database.php,v 1.21 2005/12/07 17:00:28 jswalter Exp $
+ * $Id: utils-database.php,v 1.22 2005/12/10 20:09:08 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -660,7 +660,7 @@ function __record_insert ( $_objCon, $_strTableName, $_aryData )
     * @access private
     * @static
     */
-    $sql = $_objCon->GetInsertSQL($_strTableName, $_aryData, true);
+    $sql = $_objCon->GetInsertSQL($_strTableName, $_aryData);
 
    /**
     * Record Set of found data
@@ -957,6 +957,9 @@ function __record_delete ( $_objCon, $_strTableName, $_identifier, $_aryData )
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.22  2005/12/10 20:09:08  vanmer
+ * - removed parameters for getInsertSQL, to allow for strange characters
+ *
  * Revision 1.21  2005/12/07 17:00:28  jswalter
  *  - removed left over debug code
  *
