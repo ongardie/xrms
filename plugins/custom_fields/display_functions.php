@@ -726,6 +726,7 @@ function save_values ($values, $instance_id, $object_id, $key_id, $subkey_id) {
 	
 	# Ensure we have an instance_id
 	if (!$instance_id) {
+		if (!$key_id) return false;
 		assert($key_id);
 		$tbl = "cf_instances";
 		$rec = array();
@@ -791,7 +792,7 @@ function save_values ($values, $instance_id, $object_id, $key_id, $subkey_id) {
 		}
 	}
 
-	$con->close();
+    connect($con);
 }
 
 function type_name_to_object_id ($type_name) {
