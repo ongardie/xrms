@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: ControlledObject_list.php,v 1.5 2005/12/12 20:00:40 vanmer Exp $
+ * $Id: ControlledObject_list.php,v 1.6 2005/12/12 21:01:42 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -30,12 +30,13 @@ getGlobalVar($msg, 'msg');
 
 $page_title = _("Manage Controlled Objects");
 
-$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_ControlledObject.php?form_action=edit&return_url=ControlledObject_list.php&ControlledObject_id="), 'ControlledObject_id', $con->qstr("'\">")) . "AS LINK, ControlledObject_name, on_what_table, on_what_field, data_source.data_source_name FROM ControlledObject  JOIN data_source ON data_source.data_source_id=ControlledObject.data_source_id";
+$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_ControlledObject.php?form_action=edit&return_url=ControlledObject_list.php&ControlledObject_id="), 'ControlledObject_id', $con->qstr("'\">")) . "AS LINK, ControlledObject_id, ControlledObject_name, on_what_table, on_what_field, data_source.data_source_name FROM ControlledObject  JOIN data_source ON data_source.data_source_id=ControlledObject.data_source_id";
 
 $form_id="ControlledObjectsForm";
 
     $columns = array();
     $columns[] = array('name' => _("Edit"), 'index_sql' => 'LINK');
+    $columns[] = array('name' => _("ID"), 'index_sql' => 'ControlledObject_id');
     $columns[] = array('name' => _("Object Name"), 'index_sql' => 'ControlledObject_name');
     $columns[] = array('name' => _("Source Table"), 'index_sql' => 'on_what_table');
     $columns[] = array('name' => _("Identifying Field"), 'index_sql' => 'on_what_field');
@@ -64,7 +65,6 @@ $form_id="ControlledObjectsForm";
 
 
 
-$css_theme='basic-left';
 start_page($page_title, true, $msg);
 echo '<form method="POST" name="'.$form_id . '">';
 echo "<div id='Main'>";
@@ -85,6 +85,10 @@ end_page();
 
 /**
  * $Log: ControlledObject_list.php,v $
+ * Revision 1.6  2005/12/12 21:01:42  vanmer
+ * - added controlled object ID to pager list
+ * - removed forced style
+ *
  * Revision 1.5  2005/12/12 20:00:40  vanmer
  * - changed to use GUP_Pager instead of deprecated adodb pager
  *
