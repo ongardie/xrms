@@ -2,10 +2,12 @@
 /**
  * Export pager contents
  *
- * $Id: pager-export.php,v 1.4 2005/04/29 16:22:26 daturaarutad Exp $
+ * $Id: pager-export.php,v 1.5 2005/12/12 17:54:05 daturaarutad Exp $
  */
 
-require_once('../../../include-locations.inc');
+if(!$include_directory) {
+    require_once('../../../include-locations.inc');
+}
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -83,6 +85,9 @@ if(is_array($session_data) && is_array($column_info)) {
 
 /**
  * $Log: pager-export.php,v $
+ * Revision 1.5  2005/12/12 17:54:05  daturaarutad
+ * only bring in include-locations.inc if $include_directory is undefined
+ *
  * Revision 1.4  2005/04/29 16:22:26  daturaarutad
  * added html type which strips all html from column
  *
