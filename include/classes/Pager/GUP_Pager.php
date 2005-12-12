@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.40 2005/12/12 17:10:31 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.41 2005/12/12 17:54:44 daturaarutad Exp $
  */
 
 
@@ -631,7 +631,8 @@ class GUP_Pager {
 
 
 						var oldAction = document.{$this->form_id}.action;
-						document.{$this->form_id}.action = '$http_site_root/include/classes/Pager/pager-export.php';
+
+                        document.{$this->form_id}.action = '$http_site_root/export/export.php';
 						document.{$this->form_id}.pager_id.value = '$pager_id';
 
 						document.{$this->form_id}.submit();
@@ -1224,6 +1225,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.41  2005/12/12 17:54:44  daturaarutad
+ * use export/export.php wrapper for export (sourceforge bug # 1211679)
+ *
  * Revision 1.40  2005/12/12 17:10:31  daturaarutad
  * tidy up the appearance a bit
  *
