@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: acl_results.php,v 1.11 2005/09/15 21:40:45 vanmer Exp $
+ * $Id: acl_results.php,v 1.12 2005/12/12 21:02:02 vanmer Exp $
  *
  * @author Aaron van Meerten
  */
@@ -16,7 +16,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 
 $session_user_id = session_check();
 
@@ -83,8 +83,9 @@ TILLEND;
     break;
     case 'selectObject':
         $nextAction="calculatePermission";
+       $form_id="ACLSelectForm";
 echo<<<TILLEND
-        <form method=POST action="acl_results.php">
+        <form method=POST action="acl_results.php" name="$form_id">
         <input type=hidden name=aclAction value="$aclAction">
         <input type=hidden name=aclUser value="$aclUser">
         <input type=hidden name=object value="$object">
@@ -94,7 +95,7 @@ echo<<<TILLEND
             <tr><td class=widget_content>Please select a controlled object to search for permissions on:<br>
 TILLEND;
         
-        display_object_list($acl, $object, false, true, $con);
+        display_object_list($acl, $object, false, true, $con, $form_id);
         echo "</td></tr>";
         echo "<tr><td class=widget_content><input class=button type=submit onclick=\"javascript:this.form.aclAction.value='$nextAction';\" value=\"Calculate Permissions\"></td></tr>";
         echo "</table></form>";
@@ -124,15 +125,16 @@ TILLEND;
             else $controlled_objects=$result['controlled_objects'];
             
             //print_r($ret);
+            $form_id="ACLResultsForm";
+            echo '<form method="POST" name='.$form_id.'>';
 echo <<<TILLEND
-            <form method="POST">
             <input type=hidden name=object value="$object">
             <input type=hidden name=aclUser value="$aclUser">
             <input type=hidden name=aclTest value="$aclTest">
             <input type=hidden name=aclAction value="$aclAction">
             <input type=hidden name=Permission value="$Permission">
 TILLEND;
-            display_object_list($acl, $object, $controlled_objects, false, $con);
+            display_object_list($acl, $object, $controlled_objects, false, $con, $form_id);
             }
         }
 
@@ -152,53 +154,20 @@ echo '<table class=widget>
 echo "</div></div>";
 end_page();
  
-function display_object_list($acl, $object, $ids=false, $extrafield=false, $con) {
+function display_object_list($acl, $object, $ids=false, $extrafield=false, $con, $form_id) {
 //            echo "BLAH"; exit;
-        global $http_site_root;
+            global $http_site_root;
+            $objectData = $acl->get_controlled_object(false, $object);
+            $on_what_field=$objectData['on_what_field'];
+            $on_what_table=$objectData['on_what_table'];
+
             if ($ids OR $extrafield) {
-                $objectData = $acl->get_controlled_object(false, $object);
-                $on_what_field=$objectData['on_what_field'];
-                $on_what_table=$objectData['on_what_table'];
                 if ($ids AND is_array($ids)) $fieldRestriction[$on_what_field]=$ids;
             }
             $ret = $acl->get_controlled_object_data($object, false, $fieldRestriction, false, true, false, false, false, true);
 
-           // begin sorted columns stuff
-            getGlobalVar($sort_column, 'sort_column'); 
-            getGlobalVar($current_sort_column, 'current_sort_column'); 
-            getGlobalVar($sort_order, 'sort_order'); 
-            getGlobalVar($current_sort_order, 'current_sort_order'); 
-            getGlobalVar($Results_next_page, 'Results_next_page'); 
-            getGlobalVar($resort, 'resort'); 
-            
-            if (!strlen($sort_column) > 0) {
-                $sort_column = 1;
-                            $current_sort_column = $sort_column;
-                $sort_order = "asc";
-            }
-                
-            if (!($sort_column == $current_sort_column)) {
-                $sort_order = "asc";
-            }
-            
-            
-            $opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
-            $sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
-            
-            $ascending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/asc.gif" alt="">';
-            $descending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/desc.gif" alt="">';
-            $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
-            
-            $order_by = $sort_column;
-            
-            
-            
-            $order_by .= " $sort_order";
-            // end sorted columns stuff
             $sql=$ret['sql'];
-            if (strlen(trim($order_by))>0) {
-                $sql .= " order by $order_by";
-            }
+
             if ($extrafield) {
                 $radiofield=$con->CONCAT($con->qstr("<input type=radio name=on_what_id value=\""),$on_what_field,$con->qstr("\">")) ." as select_on_what_id";
                 if(preg_match("|SELECT([^\e]*)FROM([^\e]*)|", $sql, $matched)) {
@@ -211,38 +180,23 @@ function display_object_list($acl, $object, $ids=false, $extrafield=false, $con)
                 }
                 echo "</pre>";
             }
-echo <<<TILLEND
-<script language="JavaScript" type="text/javascript">
-<!--
 
-function submitForm(nextPage) {
-    document.forms[0].Results_next_page.value = nextPage;
-    document.forms[0].submit();
-}
+            $tablecolumns=$con->MetaColumns($on_what_table);
+            $columns = array();
+            if ($extrafield) $columns[]=array('name'=>'SELECT','index_sql'=>'select_on_what_id');
+            foreach ($tablecolumns as $tkey=>$tfield_info) {
+                $fieldname=$tfield_info->name;
+                $columns[]=array('name'=>$fieldname, 'index_sql'=>$fieldname);
+            }
 
-function resort(sortColumn) {
-    document.forms[0].sort_column.value = sortColumn + 1;
-    document.forms[0].Results_next_page.value = '';
-    document.forms[0].resort.value = 1;
-    document.forms[0].submit();
-}
-
-//-->
-</script>
-    
-            <input type=hidden name=use_post_vars value=1>
-            <input type=hidden name=Results_next_page value="$Results_next_page">
-            <input type=hidden name=resort value="0">
-            <input type=hidden name=current_sort_column value="$sort_column">
-            <input type=hidden name=sort_column value="$sort_column">
-            <input type=hidden name=current_sort_order value="$sort_order">
-            <input type=hidden name=sort_order value="$sort_order">
-TILLEND;
-        $pager = new ADODB_Pager($con, $sql, 'Results', false, $sort_column-1, $pretty_sort_order);
+        $pager = new GUP_Pager($con, $sql,false, 'Results', $form_id, 'ControlledObjectData', $columns);
         $pager->Render();
 }
  /*
   * $Log: acl_results.php,v $
+  * Revision 1.12  2005/12/12 21:02:02  vanmer
+  * - changed to use GUP pager to render results for ACL results tests
+  *
   * Revision 1.11  2005/09/15 21:40:45  vanmer
   * - changed to use the correct dbconnection when querying with the ACL query tool
   *
