@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: ControlledObject_list.php,v 1.6 2005/12/12 21:01:42 vanmer Exp $
+ * $Id: ControlledObject_list.php,v 1.7 2005/12/12 21:17:20 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -59,7 +59,7 @@ $form_id="ControlledObjectsForm";
                 </td>
             </tr>";
 
-   $pager = new GUP_Pager($con, $sql,false, 'Controlled Objects', $form_id, 'ControlledObjects', $columns);
+   $pager = new GUP_Pager($con, $sql,false, _("Controlled Objects"), $form_id, 'ControlledObjects', $columns);
 
     $pager->AddEndRows($endrows);
 
@@ -85,6 +85,9 @@ end_page();
 
 /**
  * $Log: ControlledObject_list.php,v $
+ * Revision 1.7  2005/12/12 21:17:20  vanmer
+ * - added internationalization calls to strings which were only english
+ *
  * Revision 1.6  2005/12/12 21:01:42  vanmer
  * - added controlled object ID to pager list
  * - removed forced style

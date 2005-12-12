@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupGroup_list.php,v 1.2 2005/08/11 22:52:15 vanmer Exp $
+ * $Id: GroupGroup_list.php,v 1.3 2005/12/12 21:17:20 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -33,12 +33,13 @@ $page_title = _("Manage Group Groups");
 $form_name = 'GroupGroupPager';
 
 $sql="SELECT " . 
-$con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Edit")."\" onclick=\"javascript: location.href='one_GroupGroup.php?form_action=edit&return_url=GroupGroup_list.php&GroupUser_id="), 'GroupUser_id', $con->qstr("'\">"),$con->qstr("<input type=\"button\" class=\"button\" value=\""._("Delete") . "\" onclick=\"javascript: location.href='edit_GroupUser.php?userAction=deleteRole&return_url=GroupGroup_list.php&GroupUser_id="), 'GroupUser_id', $con->qstr("'\">")) . "AS LINK, Groups.Group_name as 'GroupGroup', CGroup.Group_name as ChildGroup FROM GroupUser LEFT OUTER JOIN Groups on Groups.Group_id=GroupUser.Group_id LEFT OUTER JOIN Groups CGroup on CGroup.Group_id=GroupUser.ChildGroup_id WHERE GroupUser.ChildGroup_id IS NOT NULL";
+$con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Edit")."\" onclick=\"javascript: location.href='one_GroupGroup.php?form_action=edit&return_url=GroupGroup_list.php&GroupUser_id="), 'GroupUser_id', $con->qstr("'\">"),$con->qstr("<input type=\"button\" class=\"button\" value=\""._("Delete") . "\" onclick=\"javascript: location.href='edit_GroupUser.php?userAction=deleteRole&return_url=GroupGroup_list.php&GroupUser_id="), 'GroupUser_id', $con->qstr("'\">")) . "AS LINK,GroupUser_id, Groups.Group_name as 'GroupGroup', CGroup.Group_name as ChildGroup FROM GroupUser LEFT OUTER JOIN Groups on Groups.Group_id=GroupUser.Group_id LEFT OUTER JOIN Groups CGroup on CGroup.Group_id=GroupUser.ChildGroup_id WHERE GroupUser.ChildGroup_id IS NOT NULL";
 
     $columns = array();
-    $columns[] = array('name' => 'Edit', 'index_sql' => 'LINK');
-    $columns[] = array('name' => 'Group', 'index_sql' => 'GroupGroup','group_calc'=>true);
-    $columns[] = array('name' => 'ChildGroup', 'index_sql' => 'ChildGroup','group_calc'=>true);
+    $columns[] = array('name' => _("Edit"), 'index_sql' => 'LINK');
+    $columns[] = array('name' => _("ID"), 'index_sql' => 'GroupUser_id');
+    $columns[] = array('name' => _("Group"), 'index_sql' => 'GroupGroup','group_calc'=>true);
+    $columns[] = array('name' => _("Child Group"), 'index_sql' => 'ChildGroup','group_calc'=>true);
 
 
     $default_columns=array('LINK','GroupGroup', 'ChildGroup');
@@ -57,7 +58,7 @@ $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Ed
                 </td>
             </tr>";
 
-   $pager = new GUP_Pager($con, $sql,false, 'Group Groups', $form_name, 'GroupGroups', $columns);
+   $pager = new GUP_Pager($con, $sql,false, _("Group Groups"), $form_name, 'GroupGroups', $columns);
 
     $pager->AddEndRows($endrows);
 
@@ -86,6 +87,9 @@ end_page();
 
 /**
  * $Log: GroupGroup_list.php,v $
+ * Revision 1.3  2005/12/12 21:17:20  vanmer
+ * - added internationalization calls to strings which were only english
+ *
  * Revision 1.2  2005/08/11 22:52:15  vanmer
  * - changed to use ACL dbconnection
  *

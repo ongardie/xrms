@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupUser_list.php,v 1.10 2005/08/11 23:37:47 vanmer Exp $
+ * $Id: GroupUser_list.php,v 1.11 2005/12/12 21:17:20 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -73,7 +73,7 @@ $role_select=$sql . " AND GroupUser.Role_id= XXX-value-XXX";
 		</td>
             </tr>";
    
-    $pager = new GUP_Pager($con, $sql,false, 'Group Users', $form_name, 'GroupUsers', $columns);
+    $pager = new GUP_Pager($con, $sql,false, _("Group Users"), $form_name, 'GroupUsers', $columns);
 
     $pager->AddEndRows($endrows);
 
@@ -101,6 +101,9 @@ end_page();
 
 /**
  * $Log: GroupUser_list.php,v $
+ * Revision 1.11  2005/12/12 21:17:20  vanmer
+ * - added internationalization calls to strings which were only english
+ *
  * Revision 1.10  2005/08/11 23:37:47  vanmer
  * - moved add new button into Group User pager
  *
