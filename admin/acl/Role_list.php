@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: Role_list.php,v 1.6 2005/08/11 22:10:38 vanmer Exp $
+ * $Id: Role_list.php,v 1.7 2005/12/12 21:31:28 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -15,7 +15,8 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 global $http_site_root;
 
@@ -25,90 +26,46 @@ require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
 $con = get_acl_dbconnection();
 
+getGlobalVar($msg, 'msg');
 
 $page_title = _("Manage Roles");
+$form_id="RolesForm";
 
-// begin sorted columns stuff
-getGlobalVar($sort_column, 'sort_column'); 
-getGlobalVar($current_sort_column, 'current_sort_column'); 
-getGlobalVar($sort_order, 'sort_order'); 
-getGlobalVar($current_sort_order, 'current_sort_order'); 
-getGlobalVar($Role_next_page, 'Role_next_page'); 
-getGlobalVar($resort, 'resort'); 
+$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_Role.php?form_action=edit&return_url=Role_list.php&Role_id="), 'Role_id', $con->qstr("'\">")) . "AS LINK, Role.* FROM Role";
 
-if (!strlen($sort_column) > 0) {
-    $sort_column = 1;
-		$current_sort_column = $sort_column;
-    $sort_order = "asc";
-}
-    
-if (!($sort_column == $current_sort_column)) {
-    $sort_order = "asc";
-}
+$columns = array();
+$columns[] = array('name' => _("Edit"), 'index_sql' => 'LINK', 'sql_sort_column' => 'Role_id', 'type' => 'url');
+$columns[] = array('name' => _("Name"), 'index_sql' => 'Role_name');
+$columns[] = array('name' => _("ID"), 'index_sql' => 'Role_id');
 
+$default_columns = array('LINK','Role_name');
 
-$opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
-$sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
+$pager_columns = new Pager_Columns('RolesPager', $columns, $default_columns, $form_id);
+$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 
-$ascending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/asc.gif" alt="">';
-$descending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/desc.gif" alt="">';
-$pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
-
-$order_by = $sort_column;
+$columns = $pager_columns->GetUserColumns('default');
+$colspan=count($columns);
 
 
+$pager = new GUP_Pager($con, $sql, null,_("Roles"), $form_id, 'RolesPager', $columns, false);
 
-$order_by .= " $sort_order";
-// end sorted columns stuff
-
-
-$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_Role.php?form_action=edit&return_url=Role_list.php&Role_id="), 'Role_id', $con->qstr("'\">")) . "AS LINK, Role.* FROM Role order by $order_by";
-
-$css_theme='basic-left';
-start_page($page_title);
-?>
-
-<script language="JavaScript" type="text/javascript">
-<!--
-
-function submitForm(nextPage) {
-    document.forms[0].Role_next_page.value = nextPage;
-    document.forms[0].submit();
-}
-
-function resort(sortColumn) {
-    document.forms[0].sort_column.value = sortColumn + 1;
-    document.forms[0].Role_next_page.value = '';
-    document.forms[0].resort.value = 1;
-    document.forms[0].submit();
-}
-
-//-->
-</script>
+$endrows="<tr><td colspan=$colspan>$pager_columns_button
+<input type=\"button\" class=\"button\" value=\"". _("Add New") ."\" onclick=\"javascript: location.href='one_Role.php?form_action=new&return_url=Role_list.php'\"></tr></td>";
+$pager->AddEndRows($endrows);
 
 
-<form method="POST">
-<input type=hidden name=use_post_vars value=1>
-<input type=hidden name=Role_next_page value="<?php  echo $Role_next_page; ?>">
-<input type=hidden name=resort value="0">
-<input type=hidden name=current_sort_column value="<?php  echo $sort_column; ?>">
-<input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
-<input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
-<input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
-
-
-
-<?php
+start_page($page_title, true, $msg);
+echo "<form method=\"POST\" name=\"$form_id\">";
 
 echo "<div id='Main'>";
 require_once('xrms_acl_nav.php');
 echo '<div id=Content>';
 
-$pager = new ADODB_Pager($con, $sql, 'Role', false, $sort_column-1, $pretty_sort_order);
+echo $pager_columns_selects;
 $pager->Render();
 
 ?>
-<input type="button" class="button" value="<?php echo _('Add New'); ?>" onclick="javascript: location.href='one_Role.php?form_action=new&return_url=Role_list.php'">
 </div></div></form>
 
 <?php
@@ -116,6 +73,9 @@ end_page();
 
 /**
  * $Log: Role_list.php,v $
+ * Revision 1.7  2005/12/12 21:31:28  vanmer
+ * - changed to use GUP_Pager instead of adodb pager
+ *
  * Revision 1.6  2005/08/11 22:10:38  vanmer
  * - changed to use acl dbconnection
  *
