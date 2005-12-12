@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: ControlledObjectRelationship_list.php,v 1.5 2005/08/11 22:52:15 vanmer Exp $
+ * $Id: ControlledObjectRelationship_list.php,v 1.6 2005/12/12 21:00:56 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -15,7 +15,8 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 global $http_site_root;
 
@@ -28,93 +29,63 @@ $con = get_acl_dbconnection();
 
 $page_title = _("Manage Controlled Object Relationships");
 
-// begin sorted columns stuff
-getGlobalVar($sort_column, 'sort_column'); 
-getGlobalVar($current_sort_column, 'current_sort_column'); 
-getGlobalVar($sort_order, 'sort_order'); 
-getGlobalVar($current_sort_order, 'current_sort_order'); 
-getGlobalVar($ControlledObjectRelationship_next_page, 'ControlledObjectRelationship_next_page'); 
-getGlobalVar($resort, 'resort'); 
-
-if (!strlen($sort_column) > 0) {
-    $sort_column = 1;
-		$current_sort_column = $sort_column;
-    $sort_order = "asc";
-}
-    
-if (!($sort_column == $current_sort_column)) {
-    $sort_order = "asc";
-}
-
-
-$opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
-$sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
-
-$ascending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/asc.gif" alt="">';
-$descending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/desc.gif" alt="">';
-$pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
-
-$order_by = $sort_column;
-
-
-
-$order_by .= " $sort_order";
-// end sorted columns stuff
-
+$form_id="ControlledObjectRelationships";
 
 $sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_ControlledObjectRelationship.php?form_action=edit&return_url=ControlledObjectRelationship_list.php&CORelationship_id="), 'CORelationship_id', $con->qstr("'\">")) . "AS LINK, 
-CORelationship_id as ID,
-Child.ControlledObject_name as 'Child Object', 
-Parent.ControlledObject_name as 'Parent Object' 
+CORelationship_id,
+Child.ControlledObject_name as 'ChildObject', 
+Parent.ControlledObject_name as 'ParentObject',
+on_what_child_field, on_what_parent_field, cross_table, singular 
 FROM ControlledObjectRelationship LEFT OUTER JOIN ControlledObject AS Parent ON Parent.ControlledObject_id=ControlledObjectRelationship.ParentControlledObject_id
-JOIN ControlledObject AS Child ON Child.ControlledObject_id=ControlledObjectRelationship.ChildControlledObject_id 
-order by $order_by";
+JOIN ControlledObject AS Child ON Child.ControlledObject_id=ControlledObjectRelationship.ChildControlledObject_id";
 
-$css_theme='basic-left';
+
+$form_id="ControlledObjectsForm";
+
+    $columns = array();
+    $columns[] = array('name' => _("Edit"), 'index_sql' => 'LINK');
+    $columns[] = array('name' => _("ID"), 'index_sql' => 'CORelationship_id');
+    $columns[] = array('name' => _("Child Object"), 'index_sql' => 'ChildObject', 'group_calc'=>true);
+    $columns[] = array('name' => _("Parent Object"), 'index_sql' => 'ParentObject', 'group_calc'=>true);
+    $columns[] = array('name' => _("Child Field"), 'index_sql' => 'on_what_child_field');
+    $columns[] = array('name' => _("Parent Field"), 'index_sql' => 'on_what_parent_field');
+    $columns[] = array('name' => _("Cross Table"), 'index_sql' => 'cross_table');
+    $columns[] = array('name' => _("Singular?"), 'index_sql' => 'singular');
+
+    $default_columns=array('LINK','ChildObject', 'ParentObject');
+    
+    $pager_columns = new Pager_Columns('ControlledObjectRelationshipPager', $columns, $default_columns, $form_id);
+    $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+    $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+    $columns = $pager_columns->GetUserColumns('default');
+    $colspan = count($columns);
+
+        $endrows =  "
+            <tr>
+                <td colspan=$colspan class=widget_content_form_element>
+                    <input type=\"button\" class=\"button\" value=\"". _("Add New") . "\" onclick=\"javascript: location.href='one_ControlledObjectRelationship.php?form_action=new&return_url=ControlledObjectRelationship_list.php'\">
+                    $pager_columns_button
+                </td>
+            </tr>";
+
+   $pager = new GUP_Pager($con, $sql,false, _("Controlled Object Relationships"), $form_id, 'ControlledObjects', $columns);
+
+    $pager->AddEndRows($endrows);
+
+
 start_page($page_title);
-?>
-
-<script language="JavaScript" type="text/javascript">
-<!--
-
-function submitForm(nextPage) {
-    document.forms[0].ControlledObjectRelationship_next_page.value = nextPage;
-    document.forms[0].submit();
-}
-
-function resort(sortColumn) {
-    document.forms[0].sort_column.value = sortColumn + 1;
-    document.forms[0].ControlledObjectRelationship_next_page.value = '';
-    document.forms[0].resort.value = 1;
-    document.forms[0].submit();
-}
-
-//-->
-</script>
-
-
-<form method="POST">
-<input type=hidden name=use_post_vars value=1>
-<input type=hidden name=ControlledObjectRelationship_next_page value="<?php  echo $ControlledObjectRelationship_next_page; ?>">
-<input type=hidden name=resort value="0">
-<input type=hidden name=current_sort_column value="<?php  echo $sort_column; ?>">
-<input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
-<input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
-<input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
-
-
-
-<?php
+echo '<form method="POST" name="'.$form_id.'">';
 
 echo "<div id='Main'>";
 require_once('xrms_acl_nav.php');
 echo '<div id=Content>';
 
-$pager = new ADODB_Pager($con, $sql, 'ControlledObjectRelationship', false, $sort_column-1, $pretty_sort_order);
+echo $pager_columns_selects;
 $pager->Render();
 
 ?>
-<input type="button" class="button" value="<?php echo _("Add New"); ?>" onclick="javascript: location.href='one_ControlledObjectRelationship.php?form_action=new&return_url=ControlledObjectRelationship_list.php'">
+
 </div></div></form>
 
 <?php
@@ -122,6 +93,9 @@ end_page();
 
 /**
  * $Log: ControlledObjectRelationship_list.php,v $
+ * Revision 1.6  2005/12/12 21:00:56  vanmer
+ * - changed to use GUP pager instead of adodb pager
+ *
  * Revision 1.5  2005/08/11 22:52:15  vanmer
  * - changed to use ACL dbconnection
  *
