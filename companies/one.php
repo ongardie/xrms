@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.130 2005/08/28 15:51:20 braverock Exp $
+ * $Id: one.php,v 1.131 2005/12/12 21:54:57 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -257,7 +257,7 @@ $activities_widget =  GetActivitiesWidget($con, $search_terms, $activities_form_
 
 // contacts query
 $sql = "select " .
-        $con->Concat($con->qstr('<a id="'), 'last_name', $con->qstr(' '), 'first_names', $con->qstr('" href="' . $http_site_root . '/contacts/one.php?contact_id='), "contact_id", $con->qstr('&amp;return_url=/companies/one.php%3Fcompany_id=' . $company_id . '">'), "last_name", $con->qstr(', '), "first_names", $con->qstr('</a>')) . " AS name, summary, title, description, email, contact_id, first_names, last_name, address_id, work_phone
+        $con->Concat($con->qstr('<a id="'), 'last_name', $con->qstr(' '), 'first_names', $con->qstr('" href="' . $http_site_root . '/contacts/one.php?contact_id='), "contact_id", $con->qstr('&amp;return_url=/companies/one.php%3Fcompany_id=' . $company_id . '">'), "last_name", $con->qstr(', '), "first_names", $con->qstr('</a>')) . " AS name, summary, title, description, email, contact_id, first_names, last_name, address_id, work_phone, work_phone_ext
 from contacts where company_id = $company_id and contact_record_status = 'a'";
 
 
@@ -273,12 +273,13 @@ $columns[] = array('name' => _('Name'), 'index_sql' => 'name', 'sql_sort_column'
 $columns[] = array('name' => _('Summary'), 'index_sql' => 'summary');
 $columns[] = array('name' => _('Title'), 'index_sql' => 'title');
 $columns[] = array('name' => _('Description'), 'index_sql' => 'description');
-$columns[] = array('name' => _('Phone'), 'index_calc' => 'phone');
+$columns[] = array('name' => _('Phone'), 'index_calc' => 'work_phone');
+$columns[] = array('name' => _('Extension'), 'index_calc' => 'work_phone_ext');
 $columns[] = array('name' => _('E-Mail'), 'index_calc' => 'email', 'sql_sort_column' => 'email');
 
 // no reason to set this if you don't want all by default
 $default_columns = null;
-//$default_columns = array('name','summary','title','description','phone','email');
+$default_columns = array('name','summary','title','description','work_phone','email');
 
 
 // selects the columns this user is interested in
@@ -729,6 +730,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.131  2005/12/12 21:54:57  vanmer
+ * - added extension to list of available fields in contact summary pager for single company view
+ * - changed default columns to reflect work phone number being displayed in pager of contacts
+ *
  * Revision 1.130  2005/08/28 15:51:20  braverock
  * - add missing td tag for compliant HTML
  *
