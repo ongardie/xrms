@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.39 2005/12/06 18:04:20 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.40 2005/12/12 17:10:31 daturaarutad Exp $
  */
 
 
@@ -774,8 +774,8 @@ END;
 
         	if($group_html || $i == ($this->sort_column-1)) {
             	$hdr .= "<td class=widget_label_center>
-							<table cellpadding=0 cellspacing=0><tr><td class=widget_label>$header_text</td>
-            					<td class=widget_label>$selected_column_header_html</td><td class=widget_label> $group_html</td></tr>
+							<table cellpadding=0 cellspacing=0><tr><td class=widget_content>$header_text</td>
+            					<td class=widget_content>$selected_column_header_html</td><td class=widget_content> $group_html</td></tr>
 							</table>
 						</td>";
         	} else {
@@ -1081,9 +1081,9 @@ END;
 				</td></tr>\n";
 		}
         if ($page_count != '&nbsp;') {
-            echo "<tr><td colspan=$colspan>".
+            echo "<tr><td colspan=$colspan class=widget_label>".
             			"<table border=0 cellpadding=0 cellspacing=0 width=\"100%\">".
-            			"<tr><td class=widget_label align=left>$page_count </td><td align=right class=widget_label>$page_nav </td></tr>".
+            			"<tr><td class=widget_label style=\"text-align: left;\">$page_count </td><td style=\"text-align: right;\" class=widget_label>$page_nav </td></tr>".
             			"</table>".
             	 "</td></tr>\n";
         }
@@ -1224,6 +1224,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.40  2005/12/12 17:10:31  daturaarutad
+ * tidy up the appearance a bit
+ *
  * Revision 1.39  2005/12/06 18:04:20  daturaarutad
  * add filesize as available column type for rendering
  *
