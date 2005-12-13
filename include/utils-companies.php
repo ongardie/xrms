@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-companies.php,v 1.4 2005/12/08 22:49:47 vanmer Exp $
+ * $Id: utils-companies.php,v 1.5 2005/12/13 20:13:52 vanmer Exp $
  *
  */
 
@@ -211,7 +211,7 @@ function get_company($con, $company_id, $return_rst=false)
     if (!$company_id)
         return false;
 
-    $sql = "SELECT * FROM companIES WHERE company_id=$company_id";
+    $sql = "SELECT * FROM companies WHERE company_id=$company_id";
     $rst = $con->execute($sql);
     if (!$rst) {
         db_error_handler($con, $sql); return false;
@@ -263,7 +263,7 @@ function delete_company($con, $company_id, $delete_from_database=false) {
     if ($delete_from_database) {
         $sql = "DELETE FROM companies";
     } else {
-        $sql = "UPDATE companies SET ccompanies_record_status=" . $con->qstr('d');
+        $sql = "UPDATE companies SET companies_record_status=" . $con->qstr('d');
     }
     $sql .= "  WHERE company_id=$company_id";
 
@@ -366,6 +366,10 @@ function change_company_key_related_tables($con, $old_company_id, $new_company_i
 
  /**
  * $Log: utils-companies.php,v $
+ * Revision 1.5  2005/12/13 20:13:52  vanmer
+ * - fixed typo for delete
+ * - changed case on company table to reflect all lowercase name of companies table
+ *
  * Revision 1.4  2005/12/08 22:49:47  vanmer
  * - added a working function (with no checks) for add_company
  * - this should be updated to do all the relevant checks and add sensible defaults
