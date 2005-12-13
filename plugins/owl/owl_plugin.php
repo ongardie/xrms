@@ -602,11 +602,7 @@ function op_browse_files(&$params) {
 
 		$owl_data = OWL_Browse_Files($owl_parent_id, $file_data, $folder_data);
 
-        if($owl_parent_id == $entity_folder_id) {
-            // this is bad... the ".. (folder)" should be handled differently...change later
-            array_shift($owl_data);
-        } 
-	
+
 
 
 		// ADDED By BOZZ
@@ -618,6 +614,15 @@ function op_browse_files(&$params) {
 
 			if($owl_row['is_folder']) {
 
+                // don't show the ..(back) if we are in the entity folder root
+                if($owl_row['link_parent']) {
+                    if($owl_parent_id == $entity_folder_id) {
+                        unset($owl_data[$k]);
+                        continue;
+                    } else {
+                        $owl_data[$k]['name'] = '.. (' . _('back') . ')';
+                    }
+                } 
 			
 				$owl_data[$k]['file_size'] = '';
 
@@ -826,6 +831,9 @@ function op_template(&$params) {
 
 /**
  * $Log: owl_plugin.php,v $
+ * Revision 1.7  2005/12/13 22:34:34  daturaarutad
+ * do not  show the ..(back) if we are in the entity folder root using link_parent
+ *
  * Revision 1.6  2005/12/09 19:26:16  daturaarutad
  * add path view and delete button to browse sidebar
  *
