@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-companies.php,v 1.5 2005/12/13 20:13:52 vanmer Exp $
+ * $Id: utils-companies.php,v 1.6 2005/12/14 23:55:52 jswalter Exp $
  *
  */
 
@@ -88,12 +88,14 @@ function add_update_company($con, $company_data)
     {
         // Define who is adding/updating this record
         global $session_user_id;
-        $company_data['user_id'] = $session_user_id;
+//        $company_data['user_id'] = $session_user_id;
+
+        $company_info = pull_company_fields ( $company_data );
 
         // Because the way ADOdb is written, we can't let it take care of force
         // updates if a record exists, and INSERT if the record does not exist.
         // We have to do the checking, so... we need to use the XRMS version...
-        $_retVal = __record_add_update ( $con, 'companies', 'company_name', $company_data );
+        $_retVal = __record_add_update ( $con, 'companies', 'company_name', $company_info );
     }
 
     // Send back what we have
@@ -364,8 +366,114 @@ function change_company_key_related_tables($con, $old_company_id, $new_company_i
     return true;
 }
 
+/**********************************************************************/
+
+/**
+ *
+ * Retrieves Company "owner"
+ *
+ * If the Company does not have an "owner" set, then FALSE will be
+ * returned indicating no "owner" has been defined.
+ *
+ * @param int $company_id  $company_id of Company to retrieve owner
+ *
+ * @return int $user_id  Company "owner" id
+ */
+function get_division_owner ( $company_id )
+{
+   /**
+    * Default return value
+    *
+    * Returns user_id or boolean upon failure
+    * Default value is set at FALSE
+    *
+    * @var mixed $_retVal Indicates if owner was found was created or not
+    * @access private
+    * @static
+    */
+    $_retVal = false;
+
+    // We need something to work on
+    if ( $company_id )
+    {
+        // Did we find the company
+        if ( $_company_data = get_company( get_xrms_dbconnection(), $company_id ) )
+        {
+            // Retrieve "owner"
+            if ( $_company_data['user_id'] > 0 )
+            {
+                $_retVal = $_company_data['user_id'];
+            }
+        }
+    }
+
+    return $_retVal;
+};
+
+
+/**********************************************************************/
+
+/**
+ *
+ * Pulls only company field data from given array
+ *
+ * @param array $array_data array to retrieve company data from
+ *
+ * @return array $company_fields company "only" fields found in given array
+ */
+function pull_company_fields ( $array_data )
+{
+    if ( ! $array_data )
+        return $array_data;
+
+    // Retrieve only the field names we can handle
+    $company_fields = array ( 'company_id'                => '',
+                              'company_id'                => '',
+                              'user_id'                   => '',
+                              'company_source_id'         => '',
+                              'industry_id'               => '',
+                              'crm_status_id'             => '',
+                              'rating_id'                 => '',
+                              'account_status_id'         => '',
+                              'company_name'              => '',
+                              'company_code'              => '',
+                              'legal_name'                => '',
+                              'tax_id'                    => '',
+                              'profile'                   => '',
+                              'phone'                     => '',
+                              'phone2'                    => '',
+                              'fax'                       => '',
+                              'url'                       => '',
+                              'employees'                 => '',
+                              'revenue'                   => '',
+                              'credit_limit'              => '',
+                              'terms'                     => '',
+                              'default_primary_address'   => '',
+                              'default_billing_address'   => '',
+                              'default_shipping_address'  => '',
+                              'default_payment_address'   => '',
+                              'custom1'                   => '',
+                              'custom2'                   => '',
+                              'custom3'                   => '',
+                              'custom4'                   => '',
+                              'extref1'                   => '',
+                              'extref2'                   => '',
+                              'extref3'                   => '',
+                            );
+
+    // Now pull out the fields we need
+    return array_intersect_key_2($company_fields, $array_data);
+
+}
+
+/**********************************************************************/
+
  /**
  * $Log: utils-companies.php,v $
+ * Revision 1.6  2005/12/14 23:55:52  jswalter
+ *  - added 'get_owner()' block
+ *  - added 'pull_data()' block to retrieve fields only used in "company" table
+ *
  * Revision 1.5  2005/12/13 20:13:52  vanmer
  * - fixed typo for delete
  * - changed case on company table to reflect all lowercase name of companies table
