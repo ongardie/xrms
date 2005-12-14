@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.41 2005/12/12 17:54:44 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.42 2005/12/14 16:40:19 daturaarutad Exp $
  */
 
 
@@ -333,7 +333,7 @@ class GUP_Pager {
         	$page_count = $this->RenderPageCount();
         	$page_nav .= $this->RenderNav();
         } else {
-        	$page_count = "&nbsp;";
+        	$page_count = '';
         	$page_count .= $this->RenderPageCount();
         	$page_nav .= "&nbsp;";
 		}
@@ -1004,7 +1004,7 @@ END;
       // *** updated to return an empty string if there's an empty rs
       if ($lastPage < 1) {
         $lastPage = 1;
-        return '&nbsp;';
+        return '';
       } // check for empty rs.
       if ($this->curr_page > $lastPage) $this->curr_page = 1; {
 
@@ -1081,7 +1081,7 @@ END;
 					</table>
 				</td></tr>\n";
 		}
-        if ($page_count != '&nbsp;') {
+        if ($page_count != '') {
             echo "<tr><td colspan=$colspan class=widget_label>".
             			"<table border=0 cellpadding=0 cellspacing=0 width=\"100%\">".
             			"<tr><td class=widget_label style=\"text-align: left;\">$page_count </td><td style=\"text-align: right;\" class=widget_label>$page_nav </td></tr>".
@@ -1225,6 +1225,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.42  2005/12/14 16:40:19  daturaarutad
+ * update to not display page count row if no results
+ *
  * Revision 1.41  2005/12/12 17:54:44  daturaarutad
  * use export/export.php wrapper for export (sourceforge bug # 1211679)
  *
