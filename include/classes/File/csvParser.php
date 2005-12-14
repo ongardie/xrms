@@ -8,7 +8,7 @@
 // | Email         walter@torres.ws                                         |
 // | Web           http://web.php-yacs.org                                  |
 // | Mirror        http://php-yacs.sourceforge.net/                         |
-// | $Id: csvParser.php,v 1.2 2005/10/27 19:14:47 jswalter Exp $             |
+// | $Id: csvParser.php,v 1.3 2005/12/14 02:04:54 vanmer Exp $             |
 // +------------------------------------------------------------------------+
 // | This source file is subject to version 3.00 of the PHP License,        |
 // | that is available at http://www.php.net/license/3_0.txt.               |
@@ -42,8 +42,8 @@
  * @author      Walter Torres <walter@torres.ws>
  * @contributor Aaron Van Meerten
  *
- * @version   $Id: csvParser.php,v 1.2 2005/10/27 19:14:47 jswalter Exp $
- * @date      $Date: 2005/10/27 19:14:47 $
+ * @version   $Id: csvParser.php,v 1.3 2005/12/14 02:04:54 vanmer Exp $
+ * @date      $Date: 2005/12/14 02:04:54 $
  *
  * @copyright (c) 2004 Walter Torres
  * @license   Licensed under the GNU GPL. For full terms see the file COPYING.
@@ -262,7 +262,7 @@
  *
  * @extends File
  *
- * @date  $Date: 2005/10/27 19:14:47 $
+ * @date  $Date: 2005/12/14 02:04:54 $
  *
  * @todo Have this class extend FILE to utilize common File operations
  *
@@ -936,10 +936,11 @@ class csvParser //extends File
     */
     function _labelArray( $_oldRecord )
     {
+        $header=$this->_recordHeaders($_oldRecord);
         foreach ($_oldRecord as $key => $value)
         {
-            if ( isset ( $this->_cvsHeaders[$key] ) )
-                $fieldID = $this->_cvsHeaders[$key];
+            if ( isset ( $header[$key] ) )
+                $fieldID = $header[$key];
             else
                 $fieldID = $key;
 
@@ -947,6 +948,28 @@ class csvParser //extends File
         }
 
         return $_newRecord;
+    }
+// }}}
+// {{{ _recordHeaders
+   /**
+    * Method private mixed _recordHeaders( array record )
+    *
+    * Retrieves the headers for a single record for the open CSV file
+    *
+    * @name _recordHeaders()
+    * @access public
+    *
+    * @static
+    * @final 
+    *
+    * @param array $_oldRecord array for which to retrieves headers 
+    * @return array header array for passed in record
+    *
+    * @since r1.2 
+    */
+    function _recordHeaders($_oldRecord) {
+        $headers=$this->_cvsHeaders;
+        return $headers;
     }
 // }}}
 // {{{ getCSVfile
@@ -2134,6 +2157,10 @@ class csvParser //extends File
 
 /**
   * $Log: csvParser.php,v $
+  * Revision 1.3  2005/12/14 02:04:54  vanmer
+  * - changed csvParser to call a function to retrieves headers for each record as it is being loaded
+  * - this is useful so the parser can be extended to provide different headers based on the contents of the record
+  *
   * Revision 1.2  2005/10/27 19:14:47  jswalter
   *  - added '$_errLogFileName' & '$_errLogPath' as Class properties
   *  - added 'setErrLogPath()' & 'setErrLogFileName()' methods to define these properties
