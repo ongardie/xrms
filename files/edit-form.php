@@ -3,7 +3,7 @@
 /**
  * Form for creating a new file and editing existing ones
  *
- * $Id: edit-form.php,v 1.1 2005/07/06 17:31:20 jswalter Exp $
+ * $Id: edit-form.php,v 1.2 2005/12/14 05:03:45 daturaarutad Exp $
  */
 
 
@@ -47,7 +47,7 @@ $file_entered_at = '';
             <!-- Display Name of File -->
             <tr>
                 <td class="widget_label_right">
-                    <?php echo _("Display Name"); ?>
+                    <?php echo _("Summary"); ?>
                 </td>
                 <td class="widget_content_form_element">
                     <input type="text"
@@ -114,6 +114,9 @@ end_page();
 
 /**
  * $Log: edit-form.php,v $
+ * Revision 1.2  2005/12/14 05:03:45  daturaarutad
+ * change Display Name to Summary
+ *
  * Revision 1.1  2005/07/06 17:31:20  jswalter
  *  - initial commit
  *  - pulled from 'edit.php'
