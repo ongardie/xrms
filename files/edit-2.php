@@ -2,7 +2,7 @@
 /**
  * Insert Updated File information into the database
  *
- * $Id: edit-2.php,v 1.8 2005/11/29 20:04:19 daturaarutad Exp $
+ * $Id: edit-2.php,v 1.9 2005/12/14 05:03:29 daturaarutad Exp $
  */
 
 //include required files
@@ -64,7 +64,6 @@ if ($file_name != "") {
 	  	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 	  	$con->execute($upd);
 		
-	  	// BEFORE BOZZ move_uploaded_file($_FILES['file1']['tmp_name'], $file_storage_directory . $file_id . '_' . $file_name);
 	  	if(!$file_plugin_params['file_stored']) {
 	  		move_uploaded_file($_FILES['file1']['tmp_name'], $file_storage_directory . $file_id . '_' . $file_name);
 		
@@ -77,6 +76,7 @@ if ($file_name != "") {
 			
 		  	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 		  	$con->execute($upd);
+		    $msg = _('File was updated successfully.');
 	  	}
 	}
 
@@ -107,6 +107,7 @@ if ($file_name != "") {
 
   		$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
   		$con->execute($upd);
+	    $msg = _('File was updated successfully.');
 	}
 }
 
@@ -122,17 +123,16 @@ if($error) {
 	header("Location: $http_site_root/files/one.php?file_id=$file_id&msg=$msg&return_url=$return_url");
 } else {
 	$msg = 'saved';
-    if(false === strpos($return_url, 'php?')) {
-        $sep = '?';
-    } else {
-        $sep = '&';
-    }
+    $sep = get_url_seperator($return_url);
 
 	header("Location: " . $http_site_root . $return_url . $sep . "msg=$msg");
 }
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.9  2005/12/14 05:03:29  daturaarutad
+ * use get_url_seperator() function
+ *
  * Revision 1.8  2005/11/29 20:04:19  daturaarutad
  * check for ? in return_url
  *
