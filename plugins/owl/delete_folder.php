@@ -2,7 +2,7 @@
 /**
  * owl/new_folder-2.php - This file adds new folders to the system
  *
- * $Id: delete_folder.php,v 1.1 2005/12/09 19:23:00 daturaarutad Exp $
+ * $Id: delete_folder.php,v 1.2 2005/12/14 04:27:52 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -25,11 +25,9 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-if (strpos($return_url,'?')!==false) { 
-    $sep='&'; 
-} else { 
-    $sep='?'; 
-}
+$sep = get_url_seperator($return_url);
+
+$error = false;
 
 
 $folders = GetFolders(null, null, "external_id = $folder_id");
@@ -42,6 +40,7 @@ if(count($folders)) {
     
     if($folder_plugin_params['error_status']) {
         $msg = $folder_plugin_params['error_text'];
+        $error = true;
     } else {
 
         $on_what_table = $folders[0]['on_what_table'];
@@ -55,6 +54,7 @@ if(count($folders)) {
             if(!$rst) {
                 db_error_handler($con, $file_sql);
 	            $msg .= _('Error deleting files in XRMS.');
+                $error = true;
             }
 
         }
@@ -66,9 +66,15 @@ if(count($folders)) {
             if(!$rst) {
                 db_error_handler($con, $folder_sql);
 	            $msg .= _('Error deleting files in XRMS.');
+                $error = true;
             }
         }
         $owl_parent_url = "owl_parent_id=" . GetEntityFolderID($on_what_table, $on_what_id) . "&";
+
+        if(!$error) {
+            $msg = _('Folder deleted successfully.');
+
+        }
 
         
     }
@@ -76,11 +82,16 @@ if(count($folders)) {
 
 } else {
 	$msg .= _('Folder not found in XRMS.');
+    $error = true;
 }
-	header("Location: " . $http_site_root . $return_url . $sep . $owl_parent_url . "msg=" . htmlentities($msg));
+
+header("Location: " . $http_site_root . $return_url . $sep . $owl_parent_url . "msg=" . htmlentities($msg));
 
 /**
  * $Log: delete_folder.php,v $
+ * Revision 1.2  2005/12/14 04:27:52  daturaarutad
+ * fix $msg
+ *
  * Revision 1.1  2005/12/09 19:23:00  daturaarutad
  * new file for deleting files and folders
  *
