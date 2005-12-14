@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.20 2005/11/17 16:47:52 daturaarutad Exp $
+ * $Id: one.php,v 1.21 2005/12/14 05:05:02 daturaarutad Exp $
  */
 
 //include required files
@@ -118,6 +118,11 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><?php  echo $file_info['file_id']; ?></td>
             </tr>
             <tr>
+                <td class=widget_label_right><?php echo _("Filename"); ?></td>
+                <td class=widget_content_form_element><?php  echo $file_info['file_name']; ?></td>
+            </tr>
+
+            <tr>
                 <td class="widget_label_right">
                     <?php echo _("Attached to"); ?>
                     <?php  echo $table_singular ?>
@@ -126,7 +131,7 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("File Name"); ?></td>
+                <td class=widget_label_right><?php echo _("Summary"); ?></td>
                 <td class=widget_content_form_element><input type=text size=40 name=file_pretty_name value="<?php  echo $file_info['file_pretty_name']; ?>"></td>
             </tr>
             <tr>
@@ -218,6 +223,9 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.21  2005/12/14 05:05:02  daturaarutad
+ *change File Name to Summary, show true filename
+ *
  *Revision 1.20  2005/11/17 16:47:52  daturaarutad
  *added patch by dbaudone which shows attached to: field
  *
