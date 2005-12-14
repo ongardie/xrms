@@ -283,6 +283,8 @@ function op_get_one_file_html(&$params) {
 	$columns[] = array('name' => _("Modified"), 'index_data' => 'last_modified_on');
 	$columns[] = array('name' => _("Size"), 'index_data' => 'file_size');
 	$columns[] = array('name' => _("Version"), 'index_data' => 'selected_version', 'default_sort' => 'asc'); 
+
+
 	
 	$pager = new GUP_Pager($con, null, $file_versions, _('All File Versions'), 'FileForm', 'FilePager', $columns, false, true);
 	
@@ -545,7 +547,6 @@ function op_browse_files(&$params) {
 
 		$file_data = $rst->GetArray();
 
-
 		
 		/* 	The lowdown on owl_parent_id:
 			This variable tracks where in the hierarchy a user is.
@@ -599,9 +600,7 @@ function op_browse_files(&$params) {
         $folder_caption = $path_info['path'];
         $folder_name = $path_info['current_folder'];
 
-
 		$owl_data = OWL_Browse_Files($owl_parent_id, $file_data, $folder_data);
-
 
 
 
@@ -633,7 +632,10 @@ function op_browse_files(&$params) {
 			        $folder_link = "$http_site_root/private/home.php?owl_parent_id={$owl_data[$k]['id']}";
                 }
                 // the <!-- 0 --> is so that the pager will sort folders before files, alphabetically
-				$owl_data[$k]['file_pretty_name'] = "<!-- 0 {$owl_data[$k]['file_pretty_name']} --><img src=\"$default->owl_graphics_url/$default->system_ButtonStyle/icon_filetype/folder_closed.gif\"></img>&nbsp;<a href='$folder_link'>{$owl_data[$k]['name']}</a>";
+				$owl_data[$k]['file_pretty_name'] = "<!-- 0 {$owl_data[$k]['file_pretty_name']} --><a href='$folder_link'>{$owl_data[$k]['name']}</a>";
+                $owl_data[$k]['icon'] = "<a href='$folder_link'><img src=\"$default->owl_graphics_url/$default->system_ButtonStyle/icon_filetype/folder_closed.gif\" border=\"0\" alt=\"\"></img></a>";
+
+
 
 			} else {
 
@@ -673,11 +675,8 @@ function op_browse_files(&$params) {
 				//}
 				
                 // the <!-- 1 --> is so that the pager will sort folders before files, alphabetically
-				$owl_data[$k]['file_pretty_name'] = "<!-- 1 {$owl_data[$k]['file_pretty_name']} --><img src=\"$default->owl_graphics_url/$default->system_ButtonStyle/icon_filetype/$sDispIcon\" border=\"0\" alt=\"\"></img>&nbsp;<a href='$http_site_root/files/one.php?file_id={$owl_data[$k]['file_id']}&return_url=$return_url' alt=\"File Name: " .$owl_data[$k]['file_name'] . "\" title=\"File Name: " .$owl_data[$k]['file_name'] . "\">" . $owl_data[$k]['file_pretty_name'] . '</a>';
-				//print("<pre>");
-				//print_r($owl_data);
-				//print_r($default);
-				//print("</pre>");
+				$owl_data[$k]['icon'] = "<a href='$http_site_root/files/one.php?file_id={$owl_data[$k]['file_id']}&return_url=$return_url' alt=\"File Name: " .$owl_data[$k]['file_name'] . "\" title=\"File Name: " .$owl_data[$k]['file_name'] . "\"><img src=\"$default->owl_graphics_url/$default->system_ButtonStyle/icon_filetype/$sDispIcon\" border=\"0\" alt=\"\"></img></a>";
+				$owl_data[$k]['file_pretty_name'] = "<!-- 1 {$owl_data[$k]['file_pretty_name']} --><a href='$http_site_root/files/one.php?file_id={$owl_data[$k]['file_id']}&return_url=$return_url' alt=\"File Name: " .$owl_data[$k]['file_name'] . "\" title=\"File Name: " .$owl_data[$k]['file_name'] . "\">" . $owl_data[$k]['file_pretty_name'] . '</a>';
 			}
 		}
 
@@ -689,12 +688,24 @@ function op_browse_files(&$params) {
 
 
         $columns=array();
-        $columns[] = array('name' => 'Name', 'index_calc' => 'file_pretty_name');
+        $columns[] = array('name' => 'Icon', 'index_calc' => 'icon');
+        $columns[] = array('name' => 'Summary', 'index_calc' => 'file_pretty_name', 'default_sort' => 'asc');
         $columns[] = array('name' => 'Size', 'index_calc' => 'file_size');
         $columns[] = array('name' => 'Owner', 'index_calc' => 'username');
+        $columns[] = array('name' => 'Description', 'index_calc' => 'file_description');
         $columns[] = array('name' => 'Date', 'index_calc' => 'entered_at');
 
         $caption = _("Files in $folder_caption");
+
+
+        if(!$file_sidebar_default_columns) $file_sidebar_default_columns = array('icon', 'file_pretty_name', 'file_size','username', 'entered_at');
+    
+        $file_pager_columns = new Pager_Columns('Files_Sidebar', $columns, $file_sidebar_default_columns, 'Files_Sidebar_Form');
+        $file_pager_columns_button = $file_pager_columns->GetSelectableColumnsButton();
+        $file_pager_columns_selects = $file_pager_columns->GetSelectableColumnsWidget();
+    
+        $columns = $file_pager_columns->GetUserColumns('default');
+        $colspan = count($columns);
 
         $pager = new GUP_Pager($con, null, $owl_data, $caption, 'Files_Sidebar_Form', 'Files_Sidebar', $columns, false, true);
 
@@ -726,6 +737,7 @@ function op_browse_files(&$params) {
         $endrows =  "
                 <tr>
                     <td colspan=$colspan class=widget_content_form_element>
+                            $file_pager_columns_button
                             $new_file_button
                             $new_folder_button
                             $delete_folder_button
@@ -736,6 +748,7 @@ function op_browse_files(&$params) {
         $pager->AddEndRows($endrows);
 
         $params['file_rows'] = "<form name=Files_Sidebar_Form method=POST>
+            $file_pager_columns_selects
 			<input type=hidden name=contact_id value=$contact_id>
 			<input type=hidden name=company_id value=$company_id>
 			<input type=hidden name=division_id value=$division_id>
@@ -831,6 +844,9 @@ function op_template(&$params) {
 
 /**
  * $Log: owl_plugin.php,v $
+ * Revision 1.8  2005/12/14 04:54:04  daturaarutad
+ * add selectable columns to sidebar pager, add column for icon
+ *
  * Revision 1.7  2005/12/13 22:34:34  daturaarutad
  * do not  show the ..(back) if we are in the entity folder root using link_parent
  *
