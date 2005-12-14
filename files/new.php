@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.20 2005/11/09 22:35:57 daturaarutad Exp $
+ * $Id: new.php,v 1.21 2005/12/14 05:04:27 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -18,36 +18,22 @@ require_once($include_directory . 'mime/mime-array.php');
 // Pull SESSION data
 $session_user_id = session_check('','Create');
 
-    // See if we have an error message from anywhere
-    // $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
-    if ( isset($_GET['msg']) )
-        $msg = $_GET['msg'];
+getGlobalVar($msg, 'msg');
+getGlobalVar($return_url, 'return_url');
 
-    else if ( isset($_POST['msg']) )
-        $msg = $_POST['msg'];
-
-    else
-        $msg = null;
+$error = false;
 
 // if 'act' is not defeined, this is our first time through
 if ( $_POST['act'] == 'up' )
 {
 
-    // Make sure we have what we need
-    if ( empty ($_POST['file_pretty_name']) )
-    {
-        $msg .= _("Please give a Display Name for this File") . '. ';
-        $msg .= '<br />';
-    }
-
     // Process Uploaded File
-    else
     {
          // Pull File info
-        $file_pretty_name = (strlen(trim($_POST['file_pretty_name'])) > 0) ? $_POST['file_pretty_name'] : $file_name;
         $file_name        = $_FILES['file1']['name'];
         $file_type        = $_FILES['file1']['type'];
         $file_size        = $_FILES['file1']['size'];
+        $file_pretty_name = (strlen(trim($_POST['file_pretty_name'])) > 0) ? $_POST['file_pretty_name'] : $file_name;
         
 
         //save to database
@@ -76,6 +62,7 @@ if ( $_POST['act'] == 'up' )
 
 	   if($file_plugin_params['error_status']) {
 	       $msg .= $file_plugin_params['error_text'];
+           $error = true;
 		} else {
 
 	        // Make DB connection
@@ -117,10 +104,13 @@ if ( $_POST['act'] == 'up' )
 	    }
 	}
 
-    if (! $msg)
+    if (! $error)
     {
+        $msg = _('File added successfully');
         // go back to our orginal page
-        header("Location: " . $http_site_root . $_POST['return_url']);
+        $sep = get_url_seperator($return_url);
+
+        header("Location: " . $http_site_root . $return_url . $sep . "msg=$msg");
 
         // Just to make sure we stop here
         exit;
@@ -133,7 +123,6 @@ if ( $_POST['act'] == 'up' )
     // Inbound DB info
 	getGlobalVar($on_what_table, 'on_what_table');
 	getGlobalVar($on_what_id, 'on_what_id');
-	getGlobalVar($return_url, 'return_url');
 
     $con = &adonewconnection($xrms_db_dbtype);
     $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -209,6 +198,9 @@ if ( $_POST['act'] == 'up' )
 
 /**
  * $Log: new.php,v $
+ * Revision 1.21  2005/12/14 05:04:27  daturaarutad
+ * remove summary requirement, use file name as default if none given; use get_url_seperator function
+ *
  * Revision 1.20  2005/11/09 22:35:57  daturaarutad
  * add hooks for files plugin
  *
