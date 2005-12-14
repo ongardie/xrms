@@ -2,7 +2,7 @@
 /**
  * owl/new_folder-2.php - This file adds new folders to the system
  *
- * $Id: new_folder-2.php,v 1.4 2005/12/09 19:24:43 daturaarutad Exp $
+ * $Id: new_folder-2.php,v 1.5 2005/12/14 04:48:56 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -67,7 +67,7 @@ if($folder_plugin_params['error_status']) {
 
 	$tbl = 'folders';
 
-	$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+	$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc(), false);
 	//echo $ins;
 	$rst = $con->execute($ins);
 	if(!$rst) {
@@ -84,6 +84,9 @@ if($folder_plugin_params['error_status']) {
 
 /**
  * $Log: new_folder-2.php,v $
+ * Revision 1.5  2005/12/14 04:48:56  daturaarutad
+ * make sure GetInsertSQL does not try to set null values
+ *
  * Revision 1.4  2005/12/09 19:24:43  daturaarutad
  * use $sep for ? vs & in return url
  *
