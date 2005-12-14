@@ -2,7 +2,7 @@
 /**
  * Form for creating a new folder
  *
- * $Id: new_folder.php,v 1.3 2005/11/09 19:26:21 daturaarutad Exp $
+ * $Id: new_folder.php,v 1.4 2005/12/14 04:29:02 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -87,6 +87,7 @@ $file_entered_at = '';
                 <td class=widget_label_right><?php echo _("Folder Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=40 name=name></td>
             </tr>
+<!-- Commented out for now
             <tr>
                 <td class=widget_label_right_166px><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=description></textarea></td>
@@ -98,6 +99,7 @@ $file_entered_at = '';
                     <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
                 </td>
             </tr>
+-->
             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save");?>"></td>
             </tr>
@@ -141,6 +143,9 @@ end_page();
 
 /**
  * $Log: new_folder.php,v $
+ * Revision 1.4  2005/12/14 04:29:02  daturaarutad
+ * hide description and date fields for now
+ *
  * Revision 1.3  2005/11/09 19:26:21  daturaarutad
  * use getGlobalVar instead of $_POST for CGI params
  *
