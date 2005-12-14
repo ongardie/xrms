@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.161 2005/12/08 05:21:47 vanmer Exp $
+ * $Id: utils-misc.php,v 1.162 2005/12/14 04:29:24 daturaarutad Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -1875,6 +1875,23 @@ function add_process_entity($con, $entity, $entity_type, $title, $description, $
     return $entity_id;
 }
 
+
+/**
+* A function that returns either '?' or '&' for adding arguments to unknown URLs 
+* @param string url to check
+* @return string '?' or '&' based on existance or not of 'php?' in url
+*/
+function get_url_seperator($url) {
+    
+    if(false === strpos($url, 'php?')) {
+        return '?';
+    } else {
+        return '&';
+    }
+}
+
+
+
  /**
   * Converts all '<br>' & '<p> tags, with attributes, into NEWLINE characters
   *
@@ -1955,6 +1972,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.162  2005/12/14 04:29:24  daturaarutad
+ * add get_url_seperator() function
+ *
  * Revision 1.161  2005/12/08 05:21:47  vanmer
  * - Initial revision of database handling of session data using adodb session functions as an option
  *
