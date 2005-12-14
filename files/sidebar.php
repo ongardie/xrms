@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.26 2005/12/09 19:26:47 daturaarutad Exp $
+ * $Id: sidebar.php,v 1.27 2005/12/14 05:05:30 daturaarutad Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -71,6 +71,7 @@ if(!$file_rows && !$file_rows['error_status']) {
           // get contact id
           $file_info['name'] = "<a href='$http_site_root/files/one.php?file_id={$file_sidebar_rst->fields['file_id']}&return_url=". urlencode($return_url) . "' title='". $file_sidebar_rst->fields['file_pretty_name']. "'>" . substr( $file_sidebar_rst->fields['file_pretty_name'], 0, 20) .  '</a>';
           $file_info['size'] = $file_sidebar_rst->fields['file_size'];
+          $file_info['description'] = $file_sidebar_rst->fields['file_description'];
           $file_info['owner'] =  $file_sidebar_rst->fields['username'];
           $file_info['date'] = $con->userdate($file_sidebar_rst->fields['entered_at']);
 
@@ -82,9 +83,10 @@ if(!$file_rows && !$file_rows['error_status']) {
     } 
 
     $columns=array();
-    $columns[] = array('name' => 'Name', 'index_calc' => 'name');
+    $columns[] = array('name' => 'Summary', 'index_calc' => 'name');
     $columns[] = array('name' => 'Size', 'index_calc' => 'size', 'type' => 'filesize');
     $columns[] = array('name' => 'Owner', 'index_calc' => 'owner');
+    $columns[] = array('name' => 'Description', 'index_calc' => 'description');
     $columns[] = array('name' => 'Date', 'index_calc' => 'date');
 
     if(!$file_sidebar_default_columns) $file_sidebar_default_columns = array('name', 'size','owner', 'date');
@@ -127,6 +129,9 @@ if(!$file_rows && !$file_rows['error_status']) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.27  2005/12/14 05:05:30  daturaarutad
+ * change Name to Summary, add Description as possible field
+ *
  * Revision 1.26  2005/12/09 19:26:47  daturaarutad
  * display error msg from plugin if exists
  *
