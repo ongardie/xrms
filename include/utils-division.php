@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-division.php,v 1.1 2005/12/13 19:19:36 jswalter Exp $
+ * $Id: utils-division.php,v 1.2 2005/12/15 00:20:21 jswalter Exp $
  *
  */
 
@@ -171,6 +171,23 @@ function get_division($con, $division_id, $return_rst = false)
     if ( $con && ($division_id > 0) )
     {
 
+        $sql = "SELECT * FROM company_division
+                 WHERE division_id = $division_id";
+
+        if ( ! $rst = $con->execute($sql) )
+        {
+            db_error_handler($con, $sql);
+            return false;
+        }
+        else
+        {
+            // Does this need to send back the record set
+            if ($return_rst)
+                $_retVal = $rst;
+
+            else
+                $_retVal = $rst->fields;
+        }
     }
 
     // return what we have
@@ -282,7 +299,30 @@ function get_division_owner ( $_division_id )
     // We need something to work on
     if ( $_division_id )
     {
+        // Did we find the Division
+        if ( $_division_data = get_division( get_xrms_dbconnection(), $_division_id ) )
+        {
+            // If the owner is not set, check the Company for its owner
+            if ( $_division_data['user_id'] )
+            {
+                $_retVal = $_division_data['user_id'];
+            }
+            // The owner is not set, check the Company for its owner
+            else
+            {
+                /* Include the misc utilities file */
+                global $include_directory;
+                include_once $include_directory . 'utils-companies.php';
 
+                 // If the owner is not set, set FALSE
+                $_company_data = get_company_owner( $_division_data['company_id']);
+
+                if ( $_company_data['user_id'] )
+                {
+                    $_retVal = $_company_data['user_id'];;
+                }
+            }
+        }
     }
 
     return $_retVal;
@@ -323,6 +363,9 @@ function pull_division_fields ( $array_data )
 
  /**
   * $Log: utils-division.php,v $
+  * Revision 1.2  2005/12/15 00:20:21  jswalter
+  *  - fleshed out "get_division()" and "get_division_owner()'
+  *
   * Revision 1.1  2005/12/13 19:19:36  jswalter
   *  - Initial revision of an API for managing divisions within XRMS
   *
