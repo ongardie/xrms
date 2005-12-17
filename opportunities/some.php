@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.63 2005/12/06 23:25:10 vanmer Exp $
+ * $Id: some.php,v 1.64 2005/12/17 21:27:59 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -65,7 +65,7 @@ $close_at = $con->SQLDate('Y-M-D', 'close_at');
 $sql = "SELECT "
 . $con->Concat("'<a id=\"'", "opp.opportunity_title",  "'\" href=\"one.php?opportunity_id='", "opp.opportunity_id", "'\">'", "opp.opportunity_title","'</a>'")
 . " AS opportunity" . ",
-  c.company_name AS 'company', u.username AS owner " . ",
+  c.company_name AS company, u.username AS owner " . ",
   ot.opportunity_type_pretty_name AS type,
   CASE
     WHEN (opp.size > 0) THEN opp.size
@@ -498,6 +498,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.64  2005/12/17 21:27:59  vanmer
+ * - changed SQL statement to not quote fieldname
+ * - patch provided by kennyholden
+ *
  * Revision 1.63  2005/12/06 23:25:10  vanmer
  * - added opportunity type name to list of statuses
  * - changed sort order of statuses to reflect table sort_order column
