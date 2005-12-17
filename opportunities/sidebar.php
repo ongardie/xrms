@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.19 2005/08/28 15:45:09 braverock Exp $
+ * $Id: sidebar.php,v 1.20 2005/12/17 21:28:43 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -41,7 +41,7 @@ $close_at = $con->SQLDate('Y-m-D', 'close_at');
 $opportunity_sql_select = "select "
 . $con->Concat("'<a id=\"'", "opportunities.opportunity_title",  "'\" href=\"$http_site_root/opportunities/one.php?opportunity_id='", "opportunities.opportunity_id", "'\">'", "opportunities.opportunity_title","'</a>'")
 . " AS opportunity" . ",
-  c.company_name AS 'company', u.username AS owner " . ",
+  c.company_name AS company, u.username AS owner " . ",
   ot.opportunity_type_pretty_name AS type,
   CASE
     WHEN (opportunities.size > 0) THEN opportunities.size
@@ -149,6 +149,10 @@ $opportunity_rows .= "</form></div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.20  2005/12/17 21:28:43  vanmer
+ * - removed quotes from company fieldname
+ * - patch provided by kennyholden
+ *
  * Revision 1.19  2005/08/28 15:45:09  braverock
  * - remove unnecessary second form close tag, it confuses some browsers
  *
