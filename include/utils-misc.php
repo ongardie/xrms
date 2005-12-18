@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.162 2005/12/14 04:29:24 daturaarutad Exp $
+ * $Id: utils-misc.php,v 1.163 2005/12/18 02:55:52 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -983,7 +983,7 @@ function time_zone_offset($con, $address_id) {
 
         //This can be applied to other countries that always will have provinces
         if($country_id == 218) {
-            $sql = "SELECT daylight_savings_id, offset, confirmed,
+            $sql = "SELECT daylight_savings_id, gmt_offset, confirmed,
                             (CASE WHEN (province = '" . $province . "') THEN 0 ELSE 1 END) AS has_province,
                             (CASE WHEN (city = " . $con->qstr($city) . ") THEN 0 ELSE 1 END) AS has_city,
                             (CASE WHEN (postal_code='" . $postal_code . "') THEN 0 ELSE 1 END) AS has_postal_code
@@ -992,7 +992,7 @@ function time_zone_offset($con, $address_id) {
                         AND province = '" . $province . "'";
         }
         else {
-            $sql = "SELECT daylight_savings_id, offset, confirmed,
+            $sql = "SELECT daylight_savings_id, gmt_offset, confirmed,
                             (CASE WHEN (province = '" . $province . "') THEN 0 ELSE 1 END) AS has_province,
                             (CASE WHEN (city = " . $con->qstr($city) . ") THEN 0 ELSE 1 END) AS has_city,
                             (CASE WHEN (postal_code='" . $postal_code . "') THEN 0 ELSE 1 END) AS has_postal_code
@@ -1010,7 +1010,7 @@ function time_zone_offset($con, $address_id) {
         elseif(!$rst->EOF) {
             $confirmed = $rst->fields['confirmed'];
             $daylight_savings_id = $rst->fields['daylight_savings_id'];
-            $offset = $rst->fields['offset'];
+            $offset = $rst->fields['gmt_offset'];
 
             return array("daylight_savings_id" => $daylight_savings_id, "offset" => $offset);
         }
@@ -1972,6 +1972,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.163  2005/12/18 02:55:52  vanmer
+ * - changed to use new gmt_offset field instead of offset field, for postgres compatiblity
+ *
  * Revision 1.162  2005/12/14 04:29:24  daturaarutad
  * add get_url_seperator() function
  *
