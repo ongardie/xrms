@@ -713,7 +713,7 @@
       <NOTNULL/>
       <DEFAULT value="f"/>
     </field>
-    <field name="offset" type="N" size="10"/>
+    <field name="gmt_offset" type="N" size="10"/>
     <field name="daylight_savings_id" type="I" size="10">
       <UNSIGNED/>
     </field>
@@ -2610,7 +2610,7 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="offset" type="N" size="10">
+    <field name="gmt_offset" type="N" size="10">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
