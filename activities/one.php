@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.128 2005/11/04 16:26:50 braverock Exp $
+ * $Id: one.php,v 1.129 2005/12/18 02:56:23 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -72,7 +72,7 @@ if ($activity_rst) {
     $address_id = $activity_rst->fields['address_id'];
     $scheduled_at = date('Y-m-d H:i:s', strtotime($activity_rst->fields['scheduled_at']));
     $ends_at = date('Y-m-d H:i:s', strtotime($activity_rst->fields['ends_at']));
-    $local_time = calculate_time_zone_time($con, $activity_rst->fields['daylight_savings_id'], $rst->fields['offset']);
+    $local_time = calculate_time_zone_time($con, $activity_rst->fields['daylight_savings_id'], $rst->fields['gmt_offset']);
     $activity_status = $activity_rst->fields['activity_status'];
     $completed_at = $activity_rst->fields['completed_at'];
     $completed_by = $activity_rst->fields['completed_by'];
@@ -769,6 +769,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.129  2005/12/18 02:56:23  vanmer
+ * - changed to use gmt_offset fieldname
+ *
  * Revision 1.128  2005/11/04 16:26:50  braverock
  * - clear ends_at time if scheduled and end times are the same
  *   and activity uncompleted
