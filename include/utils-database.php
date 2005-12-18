@@ -8,7 +8,7 @@
  * @author Beth Macknik
  * @package XRMS_API
  *
- * $Id: utils-database.php,v 1.23 2005/12/15 00:17:48 jswalter Exp $
+ * $Id: utils-database.php,v 1.24 2005/12/18 02:55:04 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -16,6 +16,10 @@ if ( !defined('IN_XRMS') )
   die('Hacking attempt');
   exit;
 }
+
+require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb/adodb-datadict.inc.php');
+
 
 /**
   * Create the string to use for a company name search
@@ -1047,11 +1051,117 @@ function __record_delete ( $_objCon, $_strTableName, $_identifier, $_aryData )
 
 };
 
+ /**
+   * Upgrade function, intended to change a fieldname in a table from one fieldname to another
+   * Database agnostic way to upgrade/change datastructures
+**/
+function rename_fieldname($con, $table_name, $old_field_name, $new_field_name, &$upgrade_msgs) {
+    $dict = NewDataDictionary( $con );
+    $table_list = list_db_tables($con);
+    //ensure that table already exists
+    if (in_array($table_name,$table_list)) {
+        //get list of fields from table, to ensure that we have a field to change
+        $cols=$dict->MetaColumns($table_name);
+//        print_r($cols);
+        if (array_key_exists(strtoupper($old_field_name), $cols)) {
+            //definition of new field, needed by MYSQL
+            $field_definition=array();
+            $field_definition[]=array('NAME'=>$new_field_name,'TYPE'=>'C','SIZE'=>32);
+            $sql=$dict->RenameColumnSQL($table_name, $old_field_name, $new_field_name,$field_definition);
+            foreach ($sql AS $sql_line) {
+                $rst=$con->execute($sql_line);
+                if (!$rst) db_error_handler($con, $sql_line);
+            }
+            $upgrade_msgs[]="Changed fieldname in $table_name from $old_field_name to $new_field_name<br>";
+            return true;
+        }
+    }
+    return false;
+}
+
+
+ /**
+   * Upgrade function, intended to add a new table
+   * Database agnostic way to add tables to the database
+**/
+function create_table($con, $table_name, $table_fields, $table_opts, &$upgrade_msgs) {
+    $dict = NewDataDictionary( $con );
+    $table_list = list_db_tables($con);
+    //ensure that table is not already in existance
+    if (!in_array($table_name,$table_list)) {
+        //define details of the table in the fields array        
+        //no global table options needed, so setting to false
+
+        $sql=$dict->CreateTableSQL( $table_name, $table_fields, $table_opts );
+        foreach ($sql AS $sql_line) {
+            $rst=$con->execute($sql_line);
+            if (!$rst) db_error_handler($con, $sql_line);
+        }
+        $upgrade_msgs[]="Added new $table_name table<br>";
+        return true;
+    }
+    return false;
+}
+
+ /**
+   * Upgrade function, intended to add a field to a table
+   * Database agnostic way to upgrade/change datastructures
+**/
+function add_field($con, $table_name, $field_definition, $table_opts='', &$upgrade_msgs) {
+    $dict = NewDataDictionary( $con );
+    $table_list = list_db_tables($con);
+    $old_upgrade_count=count($upgrade_msgs);
+    //ensure that table already exists
+    if (in_array($table_name,$table_list)) {
+        $cols=$dict->MetaColumns($table_name);
+//        print_r($cols);
+        foreach ($field_definition as $fielddata) {
+            $field_name=$fielddata['NAME'];
+            if (!array_key_exists($field_name, $cols)) {
+                $fdef=array($fielddata);
+                $sql=$dict->ChangeTableSQL($table_name, $fdef, $table_opts);
+                foreach ($sql AS $sql_line) {
+                    $rst=$con->execute($sql_line);
+                    if (!$rst) db_error_handler($con, $sql_line);
+                }
+                $upgrade_msgs[]="Added field $field_name in $table_name<br>";
+            }
+        }
+        $upgrade_count=count($upgrade_msgs);
+        if ($upgrade_count>$old_upgrade_count) return true;
+     }
+    return false;
+}
+
+ /**
+   * Upgrade function, intended to remove a table from the database
+   * Database agnostic way to upgrade/change datastructures
+**/
+function drop_table($con, $table_name, &$upgrade_msgs) {
+    $dict = NewDataDictionary( $con );
+    $table_list = list_db_tables($con);
+    //ensure that table is already in existance, cannot drop it without it existing
+    if (in_array($table_name,$table_list)) {
+        $sql=$dict->DropTableSQL( $table_name );
+        foreach ($sql AS $sql_line) {
+            $rst=$con->execute($sql_line);
+            if (!$rst) db_error_handler($con, $sql_line);
+        }
+        $upgrade_msgs[]="Removed $table_name table<br>";
+        return true;
+    }
+    return false;
+}
+
 
 // ============================================================================
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.24  2005/12/18 02:55:04  vanmer
+ * - moved functions for upgrading table structure from examples into functions in utils-database
+ * - intended to be used when upgrading the database, instead of straight SQL calls
+ *
  * Revision 1.23  2005/12/15 00:17:48  jswalter
  *  - better commonality in retrun options across "generic" DB access functions
  *
