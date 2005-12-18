@@ -2,7 +2,7 @@
 /**
  * Add an address
  *
- * $Id: add-address.php,v 1.12 2005/04/11 02:06:37 maulani Exp $
+ * $Id: add-address.php,v 1.13 2005/12/18 02:57:20 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -72,7 +72,7 @@ if($time_zone_offset = time_zone_offset($con, $address_id)) {
     elseif(!$rst->EOF) {
         $rec = array();
         $rec['daylight_savings_id'] = $time_zone_offset['daylight_savings_id'];
-        $rec['offset'] = $time_zone_offset['offset'];
+        $rec['gmt_offset'] = $time_zone_offset['offset'];
 
         $upd = $con->getUpdateSQL($rst, $rec, true, get_magic_quotes_gpc());
         $rst = $con->execute($upd);
@@ -88,6 +88,10 @@ header("Location: addresses.php?msg=address_added&company_id=$company_id");
 
 /**
  * $Log: add-address.php,v $
+ * Revision 1.13  2005/12/18 02:57:20  vanmer
+ * - changed to use gmt_offset instead of offset field
+ * - Thanks to kennyholden for this patch
+ *
  * Revision 1.12  2005/04/11 02:06:37  maulani
  * - Add address type.  RFE 862049 (maulani)
  *

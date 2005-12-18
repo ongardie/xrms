@@ -2,7 +2,7 @@
 /**
  * Edit address for a company
  *
- * $Id: one-address.php,v 1.10 2005/09/07 17:32:40 daturaarutad Exp $
+ * $Id: one-address.php,v 1.11 2005/12/18 02:57:20 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -92,7 +92,7 @@ $company_name = fetch_company_name($con, $company_id);
 	$model->SetForeignKeyField('address_type', _("Address Type"), 'address_types', 'address_type', 'address_type', $con, null, 'address_type_sort_value');
         
     $model->SetFieldType('address_record_status', 'db_only');
-    $model->SetFieldType('offset', 'db_only');
+    $model->SetFieldType('gmt_offset', 'db_only');
     $model->SetFieldType('daylight_savings_id', 'db_only');
         
     $model->SetCheckboxField('use_pretty_address', 't','f');
@@ -190,7 +190,7 @@ switch ($form_action) {
             elseif(!$rst->EOF) {
                 $rec = array();
                 $rec['daylight_savings_id'] = $time_zone_offset['daylight_savings_id'];
-                $rec['offset'] = $time_zone_offset['offset'];
+                $rec['gmt_offset'] = $time_zone_offset['offset'];
         
                 $upd = $con->getUpdateSQL($rst, $rec, true, get_magic_quotes_gpc());
                 $rst = $con->execute($upd);
@@ -214,6 +214,10 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.11  2005/12/18 02:57:20  vanmer
+ * - changed to use gmt_offset instead of offset field
+ * - Thanks to kennyholden for this patch
+ *
  * Revision 1.10  2005/09/07 17:32:40  daturaarutad
  * fixed formatting; enabled delete button in quickform; remove old form sort code
  *

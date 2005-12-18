@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.30 2005/06/19 13:30:10 braverock Exp $
+ * $Id: import-companies-3.php,v 1.31 2005/12/18 02:57:20 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -576,7 +576,7 @@ foreach ($filearray as $row) {
                     elseif(!$rst->EOF) {
                         $rec = array();
                         $rec['daylight_savings_id'] = $time_zone_offset['daylight_savings_id'];
-                        $rec['offset'] = $time_zone_offset['offset'];
+                        $rec['gmt_offset'] = $time_zone_offset['offset'];
 
                         $upd = $con->getUpdateSQL($rst, $rec, true, get_magic_quotes_gpc());
                         if (strlen($upd)>0) {
@@ -878,6 +878,10 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.31  2005/12/18 02:57:20  vanmer
+ * - changed to use gmt_offset instead of offset field
+ * - Thanks to kennyholden for this patch
+ *
  * Revision 1.30  2005/06/19 13:30:10  braverock
  * - improved localization and multi-line handling w/ addslashes
  * - improved duplicate checking

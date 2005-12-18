@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.26 2005/09/06 17:32:44 ycreddy Exp $
+ * $Id: new-2.php,v 1.27 2005/12/18 02:57:20 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -165,7 +165,7 @@ if($time_zone_offset = time_zone_offset($con, $address_id)) {
     elseif(!$rst->EOF) {
         $rec = array();
         $rec['daylight_savings_id'] = $time_zone_offset['daylight_savings_id'];
-        $rec['offset'] = $time_zone_offset['offset'];
+        $rec['gmt_offset'] = $time_zone_offset['offset'];
 
         $upd = $con->getUpdateSQL($rst, $rec, true, get_magic_quotes_gpc());
         $rst = $con->execute($upd);
@@ -248,6 +248,10 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.27  2005/12/18 02:57:20  vanmer
+ * - changed to use gmt_offset instead of offset field
+ * - Thanks to kennyholden for this patch
+ *
  * Revision 1.26  2005/09/06 17:32:44  ycreddy
  * Added code to Strip off non digit characters from Fax
  *

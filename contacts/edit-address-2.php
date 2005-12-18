@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a contact
  *
- * $Id: edit-address-2.php,v 1.13 2005/09/29 15:01:40 vanmer Exp $
+ * $Id: edit-address-2.php,v 1.14 2005/12/18 02:57:20 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -126,7 +126,7 @@ if ($alt_address) {
         elseif(!$rst->EOF) {
             $rec = array();
             $rec['daylight_savings_id'] = $time_zone_offset['daylight_savings_id'];
-            $rec['offset'] = $time_zone_offset['offset'];
+            $rec['gmt_offset'] = $time_zone_offset['offset'];
 
             $upd = $con->getUpdateSQL($rst, $rec, true, get_magic_quotes_gpc());
             $rst = $con->execute($upd);
@@ -161,6 +161,10 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.14  2005/12/18 02:57:20  vanmer
+ * - changed to use gmt_offset instead of offset field
+ * - Thanks to kennyholden for this patch
+ *
  * Revision 1.13  2005/09/29 15:01:40  vanmer
  * - added code to allow change of home address for contact
  *
@@ -198,7 +202,7 @@ header("Location: $return_url");
  * - added processing for "Use Alternate Address" section
  *
  * Revision 1.2  2004/06/09 17:36:09  gpowers
- * - added $Id: edit-address-2.php,v 1.13 2005/09/29 15:01:40 vanmer Exp $Log: tags.
+ * - added $Id: edit-address-2.php,v 1.14 2005/12/18 02:57:20 vanmer Exp $Log: tags.
  *
  * Revision 1.1  2004/06/09 16:52:14  gpowers
  * - Contact Address Editing
