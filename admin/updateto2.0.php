@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.5 2005/12/08 23:54:28 vanmer Exp $
+ * $Id: updateto2.0.php,v 1.6 2005/12/18 02:58:06 vanmer Exp $
  */
 
 // where do we include from
@@ -4732,12 +4732,19 @@ if ($owl_pref) {
     $msg .= _("Removed deprecated Owl preference, now entirely controlled by Owl Plugin") . '<br>';
 }
 
-
 //check to see if session table has been added
 $msg .= check_session_table($con, $table_list);
 
 //ensure that company_id 1 is Unknown Company
 $msg .= update_unknown_company($con);
+
+
+//update timezone offset field using the new 2.0 style of upgrading, for database compatibility
+$upgrade_msgs=array();
+rename_fieldname($con, 'addresses', 'offset', 'gmt_offset', $upgrade_msgs);
+
+rename_fieldname($con, 'time_zones', 'offset', 'gmt_offset', $upgrade_msgs);
+$msg.=implode("<br>\n",$upgrade_msgs);
 
 //FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
 //set_admin_preference($con, 'xrms_version', '2.0.0');
@@ -4766,6 +4773,9 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.6  2005/12/18 02:58:06  vanmer
+ * - added upgrade commands to rename fieldnames from offset to gmt_offset
+ *
  * Revision 1.5  2005/12/08 23:54:28  vanmer
  * - changed case status open indicator to use new updated code for closed statuses
  * - removed add index on case type id, since multiple indexes are added (each time update is run)
