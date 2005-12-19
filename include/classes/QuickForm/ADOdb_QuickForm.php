@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.21 2005/12/02 22:33:12 vanmer Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.22 2005/12/19 23:18:59 daturaarutad Exp $
  */
 
 
@@ -94,7 +94,7 @@
 	* @param boolean Whether or not the model's tablename should be prepended to all elements for that model 
 	* 
 	*/
-	function ADOdb_QuickForm_View($dbh, $displayTitle, $form_method = 'get', $prependTablename = false) {
+	function ADOdb_QuickForm_View($dbh, $displayTitle, $form_method = 'POST', $prependTablename = false) {
 		$this->DBH = $dbh;
 		$this->DisplayTitle = $displayTitle;
 		$this->PrependTablename = $prependTablename;
@@ -699,6 +699,9 @@ END;
 
 /**
 * $Log: ADOdb_QuickForm.php,v $
+* Revision 1.22  2005/12/19 23:18:59  daturaarutad
+* change default form method to POST
+*
 * Revision 1.21  2005/12/02 22:33:12  vanmer
 * - changed default handling for form fields to display contents as a text field, instead of displaying an error
 *
