@@ -25,7 +25,6 @@
 
 function xrms_plugin_init_owl() {
     global $xrms_plugin_hooks;
-    $xrms_plugin_hooks['menuline']['owl'] = 'owl_menu';
     $xrms_plugin_hooks['file_add_file']['owl'] = 'fn_add_file';
     $xrms_plugin_hooks['file_update_file']['owl'] = 'fn_upd_file';
     $xrms_plugin_hooks['file_delete_file']['owl'] = 'fn_delete_file';
@@ -68,19 +67,6 @@ function fn_get_search_fields_sql() {
 	return op_get_search_fields_sql();
 }
 
-
-
-
-/**
-* Add Demo link to upper menu
-*/
-function owl_menu() {
-
-    global $http_site_root;
-
-    // BEFORE BOZZ echo "&nbsp;<a href='$http_site_root/plugins/owl/owl_main.php'>Owl</a>&nbsp;&bull;\n";
-    echo "&nbsp;<a href='/intranet'>Owl</a>&nbsp;&bull;\n";
-}
 
 
 function fn_get_xrms_file_id(&$params) { 
@@ -183,6 +169,9 @@ function fn_template() {
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.7  2005/12/19 23:20:24  daturaarutad
+ * remove OWL menu
+ *
  * Revision 1.6  2005/12/09 19:23:23  daturaarutad
  * add delete hook
  *
