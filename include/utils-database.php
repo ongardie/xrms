@@ -8,7 +8,7 @@
  * @author Beth Macknik
  * @package XRMS_API
  *
- * $Id: utils-database.php,v 1.24 2005/12/18 02:55:04 vanmer Exp $
+ * $Id: utils-database.php,v 1.25 2005/12/19 04:57:33 jswalter Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -473,37 +473,80 @@ register_shutdown_function('db_con_cleanup');
 /*****************************************************************************/
 
  /**
+  * This is a collection of generic DB handing functions. These are designed
+  * handle most situations found within the XRMS system.
+  *
+  * __record_add_update() is the core function. By passing an array of data,
+  * the name of the table to use and an ADOdb connection object, this function
+  * handles all the "decissions" to determine if the given data is to be used
+  * to UPDATE an existing record, to to be INSERTed into a new record.
+  *
+  * All secondary and DB only fields are properly polulated.
+  *
+  * This function will return either a copy of the record data in a named array,
+  * or an ADOdb record set. Your choice. The array is default.
+  *
+  * __record_insert() is a secondary function. Use this if you know that
+  * the data you have should be INSERTed. It will not do any checking to
+  * verify tha the data exists or not. If this call fails, double check
+  * to make sure it truely is orginal data, or just use __record_add_update()
+  *
+  * __record_update() is a secondary function. Use this if you know that
+  *
+  *
+  * @access public
+  * @category db_handling
+  *
+  *
+  */
+
+
+ /**
   * Determines whether to INSERT or UPDATE a record in the database
   *
+  * The return value of the Function has 3 possibilities:
+  * 1) on INSERT, record ID of new record
+  * 2) on UPDATE, full data array for "updated" record, entire record
+  * 3) on DB failure, FALSE boolean
+  *
+  * 1 and 2 can be overridden with the '$return_recordset' parameter set to TRUE,
+  * this forces an ADOdb recorset to be returned regardless of operation.
+  *
+  * In order to handle data from variou sources $_magic_quotes has been added
+  * as a final parameter. This boolen informs the function whether in the incoming
+  * data is "slash quoted" already or not. It defaults to FALSE, not "slash quoted"
+  *
   * @name __record_add_update()
-  * @access private
+  * @access public
   * @category db_handling
   *
   * @uses ADOdb::GetInsertSQL() Creates INSERT SQL from array data
   * @uses ADOdb::GetUpdateSQL() Creates UPDATE SQL from array data
   * @uses ADOdb::Execute()      Execute generated SQL
+  *
   * @static
   * @final
   *
   * @author Walter Torres <walter@torres.ws>
   *
-  * @param  object $_objCon       Connection object ot Database to hit
-  * @param  string $_strTableName table name to place data
-  * @param  string $_identifier   field name to search for matching record
-  * @param  array  $_aryData      Array of data for placement
-  * @param  string $_id_field     Record ID Field for table, if different than '[table_name]_id', optional
+  * @param  object   $_objCon           Connection object ot Database to hit
+  * @param  string   $_strTableName     table name to place data
+  * @param  string   $_identifier       field name to search for matching record
+  * @param  array    $_aryData          Array of data for placement
+  * @param  boolean  $_magic_quotes     F - inbound data has not "add slashes", T - data has "add slashes
+  * @param  boolean  $return_recordset  indicating if adodb recordset object should be returned (defaults to false)
   *
   * @return mixed  $_retVal       Record ID on sucess, FALSE on failure
   */
-function __record_add_update ( $_objCon, $_strTableName, $_identifier, $_aryData, $_id_field = false )
+function __record_add_update ( $_objCon, $_strTableName, $_identifier, $_aryData, $_magic_quotes = false, $_return_recordset = false )
 {
    /**
     * Default return value
     *
-    * Returns Statement Template string or boolean upon failure
+    * Returns record id, data array, ADOdb recordset or boolean upon failure
     * Default value is set at FALSE
     *
-    * @var mixed $_retVal Indicates if Statement was created or not
+    * @var mixed $_retVal Returns record id, data array, ADOdb recordset or boolean upon failure
     * @access private
     * @static
     */
@@ -511,7 +554,7 @@ function __record_add_update ( $_objCon, $_strTableName, $_identifier, $_aryData
 
     // We need to derive the primary and status keys for this table
     $_primary_key = get_primarykey_from_table($_objCon, $_strTableName);
-    $_status_key = get_status_from_table($_objCon, $_strTableName);
+    $_status_key  = get_status_from_table($_objCon, $_strTableName);
 
     # Find record in database
     $sql = "SELECT *
@@ -533,7 +576,7 @@ function __record_add_update ( $_objCon, $_strTableName, $_identifier, $_aryData
         $_aryData['last_modified_at'] = $_timeStamp;
 
         // Set record status, either way
-        $_aryData[$_strTableName . '_record_status'] = 'a';
+        $_aryData[$_status_key] = 'a';
 
         // Keep the primary key ID
         $_primary_key_id = $_recordSet->fields[$_primary_key];
@@ -557,6 +600,8 @@ function __record_add_update ( $_objCon, $_strTableName, $_identifier, $_aryData
                     $_retVal[$_primary_key] = $_primary_key_id;
                     $_retVal['primarykey']  = $_primary_key;
                     $_retVal['statuskey']   = $_status_key;
+                    $_retVal['action']      = 'update';
+
                 }
             }
             else
@@ -593,13 +638,14 @@ function __record_add_update ( $_objCon, $_strTableName, $_identifier, $_aryData
             * @static
             */
             // No record was found, so we need to INSERT it
-            if ( $_objCon->Execute($sql) )
+            if ( $rs =& $_objCon->Execute($sql) )
             {
                 $_retVal = $rs->fields;
 
-                $_retVal[$_primary_key] = $_primary_key_id;
+                $_retVal[$_primary_key] = $_objCon->Insert_ID();
                 $_retVal['primarykey']  = $_primary_key;
                 $_retVal['statuskey']   = $_status_key;
+                $_retVal['action']      = 'insert';
             }
             else
             {
@@ -607,7 +653,7 @@ function __record_add_update ( $_objCon, $_strTableName, $_identifier, $_aryData
             }
         }
     }
-    // DB access failed
+    // DB access failure
     else
     {
         db_error_handler($_objCon, $sql . ' - add/update [1]' );
@@ -621,32 +667,43 @@ function __record_add_update ( $_objCon, $_strTableName, $_identifier, $_aryData
  /**
   * Generic INSERT method for database
   *
+  * If a record is INSERted, either an named array will be returned (default)
+  * or an ADOdb recordset if the $_return_recordset parameter is set.
+  *
+  * If a data array is returned (default), 3 elements will be returned:
+  * 1) '[primarykey]' = 0 - this indicated that a record was not created
+  * 1) 'primarykey'  = table primary key
+  * 2) 'statuskey'   = table status field
+  *
   * @name __insert_record()
   * @access private
   * @category db_handling
   *
   * @uses ADOdb::GetInsertSQL() Creates INSERT SQL from array data
   * @uses ADOdb::Execute()      Execute generated SQL
+  *
   * @static
   * @final
   *
   * @author Walter Torres <walter@torres.ws>
   *
-  * @param  object   $_objCon           Connection object ot Database to hit
-  * @param  string   $_strTableName     table name to INSERT data into
-  * @param  array    $_aryData          Array of data for INSERT
-  * @param  boolean  $return_recordset  indicating if adodb recordset object should be returned (defaults to false)
+  * @param  object   $_objCon            Connection object ot Database to hit
+  * @param  string   $_strTableName      table name to INSERT data into
+  * @param  array    $_aryData           Array of data for INSERT
+  * @param  boolean  $_magic_quotes      F - inbound data has not "add slashes", T - data has "add slashes" (defaults to false)
+  * @param  boolean  $_return_recordset  indicating if adodb recordset object should be returned (defaults to false)
+  *
   * @return mixed    $_retVal           Record ID on sucess, FALSE on failure
   */
-function __record_insert ( $_objCon, $_strTableName, $_aryData, $return_recordset = false )
+function __record_insert ( $_objCon, $_strTableName, $_aryData, $_magic_quotes = false, $_return_recordset = false )
 {
    /**
     * Default return value
     *
-    * Returns Statement Template string or boolean upon failure
+    * Returns record id of new record, ADOdb recordset or boolean upon failure
     * Default value is set at FALSE
     *
-    * @var mixed $_retVal Indicates if Statement was created or not
+    * @var mixed $_retVal Returns record id, ADOdb recordset or boolean upon failure
     * @access private
     * @static
     */
@@ -654,7 +711,7 @@ function __record_insert ( $_objCon, $_strTableName, $_aryData, $return_recordse
 
     global $users, $session_user_id;
 
-    // We need to derive the primary and status keys for this table
+    // What is the primary key for this table
     $_primary_key = get_primarykey_from_table($_objCon, $_strTableName);
     $_status_key = get_status_from_table($_objCon, $_strTableName);
 
@@ -681,31 +738,23 @@ function __record_insert ( $_objCon, $_strTableName, $_aryData, $return_recordse
    /**
     * Generated INSERT SQL from array
     *
-    * @var string $sql Generated INSERT SQL
+    * @var string $_sql Generated INSERT SQL
     * @access private
     * @static
     */
-    $sql = $_objCon->GetInsertSQL($_strTableName, $_aryData);
+    $_sql = $_objCon->GetInsertSQL($_strTableName, $_aryData, $_magic_quotes);
 
-   /**
-    * Record Set of found data
-    *
-    * @var recordSet $_recordSet Retrieve record of FUND data from database
-    * @access private
-    * @static
-    */
-    $_recordSet =& $_objCon->Execute($sql);
-
-    if ( $_recordSet )
+    // Was a record created?
+    if ( $_recordSet =& $_objCon->Execute($_sql) )
     {
         // Return Recordset
         if ( $_return_recordset )
-            $_retVal = $rs;
+            $_retVal = $_recordSet;
 
         // or return data array
         else
         {
-            $_retVal = $rs->fields;
+            $_retVal[$_primary_key] = $_objCon->Insert_ID();
             $_retVal['primarykey'] = $_primary_key;
             $_retVal['statuskey']= $_status_key;
         }
@@ -723,10 +772,16 @@ function __record_insert ( $_objCon, $_strTableName, $_aryData, $return_recordse
  /**
   * Generic UPDATE method for database
   *
-  * This method has 3 different return options:
-  * 1) false boolean if no record was found
-  * 2) data array of found record [default]
-  * 3) ADOdb recordset of found record [if 5th parameter is set TRUE]
+  * If a record is UPDATEd, either an named array will be returned (default)
+  * or an ADOdb recordset if the $_return_recordset parameter is set.
+  *
+  * If a data array is returned (default), 3 elements will be returned:
+  * 1) '[primarykey]' = 0 - this indicated that a record was not updated
+  * 1) 'primarykey'  = table primary key
+  * 2) 'statuskey'   = table status field
+  *
+  * This method can also mark a record as a [logical] deleted record
+  * via a TRUE in the seventh parameter.
   *
   * @name __record_update()
   * @access private
@@ -734,100 +789,76 @@ function __record_insert ( $_objCon, $_strTableName, $_aryData, $return_recordse
   *
   * @uses ADOdb::GetUpdateSQL() Creates UPDATE SQL from array data
   * @uses ADOdb::Execute()      Execute generated SQL
+  *
   * @static
   * @final
   *
   * @author Walter Torres <walter@torres.ws>
   *
-  * @param  object  $_objCon           Connection object ot Database to hit
-  * @param  string  $_strTableName     Table name to UPDATE data into
-  * @param  string  $_identifier       Field name to search for matching record
-  * @param  array   $_aryData          Array of data for UPDATE
-  * @param boolean  $return_recordset  indicating if adodb recordset object should be returned (defaults to false)
-  * @param  boolean $_deleteRecord     Indicates whether to mark the record as "deleted' [optional]
+  * @param  object   $_objCon           Connection object ot Database to hit
+  * @param  string   $_strTableName     Table name to UPDATE data into
+  * @param  string   $_identifier       Field name to search for matching record
+  * @param  array    $_aryData          Array of data for UPDATE
+  * @param  boolean  $return_recordset  indicating if adodb recordset object should be returned (defaults to false)
+  * @param  boolean  $_magic_quotes     F - inbound data has not "add slashes", T - data has "add slashes" (defaults to false)
+  * @param  boolean  $_deleteRecord     Indicates whether to mark the record as "deleted' [optional]
+  *
   * @return mixed   $_retVal           Record ID on sucess, FALSE on failure
   */
-function __record_update ( $_objCon, $_strTableName, $_identifier, $_aryData, $_return_recordset = false, $_deleteRecord = false )
+function __record_update ( $_objCon, $_strTableName, $_identifier, $_aryData, $_magic_quotes = false, $_return_recordset = false, $_deleteRecord = false )
 {
    /**
     * Default return value
     *
-    * Returns Statement Template string or boolean upon failure
+    * Returns record data array of updated record, ADOdb recordset or boolean upon failure
     * Default value is set at FALSE
     *
-    * @var mixed $_retVal Indicates if Statement was created or not
+    * @var mixed $_retVal Returns record id, ADOdb recordset or boolean upon failure
     * @access private
     * @static
     */
-    $_retVal = true;
+    $_retVal = false;
 
     global $users, $session_user_id, $msg;
 
-    # Find User from database
-    $sql = "SELECT *
-              FROM $_strTableName
-             WHERE $_identifier = " . $_objCon->qstr($_aryData[$_identifier], get_magic_quotes_gpc());
-
-    if ( $rs =& $_objCon->Execute($sql) )
+    // If a record was found, it can be UPDATEd
+    if ($rs = __record_find ( $_objCon, $_strTableName, $_aryData, $_magic_quotes, true ) )
     {
-        // We need to derive the primary and status keys for this table
+        // What is the primary key for this table
         $_primary_key = get_primarykey_from_table($_objCon, $_strTableName);
-        $_status_key = get_status_from_table($_objCon, $_strTableName);
+        $_status_key  = get_status_from_table($_objCon, $_strTableName);
 
-        // If this record is "published", then it can NOT be UPDATEd
-        if ( ! $rs->fields['published'] )
+        // Found record primary key
+        $_found_key = $rs->fields[$_primary_key];
+
+        if ( $_deleteRecord )
         {
-            if ( $_deleteRecord )
-            {
-                // "delete" record by changing record status
-                $_aryData[$_status_key] = 'd';
-            }
-            else
-            {
-                // change "delete" record status to 'a' since we are to UPDATE the record data
-                $_aryData[$_status_key] = 'a';
-            }
+            // "delete" record by changing record status
+            $_aryData[$_status_key] = 'd';
+        }
+        else
+        {
+            // change "delete" record status to 'a' since we are to UPDATE the record data
+            $_aryData[$_status_key] = 'a';
+        }
 
-            // Only UPDATE if any of the fields have changed
-           if ( $_objCon->GetUpdateSQL($rs, $_aryData, false, true) )
-           {
-                // Since something is different, set the modified fields
+        // Only UPDATE if any of the fields have changed
+        if ( $_objCon->GetUpdateSQL($rs, $_aryData, $_magic_quotes) )
+        {
+            // Since something is different, set the modified fields
 
-                $_timeStamp =  date( 'Y-m-d H:i:s', time());
-                // Add 'modified' date and by whom
-                $_aryData['modified_by'] = $users['user_id'];     // some tables have these field names
-                $_aryData['modified_on'] = $_timeStamp;
+            $_timeStamp =  date( 'Y-m-d H:i:s', time());
+            // Add 'modified' date and by whom
+            $_aryData['modified_by'] = $users['user_id'];     // some tables have these field names
+            $_aryData['modified_on'] = $_timeStamp;
 
-                $_aryData['last_modified_by'] = $session_user_id; // others use these
-                $_aryData['last_modified_at'] = $_timeStamp;
+            $_aryData['last_modified_by'] = $session_user_id; // others use these
+            $_aryData['last_modified_at'] = $_timeStamp;
 
-                // Build new SQL
-                $updateSQL = $_objCon->GetUpdateSQL($rs, $_aryData, false, true);
+            // Build new SQL
+            $updateSQL = $_objCon->GetUpdateSQL($rs, $_aryData, $_magic_quotes);
 
-                if ( $rs =& $_objCon->Execute($updateSQL) )
-                {
-                    // Return Recordset
-                    if ( $_return_recordset )
-                        $_retVal = $rs;
-
-                    // or return data array
-                    else
-                    {
-                        $_retVal = $rs->fields;
-
-                        $_retVal['primarykey'] = $_primary_key;
-                        $_retVal['statuskey']= $_status_key;
-                    }
-                }
-                else
-                {
-                    db_error_handler($_objCon, $sql . ' - record_update [2]');
-                    $_retVal = false;
-                }
-            }
-
-            // No data change, just pass the data back
-            else
+            if ( $rs =& $_objCon->Execute($updateSQL) )
             {
                 // Return Recordset
                 if ( $_return_recordset )
@@ -836,27 +867,43 @@ function __record_update ( $_objCon, $_strTableName, $_identifier, $_aryData, $_
                 // or return data array
                 else
                 {
-                    $_retVal = $rs->fields;
+                    $_retVal[$_primary_key] = $_found_key;
 
                     $_retVal['primarykey'] = $_primary_key;
                     $_retVal['statuskey']= $_status_key;
                 }
             }
-
+            else
+            {
+                db_error_handler($_objCon, $sql . ' - record_update [2]');
+                $_retVal = false;
+            }
         }
 
-        // Since this record is "published", it can not be changed
+        // No data change
         else
         {
-            $msg .= 'Record is "published", it can not be updated.';
-            $_retVal = false;
-        }
+            // Return Recordset
+            if ( $_return_recordset )
+                $_retVal = $rs;
 
+            // or return data array
+            else
+            {
+                $_retVal[$_primary_key] = 0;
+                $_retVal['primarykey'] = $_primary_key;
+                $_retVal['statuskey']= $_status_key;
+            }
+        }
     }
     else
     {
-        db_error_handler($_objCon, $sql . ' - record_update [1]');
-        $_retVal = false;
+        // Error message about not find a record to be updated
+        $msg = 'Could not locate record to Update';
+
+        $_retVal[$_primary_key] = 0;
+        $_retVal['primarykey'] = $_primary_key;
+        $_retVal['statuskey']= $_status_key;
     }
 
     // Send back what we have
@@ -872,11 +919,25 @@ function __record_update ( $_objCon, $_strTableName, $_identifier, $_aryData, $_
   *  2) unique "identifier(s)" to search table for
   *  3) conection object to process from
   *
-  * The "unique identifier(s)" can be any number of table fields,
+  * The[se] "unique identifier[s]" can be any number of table fields,
   * but they must be in an array with the field name as the key
   * and the field value as the array element value. The method will
   * pull this information apart and construct a query to search the
   * desired table in order to locate the proper record.
+  *
+  * If a record is found, either an named array will be returned (default)
+  * or an ADOdb recordset if the $_return_recordset parameter is set.
+  *
+  * If a data array is returned (default), 2 additional elements will be
+  * added to the array:
+  * 1) 'primarykey'  = table primary key
+  * 2) 'statuskey'   = table status field
+  *
+  * If a record is not located, the orginal data will be returned with
+  * 3 elements added to the array:
+  * 1) '[primarykey]' = 0 - this indicated that a record was not found
+  * 2) 'primarykey'  = table primary key
+  * 3) 'statuskey'   = table status field
   *
   * @name __record_find()
   * @access private
@@ -886,15 +947,16 @@ function __record_update ( $_objCon, $_strTableName, $_identifier, $_aryData, $_
   *
   * @author Walter Torres <walter@torres.ws>
   *
-  * @param  object  $_objCon            Connection object ot Database to hit
-  * @param  string  $_strTableName      table name to UPDATE data into
-  * @param  array   $_aryData           Record data Array, only needs $_identifier
-  * @param  boolean $_return_recordset  Indicating if adodb recordset object should be returned (defaults to false)
-  * @param  boolean $_show_deleted      specifying if deleted companies should be included (defaults to false)
+  * @param  object   $_objCon            Connection object ot Database to hit
+  * @param  string   $_strTableName      table name to UPDATE data into
+  * @param  array    $_aryData           Record data Array, only needs $_identifier
+  * @param  boolean  $_return_recordset  Indicating if adodb recordset object should be returned (defaults to false)
+  * @param  boolean  $_magic_quotes      F - inbound data has not "add slashes", T - data has "add slashes" (defaults to false)
+  * @param  boolean  $_show_deleted      specifying if deleted companies should be included (defaults to false)
   *
-  * @return boolean $_retVal            Data array (or Recordset) on Success or boolean on failure
+  * @return boolean  $_retVal            Data array (or Recordset) on Success or boolean on failure
   */
-function __record_find ( $_objCon = false, $_strTableName = false, $_aryData = false, $_return_recordset = false, $_show_deleted = false )
+function __record_find ( $_objCon, $_strTableName, $_aryData, $_magic_quotes = false, $_return_recordset = false, $_show_deleted = false )
 {
    /**
     * Default return value
@@ -908,73 +970,97 @@ function __record_find ( $_objCon = false, $_strTableName = false, $_aryData = f
     */
     $_retVal = false;
 
-    // This can only run if we have a DB Connection object and some data
-    if ( $_objCon && $_strTableName  && $_aryData )
+    // What is the primary key for this table
+    $_primary_key = get_primarykey_from_table($_objCon, $_strTableName);
+    $_status_key  = get_status_from_table($_objCon, $_strTableName);
+
+   /**
+    * Generated SELECT SQL from array
+    *
+    * @var string $_sql Generated SELECT SQL
+    * @access private
+    * @static
+    */
+    $_sql = "SELECT *
+             FROM $_strTableName
+             WHERE ";
+
+    // If the primary key for this table was given, we can ignore
+    // everything else
+    if ( $_aryData[$_primary_key] )
     {
-        // Begin SQL construct
-        $sql = "SELECT *
-                  FROM $_strTableName
-                 WHERE ";
+        // Only way to make sure "slashed quotes" are handled properly
+        if ( $_magic_quotes )
+            $_key_data = $_objCon->qstr($_aryData[$_primary_key], get_magic_quotes_gpc());
+        else
+            $_key_data = $_objCon->qstr($_aryData[$_primary_key]);
 
-        // If the primary key for this table was given, we can ignore
-        // everything else
-        $_primary_key = get_primarykey_from_table($_objCon, $_strTableName);
-        $_status_key = get_status_from_table($_objCon, $_strTableName);
+        $_sql .=  $_primary_key . ' = ' . $_key_data;
+    }
 
-        // If the primary key is defined, just use that.
-        if ( $_aryData[$_primary_key] )
+    // Otherwise we need to look for this record the hard way ward
+    else
+    {
+       /**
+        * Fields to search DB with
+        *
+        * Creates an array of table fields for SQL search of DB
+        *
+        * @var array $_retVal array of table fields
+        * @access private
+        * @static
+        */
+        $where_fields = array();
+
+        foreach ($_aryData as $_field => $_value)
         {
-            $sql .=  $_primary_key . ' = ' . $_objCon->qstr($_aryData[$_primary_key]);
+            // Only way to make sure "slashed quotes" are handled properly
+            if ( $_magic_quotes )
+                $_field_data = $_objCon->qstr($_value, get_magic_quotes_gpc());
+            else
+                $_field_data = $_objCon->qstr($_value);
+
+            $where_fields[] = "$_field LIKE " . $_field_data;
         }
 
-        // Otherwise we need to look for this record the hard wayward
+        // Assmeble Query pieces
+        $_sql .= implode ( ' AND ', $where_fields );
+    }
+
+    // Decide if we need to filter out 'deleted' records
+    if ( ! $_show_deleted )
+        $_sql .= ' AND ' . $_status_key . ' = ' . $_objCon->qstr('a');
+
+    // Find this record
+    if ( $rs =& $_objCon->Execute($_sql) )
+    {
+        // Return Recordset
+        if ( $_return_recordset )
+            $_retVal = $rs;
+
+        // or return data array
         else
         {
-           /**
-            * Fields to search DB with
-            *
-            * Creates an array of table fields for SQL search of DB
-            *
-            * @var array $_retVal array of table fields
-            * @access private
-            * @static
-            */
-            $where_fields = array();
-
-            foreach ($_aryData as $_field => $_value)
-            {
-                    unset($_aryData[$_field]);
-                    $where_fields[] = "$_field LIKE " . $_objCon->qstr($_value);
-            }
-
-            // Assmeble Query pieces
-            $sql .= implode ( ' AND ', $where_fields );
-        }
-
-        // Decide if we need to filter our 'deleted' records
-        if ( ! $_show_deleted )
-            $sql .= ' AND ' . $_status_key . ' = ' . $_objCon->qstr('a');
-
-        // Find this record
-        if ( $rs =& $_objCon->Execute($sql) )
-        {
-            // Return Recordset
-            if ( $_return_recordset )
-                $_retVal = $rs;
-
-            // or return data array
-            else
+            // If anything was found, return it
+            if ( $rs->RecordCount() > 0 )
             {
                 $_retVal = $rs->fields;
-                $_retVal['primarykey'] = $_primary_key;
-                $_retVal['statuskey']= $_status_key;
             }
+            // Otherwise, send back what was given and set key to ZERO
+            else
+            {
+                $_retVal = $_aryData;
+                $_retVal[$_primary_key] = 0;
+            }
+
+            $_retVal['primarykey'] = $_primary_key;
+            $_retVal['statuskey']= $_status_key;
         }
-        else
-        {
-            db_error_handler($_objCon, $sql . ' - record_find [1]');
-            $_retVal = false;
-        }
+    }
+    else
+    {
+        db_error_handler($_objCon, $sql . ' - record_find [1]');
+        $_retVal = false;
     }
 
     // Send back what we have
@@ -1051,6 +1137,8 @@ function __record_delete ( $_objCon, $_strTableName, $_identifier, $_aryData )
 
 };
 
+/*****************************************************************************/
+
  /**
    * Upgrade function, intended to change a fieldname in a table from one fieldname to another
    * Database agnostic way to upgrade/change datastructures
@@ -1089,7 +1177,7 @@ function create_table($con, $table_name, $table_fields, $table_opts, &$upgrade_m
     $table_list = list_db_tables($con);
     //ensure that table is not already in existance
     if (!in_array($table_name,$table_list)) {
-        //define details of the table in the fields array        
+        //define details of the table in the fields array
         //no global table options needed, so setting to false
 
         $sql=$dict->CreateTableSQL( $table_name, $table_fields, $table_opts );
@@ -1158,6 +1246,14 @@ function drop_table($con, $table_name, &$upgrade_msgs) {
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.25  2005/12/19 04:57:33  jswalter
+ *  - extensive work on '__record_insert()', '__record_update()' and '__record_find()'
+ *    to handle record sets, "magic quotes", etc. All thee methods now handle the
+ *    same parameter list and return the same types of data; except '__record_find()',
+ *    it returns a full data array (or recordset) as the others return the record
+ *    id of the record INSERTed or UPDATEd and '__record_update()' which wants to
+ *    know which field to use to locate the record to UPDATE.
+ *
  * Revision 1.24  2005/12/18 02:55:04  vanmer
  * - moved functions for upgrading table structure from examples into functions in utils-database
  * - intended to be used when upgrading the database, instead of straight SQL calls
