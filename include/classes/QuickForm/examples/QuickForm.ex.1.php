@@ -50,14 +50,14 @@ if(check_user_role(false, $session_user_id, 'Administrator')) {
 
     $model->SetForeignKeyField('entered_by', 'Entered By', 'users', 'user_id', 'username');
 
-    $model->SetFieldType('note_description', 'fckeditor');
+    //$model->SetFieldType('note_description', 'fckeditor');
 
 
 
 
     $view = new ADOdb_QuickForm_View($con, _('Edit Note'), 'POST');
     $view->SetReturnButton('Return to List', $return_url);
-    $view->SetButtonText('A B C', 'Easy As', '1 2 3');
+    $view->SetButtonText('Your name here', 'Create', '1 2 3');
 
     $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
     $form_html = $controller->ProcessAndRenderForm();
@@ -67,7 +67,7 @@ if(check_user_role(false, $session_user_id, 'Administrator')) {
 echo <<<END
 
 <div id="Main">
-    <?php echo $form_html; ?>
+    echo $form_html; 
 </div>
 END;
 
