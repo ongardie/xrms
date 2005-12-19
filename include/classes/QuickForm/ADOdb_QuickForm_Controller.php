@@ -10,7 +10,7 @@
 	* @author Justin Cooper <justin@braverock.com>
 	* @todo
 	*
-	* $Id: ADOdb_QuickForm_Controller.php,v 1.7 2005/11/14 20:16:48 daturaarutad Exp $
+	* $Id: ADOdb_QuickForm_Controller.php,v 1.8 2005/12/19 23:11:57 daturaarutad Exp $
 	*/
 
 
@@ -100,6 +100,7 @@
                         }
 						$this->View->AddModel($this->Models[$j]);
 					}
+				    $this->View->SetConstants();
 
 					$this->View->InitForm();
 					
@@ -118,6 +119,7 @@
                         }
 						$this->View->AddModel($this->Models[$j]);
 					}
+				    $this->View->SetConstants();
 					$this->View->InitForm();
 
 	    			$this->View->SetNextFormAction('update');
