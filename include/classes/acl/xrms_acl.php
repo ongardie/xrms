@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.31 2005/12/02 00:22:58 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.32 2005/12/19 22:19:55 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -2260,7 +2260,7 @@ class xrms_acl {
             $ControlledObjectRelationship_ids=array_keys($ControlledObjectRelationships);
             $Scopes=array('World');
             if ($SearchUser) $Scopes[]='User';
-            $ApplyUserPerms=$SearchUser;
+            //$ApplyUserPerms=$SearchUser;
             $RolePermission = $this->get_role_permission($UserRoleList, $ControlledObjectRelationship_ids, $Scopes, false, false, $inheritable);
             if ($RolePermission) {
                 if (!is_array(current($RolePermission))) { $RolePermission = array ( $RolePermission); }
@@ -2275,7 +2275,7 @@ class xrms_acl {
                             if (!$SearchUser) { $newPerm_id=false; }                           
                             else { 
                                 //check to see if we have already checked the object for user searchability
-                                if (!$ApplyUserPerms) {
+                                //if (!$ApplyUserPerms) {
                                     // if no particular object is given, cannot search user record
                                     if (!$on_what_id) { $SearchUser=false; $newPerm_id=false;}//echo "No id provided, cannot check permissions"; return false; }
                                     else {
@@ -2290,7 +2290,7 @@ class xrms_acl {
                                             $newPerm_id=false;                               
                                         } else { $ApplyUserPerms=true; }
                                     }
-                                }
+                                //}
                             }
                         break;
                     }
@@ -2468,6 +2468,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.32  2005/12/19 22:19:55  vanmer
+ * - removed check for applyUserPerms, unneeded and allowed more permissions than expected
+ *
  * Revision 1.31  2005/12/02 00:22:58  vanmer
  * - better PHPDoc for ACL
  *
