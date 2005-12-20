@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.163 2005/12/18 02:55:52 vanmer Exp $
+ * $Id: utils-misc.php,v 1.164 2005/12/20 07:57:58 jswalter Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -59,11 +59,11 @@ function session_startup () {
         ADODB_Session::table('adodb_sessions');
         ADODB_Session::open('xrms_sessions',$xrms_system_id);
         //make sure table exists
-        if (!in_array($table_name,$table_list)) { 
+        if (!in_array($table_name,$table_list)) {
             //make sure adodb session table exists
-            require_once($include_directory.'adodb/adodb-xmlschema.inc.php'); 
+            require_once($include_directory.'adodb/adodb-xmlschema.inc.php');
             $schemaFile=$include_directory.'adodb/session/adodb_sessions_schema.xml';
-            adodb_session_create_table($schemaFile); 
+            adodb_session_create_table($schemaFile);
         }
         break;
         case 'db':
@@ -642,6 +642,68 @@ function db_error_handler (&$con,$sql,$colspan=20) {
                  ."\t</td>\n</tr>\n";
         }
 } //end fn db_error_handler
+
+
+/**
+ * function get_country_id
+ *
+ * Takes an Country name or ISO code and returns the XRMS country id
+ *
+ * @author walter Torres
+ *
+ * @param object $con Database connection
+ * @param mixed $country_info Country name, ISO code or named array with info; keys are table field names
+ *
+ * @return array $country entire found country record, or array of found country records
+ */
+function get_country($con, $country_info)
+{
+   /**
+    *  Country data comes in 5 flavors:
+    *   - country_name     Full [American English] spelling of Country Name
+    *   - un_code          3 digit UN country code
+    *   - iso_code1        no idea ;)
+    *   - iso_code2        2 character ISO code for Country
+    *   - iso_code3        3 character ISO code for Country
+    */
+
+   /**
+    * Default return value
+    *
+    * Returns a found country record as a named array, or, if multiples are found, an array of arrays,
+    * of FALSE for a failure of some kind.
+    * Default value is set at FALSE
+    *
+    * @var mixed $_retVal found country record as array or false if failure occured
+    * @access private
+    * @static
+    */
+    $_retVal = false;
+
+    // If inbound is an array, assume one of the key names matches a table field name
+    if ( is_array($country_info) )
+    {
+
+
+    }
+    // inbound string could be anything
+    else
+    {
+        // Define fields to searches
+        $extra_where['country_name'] = $country_info;
+        $extra_where['un_code'] = strtoupper($country_info);
+        $extra_where['iso_code1'] = $country_info;
+        $extra_where['iso_code2'] = $country_info;
+        $extra_where['iso_code3'] = $country_info;
+
+        $_table_name = 'countries';
+
+        // Determine if this contact already exists
+        $_retVal = __record_find ( $con, $_table_name, $extra_where, 'OR', $_magic_quotes );
+    }
+
+    return $_retVal;
+};
 
 
 /**
@@ -1877,12 +1939,12 @@ function add_process_entity($con, $entity, $entity_type, $title, $description, $
 
 
 /**
-* A function that returns either '?' or '&' for adding arguments to unknown URLs 
+* A function that returns either '?' or '&' for adding arguments to unknown URLs
 * @param string url to check
 * @return string '?' or '&' based on existance or not of 'php?' in url
 */
 function get_url_seperator($url) {
-    
+
     if(false === strpos($url, 'php?')) {
         return '?';
     } else {
@@ -1972,6 +2034,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.164  2005/12/20 07:57:58  jswalter
+ *  - added 'get_country_id()' to retrieve XRMS country identifer
+ * Bug 779
+ *
  * Revision 1.163  2005/12/18 02:55:52  vanmer
  * - changed to use new gmt_offset field instead of offset field, for postgres compatiblity
  *
