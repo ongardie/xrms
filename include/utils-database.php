@@ -8,7 +8,7 @@
  * @author Beth Macknik
  * @package XRMS_API
  *
- * $Id: utils-database.php,v 1.25 2005/12/19 04:57:33 jswalter Exp $
+ * $Id: utils-database.php,v 1.26 2005/12/20 07:56:20 jswalter Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -822,7 +822,7 @@ function __record_update ( $_objCon, $_strTableName, $_identifier, $_aryData, $_
     global $users, $session_user_id, $msg;
 
     // If a record was found, it can be UPDATEd
-    if ($rs = __record_find ( $_objCon, $_strTableName, $_aryData, $_magic_quotes, true ) )
+    if ($rs = __record_find ( $_objCon, $_strTableName, $_aryData, 'AND', $_magic_quotes, true ) )
     {
         // What is the primary key for this table
         $_primary_key = get_primarykey_from_table($_objCon, $_strTableName);
@@ -951,12 +951,13 @@ function __record_update ( $_objCon, $_strTableName, $_identifier, $_aryData, $_
   * @param  string   $_strTableName      table name to UPDATE data into
   * @param  array    $_aryData           Record data Array, only needs $_identifier
   * @param  boolean  $_return_recordset  Indicating if adodb recordset object should be returned (defaults to false)
+  * @param  boolean  $_search_condition  Multiple search fields should use an AND or OR, defaults to AND
   * @param  boolean  $_magic_quotes      F - inbound data has not "add slashes", T - data has "add slashes" (defaults to false)
   * @param  boolean  $_show_deleted      specifying if deleted companies should be included (defaults to false)
   *
   * @return boolean  $_retVal            Data array (or Recordset) on Success or boolean on failure
   */
-function __record_find ( $_objCon, $_strTableName, $_aryData, $_magic_quotes = false, $_return_recordset = false, $_show_deleted = false )
+function __record_find ( $_objCon, $_strTableName, $_aryData, $_search_condition = "AND", $_magic_quotes = false, $_return_recordset = false, $_show_deleted = false )
 {
    /**
     * Default return value
@@ -1001,6 +1002,14 @@ function __record_find ( $_objCon, $_strTableName, $_aryData, $_magic_quotes = f
     // Otherwise we need to look for this record the hard way ward
     else
     {
+        // Force to upper case
+        $_search_condition = strtoupper ( $_search_condition );
+
+       // Make sure the '$_search_condition' parameter wasn't overwritten with
+        // something we can't use
+        if ( ( strcasecmp ( $_search_condition, 'AND' ) != 0 ) && ( strcasecmp ( $_search_condition, 'OR' ) != 0 ) )
+            $_search_condition = 'AND';
+
        /**
         * Fields to search DB with
         *
@@ -1024,7 +1033,7 @@ function __record_find ( $_objCon, $_strTableName, $_aryData, $_magic_quotes = f
         }
 
         // Assmeble Query pieces
-        $_sql .= implode ( ' AND ', $where_fields );
+        $_sql .= implode ( " $_search_condition ", $where_fields );
     }
 
     // Decide if we need to filter out 'deleted' records
@@ -1246,6 +1255,10 @@ function drop_table($con, $table_name, &$upgrade_msgs) {
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.26  2005/12/20 07:56:20  jswalter
+ *  - added '$search_condtion' to '__record_find()' in order to do AND or OR searches
+ * Bug 776
+ *
  * Revision 1.25  2005/12/19 04:57:33  jswalter
  *  - extensive work on '__record_insert()', '__record_update()' and '__record_find()'
  *    to handle record sets, "magic quotes", etc. All thee methods now handle the
