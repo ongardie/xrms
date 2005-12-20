@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.8 2005/12/15 00:16:08 jswalter Exp $
+ * $Id: utils-contacts.php,v 1.9 2005/12/20 07:54:15 jswalter Exp $
  *
  */
 
@@ -66,12 +66,14 @@
  * - contact_record_status   - the database defaults this to [a] Active
  * - email_status            - the database defaults this to [a] Active
  *
- * @param adodbconnection $con                with handle to the database
+ * @param adodbconnection  $con               with handle to the database
  * @param array            $contact_info      with data about the contact, to add/update
+ * @param boolean          $_return_data      F - returns record ID, T - returns record in an array
+ * @param boolean          $_magic_quotes     F - inbound data is not "add slashes", T - data is "add slashes"
  *
- * @return $contact_id of newly created or modified contact, or false if failure occured
+ * @return mixed $contact_id of newly created or modified contact, record data array or false if failure occured
  */
-function add_update_contact($con, $contact_info )
+function add_update_contact($con, $contact_info, $_return_data = false, $_magic_quotes =  false )
 {
    /**
     * Default return value
@@ -85,147 +87,150 @@ function add_update_contact($con, $contact_info )
     */
     $_retVal = false;
 
-    if (  $con && $contact_info )
+    global $session_user_id;
+
+    // If there is not a 'company_id', one needs to be located or created
+    if ( (! $contact_info['company_id']) || ( $contact_info['company_id']) == 0 )
     {
-        global $session_user_id;
-
-        // If there is not a 'company_id', one needs to be located or created
-        if ( (! $contact_info['company_id']) || ( $contact_info['company_id']) == 0 )
+        if ( (! $contact_info['company_name']) && (! $contact_info['first_names']) && (! $contact_info['last_name']) )
         {
-            if ( (! $contact_info['company_name']) && (! $contact_info['first_names']) && (! $contact_info['last_name']) )
-            {
-                // Since there is not info the create or derive a company name
-                $contact_info['company_id'] = 1;
-            }
-
-            else
-            {
-                // There needs to be a company name
-                if ( ! $contact_info['company_name'] )
-                    $contact_info['company_name'] = $contact_info['first_names'] . ' ' . $contact_info['last_name'];
-
-                // Retrieve comany id
-                $_company_data = add_update_company ( $con, $contact_info );
-
-                // Pull out company_id
-                $contact_info['company_id'] = $_company_data['company_id'];
-            }
+            // Since there is not info to create or derive a company name
+            $contact_info['company_id'] = 1;
         }
 
-        // Other sub-systems can handle "personal" information. THey may or may not
-        // utilize other fields that the 'contacts' table don't need to deal with.
-        // This array (below) will pull out only the fields we need and process them.
-        // This way we make sure we hae the data we need, and only that data.
-        $contact_data = pull_contact_fields ( $contact_info );
+        else
+        {
+            // There needs to be a company name
+            if ( ! $contact_info['company_name'] )
+                $contact_info['company_name'] = $contact_info['first_names'] . ' ' . $contact_info['last_name'];
 
-        /* CLEAN INCOMING DATA FIELDS */
-        // make sure the phone numbers are in a format we can deal with
-        $contact_phone_fields = array('work_phone','cell_phone','home_phone','fax');
-        $phone_clean_count    = clean_phone_fields($contact_info, $contact_phone_fields);
+            // Retrieve comany id
+            $_company_data = add_update_company ( $con, $contact_info );
 
-        // If 'field' this exists, but has no data, remove it
-        if (strlen($contact_data['user_id']) == 0)
-            unset ( $contact_data['user_id'] );
+            // Pull out company_id
+            $contact_info['company_id'] = $_company_data['company_id'];
+            $contact_info['address_id'] = $_company_data['address_id'];
+        }
+    }
 
-        if (strlen($contact_data['contact_id']) == 0)
-            unset ( $contact_data['contact_id'] );
+    // Other sub-systems can handle "personal" information. They may or may not
+    // utilize other fields that the 'contacts' table don't need to deal with.
+    // This array (below) will pull out only the fields we need and process them.
+    // This way we make sure we hae the data we need, and only that data.
+    $contact_data = pull_contact_fields ( $contact_info );
 
-        // Prep array for "search", only on these fields
-        $extra_where = array();
-        foreach ($contact_data as $_field => $_value) {
-            switch ($_field) {
-                case 'contact_id':
-                case 'email':
-                case 'last_name':
-                case 'first_names':
+    /* CLEAN INCOMING DATA FIELDS */
+    // make sure the phone numbers are in a format we can deal with
+    $contact_phone_fields = array('work_phone','cell_phone','home_phone','fax');
+    $phone_clean_count    = clean_phone_fields($contact_info, $contact_phone_fields);
+
+    // If 'field' this exists, but has no data, remove it
+    if (strlen($contact_data['user_id']) == 0)
+        unset ( $contact_data['user_id'] );
+
+    if (strlen($contact_data['contact_id']) == 0)
+        unset ( $contact_data['contact_id'] );
+
+    // Prep array for "search", only on these fields
+    $extra_where = array();
+    foreach ($contact_data as $_field => $_value) {
+        switch ($_field) {
+            case 'contact_id':
+            case 'email':
+            case 'last_name':
+            case 'first_names':
 //                case 'work_phone':
 //                case 'cell_phone':
 //                case 'home_phone':
-                    $extra_where[$_field] = $_value;
-                break;
-            }
+                $extra_where[$_field] = $_value;
+            break;
         }
+    }
 
-        $_table_name = 'contacts';
+    $_table_name = 'contacts';
 
-        // If this contact exists already
-        if ( $found_contact_data = __record_find ( $con, $_table_name, $extra_where ) )
-        {
-            // Whats the primary key for this data set
-            $_primay_key = $found_contact_data['primarykey'];
+    // Determine if this contact already exists
+    $found_contact_data = __record_find ( $con, $_table_name, $extra_where, 'AND', $_magic_quotes );
 
-            // We found it, so pull record ID
-            $contact_data[$_primay_key] = $found_contact_data[$_primay_key];
+    // What's the primary key for this data set
+    $_primay_key = $found_contact_data['primarykey'];
 
-            // Need to clean up the data
-            // "Account Owner"
-            if (strlen($contact_data['user_id']) == 0)
-                    $contact_data['user_id']  = $found_contact_data['user_id'];
+    // If this contact exists already
+    if ( $found_contact_data[$_primay_key] )
+    {
+        // We found it, so pull record ID
+        $contact_data[$_primay_key] = $found_contact_data[$_primay_key];
+
+        // Need to clean up the data
+        // "Account Owner"
+        if (strlen($contact_data['user_id']) == 0)
+                $contact_data['user_id']  = $found_contact_data['user_id'];
 
         if (strlen($contact_data['company_id']) == 0)
-                   $contact_data['company_id']  = $found_contact_data['company_id'];
+                $contact_data['company_id']  = $found_contact_data['company_id'];
 
-            if (strlen($contact_data['home_address_id']) == 0)
-                    $contact_data['home_address_id']  = $found_contact_data['home_address_id'];
+        if (strlen($contact_data['home_address_id']) == 0)
+                $contact_data['home_address_id']  = $found_contact_data['home_address_id'];
 
-            if (strlen($contact_data['last_name']) == 0)
-                    $contact_data['last_name']  = $found_contact_data['last_name'];
+        if (strlen($contact_data['last_name']) == 0)
+                $contact_data['last_name']  = $found_contact_data['last_name'];
 
-            if (strlen($contact_data['first_names']) == 0)
-                    $contact_data['first_names']  = $found_contact_data['first_names'];
+        if (strlen($contact_data['first_names']) == 0)
+                $contact_data['first_names']  = $found_contact_data['first_names'];
 
-            // Updsate contact data record
-            $contact_rst = __record_update ( $con, $_table_name, 'contact_id', $contact_data, true );
+        // Update contact data record
+        $_retVal = __record_update ( $con, $_table_name, 'contact_id', $contact_data, $_magic_quotes );
 
-            $contact_id = $contact_rst->fields['contact_id'];
+//            $_retVal = $_retVal['contact_id'];
 
-            //this will run whether or not base contact changed
-            $param = array($contact_rst, $contact_data);
-            do_hook_function('contact_edit_2', $param);
+        //this will run whether or not base contact changed
+        $param = array($_retVal, $contact_data);
+        do_hook_function('contact_edit_2', $param);
 
-            $audit_type = 'updated';
-        }
-
-        // This is a new Record
-        else
-        {
-            // Need to clean up the data
-
-            // "Account Owner"
-            $contact_data['user_id']          = (strlen($contact_data['user_id']) > 0)         ? $contact_data['user_id']         : $session_user_id;
-
-            $contact_data['company_id']       = (strlen($contact_data['company_id']) > 0)      ? $contact_data['company_id']      : 1;
-            $contact_data['home_address_id']  = (strlen($contact_data['home_address_id']) > 0) ? $contact_data['home_address_id'] : 1;
-
-            // If salutation is 0, make sure you replace it with an empty string
-            $contact_data['salutation']       = (strlen($contact_data['salutation']) > 0)      ? $contact_data['salutation']      : "";
-
-            $contact_data['last_name']        = (strlen($contact_data['last_name']) > 0)       ? $contact_data['last_name']       : "[last name]";
-            $contact_data['first_names']      = (strlen($contact_data['first_names']) > 0)     ? $contact_data['first_names']     : "[first names]";
-
-            // If 'gender' is not defined, define it
-            if(!$contact_data['gender'])
-                $contact_data['gender'] = 'u';
-
-            $contact_array = __record_insert ( $con, 'contacts', $contact_data );
-
-            $contact_id = $contact_array['contact_id'];
-
-            //add to recently viewed list
-            update_recent_items($con, $session_user_id, $_table_name, $contact_id);
-
-            $rec['contact_id'] = $contact_id;
-            do_hook_function('contact_new_2', $rec);
-
-            $audit_type = 'created';
-        }
-
-        // Set audit trail
-        add_audit_item($con, $session_user_id, $audit_type, $_table_name, $contact_id, 1);
-
-        return $contact_id;
-
+        $audit_type = 'updated';
     }
+
+    // This is a new Record
+    else
+    {
+        // Need to clean up the data
+
+        // "Account Owner"
+        $contact_data['user_id']          = (strlen($contact_data['user_id']) > 0)         ? $contact_data['user_id']         : $session_user_id;
+
+        $contact_data['company_id']       = (strlen($contact_data['company_id']) > 0)      ? $contact_data['company_id']      : 1;
+        $contact_data['home_address_id']  = (strlen($contact_data['home_address_id']) > 0) ? $contact_data['home_address_id'] : 1;
+
+        // If salutation is 0, make sure you replace it with an empty string
+        $contact_data['salutation']       = (strlen($contact_data['salutation']) > 0)      ? $contact_data['salutation']      : 0;
+
+        $contact_data['last_name']        = (strlen($contact_data['last_name']) > 0)       ? $contact_data['last_name']       : "[last name]";
+        $contact_data['first_names']      = (strlen($contact_data['first_names']) > 0)     ? $contact_data['first_names']     : "[first names]";
+
+        // If 'gender' is not defined, define it
+        if(!$contact_data['gender'])
+            $contact_data['gender'] = 'u';
+
+        $contact_array = __record_insert ( $con, 'contacts', $contact_data, $_magic_quotes, true );
+
+        $_retVal = $contact_array['contact_id'];
+
+        //add to recently viewed list
+        update_recent_items($con, $session_user_id, $_table_name, $contact_id);
+
+        $contact_data['contact_id'] = $contact_id;
+        do_hook_function('contact_new_2', $contact_data);
+
+        $audit_type = 'created';
+    }
+
+    // Set audit trail
+    add_audit_item($con, $session_user_id, $audit_type, $_table_name, $contact_id, 1);
+
+exit;
+
+    return $_retVal;
+
 };
 
 
@@ -479,6 +484,10 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.9  2005/12/20 07:54:15  jswalter
+ *  - completed 'add_update_contact()'
+ * Bug 777
+ *
  * Revision 1.8  2005/12/15 00:16:08  jswalter
  *  - added a bit more "intelligent" processing in "add_update"
  *  - created new function to retrieve only fields that are in "contacts" table
