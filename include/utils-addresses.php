@@ -7,7 +7,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-addresses.php,v 1.1 2005/12/19 05:34:18 jswalter Exp $
+ * $Id: utils-addresses.php,v 1.2 2005/12/20 07:49:21 jswalter Exp $
  *
  */
 
@@ -70,6 +70,95 @@ function add_update_address($con, $address_data, $return_recordset = false )
 
     // Retrieve address table fields from orginal data set
     $address_info = pull_address_fields ( $address_data );
+
+    // If a company_is was not passed in, set it to ONE
+    if ( ! $address_info['company_id'] )
+        $address_info['company_id'] = 1;
+
+    // If 'country' is not defined, use the systems default value
+    if ( ( ! $address_info['country_id'] ) && ( ! $address_info['country'] ) )
+    {
+        global $default_country_id;
+            $address_info['country_id'] = $default_country_id;
+     }
+    // Otherwise retrieve XRMS Country ID
+    else
+    {
+        $_country_data = get_country($con, $address_info['country']);
+        $address_info['country_id'] = $_country_data['country_id'];
+    }
+
+    $_table_name = 'addresses';
+
+    // What is the primary key for this table
+    $_primary_key = get_primarykey_from_table($con, $_table_name);
+
+    // If we have a record ID, we don't need to find the record (as we have it)
+    // it just needs to be updated.
+
+    if ( 0 )
+    {
+
+
+    }
+    // Need to see if this address exists already
+    else
+    {
+        // Prep array for "search", only on these fields
+        $extra_where = array();
+        foreach ($address_info as $_field => $_value) {
+            switch ($_field) {
+                case 'line1':
+                case 'line2':
+                case 'postal_code':
+                    $extra_where[$_field] = $_value;
+                break;
+            }
+        }
+
+        // Determine if this contact already exists
+        $found_data = __record_find ( $con, $_table_name, $extra_where, $_magic_quotes );
+
+        // Retrieve timezone and GMT data if not already defined
+        if ( (! $found_data['daylight_savings_id'] ) || (! $found_data['gmt_offset'] ) )
+        {
+            $time_zone_offset = time_zone_offset($con, $found_data['address_id']);
+            $address_info['daylight_savings_id'] = $time_zone_offset['daylight_savings_id'];
+            $address_info['gmt_offset']          = $time_zone_offset['offset'];
+        }
+
+        // What's the primary key for this data set
+        $_primay_key = $found_data['primarykey'];
+
+        // If this contact exists already
+        if ( $found_data[$_primay_key] )
+        {
+            // Define address name if one is not already defined
+            if ( ( ! $address_info['address_name'] ) && ( ! $found_data['address_name'] ) )
+                $address_info['address_name'] = 'Main';
+
+            // We found it, so pull record ID
+            $address_info[$_primay_key] = $found_data[$_primay_key];
+
+            $_retVal = __record_update ( $con, $_table_name, $_primay_key, $address_info, $_magic_quotes, $_return_recordset, $_deleteRecord );
+
+            if ( $_retVal[$_primary_key] == 0 )
+            {
+                $_retVal[$_primary_key] = $found_data[$_primay_key];
+                $_retVal['primarykey'] = $_primary_key;
+            }
+        }
+        // This is a new addresses
+        else
+        {
+            // Define address name if one is not already defined
+            if ( ! $address_info['address_name'] )
+                $address_info['address_name'] = 'Main';
+
+            // make new record
+            $_retVal = __record_insert ( $con, $_table_name, $address_info, $_magic_quotes, $_return_recordset );
+        }
+    }
 
     return $_retVal;
 };
@@ -304,6 +393,10 @@ function pull_address_fields ( $array_data )
 
  /**
  * $Log: utils-addresses.php,v $
+ * Revision 1.2  2005/12/20 07:49:21  jswalter
+ *  - fleshed out 'add_update_address()'
+ * Bug 779
+ *
  * Revision 1.1  2005/12/19 05:34:18  jswalter
  *  - initial commit
  *
