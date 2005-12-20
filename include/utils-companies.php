@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-companies.php,v 1.6 2005/12/14 23:55:52 jswalter Exp $
+ * $Id: utils-companies.php,v 1.7 2005/12/20 07:51:21 jswalter Exp $
  *
  */
 
@@ -77,26 +77,35 @@ function add_update_company($con, $company_data)
     * Returns Record ID or boolean upon failure
     * Default value is set at FALSE
     *
-    * @var mixed $_retVal Indicates if Statement was created or not
+    * @var mixed $_retVal Indicates if company data was INSERTed or UPDATEd or not
     * @access private
     * @static
     */
     $_retVal = false;
 
-    // This needs a DB connection Object, an array of company data and a company name
-    if ( $con && $company_data && $company_data['company_name'] )
+    // This needs a company name
+    if ( $company_data['company_name'] )
     {
         // Define who is adding/updating this record
-        global $session_user_id;
+//        global $session_user_id;
 //        $company_data['user_id'] = $session_user_id;
+
+        // Add/update/retrieve address ifno
+        $_address_info = add_update_address($con, $company_data );
+
+        // Insert address ID into data set
+        $_address_id = $_address_info[$_address_info['primarykey']];
 
         $company_info = pull_company_fields ( $company_data );
 
         // Because the way ADOdb is written, we can't let it take care of force
         // updates if a record exists, and INSERT if the record does not exist.
         // We have to do the checking, so... we need to use the XRMS version...
-        $_retVal = __record_add_update ( $con, 'companies', 'company_name', $company_info );
+        $_retVal = __record_add_update ( $con, 'companies', 'company_name', $company_info, true );
     }
+
+    // Place address ID into data set
+    $_retVal['address_id'] = $_address_id;
 
     // Send back what we have
     return $_retVal;
@@ -428,7 +437,6 @@ function pull_company_fields ( $array_data )
 
     // Retrieve only the field names we can handle
     $company_fields = array ( 'company_id'                => '',
-                              'company_id'                => '',
                               'user_id'                   => '',
                               'company_source_id'         => '',
                               'industry_id'               => '',
@@ -466,10 +474,19 @@ function pull_company_fields ( $array_data )
 
 }
 
+
+/** Include the misc utilities file */
+include_once $include_directory . 'utils-addresses.php';
+
+
 /**********************************************************************/
 
  /**
  * $Log: utils-companies.php,v $
+ * Revision 1.7  2005/12/20 07:51:21  jswalter
+ *  - fleshed out 'add_update_company()' a bit more. adds/updates seems to work OK.
+ * Bug 778
+ *
  * Revision 1.6  2005/12/14 23:55:52  jswalter
  *  - added 'get_owner()' block
  *  - added 'pull_data()' block to retrieve fields only used in "company" table
