@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.9 2005/12/20 07:54:15 jswalter Exp $
+ * $Id: utils-contacts.php,v 1.10 2005/12/20 18:34:17 jswalter Exp $
  *
  */
 
@@ -199,7 +199,6 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
         $contact_data['user_id']          = (strlen($contact_data['user_id']) > 0)         ? $contact_data['user_id']         : $session_user_id;
 
         $contact_data['company_id']       = (strlen($contact_data['company_id']) > 0)      ? $contact_data['company_id']      : 1;
-        $contact_data['home_address_id']  = (strlen($contact_data['home_address_id']) > 0) ? $contact_data['home_address_id'] : 1;
 
         // If salutation is 0, make sure you replace it with an empty string
         $contact_data['salutation']       = (strlen($contact_data['salutation']) > 0)      ? $contact_data['salutation']      : 0;
@@ -484,6 +483,10 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.10  2005/12/20 18:34:17  jswalter
+ *  - removed 'home_address_id' assignment from add_update method
+ * BUg 777
+ *
  * Revision 1.9  2005/12/20 07:54:15  jswalter
  *  - completed 'add_update_contact()'
  * Bug 777
