@@ -7,7 +7,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-addresses.php,v 1.2 2005/12/20 07:49:21 jswalter Exp $
+ * $Id: utils-addresses.php,v 1.3 2005/12/22 22:39:26 jswalter Exp $
  *
  */
 
@@ -68,8 +68,22 @@ function add_update_address($con, $address_data, $return_recordset = false )
     */
     $_retVal = false;
 
+    $_table_name = 'addresses';
+
+    // What is the primary key for this table
+    $_primary_key = get_primarykey_from_table($con, $_table_name);
+
     // Retrieve address table fields from orginal data set
     $address_info = pull_address_fields ( $address_data );
+
+    // If nothing was sent back, we can't make an address. Default to '1'
+    if ( ! $address_info )
+    {
+        $address_info['address_id'] = 1;
+        $address_info['primarykey'] = $_primary_key;
+
+        return $address_info;
+    }
 
     // If a company_is was not passed in, set it to ONE
     if ( ! $address_info['company_id'] )
@@ -87,11 +101,6 @@ function add_update_address($con, $address_data, $return_recordset = false )
         $_country_data = get_country($con, $address_info['country']);
         $address_info['country_id'] = $_country_data['country_id'];
     }
-
-    $_table_name = 'addresses';
-
-    // What is the primary key for this table
-    $_primary_key = get_primarykey_from_table($con, $_table_name);
 
     // If we have a record ID, we don't need to find the record (as we have it)
     // it just needs to be updated.
@@ -393,6 +402,9 @@ function pull_address_fields ( $array_data )
 
  /**
  * $Log: utils-addresses.php,v $
+ * Revision 1.3  2005/12/22 22:39:26  jswalter
+ *  - moved primary key retrieval to near top of method 'add_update_address()'
+ *
  * Revision 1.2  2005/12/20 07:49:21  jswalter
  *  - fleshed out 'add_update_address()'
  * Bug 779
