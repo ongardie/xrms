@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.10 2005/12/20 18:34:17 jswalter Exp $
+ * $Id: utils-contacts.php,v 1.11 2005/12/22 22:50:36 jswalter Exp $
  *
  */
 
@@ -95,7 +95,7 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
         if ( (! $contact_info['company_name']) && (! $contact_info['first_names']) && (! $contact_info['last_name']) )
         {
             // Since there is not info to create or derive a company name
-            $contact_info['company_id'] = 1;
+//            $contact_info['company_id'] = 1;
         }
 
         else
@@ -181,6 +181,9 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
         // Update contact data record
         $_retVal = __record_update ( $con, $_table_name, 'contact_id', $contact_data, $_magic_quotes );
 
+        if ($_retVal['contact_id'] == 0)
+                $_retVal['contact_id']  = $contact_data['contact_id'];
+
 //            $_retVal = $_retVal['contact_id'];
 
         //this will run whether or not base contact changed
@@ -193,43 +196,42 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
     // This is a new Record
     else
     {
-        // Need to clean up the data
+        // If a company has not been defined, AND names are not given, this can be be dealt with
+        if ( ( $contact_data['company_id'] ) && ( ( $contact_data['last_name'] ) || ( $contact_data['first_names'] ) ) )
+        {
+            // Need to clean up the data
 
-        // "Account Owner"
-        $contact_data['user_id']          = (strlen($contact_data['user_id']) > 0)         ? $contact_data['user_id']         : $session_user_id;
+            // "Account Owner"
+            $contact_data['user_id']          = (strlen($contact_data['user_id']) > 0)         ? $contact_data['user_id']         : $session_user_id;
 
-        $contact_data['company_id']       = (strlen($contact_data['company_id']) > 0)      ? $contact_data['company_id']      : 1;
+            // If salutation is 0, make sure you replace it with an empty string
+            $contact_data['salutation']       = (strlen($contact_data['salutation']) > 0)      ? $contact_data['salutation']      : 0;
 
-        // If salutation is 0, make sure you replace it with an empty string
-        $contact_data['salutation']       = (strlen($contact_data['salutation']) > 0)      ? $contact_data['salutation']      : 0;
+            $contact_data['last_name']        = (strlen($contact_data['last_name']) > 0)       ? $contact_data['last_name']       : "[last name]";
+            $contact_data['first_names']      = (strlen($contact_data['first_names']) > 0)     ? $contact_data['first_names']     : "[first names]";
 
-        $contact_data['last_name']        = (strlen($contact_data['last_name']) > 0)       ? $contact_data['last_name']       : "[last name]";
-        $contact_data['first_names']      = (strlen($contact_data['first_names']) > 0)     ? $contact_data['first_names']     : "[first names]";
+            // If 'gender' is not defined, define it
+            if(!$contact_data['gender'])
+                $contact_data['gender'] = 'u';
 
-        // If 'gender' is not defined, define it
-        if(!$contact_data['gender'])
-            $contact_data['gender'] = 'u';
+            $contact_array = __record_insert ( $con, 'contacts', $contact_data, $_magic_quotes, true );
 
-        $contact_array = __record_insert ( $con, 'contacts', $contact_data, $_magic_quotes, true );
+            $_retVal = $contact_array['contact_id'];
 
-        $_retVal = $contact_array['contact_id'];
+            //add to recently viewed list
+            update_recent_items($con, $session_user_id, $_table_name, $contact_id);
 
-        //add to recently viewed list
-        update_recent_items($con, $session_user_id, $_table_name, $contact_id);
+            $contact_data['contact_id'] = $contact_id;
+            do_hook_function('contact_new_2', $contact_data);
 
-        $contact_data['contact_id'] = $contact_id;
-        do_hook_function('contact_new_2', $contact_data);
-
-        $audit_type = 'created';
+            $audit_type = 'created';
+        }
     }
 
     // Set audit trail
     add_audit_item($con, $session_user_id, $audit_type, $_table_name, $contact_id, 1);
 
-exit;
-
     return $_retVal;
-
 };
 
 
@@ -483,6 +485,9 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.11  2005/12/22 22:50:36  jswalter
+ *  - modified 'add_update_company()' to default to '1' for unknown contacts and company records
+ *
  * Revision 1.10  2005/12/20 18:34:17  jswalter
  *  - removed 'home_address_id' assignment from add_update method
  * BUg 777
