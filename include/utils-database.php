@@ -8,7 +8,7 @@
  * @author Beth Macknik
  * @package XRMS_API
  *
- * $Id: utils-database.php,v 1.26 2005/12/20 07:56:20 jswalter Exp $
+ * $Id: utils-database.php,v 1.27 2005/12/22 23:01:26 jswalter Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -615,10 +615,10 @@ function __record_add_update ( $_objCon, $_strTableName, $_identifier, $_aryData
         else if ( $_recordSet && ( $_recordSet->RecordCount() == 0 ) )
         {
             // Add 'created' date and by whom
-            $_aryData['created_by'] = $users['user_id'];      // some tables have these field names
+            $_aryData['created_by'] = $session_user_id;      // some tables have these field names
             $_aryData['created_on'] = $_timeStamp;
 
-            $_aryData['entered_by'] = $users['user_id'];      // others use these
+            $_aryData['entered_by'] = $session_user_id;      // others use these
             $_aryData['entered_at'] = $_timeStamp;
 
            /**
@@ -749,7 +749,12 @@ function __record_insert ( $_objCon, $_strTableName, $_aryData, $_magic_quotes =
     {
         // Return Recordset
         if ( $_return_recordset )
-            $_retVal = $_recordSet;
+        {
+            $_aryData = array();
+            $_aryData[$_primary_key] = $_objCon->Insert_ID();
+
+            $_retVal = __record_find ( $_objCon, $_strTableName, $_aryData, $_search_condition, true, $_show_deleted );
+        }
 
         // or return data array
         else
@@ -971,105 +976,109 @@ function __record_find ( $_objCon, $_strTableName, $_aryData, $_search_condition
     */
     $_retVal = false;
 
-    // What is the primary key for this table
-    $_primary_key = get_primarykey_from_table($_objCon, $_strTableName);
-    $_status_key  = get_status_from_table($_objCon, $_strTableName);
-
-   /**
-    * Generated SELECT SQL from array
-    *
-    * @var string $_sql Generated SELECT SQL
-    * @access private
-    * @static
-    */
-    $_sql = "SELECT *
-             FROM $_strTableName
-             WHERE ";
-
-    // If the primary key for this table was given, we can ignore
-    // everything else
-    if ( $_aryData[$_primary_key] )
+    // This can only work if the data array haas elements within
+    if ( count ($_aryData) )
     {
-        // Only way to make sure "slashed quotes" are handled properly
-        if ( $_magic_quotes )
-            $_key_data = $_objCon->qstr($_aryData[$_primary_key], get_magic_quotes_gpc());
-        else
-            $_key_data = $_objCon->qstr($_aryData[$_primary_key]);
+        // What is the primary key for this table
+        $_primary_key = get_primarykey_from_table($_objCon, $_strTableName);
+        $_status_key  = get_status_from_table($_objCon, $_strTableName);
 
-        $_sql .=  $_primary_key . ' = ' . $_key_data;
-    }
-
-    // Otherwise we need to look for this record the hard way ward
-    else
-    {
-        // Force to upper case
-        $_search_condition = strtoupper ( $_search_condition );
-
-       // Make sure the '$_search_condition' parameter wasn't overwritten with
-        // something we can't use
-        if ( ( strcasecmp ( $_search_condition, 'AND' ) != 0 ) && ( strcasecmp ( $_search_condition, 'OR' ) != 0 ) )
-            $_search_condition = 'AND';
-
-       /**
-        * Fields to search DB with
+    /**
+        * Generated SELECT SQL from array
         *
-        * Creates an array of table fields for SQL search of DB
-        *
-        * @var array $_retVal array of table fields
+        * @var string $_sql Generated SELECT SQL
         * @access private
         * @static
         */
-        $where_fields = array();
+        $_sql = "SELECT *
+                FROM $_strTableName
+                WHERE ";
 
-        foreach ($_aryData as $_field => $_value)
+        // If the primary key for this table was given, we can ignore
+        // everything else
+        if ( $_aryData[$_primary_key] )
         {
             // Only way to make sure "slashed quotes" are handled properly
             if ( $_magic_quotes )
-                $_field_data = $_objCon->qstr($_value, get_magic_quotes_gpc());
+                $_key_data = $_objCon->qstr($_aryData[$_primary_key], get_magic_quotes_gpc());
             else
-                $_field_data = $_objCon->qstr($_value);
+                $_key_data = $_objCon->qstr($_aryData[$_primary_key]);
 
-            $where_fields[] = "$_field LIKE " . $_field_data;
+            $_sql .=  $_primary_key . ' = ' . $_key_data;
         }
 
-        // Assmeble Query pieces
-        $_sql .= implode ( " $_search_condition ", $where_fields );
-    }
-
-    // Decide if we need to filter out 'deleted' records
-    if ( ! $_show_deleted )
-        $_sql .= ' AND ' . $_status_key . ' = ' . $_objCon->qstr('a');
-
-    // Find this record
-    if ( $rs =& $_objCon->Execute($_sql) )
-    {
-        // Return Recordset
-        if ( $_return_recordset )
-            $_retVal = $rs;
-
-        // or return data array
+        // Otherwise we need to look for this record the hard way ward
         else
         {
-            // If anything was found, return it
-            if ( $rs->RecordCount() > 0 )
+            // Force to upper case
+            $_search_condition = strtoupper ( $_search_condition );
+
+        // Make sure the '$_search_condition' parameter wasn't overwritten with
+            // something we can't use
+            if ( ( strcasecmp ( $_search_condition, 'AND' ) != 0 ) && ( strcasecmp ( $_search_condition, 'OR' ) != 0 ) )
+                $_search_condition = 'AND';
+
+        /**
+            * Fields to search DB with
+            *
+            * Creates an array of table fields for SQL search of DB
+            *
+            * @var array $_retVal array of table fields
+            * @access private
+            * @static
+            */
+            $where_fields = array();
+
+            foreach ($_aryData as $_field => $_value)
             {
-                $_retVal = $rs->fields;
-            }
-            // Otherwise, send back what was given and set key to ZERO
-            else
-            {
-                $_retVal = $_aryData;
-                $_retVal[$_primary_key] = 0;
+                // Only way to make sure "slashed quotes" are handled properly
+                if ( $_magic_quotes )
+                    $_field_data = $_objCon->qstr($_value, get_magic_quotes_gpc());
+                else
+                    $_field_data = $_objCon->qstr($_value);
+
+                $where_fields[] = "$_field LIKE " . $_field_data;
             }
 
-            $_retVal['primarykey'] = $_primary_key;
-            $_retVal['statuskey']= $_status_key;
+            // Assmeble Query pieces
+            $_sql .= implode ( " $_search_condition ", $where_fields );
         }
-    }
-    else
-    {
-        db_error_handler($_objCon, $sql . ' - record_find [1]');
-        $_retVal = false;
+
+        // Decide if we need to filter out 'deleted' records
+        if ( ( ! $_show_deleted ) && ( $_status_key ) )
+            $_sql .= ' AND ' . $_status_key . ' = ' . $_objCon->qstr('a');
+
+        // Find this record
+        if ( $rs =& $_objCon->Execute($_sql) )
+        {
+            // Return Recordset
+            if ( $_return_recordset )
+                $_retVal = $rs;
+
+            // or return data array
+            else
+            {
+                // If anything was found, return it
+                if ( $rs->RecordCount() > 0 )
+                {
+                    $_retVal = $rs->fields;
+                }
+                // Otherwise, send back what was given and set key to ZERO
+                else
+                {
+                    $_retVal = $_aryData;
+                    $_retVal[$_primary_key] = 0;
+                }
+
+                $_retVal['primarykey'] = $_primary_key;
+                $_retVal['statuskey']= $_status_key;
+            }
+        }
+        else
+        {
+            db_error_handler($_objCon, $sql . ' - record_find [1]');
+            $_retVal = false;
+        }
     }
 
     // Send back what we have
@@ -1255,6 +1264,10 @@ function drop_table($con, $table_name, &$upgrade_msgs) {
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.27  2005/12/22 23:01:26  jswalter
+ *  - modified '__record_insert()' to return an actual recordset with record data
+ *  - modified '__record_find()' to hand AND and OR searches
+ *
  * Revision 1.26  2005/12/20 07:56:20  jswalter
  *  - added '$search_condtion' to '__record_find()' in order to do AND or OR searches
  * Bug 776
