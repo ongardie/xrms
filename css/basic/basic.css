@@ -315,6 +315,9 @@ table.widget .sublabel {
 .overdue_activity a:hover, .closed_activity a:hover {
     color: rgb(240,184,47); /* grey links for closed activities, matches closed_activity above */
 }
+.non_uploaded_file a {
+    color: #990000; /* should match the color for non_uploaded_file above */
+}
 
 #PagerRestore {
     padding: 8px 0 0 0;
