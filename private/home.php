@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.66 2005/12/06 19:07:50 daturaarutad Exp $
+ * $Id: home.php,v 1.67 2005/12/26 21:45:37 braverock Exp $
  */
 
 // include the common files
@@ -93,9 +93,9 @@ $front_splash = do_hook_function('private_front_splash', $front_splash);
 $user_contact_id= $_SESSION['user_contact_id'];
 
 if ($user_contact_id) {
-	$extra_where = "AND ((a.user_id = $session_user_id) OR (activity_participants.contact_id=$user_contact_id))";
+    $extra_where = "AND ((a.user_id = $session_user_id) OR (activity_participants.contact_id=$user_contact_id))";
 } else {
-	$extra_where = "AND (a.user_id = $session_user_id) ";
+    $extra_where = "AND (a.user_id = $session_user_id) ";
 }
 $form_name = 'ActivitiesView';
 
@@ -103,11 +103,12 @@ $search_terms = array('activity_status'                 => "'o'");
 
 $default_columns = array('title', 'type', 'contact', 'activity_about', 'scheduled', 'due');
 
-    
+// Make sure $private_body_rows is always defined.
+$private_body_rows = '';
+// add hook for body of home page under activity widget
+$private_body_rows = do_hook_function('private_body_bottom', $private_body_rows);
+
 $activities_widget =  GetActivitiesWidget($con, $search_terms, $form_name, _('Search Results'), $session_user_id, $return_url, $extra_where, null, $default_columns, true, array('due' => 'asc'));
-
-
-
 
 //close the database connection, as we are done with it.
 $con->close();
@@ -115,10 +116,6 @@ $con->close();
 if (!strlen($files_rows) > 0) {
     // Make sure $file_rows is always defined.
     $files_rows = "<tr><td class=widget_content colspan=7>" . _("No open files") . "</td></tr>";
-}
-if (!strlen($nu_files_rows) > 0) {
-    // Make sure $nu_file_rows is always defined.
-    $nu_file_rows = '';
 }
 
 if (!strlen($activity_rows) > 0) {
@@ -134,18 +131,18 @@ start_page($page_title,true,$msg);
 <div id="Main">
     <div id="Content">
         <? echo $front_splash;?>
-		<!-- Display Type -->
-		<form action="home.php" method="POST" name="<?php echo $form_name; ?>">
-		<!-- List or Calendar View -->
-		<?php 
-			echo $activities_widget['content']; 
-			//echo $activities_widget['sidebar']; 
-			echo $activities_widget['js']; 
-		?>
-		</form>
+        <!-- Display Type -->
+        <form action="home.php" method="POST" name="<?php echo $form_name; ?>">
+        <!-- List or Calendar View -->
+        <?php
+            echo $activities_widget['content'];
+            //echo $activities_widget['sidebar'];
+            echo $activities_widget['js'];
+        ?>
+        </form>
 
-        <!-- Non-Uploaded Files //-->
-        <?php  echo $nu_file_rows; ?>
+        <!-- Body Hook Return (e.g.) Non-Uploaded Files //-->
+        <?php  echo $private_body_rows; ?>
 
     </div>
 
@@ -185,6 +182,10 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.67  2005/12/26 21:45:37  braverock
+ * - add private_body_bottom hook to support non_uploaded_files functionality moving to plugin
+ *   contributed by Florent Jekot <fjekot at fontaine-consultants dot fr>
+ *
  * Revision 1.66  2005/12/06 19:07:50  daturaarutad
  * removed non_uploaded_file code
  *
@@ -303,7 +304,7 @@ end_page();
  *   Defined $activity_rows so it wouldn't be used undefined.
  *
  * Revision 1.28  2004/07/14 14:30:31  cpsource
- * - Make sure $nu_file_rows is always defined as something
+ * - Make sure $nu_file_rows is always defined as something (now $private_body_rows)
  *
  * Revision 1.27  2004/07/10 13:10:49  braverock
  * - applied undefined variables patch
