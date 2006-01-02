@@ -9,11 +9,11 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.164 2005/12/20 07:57:58 jswalter Exp $
+ * $Id: utils-misc.php,v 1.165 2006/01/02 21:39:57 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
-
+require_once($include_directory.'utils-database.php');
 require_once($include_directory.'vars.php');
 
 if ( !defined('IN_XRMS') )
@@ -2034,6 +2034,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.165  2006/01/02 21:39:57  vanmer
+ * - always include utils-database.php from pages which include utils-misc, so that dbconnection function is available
+ *
  * Revision 1.164  2005/12/20 07:57:58  jswalter
  *  - added 'get_country_id()' to retrieve XRMS country identifer
  * Bug 779
