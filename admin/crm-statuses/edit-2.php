@@ -2,7 +2,7 @@
 /**
  * Insert the updated information into the database
  *
- * $Id: edit-2.php,v 1.4 2004/07/16 23:51:36 cpsource Exp $
+ * $Id: edit-2.php,v 1.5 2006/01/02 21:48:37 vanmer Exp $
  */
 
 // include required files
@@ -21,8 +21,7 @@ $crm_status_pretty_name = $_POST['crm_status_pretty_name'];
 $crm_status_pretty_plural = $_POST['crm_status_pretty_plural'];
 $crm_status_display_html = $_POST['crm_status_display_html'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM crm_statuses WHERE crm_status_id = $crm_status_id";
 $rst = $con->execute($sql);
@@ -42,6 +41,9 @@ header("Location: some.php");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.5  2006/01/02 21:48:37  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.4  2004/07/16 23:51:36  cpsource
  * - require session_check ( 'Admin' )
  *

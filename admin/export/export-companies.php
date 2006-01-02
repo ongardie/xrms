@@ -86,8 +86,7 @@ WHERE
   a.country_id = coun.country_id
 ORDER BY c.company_name DESC, cont.last_name DESC, cont.first_names DESC";
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $rst = $con->execute($sql);
 
@@ -109,6 +108,9 @@ header("Location: {$http_site_root}/tmp/contacts-export.csv");
 
 /**
  * $Log: export-companies.php,v $
+ * Revision 1.8  2006/01/02 21:50:29  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.7  2005/09/06 16:04:39  braverock
  * - add Admin ACL restriction to export functions.
  *   credit Bert (SF:camel2004) for the patch

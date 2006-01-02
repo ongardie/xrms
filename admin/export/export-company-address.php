@@ -5,7 +5,7 @@
  * @author Fontain Consulting Group (France)
  * @author Brian Peterson (modified to only export company info and address)
  *
- * $Id: export-company-address.php,v 1.2 2005/09/06 16:04:39 braverock Exp $
+ * $Id: export-company-address.php,v 1.3 2006/01/02 21:50:29 vanmer Exp $
  */
 
 //include required files
@@ -37,8 +37,7 @@ WHERE
   a.country_id = coun.country_id
 ORDER BY c.company_name";
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $rst = $con->execute($sql);
 
@@ -65,6 +64,9 @@ header("Location: {$http_site_root}/tmp/company-address-export.csv");
 
 /**
  * $Log: export-company-address.php,v $
+ * Revision 1.3  2006/01/02 21:50:29  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.2  2005/09/06 16:04:39  braverock
  * - add Admin ACL restriction to export functions.
  *   credit Bert (SF:camel2004) for the patch

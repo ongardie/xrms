@@ -13,7 +13,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: import-companies.php,v 1.18 2005/10/06 04:30:06 vanmer Exp $
+ * $Id: import-companies.php,v 1.19 2006/01/02 21:50:29 vanmer Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -29,8 +29,7 @@ $page_title = _("Import");
 if (!isset($msg)) { $msg=''; };
 start_page($page_title, true, $msg);
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $user_menu = get_user_menu($con, $session_user_id);
 
@@ -163,6 +162,9 @@ if ($handle = opendir('.')) {
 <?php end_page();
 /**
  * $Log: import-companies.php,v $
+ * Revision 1.19  2006/01/02 21:50:29  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.18  2005/10/06 04:30:06  vanmer
  * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
  *

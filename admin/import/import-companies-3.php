@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.31 2005/12/18 02:57:20 vanmer Exp $
+ * $Id: import-companies-3.php,v 1.32 2006/01/02 21:50:29 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -203,8 +203,7 @@ switch ($delimiter) {
         break;
 }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $row_number = 1;
 
@@ -878,6 +877,9 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.32  2006/01/02 21:50:29  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.31  2005/12/18 02:57:20  vanmer
  * - changed to use gmt_offset instead of offset field
  * - Thanks to kennyholden for this patch

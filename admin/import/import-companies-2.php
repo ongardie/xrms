@@ -17,7 +17,7 @@
  * @author Brian Peterson
  *
  *
- * $Id: import-companies-2.php,v 1.10 2005/06/19 13:30:10 braverock Exp $
+ * $Id: import-companies-2.php,v 1.11 2006/01/02 21:50:29 vanmer Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -161,8 +161,7 @@ switch ($delimiter) {
 }
 
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $row_number = 1;
 
@@ -330,6 +329,9 @@ end_page();
 
 /**
  * $Log: import-companies-2.php,v $
+ * Revision 1.11  2006/01/02 21:50:29  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.10  2005/06/19 13:30:10  braverock
  * - improved localization and multi-line handling w/ addslashes
  * - improved duplicate checking
