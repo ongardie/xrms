@@ -14,8 +14,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $opportunity_id = $_GET['opportunity_id'];
 $category_id = $_GET['category_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $sql = "delete from entity_category_map 

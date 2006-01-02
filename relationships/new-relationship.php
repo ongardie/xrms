@@ -37,8 +37,7 @@ if ($relationship_entity) {
     $relationship_entity_id=current($relationship_entities_array);
 }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $singular_table=make_singular($relationship_entity_table);
 
@@ -146,6 +145,9 @@ function restrictByEntity() {
 <?php
 /*
  * $Log: new-relationship.php,v $
+ * Revision 1.17  2006/01/02 23:31:01  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.16  2005/05/09 01:33:50  vanmer
  * - added relationship entities as hidden variable in order to pass back in case of error
  *

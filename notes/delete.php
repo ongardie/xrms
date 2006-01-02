@@ -2,7 +2,7 @@
 /**
  * Mark a note as deleted
  *
- * $Id: delete.php,v 1.2 2004/06/12 06:23:27 introspectshun Exp $
+ * $Id: delete.php,v 1.3 2006/01/02 23:29:26 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -19,8 +19,7 @@ $session_user_id = session_check();
 $return_url = $_GET['return_url'];
 $note_id = $_GET['note_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM notes WHERE note_id = $note_id";
 $rst = $con->execute($sql);
@@ -37,6 +36,9 @@ header("Location: {$http_site_root}/{$return_url}");
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.3  2006/01/02 23:29:26  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.2  2004/06/12 06:23:27  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  *

@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.16 2005/07/06 22:50:32 braverock Exp $
+ * $Id: new.php,v 1.17 2006/01/02 23:29:27 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -22,8 +22,7 @@ $contact_id = (array_key_exists('contact_id',$_GET) ? $_GET['contact_id'] : $_PO
 $opportunity_type_id = (array_key_exists('opportunity_type_id',$_GET) ? $_GET['opportunity_type_id'] : $_POST['opportunity_type_id']);
 $opportunity_title = (array_key_exists('opportunity_title',$_GET) ? $_GET['opportunity_title'] : $_POST['opportunity_title']);
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $company_name = fetch_company_name($con, $company_id);
 
@@ -234,6 +233,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.17  2006/01/02 23:29:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.16  2005/07/06 22:50:32  braverock
  * - add opportunity types
  *

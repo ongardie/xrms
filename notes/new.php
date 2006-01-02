@@ -2,7 +2,7 @@
 /**
  * Create a note
  *
- * $Id: new.php,v 1.7 2004/07/25 13:00:13 braverock Exp $
+ * $Id: new.php,v 1.8 2006/01/02 23:29:27 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -19,8 +19,7 @@ $on_what_table = $_POST['on_what_table'];
 $on_what_id = $_POST['on_what_id'];
 $return_url = $_POST['return_url'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $con->close();
 
@@ -68,6 +67,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.8  2006/01/02 23:29:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.7  2004/07/25 13:00:13  braverock
  * - remove lang file require_once, as it is no longer used
  *

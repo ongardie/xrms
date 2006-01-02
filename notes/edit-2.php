@@ -2,7 +2,7 @@
 /**
  * Commit and edited note to the database
  *
- * $Id: edit-2.php,v 1.3 2004/06/21 14:24:59 braverock Exp $
+ * $Id: edit-2.php,v 1.4 2006/01/02 23:29:27 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -19,8 +19,7 @@ $note_id = $_POST['note_id'];
 $note_description = $_POST['note_description'];
 $return_url = $_POST['return_url'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM notes WHERE note_id = $note_id";
 $rst = $con->execute($sql);
@@ -37,6 +36,9 @@ header("Location: " . $http_site_root . $return_url);
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.4  2006/01/02 23:29:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.3  2004/06/21 14:24:59  braverock
  * - localized strings for i18n/internationalization/translation support
  *

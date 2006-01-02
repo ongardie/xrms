@@ -2,7 +2,7 @@
 /**
  * Insert a new opportunity into the database
  *
- * $Id: new-2.php,v 1.10 2005/07/06 22:50:32 braverock Exp $
+ * $Id: new-2.php,v 1.11 2006/01/02 23:29:27 vanmer Exp $
  */
 
 //include common files
@@ -32,8 +32,7 @@ $opportunity_description = $_POST['opportunity_description'];
 
 $campaign_id = ($campaign_id > 0) ? $campaign_id : 0;
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 //save to database
@@ -76,6 +75,9 @@ header("Location: one.php?msg=opportunity_added&opportunity_id=$opportunity_id")
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.11  2006/01/02 23:29:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.10  2005/07/06 22:50:32  braverock
  * - add opportunity types
  *

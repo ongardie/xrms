@@ -2,7 +2,7 @@
 /**
  * Insert a new Note into the Database
  *
- * $Id: new-2.php,v 1.5 2004/07/07 22:37:40 introspectshun Exp $
+ * $Id: new-2.php,v 1.6 2006/01/02 23:29:27 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -20,8 +20,7 @@ $on_what_table = $_POST['on_what_table'];
 $on_what_id = $_POST['on_what_id'];
 $note_description = $_POST['note_description'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 //save to database
@@ -42,6 +41,9 @@ header("Location: " . $http_site_root . $return_url);
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.6  2006/01/02 23:29:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.5  2004/07/07 22:37:40  introspectshun
  * - Now passes a table name instead of a recordset into GetInsertSQL
  *

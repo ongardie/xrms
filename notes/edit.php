@@ -2,7 +2,7 @@
 /**
  * Edit a note
  *
- * $Id: edit.php,v 1.9 2004/07/25 13:00:13 braverock Exp $
+ * $Id: edit.php,v 1.10 2006/01/02 23:29:27 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -18,8 +18,7 @@ $session_user_id = session_check();
 $note_id = $_GET['note_id'];
 $return_url = $_GET['return_url'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $sql = "select * from notes where note_id = $note_id";
@@ -85,6 +84,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.10  2006/01/02 23:29:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.9  2004/07/25 13:00:13  braverock
  * - remove lang file require_once, as it is no longer used
  *

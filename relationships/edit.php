@@ -27,8 +27,7 @@ $on_what_table_singular = make_singular($on_what_table);
 $relationship_id = $_GET['relationship_id'];
 $return_url = $_GET['return_url'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $page_title = _("Edit Association");
 start_page($page_title, true, $msg);
@@ -86,6 +85,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.6  2006/01/02 23:31:01  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.5  2005/02/11 21:18:27  vanmer
  * - added error handling on failed queries
  * - added error handling if table not specified properly

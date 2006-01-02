@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.53 2005/07/19 16:06:06 braverock Exp $
+ * $Id: one.php,v 1.54 2006/01/02 23:29:27 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -24,8 +24,7 @@ $session_user_id = session_check();
 
 $msg            = isset($_GET['msg']) ? $_GET['msg'] : '';
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug = 1;
 
 $form_name = 'One_Opportunity';
@@ -394,6 +393,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.54  2006/01/02 23:29:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.53  2005/07/19 16:06:06  braverock
  * - add work phone extension to display, if it exists
  *

@@ -28,8 +28,7 @@ $on_what_table = $_POST['on_what_table'];
 
 $campaign_id = ($campaign_id > 0) ? $campaign_id : 0;
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $no_update = false;

@@ -20,8 +20,7 @@ $session_user_id = session_check();
 $relationship_id = $_POST['relationship_id'];
 $return_url = $_POST['return_url'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM relationships WHERE relationship_id = '$relationship_id'";
 $rst = $con->execute($sql);
@@ -39,6 +38,9 @@ header("Location: " . $http_site_root . "/" . $return_url);
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.2  2006/01/02 23:31:01  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.1  2004/07/09 15:33:42  neildogg
  * New, generic programs that utilize the new relationships table
  *

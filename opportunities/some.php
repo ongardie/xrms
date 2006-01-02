@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.64 2005/12/17 21:27:59 vanmer Exp $
+ * $Id: some.php,v 1.65 2006/01/02 23:29:27 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -19,8 +19,7 @@ require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $on_what_table='opportunities';
@@ -498,6 +497,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.65  2006/01/02 23:29:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.64  2005/12/17 21:27:59  vanmer
  * - changed SQL statement to not quote fieldname
  * - patch provided by kennyholden

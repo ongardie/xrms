@@ -35,8 +35,7 @@ $typedirection = explode(",", $relationship_type_direction);
 $working_direction = $typedirection[1];
 $relationship_type_id = $typedirection[0];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 if($working_direction == "from") {
     $opposite_direction = "to";
@@ -214,6 +213,9 @@ end_page();
 
 /**
  * $Log: new-relationship-2.php,v $
+ * Revision 1.26  2006/01/02 23:31:01  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.25  2005/05/09 01:34:46  vanmer
  * - changed output to occur after start_page, calculations to occur before start_page
  * - changed to redirect to search page when error occurs in search

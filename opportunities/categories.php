@@ -2,7 +2,7 @@
 /**
  * Set categories for an opportunity
  *
- * $Id: categories.php,v 1.6 2004/07/30 11:11:11 cpsource Exp $
+ * $Id: categories.php,v 1.7 2006/01/02 23:29:27 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -19,8 +19,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $opportunity_id = $_GET['opportunity_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 // associated with
@@ -124,6 +123,9 @@ end_page();
 
 /**
  * $Log: categories.php,v $
+ * Revision 1.7  2006/01/02 23:29:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.6  2004/07/30 11:11:11  cpsource
  * - Improved msg handling
  *   Got campaign_id and opportunity_status_id from database so

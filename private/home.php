@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.67 2005/12/26 21:45:37 braverock Exp $
+ * $Id: home.php,v 1.68 2006/01/02 23:31:30 vanmer Exp $
  */
 
 // include the common files
@@ -43,8 +43,7 @@ if (stristr($_SERVER['HTTP_USER_AGENT'], "MMP")) {
 }
 
 //connect to the database
-$con = &adonewconnection($xrms_db_dbtype);
-$con->nconnect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug=1;
 
 /*********************************/
@@ -182,6 +181,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.68  2006/01/02 23:31:30  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.67  2005/12/26 21:45:37  braverock
  * - add private_body_bottom hook to support non_uploaded_files functionality moving to plugin
  *   contributed by Florent Jekot <fjekot at fontaine-consultants dot fr>

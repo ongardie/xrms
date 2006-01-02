@@ -2,7 +2,7 @@
 /**
  * View an opportunity
  *
- * $Id: opportunity-view.php,v 1.9 2005/07/06 22:50:32 braverock Exp $
+ * $Id: opportunity-view.php,v 1.10 2006/01/02 23:29:27 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -16,8 +16,7 @@ $session_user_id = session_check();
 
 $opportunity_type_id = $_GET['opportunity_type_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select *
         from opportunity_statuses
@@ -74,6 +73,9 @@ end_page();
 
 /**
  * $Log: opportunity-view.php,v $
+ * Revision 1.10  2006/01/02 23:29:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.9  2005/07/06 22:50:32  braverock
  * - add opportunity types
  *
