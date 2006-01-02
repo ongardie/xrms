@@ -25,8 +25,7 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 $user_id = $session_user_id;
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 //////////////////////////////////////////////////////////////////////

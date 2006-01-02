@@ -4,7 +4,7 @@
  *
  * @todo create more examples here.
  *
- * $Id: voicemail.php,v 1.2 2004/11/15 23:55:22 gpowers Exp $
+ * $Id: voicemail.php,v 1.3 2006/01/02 23:52:14 vanmer Exp $
  */
 
 // include the common files
@@ -20,8 +20,7 @@ $session_user_id = session_check();
 $msg = $_GET['msg'];
 
 //connect to the database
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 /*********************************/
 /*** Include the sidebar boxes ***/

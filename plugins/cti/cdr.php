@@ -4,7 +4,7 @@
  *
  * Search for and View a list of calls
  *
- * $Id: cdr.php,v 1.1 2005/05/11 18:07:00 gpowers Exp $
+ * $Id: cdr.php,v 1.2 2006/01/02 23:52:14 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -22,8 +22,7 @@ $on_what_table='cdr';
 $session_user_id = session_check();
 
 // Start connection
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $page_title = _("Call Detail Report");
@@ -371,6 +370,9 @@ end_page();
 
 /**
  * $Log: cdr.php,v $
+ * Revision 1.2  2006/01/02 23:52:14  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.1  2005/05/11 18:07:00  gpowers
  *
  * Call Detail Report

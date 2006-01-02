@@ -17,8 +17,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $session_user_id = session_check(); 
@@ -129,6 +128,9 @@ header("Location: " . $http_site_root . "/plugins/cti/provision/new-cisco-7960-2
 
 /**
  * $Log: new-cisco-7960.php,v $
+ * Revision 1.3  2006/01/02 23:52:14  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.2  2005/04/03 19:18:45  gpowers
  * - updated to use mt_rand(10000000,99999999) for sip passwords
  *   - this should be good enough for phones on private LANs.

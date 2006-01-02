@@ -17,8 +17,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $session_user_id = session_check(); 
@@ -132,6 +131,9 @@ header("Location: " . $http_site_root . "/admin/routing.php?msg=" . urlencode(_(
    
 /**
  * $Log: new-asterisk-sip-conf.php,v $
+ * Revision 1.2  2006/01/02 23:52:14  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.1  2005/03/31 22:39:59  gpowers
  * - basic Cisco 7960 CNF file setup
  * - asterisk sip.conf config

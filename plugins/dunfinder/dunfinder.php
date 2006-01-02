@@ -4,7 +4,7 @@
  * Copyright (c) 2004 The XRMS Project Team and
  * Copyright (c) 2004 Glenn Powers <glenn@net127.com>
  *
- * $Id: dunfinder.php,v 1.1 2004/08/03 17:28:59 gpowers Exp $
+ * $Id: dunfinder.php,v 1.2 2006/01/02 23:54:07 vanmer Exp $
  */
 
 // include the common files
@@ -25,8 +25,7 @@ $type = $_GET['type'];
 $monitor_url = "http://www.megapop.net/cgi-bin/restricted/conn_mon.cgi?";
 
 //connect to the database
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //uncomment the debug line to see what's going on with the query
 // $con->debug = 1;
@@ -103,6 +102,9 @@ end_page();
 
 /**
  * $Log: dunfinder.php,v $
+ * Revision 1.2  2006/01/02 23:54:07  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.1  2004/08/03 17:28:59  gpowers
  * - This is a semi-standard Dialup Number Finder,
  *   modified to work inside of XRMS.

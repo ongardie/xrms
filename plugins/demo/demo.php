@@ -4,7 +4,7 @@
  *
  * @todo create more examples here.
  *
- * $Id: demo.php,v 1.4 2004/06/16 21:00:36 gpowers Exp $
+ * $Id: demo.php,v 1.5 2006/01/02 23:52:14 vanmer Exp $
  */
 
 // include the common files
@@ -20,8 +20,7 @@ $session_user_id = session_check();
 $msg = $_GET['msg'];
 
 //connect to the database
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 /*********************************/
 /*** Include the sidebar boxes ***/
@@ -86,6 +85,9 @@ end_page();
 
 /**
  * $Log: demo.php,v $
+ * Revision 1.5  2006/01/02 23:52:14  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.4  2004/06/16 21:00:36  gpowers
  * - removed $this from session_check()
  *   - it is incompatible with PHP5

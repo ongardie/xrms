@@ -4,7 +4,7 @@
  * Copyright (c) 2004 Glenn Powers <glenn@net127.com>
  * Licensed under the GNU GPL v2
  *
- * $Id: update-contact-phone-numbers.php,v 1.1 2005/04/26 17:32:14 gpowers Exp $
+ * $Id: update-contact-phone-numbers.php,v 1.2 2006/01/02 23:52:14 vanmer Exp $
  */
 
 // include the common files
@@ -19,8 +19,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 $session_user_id = session_check();
 
 //connect to the database
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //uncomment the debug line to see what's going on with the query
 //$con->debug = 1;
@@ -61,6 +60,9 @@ echo "<br /><h2>" . _("Complete") . "</h2>";
 
 /**
  * $Log: update-contact-phone-numbers.php,v $
+ * Revision 1.2  2006/01/02 23:52:14  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.1  2005/04/26 17:32:14  gpowers
  * - scripts to separate extensions from phone numbers in contacts and companies table
  *   - in contacts table, extension are placed in NEW work_phone_ext column
