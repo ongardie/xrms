@@ -4,7 +4,7 @@
  *
  * Edit address-type
  *
- * $Id: edit-2.php,v 1.1 2005/04/11 00:43:25 maulani Exp $
+ * $Id: edit-2.php,v 1.2 2006/01/02 22:35:33 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -20,8 +20,7 @@ $address_type_id = $_POST['address_type_id'];
 $address_type = $_POST['address_type'];
 $address_type_sort_value = $_POST['address_type_sort_value'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM address_types WHERE address_type_id = $address_type_id";
 $rst = $con->execute($sql);
@@ -39,6 +38,9 @@ header("Location: some.php");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.2  2006/01/02 22:35:33  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.1  2005/04/11 00:43:25  maulani
  * - Add address type admin tool
  *

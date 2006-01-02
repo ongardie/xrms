@@ -8,7 +8,7 @@
  * This is intended as a temporary solution until full access control is introduced
  * in XRMS.
  *
- * $Id: routing.php,v 1.9 2005/05/18 05:54:55 vanmer Exp $
+ * $Id: routing.php,v 1.10 2006/01/02 22:38:16 vanmer Exp $
  */
 
 //where do we include from
@@ -27,8 +27,7 @@ $session_user_id = session_check();
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 //make our database connection
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //$con->debug = 1;
 
@@ -50,6 +49,9 @@ if (check_user_role(false, $_SESSION['session_user_id'], 'Administrator')) {
 
 /**
  *$Log: routing.php,v $
+ *Revision 1.10  2006/01/02 22:38:16  vanmer
+ *- changed to use centralized dbconnection function
+ *
  *Revision 1.9  2005/05/18 05:54:55  vanmer
  *- changed to reference ACL for administration routing, instead of SESSION variable
  *

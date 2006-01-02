@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.7 2006/01/02 21:14:11 vanmer Exp $
+ * $Id: updateto2.0.php,v 1.8 2006/01/02 22:38:16 vanmer Exp $
  */
 
 // where do we include from
@@ -32,8 +32,7 @@ require_once('../install/data.php');
 $session_user_id = session_check( 'Admin' );
 
 // make a database connection
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $msg = '';
 
@@ -4777,6 +4776,9 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.8  2006/01/02 22:38:16  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.7  2006/01/02 21:14:11  vanmer
  * - moved rename of gmt_offset field to before first use of gmt_offset field in addresses table
  * - added check to see if gmt_offset field exists before adding the offset field (to ensure that multiple runs of update do not add extraneous fields)

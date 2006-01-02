@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @todo: Active companies should always have active addresses
  *
- * $Id: data_clean.php,v 1.13 2005/12/06 22:40:20 vanmer Exp $
+ * $Id: data_clean.php,v 1.14 2006/01/02 22:38:16 vanmer Exp $
  */
 
 // where do we include from
@@ -26,8 +26,7 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check( 'Admin' );
 
 // make a database connection
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug = 1;
 
 $msg = '';
@@ -346,6 +345,9 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.14  2006/01/02 22:38:16  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.13  2005/12/06 22:40:20  vanmer
  * - removed data_clean code that deals with system parameters
  *

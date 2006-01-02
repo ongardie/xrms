@@ -5,7 +5,7 @@
  *
  * @author Brad Marshall
  *
- * $Id: sort.php,v 1.6 2005/06/30 04:41:54 vanmer Exp $
+ * $Id: sort.php,v 1.7 2006/01/02 22:38:16 vanmer Exp $
  */
 
 
@@ -28,8 +28,7 @@ $return_url = $_GET['return_url'];
 $activity_template = $_GET['activity_template'];
 $allowMultiple=$_GET['allowMultiple'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug=1;
 
 //handle incoming data
@@ -143,6 +142,9 @@ header ('Location: ' . $http_site_root . $return_url);
 
 /**
  *$Log: sort.php,v $
+ *Revision 1.7  2006/01/02 22:38:16  vanmer
+ *- changed to use centralized dbconnection function
+ *
  *Revision 1.6  2005/06/30 04:41:54  vanmer
  *- added special handling for shortened record_status name on activity resolutions
  *

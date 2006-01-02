@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.36 2005/07/06 21:10:46 braverock Exp $
+ * $Id: index.php,v 1.37 2006/01/02 22:38:16 vanmer Exp $
  */
 
 //include required stuff
@@ -21,8 +21,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 // stub out
 if ( 0 ) {
   // open a connection to the database
-  $con = &adonewconnection($xrms_db_dbtype);
-  $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+  $con = get_xrms_dbconnection();
 
   // get the user info
   $user_menu = get_user_menu($con);
@@ -254,6 +253,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.37  2006/01/02 22:38:16  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.36  2005/07/06 21:10:46  braverock
  * - add opportunity types
  *
