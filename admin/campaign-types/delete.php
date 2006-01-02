@@ -11,8 +11,7 @@ $session_user_id = session_check( 'Admin' );
 
 $campaign_type_id = $_POST['campaign_type_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM campaign_types WHERE campaign_type_id = $campaign_type_id";
 $rst = $con->execute($sql);

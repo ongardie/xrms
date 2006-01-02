@@ -2,7 +2,7 @@
 /**
  * Insert the updated information into the database
  *
- * $Id: edit-2.php,v 1.7 2005/01/10 23:34:05 vanmer Exp $
+ * $Id: edit-2.php,v 1.8 2006/01/02 21:41:51 vanmer Exp $
  */
 
 // include required files
@@ -24,8 +24,7 @@ $case_status_long_desc = $_POST['case_status_long_desc'];
 $case_type_id = $_POST['case_type_id'];
 $status_open_indicator = $_POST['status_open_indicator'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM case_statuses WHERE case_status_id = $case_status_id";
 $rst = $con->execute($sql);
@@ -48,6 +47,9 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.8  2006/01/02 21:41:51  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.7  2005/01/10 23:34:05  vanmer
  * - added open_indicator to status save
  *

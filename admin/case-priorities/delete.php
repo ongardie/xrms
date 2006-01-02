@@ -2,7 +2,7 @@
 /**
  * Delete (set status to 'd') a single case priority
  *
- * $Id: delete.php,v 1.4 2004/07/16 23:51:35 cpsource Exp $
+ * $Id: delete.php,v 1.5 2006/01/02 21:41:50 vanmer Exp $
  */
 
 //include required files
@@ -19,8 +19,7 @@ $session_user_id = session_check( 'Admin' );
 
 $case_priority_id = $_POST['case_priority_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM case_priorities WHERE case_priority_id = $case_priority_id";
 $rst = $con->execute($sql);
@@ -37,6 +36,9 @@ header("Location: some.php");
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.5  2006/01/02 21:41:50  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.4  2004/07/16 23:51:35  cpsource
  * - require session_check ( 'Admin' )
  *

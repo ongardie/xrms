@@ -2,7 +2,7 @@
 /**
  * Insert a new Case into the database
  *
- * $Id: new-2.php,v 1.5 2004/07/16 23:51:35 cpsource Exp $
+ * $Id: new-2.php,v 1.6 2006/01/02 21:41:51 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -19,8 +19,7 @@ $case_type_pretty_name = $_POST['case_type_pretty_name'];
 $case_type_pretty_plural = $_POST['case_type_pretty_plural'];
 $case_type_display_html = $_POST['case_type_display_html'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //save to database
 $rec = array();
@@ -39,6 +38,9 @@ header("Location: some.php");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.6  2006/01/02 21:41:51  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.5  2004/07/16 23:51:35  cpsource
  * - require session_check ( 'Admin' )
  *

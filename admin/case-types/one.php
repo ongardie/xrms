@@ -2,7 +2,7 @@
 /**
  * Edit the information for a single case
  *
- * $Id: one.php,v 1.10 2005/07/11 13:55:45 braverock Exp $
+ * $Id: one.php,v 1.11 2006/01/02 21:41:51 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -16,8 +16,7 @@ $session_user_id = session_check( 'Admin' );
 
 $case_type_id = $_GET['case_type_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from case_types where case_type_id = $case_type_id";
 
@@ -102,6 +101,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.11  2006/01/02 21:41:51  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.10  2005/07/11 13:55:45  braverock
  * - remove trainling whitespace
  *

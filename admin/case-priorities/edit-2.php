@@ -2,7 +2,7 @@
 /**
  * Update database with changes to Case Priority
  *
- * $Id: edit-2.php,v 1.5 2004/12/31 15:31:59 braverock Exp $
+ * $Id: edit-2.php,v 1.6 2006/01/02 21:41:50 vanmer Exp $
  */
 
 //include required files
@@ -26,8 +26,7 @@ $case_priority_score_adjustment = $_POST['case_priority_score_adjustment'];
 
 $case_priority_score_adjustment = ($case_priority_score_adjustment > 0) ? $case_priority_score_adjustment : 0;
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM case_priorities WHERE case_priority_id = $case_priority_id";
 $rst = $con->execute($sql);
@@ -48,6 +47,9 @@ header("Location: some.php");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.6  2006/01/02 21:41:50  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.5  2004/12/31 15:31:59  braverock
  * - return to some.php after change
  * - patch provided by Ozgur Cayci

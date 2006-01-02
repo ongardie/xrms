@@ -2,7 +2,7 @@
 /**
  * Insert a new Case Priority into the database
  *
- * $Id: add-2.php,v 1.5 2004/07/16 23:51:35 cpsource Exp $
+ * $Id: add-2.php,v 1.6 2006/01/02 21:41:49 vanmer Exp $
  */
 
 //include required files
@@ -25,8 +25,7 @@ $case_priority_score_adjustment = $_POST['case_priority_score_adjustment'];
 
 $case_priority_score_adjustment = ($case_priority_score_adjustment > 0) ? $case_priority_score_adjustment : 0;
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //save to database
 $rec = array();
@@ -46,6 +45,9 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.6  2006/01/02 21:41:49  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.5  2004/07/16 23:51:35  cpsource
  * - require session_check ( 'Admin' )
  *

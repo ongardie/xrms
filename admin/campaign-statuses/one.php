@@ -4,7 +4,7 @@
  *
  * Edit campaign-statuses
  *
- * $Id: one.php,v 1.9 2004/07/25 17:34:45 johnfawcett Exp $
+ * $Id: one.php,v 1.10 2006/01/02 21:37:28 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -18,8 +18,7 @@ $session_user_id = session_check( 'Admin' );
 
 $campaign_status_id = $_GET['campaign_status_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from campaign_statuses where campaign_status_id = $campaign_status_id";
 
@@ -116,6 +115,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.10  2006/01/02 21:37:28  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.9  2004/07/25 17:34:45  johnfawcett
  * - reinserted ? in gettext string - needed by some languages
  * - standardized delete text and button

@@ -4,7 +4,7 @@
  *
  * List campaign-statuses
  *
- * $Id: some.php,v 1.7 2005/05/10 13:29:37 braverock Exp $
+ * $Id: some.php,v 1.8 2006/01/02 21:37:28 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -16,8 +16,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from campaign_statuses where campaign_status_record_status = 'a' order by campaign_status_id";
 $rst = $con->execute($sql);
@@ -102,6 +101,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.8  2006/01/02 21:37:28  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.7  2005/05/10 13:29:37  braverock
  * - localized string patches provided by Alan Baghumian (alanbach)
  *

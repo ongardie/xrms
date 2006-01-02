@@ -2,7 +2,7 @@
 /**
  * save the updated information for a single case
  *
- * $Id: edit-2.php,v 1.4 2004/07/16 23:51:35 cpsource Exp $
+ * $Id: edit-2.php,v 1.5 2006/01/02 21:41:51 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -20,8 +20,7 @@ $case_type_pretty_name = $_POST['case_type_pretty_name'];
 $case_type_pretty_plural = $_POST['case_type_pretty_plural'];
 $case_type_display_html = $_POST['case_type_display_html'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM case_types WHERE case_type_id = $case_type_id";
 $rst = $con->execute($sql);
@@ -41,6 +40,9 @@ header("Location: some.php");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.5  2006/01/02 21:41:51  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.4  2004/07/16 23:51:35  cpsource
  * - require session_check ( 'Admin' )
  *

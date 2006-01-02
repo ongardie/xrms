@@ -2,7 +2,7 @@
 /**
  * Manage Case Statuses
  *
- * $Id: one.php,v 1.14 2005/07/08 17:21:38 braverock Exp $
+ * $Id: one.php,v 1.15 2006/01/02 21:41:51 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -16,8 +16,7 @@ $session_user_id = session_check( 'Admin' );
 
 $case_status_id = $_GET['case_status_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug = 1;
 
 $sql = "select * from case_statuses where case_status_id = $case_status_id";
@@ -243,6 +242,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.15  2006/01/02 21:41:51  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.14  2005/07/08 17:21:38  braverock
  * - remove debug line
  *

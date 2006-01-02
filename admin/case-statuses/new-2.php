@@ -16,8 +16,7 @@ $case_status_display_html = $_POST['case_status_display_html'];
 $case_status_long_desc = $_POST['case_status_long_desc'];
 $case_type_id = $_POST['case_type_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug = 1;
 
 //get next sort_order value, put it at the bottom of the list

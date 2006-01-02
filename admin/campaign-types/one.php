@@ -2,7 +2,7 @@
 /**
  * Manage campaign types
  *
- * $Id: one.php,v 1.8 2004/07/25 17:37:27 johnfawcett Exp $
+ * $Id: one.php,v 1.9 2006/01/02 21:37:29 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -16,8 +16,7 @@ $session_user_id = session_check( 'Admin' );
 
 $campaign_type_id = $_GET['campaign_type_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from campaign_types where campaign_type_id = $campaign_type_id";
 
@@ -103,6 +102,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.9  2006/01/02 21:37:29  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.8  2004/07/25 17:37:27  johnfawcett
  * - reinserted ? in gettext string - needed by some languages
  * - standardized delete text and button

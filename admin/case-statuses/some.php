@@ -2,7 +2,7 @@
 /**
 * Manage Case Statuses
 *
-* $Id: some.php,v 1.15 2005/07/08 17:10:34 braverock Exp $
+* $Id: some.php,v 1.16 2006/01/02 21:41:51 vanmer Exp $
 */
 
 require_once('../../include-locations.inc');
@@ -14,8 +14,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //print_r($_SESSION);
 getGlobalVar($acase_type_id,'acase_type_id');
@@ -190,6 +189,9 @@ end_page();
 
 /**
 * $Log: some.php,v $
+* Revision 1.16  2006/01/02 21:41:51  vanmer
+* - changed to use centralized dbconnection function
+*
 * Revision 1.15  2005/07/08 17:10:34  braverock
 * - remove obsolete todo item
 *
