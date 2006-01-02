@@ -4,7 +4,7 @@
  *
  * Edit salutation
  *
- * $Id: edit-2.php,v 1.1 2005/04/10 17:33:36 maulani Exp $
+ * $Id: edit-2.php,v 1.2 2006/01/02 22:11:29 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -20,8 +20,7 @@ $salutation_id = $_POST['salutation_id'];
 $salutation = $_POST['salutation'];
 $salutation_sort_value = $_POST['salutation_sort_value'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM salutations WHERE salutation_id = $salutation_id";
 $rst = $con->execute($sql);
@@ -39,6 +38,9 @@ header("Location: some.php");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.2  2006/01/02 22:11:29  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.1  2005/04/10 17:33:36  maulani
  * - Add administrative tool to modify salutations popup list
  *

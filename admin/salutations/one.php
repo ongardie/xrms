@@ -4,7 +4,7 @@
  *
  * Edit salutation
  *
- * $Id: one.php,v 1.1 2005/04/10 17:33:36 maulani Exp $
+ * $Id: one.php,v 1.2 2006/01/02 22:11:29 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -18,8 +18,7 @@ $session_user_id = session_check( 'Admin' );
 
 $salutation_id = $_GET['salutation_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from salutations where salutation_id = $salutation_id";
 
@@ -109,6 +108,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.2  2006/01/02 22:11:29  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.1  2005/04/10 17:33:36  maulani
  * - Add administrative tool to modify salutations popup list
  *
