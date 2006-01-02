@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: acl_results.php,v 1.12 2005/12/12 21:02:02 vanmer Exp $
+ * $Id: acl_results.php,v 1.13 2006/01/02 22:27:11 vanmer Exp $
  *
  * @author Aaron van Meerten
  */
@@ -30,9 +30,7 @@ $acl = get_acl_object($acl_options, $con);
 // $con->debug=1;
 
 // we need this for the companies foreign key lookup
-$xcon = &adonewconnection($xrms_db_dbtype);
-$xcon->nconnect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-
+$xcon = get_xrms_dbconnection();
 
 
 getGlobalVar($aclAction,'aclAction');
@@ -44,7 +42,6 @@ getGlobalVar($Permission, 'Permission');
 getGlobalVar($msg, 'msg');
 
 $title= _("ACL Results");
-$css_theme='basic-left';
 start_page($title, true, $msg);
 echo '<div id="Main">';
 require_once('xrms_acl_nav.php');
@@ -194,6 +191,10 @@ function display_object_list($acl, $object, $ids=false, $extrafield=false, $con,
 }
  /*
   * $Log: acl_results.php,v $
+  * Revision 1.13  2006/01/02 22:27:11  vanmer
+  * - removed force of css theme for ACL interface
+  * - changed to use centralized dbconnection function
+  *
   * Revision 1.12  2005/12/12 21:02:02  vanmer
   * - changed to use GUP pager to render results for ACL results tests
   *

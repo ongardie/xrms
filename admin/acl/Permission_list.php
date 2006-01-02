@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: Permission_list.php,v 1.4 2005/07/28 18:56:44 vanmer Exp $
+ * $Id: Permission_list.php,v 1.5 2006/01/02 22:27:11 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -31,7 +31,6 @@ $page_title = _("Manage Permission");
 
 $sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_Permission.php?form_action=edit&return_url=Permission_list.php&Permission_id="), 'Permission_id', $con->qstr("'\">")) . "AS LINK, Permission.* FROM Permission";
 
-$css_theme='basic-left';
 start_page($page_title);
 
 echo "<div id='Main'>";
@@ -75,6 +74,10 @@ end_page();
 
 /**
  * $Log: Permission_list.php,v $
+ * Revision 1.5  2006/01/02 22:27:11  vanmer
+ * - removed force of css theme for ACL interface
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.4  2005/07/28 18:56:44  vanmer
  * - changed to use GUP_Pager instead of older adodb pager
  * - changed to use acl dbconnection code

@@ -2,7 +2,7 @@
 /**
  * Administration interface for managing permissions for one role
  *
- * $Id: role_permission_grid.php,v 1.5 2005/08/12 00:25:40 vanmer Exp $
+ * $Id: role_permission_grid.php,v 1.6 2006/01/02 22:27:11 vanmer Exp $
  *
  */
 
@@ -77,7 +77,6 @@ if ($gridrole_id) {
 
 }
 if ($grid_action=='assignPerms') { $msg.=_("Permissions Assigned"); }
-$css_theme='basic-left';
 start_page($page_title, true, $msg);
  echo '<div id="Main">';
  include('xrms_acl_nav.php');

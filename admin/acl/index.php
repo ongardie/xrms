@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: index.php,v 1.4 2005/08/17 02:43:23 vanmer Exp $
+ * $Id: index.php,v 1.5 2006/01/02 22:27:11 vanmer Exp $
  *
  * @todo write dashboard
  */
@@ -45,7 +45,6 @@ $con = get_acl_dbconnection();
 global $css_theme;
 getGlobalVar($acl_datasource_name, 'acl_datasource_name');
 $page_title = _("ACL Management");
-$css_theme="basic-left";
 start_page($page_title,true, $msg);
 ?>
 <div id="Main">
@@ -70,6 +69,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.5  2006/01/02 22:27:11  vanmer
+ * - removed force of css theme for ACL interface
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.4  2005/08/17 02:43:23  vanmer
  * - added new db connection to allow ACL datasource variable to get reset.
  * - added link to manage XRMS if managing another datasource

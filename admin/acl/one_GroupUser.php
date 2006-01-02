@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Aaron van Meerten
- * $Id: one_GroupUser.php,v 1.6 2005/08/11 22:53:53 vanmer Exp $
+ * $Id: one_GroupUser.php,v 1.7 2006/01/02 22:27:11 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -56,7 +56,6 @@ global $symbol_precendence;
             }
         }
 	$page_title = 'Manage Group Users';
-        $css_theme='basic-left';
 	start_page($page_title, true, $msg);
 
   require_once($include_directory ."classes/QuickForm/ADOdb_QuickForm.php");
@@ -100,6 +99,10 @@ end_page();
 
 /**
  * $Log: one_GroupUser.php,v $
+ * Revision 1.7  2006/01/02 22:27:11  vanmer
+ * - removed force of css theme for ACL interface
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.6  2005/08/11 22:53:53  vanmer
  * - changed to use ACL dbconnection
  *

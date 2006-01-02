@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Aaron van Meerten
- * $Id: one_GroupMember.php,v 1.4 2005/08/11 22:53:53 vanmer Exp $
+ * $Id: one_GroupMember.php,v 1.5 2006/01/02 22:27:11 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -28,9 +28,7 @@ global $symbol_precendence;
 	// $con->debug=1;
 	
 	// we need this for the companies foreign key lookup
-	$xcon = &adonewconnection($xrms_db_dbtype);
-	$xcon->nconnect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-
+	$xcon = get_xrms_dbconnection();
 
     getGlobalVar($return_url, 'return_url');
     getGlobalVar($msg, 'msg');
@@ -40,8 +38,6 @@ global $symbol_precendence;
 
 	$page_title = 'Manage Group Member';
         
-        $css_theme='basic-left';
-
 if ($form_action=='delete') {
     $ret=delete_group_member($con, $GroupMember_id);
     if ($ret) { $msg=_("Delete Successful"); }
@@ -136,6 +132,10 @@ end_page();
 
 /**
  * $Log: one_GroupMember.php,v $
+ * Revision 1.5  2006/01/02 22:27:11  vanmer
+ * - removed force of css theme for ACL interface
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.4  2005/08/11 22:53:53  vanmer
  * - changed to use ACL dbconnection
  *
