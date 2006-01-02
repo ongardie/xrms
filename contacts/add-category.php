@@ -14,8 +14,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg']: '';
 $contact_id = $_GET['contact_id'];
 $category_id = $_GET['category_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $sql = "delete from entity_category_map 
@@ -40,6 +39,9 @@ header("Location: categories.php?contact_id=$contact_id");
 
 /**
  * $Log: add-category.php,v $
+ * Revision 1.7  2006/01/02 22:59:59  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.6  2004/07/30 11:32:01  cpsource
  * - Define msg properly
  *   Fix bug with new.php wereby division_id and address_id were

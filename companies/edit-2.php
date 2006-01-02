@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.19 2005/09/06 17:33:34 ycreddy Exp $
+ * $Id: edit-2.php,v 1.20 2006/01/02 22:56:27 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -40,8 +40,7 @@ $custom4 = $_POST['custom4'];
 
 if (!$rating_id) { $rating_id = 0; }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 // $con->debug=1;
 
@@ -91,6 +90,9 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.20  2006/01/02 22:56:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.19  2005/09/06 17:33:34  ycreddy
  * Added code to Strip off non digit characters from Fax
  *

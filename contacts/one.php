@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.96 2005/09/25 05:42:06 vanmer Exp $
+ * $Id: one.php,v 1.97 2006/01/02 23:00:00 vanmer Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -31,8 +31,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 global $con;
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $form_name = 'One_Contact';
 
@@ -514,6 +513,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.97  2006/01/02 23:00:00  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.96  2005/09/25 05:42:06  vanmer
  * - removed IM field references from all contact pages (now handled by plugin)
  * - added custom field hook for contacts new.php

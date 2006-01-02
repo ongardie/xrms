@@ -4,7 +4,7 @@
  *
  * This page allows for export vcard for a single contact.
  *
- * $Id: vcard.php,v 1.9 2004/12/24 16:25:57 braverock Exp $
+ * $Id: vcard.php,v 1.10 2006/01/02 23:00:00 vanmer Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -18,8 +18,7 @@ $session_user_id = session_check();
 
 $contact_id = $_GET['contact_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 
@@ -89,6 +88,9 @@ exit;
 
 /**
  * $Log: vcard.php,v $
+ * Revision 1.10  2006/01/02 23:00:00  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.9  2004/12/24 16:25:57  braverock
  * -modified to use lastname.firstname.vcf as vcard filenname
  *

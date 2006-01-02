@@ -15,8 +15,7 @@ $email_template_id = $_POST['email_template_id'];
 $email_template_title = (strlen($_POST['email_template_title']) > 0) ? $_POST['email_template_title'] : "Template $email_template_id";
 $email_template_body = $_POST['email_template_body'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM email_templates WHERE email_template_id = $email_template_id";
 $rst = $con->execute($sql);

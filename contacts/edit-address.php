@@ -2,7 +2,7 @@
 /**
  * Edit address for a contact
  *
- * $Id: edit-address.php,v 1.11 2005/06/07 21:38:55 braverock Exp $
+ * $Id: edit-address.php,v 1.12 2006/01/02 22:59:59 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -18,8 +18,7 @@ $session_user_id = session_check();
 $msg = isset($_GET['msg']) ? $_GET['msg']: '';
 $contact_id = $_GET['contact_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 // This query is done separately in case there is no current address
@@ -256,6 +255,9 @@ end_page();
 
 /**
  * $Log: edit-address.php,v $
+ * Revision 1.12  2006/01/02 22:59:59  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.11  2005/06/07 21:38:55  braverock
  * - fix company name link
  *

@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.30 2005/11/18 20:35:23 vanmer Exp $
+ * $Id: edit-2.php,v 1.31 2006/01/02 22:59:59 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -56,8 +56,7 @@ $custom4 = $_POST['custom4'];
 getGlobalVar($address_return_url, 'address_return_url');
 
 $url_return_url=urlencode($address_return_url);
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug=1;
 
 $contact_rst=get_contact($con, $contact_id, true);
@@ -142,6 +141,9 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.31  2006/01/02 22:59:59  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.30  2005/11/18 20:35:23  vanmer
  * - changed to use contact API for updating contact
  *

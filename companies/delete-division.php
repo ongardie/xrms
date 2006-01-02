@@ -2,7 +2,7 @@
 /**
  * Delete a division by setting its status
  *
- * $Id: delete-division.php,v 1.3 2004/06/12 17:10:24 gpowers Exp $
+ * $Id: delete-division.php,v 1.4 2006/01/02 22:56:26 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -18,8 +18,7 @@ $session_user_id = session_check();
 $company_id = $_GET['company_id'];
 $division_id = $_GET['division_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM company_division WHERE division_id = $division_id";
 $rst = $con->execute($sql);
@@ -38,6 +37,9 @@ header("Location: divisions.php?msg=address_deleted&company_id=$company_id");
 
 /**
  * $Log: delete-division.php,v $
+ * Revision 1.4  2006/01/02 22:56:26  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.3  2004/06/12 17:10:24  gpowers
  * - removed DBTimeStamp() calls for compatibility with GetInsertSQL() and
  *   GetUpdateSQL()

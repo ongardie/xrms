@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.22 2005/08/05 21:39:09 vanmer Exp $
+ * $Id: some-advanced.php,v 1.23 2006/01/02 22:56:27 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -99,8 +99,7 @@ arr_vars_session_set ( $arr_vars );
 //  $_SESSION['companies_crm_status_id'] = $crm_status_id;
 //}
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //uncomment this line if you suspect a problem with the SQL query
 //$con->debug = 1;
@@ -431,6 +430,9 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.23  2006/01/02 22:56:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.22  2005/08/05 21:39:09  vanmer
  * - changed to use centralized company search name function
  *

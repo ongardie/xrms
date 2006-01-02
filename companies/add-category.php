@@ -2,7 +2,7 @@
 /**
  * Add Category
  *
- * $Id: add-category.php,v 1.5 2004/07/30 11:23:38 cpsource Exp $
+ * $Id: add-category.php,v 1.6 2006/01/02 22:56:26 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -18,8 +18,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $company_id = $_GET['company_id'];
 $category_id = $_GET['category_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $sql = "delete from entity_category_map 
@@ -46,6 +45,9 @@ header("Location: categories.php?company_id=$company_id");
 
 /**
  * $Log: add-category.php,v $
+ * Revision 1.6  2006/01/02 22:56:26  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.5  2004/07/30 11:23:38  cpsource
  * - Do standard msg processing
  *   Default use_pretty_address in new-2.php set to null

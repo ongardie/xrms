@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division-2.php,v 1.13 2005/08/20 23:56:12 braverock Exp $
+ * $Id: edit-division-2.php,v 1.14 2006/01/02 22:56:27 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -28,8 +28,7 @@ $description = $_POST['description'];
 $use_pretty_address = ($use_pretty_address == 'on') ? "'t'" : "'f'";
 
 
-    $con = &adonewconnection($xrms_db_dbtype);
-    $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+    $con = get_xrms_dbconnection();
 
 //    $con->debug=1;
 
@@ -58,6 +57,9 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-division-2.php,v $
+ * Revision 1.14  2006/01/02 22:56:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.13  2005/08/20 23:56:12  braverock
  * - back out incorrect comments from 1.11 commit
  *

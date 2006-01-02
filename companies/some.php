@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.80 2005/12/06 21:39:18 vanmer Exp $
+ * $Id: some.php,v 1.81 2006/01/02 22:56:27 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -18,8 +18,7 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //uncomment this line if you suspect a problem with the SQL query
 //$con->debug = 1;
@@ -1034,6 +1033,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.81  2006/01/02 22:56:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.80  2005/12/06 21:39:18  vanmer
  * - updated negative criteria to only appear in advanced search
  *

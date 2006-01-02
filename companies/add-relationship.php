@@ -2,7 +2,7 @@
 /**
  * Add Relationship
  *
- * $Id: add-relationship.php,v 1.9 2004/07/07 21:53:13 introspectshun Exp $
+ * $Id: add-relationship.php,v 1.10 2006/01/02 22:56:26 vanmer Exp $
  *
  * @todo put back in established at date parsing
  */
@@ -30,8 +30,7 @@ if($from_or_to == "to") {
     $to_what_id = $temporary_id;
 }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 //save to database
@@ -53,6 +52,9 @@ header("Location: relationships.php?company_id=$company_id");
 
 /**
  * $Log: add-relationship.php,v $
+ * Revision 1.10  2006/01/02 22:56:26  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.9  2004/07/07 21:53:13  introspectshun
  * - Now passes a table name instead of a recordset into GetInsertSQL
  *

@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a company
  *
- * $Id: edit-address-2.php,v 1.9 2005/06/15 18:37:53 ycreddy Exp $
+ * $Id: edit-address-2.php,v 1.10 2006/01/02 22:56:27 vanmer Exp $
  */
 
 
@@ -31,8 +31,7 @@ $use_pretty_address = $_POST['use_pretty_address'];
 
 $use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug=1;
 
 $sql = "SELECT * FROM addresses WHERE address_id = $address_id";
@@ -62,6 +61,9 @@ header("Location: addresses.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.10  2006/01/02 22:56:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.9  2005/06/15 18:37:53  ycreddy
  * Added a plugin hook 'company_edit_address_2'
  *

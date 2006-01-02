@@ -2,7 +2,7 @@
 /**
  * Database updates for transfer contact
  *
- * $Id: transfer-3.php,v 1.6 2005/08/04 20:08:08 vanmer Exp $
+ * $Id: transfer-3.php,v 1.7 2006/01/02 23:00:00 vanmer Exp $
  */
 
 
@@ -22,8 +22,7 @@ $contact_id = $_POST['contact_id'];
 
 $everywhere = (isset($_POST['everywhere'])) ? $_POST['everywhere'] : '';
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 // set the business address for this contact to the primary address of the new company.
@@ -92,6 +91,9 @@ function add_contact_company_history($con, $contact_id, $company_id) {
 }
 /**
  * $Log: transfer-3.php,v $
+ * Revision 1.7  2006/01/02 23:00:00  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.6  2005/08/04 20:08:08  vanmer
  * - changed final transfer step to redirect to address selection to select new address for the new contact
  *

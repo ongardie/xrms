@@ -5,7 +5,7 @@
  * Do not add anything to this file
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.7 2004/04/13 12:29:20 maulani Exp $
+ * $Id: update.php,v 1.8 2006/01/02 23:05:45 vanmer Exp $
  */
 
 /**
@@ -28,8 +28,7 @@ require_once($include_directory . 'vars.php');
 require_once('install-utils.inc');
 
 // make a database connection
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 // Leave the admin checks so folks can always get into the admin section.
 // even though this file has been moved
@@ -86,6 +85,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.8  2006/01/02 23:05:45  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.7  2004/04/13 12:29:20  maulani
  * - Move the data clean and update files into the admin section of XRMS
  *

@@ -4,7 +4,7 @@
  *
  * Email templates
  *
- * $Id: templates.php,v 1.4 2004/08/04 21:46:42 introspectshun Exp $
+ * $Id: templates.php,v 1.5 2006/01/02 23:02:14 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -19,8 +19,7 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 $msg = $_GET['msg'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM users WHERE user_id = $session_user_id";
 $rst = $con->execute($sql);
@@ -84,6 +83,9 @@ end_page();
 
 /**
  * $Log: templates.php,v $
+ * Revision 1.5  2006/01/02 23:02:14  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.4  2004/08/04 21:46:42  introspectshun
  * - Localized strings for i18n/l10n support
  * - All paths now relative to include-locations-location.inc

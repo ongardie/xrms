@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.21 2005/12/14 05:04:27 daturaarutad Exp $
+ * $Id: new.php,v 1.22 2006/01/02 23:03:52 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -66,8 +66,7 @@ if ( $_POST['act'] == 'up' )
 		} else {
 
 	        // Make DB connection
-	        $con = &adonewconnection($xrms_db_dbtype);
-	        $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+	        $con = get_xrms_dbconnection();
 	        // $con->debug = 1;
 	
 	        // INSERT values into table
@@ -124,8 +123,7 @@ if ( $_POST['act'] == 'up' )
 	getGlobalVar($on_what_table, 'on_what_table');
 	getGlobalVar($on_what_id, 'on_what_id');
 
-    $con = &adonewconnection($xrms_db_dbtype);
-    $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+    $con = get_xrms_dbconnection();
 
     if ($on_what_table == 'opportunities')
     {
@@ -198,6 +196,9 @@ if ( $_POST['act'] == 'up' )
 
 /**
  * $Log: new.php,v $
+ * Revision 1.22  2006/01/02 23:03:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.21  2005/12/14 05:04:27  daturaarutad
  * remove summary requirement, use file name as default if none given; use get_url_seperator function
  *

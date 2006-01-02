@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division.php,v 1.14 2005/08/04 19:30:48 vanmer Exp $
+ * $Id: edit-division.php,v 1.15 2006/01/02 22:56:27 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -23,8 +23,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $company_id = $_GET['company_id'];
 $address_id = $_GET['address_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select d.*, c.company_name from companies c, company_division d where c.company_id = d.company_id and d.division_id = $division_id";
 
@@ -115,6 +114,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: edit-division.php,v $
+ * Revision 1.15  2006/01/02 22:56:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.14  2005/08/04 19:30:48  vanmer
  * - added passthrough for return_url, if provided
  *

@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.26 2005/08/11 02:46:19 vanmer Exp $
+ * $Id: addresses.php,v 1.27 2006/01/02 22:56:26 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -33,8 +33,7 @@ $return_url="addresses.php?company_id=$company_id&edit_contact_id=$edit_contact_
 
 $url_return_url=urlencode($return_url);
 global $con;
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $company_name = fetch_company_name($con, $company_id);
@@ -214,6 +213,9 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.27  2006/01/02 22:56:26  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.26  2005/08/11 02:46:19  vanmer
  * - added postal code to mini search on addresses
  * - added qstr over all input'd variables

@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.64 2005/08/28 16:35:06 braverock Exp $
+ * $Id: some.php,v 1.65 2006/01/02 23:00:00 vanmer Exp $
  */
 
 //include the standard files
@@ -22,8 +22,7 @@ require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 $on_what_table='contacts';
 $session_user_id = session_check();
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug = 1;
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
@@ -483,6 +482,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.65  2006/01/02 23:00:00  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.64  2005/08/28 16:35:06  braverock
  * - fix colspan on Recently Viewed table
  *

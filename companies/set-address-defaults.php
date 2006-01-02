@@ -24,8 +24,7 @@ if (!$default_shipping_address) {$default_shipping_address=0;}
 $default_payment_address = isset($_POST['default_payment_address']) ? $_POST['default_payment_address'] : '';
 if (!$default_payment_address) {$default_payment_address=0;}
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 // $con->debug=1;
 

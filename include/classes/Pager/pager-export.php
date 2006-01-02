@@ -2,7 +2,7 @@
 /**
  * Export pager contents
  *
- * $Id: pager-export.php,v 1.5 2005/12/12 17:54:05 daturaarutad Exp $
+ * $Id: pager-export.php,v 1.6 2006/01/02 23:04:33 vanmer Exp $
  */
 
 if(!$include_directory) {
@@ -16,8 +16,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'adodb/toexport.inc.php');
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $session_user_id = session_check();
@@ -85,6 +84,9 @@ if(is_array($session_data) && is_array($column_info)) {
 
 /**
  * $Log: pager-export.php,v $
+ * Revision 1.6  2006/01/02 23:04:33  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.5  2005/12/12 17:54:05  daturaarutad
  * only bring in include-locations.inc if $include_directory is undefined
  *

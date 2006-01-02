@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.43 2005/12/06 22:30:20 jswalter Exp $
+ * $Id: edit.php,v 1.44 2006/01/02 22:59:59 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -30,8 +30,7 @@ $session_user_id = session_check('','Update');
 
 $msg        = isset($_GET['msg']) ? $_GET['msg'] : '';
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug = 1;
 
 $sql = "SELECT * FROM users WHERE user_id = $session_user_id";
@@ -320,6 +319,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.44  2006/01/02 22:59:59  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.43  2005/12/06 22:30:20  jswalter
  *  - modified 'build_salutation_menu()' to force BLANK as first menu item
  *

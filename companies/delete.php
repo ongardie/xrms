@@ -2,7 +2,7 @@
 /**
  * Delete company
  *
- * $Id: delete.php,v 1.5 2005/01/13 18:20:28 vanmer Exp $
+ * $Id: delete.php,v 1.6 2006/01/02 22:56:26 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -19,8 +19,7 @@ $on_what_id=$company_id;
 $session_user_id = session_check('','Delete');
 
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM companies WHERE company_id = $company_id";
 $rst = $con->execute($sql);
@@ -99,6 +98,9 @@ header("Location: some.php?msg=company_deleted");
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.6  2006/01/02 22:56:26  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.5  2005/01/13 18:20:28  vanmer
  * - Basic ACL changes to allow create/delete/update functionality to be restricted
  *

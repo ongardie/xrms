@@ -2,7 +2,7 @@
 /**
  * Add Former Name
  *
- * $Id: delete-relationship.php,v 1.3 2004/07/01 19:49:13 braverock Exp $
+ * $Id: delete-relationship.php,v 1.4 2006/01/02 22:56:26 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -18,8 +18,7 @@ $from_what_id = $_GET['from_what_id'];
 $relationship_type_id = $_GET['relationship_type_id'];
 $company_id = $_GET['company_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $sql = "delete from relationships where from_what_id = " .  $con->qstr($from_what_id, get_magic_quotes_gpc())
@@ -34,6 +33,9 @@ header("Location: relationships.php?company_id=$company_id");
 
 /**
  * $Log: delete-relationship.php,v $
+ * Revision 1.4  2006/01/02 22:56:26  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.3  2004/07/01 19:49:13  braverock
  * - add new configurable relationships code
  *   - adapted from patches submitted by Neil Roberts

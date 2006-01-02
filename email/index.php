@@ -3,7 +3,7 @@
  *
  * Email.
  *
- * $Id: index.php,v 1.7 2005/01/09 01:06:52 vanmer Exp $
+ * $Id: index.php,v 1.8 2006/01/02 23:02:14 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -19,8 +19,7 @@ $msg = $_GET['msg'];
 $array_of_companies = array();
 $array_of_companies = unserialize($_SESSION['array_of_companies']);
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
     
     //hack to not show continue button if no templates are found
     $show_continue=true; 
@@ -98,6 +97,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.8  2006/01/02 23:02:14  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.7  2005/01/09 01:06:52  vanmer
  * - added check to see if templates exist.  If not, do not show continue button
  *

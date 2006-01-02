@@ -14,8 +14,7 @@ $msg = $_GET['msg'];
 $email_template_title = $_POST['email_template_title'];
 $email_template_body = $_POST['email_template_body'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //save to database
 $rec = array();

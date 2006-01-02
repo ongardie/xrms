@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.31 2005/11/18 20:35:07 vanmer Exp $
+ * $Id: new-2.php,v 1.32 2006/01/02 22:59:59 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -46,8 +46,7 @@ $arr_vars = array ( // local var name             // session variable name, flag
 // get all posted in variables
 arr_vars_get_all ( $arr_vars , true);
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 // uncomment the following line to turn on debugging
 //$con->debug=1;
@@ -162,6 +161,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.32  2006/01/02 22:59:59  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.31  2005/11/18 20:35:07  vanmer
  * - changed to use contact API for adding new contact
  *

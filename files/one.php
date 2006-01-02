@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.21 2005/12/14 05:05:02 daturaarutad Exp $
+ * $Id: one.php,v 1.22 2006/01/02 23:03:52 vanmer Exp $
  */
 
 //include required files
@@ -25,8 +25,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 getGlobalVar($return_url, 'return_url');
 $out_return_url=urlencode($return_url);
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 update_recent_items($con, $session_user_id, "files", $file_id);
 
@@ -223,6 +222,9 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.22  2006/01/02 23:03:52  vanmer
+ *- changed to use centralized dbconnection function
+ *
  *Revision 1.21  2005/12/14 05:05:02  daturaarutad
  *change File Name to Summary, show true filename
  *

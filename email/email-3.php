@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.18 2005/09/20 14:37:06 ycreddy Exp $
+ * $Id: email-3.php,v 1.19 2006/01/02 23:02:14 vanmer Exp $
  */
 
 
@@ -80,8 +80,7 @@ if (is_array($array_of_contacts))
 else
     echo _("WARNING: No array of contacts!") . "<br>";
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug = 1;
 
 $sql = "select cont.contact_id, cont.email, cont.first_names, cont.last_name, c.company_name, u.username
@@ -159,6 +158,9 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.19  2006/01/02 23:02:14  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.18  2005/09/20 14:37:06  ycreddy
  * Fix to how file_upload.php is included
  *

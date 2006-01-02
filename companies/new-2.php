@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.27 2005/12/18 02:57:20 vanmer Exp $
+ * $Id: new-2.php,v 1.28 2006/01/02 22:56:27 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -69,8 +69,7 @@ $address_name = (strlen($address_name) > 0) ? $address_name : '[address]';
 $use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
 
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 //save to database
@@ -248,6 +247,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.28  2006/01/02 22:56:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.27  2005/12/18 02:57:20  vanmer
  * - changed to use gmt_offset instead of offset field
  * - Thanks to kennyholden for this patch

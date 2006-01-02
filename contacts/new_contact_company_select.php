@@ -45,8 +45,7 @@ switch ($company_select_action) {
             $msg=_("Please select a company to continue");
         }
     case 'showCompanies':
-        $con = &adonewconnection($xrms_db_dbtype);
-        $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+        $con = get_xrms_dbconnection();
         if (!$company_name) {
             $msg="Please include a search phrase";
             Header("Location: new_contact_company_select.php?company_select_action=newCompanySearch&msg=$msg&return_url=$return_url");
@@ -105,6 +104,9 @@ end_page();
 
 /*
  * $Log: new_contact_company_select.php,v $
+ * Revision 1.6  2006/01/02 23:00:00  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.5  2005/08/05 21:44:51  vanmer
  * - changed contact company searches to use centralized company search string function
  *

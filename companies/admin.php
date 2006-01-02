@@ -2,7 +2,7 @@
 /**
  * Set admin items for a company
  *
- * $Id: admin.php,v 1.7 2004/07/21 19:17:56 introspectshun Exp $
+ * $Id: admin.php,v 1.8 2006/01/02 22:56:26 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -24,8 +24,7 @@ $company_id = isset($_GET['company_id']) ? $_GET['company_id'] : '';
 // $gacl_check = $gacl->acl_check('users', $session_user_id, 'company', 'view', 'companies', $company_id);
 // $gacl_check = ($gacl_check) ? "True" : "False";
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from companies where company_id = $company_id";
 
@@ -135,6 +134,9 @@ end_page();
 
 /**
  * $Log: admin.php,v $
+ * Revision 1.8  2006/01/02 22:56:26  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.7  2004/07/21 19:17:56  introspectshun
  * - Localized strings for i18n/l10n support
  *

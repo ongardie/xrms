@@ -6,7 +6,7 @@
  *
  * @todo Add ability to ctreate a Sales Opportunity for a new company
  *
- * $Id: new.php,v 1.20 2005/10/06 04:30:06 vanmer Exp $
+ * $Id: new.php,v 1.21 2006/01/02 22:56:27 vanmer Exp $
  */
 
 /* Include required files */
@@ -24,8 +24,7 @@ $session_user_id = session_check('','Create');
 $msg      = isset($_GET['msg'])      ? $_GET['msg']      : '';
 $clone_id = isset($_GET['clone_id']) ? $_GET['clone_id'] : 0;
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 if ($clone_id > 0) {
     $sql = "select * from companies where company_id = $clone_id";
@@ -313,6 +312,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.21  2006/01/02 22:56:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.20  2005/10/06 04:30:06  vanmer
  * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
  *

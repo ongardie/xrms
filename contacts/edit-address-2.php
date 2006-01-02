@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a contact
  *
- * $Id: edit-address-2.php,v 1.14 2005/12/18 02:57:20 vanmer Exp $
+ * $Id: edit-address-2.php,v 1.15 2006/01/02 22:59:59 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -44,8 +44,7 @@ arr_vars_get_all ( $arr_vars , true );
 
 $use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 if ($alt_address) {
@@ -161,6 +160,9 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.15  2006/01/02 22:59:59  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.14  2005/12/18 02:57:20  vanmer
  * - changed to use gmt_offset instead of offset field
  * - Thanks to kennyholden for this patch
@@ -202,7 +204,7 @@ header("Location: $return_url");
  * - added processing for "Use Alternate Address" section
  *
  * Revision 1.2  2004/06/09 17:36:09  gpowers
- * - added $Id: edit-address-2.php,v 1.14 2005/12/18 02:57:20 vanmer Exp $Log: tags.
+ * - added $Id: edit-address-2.php,v 1.15 2006/01/02 22:59:59 vanmer Exp $Log: tags.
  *
  * Revision 1.1  2004/06/09 16:52:14  gpowers
  * - Contact Address Editing

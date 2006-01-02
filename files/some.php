@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.42 2005/12/05 20:45:19 daturaarutad Exp $
+ * $Id: some.php,v 1.43 2006/01/02 23:03:52 vanmer Exp $
  */
 
 //include required files
@@ -19,8 +19,7 @@ require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $on_what_table='files';
@@ -520,6 +519,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.43  2006/01/02 23:03:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.42  2005/12/05 20:45:19  daturaarutad
  * removed export and mail merge buttons
  *

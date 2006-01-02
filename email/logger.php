@@ -3,7 +3,7 @@
 *
 * Log an email message
 *
-* $Id: logger.php,v 1.2 2005/02/10 14:40:03 maulani Exp $
+* $Id: logger.php,v 1.3 2006/01/02 23:02:14 vanmer Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -18,8 +18,7 @@ require_once 'Console/Getopt.php';
 
 $args = Console_Getopt::readPHPArgv();
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $message = file_get_contents("php://stdin");
@@ -153,6 +152,9 @@ $con->close();
 
 /**
 * $Log: logger.php,v $
+* Revision 1.3  2006/01/02 23:02:14  vanmer
+* - changed to use centralized dbconnection function
+*
 * Revision 1.2  2005/02/10 14:40:03  maulani
 * - Set last modified info when creating activities
 *

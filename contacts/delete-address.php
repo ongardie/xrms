@@ -2,7 +2,7 @@
 /**
  * delete address for a contact
  *
- * $Id: delete-address.php,v 1.3 2004/07/22 11:21:13 cpsource Exp $
+ * $Id: delete-address.php,v 1.4 2006/01/02 22:59:59 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -19,8 +19,7 @@ $session_user_id = session_check();
 $contact_id = $_GET['contact_id'];
 $address_id = $_GET['address_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $sql = "SELECT * FROM addresses WHERE address_id = $address_id";
@@ -49,6 +48,9 @@ header("Location: one.php?msg=deleted&contact_id=$contact_id");
 
 /**
  * $Log: delete-address.php,v $
+ * Revision 1.4  2006/01/02 22:59:59  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.3  2004/07/22 11:21:13  cpsource
  * - All paths now relative to include-locations-location.inc
  *   Code cleanup for Create Contact for 'Self'

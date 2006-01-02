@@ -2,7 +2,7 @@
 /**
  * Transfer a Contact to Another Company
  *
- * $Id: transfer.php,v 1.9 2005/08/04 20:59:10 vanmer Exp $
+ * $Id: transfer.php,v 1.10 2006/01/02 23:00:00 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -18,8 +18,7 @@ getGlobalVar($company_name, 'company_name');
 $msg = isset($_GET['msg']) ? $_GET['msg']: '';
 $contact_id = $_GET['contact_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 // This query is done separately in case there is no current address
@@ -76,6 +75,9 @@ end_page();
 
 /**
  * $Log: transfer.php,v $
+ * Revision 1.10  2006/01/02 23:00:00  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.9  2005/08/04 20:59:10  vanmer
  * - removed msg from hidden variables, not needed to pass on every msg found
  * - added extra parameter to display company_name if provided

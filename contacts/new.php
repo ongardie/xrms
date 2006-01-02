@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.39 2005/09/25 05:42:06 vanmer Exp $
+ * $Id: new.php,v 1.40 2006/01/02 23:00:00 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -19,8 +19,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $clone_id = isset($_GET['clone_id']) ? $_GET['clone_id'] : 0;
 getGlobalVar($return_url, 'return_url');
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 if ($clone_id > 0) {
 
@@ -353,6 +352,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.40  2006/01/02 23:00:00  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.39  2005/09/25 05:42:06  vanmer
  * - removed IM field references from all contact pages (now handled by plugin)
  * - added custom field hook for contacts new.php

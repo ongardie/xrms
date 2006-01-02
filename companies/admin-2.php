@@ -2,7 +2,7 @@
 /**
  * Insert company admin items into the database
  *
- * $Id: admin-2.php,v 1.5 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: admin-2.php,v 1.6 2006/01/02 22:56:26 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -27,8 +27,7 @@ $extref2 = $_POST['extref2'];
 $credit_limit = ($credit_limit > 0) ? $credit_limit : 0;
 $terms = ($terms > 0) ? $terms : 0;
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM companies WHERE company_id = $company_id";
 $rst = $con->execute($sql);
@@ -62,6 +61,9 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: admin-2.php,v $
+ * Revision 1.6  2006/01/02 22:56:26  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.5  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.28 2005/10/10 12:31:41 braverock Exp $
+* $Id: email-4.php,v 1.29 2006/01/02 23:02:14 vanmer Exp $
 *
 * @todo use a more secure method than 'unlink' to delete files after sending them
 */
@@ -69,8 +69,7 @@ if ( $_SESSION['email_sent'] === false )
         }
     }
 
-    $con = &adonewconnection($xrms_db_dbtype);
-    $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+    $con = get_xrms_dbconnection();
     //$con->debug = 1;
 
     if (is_array($array_of_contacts)) {
@@ -339,6 +338,9 @@ function getFile($file_to_open)
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.29  2006/01/02 23:02:14  vanmer
+* - changed to use centralized dbconnection function
+*
 * Revision 1.28  2005/10/10 12:31:41  braverock
 * - remove trailing whitespace
 *

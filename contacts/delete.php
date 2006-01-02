@@ -14,8 +14,7 @@ $on_what_id=$contact_id;
 $session_user_id = session_check('','Delete');
 $company_id = $_GET['company_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM contacts WHERE contact_id = $contact_id";
 $rst = $con->execute($sql);
@@ -34,6 +33,9 @@ header("Location: {$http_site_root}/companies/one.php?company_id=$company_id&msg
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.7  2006/01/02 22:59:59  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.6  2005/02/10 21:16:48  maulani
  * - Add audit trail entries
  *

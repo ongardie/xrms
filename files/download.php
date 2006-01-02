@@ -5,7 +5,7 @@
  * Files that have been stored on the server are downloaded to
  * the user's default location.
  *
- * $Id: download.php,v 1.19 2005/11/09 22:35:42 daturaarutad Exp $
+ * $Id: download.php,v 1.20 2006/01/02 23:03:52 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -24,8 +24,7 @@ $session_user_id = session_check();
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from files where file_id = $file_id";
 
@@ -114,6 +113,9 @@ exit();
 
 /**
  * $Log: download.php,v $
+ * Revision 1.20  2006/01/02 23:03:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.19  2005/11/09 22:35:42  daturaarutad
  * add hooks for files plugin
  *

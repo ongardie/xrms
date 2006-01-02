@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.16 2005/10/03 10:28:27 braverock Exp $
+* $Id: email-2.php,v 1.17 2006/01/02 23:02:14 vanmer Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -92,8 +92,7 @@ else
 {
     $email_template_id = (strlen($_POST['email_template_id']) > 0) ? $_POST['email_template_id'] : $_GET['email_template_id'];
 
-    $con = &adonewconnection($xrms_db_dbtype);
-    $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+    $con = get_xrms_dbconnection();
     //$con->debug=true;
     $sql = "SELECT * FROM users WHERE user_id = '".$session_user_id."'";
     $rst = $con->execute($sql);
@@ -366,6 +365,9 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.17  2006/01/02 23:02:14  vanmer
+* - changed to use centralized dbconnection function
+*
 * Revision 1.16  2005/10/03 10:28:27  braverock
 * - remove legacy file_limit_sql
 *

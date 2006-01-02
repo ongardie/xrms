@@ -2,7 +2,7 @@
 /**
  * Insert Updated File information into the database
  *
- * $Id: edit-2.php,v 1.9 2005/12/14 05:03:29 daturaarutad Exp $
+ * $Id: edit-2.php,v 1.10 2006/01/02 23:03:52 vanmer Exp $
  */
 
 //include required files
@@ -26,8 +26,7 @@ $file_name = $_FILES['file1']['name'];
 $file_type = $_FILES['file1']['type'];
 $file_size = $_FILES['file1']['size'];
 $file_tmp_name = $_FILES['file1']['tmp_name'];
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 
@@ -130,6 +129,9 @@ if($error) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.10  2006/01/02 23:03:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.9  2005/12/14 05:03:29  daturaarutad
  * use get_url_seperator() function
  *

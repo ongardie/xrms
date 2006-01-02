@@ -2,7 +2,7 @@
 /**
  * Add Former Name
  *
- * $Id: delete-former-name.php,v 1.3 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: delete-former-name.php,v 1.4 2006/01/02 22:56:26 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -17,8 +17,7 @@ $session_user_id = session_check();
 $company_id = $_GET['company_id'];
 $former_name = $_GET['former_name'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $sql = "delete from company_former_names where company_id = " . $company_id  . " AND former_name = " . $con->qstr($former_name, get_magic_quotes_gpc());
@@ -33,6 +32,9 @@ header("Location: former-names.php?company_id=$company_id");
 
 /**
  * $Log: delete-former-name.php,v $
+ * Revision 1.4  2006/01/02 22:56:26  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.3  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

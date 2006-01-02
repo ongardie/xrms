@@ -2,7 +2,7 @@
 /**
  * Set categories for a contact
  *
- * $Id: categories.php,v 1.8 2004/07/22 11:21:13 cpsource Exp $
+ * $Id: categories.php,v 1.9 2006/01/02 22:59:59 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -21,8 +21,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $contact_id = $_GET['contact_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 // associated with
@@ -130,6 +129,9 @@ end_page();
 
 /**
  * $Log: categories.php,v $
+ * Revision 1.9  2006/01/02 22:59:59  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.8  2004/07/22 11:21:13  cpsource
  * - All paths now relative to include-locations-location.inc
  *   Code cleanup for Create Contact for 'Self'

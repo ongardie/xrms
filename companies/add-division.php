@@ -2,7 +2,7 @@
 /**
  * Add a division to a company
  *
- * $Id: add-division.php,v 1.12 2005/08/04 19:29:50 vanmer Exp $
+ * $Id: add-division.php,v 1.13 2006/01/02 22:56:26 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -24,8 +24,7 @@ if (!strlen($division_name)) {
 $address_id = $_POST['address_id'];
 $description = $_POST['description'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //$con->debug = 1;
 
@@ -57,6 +56,9 @@ header("Location: divisions.php?msg=division_added&company_id=$company_id");
 
 /**
  * $Log: add-division.php,v $
+ * Revision 1.13  2006/01/02 22:56:26  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.12  2005/08/04 19:29:50  vanmer
  * - altered to return to divisions list after new division is added to a company
  *

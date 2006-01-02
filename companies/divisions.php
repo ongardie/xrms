@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: divisions.php,v 1.14 2005/07/21 22:13:27 braverock Exp $
+ * $Id: divisions.php,v 1.15 2006/01/02 22:56:27 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -22,8 +22,7 @@ $session_user_id = session_check();
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $company_id = $_GET['company_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $company_name = fetch_company_name($con, $company_id);
@@ -115,6 +114,9 @@ end_page();
 
 /**
  * $Log: divisions.php,v $
+ * Revision 1.15  2006/01/02 22:56:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.14  2005/07/21 22:13:27  braverock
  * - set a default name for division if no name specified
  *

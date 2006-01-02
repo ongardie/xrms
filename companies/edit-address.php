@@ -2,7 +2,7 @@
 /**
  * Edit address for a company
  *
- * $Id: edit-address.php,v 1.11 2005/06/01 16:08:10 vanmer Exp $
+ * $Id: edit-address.php,v 1.12 2006/01/02 22:56:27 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -19,8 +19,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $company_id = $_GET['company_id'];
 $address_id = $_GET['address_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select a.*, c.company_name from companies c, addresses a where c.company_id = a.company_id and a.address_id = $address_id";
 
@@ -139,6 +138,9 @@ end_page();
 
 /**
  * $Log: edit-address.php,v $
+ * Revision 1.12  2006/01/02 22:56:27  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.11  2005/06/01 16:08:10  vanmer
  * - added ACL control over whether delete button appears on address
  *
