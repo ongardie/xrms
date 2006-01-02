@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.19 2005/09/26 01:20:02 vanmer Exp $
+ * $Id: some.php,v 1.20 2006/01/02 22:09:39 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -24,8 +24,7 @@ getGlobalVar($last_name, 'last_name');
 getGlobalVar($gmt_offset, 'gmt_offset');
 getGlobalVar($email, 'email');
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug=1;
 
 $sql = "select * from users order by last_name, first_names";
@@ -174,6 +173,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.20  2006/01/02 22:09:39  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.19  2005/09/26 01:20:02  vanmer
  * - added parameters to inputs for new user in some.php, so that passed in values will be displayed
  * - added passback of entered parameters from add-2.php if error occurs when adding the user

@@ -5,7 +5,7 @@
  * Check that new password entries are identical
  * Then save in the database.
  *
- * $Id: change-owner-2.php,v 1.2 2005/03/28 17:49:02 gpowers Exp $
+ * $Id: change-owner-2.php,v 1.3 2006/01/02 22:09:39 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -30,8 +30,7 @@ if ( 'Admin' != $_SESSION['role_short_name'] ) {
 $current_user_id = $_POST['current_user_id'];
 $new_user_id = $_POST['new_user_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //uncomment the debug line to see what's going on with the query
 // $con->debug = 1;
@@ -77,6 +76,9 @@ foreach ($tables as $table) {
 
 /**
  *$Log: change-owner-2.php,v $
+ *Revision 1.3  2006/01/02 22:09:39  vanmer
+ *- changed to use centralized dbconnection function
+ *
  *Revision 1.2  2005/03/28 17:49:02  gpowers
  *- limited to changing open activities and active records
  *

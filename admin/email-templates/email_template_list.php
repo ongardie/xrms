@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: email_template_list.php,v 1.3 2005/07/05 05:28:18 alanbach Exp $
+ * $Id: email_template_list.php,v 1.4 2006/01/02 22:12:31 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -23,8 +23,7 @@ global $http_site_root;
 
 $session_user_id = session_check();
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $page_title = _("Manage Email Templates");
 
@@ -86,6 +85,9 @@ end_page();
 
 /**
  * $Log: email_template_list.php,v $
+ * Revision 1.4  2006/01/02 22:12:31  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.3  2005/07/05 05:28:18  alanbach
  * fa_IR translation update + some gettext corrections.
  *

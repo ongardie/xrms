@@ -5,7 +5,7 @@
  * Form to enter a new password for a user
  * @todo - add javascript validation on the save.
  *
- * $Id: change-owner.php,v 1.3 2005/05/10 13:34:12 braverock Exp $
+ * $Id: change-owner.php,v 1.4 2006/01/02 22:09:39 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -28,8 +28,7 @@ if ( 'Admin' != $_SESSION['role_short_name'] ) {
 }
 
 //connect to the database
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $page_title = _("Change Record Owner");
 start_page($page_title);
@@ -106,6 +105,9 @@ end_page();
 
 /**
  *$Log: change-owner.php,v $
+ *Revision 1.4  2006/01/02 22:09:39  vanmer
+ *- changed to use centralized dbconnection function
+ *
  *Revision 1.3  2005/05/10 13:34:12  braverock
  *- localized string patches provided by Alan Baghumian (alanbach)
  *

@@ -2,7 +2,7 @@
 /**
  * commit a new user to the Database
  *
- * $Id: add-2.php,v 1.12 2005/09/26 01:20:03 vanmer Exp $
+ * $Id: add-2.php,v 1.13 2006/01/02 22:09:39 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -25,8 +25,7 @@ $gmt_offset = $_POST['gmt_offset'];
 if (array_key_exists('allowed_p', $_POST)) $enabled=true;
 else $enabled=false;
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 $error_msg='';
 $user_id=add_xrms_user($con, $new_username, $password, $role_id, $first_names, $last_name, $email, $gmt_offset, $enabled, false, $error_msg);
 $con->close();
@@ -40,6 +39,9 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.13  2006/01/02 22:09:39  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.12  2005/09/26 01:20:03  vanmer
  * - added parameters to inputs for new user in some.php, so that passed in values will be displayed
  * - added passback of entered parameters from add-2.php if error occurs when adding the user

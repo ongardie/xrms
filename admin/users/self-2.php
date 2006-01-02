@@ -4,7 +4,7 @@
  *
  * Save the changes from a user-level self-change
  *
- * $Id: self-2.php,v 1.7 2004/07/20 11:40:06 cpsource Exp $
+ * $Id: self-2.php,v 1.8 2006/01/02 22:09:39 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -24,8 +24,7 @@ $gmt_offset   = $_POST['gmt_offset'];
 
 $gmt_offset = (strlen($gmt_offset) > 0) ? $gmt_offset : 0;
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM users WHERE user_id = $edit_user_id";
 $rst = $con->execute($sql);
@@ -48,6 +47,9 @@ header("Location: " . $http_site_root . "/private/home.php?msg=saved");
 
 /**
  *$Log: self-2.php,v $
+ *Revision 1.8  2006/01/02 22:09:39  vanmer
+ *- changed to use centralized dbconnection function
+ *
  *Revision 1.7  2004/07/20 11:40:06  cpsource
  *- Fixed multiple errors
  *   misc undefined variables being used, g....

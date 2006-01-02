@@ -5,7 +5,7 @@
  * Administration screen for managing user preferences
  *
  *
- * $Id: user_prefs.php,v 1.3 2005/07/08 18:50:05 vanmer Exp $
+ * $Id: user_prefs.php,v 1.4 2006/01/02 22:09:39 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -25,8 +25,7 @@ $user_id=$session_user_id;
 
 $page_title="User Preferences";
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //get all user preference types
 $types=get_user_preference_type($con, false, false, true);
 if (!$types) { $msg="Failed to load an user preference types, no user preferences available"; $user_preferences_table='';}

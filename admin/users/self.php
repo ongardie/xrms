@@ -5,7 +5,7 @@
  * Users who do not have admin privileges can update their own
  * user record and password.
  *
- * $Id: self.php,v 1.16 2005/07/06 17:20:36 vanmer Exp $
+ * $Id: self.php,v 1.17 2006/01/02 22:09:39 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -20,8 +20,7 @@ $user_id=$session_user_id;
 
 getGlobalVar($msg, 'msg');
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from users where user_id = $session_user_id";
 
@@ -114,6 +113,9 @@ end_page();
 
 /**
  *$Log: self.php,v $
+ *Revision 1.17  2006/01/02 22:09:39  vanmer
+ *- changed to use centralized dbconnection function
+ *
  *Revision 1.16  2005/07/06 17:20:36  vanmer
  *- changed to use function to get user preferences table
  *

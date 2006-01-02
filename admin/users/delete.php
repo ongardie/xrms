@@ -2,7 +2,7 @@
 /**
  * Remove a user form the system
  *
- * $Id: delete.php,v 1.4 2004/07/16 23:51:38 cpsource Exp $
+ * $Id: delete.php,v 1.5 2006/01/02 22:09:39 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -17,8 +17,7 @@ $session_user_id = session_check( 'Admin' );
 
 $edit_user_id = $_POST['edit_user_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM users WHERE user_id = $edit_user_id";
 $rst = $con->execute($sql);
@@ -35,6 +34,9 @@ header("Location: some.php");
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.5  2006/01/02 22:09:39  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.4  2004/07/16 23:51:38  cpsource
  * - require session_check ( 'Admin' )
  *

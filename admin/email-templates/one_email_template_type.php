@@ -7,7 +7,7 @@
  *
  *
  * @author Aaron van Meerten
- * $Id: one_email_template_type.php,v 1.2 2005/06/24 23:52:31 vanmer Exp $
+ * $Id: one_email_template_type.php,v 1.3 2006/01/02 22:12:31 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -22,8 +22,7 @@ $session_user_id = session_check();
 
 
 		// we need this for the companies foreign key lookup
-	  $con = &adonewconnection($xrms_db_dbtype);
-	  $con->nconnect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+	  $con = get_xrms_dbconnection();
 
 
 getGlobalVar($return_url, 'return_url');
@@ -88,6 +87,9 @@ start_page($page_title);
 
 /**
  * $Log: one_email_template_type.php,v $
+ * Revision 1.3  2006/01/02 22:12:31  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.2  2005/06/24 23:52:31  vanmer
  * - added sidebar wrapper
  *

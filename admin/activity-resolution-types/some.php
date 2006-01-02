@@ -2,7 +2,7 @@
 /**
  * Manage Activity Resolution Types
  *
- * $Id: some.php,v 1.1 2005/06/30 04:35:29 vanmer Exp $
+ * $Id: some.php,v 1.2 2006/01/02 22:14:07 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -15,8 +15,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from activity_resolution_types where resolution_type_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql);
@@ -97,6 +96,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.2  2006/01/02 22:14:07  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.1  2005/06/30 04:35:29  vanmer
  * - initial revision of list for activity resolution types admin page
  *

@@ -4,7 +4,7 @@
  *
  * Admin changes a user
  *
- * $Id: edit-2.php,v 1.16 2005/07/06 17:19:53 vanmer Exp $
+ * $Id: edit-2.php,v 1.17 2006/01/02 22:09:39 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -73,8 +73,7 @@ switch ($userAction) {
         
         $gmt_offset = (strlen($gmt_offset) > 0) ? $gmt_offset : 0;
         
-        $con = &adonewconnection($xrms_db_dbtype);
-        $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+        $con = get_xrms_dbconnection();
         
         $sql = "SELECT * FROM users WHERE user_id = $edit_user_id";
         $rst = $con->execute($sql);
@@ -117,6 +116,9 @@ switch ($userAction) {
 }    
 /**
  *$Log: edit-2.php,v $
+ *Revision 1.17  2006/01/02 22:09:39  vanmer
+ *- changed to use centralized dbconnection function
+ *
  *Revision 1.16  2005/07/06 17:19:53  vanmer
  *- allow edit of user data to return to $return_url instead of always going to self.php
  *- removed reference to short_role in session

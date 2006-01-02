@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.24 2005/07/06 17:22:14 vanmer Exp $
+ * $Id: one.php,v 1.25 2006/01/02 22:09:39 vanmer Exp $
  */
 
 //include required files
@@ -24,8 +24,7 @@ if (!$return_url) {
 
 $edit_user_id = $_GET['edit_user_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from users where user_id = $edit_user_id";
 
@@ -168,6 +167,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.25  2006/01/02 22:09:39  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.24  2005/07/06 17:22:14  vanmer
  * - added return url when editing user data
  *

@@ -5,7 +5,7 @@
  * Check that new password entries are identical
  * Then save in the database.
  *
- * $Id: change-password-2.php,v 1.12 2005/09/15 16:08:38 vanmer Exp $
+ * $Id: change-password-2.php,v 1.13 2006/01/02 22:09:39 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -33,8 +33,7 @@ $confirm_password = $_POST['confirm_password'];
 if ($password == $confirm_password) {
     $password = md5($password);
 
-    $con = &adonewconnection($xrms_db_dbtype);
-    $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+    $con = get_xrms_dbconnection();
 
     $sql = "SELECT * FROM users WHERE user_id = $edit_user_id";
 
@@ -72,6 +71,9 @@ if ($password == $confirm_password) {
 
 /**
  *$Log: change-password-2.php,v $
+ *Revision 1.13  2006/01/02 22:09:39  vanmer
+ *- changed to use centralized dbconnection function
+ *
  *Revision 1.12  2005/09/15 16:08:38  vanmer
  *- added code to ensure that even if user is an administrator, they can still change their own password as well
  *
