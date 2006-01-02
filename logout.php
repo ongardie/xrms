@@ -2,7 +2,7 @@
 /**
  * Logout
  *
- * $Id: logout.php,v 1.6 2005/11/27 14:17:20 braverock Exp $
+ * $Id: logout.php,v 1.7 2006/01/02 23:23:09 vanmer Exp $
  */
 
 require_once('include-locations.inc');
@@ -16,8 +16,7 @@ $session_user_id = session_check();
 
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
  
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 add_audit_item($con, $session_user_id, 'logout', '', '', 2);

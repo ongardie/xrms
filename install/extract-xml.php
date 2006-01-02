@@ -2,7 +2,7 @@
 /**
  * install/extract-util.php - This page should be used by developers and administrators to extract an xml schema
  *
- * $Id: extract-xml.php,v 1.3 2005/12/06 22:32:14 vanmer Exp $
+ * $Id: extract-xml.php,v 1.4 2006/01/02 23:23:09 vanmer Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -32,8 +32,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-xmlschema.inc.php' );
 
 // can we make a database connection?
-$con = &adonewconnection($xrms_db_dbtype);
-$connectiontest = $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$connectiontest = get_xrms_dbconnection();
 if (!$connectiontest) {
     // Oops!  We do not have a valid database connection
     // Now instruct the user in how to fix this problem
@@ -44,7 +43,7 @@ if (!$connectiontest) {
     $problem .= 'Then run this installation again.<BR><BR>';
 
     install_fatal_error($problem);
-}
+} else $con=$connectiontest;
 
 
 $role = $_SESSION['role_short_name'];
@@ -74,6 +73,9 @@ echo "Placed Schema in $out_path";
 
 /**
  *$Log: extract-xml.php,v $
+ *Revision 1.4  2006/01/02 23:23:09  vanmer
+ *- changed to use centralized dbconnection function
+ *
  *Revision 1.3  2005/12/06 22:32:14  vanmer
  *- changed to save xml schema file in the upload directory
  *

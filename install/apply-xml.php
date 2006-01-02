@@ -2,7 +2,7 @@
 /**
  * install/extract-util.php - This page should be used by developers and administrators to extract an xml schema
  *
- * $Id: apply-xml.php,v 1.1 2005/10/03 21:19:58 vanmer Exp $
+ * $Id: apply-xml.php,v 1.2 2006/01/02 23:23:09 vanmer Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -32,8 +32,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-xmlschema.inc.php' );
 
 // can we make a database connection?
-$con = &adonewconnection($xrms_db_dbtype);
-$connectiontest = $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$connectiontest = get_xrms_dbconnection();
 if (!$connectiontest) {
     // Oops!  We do not have a valid database connection
     // Now instruct the user in how to fix this problem
@@ -44,7 +43,7 @@ if (!$connectiontest) {
     $problem .= 'Then run this installation again.<BR><BR>';
 
     install_fatal_error($problem);
-}
+} else $con=$connectiontest;
 
 //Uncomment this if you want to see what's going on
 //$con->debug=true;
@@ -70,6 +69,9 @@ $result = $schema->ExecuteSchema();
 
 /**
  *$Log: apply-xml.php,v $
+ *Revision 1.2  2006/01/02 23:23:09  vanmer
+ *- changed to use centralized dbconnection function
+ *
  *Revision 1.1  2005/10/03 21:19:58  vanmer
  *- Adding application to use XML schema for install of XRMS tables
  *- Commit includes extract file to get current database into XML form

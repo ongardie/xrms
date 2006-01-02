@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.25 2005/11/27 14:17:20 braverock Exp $
+ * $Id: login-2.php,v 1.26 2006/01/02 23:23:09 vanmer Exp $
  */
 require_once('include-locations.inc');
 
@@ -21,8 +21,7 @@ $target   = $_REQUEST['target'];
 
 
 
-$con = &adonewconnection($xrms_db_dbtype);
-$connectiontest = $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$connectiontest = get_xrms_dbconnection();
 if (!$connectiontest) {
     // Oops!  We do not have a valid database connection
     // Now instruct the user in how to fix this problem
@@ -46,7 +45,7 @@ if (!$connectiontest) {
         </html>
 EOQ;
     exit;
-}
+} else $con=$connectiontest;
 // $con->debug = 1;
 
 // this hook is untested with ldap. Works okay authenticating to the DB
@@ -155,6 +154,9 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.26  2006/01/02 23:23:09  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.25  2005/11/27 14:17:20  braverock
  * - added hooks to support more advanced login/logout functionality
  *   - patches provided by Brendon Baumgartner <brendon@brendon.com>

@@ -6,7 +6,7 @@
  * when evaluating xrms.
  *
  * @author Beth Macknik
- * $Id: sample.php,v 1.3 2005/05/24 15:21:24 braverock Exp $
+ * $Id: sample.php,v 1.4 2006/01/02 23:23:09 vanmer Exp $
  */
 
 /**
@@ -31,8 +31,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'vars.php');
 
 // make a database connection
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 // companies
 if (confirm_no_records($con, 'companies')) {
@@ -100,6 +99,9 @@ end_page();
 
 /**
  * $Log: sample.php,v $
+ * Revision 1.4  2006/01/02 23:23:09  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.3  2005/05/24 15:21:24  braverock
  * - add missing "
  *
