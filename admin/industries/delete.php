@@ -12,8 +12,7 @@ $session_user_id = session_check( 'Admin' );
 
 $industry_id = $_POST['industry_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM industries WHERE industry_id = $industry_id";
 $rst = $con->execute($sql);

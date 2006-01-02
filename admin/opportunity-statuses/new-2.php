@@ -2,7 +2,7 @@
 /**
  * Insert a new opportunity status into the database
  *
- * $Id: new-2.php,v 1.8 2004/07/16 23:51:37 cpsource Exp $
+ * $Id: new-2.php,v 1.9 2006/01/02 21:59:08 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -33,9 +33,7 @@ if (strlen($opportunity_status_display_html) > 0) {
     $opportunity_status_display_html = $opportunity_status_pretty_name;
 }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-
+$con = get_xrms_dbconnection();
 
 //get next sort_order value, put it at the bottom of the list
 $sql = "select sort_order from opportunity_statuses where opportunity_status_record_status='a' order by sort_order desc";
@@ -63,6 +61,9 @@ header("Location: some.php");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.9  2006/01/02 21:59:08  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.8  2004/07/16 23:51:37  cpsource
  * - require session_check ( 'Admin' )
  *

@@ -2,7 +2,7 @@
 /**
  * View all opportunity Types
  *
- * $Id: some.php,v 1.1 2005/07/06 21:08:57 braverock Exp $
+ * $Id: some.php,v 1.2 2006/01/02 21:59:08 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -14,8 +14,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from opportunity_types where opportunity_type_record_status = 'a' order by opportunity_type_id";
 $rst = $con->execute($sql);
@@ -91,6 +90,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.2  2006/01/02 21:59:08  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.1  2005/07/06 21:08:57  braverock
  * - Initial Revision of Admin screens for opportunity types
  *

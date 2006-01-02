@@ -15,8 +15,7 @@ $industry_pretty_name = $_POST['industry_pretty_name'];
 $industry_pretty_plural = $_POST['industry_pretty_plural'];
 $industry_display_html = $_POST['industry_display_html'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //save to database
 $rec = array();

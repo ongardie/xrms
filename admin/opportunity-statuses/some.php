@@ -5,7 +5,7 @@
  *
  * @todo modify all opportunity status uses to use a sort order
  *
- * $Id: some.php,v 1.11 2005/05/10 13:31:53 braverock Exp $
+ * $Id: some.php,v 1.12 2006/01/02 21:59:08 vanmer Exp $
  */
 
 //include required XRMS common files
@@ -20,8 +20,7 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check( 'Admin' );
 
 //connect to the database
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from opportunity_statuses where opportunity_status_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql);
@@ -155,6 +154,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.12  2006/01/02 21:59:08  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.11  2005/05/10 13:31:53  braverock
  * - localized string patches provided by Alan Baghumian (alanbach)
  *

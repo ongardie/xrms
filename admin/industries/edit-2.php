@@ -16,8 +16,7 @@ $industry_pretty_name = $_POST['industry_pretty_name'];
 $industry_pretty_plural = $_POST['industry_pretty_plural'];
 $industry_display_html = $_POST['industry_display_html'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM industries WHERE industry_id = $industry_id";
 $rst = $con->execute($sql);

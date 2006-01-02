@@ -4,7 +4,7 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.15 2005/07/08 17:29:29 braverock Exp $
+ * $Id: one.php,v 1.16 2006/01/02 21:59:08 vanmer Exp $
  */
 
 //include required common files
@@ -20,8 +20,7 @@ $session_user_id = session_check( 'Admin' );
 
 $opportunity_status_id = $_GET['opportunity_status_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from opportunity_statuses where opportunity_status_id = $opportunity_status_id";
 
@@ -246,6 +245,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.16  2006/01/02 21:59:08  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.15  2005/07/08 17:29:29  braverock
  * - add role_id and sort_order to display/new
  * - properly localize strings

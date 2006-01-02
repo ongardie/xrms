@@ -2,7 +2,7 @@
 /**
  * Insert a new opportunity type the database
  *
- * $Id: new-2.php,v 1.1 2005/07/06 21:08:57 braverock Exp $
+ * $Id: new-2.php,v 1.2 2006/01/02 21:59:08 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -19,8 +19,7 @@ $opportunity_type_pretty_name = $_POST['opportunity_type_pretty_name'];
 $opportunity_type_pretty_plural = $_POST['opportunity_type_pretty_plural'];
 $opportunity_type_display_html = $_POST['opportunity_type_display_html'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //save to database
 $rec = array();
@@ -39,6 +38,9 @@ header("Location: some.php");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.2  2006/01/02 21:59:08  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.1  2005/07/06 21:08:57  braverock
  * - Initial Revision of Admin screens for opportunity types
  *

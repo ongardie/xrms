@@ -11,8 +11,7 @@ $session_user_id = session_check( 'Admin' );
 
 $opportunity_status_id = $_POST['opportunity_status_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug = 1;
 
 //lazy delete the selected record

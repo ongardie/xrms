@@ -2,7 +2,7 @@
 /**
  * save an updated an opportunity status  to database after editing it.
  *
- * $Id: edit-2.php,v 1.6 2004/07/16 23:51:37 cpsource Exp $
+ * $Id: edit-2.php,v 1.7 2006/01/02 21:59:08 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -22,8 +22,7 @@ $opportunity_status_display_html = $_POST['opportunity_status_display_html'];
 $opportunity_status_long_desc = $_POST['opportunity_status_long_desc'];
 $status_open_indicator = $_POST['status_open_indicator'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //$con->debug=1;
 
@@ -48,6 +47,9 @@ header("Location: some.php");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.7  2006/01/02 21:59:08  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.6  2004/07/16 23:51:37  cpsource
  * - require session_check ( 'Admin' )
  *

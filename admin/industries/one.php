@@ -2,7 +2,7 @@
 /**
  * Manage industries
  *
- * $Id: one.php,v 1.8 2004/07/25 18:36:38 johnfawcett Exp $
+ * $Id: one.php,v 1.9 2006/01/02 21:55:10 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -17,8 +17,7 @@ $session_user_id = session_check( 'Admin' );
 
 $industry_id = $_GET['industry_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from industries where industry_id = $industry_id";
 
@@ -102,6 +101,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.9  2006/01/02 21:55:10  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.8  2004/07/25 18:36:38  johnfawcett
  * - corrected string erroneously pasted
  *

@@ -2,7 +2,7 @@
 /**
  * Manage Industries
  *
- * $Id: some.php,v 1.7 2004/12/24 15:54:51 braverock Exp $
+ * $Id: some.php,v 1.8 2006/01/02 21:55:10 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -15,8 +15,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from industries where industry_record_status = 'a' order by industry_pretty_name";
 $rst = $con->execute($sql);
@@ -90,6 +89,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.8  2006/01/02 21:55:10  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.7  2004/12/24 15:54:51  braverock
  * - localize industry_pretty_name
  *
