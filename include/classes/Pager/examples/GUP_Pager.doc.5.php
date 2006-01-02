@@ -32,9 +32,7 @@ if(check_user_role(false, $session_user_id, 'Administrator')) {
 
 global $con;
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-
+$con = get_xrms_dbconnection();
 
 //Let's assume that we have a query like:
 $data = array();

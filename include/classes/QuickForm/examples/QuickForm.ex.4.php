@@ -33,8 +33,7 @@ if(check_user_role(false, $session_user_id, 'Administrator')) {
     global $http_site_root;
     $return_url = $http_site_root . current_page();
 
-	$con = &adonewconnection($xrms_db_dbtype);
-	$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+	$con = get_xrms_dbconnection();
 
 
     $model = new ADOdb_QuickForm_Model();
