@@ -4,7 +4,7 @@
  *
  * Add account status
  *
- * $Id: add-2.php,v 1.6 2005/04/10 17:34:54 maulani Exp $
+ * $Id: add-2.php,v 1.7 2006/01/02 21:26:21 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -21,8 +21,7 @@ $account_status_pretty_name = $_POST['account_status_pretty_name'];
 $account_status_pretty_plural = $_POST['account_status_pretty_plural'];
 $account_status_display_html = $_POST['account_status_display_html'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 if (!$account_status_pretty_name) { $account_status_pretty_name = $account_status_short_name; }
 if (!$account_status_pretty_plural) { $account_status_pretty_plural = $account_status_short_name; }
@@ -45,6 +44,9 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.7  2006/01/02 21:26:21  vanmer
+ * - changed to use centralized xrms dbconnection function
+ *
  * Revision 1.6  2005/04/10 17:34:54  maulani
  * - Add phpdoc
  *

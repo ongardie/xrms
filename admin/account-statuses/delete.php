@@ -4,7 +4,7 @@
  *
  * Delete account-status
  *
- * $Id: delete.php,v 1.4 2005/04/10 17:34:54 maulani Exp $
+ * $Id: delete.php,v 1.5 2006/01/02 21:26:21 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -18,8 +18,7 @@ $session_user_id = session_check( 'Admin' );
 
 $account_status_id = $_POST['account_status_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM account_statuses WHERE account_status_id = $account_status_id";
 $rst = $con->execute($sql);
@@ -36,6 +35,9 @@ header("Location: some.php");
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.5  2006/01/02 21:26:21  vanmer
+ * - changed to use centralized xrms dbconnection function
+ *
  * Revision 1.4  2005/04/10 17:34:54  maulani
  * - Add phpdoc
  *

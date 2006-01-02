@@ -4,7 +4,7 @@
  *
  * Edit account-status
  *
- * $Id: one.php,v 1.8 2004/07/25 17:19:59 johnfawcett Exp $
+ * $Id: one.php,v 1.9 2006/01/02 21:26:21 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -18,8 +18,7 @@ $session_user_id = session_check( 'Admin' );
 
 $account_status_id = $_GET['account_status_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from account_statuses where account_status_id = $account_status_id";
 
@@ -119,6 +118,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.9  2006/01/02 21:26:21  vanmer
+ * - changed to use centralized xrms dbconnection function
+ *
  * Revision 1.8  2004/07/25 17:19:59  johnfawcett
  * - Reinserted ? in gettext strings - needed for some languages
  * - Standardized Delete text and button

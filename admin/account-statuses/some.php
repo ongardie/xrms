@@ -4,7 +4,7 @@
  *
  * List account-status
  *
- * $Id: some.php,v 1.8 2004/11/26 17:18:28 braverock Exp $
+ * $Id: some.php,v 1.9 2006/01/02 21:26:21 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -16,8 +16,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from account_statuses where account_status_record_status = 'a' order by account_status_id";
 $rst = $con->execute($sql);
@@ -93,6 +92,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.9  2006/01/02 21:26:21  vanmer
+ * - changed to use centralized xrms dbconnection function
+ *
  * Revision 1.8  2004/11/26 17:18:28  braverock
  * - localized strings for i18n
  *
