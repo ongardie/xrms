@@ -39,8 +39,7 @@ $city = $_REQUEST['city'];
 $state = $_REQUEST['state'];
 $country = $_REQUEST['country'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 // if pdf action was selected then output a pdf instead of html page
 if ($pdf)
@@ -322,6 +321,9 @@ function nbsp($in)
 
 /**
  * $Log: companies-list.php,v $
+ * Revision 1.12  2006/01/02 23:46:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.11  2005/10/06 04:30:07  vanmer
  * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
  *

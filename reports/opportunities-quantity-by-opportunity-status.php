@@ -3,7 +3,7 @@
  *
  * Opportunities quanity by opportunity status report.
  *
- * $Id: opportunities-quantity-by-opportunity-status.php,v 1.12 2005/04/05 18:50:16 daturaarutad Exp $
+ * $Id: opportunities-quantity-by-opportunity-status.php,v 1.13 2006/01/02 23:46:52 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -34,8 +34,7 @@ if (strlen($hide_closed_opps) > 0) {
 }
 else $hide_closed_opps = false;
  
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $user_menu = get_user_menu($con, $user_id);
 
@@ -208,6 +207,9 @@ function GetOpportunitiesQuantityByOpportunityStatusGraph($con, $user_id, $all_u
 
 /**
  * $Log: opportunities-quantity-by-opportunity-status.php,v $
+ * Revision 1.13  2006/01/02 23:46:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.12  2005/04/05 18:50:16  daturaarutad
  * added .jpg extension to graph images
  *

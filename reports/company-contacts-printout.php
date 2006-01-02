@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: company-contacts-printout.php,v 1.12 2005/08/05 21:58:02 vanmer Exp $
+ * $Id: company-contacts-printout.php,v 1.13 2006/01/02 23:46:52 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -84,8 +84,7 @@ $_SESSION['companies_company_code'] = $company_code;
 $_SESSION['companies_user_id'] = $user_id;
 $_SESSION['companies_crm_status_id'] = $crm_status_id;
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //uncomment this line if you suspect a problem with the SQL query
 //$con->debug = 1;
@@ -336,6 +335,9 @@ end_page();
 
 /**
  * $Log: company-contacts-printout.php,v $
+ * Revision 1.13  2006/01/02 23:46:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.12  2005/08/05 21:58:02  vanmer
  * - changed to use centralized company search function
  *

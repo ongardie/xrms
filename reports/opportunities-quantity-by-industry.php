@@ -3,7 +3,7 @@
  *
  * Opportunities by quanity by industry report.
  *
- * $Id: opportunities-quantity-by-industry.php,v 1.10 2005/04/05 18:50:16 daturaarutad Exp $
+ * $Id: opportunities-quantity-by-industry.php,v 1.11 2006/01/02 23:46:52 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -19,8 +19,7 @@ require_once($include_directory . 'classes/Graph/BarGraph.php');
 $session_user_id = session_check();
 $msg = $_GET['msg'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $page_title = _("Opportunities by Industry");
 start_page($page_title, true, $msg);
@@ -116,6 +115,9 @@ function GetOpportunitiesQuantityByOpportunityStatusGraph($con) {
 
 /**
  * $Log: opportunities-quantity-by-industry.php,v $
+ * Revision 1.11  2006/01/02 23:46:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.10  2005/04/05 18:50:16  daturaarutad
  * added .jpg extension to graph images
  *

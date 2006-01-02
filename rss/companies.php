@@ -7,7 +7,7 @@
  * max = maximum number of entries.  Overridden by system parameter if necessary
  * status = new or modified.  Default new.
  *
- * $Id: companies.php,v 1.4 2005/06/29 16:07:10 maulani Exp $
+ * $Id: companies.php,v 1.5 2006/01/02 23:46:52 vanmer Exp $
  */
 
 //include required files
@@ -20,8 +20,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'confgoto.php');
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug = 1;
 
 $rss_ok = get_system_parameter($con, 'RSS Feeds Enabled');
@@ -136,6 +135,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
 
 /**
  * $Log: companies.php,v $
+ * Revision 1.5  2006/01/02 23:46:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.4  2005/06/29 16:07:10  maulani
  * - Add author tag to feeds
  *

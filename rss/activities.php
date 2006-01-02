@@ -11,7 +11,7 @@
  * status = open or scheduled or overdue or closed or current (open or closed).  Default all.
  * type = limit activity type.  Default all.
  *
- * $Id: activities.php,v 1.6 2005/06/29 16:06:55 maulani Exp $
+ * $Id: activities.php,v 1.7 2006/01/02 23:46:52 vanmer Exp $
  */
 
 //include required files
@@ -24,8 +24,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'confgoto.php');
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug = 1;
 
 $rss_ok = get_system_parameter($con, 'RSS Feeds Enabled');
@@ -275,6 +274,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
 
 /**
  * $Log: activities.php,v $
+ * Revision 1.7  2006/01/02 23:46:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.6  2005/06/29 16:06:55  maulani
  * - Add author tag to feeds
  *

@@ -4,7 +4,7 @@
  * Send reminder email for each overdue activity.  Call from cron job to regularly
  * prompt users regarding overdue activities.
  *
- * $Id: overdue-email.php,v 1.1 2005/04/01 10:27:09 maulani Exp $
+ * $Id: overdue-email.php,v 1.2 2006/01/02 23:46:52 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -17,8 +17,7 @@ require_once($include_directory . 'adodb-params.php');
 
 // $session_user_id = session_check();  Commented out because this code is called from cron job
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $from_email_address = get_system_parameter($con, "Sender Email Address");
@@ -100,6 +99,9 @@ end_page();
 
 /**
  * $Log: overdue-email.php,v $
+ * Revision 1.2  2006/01/02 23:46:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.1  2005/04/01 10:27:09  maulani
  * - Add report to email overdue activities to XRMS users
  *   Useful for low volume sites where users are logging into  XRMS infrequently

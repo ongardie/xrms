@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.22 2005/03/21 13:40:58 maulani Exp $
+ * $Id: index.php,v 1.23 2006/01/02 23:46:52 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -16,8 +16,7 @@ $session_user_id = session_check();
 
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $user_menu = get_user_menu($con);
 
@@ -154,6 +153,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.23  2006/01/02 23:46:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.22  2005/03/21 13:40:58  maulani
  * - Remove redundant code by centralizing common user menu call
  *

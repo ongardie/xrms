@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: audit-items.php,v 1.10 2005/03/21 13:40:58 maulani Exp $
+ * $Id: audit-items.php,v 1.11 2006/01/02 23:46:52 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -29,8 +29,7 @@ if(!isset($user_id)) $user_id=$session_user_id;
 $page_title = _("Audit Log");
 start_page($page_title, true, $msg);
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $user_menu = get_user_menu($con, $user_id);
@@ -177,6 +176,9 @@ end_page();
 
 /**
  * $Log: audit-items.php,v $
+ * Revision 1.11  2006/01/02 23:46:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.10  2005/03/21 13:40:58  maulani
  * - Remove redundant code by centralizing common user menu call
  *

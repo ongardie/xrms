@@ -3,7 +3,7 @@
  *
  * Companies by crm status report.
  *
- * $Id: companies-by-crm-status.php,v 1.15 2005/10/06 04:30:07 vanmer Exp $
+ * $Id: companies-by-crm-status.php,v 1.16 2006/01/02 23:46:52 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -32,8 +32,7 @@ start_page($page_title, true, $msg);
 
 // jnh
 $userArray = array();
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $user_menu = get_user_menu($con, $user_id);
@@ -195,6 +194,9 @@ function GetCompaniesByCRMStatusGraph($con, $user_id, $all_users) {
 
 /**
  * $Log: companies-by-crm-status.php,v $
+ * Revision 1.16  2006/01/02 23:46:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.15  2005/10/06 04:30:07  vanmer
  * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
  *

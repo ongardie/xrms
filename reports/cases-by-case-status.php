@@ -3,7 +3,7 @@
  *
  * Cases by case status report.
  *
- * $Id: cases-by-case-status.php,v 1.10 2005/04/05 18:50:16 daturaarutad Exp $
+ * $Id: cases-by-case-status.php,v 1.11 2006/01/02 23:46:52 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -22,8 +22,7 @@ $msg = $_GET['msg'];
 $page_title = _("Cases by Status");
 start_page($page_title, true, $msg);
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 
@@ -116,6 +115,9 @@ function GetCasesByCaseStatusGraph($con) {
 
 /**
  * $Log: cases-by-case-status.php,v $
+ * Revision 1.11  2006/01/02 23:46:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.10  2005/04/05 18:50:16  daturaarutad
  * added .jpg extension to graph images
  *

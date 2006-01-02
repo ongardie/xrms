@@ -3,7 +3,7 @@
  *
  * Companies by company source report.
  *
- * $Id: companies-by-company-source.php,v 1.12 2005/04/05 18:50:16 daturaarutad Exp $
+ * $Id: companies-by-company-source.php,v 1.13 2006/01/02 23:46:52 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -27,8 +27,7 @@ if (!$user_id)
    $all_users = true;
 }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 
@@ -204,6 +203,9 @@ function GetCompaniesByCompanySourceGraph($con, $user_id, $all_users) {
 
 /**
  * $Log: companies-by-company-source.php,v $
+ * Revision 1.13  2006/01/02 23:46:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.12  2005/04/05 18:50:16  daturaarutad
  * added .jpg extension to graph images
  *

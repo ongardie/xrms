@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: activitytimes.php,v 1.8 2005/03/21 13:40:57 maulani Exp $
+ * $Id: activitytimes.php,v 1.9 2006/01/02 23:46:52 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -36,8 +36,7 @@ if (!strlen($ending) > 0) $ending = date("Y-m-d");
 $page_title = _("Timesheets");
 start_page($page_title, true, $msg);
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $user_menu = get_user_menu($con, $user_id);
@@ -178,6 +177,9 @@ function formatSeconds( $diff ) {
 
 /**
  * $Log: activitytimes.php,v $
+ * Revision 1.9  2006/01/02 23:46:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.8  2005/03/21 13:40:57  maulani
  * - Remove redundant code by centralizing common user menu call
  *

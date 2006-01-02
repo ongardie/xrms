@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: completed-items.php,v 1.17 2005/12/08 23:39:09 vanmer Exp $
+ * $Id: completed-items.php,v 1.18 2006/01/02 23:46:52 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -46,8 +46,7 @@ if (($display) || (!$friendly)) {
     start_page($page_title, true, $msg);
 }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $use_hr = get_system_parameter($con, 'Reports--Use Horizontal Rule');
@@ -386,6 +385,9 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: completed-items.php,v $
+ * Revision 1.18  2006/01/02 23:46:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.17  2005/12/08 23:39:09  vanmer
  * - changed completed item report to correct reflect open indicator codes for case statuses
  *

@@ -2,7 +2,7 @@
 /**
  * Create a graph of activity for the requested user.
  *
- * $Id: user-activity.php,v 1.7 2005/01/03 06:37:19 ebullient Exp $
+ * $Id: user-activity.php,v 1.8 2006/01/02 23:46:52 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -16,8 +16,7 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 $msg = $_GET['msg'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $user_id = $_POST['user_id'];
@@ -110,6 +109,9 @@ end_page();
 
 /**
  * $Log: user-activity.php,v $
+ * Revision 1.8  2006/01/02 23:46:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.7  2005/01/03 06:37:19  ebullient
  * update reports - graphs centered on page, reports surrounded by divs
  *

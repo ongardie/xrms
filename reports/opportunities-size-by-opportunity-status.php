@@ -3,7 +3,7 @@
  *
  * Opportunities size by opportunity status report.
  *
- * $Id: opportunities-size-by-opportunity-status.php,v 1.13 2005/04/05 18:50:16 daturaarutad Exp $
+ * $Id: opportunities-size-by-opportunity-status.php,v 1.14 2006/01/02 23:46:52 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -28,8 +28,7 @@ if (!$user_id)
 	$all_users = true;
 }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 if (strlen($hide_closed_opps) > 0) {
 	$checked_hide_closed_opps = "checked";
@@ -221,6 +220,9 @@ function GetOpportunitiesSizeByOpportunityStatusGraph($con, $user_id, $all_users
 
 /**
  * $Log: opportunities-size-by-opportunity-status.php,v $
+ * Revision 1.14  2006/01/02 23:46:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.13  2005/04/05 18:50:16  daturaarutad
  * added .jpg extension to graph images
  *
