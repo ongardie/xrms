@@ -2,7 +2,7 @@
 /**
  * Delete a Rating by setting the rating_record_status to 'd'
  *
- * $Id: delete.php,v 1.4 2004/07/16 23:51:37 cpsource Exp $
+ * $Id: delete.php,v 1.5 2006/01/02 22:03:16 vanmer Exp $
  */
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -15,8 +15,7 @@ $session_user_id = session_check( 'Admin' );
 
 $rating_id = $_POST['rating_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM ratings WHERE rating_id = $rating_id";
 $rst = $con->execute($sql);
@@ -33,6 +32,9 @@ header("Location: some.php");
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.5  2006/01/02 22:03:16  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.4  2004/07/16 23:51:37  cpsource
  * - require session_check ( 'Admin' )
  *

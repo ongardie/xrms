@@ -2,7 +2,7 @@
 /**
  * Show details of a single rating
  *
- * $Id: one.php,v 1.8 2004/07/25 18:30:25 johnfawcett Exp $
+ * $Id: one.php,v 1.9 2006/01/02 22:03:16 vanmer Exp $
  */
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -15,8 +15,7 @@ $session_user_id = session_check( 'Admin' );
 
 $rating_id = $_GET['rating_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from ratings where rating_id = $rating_id";
 
@@ -102,6 +101,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.9  2006/01/02 22:03:16  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.8  2004/07/25 18:30:25  johnfawcett
  * - reinserted ? into gettext string - needed by some languages
  * - standardized delete text and button

@@ -2,7 +2,7 @@
 /**
  * Edit the information for a system parameter
  *
- * $Id: one.php,v 1.5 2005/05/10 13:32:21 braverock Exp $
+ * $Id: one.php,v 1.6 2006/01/02 22:07:25 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -16,8 +16,7 @@ $session_user_id = session_check();
 
 $param_id = $_GET['param_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql ="select string_val, int_val, float_val, datetime_val, description from system_parameters where param_id='$param_id'";
 $sysst = $con->execute($sql);
@@ -138,6 +137,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.6  2006/01/02 22:07:25  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.5  2005/05/10 13:32:21  braverock
  * - localized string patches provided by Alan Baghumian (alanbach)
  *

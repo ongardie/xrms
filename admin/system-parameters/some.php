@@ -2,7 +2,7 @@
 /**
  * View the system parameters
  *
- * $Id: some.php,v 1.4 2005/05/10 13:32:21 braverock Exp $
+ * $Id: some.php,v 1.5 2006/01/02 22:07:25 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -14,8 +14,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select param_id from system_parameters order by param_id";
 $rst = $con->execute($sql);
@@ -62,6 +61,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.5  2006/01/02 22:07:25  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.4  2005/05/10 13:32:21  braverock
  * - localized string patches provided by Alan Baghumian (alanbach)
  *

@@ -2,7 +2,7 @@
 /**
  * Edit a relationship type
  *
- * $Id: edit-2.php,v 1.2 2004/09/29 14:38:38 braverock Exp $
+ * $Id: edit-2.php,v 1.3 2006/01/02 22:03:16 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -22,8 +22,8 @@ $from_what_text = $_POST['from_what_text'];
 $to_what_text = $_POST['to_what_text'];
 $pre_formatting = $_POST['pre_formatting'];
 $post_formatting = $_POST['post_formatting'];
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM relationship_types WHERE relationship_type_id = $relationship_type_id";
 $rst = $con->execute($sql);
@@ -53,6 +53,9 @@ header("Location: some.php");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.3  2006/01/02 22:03:16  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.2  2004/09/29 14:38:38  braverock
  * - add phpdoc
  * - rationalize indentation

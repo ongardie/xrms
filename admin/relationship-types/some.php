@@ -15,8 +15,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from relationship_types where relationship_status = 'a' order by relationship_name, relationship_type_id";
 $rst = $con->execute($sql);
@@ -110,6 +109,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.3  2006/01/02 22:03:16  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.2  2004/07/18 16:03:59  braverock
  * - localize strings for i18n translation support
  *   - applies modified patches from Sebastian Becker (hyperpac)

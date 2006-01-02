@@ -4,7 +4,7 @@
  *
  * Displays Sales Performance Data.
  *
- * $Id: reports.php,v 1.8 2004/12/26 22:09:27 braverock Exp $
+ * $Id: reports.php,v 1.9 2006/01/02 22:07:25 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -17,8 +17,7 @@ $session_user_id = session_check( $this );
 
 $msg = $_GET['msg'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 // $con->debug = 1;
     $period_from = $_POST['period_from'];
@@ -1502,6 +1501,9 @@ end_page();
 
 /**
  * $Log: reports.php,v $
+ * Revision 1.9  2006/01/02 22:07:25  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.8  2004/12/26 22:09:27  braverock
  * - removed Mac format line endings
  *

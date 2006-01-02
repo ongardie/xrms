@@ -2,7 +2,7 @@
 /**
  * Update an edited rating
  *
- * $Id: edit-2.php,v 1.4 2004/07/16 23:51:37 cpsource Exp $
+ * $Id: edit-2.php,v 1.5 2006/01/02 22:03:16 vanmer Exp $
  */
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -23,8 +23,7 @@ $rating_display_html = $_POST['rating_display_html'];
 if (!strlen(rating_pretty_plural) > 0) { $rating_pretty_plural = $rating_pretty_name; }
 if (!strlen(rating_display_html) > 0)  { $rating_display_html  = $rating_pretty_name; }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM ratings WHERE rating_id = $rating_id";
 $rst = $con->execute($sql);
@@ -44,6 +43,9 @@ header("Location: some.php");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.5  2006/01/02 22:03:16  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.4  2004/07/16 23:51:37  cpsource
  * - require session_check ( 'Admin' )
  *

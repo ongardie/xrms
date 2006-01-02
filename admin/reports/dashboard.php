@@ -4,7 +4,7 @@
  *
  * Displays Audit entries and new activity counts.  Needs work.
  *
- * $Id: dashboard.php,v 1.10 2004/07/16 23:51:38 cpsource Exp $
+ * $Id: dashboard.php,v 1.11 2006/01/02 22:07:25 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -18,8 +18,7 @@ $session_user_id = session_check( 'Admin' );
 
 $msg = $_GET['msg'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $sql_audit_items = "select ai.*, u.username
@@ -250,6 +249,9 @@ end_page();
 
 /**
  * $Log: dashboard.php,v $
+ * Revision 1.11  2006/01/02 22:07:25  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.10  2004/07/16 23:51:38  cpsource
  * - require session_check ( 'Admin' )
  *

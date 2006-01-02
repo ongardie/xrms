@@ -4,7 +4,7 @@
  *
  * @todo add sort order for display purposes
  *
- * $Id: some.php,v 1.6 2004/07/16 23:51:37 cpsource Exp $
+ * $Id: some.php,v 1.7 2006/01/02 22:03:16 vanmer Exp $
  */
 
 
@@ -17,8 +17,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from ratings where rating_record_status = 'a' order by rating_id";
 $rst = $con->execute($sql);
@@ -94,6 +93,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.7  2006/01/02 22:03:16  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.6  2004/07/16 23:51:37  cpsource
  * - require session_check ( 'Admin' )
  *

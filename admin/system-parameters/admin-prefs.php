@@ -5,7 +5,7 @@
  * Administration screen for managing default system preferences
  *
  *
- * $Id: admin-prefs.php,v 1.4 2005/11/30 00:46:49 vanmer Exp $
+ * $Id: admin-prefs.php,v 1.5 2006/01/02 22:07:25 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -17,8 +17,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check('Admin');
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 getGlobalVar($prefs_action, 'prefs_action');
 getGlobalVar($msg, 'msg');
@@ -76,6 +75,9 @@ end_page();
 
 /**
   * $Log: admin-prefs.php,v $
+  * Revision 1.5  2006/01/02 22:07:25  vanmer
+  * - changed to use centralized dbconnection function
+  *
   * Revision 1.4  2005/11/30 00:46:49  vanmer
   * - added check for read-only options, do not attempt to save any option that is read-only
   *

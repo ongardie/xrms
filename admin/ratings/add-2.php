@@ -2,7 +2,7 @@
 /**
  * Insert a new rating
  *
- * $Id: add-2.php,v 1.5 2004/07/16 23:51:37 cpsource Exp $
+ * $Id: add-2.php,v 1.6 2006/01/02 22:03:16 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -23,8 +23,7 @@ $rating_display_html = $_POST['rating_display_html'];
 if (!strlen(rating_pretty_plural) > 0) { $rating_pretty_plural = $rating_pretty_name; }
 if (!strlen(rating_display_html) > 0)  { $rating_display_html  = $rating_pretty_name; }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //save to database
 $rec = array();
@@ -43,6 +42,9 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.6  2006/01/02 22:03:16  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.5  2004/07/16 23:51:37  cpsource
  * - require session_check ( 'Admin' )
  *

@@ -17,8 +17,7 @@ $to_what_text = $_POST['to_what_text'];
 $pre_formatting = $_POST['pre_formatting'];
 $post_formatting = $_POST['post_formatting'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //save to database
 $rec = array();
