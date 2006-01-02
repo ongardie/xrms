@@ -3,7 +3,7 @@
   *
   * Email.
   *
-  * $Id: snailmail-2.php,v 1.2 2005/08/17 21:14:20 ycreddy Exp $
+  * $Id: snailmail-2.php,v 1.3 2006/01/02 23:47:49 vanmer Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -40,8 +40,7 @@ else
     echo _("WARNING: No array of contacts!") . "<br>";
 
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug = 1;
 
 $sql = "select cont.contact_id, cont.salutation , cont.first_names, cont.last_name, " .

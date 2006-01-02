@@ -3,7 +3,7 @@
   *
   * Email.
   *
-  * $Id: snailmail-1.php,v 1.2 2005/08/17 21:13:46 ycreddy Exp $
+  * $Id: snailmail-1.php,v 1.3 2006/01/02 23:47:49 vanmer Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -31,8 +31,7 @@ require_once($include_directory . 'classes/Pager/Pager_Columns.php');
   //activities
   $activity_id = $_POST['activity_id'];
 
-  $con = &adonewconnection($xrms_db_dbtype);
-  $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+  $con = get_xrms_dbconnection();
 //$con->debug = 1;
 
     //hack to not show continue button if no templates are found
@@ -109,8 +108,7 @@ else
     echo _("WARNING: No array of contacts!") . "<br>";
 
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug = 1;
 
 $sql = "select cont.contact_id, addr.address_body, cont.first_names, cont.last_name, "
