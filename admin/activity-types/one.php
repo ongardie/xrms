@@ -4,7 +4,7 @@
  *
  * Edit account-types
  *
- * $Id: one.php,v 1.11 2005/06/16 23:54:59 vanmer Exp $
+ * $Id: one.php,v 1.12 2006/01/02 21:30:02 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -19,8 +19,7 @@ $session_user_id = session_check( 'Admin' );
 
 $activity_type_id = $_GET['activity_type_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from activity_types where activity_type_id = $activity_type_id";
 
@@ -122,6 +121,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.12  2006/01/02 21:30:02  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.11  2005/06/16 23:54:59  vanmer
  * - changed to only allow edit button and output to appear if user_editable_flag is set to 1
  *

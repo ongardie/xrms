@@ -25,9 +25,8 @@ $on_what_id = $_GET['on_what_id'];
 $return_url = $_GET['return_url'];
 $activity_template = $_GET['activity_template'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-$con->debug=1;
+$con = get_xrms_dbconnection();
+//$con->debug=1;
 
 //handle incoming data
 if ($direction == 'down') {
@@ -101,6 +100,9 @@ header ('Location: ' . $http_site_root . $return_url);
 
 /**
  * $Log: sort.php,v $
+ * Revision 1.5  2006/01/02 21:30:02  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.4  2004/07/16 23:51:34  cpsource
  * - require session_check ( 'Admin' )
  *

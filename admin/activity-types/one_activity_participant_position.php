@@ -27,8 +27,8 @@ if ($global_flag) {
     $rec['global_flag']=$global_flag;
 }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
+
 switch ($position_action) {
     case 'new':
         if (!$participant_position_name) {

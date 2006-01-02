@@ -19,8 +19,7 @@ $activity_type_score_adjustment = $_POST['activity_type_score_adjustment'];
 
 $activity_type_score_adjustment = ($activity_type_score_adjustment > 0) ? $activity_type_score_adjustment : 0;
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM activity_types WHERE activity_type_id = $activity_type_id";
 $rst = $con->execute($sql);

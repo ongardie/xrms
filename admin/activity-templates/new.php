@@ -4,7 +4,7 @@
  *
  * @author Brad Marshall
  *
- * $Id: new.php,v 1.7 2005/09/29 14:58:36 vanmer Exp $
+ * $Id: new.php,v 1.8 2006/01/02 21:27:56 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -33,8 +33,7 @@ if (strlen($duration) == 0) {
     $duration = 1;
 }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug = 1;
 
 //get next sort_order value, put it at the bottom of the list
@@ -84,6 +83,9 @@ header("Location: $http_site_root$return_url");
 
 /**
  * $Log: new.php,v $
+ * Revision 1.8  2006/01/02 21:27:56  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.7  2005/09/29 14:58:36  vanmer
  * - changed to redirect to edit page if process activity type is selected for the new activity template
  *

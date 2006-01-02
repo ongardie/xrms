@@ -2,7 +2,7 @@
 /**
  * Manage Activity Types
  *
- * $Id: some.php,v 1.13 2005/01/11 22:31:17 vanmer Exp $
+ * $Id: some.php,v 1.14 2006/01/02 21:30:02 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -15,8 +15,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from activity_types where activity_type_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql);
@@ -105,6 +104,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.14  2006/01/02 21:30:02  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.13  2005/01/11 22:31:17  vanmer
  * - added resort_id to allow click up or down on an activity to type to actually the sort_order of that activity_type, rather than the one with the same sort_order and lowest activity_type_id
  *

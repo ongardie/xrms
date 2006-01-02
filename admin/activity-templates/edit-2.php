@@ -2,7 +2,7 @@
 /**
  * save an updated an activity template to database after editing it.
  *
- * $Id: edit-2.php,v 1.7 2005/09/29 14:59:02 vanmer Exp $
+ * $Id: edit-2.php,v 1.8 2006/01/02 21:27:56 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -30,8 +30,7 @@ if (strlen($return_url) == 0) {
     $return_url = "/admin/activity-templates/some.php";
 }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug=1;
 
 $sql = "SELECT * FROM activity_templates WHERE activity_template_id = $activity_template_id";

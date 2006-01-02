@@ -18,8 +18,7 @@ if (strlen($return_url) == 0) {
     $return_url = "/admin/activity-templates/some.php";
 }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM activity_templates WHERE activity_template_id = $activity_template_id";
 $rst = $con->execute($sql);

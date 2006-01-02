@@ -2,7 +2,7 @@
 /**
  * Manage activity templates
  *
- * $Id: edit.php,v 1.10 2005/09/29 15:00:07 vanmer Exp $
+ * $Id: edit.php,v 1.11 2006/01/02 21:27:56 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -20,8 +20,7 @@ $on_what_id = $_GET['on_what_id'];
 $return_url = $_GET['return_url'];
 getGlobalVar($msg, 'msg');
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from activity_templates where activity_template_id = $activity_template_id";
 
@@ -227,6 +226,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.11  2006/01/02 21:27:56  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.10  2005/09/29 15:00:07  vanmer
  * - added workflow entity and type menus to activity template page
  * - added javascript to only display entity when activity type is process

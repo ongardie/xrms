@@ -2,7 +2,7 @@
 /**
  * Commit the new Activity Type to the database
  *
- * $Id: add-2.php,v 1.9 2005/06/16 23:54:12 vanmer Exp $
+ * $Id: add-2.php,v 1.10 2006/01/02 21:30:02 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -23,8 +23,7 @@ $activity_type_score_adjustment = $_POST['activity_type_score_adjustment'];
 
 $activity_type_score_adjustment = ($activity_type_score_adjustment > 0) ? $activity_type_score_adjustment : 0;
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //save to database
 $rec = array();
@@ -60,6 +59,9 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.10  2006/01/02 21:30:02  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.9  2005/06/16 23:54:12  vanmer
  * - set default user_editable flag to 1, so that custom types can be edited after creation
  *

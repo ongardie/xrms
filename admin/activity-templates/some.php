@@ -2,7 +2,7 @@
 /**
  * Manage Activity Templates
  *
- * $Id: some.php,v 1.4 2004/07/16 23:51:34 cpsource Exp $
+ * $Id: some.php,v 1.5 2006/01/02 21:27:56 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -14,8 +14,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from activity_templates where activity_template_record_status='a' order by on_what_table, on_what_id, sort_order";
 $rst = $con->execute($sql);
@@ -82,6 +81,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.5  2006/01/02 21:27:56  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.4  2004/07/16 23:51:34  cpsource
  * - require session_check ( 'Admin' )
  *
