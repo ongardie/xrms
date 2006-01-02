@@ -16,8 +16,7 @@ $category_display_html = $_POST['category_display_html'];
 
 $session_user_id = session_check( 'Admin' );
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM categories WHERE category_id = $category_id";
 $rst = $con->execute($sql);

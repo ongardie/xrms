@@ -2,7 +2,7 @@
 /**
  * Manage categories
  *
- * $Id: one.php,v 1.14 2005/05/10 13:31:22 braverock Exp $
+ * $Id: one.php,v 1.15 2006/01/02 21:43:28 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -17,8 +17,7 @@ $session_user_id = session_check( 'Admin' );
 
 $category_id = $_GET['category_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from categories where category_id = $category_id";
 
@@ -158,6 +157,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.15  2006/01/02 21:43:28  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.14  2005/05/10 13:31:22  braverock
  * - localized string patches provided by Alan Baghumian (alanbach)
  *

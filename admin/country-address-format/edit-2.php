@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: edit-2.php,v 1.6 2004/07/25 12:30:58 braverock Exp $
+ * $Id: edit-2.php,v 1.7 2006/01/02 21:46:52 vanmer Exp $
  */
 //include required files
 require_once('../../include-locations.inc');
@@ -23,8 +23,7 @@ $address_format_string_id = $_GET['address_format_string_id'];
 $country_id = $_REQUEST['country_id'];
 $phone_format = $_POST['phone_format'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 if ($country_id) {
@@ -53,6 +52,9 @@ header("Location: {$http_site_root}/{$return_url}");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.7  2006/01/02 21:46:52  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.6  2004/07/25 12:30:58  braverock
  * - remove lang file require_once, as it is no longer used
  *

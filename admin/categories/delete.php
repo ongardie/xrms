@@ -13,8 +13,7 @@ $session_user_id = session_check( 'Admin' );
 $category_id = $_POST['category_id'];
 $category_record_status = "NULL";
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM categories WHERE category_id = $category_id";
 $rst = $con->execute($sql);

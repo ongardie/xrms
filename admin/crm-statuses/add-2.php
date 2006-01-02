@@ -14,9 +14,7 @@ $crm_status_pretty_name = $_POST['crm_status_pretty_name'];
 $crm_status_pretty_plural = $_POST['crm_status_pretty_plural'];
 $crm_status_display_html = $_POST['crm_status_display_html'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-
+$con = get_xrms_dbconnection();
 
 //get next sort_order value, put it at the bottom of the list
 $sql = "select sort_order from crm_statuses where crm_status_record_status='a' order by sort_order desc";

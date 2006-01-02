@@ -4,7 +4,7 @@
  *
  * Description
  *
- * $Id: one.php,v 1.10 2005/05/10 13:31:23 braverock Exp $
+ * $Id: one.php,v 1.11 2006/01/02 21:45:15 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -20,8 +20,7 @@ $session_user_id = session_check( 'Admin' );
 
 $company_source_id = $_GET['company_source_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from company_sources where company_source_id = $company_source_id";
 
@@ -112,6 +111,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.11  2006/01/02 21:45:15  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.10  2005/05/10 13:31:23  braverock
  * - localized string patches provided by Alan Baghumian (alanbach)
  *

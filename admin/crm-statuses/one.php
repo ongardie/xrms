@@ -2,7 +2,7 @@
 /**
  * Manage crm statuses
  *
- * $Id: one.php,v 1.10 2004/07/25 18:35:19 johnfawcett Exp $
+ * $Id: one.php,v 1.11 2006/01/02 21:48:01 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -16,8 +16,7 @@ $session_user_id = session_check( 'Admin' );
 
 $crm_status_id = $_GET['crm_status_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from crm_statuses where crm_status_id = $crm_status_id";
 
@@ -103,6 +102,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.11  2006/01/02 21:48:01  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.10  2004/07/25 18:35:19  johnfawcett
  * - corrected string erroneously pasted
  *

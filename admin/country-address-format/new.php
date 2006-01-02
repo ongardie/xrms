@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: new.php,v 1.6 2004/07/25 12:30:58 braverock Exp $
+ * $Id: new.php,v 1.7 2006/01/02 21:46:52 vanmer Exp $
  */
 
 //include required files
@@ -23,8 +23,7 @@ $msg = $_GET['msg'];
 $address_format_string = $_POST['address_format_string'];
 $country_id = $_POST['country_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 if ($address_format_string) {
@@ -60,6 +59,9 @@ $return_url = "/admin/country-address-format/index.php";
 header("Location: {$http_site_root}/{$return_url}");
 /**
  * $Log: new.php,v $
+ * Revision 1.7  2006/01/02 21:46:52  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.6  2004/07/25 12:30:58  braverock
  * - remove lang file require_once, as it is no longer used
  *

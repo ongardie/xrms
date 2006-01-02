@@ -2,7 +2,7 @@
 /**
  * Manage Categories
  *
- * $Id: some.php,v 1.8 2004/07/16 23:51:35 cpsource Exp $
+ * $Id: some.php,v 1.9 2006/01/02 21:43:28 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -15,8 +15,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from categories where category_record_status = 'a' order by category_pretty_name";
 $rst = $con->execute($sql);
@@ -92,6 +91,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.9  2006/01/02 21:43:28  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.8  2004/07/16 23:51:35  cpsource
  * - require session_check ( 'Admin' )
  *

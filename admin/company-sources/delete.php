@@ -12,8 +12,7 @@ $session_user_id = session_check( 'Admin' );
 
 $company_source_id = $_POST['company_source_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM company_sources WHERE company_source_id = $company_source_id";
 $rst = $con->execute($sql);

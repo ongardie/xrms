@@ -2,7 +2,7 @@
 /**
  * Manage company types
  *
- * $Id: one.php,v 1.11 2005/05/10 13:31:23 braverock Exp $
+ * $Id: one.php,v 1.12 2006/01/02 21:45:15 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -17,8 +17,7 @@ $session_user_id = session_check( 'Admin' );
 
 $company_type_id = $_GET['company_type_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from company_types where company_type_id = $company_type_id";
 
@@ -102,6 +101,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.12  2006/01/02 21:45:15  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.11  2005/05/10 13:31:23  braverock
  * - localized string patches provided by Alan Baghumian (alanbach)
  *

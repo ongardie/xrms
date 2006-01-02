@@ -2,7 +2,7 @@
 /**
  * Show and edit the details for all crm statuses
  *
- * $Id: some.php,v 1.10 2005/10/06 04:30:06 vanmer Exp $
+ * $Id: some.php,v 1.11 2006/01/02 21:48:01 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -14,8 +14,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from crm_statuses where crm_status_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql);
@@ -119,6 +118,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.11  2006/01/02 21:48:01  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.10  2005/10/06 04:30:06  vanmer
  * - updated log entries to reflect addition of code by Diego Ongaro at ETSZONE
  *

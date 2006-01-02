@@ -6,7 +6,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: index.php,v 1.8 2005/05/02 12:39:10 braverock Exp $
+ * $Id: index.php,v 1.9 2006/01/02 21:46:52 vanmer Exp $
  */
 
 //include required files
@@ -25,8 +25,7 @@ $msg = $_GET['msg'];
 
 $country_id = $_GET['country_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $page_title = _("Country Localization Formats");
@@ -72,6 +71,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.9  2006/01/02 21:46:52  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.8  2005/05/02 12:39:10  braverock
  * - double quote a couple of errant records and use htmlspecialchars where needed
  *

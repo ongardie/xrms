@@ -4,7 +4,7 @@
  *
  * List company sources
  *
- * $Id: some.php,v 1.7 2004/12/30 19:01:18 braverock Exp $
+ * $Id: some.php,v 1.8 2006/01/02 21:45:15 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -18,8 +18,7 @@ require_once($include_directory . 'adodb-params.php');
 $thispage = $_SERVER['REQUEST_URI'];
 $session_user_id = session_check( 'Admin' );
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select * from company_sources where company_source_record_status = 'a' order by company_source_pretty_name";
 $rst = $con->execute($sql);
@@ -99,6 +98,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.8  2006/01/02 21:45:15  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.7  2004/12/30 19:01:18  braverock
  * - localize strings
  * - patch provided by Ozgur Cayci

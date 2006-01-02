@@ -18,8 +18,7 @@ $company_source_score_adjustment = $_POST['company_source_score_adjustment'];
 
 $company_source_score_adjustment = ($company_source_score_adjustment > 0) ? $company_source_score_adjustment : 0;
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 // $con->debug=1;
 
