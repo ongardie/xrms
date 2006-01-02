@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of campaigns
  *
- * $Id: edit.php,v 1.16 2005/06/01 16:03:46 vanmer Exp $
+ * $Id: edit.php,v 1.17 2006/01/02 22:41:51 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -19,8 +19,7 @@ $session_user_id = session_check('','Update');
 
 $msg         = isset($_GET['msg']) ? $_GET['msg'] : '';
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 update_recent_items($con, $session_user_id, "campaigns", $campaign_id);
@@ -188,6 +187,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.17  2006/01/02 22:41:51  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.16  2005/06/01 16:03:46  vanmer
  * - changed delete campaign button to use confGoTo again, using ACL control
  *

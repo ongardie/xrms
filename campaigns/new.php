@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of campaigns
  *
- * $Id: new.php,v 1.13 2005/05/04 14:35:24 braverock Exp $
+ * $Id: new.php,v 1.14 2006/01/02 22:41:51 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -30,8 +30,7 @@ $session_user_id = session_check('','Create');
 
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $user_menu = get_user_menu($con, $user_id);
 
@@ -176,6 +175,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.14  2006/01/02 22:41:51  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.13  2005/05/04 14:35:24  braverock
  * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
  *

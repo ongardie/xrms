@@ -2,7 +2,7 @@
 /**
  * List categories for a campaign
  *
- * $Id: categories.php,v 1.6 2004/07/30 10:30:44 cpsource Exp $
+ * $Id: categories.php,v 1.7 2006/01/02 22:41:51 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -19,8 +19,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $campaign_id = $_GET['campaign_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 // associated with
@@ -124,6 +123,9 @@ end_page();
 
 /**
  * $Log: categories.php,v $
+ * Revision 1.7  2006/01/02 22:41:51  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.6  2004/07/30 10:30:44  cpsource
  * - Make sure msg can be optionally used.
  *

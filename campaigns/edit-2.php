@@ -22,8 +22,7 @@ $starts_at = $_POST['starts_at'];
 $ends_at = $_POST['ends_at'];
 $cost = $_POST['cost'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $sql = "SELECT * FROM campaigns WHERE campaign_id = $campaign_id";

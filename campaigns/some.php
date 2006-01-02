@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.33 2005/08/28 16:15:35 braverock Exp $
+ * $Id: some.php,v 1.34 2006/01/02 22:41:51 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -18,8 +18,7 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $on_what_table='campaigns';
@@ -384,6 +383,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.34  2006/01/02 22:41:51  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.33  2005/08/28 16:15:35  braverock
  * - fix incorrect  colspan entries
  *
