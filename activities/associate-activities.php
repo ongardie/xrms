@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: associate-activities.php,v 1.3 2004/07/16 04:44:24 introspectshun Exp $
+ * $Id: associate-activities.php,v 1.4 2006/01/02 21:23:18 vanmer Exp $
  */
 
 
@@ -19,9 +19,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-
+$con = get_xrms_dbconnection();
 //$con->debug=1;
 
 $color_counter = 0;
@@ -177,6 +175,9 @@ end_page();
 
 /**
  * $Log: associate-activities.php,v $
+ * Revision 1.4  2006/01/02 21:23:18  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.3  2004/07/16 04:44:24  introspectshun
  * - Localized strings for i18n/translation support
  * - Altered LEFT JOINs to use standard ON syntax rather than USING

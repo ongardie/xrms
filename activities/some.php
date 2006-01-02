@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.125 2005/08/05 01:22:39 vanmer Exp $
+ * $Id: some.php,v 1.126 2006/01/02 21:23:18 vanmer Exp $
  */
 
 // handle includes
@@ -28,8 +28,7 @@ $on_what_table='activities';
 $session_user_id = session_check();
 
 // Start connection
-$con = &adonewconnection($xrms_db_dbtype);
-$con->pconnect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 getGlobalVar($browse,'browse');
 getGlobalVar($saved_id, 'saved_id');
@@ -536,6 +535,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.126  2006/01/02 21:23:18  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.125  2005/08/05 01:22:39  vanmer
  * - changed to use centralized saved search functionality
  *

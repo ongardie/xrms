@@ -4,7 +4,7 @@
  *
  * This page allows for export vcal for a single activity.
  *
- * $Id: vcal.php,v 1.4 2004/07/25 12:27:43 braverock Exp $
+ * $Id: vcal.php,v 1.5 2006/01/02 21:23:19 vanmer Exp $
 
  */
 //include required files
@@ -20,8 +20,7 @@ $session_user_id = session_check();
 $activity_id = $_GET['activity_id'];
 $return_url = $_GET['return_url'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 update_recent_items($con, $session_user_id, "activities", $activity_id);
 
@@ -119,6 +118,9 @@ header("Location: {$http_site_root}/export/{$filename}");
 
 /**
  * $Log: vcal.php,v $
+ * Revision 1.5  2006/01/02 21:23:19  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.4  2004/07/25 12:27:43  braverock
  * - remove lang file require_once, as it is no longer used
  *

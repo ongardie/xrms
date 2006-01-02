@@ -2,7 +2,7 @@
 /**
  * 'Delete' an activity
  *
- * $Id: delete.php,v 1.5 2005/02/10 21:16:41 maulani Exp $
+ * $Id: delete.php,v 1.6 2006/01/02 21:23:18 vanmer Exp $
  */
   
 require_once('../include-locations.inc');
@@ -22,8 +22,7 @@ $session_user_id = session_check('','Delete');
 $return_url = $_GET['return_url'];
 $save_and_next = $_GET['save_and_next'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $sql = "SELECT * FROM activities WHERE activity_id = $activity_id";
@@ -47,6 +46,9 @@ if($save_and_next) {
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.6  2006/01/02 21:23:18  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.5  2005/02/10 21:16:41  maulani
  * - Add audit trail entries
  *

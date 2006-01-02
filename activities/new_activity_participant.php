@@ -33,8 +33,7 @@ if ($btCancel==_("Cancel")) {
 }
 if (!$activity_participant_action) $activity_participant_action='newParticipant';
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 if ($activity_id) {
     $activity_info=get_activity($con, array('activity_id'=>$activity_id));
@@ -175,6 +174,9 @@ end_page();
 
 /*
  * $Log: new_activity_participant.php,v $
+ * Revision 1.4  2006/01/02 21:23:18  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.3  2005/10/08 21:06:59  vanmer
  * - altered to use return_url for return even if failure occurs
  * - added msg when successfully adding a contact as a participant to an activity

@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.24 2005/07/15 23:56:57 daturaarutad Exp $
+ * $Id: browse-next.php,v 1.25 2006/01/02 21:23:18 vanmer Exp $
  */
 
 //include required files
@@ -22,8 +22,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug=1;
 
 // An array of activity IDs within activity type. Allows changes to be made without activities repeating.
@@ -99,6 +98,9 @@ $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.25  2006/01/02 21:23:18  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.24  2005/07/15 23:56:57  daturaarutad
  * fix next_to_check array
  *

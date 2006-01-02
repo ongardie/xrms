@@ -4,7 +4,7 @@
 *
 * @author Justin Cooper
 *
-* $Id: edit_activity_recurrence.php,v 1.7 2005/06/17 20:33:06 daturaarutad Exp $
+* $Id: edit_activity_recurrence.php,v 1.8 2006/01/02 21:23:18 vanmer Exp $
 */
 
 
@@ -68,8 +68,7 @@ if ($btCancel==_("Cancel")) {
     exit;
 }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 if ($activity_id) {
     $activity_info=get_activity($con, array('activity_id'=>$activity_id));
@@ -268,6 +267,9 @@ Header("Location:{$http_site_root}$return_url&msg=$msg");
 
 /*
  * $Log: edit_activity_recurrence.php,v $
+ * Revision 1.8  2006/01/02 21:23:18  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.7  2005/06/17 20:33:06  daturaarutad
  * now using add_activity function when inserting activities;  now aware of particpants as well
  *

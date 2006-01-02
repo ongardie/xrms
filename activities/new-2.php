@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.44 2005/09/21 20:07:23 vanmer Exp $
+ * $Id: new-2.php,v 1.45 2006/01/02 21:23:18 vanmer Exp $
  */
 
 //where do we include from
@@ -84,8 +84,7 @@ if ($scheduled_at > $ends_at) {
 }
 
 //make our database connection
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection(); 
 //$con->debug = 1;
 
 //check to see if we need to associate with an opportunity or case
@@ -237,6 +236,9 @@ if ($activity_status == 'c') {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.45  2006/01/02 21:23:18  vanmer
+ *- changed to use centralized database connection function
+ *
  *Revision 1.44  2005/09/21 20:07:23  vanmer
  *- added address_id to allow location to be set or edited for an activity
  *

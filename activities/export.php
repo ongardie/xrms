@@ -15,8 +15,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'adodb/toexport.inc.php');
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $session_user_id = session_check();
@@ -122,6 +121,9 @@ echo $csvdata;
 
 /**
  * $Log: export.php,v $
+ * Revision 1.8  2006/01/02 21:23:18  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.7  2005/05/19 13:20:43  maulani
  * - Remove trailing whitespace
  *

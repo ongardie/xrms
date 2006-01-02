@@ -10,7 +10,7 @@
  * @author Justin Cooper
  *
  *
- * $Id: recurrence_sidebar.php,v 1.5 2005/06/08 00:11:48 daturaarutad Exp $
+ * $Id: recurrence_sidebar.php,v 1.6 2006/01/02 21:23:18 vanmer Exp $
  */
 
 
@@ -40,8 +40,7 @@ if(!isset($activity_id)){
 
 
 // try to locate the AR record and set the values from that
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "SELECT * FROM activities_recurrence where activity_id=$activity_id";
 
@@ -319,6 +318,9 @@ end_page();
 
 /**
  * $Log: recurrence_sidebar.php,v $
+ * Revision 1.6  2006/01/02 21:23:18  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.5  2005/06/08 00:11:48  daturaarutad
  * added new periods to specify business days
  *

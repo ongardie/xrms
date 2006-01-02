@@ -26,9 +26,7 @@ getGlobalVar($restrict_string, 'restrict_string');
 getGlobalVar($reconnect_action,'reconnect_action');
 
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-
+$con = get_xrms_dbconnection();
 
 $possible_types=array( 'companies' => _("Companies"),
                                             'opportunities' => _("Opportunities"),
@@ -147,6 +145,9 @@ function GetEntityPagerData($row) {
 
 /**
   * $Log: activity-reconnect.php,v $
+  * Revision 1.3  2006/01/02 21:23:18  vanmer
+  * - changed to use centralized database connection function
+  *
   * Revision 1.2  2005/07/08 01:08:05  vanmer
   * - added contacts as possibly type to connect to
   * - sorting list alphabetically

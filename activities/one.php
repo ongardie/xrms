@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.129 2005/12/18 02:56:23 vanmer Exp $
+ * $Id: one.php,v 1.130 2006/01/02 21:23:18 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -34,8 +34,7 @@ if(!isset($activity_id)){
 
 $save_and_next = isset($_GET['save_and_next']) ? true : false;
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug = 1;
 
 update_recent_items($con, $session_user_id, "activities", $activity_id);
@@ -769,6 +768,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.130  2006/01/02 21:23:18  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.129  2005/12/18 02:56:23  vanmer
  * - changed to use gmt_offset fieldname
  *

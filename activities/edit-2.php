@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.75 2005/11/04 16:27:52 braverock Exp $
+ * $Id: edit-2.php,v 1.76 2006/01/02 21:23:18 vanmer Exp $
  */
 
 //include required files
@@ -131,8 +131,7 @@ if ($scheduled_at > $ends_at) {
    $ends_at = $scheduled_at;
 }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug = 1;
 
 //get the existing activity record for use later in the script
@@ -559,6 +558,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.76  2006/01/02 21:23:18  vanmer
+ * - changed to use centralized database connection function
+ *
  * Revision 1.75  2005/11/04 16:27:52  braverock
  * - set ends_at time to current time if it is empty.
  * - rationalizes ends_at for activities like phone calls or long-overdue activities
