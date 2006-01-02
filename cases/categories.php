@@ -2,7 +2,7 @@
 /**
  * Set categories for a case
  *
- * $Id: categories.php,v 1.6 2004/07/30 11:02:14 cpsource Exp $
+ * $Id: categories.php,v 1.7 2006/01/02 22:47:25 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -19,8 +19,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $case_id = $_GET['case_id'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 // associated with
@@ -124,6 +123,9 @@ end_page();
 
 /**
  * $Log: categories.php,v $
+ * Revision 1.7  2006/01/02 22:47:25  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.6  2004/07/30 11:02:14  cpsource
  * - Optionally define msg
  *   set default no_update flag to false in edit-2.php

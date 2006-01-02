@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.39 2005/12/06 23:16:07 vanmer Exp $
+ * $Id: some.php,v 1.40 2006/01/02 22:47:25 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -16,8 +16,7 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $on_what_table='cases';
@@ -412,6 +411,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.40  2006/01/02 22:47:25  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.39  2005/12/06 23:16:07  vanmer
  * - added case type to status dropdown
  * - added order by for status dropdown (may not work with sql server)

@@ -25,8 +25,7 @@ $division_id = $_POST['division_id'];
 $on_what_table = $_POST['on_what_table'];
 $return_url = (array_key_exists('return_url',$_GET) ? $_GET['return_url'] : $_POST['return_url']);
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $no_update = false;

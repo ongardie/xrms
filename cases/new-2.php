@@ -2,7 +2,7 @@
 /**
  * Insert a new Case into the Database
  *
- * $Id: new-2.php,v 1.10 2005/03/29 23:52:48 maulani Exp $
+ * $Id: new-2.php,v 1.11 2006/01/02 22:47:25 vanmer Exp $
  */
  
 require_once('../include-locations.inc');
@@ -26,8 +26,7 @@ $case_title = $_POST['case_title'];
 $due_at = $_POST['due_at'];
 $case_description = $_POST['case_description'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 //save to database
@@ -68,6 +67,9 @@ header("Location: one.php?msg=case_added&case_id=$case_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.11  2006/01/02 22:47:25  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.10  2005/03/29 23:52:48  maulani
  * - Add audit trail
  *

@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.19 2005/05/04 14:34:55 braverock Exp $
+ * $Id: new.php,v 1.20 2006/01/02 22:47:25 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -22,8 +22,7 @@ $contact_id = (array_key_exists('contact_id',$_GET) ? $_GET['contact_id'] : $_PO
 $case_type_id = (array_key_exists('case_type_id',$_GET) ? $_GET['case_type_id'] : $_POST['case_type_id']);
 $case_title = (array_key_exists('case_title',$_GET) ? $_GET['case_title'] : $_POST['case_title']);
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $company_name = fetch_company_name($con, $company_id);
 
@@ -226,6 +225,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.20  2006/01/02 22:47:25  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.19  2005/05/04 14:34:55  braverock
  * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
  *

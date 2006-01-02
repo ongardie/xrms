@@ -2,7 +2,7 @@
 /**
  * View case statuses
  *
- * $Id: case-status-view.php,v 1.2 2005/06/29 17:18:13 maulani Exp $
+ * $Id: case-status-view.php,v 1.3 2006/01/02 22:47:25 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,8 +15,7 @@ require_once($include_directory . 'adodb-params.php');
 $case_type_id = $_GET['case_type_id'];
 $session_user_id = session_check();
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $sql = "select s.*, t.case_type_pretty_name from case_statuses s, case_types t ";
 $sql .= "where s.case_type_id=t.case_type_id ";
@@ -76,6 +75,9 @@ end_page();
 
 /**
  * $Log: case-status-view.php,v $
+ * Revision 1.3  2006/01/02 22:47:25  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.2  2005/06/29 17:18:13  maulani
  * - Correctly display case status definitions
  *

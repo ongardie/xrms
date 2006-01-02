@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.46 2005/07/07 03:38:54 daturaarutad Exp $
+ * $Id: one.php,v 1.47 2006/01/02 22:47:25 vanmer Exp $
  */
 
 //include required files
@@ -23,8 +23,7 @@ $on_what_id=$case_id;
 $session_user_id = session_check();
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $form_name = 'One_Case';
@@ -298,6 +297,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.47  2006/01/02 22:47:25  vanmer
+ * - changed to use centralized dbconnection function
+ *
  * Revision 1.46  2005/07/07 03:38:54  daturaarutad
  * updated to use new activities-widget functions
  *
