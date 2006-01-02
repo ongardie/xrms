@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.6 2005/12/18 02:58:06 vanmer Exp $
+ * $Id: updateto2.0.php,v 1.7 2006/01/02 21:14:11 vanmer Exp $
  */
 
 // where do we include from
@@ -2627,12 +2627,23 @@ $sql = "create index province on time_zones (province)";
 $rst = $con->execute($sql);
 
 //Update address table
-$sql = "alter table addresses add offset float";
-$con->execute($sql);
+$addr_cols=$con->MetaColumns('addresses');
+if (!array_key_exists('GMT_OFFSET',$addr_cols)) {
+    $sql = "alter table addresses add offset float";
+    $con->execute($sql);
+}
 $sql = "alter table addresses add daylight_savings_id int unsigned";
 $con->execute($sql);
 $sql = "alter table addresses add address_type varchar(20) not null default 'unknown' after postal_code";
 $con->execute($sql);
+
+//update timezone offset field using the new 2.0 style of upgrading, for database compatibility
+$upgrade_msgs=array();
+rename_fieldname($con, 'addresses', 'offset', 'gmt_offset', $upgrade_msgs);
+
+rename_fieldname($con, 'time_zones', 'offset', 'gmt_offset', $upgrade_msgs);
+
+$msg.=implode("<br>\n",$upgrade_msgs);
 
 //Go through each address to insert daylight savings
 $sql = 'SELECT address_id
@@ -4739,13 +4750,6 @@ $msg .= check_session_table($con, $table_list);
 $msg .= update_unknown_company($con);
 
 
-//update timezone offset field using the new 2.0 style of upgrading, for database compatibility
-$upgrade_msgs=array();
-rename_fieldname($con, 'addresses', 'offset', 'gmt_offset', $upgrade_msgs);
-
-rename_fieldname($con, 'time_zones', 'offset', 'gmt_offset', $upgrade_msgs);
-$msg.=implode("<br>\n",$upgrade_msgs);
-
 //FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
 //set_admin_preference($con, 'xrms_version', '2.0.0');
 
@@ -4773,6 +4777,10 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.7  2006/01/02 21:14:11  vanmer
+ * - moved rename of gmt_offset field to before first use of gmt_offset field in addresses table
+ * - added check to see if gmt_offset field exists before adding the offset field (to ensure that multiple runs of update do not add extraneous fields)
+ *
  * Revision 1.6  2005/12/18 02:58:06  vanmer
  * - added upgrade commands to rename fieldnames from offset to gmt_offset
  *
