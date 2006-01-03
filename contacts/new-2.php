@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.32 2006/01/02 22:59:59 vanmer Exp $
+ * $Id: new-2.php,v 1.33 2006/01/03 21:21:05 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -146,12 +146,20 @@ $rec['last_modified_at'] = time();
 $rec['last_modified_by'] = $session_user_id;
 $rec['home_address_id']=$home_address_id;
 
-$contact_id=add_contact($con, $rec);
-$con->close();
+$contact_data=add_contact($con, $rec);
 
+if ($contact_data) {
+    if (is_array($contact_data)) { $contact_id=$contact_data['contact_id']; }
+    else { $contact_id=$contact_data; }
+} else {
+    $msg = urlencode(_("Failed to add contact"));
+    $return_url="../companies/one.php?msg=$msg&company_id=$company_id";
+}
+
+$con->close();
 if ($edit_address == "on") {
     header("Location: edit-address.php?msg=contact_added&contact_id=$contact_id");
-    } else {
+} else {
     if (!$return_url) {
         $return_url="../companies/one.php?msg=contact_added&company_id=$company_id";
     }
@@ -161,6 +169,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.33  2006/01/03 21:21:05  vanmer
+ * - changed to take either an array or an integer back from add_contact, to reflect API changes
+ *
  * Revision 1.32  2006/01/02 22:59:59  vanmer
  * - changed to use centralized dbconnection function
  *
