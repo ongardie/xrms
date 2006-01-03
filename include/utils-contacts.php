@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.11 2005/12/22 22:50:36 jswalter Exp $
+ * $Id: utils-contacts.php,v 1.12 2006/01/03 21:03:18 vanmer Exp $
  *
  */
 
@@ -185,7 +185,7 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
                 $_retVal['contact_id']  = $contact_data['contact_id'];
 
 //            $_retVal = $_retVal['contact_id'];
-
+        $contact_id=$_retVal['contact_id'];
         //this will run whether or not base contact changed
         $param = array($_retVal, $contact_data);
         do_hook_function('contact_edit_2', $param);
@@ -216,7 +216,8 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
 
             $contact_array = __record_insert ( $con, 'contacts', $contact_data, $_magic_quotes, true );
 
-            $_retVal = $contact_array['contact_id'];
+            $contact_id=$contact_array['contact_id'];
+            $_retVal = $contact_id;
 
             //add to recently viewed list
             update_recent_items($con, $session_user_id, $_table_name, $contact_id);
@@ -485,6 +486,9 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.12  2006/01/03 21:03:18  vanmer
+ * - added code to ensure that the contact_id variable is set, since it is used later in the code
+ *
  * Revision 1.11  2005/12/22 22:50:36  jswalter
  *  - modified 'add_update_company()' to default to '1' for unknown contacts and company records
  *
