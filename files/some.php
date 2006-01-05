@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.52 2006/01/05 14:47:57 braverock Exp $
+ * $Id: some.php,v 1.53 2006/01/05 14:50:04 braverock Exp $
  */
 
 //include required files
@@ -71,7 +71,7 @@ $sql = "SELECT "
       . $con->Concat($con->qstr('<a id="'), 'file_pretty_name', $con->qstr('" href="' . $http_site_root . '/files/one.php?return_url=/private/home.php&amp;file_id='), 'file_id', $con->qstr('">'), "file_pretty_name", "'</a>'")
       . " AS summary, file_description as description,
       file_pretty_name,
-      file_filesystem_name
+      file_filesystem_name,
       file_size as size,
       u.username AS owner, ";
 
@@ -533,6 +533,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.53  2006/01/05 14:50:04  braverock
+ * *** empty log message ***
+ *
  * Revision 1.52  2006/01/05 14:47:57  braverock
  * - add filesystem name to search criteria
  *
