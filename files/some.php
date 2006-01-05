@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.51 2006/01/05 14:37:58 braverock Exp $
+ * $Id: some.php,v 1.52 2006/01/05 14:47:57 braverock Exp $
  */
 
 //include required files
@@ -40,13 +40,14 @@ load_saved_search_vars($con, $on_what_table, $saved_id, $delete_saved);
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
-           'file_id'            => array ( 'file_id', arr_vars_SESSION ),
-           'file_name'          => array ( 'file_name', arr_vars_SESSION ),
-           'file_description'   => array ( 'file_description', arr_vars_SESSION ),
-           'file_on_what'       => array ( 'file_on_what', arr_vars_SESSION ),
-           'file_on_what_name'  => array ( 'file_on_what_name', arr_vars_SESSION ),
-           'file_date'          => array ( 'file_date', arr_vars_SESSION ),
-           'user_id'            => array ( 'file_user_id', arr_vars_SESSION ),
+           'file_id'               => array ( 'file_id', arr_vars_SESSION ),
+           'file_summary'          => array ( 'file_summary', arr_vars_SESSION ),
+           'file_description'      => array ( 'file_description', arr_vars_SESSION ),
+           'file_filesystem_name'  => array ( 'file_filesystem_name', arr_vars_SESSION ),
+           'file_on_what'          => array ( 'file_on_what', arr_vars_SESSION ),
+           'file_on_what_name'     => array ( 'file_on_what_name', arr_vars_SESSION ),
+           'file_date'             => array ( 'file_date', arr_vars_SESSION ),
+           'user_id'               => array ( 'file_user_id', arr_vars_SESSION ),
            );
 
 // get all passed in variables
@@ -68,8 +69,9 @@ $f_activity     = false;
 
 $sql = "SELECT "
       . $con->Concat($con->qstr('<a id="'), 'file_pretty_name', $con->qstr('" href="' . $http_site_root . '/files/one.php?return_url=/private/home.php&amp;file_id='), 'file_id', $con->qstr('">'), "file_pretty_name", "'</a>'")
-      . " AS name, file_description as description,
+      . " AS summary, file_description as description,
       file_pretty_name,
+      file_filesystem_name
       file_size as size,
       u.username AS owner, ";
 
@@ -175,9 +177,14 @@ if (strlen($file_id) > 0 and is_numeric($file_id)) {
     $where .= " and f.file_id = " . $con->qstr($file_id, get_magic_quotes_gpc());
 }
 
-if (strlen($file_name) > 0) {
+if (strlen($file_summary) > 0) {
     $criteria_count++;
-    $where .= " and f.file_pretty_name like " . $con->qstr('%' . $file_name . '%', get_magic_quotes_gpc());
+    $where .= " and f.file_pretty_name like " . $con->qstr('%' . $file_summary . '%', get_magic_quotes_gpc());
+}
+
+if (strlen($file_filesystem_name) > 0) {
+    $criteria_count++;
+    $where .= " and f.file_filesystem_name like " . $con->qstr('%' . $file_filesystem_name . '%', get_magic_quotes_gpc());
 }
 
 if (strlen($file_description) > 0) {
@@ -395,14 +402,23 @@ $plugin_search_rows = concat_hook_function('file_get_search_fields_html');
         </tr>
         <tr>
                 <td class=widget_label><?php echo _("File ID"); ?></td>
-                <td class=widget_label><?php echo _("File Name"); ?></td>
+                <td class=widget_label><?php echo _("File Summary"); ?></td>
                 <td class=widget_label><?php echo _("File Description"); ?></td>
-                <td class=widget_label><?php echo _("On What"); ?></td>
+                <td class=widget_label><?php echo _("File Name"); ?></td>
         </tr>
         <tr>
                 <td class=widget_content_form_element><input type=text name="file_id" size=5 value="<?php  echo $file_id ?>"></td>
-                <td class=widget_content_form_element><input type=text name="file_name" size=12 value="<?php  echo $file_name ?>"></td>
-                <td class=widget_content_form_element><input type=text name="file_description" size=12 value="<?php  echo $file_description ?>"></td>
+                <td class=widget_content_form_element><input type=text name="file_summary" size=12 value="<?php  echo $file_summary ?>"></td>
+                <td class=widget_content_form_element><input type=text name="file_description" size=24 value="<?php  echo $file_description ?>"></td>
+                <td class=widget_content_form_element><input type=text name="file_filesystem_name" size=12 value="<?php  echo $file_filesystem_name ?>"></td>
+        </tr>
+        <tr>
+                <td class=widget_label><?php echo _("On What"); ?></td>
+                <td class=widget_label><?php echo _("On what Name"); ?></td>
+                <td class=widget_label><?php echo _("Date"); ?></td>
+                <td class=widget_label><?php echo _("Owner"); ?></td>
+        </tr>
+        <tr>
                 <td class=widget_content_form_element>
             <select name="file_on_what">
                         <option value="default"<?php if ($file_on_what == "") { echo " selected"; } ?>></option>
@@ -415,14 +431,7 @@ $plugin_search_rows = concat_hook_function('file_get_search_fields_html');
                         <option value="activities"<?php if ($file_on_what == "activities") { echo " selected"; } ?>><?php echo _("Activities"); ?></option
                     </select>
                 </td>
-        </tr>
-        <tr>
-                <td colspan=2 class=widget_label><?php echo _("On what Name"); ?></td>
-                <td class=widget_label><?php echo _("Date"); ?></td>
-                <td class=widget_label><?php echo _("Owner"); ?></td>
-        </tr>
-        <tr>
-                <td colspan=2 class=widget_content_form_element><input type=text name="file_on_what_name" size=12 value="<?php echo $file_on_what_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="file_on_what_name" size=12 value="<?php echo $file_on_what_name; ?>"></td>
                 <td class=widget_content_form_element><input type=text name="file_date" size=8 value="<?php echo $file_date; ?>"></td>
                 <td class=widget_content_form_element><?php echo $user_menu; ?></td>
         </tr>
@@ -524,6 +533,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.52  2006/01/05 14:47:57  braverock
+ * - add filesystem name to search criteria
+ *
  * Revision 1.51  2006/01/05 14:37:58  braverock
  * - remove Mail Merge Button
  *
