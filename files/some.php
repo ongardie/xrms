@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.54 2006/01/05 14:55:01 braverock Exp $
+ * $Id: some.php,v 1.55 2006/01/05 14:56:54 braverock Exp $
  */
 
 //include required files
@@ -335,11 +335,11 @@ $owner_query_select = $sql . 'AND u.user_id = XXX-value-XXX';
 
 // selects the columns this user is interested in
 // no reason to set this if you don't want all by default
-if(!$file_default_columns) $file_default_columns =  array('name', 'size','owner', 'date');
+if(!$file_default_columns) $file_default_columns =  array('summary', 'size','owner', 'date');
 
 // Set up $pager_widget
 $columns = array();
-$columns[] = array('name' => _("Summary"), 'index_sql' => 'summmary', 'sql_sort_column' => 'file_pretty_name');
+$columns[] = array('name' => _("Summary"), 'index_sql' => 'summary', 'sql_sort_column' => 'file_pretty_name');
 $columns[] = array('name' => _("Size"), 'index_calc' => 'size', 'type' => 'filesize');
 $columns[] = array('name' => _("Owner"), 'index_sql' => 'owner', 'group_query_list' => $owner_query_list, 'group_query_select' => $owner_query_select);
 $columns[] = array('name' => _("ID"), 'index_sql' => 'ID');
@@ -533,6 +533,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.55  2006/01/05 14:56:54  braverock
+ * - add summary back to default columns
+ *
  * Revision 1.54  2006/01/05 14:55:01  braverock
  * - normalize the use of 'Summary' and 'Name' to reflect correct usage
  *
