@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.43 2006/01/02 23:03:52 vanmer Exp $
+ * $Id: some.php,v 1.44 2006/01/05 13:37:46 braverock Exp $
  */
 
 //include required files
@@ -13,7 +13,6 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-saved-search.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
@@ -348,17 +347,17 @@ $pager = $file_plugin_params['pager'];
 if($file_plugin_params['error_status']) {
    $msg .= $file_plugin_params['error_text'];
 }
-	
+
 /*
 
 function FileDataCallback($rows) {
-	global $msg;
+    global $msg;
     $file_plugin_params = array($rows);
     do_hook_function('file_search_files', $file_plugin_params);
 
-	if($file_plugin_params['error_status']) {
-	    $msg = $file_plugin_params['error_text'];
-	}
+    if($file_plugin_params['error_status']) {
+        $msg = $file_plugin_params['error_text'];
+    }
 
     return $file_plugin_params[0];
 }
@@ -519,6 +518,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.44  2006/01/05 13:37:46  braverock
+ * - remove obsolete pager.php
+ *
  * Revision 1.43  2006/01/02 23:03:52  vanmer
  * - changed to use centralized dbconnection function
  *
