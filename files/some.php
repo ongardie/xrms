@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.53 2006/01/05 14:50:04 braverock Exp $
+ * $Id: some.php,v 1.54 2006/01/05 14:55:01 braverock Exp $
  */
 
 //include required files
@@ -339,7 +339,7 @@ if(!$file_default_columns) $file_default_columns =  array('name', 'size','owner'
 
 // Set up $pager_widget
 $columns = array();
-$columns[] = array('name' => _("Summary"), 'index_sql' => 'name', 'sql_sort_column' => 'file_pretty_name');
+$columns[] = array('name' => _("Summary"), 'index_sql' => 'summmary', 'sql_sort_column' => 'file_pretty_name');
 $columns[] = array('name' => _("Size"), 'index_calc' => 'size', 'type' => 'filesize');
 $columns[] = array('name' => _("Owner"), 'index_sql' => 'owner', 'group_query_list' => $owner_query_list, 'group_query_select' => $owner_query_select);
 $columns[] = array('name' => _("ID"), 'index_sql' => 'ID');
@@ -478,7 +478,7 @@ $plugin_search_rows = concat_hook_function('file_get_search_fields_html');
                 <td class=widget_header colspan=4><?php echo _("Recently Viewed"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Name"); ?></td>
+                <td class=widget_label><?php echo _("Summary"); ?></td>
                 <td class=widget_label><?php echo _("Size"); ?></td>
                 <td class=widget_label><?php echo _("Date"); ?></td>
                 <td class=widget_label><?php echo _("File ID"); ?></td>
@@ -533,6 +533,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.54  2006/01/05 14:55:01  braverock
+ * - normalize the use of 'Summary' and 'Name' to reflect correct usage
+ *
  * Revision 1.53  2006/01/05 14:50:04  braverock
  * *** empty log message ***
  *
