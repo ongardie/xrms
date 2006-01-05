@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.48 2006/01/05 14:14:45 braverock Exp $
+ * $Id: some.php,v 1.49 2006/01/05 14:32:53 braverock Exp $
  */
 
 //include required files
@@ -68,7 +68,10 @@ $f_activity     = false;
 
 $sql = "SELECT "
       . $con->Concat($con->qstr('<a id="'), 'file_pretty_name', $con->qstr('" href="' . $http_site_root . '/files/one.php?return_url=/private/home.php&amp;file_id='), 'file_id', $con->qstr('">'), "file_pretty_name", "'</a>'")
-      . " AS name, file_description as description, file_pretty_name, ";
+      . " AS name, file_description as description,
+      file_pretty_name,
+      file_size as size,
+      u.username AS owner";
 
 $sql .= concat_hook_function('file_get_search_fields_sql');
 
@@ -319,7 +322,9 @@ if (get_system_parameter($con, 'Use Owl') == 'y') {
   echo "<input class=button type=button onclick='javascript: owl()' value='"._("Owl File Management")."'><br><br>";
 }
 
+$owner_query_list = "select " . $con->Concat("u.username", "' ('", "count(u.user_id)", "')'") . ", u.user_id $from $where group by u.username order by u.username";
 
+$owner_query_select = $sql . 'AND u.user_id = XXX-value-XXX';
 
 // selects the columns this user is interested in
 // no reason to set this if you don't want all by default
@@ -329,7 +334,7 @@ if(!$file_default_columns) $file_default_columns =  array('name', 'size','owner'
 $columns = array();
 $columns[] = array('name' => _("Summary"), 'index_sql' => 'name', 'sql_sort_column' => 'file_pretty_name');
 $columns[] = array('name' => _("Size"), 'index_calc' => 'size', 'type' => 'filesize');
-$columns[] = array('name' => _("Owner"), 'index_calc' => 'owner');
+$columns[] = array('name' => _("Owner"), 'index_sql' => 'owner', 'group_query_list' => $owner_query_list, 'group_query_select' => $owner_query_select);
 $columns[] = array('name' => _("ID"), 'index_sql' => 'ID');
 $columns[] = array('name' => _("Date"), 'index_sql' => 'date');
 $columns[] = array('name' => _("Description"), 'index_sql' => 'description');
@@ -519,6 +524,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.49  2006/01/05 14:32:53  braverock
+ * - add sql for size and owner
+ *
  * Revision 1.48  2006/01/05 14:14:45  braverock
  * - rearrange and set default columns
  *
