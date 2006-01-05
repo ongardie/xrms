@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.45 2006/01/05 13:55:15 braverock Exp $
+ * $Id: some.php,v 1.46 2006/01/05 14:00:18 braverock Exp $
  */
 
 //include required files
@@ -347,8 +347,6 @@ $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 $columns = $pager_columns->GetUserColumns('default');
 
 $pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'FileForm', 'FilePager', $columns, false, true);
-$pager_columns_button = $pager->GetSelectableColumnsButton();
-$pager_columns_selects = $pager->GetSelectableColumnsWidget();
 
 $file_plugin_params = array('pager' => $pager);
 do_hook_function('file_search_files_callback', $file_plugin_params);
@@ -518,6 +516,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.46  2006/01/05 14:00:18  braverock
+ * - remove duplicate selectable columns lines, unecessary
+ *
  * Revision 1.45  2006/01/05 13:55:15  braverock
  * - add id to sidebar
  * - add selectable columns widget to search
