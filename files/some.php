@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.50 2006/01/05 14:34:58 braverock Exp $
+ * $Id: some.php,v 1.51 2006/01/05 14:37:58 braverock Exp $
  */
 
 //include required files
@@ -366,10 +366,10 @@ if($file_plugin_params['error_status']) {
 }
 
 $pager_widget = $pager_columns_selects;
-$endrows = "<tr><td class=widget_content_form_element colspan=10>
-            $pager_columns_button
-            " . $pager->GetAndUseExportButton() .  "
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
+$endrows = "<tr><td class=widget_content_form_element colspan=10> "
+            . $pager_columns_button
+            . $pager->GetAndUseExportButton();
+
 $pager->AddEndRows($endrows);
 $pager_widget .= $pager->Render($system_rows_per_page);
 
@@ -524,6 +524,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.51  2006/01/05 14:37:58  braverock
+ * - remove Mail Merge Button
+ *
  * Revision 1.50  2006/01/05 14:34:58  braverock
  * - missing comma causes problems in some queries
  *
