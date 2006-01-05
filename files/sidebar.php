@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.27 2005/12/14 05:05:30 daturaarutad Exp $
+ * $Id: sidebar.php,v 1.28 2006/01/05 13:55:15 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -74,13 +74,15 @@ if(!$file_rows && !$file_rows['error_status']) {
           $file_info['description'] = $file_sidebar_rst->fields['file_description'];
           $file_info['owner'] =  $file_sidebar_rst->fields['username'];
           $file_info['date'] = $con->userdate($file_sidebar_rst->fields['entered_at']);
+          $file_info['id'] = $file_sidebar_rst->fields['file_id'];
 
           $files[] = $file_info;
 
           $file_sidebar_rst->movenext();
         }
         $file_sidebar_rst->close();
-    } 
+    }
+
 
     $columns=array();
     $columns[] = array('name' => 'Summary', 'index_calc' => 'name');
@@ -88,6 +90,7 @@ if(!$file_rows && !$file_rows['error_status']) {
     $columns[] = array('name' => 'Owner', 'index_calc' => 'owner');
     $columns[] = array('name' => 'Description', 'index_calc' => 'description');
     $columns[] = array('name' => 'Date', 'index_calc' => 'date');
+    $columns[] = array('name' => 'ID', 'index_calc' => 'id');
 
     if(!$file_sidebar_default_columns) $file_sidebar_default_columns = array('name', 'size','owner', 'date');
 
@@ -97,7 +100,7 @@ if(!$file_rows && !$file_rows['error_status']) {
 
     $columns = $file_pager_columns->GetUserColumns('default');
     $colspan = count($columns);
-    
+
 
     $pager = new GUP_Pager($con, null, $files, $file_sidebar_label, 'Files_Sidebar_Form', 'Files_Sidebar', $columns, false, true);
 
@@ -122,13 +125,17 @@ if(!$file_rows && !$file_rows['error_status']) {
                     $file_pager_columns_selects
                     <input type=hidden name=contact_id value=$contact_id>
                     <input type=hidden name=company_id value=$company_id>
-                    <input type=hidden name=division_id value=$division_id>\n" 
-                    .  $pager->Render() . " 
+                    <input type=hidden name=division_id value=$division_id>\n"
+                    .  $pager->Render() . "
                   </form>\n";
 }
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.28  2006/01/05 13:55:15  braverock
+ * - add id to sidebar
+ * - add selectable columns widget to search
+ *
  * Revision 1.27  2005/12/14 05:05:30  daturaarutad
  * change Name to Summary, add Description as possible field
  *

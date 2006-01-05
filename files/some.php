@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.44 2006/01/05 13:37:46 braverock Exp $
+ * $Id: some.php,v 1.45 2006/01/05 13:55:15 braverock Exp $
  */
 
 //include required files
@@ -336,8 +336,19 @@ if($f_activity) $columns[] = array('name' => _("Activity"), 'index_sql' => 'acti
 $columns[] = array('name' => _("Date"), 'index_sql' => 'date');
 $columns[] = array('name' => _("ID"), 'index_sql' => 'ID');
 
-$pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'FileForm', 'FilePager', $columns, false, true);
+// selects the columns this user is interested in
+// no reason to set this if you don't want all by default
+$default_columns = null;
 
+$pager_columns = new Pager_Columns('FilePager', $columns, $default_columns, 'FileForm');
+$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+$columns = $pager_columns->GetUserColumns('default');
+
+$pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'FileForm', 'FilePager', $columns, false, true);
+$pager_columns_button = $pager->GetSelectableColumnsButton();
+$pager_columns_selects = $pager->GetSelectableColumnsWidget();
 
 $file_plugin_params = array('pager' => $pager);
 do_hook_function('file_search_files_callback', $file_plugin_params);
@@ -348,24 +359,13 @@ if($file_plugin_params['error_status']) {
    $msg .= $file_plugin_params['error_text'];
 }
 
-/*
-
-function FileDataCallback($rows) {
-    global $msg;
-    $file_plugin_params = array($rows);
-    do_hook_function('file_search_files', $file_plugin_params);
-
-    if($file_plugin_params['error_status']) {
-        $msg = $file_plugin_params['error_text'];
-    }
-
-    return $file_plugin_params[0];
-}
-
-$pager->AddModifyDataCallback('FileDataCallback');
-*/
-
-$pager_widget = $pager->Render($system_rows_per_page);
+$pager_widget = $pager_columns_selects;
+$endrows = "<tr><td class=widget_content_form_element colspan=10>
+            $pager_columns_button
+            " . $pager->GetAndUseExportButton() .  "
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
+$pager->AddEndRows($endrows);
+$pager_widget .= $pager->Render($system_rows_per_page);
 
 $con->close();
 
@@ -518,6 +518,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.45  2006/01/05 13:55:15  braverock
+ * - add id to sidebar
+ * - add selectable columns widget to search
+ *
  * Revision 1.44  2006/01/05 13:37:46  braverock
  * - remove obsolete pager.php
  *
