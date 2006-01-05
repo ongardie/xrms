@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.47 2006/01/05 14:11:24 braverock Exp $
+ * $Id: some.php,v 1.48 2006/01/05 14:14:45 braverock Exp $
  */
 
 //include required files
@@ -323,11 +323,15 @@ if (get_system_parameter($con, 'Use Owl') == 'y') {
 
 // selects the columns this user is interested in
 // no reason to set this if you don't want all by default
-// $default_columns =  array('name', 'size','owner', 'date');
+if(!$file_default_columns) $file_default_columns =  array('name', 'size','owner', 'date');
 
 // Set up $pager_widget
 $columns = array();
 $columns[] = array('name' => _("Summary"), 'index_sql' => 'name', 'sql_sort_column' => 'file_pretty_name');
+$columns[] = array('name' => _("Size"), 'index_calc' => 'size', 'type' => 'filesize');
+$columns[] = array('name' => _("Owner"), 'index_calc' => 'owner');
+$columns[] = array('name' => _("ID"), 'index_sql' => 'ID');
+$columns[] = array('name' => _("Date"), 'index_sql' => 'date');
 $columns[] = array('name' => _("Description"), 'index_sql' => 'description');
 
 if($f_contact) $columns[] = array('name' => _("Contact"), 'index_sql' => 'contact');
@@ -337,13 +341,9 @@ if($f_case) $columns[] = array('name' => _("Case"), 'index_sql' => 'case_name');
 if($f_company) $columns[] = array('name' => _("Company"), 'index_sql' => 'company');
 if($f_activity) $columns[] = array('name' => _("Activity"), 'index_sql' => 'activity');
 
-$columns[] = array('name' => _("Size"), 'index_calc' => 'size', 'type' => 'filesize');
-$columns[] = array('name' => _("Owner"), 'index_calc' => 'owner');
-$columns[] = array('name' => _("Date"), 'index_sql' => 'date');
-$columns[] = array('name' => _("ID"), 'index_sql' => 'ID');
 
 
-$pager_columns = new Pager_Columns('FilePager', $columns, $default_columns, 'FileForm');
+$pager_columns = new Pager_Columns('FilePager', $columns, $file_default_columns, 'FileForm');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
 $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 
@@ -519,6 +519,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.48  2006/01/05 14:14:45  braverock
+ * - rearrange and set default columns
+ *
  * Revision 1.47  2006/01/05 14:11:24  braverock
  * - add size and owner columns
  *
