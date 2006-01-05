@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.28 2006/01/05 13:55:15 braverock Exp $
+ * $Id: sidebar.php,v 1.29 2006/01/05 14:07:18 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -85,12 +85,12 @@ if(!$file_rows && !$file_rows['error_status']) {
 
 
     $columns=array();
-    $columns[] = array('name' => 'Summary', 'index_calc' => 'name');
-    $columns[] = array('name' => 'Size', 'index_calc' => 'size', 'type' => 'filesize');
-    $columns[] = array('name' => 'Owner', 'index_calc' => 'owner');
-    $columns[] = array('name' => 'Description', 'index_calc' => 'description');
-    $columns[] = array('name' => 'Date', 'index_calc' => 'date');
-    $columns[] = array('name' => 'ID', 'index_calc' => 'id');
+    $columns[] = array('name' => _("Summary"), 'index_calc' => 'name');
+    $columns[] = array('name' => _("Size"), 'index_calc' => 'size', 'type' => 'filesize');
+    $columns[] = array('name' => _("Owner"), 'index_calc' => 'owner');
+    $columns[] = array('name' => _("Description"), 'index_calc' => 'description');
+    $columns[] = array('name' => _("Date"), 'index_calc' => 'date');
+    $columns[] = array('name' => _("ID"), 'index_calc' => 'id');
 
     if(!$file_sidebar_default_columns) $file_sidebar_default_columns = array('name', 'size','owner', 'date');
 
@@ -132,6 +132,9 @@ if(!$file_rows && !$file_rows['error_status']) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.29  2006/01/05 14:07:18  braverock
+ * - localize column headers
+ *
  * Revision 1.28  2006/01/05 13:55:15  braverock
  * - add id to sidebar
  * - add selectable columns widget to search
