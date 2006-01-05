@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.49 2006/01/05 14:32:53 braverock Exp $
+ * $Id: some.php,v 1.50 2006/01/05 14:34:58 braverock Exp $
  */
 
 //include required files
@@ -71,7 +71,7 @@ $sql = "SELECT "
       . " AS name, file_description as description,
       file_pretty_name,
       file_size as size,
-      u.username AS owner";
+      u.username AS owner, ";
 
 $sql .= concat_hook_function('file_get_search_fields_sql');
 
@@ -524,6 +524,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.50  2006/01/05 14:34:58  braverock
+ * - missing comma causes problems in some queries
+ *
  * Revision 1.49  2006/01/05 14:32:53  braverock
  * - add sql for size and owner
  *
