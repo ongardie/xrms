@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.20 2006/01/02 23:05:45 vanmer Exp $
+ * $Id: install.php,v 1.21 2006/01/06 21:40:02 vanmer Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -234,7 +234,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 
 // can we make a database connection?
 $con = get_xrms_dbconnection();
-if (!$connectiontest) {
+if (!$con) {
     // Oops!  We do not have a valid database connection
     // Now instruct the user in how to fix this problem
     $problem = 'We cannot connect to the database.  Check the database ';
@@ -319,6 +319,9 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.21  2006/01/06 21:40:02  vanmer
+ *- fixed broker connection test on install
+ *
  *Revision 1.20  2006/01/02 23:05:45  vanmer
  *- changed to use centralized dbconnection function
  *
