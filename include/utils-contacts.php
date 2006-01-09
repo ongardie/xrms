@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.12 2006/01/03 21:03:18 vanmer Exp $
+ * $Id: utils-contacts.php,v 1.13 2006/01/09 21:05:41 jswalter Exp $
  *
  */
 
@@ -95,7 +95,7 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
         if ( (! $contact_info['company_name']) && (! $contact_info['first_names']) && (! $contact_info['last_name']) )
         {
             // Since there is not info to create or derive a company name
-//            $contact_info['company_id'] = 1;
+            $contact_info['company_id'] = 1;
         }
 
         else
@@ -486,6 +486,9 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.13  2006/01/09 21:05:41  jswalter
+ *  - if no company name or user names are given, default to '1'
+ *
  * Revision 1.12  2006/01/03 21:03:18  vanmer
  * - added code to ensure that the contact_id variable is set, since it is used later in the code
  *
