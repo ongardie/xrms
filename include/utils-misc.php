@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.165 2006/01/02 21:39:57 vanmer Exp $
+ * $Id: utils-misc.php,v 1.166 2006/01/09 23:12:33 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -89,7 +89,7 @@ function session_startup () {
  * @param string $action - optionally specify what action to check user permission for (defaults to Read)
  * @return integer user_id of the logged in user
  */
-function session_check($c_role='', $action='Read') {
+function session_check($c_role='', $action='Read', $check_user_permission=false) {
 
     global $http_site_root;
     global $xrms_system_id;
@@ -115,11 +115,13 @@ function session_check($c_role='', $action='Read') {
 
     // make sure we've logged in
     if ( isset($_SESSION['session_user_id']) && 0 == strcmp($_SESSION['xrms_system_id'], $xrms_system_id) ) {
+      if ($check_user_permission) { $on_what_table='users'; $on_what_id=$_SESSION['session_user_id']; }
       if ($on_what_id)
          $role_ok = check_permission_bool($_SESSION['session_user_id'], false, $on_what_id, $action, $on_what_table, false, $con);
       else
-         $role_ok = check_object_permission_bool($_SESSION['session_user_id'], false, $action, $on_what_table, false, $con);
-
+      	 if ($on_what_table) 
+             $role_ok = check_object_permission_bool($_SESSION['session_user_id'], false, $action, $on_what_table, false, $con);
+         else $role_ok=true;
     // make sure we have a role to do this
     if ( $c_role AND $c_role=='Admin' ) {
         $admin_object='Administration';
@@ -2034,6 +2036,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.166  2006/01/09 23:12:33  vanmer
+ * - added check to ensure that if no on_what_table and on_what_id are set, that we will allow access
+ * - added options to check user permissions when running session check (will change on_what_table and on_what_id)
+ *
  * Revision 1.165  2006/01/02 21:39:57  vanmer
  * - always include utils-database.php from pages which include utils-misc, so that dbconnection function is available
  *
