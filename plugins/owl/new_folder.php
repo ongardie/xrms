@@ -2,7 +2,7 @@
 /**
  * Form for creating a new folder
  *
- * $Id: new_folder.php,v 1.4 2005/12/14 04:29:02 daturaarutad Exp $
+ * $Id: new_folder.php,v 1.5 2006/01/09 21:38:24 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -44,6 +44,8 @@ if ($on_what_table == 'opportunities') {
     $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS attached_to_name FROM contacts WHERE contact_id = $on_what_id";
 } elseif ($on_what_table == 'campaigns') {
     $sql = "select campaign_title as attached_to_name from campaigns where campaign_id = $on_what_id";
+} elseif ($on_what_table == 'company_division') {
+    $sql = "select division_name as attached_to_name from company_division where division_id = $on_what_id";
 }
 
 $rst = $con->execute($sql);
@@ -143,6 +145,9 @@ end_page();
 
 /**
  * $Log: new_folder.php,v $
+ * Revision 1.5  2006/01/09 21:38:24  daturaarutad
+ * add code to display division name when attached to division
+ *
  * Revision 1.4  2005/12/14 04:29:02  daturaarutad
  * hide description and date fields for now
  *
