@@ -5,7 +5,7 @@
  *
  * @todo modify all opportunity status uses to use a sort order
  *
- * $Id: some.php,v 1.12 2006/01/02 21:59:08 vanmer Exp $
+ * $Id: some.php,v 1.13 2006/01/10 08:21:13 gpowers Exp $
  */
 
 //include required XRMS common files
@@ -22,57 +22,69 @@ $session_user_id = session_check( 'Admin' );
 //connect to the database
 $con = get_xrms_dbconnection();
 
-$sql = "select * from opportunity_statuses where opportunity_status_record_status = 'a' order by sort_order";
+//print_r($_SESSION);
+getGlobalVar($aopportunity_type_id,'aopportunity_type_id');
+
+$sql = "SELECT opportunity_type_pretty_name,opportunity_type_id
+        FROM opportunity_types
+        WHERE opportunity_type_record_status = 'a'
+        ORDER BY opportunity_type_pretty_name";
 $rst = $con->execute($sql);
+if (!$rst) { db_error_handler($con, $sql); }
+else { $type_menu= $rst->getmenu2('aopportunity_type_id',$aopportunity_type_id, true, false, 1, "id=aopportunity_type_id onchange=javascript:restrictByOppType();"); }
 
-//get first row count and last row count
-$cnt = 1;
-$maxcnt = $rst->rowcount();
 
-//get rows, place them in table form 
-if ($rst) {
-   while (!$rst->EOF) {
-      $sort_order = $rst->fields['sort_order'];
-      $table_rows .= "\n<tr cellspacing=0>";
-      $table_rows .= '<td class=widget_content>'
-                     . '<a href=one.php?opportunity_status_id='
-                     . $rst->fields['opportunity_status_id']
-                     . '>';
-      
-      if (strlen ($opportunity_status_display_html) > 0) {
-         $table_rows .= _($rst->fields['opportunity_status_pretty_html']);
-      } else {
-         $table_rows .= _($rst->fields['opportunity_status_pretty_name']);
-      }
+if ($aopportunity_type_id) {
+    $sql = "SELECT *
+            FROM opportunity_statuses
+            WHERE opportunity_status_record_status = 'a' AND opportunity_type_id=$aopportunity_type_id
+            ORDER BY opportunity_type_id, sort_order";
+    $rst = $con->execute($sql);
+    if (!$rst) { db_error_handler($con, $sql); }
 
-      $table_rows .= '</a></td>'
-                  . '<td class=widget_content>'
-                  . htmlspecialchars($rst->fields['opportunity_status_long_desc'])
-                  . '</td>'
-                  . '<td class=widget_content>';
 
-       //sets up ordering links in the table
-       if ($sort_order != $cnt) {
-           $table_rows .= '<a href="' . $http_site_root
-               . '/admin/sort.php?direction=up&sort_order='
-               . $sort_order . '&table_name=opportunity_status'
-               . '&return_url=/admin/opportunity-statuses/some.php">'._("up").'</a> &nbsp; ';
-       }
-       if ($sort_order != $maxcnt) {
-           $table_rows .= '<a href="' . $http_site_root
-                        . '/admin/sort.php?direction=down&sort_order='
-                        . $sort_order . '&table_name=opportunity_status'
-                        . '&return_url=/admin/opportunity-statuses/some.php">'._("down").'</a>';
-       }
-       $table_rows .= '</td>';
+    //get first row count and last row count
+    $cnt = 1;
+    $maxcnt = $rst->rowcount();
 
-       $table_rows .= '</tr>';
-       $rst->movenext();
-    } //end while
-    $rst->close();
-} else {
-   db_error_handler($con,$sql);
-}
+    //get rows, place them in table form
+    $table_rows='';
+    if ($rst) {
+        while (!$rst->EOF) {
+
+            $sort_order = $rst->fields['sort_order'];
+            $table_rows .= '<tr>'
+                        . '<td class=widget_content><a href=one.php?opportunity_status_id=' . $rst->fields['opportunity_status_id'] . '>'
+                        . _($rst->fields['opportunity_status_pretty_name']) . '</a></td>';
+
+            //add descriptions
+            $table_rows .= '<td class=widget_content>'
+                        . htmlspecialchars($rst->fields['opportunity_status_long_desc'])
+                        . '</td>';
+
+            //sets up ordering links in the table
+
+            $table_rows .= '<td class=widget_content>';
+            if ($sort_order != $cnt) {
+                $table_rows .= '<a href="' . $http_site_root
+                            . '/admin/sort.php?direction=up&sort_order='
+                            . $sort_order . "&table_name=opportunity_status&opportunity_type_id=$aopportunity_type_id&return_url=/admin/opportunity-statuses/some.php?aopportunity_type_id=$aopportunity_type_id\">"._("up").'</a> &nbsp; ';
+            }
+            if ($sort_order != $maxcnt) {
+                $table_rows .= '<a href="' . $http_site_root
+                            . '/admin/sort.php?direction=down&sort_order='
+                            . $sort_order . "&table_name=opportunity_status&opportunity_type_id=$aopportunity_type_id&return_url=/admin/opportunity-statuses/some.php?aopportunity_type_id=$aopportunity_type_id\">"._("down").'</a>';
+            }
+            $table_rows .= '</td></tr>';
+
+            $rst->movenext();
+        }
+        $rst->close();
+        if (!$table_rows) {
+            $table_rows='<tr><td colspan=3 class=widget_content>'._("No statuses defined for specified opportunity type") . '</td></tr>';
+        }
+    }
+} else { $table_rows='<tr><td colspan=3 class=widget_content>'._("Select a opportunity type") . '</td></tr>'; }
 
 $con->close();
 
@@ -82,8 +94,25 @@ start_page($page_title);
 
 ?>
 
+    <script language=JavaScript>
+    <!--
+        function restrictByOppType() {
+            select=document.getElementById('aopportunity_type_id');
+            location.href = 'some.php?aopportunity_type_id=' + select.value;
+        }
+     //-->
+    </script>
+
 <div id="Main">
    <div id="Content">
+                <table class=widget classpacing=1>
+                    <tr>
+                        <td class=widget_header><?php echo _("Opportunity Type"); ?></td>
+                    </tr>
+                    <tr>
+                        <td class=widget_content><?php echo $type_menu; ?></td>
+                    </tr>
+                </table>
 
    <form action=../sort.php method=post>
         <table class=widget cellspacing=1>
@@ -105,6 +134,7 @@ start_page($page_title);
    <div id="Sidebar">
 
        <form action=new-2.php method=post>
+            <input type=hidden name=opportunity_type_id value="<?php echo $aopportunity_type_id; ?>">
        <table class=widget cellspacing=1>
            <tr>
                <td class=widget_header colspan=2><?php echo _("Add New Opportunity Status"); ?></td>
@@ -154,6 +184,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.13  2006/01/10 08:21:13  gpowers
+ * - added limiting of opp. status by opp. type
+ *
  * Revision 1.12  2006/01/02 21:59:08  vanmer
  * - changed to use centralized database connection function
  *
