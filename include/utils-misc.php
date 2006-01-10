@@ -9,12 +9,19 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.167 2006/01/10 14:48:03 braverock Exp $
+ * $Id: utils-misc.php,v 1.168 2006/01/10 15:03:16 braverock Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
 require_once($include_directory.'utils-database.php');
 require_once($include_directory.'vars.php');
+
+//establish the database connection variables as globals
+$GLOBALS['xrms_db_server']   = $xrms_db_server;
+$GLOBALS['xrms_db_username'] = $xrms_db_username;
+$GLOBALS['xrms_db_password'] = $xrms_db_password;
+$GLOBALS['xrms_db_dbname']   = $xrms_db_dbname;
+$GLOBALS['xrms_db_dbtype']   = $xrms_db_dbtype;
 
 if ( !defined('IN_XRMS') )
 {
@@ -2037,6 +2044,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.168  2006/01/10 15:03:16  braverock
+ * - update to use $GLOBALS array for database connection to eliminate scope issue
+ *
  * Revision 1.167  2006/01/10 14:48:03  braverock
  * - missing globals in session_check fn mess up the xrms_db_connection fn call
  *

@@ -8,7 +8,7 @@
  * @author Beth Macknik
  * @package XRMS_API
  *
- * $Id: utils-database.php,v 1.27 2005/12/22 23:01:26 jswalter Exp $
+ * $Id: utils-database.php,v 1.28 2006/01/10 15:03:16 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -200,10 +200,14 @@ function execute_batch_sql_file($con, $file_path) {
  * @return adodbconnection $con connected to XRMS database
  */
 function get_xrms_dbconnection() {
-    global $xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname, $xrms_db_dbtype;
-    $xcon = &adonewconnection($xrms_db_dbtype);
-    $xcon->nconnect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+
+    $xcon = &adonewconnection($GLOBALS['xrms_db_dbtype']);
+    $xcon->Connect( $GLOBALS['xrms_db_server'],
+                    $GLOBALS['xrms_db_username'],
+                    $GLOBALS['xrms_db_password'],
+                    $GLOBALS['xrms_db_dbname']);
     return $xcon;
+
 }
 
 /*****************************************************************************/
@@ -1264,6 +1268,9 @@ function drop_table($con, $table_name, &$upgrade_msgs) {
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.28  2006/01/10 15:03:16  braverock
+ * - update to use $GLOBALS array for database connection to eliminate scope issue
+ *
  * Revision 1.27  2005/12/22 23:01:26  jswalter
  *  - modified '__record_insert()' to return an actual recordset with record data
  *  - modified '__record_find()' to hand AND and OR searches
