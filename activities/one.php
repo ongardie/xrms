@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.130 2006/01/02 21:23:18 vanmer Exp $
+ * $Id: one.php,v 1.131 2006/01/10 08:47:01 gpowers Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -283,6 +283,10 @@ if ($is_linked) {
             $type_field="{$table_name}_type_id";
             $type_field_limit=",{$on_what_table}.$type_field";
         break;
+        case 'opportunity':
+            $type_field="{$table_name}_type_id";
+            $type_field_limit=",{$on_what_table}.$type_field";
+        break;
         default:
             $type_field=false;
             $type_field_limit='';
@@ -344,6 +348,9 @@ if ( !isset($activity_content_bottom) ) {
 }
 //call the activity_content_bottom hook
 //sending null parameter, expecting return instead of change to passed in reference
+$param=NULL;
+$activity_content_top = do_hook_function('activity_content_top',$param);
+
 $param=NULL;
 $activity_content_bottom = do_hook_function('activity_content_bottom',$param);
 
@@ -423,6 +430,8 @@ $on_what_id=$ori_on_what_id;
 //Add optional tables
 //sending null parameter, expecting return instead of change to passed in reference
 $param=NULL;
+$sidebar_top_plugin_rows = do_hook_function('activity_sidebar_top',$param);
+$param=NULL;
 $sidebar_plugin_rows = do_hook_function('activity_sidebar_bottom',$param);
 
 /** End of the sidebar includes **/
@@ -488,6 +497,7 @@ function logTime() {
         <input type=hidden name=followup_from_id value="<?php  echo $followup_from_id; ?>">
 
         <table class=widget cellspacing=1>
+                <?php echo $activity_content_top; ?>
             <tr>
                 <td class=widget_header colspan=2><?php echo _("About This Activity"); ?> <?php echo ($save_and_next) ? "(<input onclick=\"var input = prompt('Jump to', ''); if(input != null && input != '') document.location.href='browse-next.php?activity_id=" . $activity_id . "&pos=' + (input);\" type=button class=button value=" . $_SESSION['pos'] . ">/" . count($_SESSION['next_to_check']) . ")": "" ; ?></td>
             </tr>
@@ -693,6 +703,8 @@ function logTime() {
 
     <!-- right column //-->
     <div id="Sidebar">
+       <!-- sidebar top plugins //-->
+        <?php echo $sidebar_top_plugin_rows; ?>
         <!-- participant list block //-->
         <?php echo $participant_block; ?>
         <!-- attachment list block //-->
@@ -768,6 +780,11 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.131  2006/01/10 08:47:01  gpowers
+ * - added activity_content_top plugin hook
+ * - added activity_sidebar_top plugin hook
+ * - added limiting of opp. statuses by opp. types
+ *
  * Revision 1.130  2006/01/02 21:23:18  vanmer
  * - changed to use centralized database connection function
  *
