@@ -2,7 +2,7 @@
 /**
  * Insert a new opportunity status into the database
  *
- * $Id: new-2.php,v 1.9 2006/01/02 21:59:08 vanmer Exp $
+ * $Id: new-2.php,v 1.10 2006/01/10 08:16:55 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -20,6 +20,7 @@ $opportunity_status_pretty_plural = $_POST['opportunity_status_pretty_plural'];
 $opportunity_status_display_html = $_POST['opportunity_status_display_html'];
 $opportunity_status_long_desc = $_POST['opportunity_status_long_desc'];
 $status_open_indicator = $_POST['status_open_indicator'];
+$opportunity_type_id = $_POST['opportunity_type_id'];
 
 //set defaults if we didn't get everything we need
 if (strlen($opportunity_status_pretty_plural) > 0) {
@@ -48,6 +49,7 @@ $rec['opportunity_status_pretty_plural'] = $opportunity_status_pretty_plural;
 $rec['opportunity_status_display_html'] = $opportunity_status_display_html;
 $rec['opportunity_status_long_desc'] = $opportunity_status_long_desc;
 $rec['status_open_indicator'] = $status_open_indicator;
+$rec['opportunity_type_id'] = $opportunity_type_id;
 $rec['sort_order'] = $sort_order;
 
 $tbl = 'opportunity_statuses';
@@ -57,10 +59,13 @@ $con->execute($ins);
 $con->close();
 
 //go back to the main opportunity status page after updating
-header("Location: some.php");
+header("Location: some.php?aopportunity_type_id=$opportunity_type_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.10  2006/01/10 08:16:55  gpowers
+ * - added limiting of opp. statuses by opp. type
+ *
  * Revision 1.9  2006/01/02 21:59:08  vanmer
  * - changed to use centralized database connection function
  *
