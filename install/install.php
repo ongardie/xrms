@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.21 2006/01/06 21:40:02 vanmer Exp $
+ * $Id: install.php,v 1.22 2006/01/10 23:00:41 vanmer Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -25,6 +25,10 @@ require_once('data.php');
 // where do we include from
 require_once('../include-locations.inc');
 
+$structure_only=$_GET['structure_only'];
+if ($structure_only) {
+    $execute_data=false;
+} else $execute_data='true';
 
 // now check to make sure that the include-locations file has been setup for use
 if ($include_directory == "/full/path/to/xrms/include/") {
@@ -283,9 +287,11 @@ foreach ($structure_sql as $sql) {
 }
 
 //INSTALL DATA
-foreach ($data_sql as $sql) {
+if ($execute_data=='true') {
+    foreach ($data_sql as $sql) {
 	$rst=$con->execute($sql);
 	if (!$rst) db_error_handler($con, $sql);
+    }
 }
 
 //run plugin installation, pass adodb database connection
@@ -319,6 +325,9 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.22  2006/01/10 23:00:41  vanmer
+ *- added flag to allow only structure to be installed, no data
+ *
  *Revision 1.21  2006/01/06 21:40:02  vanmer
  *- fixed broker connection test on install
  *
