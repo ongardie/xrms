@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division.php,v 1.15 2006/01/02 22:56:27 vanmer Exp $
+ * $Id: edit-division.php,v 1.16 2006/01/10 15:45:02 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -53,7 +53,12 @@ $sidebar=do_hook_function('division_sidebar_bottom',$sidebar);
 $edit_division_form_extra='';
 $edit_division_form = do_hook_function('edit_division_form', $edit_division_form_extra);
 
+// include the files sidebar
+require_once("../files/sidebar.php");
+$sidebar .= $file_rows;
 if (!$sidebar) $sidebar = '&nbsp';
+
+
 
 $con->close();
 
@@ -114,6 +119,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: edit-division.php,v $
+ * Revision 1.16  2006/01/10 15:45:02  daturaarutad
+ * add files sidebar
+ *
  * Revision 1.15  2006/01/02 22:56:27  vanmer
  * - changed to use centralized dbconnection function
  *
