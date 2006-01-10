@@ -23,7 +23,7 @@
 // reason is that this file gets loaded often!
 
 global $owl_location;
-$owl_location = '/www/owl/intranet';
+$owl_location = '/home/www/stage/intranet';
 
 
 /**
@@ -590,7 +590,16 @@ function op_browse_files(&$params) {
 
 
 		if($on_what_table) {
-			$return_url = urlencode("/$on_what_table/one.php?" . make_singular($on_what_table) . "_id=".$on_what_id."&owl_parent_id=$owl_parent_id");
+			// alas, we can't use our generalized code for company_division
+			if('company_division' == $on_what_table) {
+				getGlobalVar($division_id, 'division_id');
+				getGlobalVar($company_id, 'company_id');
+
+				$return_url = urlencode("/companies/edit-division.php?company_id=$company_id&division_id=$division_id&owl_parent_id=$owl_parent_id");
+			} else {
+				$return_url = urlencode("/$on_what_table/one.php?" . make_singular($on_what_table) . "_id=".$on_what_id."&owl_parent_id=$owl_parent_id");
+			}
+			
 		} else {
 			$return_url = urlencode("/private/home.php");
 		}
@@ -627,7 +636,14 @@ function op_browse_files(&$params) {
 
 				// folder link always sets a new owl_parent_id
                 if($on_what_table) {
-                    $folder_link = "$http_site_root/$on_what_table/one.php?" . make_singular($on_what_table) . "_id=$on_what_id&owl_parent_id={$owl_data[$k]['id']}";
+					if('company_division' == $on_what_table) {
+						getGlobalVar($division_id, 'division_id');
+						getGlobalVar($company_id, 'company_id');
+		
+                    	$folder_link = "$http_site_root/companies/edit-division.php?company_id=$company_id&division_id=$division_id&owl_parent_id={$owl_data[$k]['id']}";
+					} else {
+                    	$folder_link = "$http_site_root/$on_what_table/one.php?" . make_singular($on_what_table) . "_id=$on_what_id&owl_parent_id={$owl_data[$k]['id']}";
+					}
                 } else {
 			        $folder_link = "$http_site_root/private/home.php?owl_parent_id={$owl_data[$k]['id']}";
                 }
@@ -844,6 +860,9 @@ function op_template(&$params) {
 
 /**
  * $Log: owl_plugin.php,v $
+ * Revision 1.9  2006/01/10 15:43:46  daturaarutad
+ * add code to set proper return_url for browse links when attached to company_division
+ *
  * Revision 1.8  2005/12/14 04:54:04  daturaarutad
  * add selectable columns to sidebar pager, add column for icon
  *
