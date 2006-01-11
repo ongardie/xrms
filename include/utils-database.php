@@ -8,7 +8,7 @@
  * @author Beth Macknik
  * @package XRMS_API
  *
- * $Id: utils-database.php,v 1.29 2006/01/10 16:05:01 braverock Exp $
+ * $Id: utils-database.php,v 1.30 2006/01/11 21:49:21 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -1165,7 +1165,7 @@ function __record_delete ( $_objCon, $_strTableName, $_identifier, $_aryData )
    * Upgrade function, intended to change a fieldname in a table from one fieldname to another
    * Database agnostic way to upgrade/change datastructures
 **/
-function rename_fieldname($con, $table_name, $old_field_name, $new_field_name, &$upgrade_msgs) {
+function rename_fieldname($con, $table_name, $old_field_name, $new_field_name, &$upgrade_msgs, $show_errors=false) {
     $dict = NewDataDictionary( $con );
     $table_list = list_db_tables($con);
     //ensure that table already exists
@@ -1180,10 +1180,12 @@ function rename_fieldname($con, $table_name, $old_field_name, $new_field_name, &
             $sql=$dict->RenameColumnSQL($table_name, $old_field_name, $new_field_name,$field_definition);
             foreach ($sql AS $sql_line) {
                 $rst=$con->execute($sql_line);
-                if (!$rst) db_error_handler($con, $sql_line);
+                if (!$rst) { if ($show_errors) {db_error_handler($con, $sql_line); } $error=true; }
             }
-            $upgrade_msgs[]="Changed fieldname in $table_name from $old_field_name to $new_field_name<br>";
-            return true;
+	    if (!$error) {
+                $upgrade_msgs[]="Changed fieldname in $table_name from $old_field_name to $new_field_name<br>";
+                return true;
+	    } else return false;
         }
     }
     return false;
@@ -1268,6 +1270,10 @@ function drop_table($con, $table_name, &$upgrade_msgs) {
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.30  2006/01/11 21:49:21  vanmer
+ * - changed to only display errors renaming a field if requested
+ * - changed to only report success when no database errors occurred
+ *
  * Revision 1.29  2006/01/10 16:05:01  braverock
  * - revert to NConnect instead of Connect/PConnect
  *
