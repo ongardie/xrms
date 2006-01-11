@@ -702,6 +702,7 @@ function op_browse_files(&$params) {
 		require_once($include_directory . 'vars.php');
 		require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 
+		$con = get_xrms_dbconnection();
 
         $columns=array();
         $columns[] = array('name' => 'Icon', 'index_calc' => 'icon');
@@ -860,6 +861,9 @@ function op_template(&$params) {
 
 /**
  * $Log: owl_plugin.php,v $
+ * Revision 1.10  2006/01/11 17:27:47  daturaarutad
+ * fix broken db connection for browse pager
+ *
  * Revision 1.9  2006/01/10 15:43:46  daturaarutad
  * add code to set proper return_url for browse links when attached to company_division
  *
