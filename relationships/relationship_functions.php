@@ -11,7 +11,7 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: relationship_functions.php,v 1.5 2005/06/20 16:37:06 vanmer Exp $
+ * $Id: relationship_functions.php,v 1.6 2006/01/12 21:36:46 vanmer Exp $
  */
  
 /*****************************************************************************/
@@ -119,14 +119,26 @@ function get_relationships($con, $_on_what_table, $_on_what_id, $relationship_ty
  *
  * @return array keyed by relationship_type_id, including data about relationship_type
  */
-function get_relationship_types($con, $_on_what_table) {
+function get_relationship_types($con, $_on_what_table=false, $relationship_name=false) {
 
     $sql = "SELECT relationship_type_id, relationship_name, from_what_text, from_what_table, to_what_text, to_what_table, pre_formatting, post_formatting
-            FROM relationship_types
-            WHERE from_what_table = " . $con->qstr($_on_what_table, get_magic_quotes_gpc()) . "
-                OR to_what_table = " . $con->qstr($_on_what_table,  get_magic_quotes_gpc()) . "
-            AND relationship_status = 'a'
-            ORDER BY relationship_name, from_what_table, to_what_table";
+            FROM relationship_types";
+
+    $where=array();
+    $where[]="relationship_status = " . $con->qstr('a');
+    if ($_on_what_table) {
+            $where[] = "(from_what_table = " . $con->qstr($_on_what_table, get_magic_quotes_gpc()) . "
+                OR to_what_table = " . $con->qstr($_on_what_table,  get_magic_quotes_gpc()) . ")";
+    }
+    if ($relationship_name) {
+        $where[]="relationship_name = " . $con->qstr($relationship_name);
+    }
+
+    $wherestr= implode(" AND ", $where);
+    if ($wherestr) $sql .= " WHERE $wherestr";
+
+
+    $sql .=" ORDER BY relationship_name, from_what_table, to_what_table";
     $rst = $con->execute($sql);
     if(!$rst) {
         db_error_handler($con, $sql);
@@ -146,7 +158,113 @@ function get_relationship_types($con, $_on_what_table) {
     }
     return false;
 } 
- 
+
+/*****************************************************************************/
+/**
+ *
+ * This function retrieves a relationship from its directions and on_what_ids, as well as a relationship_type
+ *
+ * @param adodbconnection $con
+ * @param integer $relationship_type_id with type of relationship to retrieve
+ * @param string $working_direction with string of the direction in which the relationship is working
+ * @param string $opposite_direction with string of the opposite direction from which the relationship is working
+ * @param integer $on_what_id with integer identifier of entity which is in the relationship (in the working direction)
+ * @param integer $on_what_id2 with integer identifier of entity which is in the relationship (in the opposite direction)
+ *
+ * @return array of relationship information, or false if no relationship was found
+ */
+function get_relationship_from_directions($con, $relationship_type_id, $working_direction, $opposite_direction, $on_what_id, $on_what_id2) {
+    if ($working_direction=='to') {
+        $to_what_id=$on_what_id;
+        $from_what_id=$on_what_id2;
+    } else {
+        $to_what_id=$on_what_id2;
+        $from_what_id=$on_what_id;
+    }
+    return get_relationship($con, $relationship_type_id, $from_what_id, $to_what_id);
+}
+
+/*****************************************************************************/
+/**
+ *
+ * This function adds a relationship from its directions and on_what_ids, as well as a relationship_type
+ *
+ * @param adodbconnection $con
+ * @param integer $relationship_type_id with type of relationship to add
+ * @param string $working_direction with string of the direction in which the relationship is working
+ * @param string $opposite_direction with string of the opposite direction from which the relationship is working
+ * @param integer $on_what_id with integer identifier of entity which is in the relationship (in the working direction)
+ * @param integer $on_what_id2 with integer identifier of entity which is in the relationship (in the opposite direction)
+ *
+ * @return integer identified for relationship, or false if no relationship was added
+ */
+function add_relationship_from_directions($con, $relationship_type_id, $working_direction, $opposite_direction, $on_what_id, $on_what_id2) {
+    if ($working_direction=='to') {
+        $to_what_id=$on_what_id;
+        $from_what_id=$on_what_id2;
+    } else {
+        $to_what_id=$on_what_id2;
+        $from_what_id=$on_what_id;
+    }
+    return add_relationship($con, $relationship_type_id, $from_what_id, $to_what_id);
+}
+
+/*****************************************************************************/
+/**
+ *
+ * This function retrieves a relationship from its type and constituent entities
+ *
+ * @param adodbconnection $con
+ * @param integer $relationship_type_id with type of relationship to retrieve
+ * @param integer $from_what_id with integer identifier of entity which is in the relationship (in the working direction)
+ * @param integer $to_what_id with integer identifier of entity which is in the relationship (in the opposite direction)
+ *
+ * @return array of relationship information, or false if no relationship was found
+ */
+function get_relationship($con, $relationship_type_id, $from_what_id, $to_what_id) {
+    $sql = "select *
+        from relationships
+        where relationship_type_id = $relationship_type_id
+        and from_what_id=$from_what_id
+        and to_what_id=$to_what_id
+        and relationship_status='a'";
+    $rst = $con->execute($sql);
+    if (!$rst) { db_error_handler($con, $sql); return false; }
+    if (!$rst->EOF) {
+        return $rst->fields;
+    } else return false;
+}
+
+/*****************************************************************************/
+/**
+ *
+ * This function adds a relationship from its type and constituent entities
+ *
+ * @param adodbconnection $con
+ * @param integer $relationship_type_id with type of relationship to add
+ * @param integer $from_what_id with integer identifier of entity which is in the relationship (in the working direction)
+ * @param integer $to_what_id with integer identifier of entity which is in the relationship (in the opposite direction)
+ *
+ * @return integer identified for relationship, or false if no relationship was added
+ */
+function add_relationship($con, $relationship_type_id, $from_what_id, $to_what_id) {
+    $rel = get_relationship($con, $relationship_type_id, $from_what_id, $to_what_id);
+    if ($rel) return $rel['relationship_id'];
+    //save to database
+    $rec = array();
+    $rec["from_what_id"] = $from_what_id;
+    $rec["to_what_id"] = $to_what_id;
+    $rec['relationship_type_id'] = $relationship_type_id;
+    $rec['established_at'] = time();
+
+    $tbl = 'relationships';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $rst=$con->execute($ins);
+    if (!$rst) { db_error_handler($con, $ins); return false; }
+    $ret=$con->Insert_ID();
+    return $ret;
+}
+
 /*****************************************************************************/
 /**
  * function get_agent_count
@@ -176,6 +294,10 @@ function get_agent_count($con, $company_id) {
 }
  /**
   * $Log: relationship_functions.php,v $
+  * Revision 1.6  2006/01/12 21:36:46  vanmer
+  * - added functions to retrieve and add relationships based on criteria
+  * - changed new-relationships page to use centralized relationship addition code instead of direct addition
+  *
   * Revision 1.5  2005/06/20 16:37:06  vanmer
   * - added new code which does a better job sorting relationships within a relationship type by name, either contact
   * last name or company name
