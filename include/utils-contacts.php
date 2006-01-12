@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.13 2006/01/09 21:05:41 jswalter Exp $
+ * $Id: utils-contacts.php,v 1.14 2006/01/12 15:42:26 jswalter Exp $
  *
  */
 
@@ -478,6 +478,73 @@ function pull_contact_fields ( $array_data )
 };
 
 
+
+/**********************************************************************/
+ /**
+  * Retrieves relationship ID
+  *
+  * @name getRelationshipID()
+  * @access public
+  * @category contact_handling
+  *
+  * @static
+  * @final
+  *
+  * @author Walter Torres <walter@torres.ws>
+  *
+  * @param  int    $_relationship   string Relationship to locate
+  * @return mixed  $_retVal         int of relationship ID, or FALSE upon failure of some kind
+  *
+  */
+function getRelationshipID ( $_relationship = null )
+{
+   /**
+    * Default return value
+    *
+    * Returns int of relationship ID or boolean upon failure
+    * Default value is set at FALSE
+    *
+    * @var mixed $_retVal Indicates if record was located or not
+    * @access private
+    * @static
+    */
+    $_retVal = false;
+
+    // Only do this if a fund ID is given
+    if ( $_relationship )
+    {
+       /**
+        * @global connObject description Use default DB conection Object
+        *
+        */
+        $_objGenDB = get_xrms_dbconnection();
+
+       /**
+        * Select list of Accounts from database
+        *
+        * @var string $sql SQL statement to retrieve data from database
+        * @access private
+        * @static
+        */
+        $sql = "SELECT *
+                  FROM relationship_types
+                 WHERE relationship_name = '$_relationship'
+                 LIMIT 1";
+
+        // Convert record set into an array
+        $_retVal = $_objGenDB->GetRow( $sql );
+        $_retVal = $_retVal['relationship_type_id'];
+
+    }   // if ( $_fundsID )
+
+    // Send back what we have
+    return $_retVal;
+};
+
+
+
+
+/**********************************************************************/
 /** Include the misc utilities file */
 include_once $include_directory . 'utils-misc.php';
 
@@ -486,6 +553,9 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.14  2006/01/12 15:42:26  jswalter
+ *  - added 'getRelationshipID()' to collection
+ *
  * Revision 1.13  2006/01/09 21:05:41  jswalter
  *  - if no company name or user names are given, default to '1'
  *
