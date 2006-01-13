@@ -15,7 +15,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-require_once('relationship_functions.php');
+require_once($include_directory . 'utils-relationships.php');
 
 $session_user_id = session_check();
 

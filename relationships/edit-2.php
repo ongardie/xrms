@@ -15,21 +15,16 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
+require_once($include_directory . 'utils-relationships.php');
+
 $session_user_id = session_check();
 
 $relationship_id = $_POST['relationship_id'];
 $return_url = $_POST['return_url'];
 
 $con = get_xrms_dbconnection();
+delete_relationship($con, $relationship_id);
 
-$sql = "SELECT * FROM relationships WHERE relationship_id = '$relationship_id'";
-$rst = $con->execute($sql);
-
-$rec = array();
-$rec['relationship_status'] = 'd';
-
-$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-$con->execute($upd);
  //$con->debug=1;
 
 $con->close();
@@ -38,6 +33,10 @@ header("Location: " . $http_site_root . "/" . $return_url);
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.3  2006/01/13 00:01:00  vanmer
+ * - changed to use newly created include/utils-relationships.php instead of relationships/relationship_functions.php
+ * - removed deprecated relationship_functions.php
+ *
  * Revision 1.2  2006/01/02 23:31:01  vanmer
  * - changed to use centralized dbconnection function
  *

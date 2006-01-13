@@ -17,10 +17,10 @@ if ( !defined('IN_XRMS') )
  * @author Neil Roberts
  * @author Aaron van Meerten
  *
- * $Id: sidebar.php,v 1.38 2005/08/19 19:26:22 braverock Exp $
+ * $Id: sidebar.php,v 1.39 2006/01/13 00:01:00 vanmer Exp $
  */
 
-require_once('relationship_functions.php');
+require_once($include_directory.'utils-relationships.php');
 
  //set these variables to control what information is output by the relationship sidebar
 
@@ -346,6 +346,10 @@ $relationship_link_rows = '';
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.39  2006/01/13 00:01:00  vanmer
+ * - changed to use newly created include/utils-relationships.php instead of relationships/relationship_functions.php
+ * - removed deprecated relationship_functions.php
+ *
  * Revision 1.38  2005/08/19 19:26:22  braverock
  * - avoid overwriting $company_name
  *
