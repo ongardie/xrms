@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.168 2006/01/10 15:03:16 braverock Exp $
+ * $Id: utils-misc.php,v 1.169 2006/01/13 20:03:38 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -48,7 +48,7 @@ function session_startup () {
   if ( empty( $sessid ) ) {
     // only call session_start once
     //check for system preference to store sessions in the database
-    require_once($include_directory.'utils-database.php');
+    if (!function_exists('get_xrms_dbconnection')) { include($include_directory.'utils-database.php'); }
     $con = get_xrms_dbconnection();
     $session_flag=get_admin_preference($con, 'session_storage_type');
     switch ($session_flag) {
@@ -2044,6 +2044,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.169  2006/01/13 20:03:38  vanmer
+ * - wrapped the get_xrms_dbconnection call and require_once for utils_database.php inside session_startup, to allow utils_database functions to be defined/used outside this functions scope
+ *
  * Revision 1.168  2006/01/10 15:03:16  braverock
  * - update to use $GLOBALS array for database connection to eliminate scope issue
  *
