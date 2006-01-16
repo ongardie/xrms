@@ -14,7 +14,7 @@
 
  *
 
- * $Id: new-form.php,v 1.5 2006/01/16 15:27:17 niclowe Exp $
+ * $Id: new-form.php,v 1.6 2006/01/16 16:00:37 niclowe Exp $
 
  */
 
@@ -49,7 +49,7 @@ $email = $_POST['email'];
 //send form to sender
 $form_input_data.= "Form Variables input into XRMS\n";
 //what data do you put in the email
-$data_in_email=array("first_names","last_name","email","company_name","phone","postal_code","city","province","YourMessage");
+$data_in_email=array("first_names","last_name","email","company_name","phone","line1","line2","postal_code","city","province","YourMessage");
 
 foreach ($_POST as $key => $val){
 if(in_array($key, $data_in_email))$form_input_data.= "$key: $val\n";
@@ -438,11 +438,11 @@ if (strlen($accounting_system) > 0) {
 add_audit_item($con, $session_user_id, 'created', 'companies', $company_id, 1);
 
 //add url to bottom of form_input_data to allow clicking of link inside email client to direct to XRMS to view/edit contact / company
-$url_to_company='<a href="'.$http_site_root.'/companies/one.php?company_id='.$company_id.'">VIEW '.$company_name.' here in '.$app_title.'</a> <BR>';
-$url_to_company.='<a href="'.$http_site_root.'/companies/one.php?company_id='.$company_id.'">EDIT '.$company_name.' here in '.$app_title.'</a>';
+$url_to_company='VIEW LINK: '.$http_site_root.'/companies/one.php?company_id='.$company_id." \n";
+$url_to_company.='EDIT LINK: '.$http_site_root.'/companies/edit.php?company_id='.$company_id;
 $form_input_data=$form_input_data.$url_to_company;
-echo nl2br($form_input_data);
-if($email_to_admin)mail($email_admin_address,"XRMS-Contact Us Form Submitted",$form_input_data,"From: $email");
+$subj="$app_title - Contact Us Form Submitted";
+if($email_to_admin)mail($email_admin_address,$subj,$form_input_data,"From: $email");
 
 
 $con->close();
@@ -456,8 +456,8 @@ header("Location: $after_adding_new_companies_from_your_web_site_redirect_to_thi
 /**
 
  * $Log: new-form.php,v $
- * Revision 1.5  2006/01/16 15:27:17  niclowe
- * Added link in admin_email to XRMS company view and edit.
+ * Revision 1.6  2006/01/16 16:00:37  niclowe
+ * fixed errant bug commit
  *
  * Revision 1.4  2004/08/30 05:50:38  niclowe
  * fixed bug where you no session was registered - thereby making the whole form useless (ie it didnt put the data in the database unless you were logged into XRMS - not good for anonymous website forms)
