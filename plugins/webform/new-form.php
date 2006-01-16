@@ -14,7 +14,7 @@
 
  *
 
- * $Id: new-form.php,v 1.4 2004/08/30 05:50:38 niclowe Exp $
+ * $Id: new-form.php,v 1.5 2006/01/16 15:27:17 niclowe Exp $
 
  */
 
@@ -54,8 +54,6 @@ $data_in_email=array("first_names","last_name","email","company_name","phone","p
 foreach ($_POST as $key => $val){
 if(in_array($key, $data_in_email))$form_input_data.= "$key: $val\n";
 }
-
-if($email_to_admin)mail($email_admin_address,"XRMS-Contact Us Form Submitted",$form_input_data,"From: $email");
 //send response to sender
 $sql="SELECT email_template_title, email_template_body from email_templates where email_template_id=$email_template_id";
 $rst=$con->execute($sql);
@@ -439,6 +437,12 @@ if (strlen($accounting_system) > 0) {
 
 add_audit_item($con, $session_user_id, 'created', 'companies', $company_id, 1);
 
+//add url to bottom of form_input_data to allow clicking of link inside email client to direct to XRMS to view/edit contact / company
+$url_to_company='<a href="'.$http_site_root.'/companies/one.php?company_id='.$company_id.'">VIEW '.$company_name.' here in '.$app_title.'</a> <BR>';
+$url_to_company.='<a href="'.$http_site_root.'/companies/one.php?company_id='.$company_id.'">EDIT '.$company_name.' here in '.$app_title.'</a>';
+$form_input_data=$form_input_data.$url_to_company;
+echo nl2br($form_input_data);
+if($email_to_admin)mail($email_admin_address,"XRMS-Contact Us Form Submitted",$form_input_data,"From: $email");
 
 
 $con->close();
@@ -452,6 +456,9 @@ header("Location: $after_adding_new_companies_from_your_web_site_redirect_to_thi
 /**
 
  * $Log: new-form.php,v $
+ * Revision 1.5  2006/01/16 15:27:17  niclowe
+ * Added link in admin_email to XRMS company view and edit.
+ *
  * Revision 1.4  2004/08/30 05:50:38  niclowe
  * fixed bug where you no session was registered - thereby making the whole form useless (ie it didnt put the data in the database unless you were logged into XRMS - not good for anonymous website forms)
  * Sorry for those who have used this and not realised (it took me a while to figure it out myself..)
