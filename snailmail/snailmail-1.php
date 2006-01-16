@@ -3,7 +3,7 @@
   *
   * Email.
   *
-  * $Id: snailmail-1.php,v 1.3 2006/01/02 23:47:49 vanmer Exp $
+  * $Id: snailmail-1.php,v 1.4 2006/01/16 15:10:09 niclowe Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -14,7 +14,7 @@
   require_once($include_directory . 'adodb/adodb.inc.php');
   require_once($include_directory . 'adodb-params.php');
   require_once($include_directory . 'classes/Pager/GUP_Pager.php');
-require_once($include_directory . 'classes/Pager/Pager_Columns.php');
+	require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
   $session_user_id = session_check();
   $msg = $_GET['msg'];
@@ -50,9 +50,9 @@ require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 		  //Nic: DO SOMETHING DIFFERENT FOR COMPANIES BECAUSE YOU HAVE TO GET THE CONTACT IDS FROM WITHIN THE COMPANY
 			//I only pass companies the end of the sql, ie the from and the where.
 			//I should have really done this in the first place for all of them.
-      		$from=$_SESSION["search_sql"]["from"];
+      $from=$_SESSION["search_sql"]["from"];
 			//var_dump($_SESSION["search_sql"]);
-			$where=$_SESSION["search_sql"]["where"];
+			$where=$_SESSION["search_sql"]["where"]." and cont.contact_id<>'NULL'";
 			$order_by=$_SESSION["search_sql"]["order"];
 			$from.=" LEFT JOIN contacts cont on cont.company_id=c.company_id ";
 			$sql="SELECT cont.contact_id ".$from.$where.$order_by;
