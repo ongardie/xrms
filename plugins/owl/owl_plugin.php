@@ -594,18 +594,21 @@ function op_browse_files(&$params) {
 			if('company_division' == $on_what_table) {
 				getGlobalVar($division_id, 'division_id');
 				getGlobalVar($company_id, 'company_id');
-
-				$return_url = urlencode("/companies/edit-division.php?company_id=$company_id&division_id=$division_id&owl_parent_id=$owl_parent_id");
+				$return_url_base = "$http_site_root/companies/edit-division.php?company_id=$company_id&division_id=$division_id";
 			} else {
-				$return_url = urlencode("/$on_what_table/one.php?" . make_singular($on_what_table) . "_id=".$on_what_id."&owl_parent_id=$owl_parent_id");
+				$return_url_base = "$http_site_root/$on_what_table/one.php?" . make_singular($on_what_table) . "_id=$on_what_id";
 			}
+			$return_url = urlencode("$return_url_base&owl_parent_id=$owl_parent_id");
 			
 		} else {
-			$return_url = urlencode("/private/home.php");
+			$return_url_base = urlencode("$http_site_root/private/home.php");
+			$return_url = urlencode("$return_url_base?owl_parent_id=$owl_parent_id");
 		}
 
         //$folder_caption = BuildFolderPath($folder_data, $owl_parent_id);
-        $path_info = BuildFolderPath($folder_data, $owl_parent_id);
+        $path_info = BuildFolderPath($folder_data, $owl_parent_id, $return_url_base);
+
+
         $folder_caption = $path_info['path'];
         $folder_name = $path_info['current_folder'];
 
@@ -861,6 +864,9 @@ function op_template(&$params) {
 
 /**
  * $Log: owl_plugin.php,v $
+ * Revision 1.11  2006/01/16 22:59:42  daturaarutad
+ * update for change to BuildFolderPath() for links in Files in in browse function
+ *
  * Revision 1.10  2006/01/11 17:27:47  daturaarutad
  * fix broken db connection for browse pager
  *
