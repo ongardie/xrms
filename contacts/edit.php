@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.44 2006/01/02 22:59:59 vanmer Exp $
+ * $Id: edit.php,v 1.45 2006/01/16 14:47:54 niclowe Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -77,10 +77,10 @@ if ($rst) {
     $gender = $rst->fields['gender'];
     $salutation = $rst->fields['salutation'];
     $email = $rst->fields['email'];
-    $work_phone = get_formatted_phone($con, $rst->fields['address_id'],$rst->fields['work_phone']);
+    $work_phone = $rst->fields['work_phone'];
     $work_phone_ext = $rst->fields['work_phone_ext'];
-    $cell_phone = get_formatted_phone($con, $rst->fields['address_id'],$rst->fields['cell_phone']);
-    $home_phone = get_formatted_phone($con, $rst->fields['home_address_id'],$rst->fields['home_phone']);
+    $cell_phone = $rst->fields['cell_phone'];
+    $home_phone = $rst->fields['home_phone'];
     $profile = $rst->fields['profile'];
     $fax = get_formatted_phone($con, $rst->fields['address_id'],$rst->fields['fax']);
     $interests = $rst->fields['interests'];
@@ -319,6 +319,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.45  2006/01/16 14:47:54  niclowe
+ * removed get_formatted_phone for phone numbers - you shouldnt format the phoen number on an edit as it will ruin the data when you save the edit
+ *
  * Revision 1.44  2006/01/02 22:59:59  vanmer
  * - changed to use centralized dbconnection function
  *
