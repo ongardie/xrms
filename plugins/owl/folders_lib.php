@@ -2,7 +2,7 @@
 /**
  * Form for creating a new folder
  *
- * $Id: folders_lib.php,v 1.2 2005/12/09 19:24:06 daturaarutad Exp $
+ * $Id: folders_lib.php,v 1.3 2006/01/16 22:59:16 daturaarutad Exp $
  */
 
 
@@ -50,33 +50,34 @@ function GetFolders($on_what_table, $on_what_id, $extra_where = '') {
 *
 * @param array list of folder records
 * @param integer owl parent id
+* @param string return_url minus &owl_parent_id=N
 *
 * @return string full path
 */
-function BuildFolderPath($folder_data, $owl_parent_id) {
+function BuildFolderPath($folder_data, $owl_parent_id, $return_url_base) {
 
-    $path = '';
+    $path = array();
+    $current_folder = '';
 
     BuildFolderPathRecurse($folder_data, $owl_parent_id, $path);
 
-    // trim off the /xrms/entity/ part...surely there is a better way to have done this!
+    // Build a path for "Files in" ... 
+	$full_path = '/';
     if($path) {
-        $bits = explode("/", $path);
+		$path = array_reverse($path);
 
-        array_shift($bits);
-        array_shift($bits);
-        array_shift($bits);
-        array_pop($bits);
-        $path = implode("/", $bits);
-        if(!$path) {
-            $path = '/';
-        } else {
-            $path = "/$path/";
-        }
+		array_shift($path);
+		array_shift($path);
+		array_shift($path);
 
-        $return['current_folder'] = array_pop($bits);
+		foreach($path as $folder) {
+			$url = $return_url_base . get_url_seperator($return_url_base) . "owl_parent_id={$folder['external_id']}";
+
+			$full_path .= "<a href=\"$url\">{$folder['name']}</a>/";
+        	$return['current_folder'] = $folder['name'];
+		}
     }
-    $return['path'] = $path;
+    $return['path'] = $full_path;
 
     return $return;
 }
@@ -91,7 +92,9 @@ function BuildFolderPathRecurse($folder_data, $owl_parent_id, &$path) {
     $folders = GetFolders(null, null, "external_id = $owl_parent_id");
     if($folders) {
         $folder = $folders[0];
-        $path = "{$folder['name']}/$path";
+
+		$path[] = $folder;
+
         if($folder['parent_id']) {
             BuildFolderPathRecurse($folder_data, $folder['parent_id'], $path);
         }
@@ -268,6 +271,9 @@ function GetRootFolderOWLID() {
 
 /**
  * $Log: folders_lib.php,v $
+ * Revision 1.3  2006/01/16 22:59:16  daturaarutad
+ * change way path is built to add links to Files in: in browser
+ *
  * Revision 1.2  2005/12/09 19:24:06  daturaarutad
  * add functions GetRootFolderOWLID() and GetEntityFolderID()
  *
