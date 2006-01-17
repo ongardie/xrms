@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: contacts_test_class.php,v 1.1 2005/11/18 20:05:15 vanmer Exp $
+ * $Id: contacts_test_class.php,v 1.2 2006/01/17 02:26:56 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -64,6 +64,7 @@ Class XRMSContactTest extends XRMS_TestCase {
         }
         $contact_result=add_contact($con, $contact_data);
         $this->assertTrue($contact_result, "Failed to add contact: {$contact_data['title']}");
+
         return $contact_result;
    }
    
@@ -147,5 +148,25 @@ Class XRMSContactTest extends XRMS_TestCase {
         return $contact_result;
     }
 
+    function test_contact_strange_characters($contact_data=false, $delete_from_database=true) {
+        if (!$contact_data) $contact_data=array(
+                   'first_names' => 'Joe',
+                   'last_name'    => "O'tester",
+                   'company_id'       => 1,
+                   'title'   => 'Test &Suite Contact: Ignore',
+                   'profile' =>'This contact was added automatically by the test suite.  It should not be visible, and can safely be ignored',
+            );
+        $test_contact_id=$this->test_add_contact($contact_data);
+        $this->assertTrue($test_contact_id, "Failed to add a new contact with strange characters, failing other tests");
+        if ($test_contact_id) {
+            $ret=$this->test_find_contact($contact_data);
+            $this->assertTrue($ret, "Failed to find contact with strange data");
+        } else return false;
+        
+        $contact_data['profile']="This contact with added automatically, and can't be seen because it should've been deleted by &";
+        $ret=$this->test_update_contact($contact_data, $test_contact_id);
+        $this->assertTrue($ret, "Failed to update contact with strange data");
+        $this->test_delete_contact($test_contact_id, $delete_from_database);
+    }
 }
 ?>
