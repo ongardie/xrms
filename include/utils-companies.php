@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-companies.php,v 1.7 2005/12/20 07:51:21 jswalter Exp $
+ * $Id: utils-companies.php,v 1.8 2006/01/17 02:24:40 vanmer Exp $
  *
  */
 
@@ -174,35 +174,50 @@ function add_company($con, $company_data)
 */
 function find_company($con, $company_data, $show_deleted = false, $return_recordset = false)
 {
+    $sql = "SELECT * FROM companies";
 
-    $sql_fetch_company_id = "select comp.company_id,cont.contact_id from companies comp, contacts cont where
-                            cont.company_id =  comp.company_id and
-                            comp.company_name = '" . addslashes($company_name) ."' and ";
-    if ( $contact_first_name = '' )
-    {
-        $sql_fetch_company_id .= "cont.first_names = '" . addslashes($contact_first_names) . "' and";
+    if (array_key_exists('company_id',$company_data) AND trim($company_data['company_id'])) {
+        $company= get_company($con, $company_id, $return_recordset);
+        if ($company AND is_array($company)) return array($company);
+        else return $company;
+    } else {
+
+        $extra_where=array();
+        foreach ($company_data as $ckey=>$cval) {
+            switch ($ckey) {
+                case 'email':
+                case 'title':
+                case 'last_name':
+                case 'first_names':
+                case 'description':
+                    unset($company_data[$ckey]);
+                    $extra_where[]="$ckey LIKE ".$con->qstr($cval);
+                break;
+            }
+        }
+        if (!$show_deleted) $company_data['company_record_status']='a';
+
+        /** CLEAN INCOMING DATA FIELDS ***/
+        $company_phone_fields=array('work_phone','cell_phone','home_phone','fax');
+        $phone_clean_count=clean_phone_fields($company_data, $company_phone_fields);
+
+        if (count($extra_where)==0) $extra_where=false;
+        $wherestr=make_where_string($con, $company_data, $tablename, $extra_where);
     }
-    $sql_fetch_company_id .= " cont.last_name = '" . addslashes($contact_last_name) . "' and
-                            cont.contact_record_status='a' and
-                            comp.company_record_status='a' " ;
+    if ($wherestr) $sql.=" WHERE $wherestr";
 
-    //echo "\n<br><pre> "._("Search Complete").' '. $sql_fetch_company_id . "\n</pre>" ;
-
-    $rst_company_id = $con->execute($sql_fetch_company_id);
-
-    if ( $rst_company_id )
-    {
-        $company_id = $rst_company_id->fields['company_id'];
-        $contact_id = $rst_company_id->fields['contact_id'];
-
-        $rst_company_id->close();
+    $rst = $con->execute($sql);
+    if (!$rst) { db_error_handler($con, $sql); return false; }
+    if ($rst->EOF) return false;
+    else {
+    if ($return_recordset) return $rst;
+        while (!$rst->EOF) {
+            $ret[]=$rst->fields;
+            $rst->movenext();
+        }
     }
-    else
-    {
-        $company_id = 0;
-    }
-
-
+    if (count($ret)>0) return $ret;
+    else return false;
 
 };
 
@@ -252,8 +267,37 @@ function get_company($con, $company_id, $return_rst=false)
  */
 function update_company($con, $company_data, $company_id=false, $company_rst=false)
 {
+
     global $session_user_id;
 
+    if (!$company_data) return false;
+    if (!$company_rst) {
+        $company_rst=get_company($con, $company_id, true);
+    }
+    if (!$company_rst) return false;
+
+    /** CLEAN INCOMING DATA FIELDS ***/
+    $company_phone_fields=array('work_phone','cell_phone','home_phone','fax');
+    $phone_clean_count=clean_phone_fields($company_data, $company_phone_fields);
+
+    $rec['last_modified_at'] = time();
+    $rec['last_modified_by'] = $session_user_id;
+
+
+    $upd = $con->GetUpdateSQL($company_rst, $company_data, false, get_magic_quotes_gpc());
+    if ($upd) {
+        $rst=$con->execute($upd);
+        if (!$rst) { db_error_handler($con, $upd); return false; }
+    }
+
+
+    //this will run whether or not base company changed
+    $param = array($company_rst, $company_data);
+    do_hook_function('company_edit_2', $param);
+
+    add_audit_item($con, $session_user_id, 'updated', 'companies', $company_id, 1);
+
+    return true;
 
 };
 
@@ -284,13 +328,19 @@ function delete_company($con, $company_id, $delete_from_database=false) {
     return true;
 }
 
-function update_unknown_company($con) {
-    $sql = "SELECT * FROM companies WHERE company_id=1";
+/**
+  * Function to update the companies table, adding the unknown company entry (potentially moving an existing company out of the way)
+  * @param adodbconnection $con with handle to the database
+  * @param integer $company_id should be 1 unless being run from the test functions
+**/
+
+function update_unknown_company($con, $company_id=1) {
+    $sql = "SELECT * FROM companies WHERE company_id=$company_id";
     $rst=$con->execute($sql);
     if (!$rst) { db_error_handler($con, $sql); return false; }
 
         $now=time();
-        $unknown_company_data=array('company_id'=>1, 'company_name'=>'Unknown Company');
+        $unknown_company_data=array('company_id'=>$company_id, 'company_name'=>'Unknown Company');
         $unknown_company_data['company_record_status']='a';
         $unknown_company_data['industry_id']=1;
         $unknown_company_data['crm_status_id']=1;
@@ -358,7 +408,7 @@ function change_company_key($con, $old_company_id, $new_company_id=false, $compa
     } else {
         //update succeeded, remove old company from database entirely
         delete_company($con, $old_company_id, true);
-        return true;
+        return $new_company_id;
     }
 }
 
@@ -483,6 +533,11 @@ include_once $include_directory . 'utils-addresses.php';
 
  /**
  * $Log: utils-companies.php,v $
+ * Revision 1.8  2006/01/17 02:24:40  vanmer
+ * - implemented update_company function
+ * - properly implemented find_company function
+ * - added tests for change_company_key to ensure update of companies works
+ *
  * Revision 1.7  2005/12/20 07:51:21  jswalter
  *  - fleshed out 'add_update_company()' a bit more. adds/updates seems to work OK.
  * Bug 778
