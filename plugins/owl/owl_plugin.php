@@ -229,7 +229,6 @@ function op_get_one_file_html(&$params) {
 	getGlobalVar($return_url, 'return_url');
 	getGlobalVar($selected_version, 'selected_version');
 
-
 	$params['file_one_html'] = "
             	<tr>
                 	<td class=widget_label_right>" . _("Version") . "</td>
@@ -239,7 +238,6 @@ function op_get_one_file_html(&$params) {
             	<tr>
                 	<td class=widget_label_right>" . _("Last Modified") . "</td>
                 	<td class=widget_content_form_element>{$file_info['last_modified_on']}</td>
-					<input type=hidden name=\"selected_version\" value=\"{$file_info['last_modified_on']}\">
             	</tr>
 
 	";
@@ -594,14 +592,14 @@ function op_browse_files(&$params) {
 			if('company_division' == $on_what_table) {
 				getGlobalVar($division_id, 'division_id');
 				getGlobalVar($company_id, 'company_id');
-				$return_url_base = "$http_site_root/companies/edit-division.php?company_id=$company_id&division_id=$division_id";
+				$return_url_base = "/companies/edit-division.php?company_id=$company_id&division_id=$division_id";
 			} else {
-				$return_url_base = "$http_site_root/$on_what_table/one.php?" . make_singular($on_what_table) . "_id=$on_what_id";
+				$return_url_base = "/$on_what_table/one.php?" . make_singular($on_what_table) . "_id=$on_what_id";
 			}
 			$return_url = urlencode("$return_url_base&owl_parent_id=$owl_parent_id");
 			
 		} else {
-			$return_url_base = urlencode("$http_site_root/private/home.php");
+			$return_url_base = urlencode("/private/home.php");
 			$return_url = urlencode("$return_url_base?owl_parent_id=$owl_parent_id");
 		}
 
@@ -695,6 +693,7 @@ function op_browse_files(&$params) {
 				
                 // the <!-- 1 --> is so that the pager will sort folders before files, alphabetically
 				$owl_data[$k]['icon'] = "<a href='$http_site_root/files/one.php?file_id={$owl_data[$k]['file_id']}&return_url=$return_url' alt=\"File Name: " .$owl_data[$k]['file_name'] . "\" title=\"File Name: " .$owl_data[$k]['file_name'] . "\"><img src=\"$default->owl_graphics_url/$default->system_ButtonStyle/icon_filetype/$sDispIcon\" border=\"0\" alt=\"\"></img></a>";
+
 				$owl_data[$k]['file_pretty_name'] = "<!-- 1 {$owl_data[$k]['file_pretty_name']} --><a href='$http_site_root/files/one.php?file_id={$owl_data[$k]['file_id']}&return_url=$return_url' alt=\"File Name: " .$owl_data[$k]['file_name'] . "\" title=\"File Name: " .$owl_data[$k]['file_name'] . "\">" . $owl_data[$k]['file_pretty_name'] . '</a>';
 			}
 		}
@@ -864,6 +863,9 @@ function op_template(&$params) {
 
 /**
  * $Log: owl_plugin.php,v $
+ * Revision 1.12  2006/01/17 20:21:00  daturaarutad
+ * fix return_url
+ *
  * Revision 1.11  2006/01/16 22:59:42  daturaarutad
  * update for change to BuildFolderPath() for links in Files in in browse function
  *

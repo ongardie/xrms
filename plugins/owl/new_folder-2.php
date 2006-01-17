@@ -2,7 +2,7 @@
 /**
  * owl/new_folder-2.php - This file adds new folders to the system
  *
- * $Id: new_folder-2.php,v 1.5 2005/12/14 04:48:56 daturaarutad Exp $
+ * $Id: new_folder-2.php,v 1.6 2006/01/17 20:21:28 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -13,6 +13,8 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'mime/mime-array.php');
+
+global $http_site_root;
 
 $session_user_id = session_check('','Create');
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
@@ -52,12 +54,7 @@ $rec = $folder_plugin_params['folder_info'];
 
 $error = false;
 
-if (strpos($return_url,'?')!==false) {
-    $sep='&';
-} else {
-    $sep='?';
-}
-
+$sep = get_url_seperator($return_url);
 
 if($folder_plugin_params['error_status']) {
     $error = true;
@@ -84,6 +81,9 @@ if($folder_plugin_params['error_status']) {
 
 /**
  * $Log: new_folder-2.php,v $
+ * Revision 1.6  2006/01/17 20:21:28  daturaarutad
+ * fix return_url
+ *
  * Revision 1.5  2005/12/14 04:48:56  daturaarutad
  * make sure GetInsertSQL does not try to set null values
  *
