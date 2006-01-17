@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-companies.php,v 1.8 2006/01/17 02:24:40 vanmer Exp $
+ * $Id: utils-companies.php,v 1.9 2006/01/17 03:14:14 vanmer Exp $
  *
  */
 
@@ -361,10 +361,11 @@ function update_unknown_company($con, $company_id=1) {
         if ($rst->fields['company_name']=='Unknown Company') return '';
 
         //company exists, so if it's either the sample data default of Bushwood Components, or a deleted company, change the company key, then add new Unknown Company
-        if (($rst->fields['company_name'] =='Bushwood Components') OR ($rst->fields['company_record_status']=='d')) {
-            $ret=change_company_key($con, 1, false, $rst);
+        //update: always change the company key (uncomment the conditional to re-enable this check
+//        if (($rst->fields['company_name'] =='Bushwood Components') OR ($rst->fields['company_record_status']=='d')) {
+            $ret=change_company_key($con, $company_id, false, $rst);
             if (!$ret) return _("Failed to upgrade company entry for unknown company.") . '  ' ._("New contacts with no company will be attach to Company:") .  " {$rst->fields['company_name']} " ._("by default").'<br>';
-        }
+//        }
     }
 
     //adding new company, since either old company has been moved or no old company was found
@@ -533,6 +534,10 @@ include_once $include_directory . 'utils-addresses.php';
 
  /**
  * $Log: utils-companies.php,v $
+ * Revision 1.9  2006/01/17 03:14:14  vanmer
+ * - disabled check that only updates a company if it is deleted or Bushwood, when replacing for unknown company entry
+ * - added parameter to allow unknown company to replace any company (for tests)
+ *
  * Revision 1.8  2006/01/17 02:24:40  vanmer
  * - implemented update_company function
  * - properly implemented find_company function
