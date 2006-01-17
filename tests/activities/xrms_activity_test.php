@@ -6,14 +6,16 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_activity_test.php,v 1.6 2005/07/07 20:59:48 vanmer Exp $
+ * $Id: xrms_activity_test.php,v 1.7 2006/01/17 02:26:28 vanmer Exp $
  */
 
+if (!$include_directory)
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-preferences.php');
+require_once($include_directory . 'utils-database.php');
 require_once($include_directory . 'utils-recurrence.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
@@ -38,21 +40,20 @@ Class XRMSActivityTest extends PHPUnit_TestCase {
        global $options;
        $this->session_user_id= session_check();
        $this->options = $options;
-       $this->con = &adonewconnection($options['xrms_db_dbtype']);
+       $this->con = get_xrms_dbconnection();
        //connect to the xrms database
-       $this->con->nconnect($options['xrms_db_server'], $options['xrms_db_username'], $options['xrms_db_password'], $options['xrms_db_dbname']);
         $this->test_activity_data= array(
                    'activity_type_id' => 1,
                    'on_what_table'    => 'opportunities',
-                   'on_what_id'       => 3,
+                   'on_what_id'       => 1,
                    'on_what_status'   => 1,
                    'activity_title'   => 'Test Suite Activity: Ignore',
                    'activity_description' =>'This activity was added automatically by the test suite.  It should not be visible, and can safely be ignored',
                    'activity_status'  => 'c',
                    'scheduled_at'     => '2005-01-01 12:18',
                    'ends_at'          => '2005-01-01 16:23',
-                   'company_id'       => 4,
-                   'contact_id'       => 13,
+                   'company_id'       => 1,
+                   'contact_id'       => 1,
                    'user_id'          => 1
             );
 
@@ -96,7 +97,8 @@ Class XRMSActivityTest extends PHPUnit_TestCase {
         $con = $this->con;
 	//if no activity id or recordset is provided, use test activity data	
 	if (!$activity_id AND !$activity_rst) {
-		$activity=$this->test_get_activity();;
+		$activity=$this->test_get_activity();
+        if (!$activity) { $this->fail("No activity retrieved, failing further update tests"); return false; }
 		$one_activity=current($activity);
 		$activity_id=$one_activity['activity_id'];
 		$this->assertTrue($activity_id, "Failed to identify activity for update");		
@@ -141,7 +143,7 @@ Class XRMSActivityTest extends PHPUnit_TestCase {
         return $activity_result;   
     }
 
-    function test_delete_activites($where_cluase=false, $delete_from_database=true) {
+    function test_delete_activites($where_clause=false, $delete_from_database=true) {
         $con = $this->con;
         $session_user_id=$this->session_user_id;
 
@@ -287,11 +289,38 @@ Class XRMSActivityTest extends PHPUnit_TestCase {
             return $ret;
         }
 
-}
+        function test_strange_character_activities($activity_data=false, $delete_from_database=true) {
+            if (!$activity_data) {
+                $activity_data= array(
+                   'activity_type_id' => 1,
+                   'on_what_table'    => 'opportunities',
+                   'on_what_id'       => 1,
+                   'on_what_status'   => 1,
+                   'activity_title'   => "Test Suite Activity: Shouldn't be seen & please Ignore",
+                   'activity_description' =>"This activity wasn't added by a user, but instead automatically by the test suite.  It should not be visible, and can safely be ignored",
+                   'activity_status'  => 'c',
+                   'scheduled_at'     => '2005-01-01 12:18',
+                   'ends_at'          => '2005-01-01 16:23',
+                   'company_id'       => 1,
+                   'contact_id'       => 1,
+                   'user_id'          => 1
+                );
+            }
+            $activity_id=$this->test_add_activity($activity_data);
 
-$suite= new PHPUnit_TestSuite( "XRMSActivityTest" );
-$display = new PHPUnit_GUI_HTML($suite);
-$display->show();
+            $change_activity['activity_title']="Testing with characters that aren't standard & could cause errors";
+            $ret=$this->test_update_activity($change_activity, $activity_id);
+            $delret=$this->test_delete_activity($activity_id, $delete_from_database);
+
+        }
+
+}
+global $in_xrms_tests;
+if (!$in_xrms_tests) {
+    $suite= new PHPUnit_TestSuite( "XRMSActivityTest" );
+    $display = new PHPUnit_GUI_HTML($suite);
+    $display->show();
+}
 //$suite = new PHPUnit_TestSuite( "get_object_groups_object_inherit");
 /*
 $test = new ACLTest( "test_get_object_groups_object_inherit");
@@ -310,6 +339,9 @@ $display->show();
  */
 /*
  * $Log: xrms_activity_test.php,v $
+ * Revision 1.7  2006/01/17 02:26:28  vanmer
+ * - added test for strange characters in activities
+ *
  * Revision 1.6  2005/07/07 20:59:48  vanmer
  * - added test for least busy user function
  *
