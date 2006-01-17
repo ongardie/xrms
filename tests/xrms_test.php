@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_test.php,v 1.8 2005/11/18 20:08:28 vanmer Exp $
+ * $Id: xrms_test.php,v 1.9 2006/01/17 02:26:02 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -19,15 +19,21 @@ require_once($include_directory . 'adodb-params.php');
 
 require_once("PHPUnit/GUI/HTML.php");
 
+global $in_xrms_tests;
+$in_xrms_tests=true;
+
 require_once($include_directory.'../tests/xrms_test_class.php');
 require_once($include_directory.'classes/acl/tests/xrms_acl_test.php');
 require_once($include_directory.'../tests/contacts_test_class.php');
+require_once($include_directory.'../tests/companies_test_class.php');
+require_once($include_directory.'../tests/activities/xrms_activity_test.php');
 require_once($include_directory.'classes/File/tests/files_test_class.php');
 require_once($include_directory.'classes/File/tests/fixed_width_parser_test.php');
 
 
 //global $options;
 //$options=array();
+
 
 $options['xrms_db_dbtype'] = $xrms_db_dbtype;
 $options['xrms_db_server'] = $xrms_db_server;
@@ -43,7 +49,9 @@ $suite_array=array ($suite);
 
 //add ACL tests to the list of suites to run
 $suite_array[]= new PHPUnit_TestSuite( "ACLTest" );
+$suite_array[]= new PHPUnit_TestSuite( "XRMSCompanyTest" );
 $suite_array[]= new PHPUnit_TestSuite( "XRMSContactTest" );
+$suite_array[]= new PHPUnit_TestSuite( "XRMSActivityTest" );
 $suite_array[] = new PHPUnit_TestSuite( "FilesStaticTest" );
 $suite_array[] = new PHPUnit_TestSuite( "FilesPropertiesTest" );
 $suite_array[] = new PHPUnit_TestSuite( "FilesFailuresTest" );
@@ -75,6 +83,10 @@ $display->show();
  */
 /*
  * $Log: xrms_test.php,v $
+ * Revision 1.9  2006/01/17 02:26:02  vanmer
+ * - added companies test to xrms tests
+ * - added activities tests to main xrms tests
+ *
  * Revision 1.8  2005/11/18 20:08:28  vanmer
  * - removed test class definitions (now in xrms_test_class.php), added contact tests to list of available tests
  *
