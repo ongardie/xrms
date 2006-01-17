@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: companies_test_class.php,v 1.1 2006/01/17 02:25:32 vanmer Exp $
+ * $Id: companies_test_class.php,v 1.2 2006/01/17 03:13:08 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -130,7 +130,7 @@ Class XRMSCompanyTest extends XRMS_TestCase {
         if (!$company_id) {
             $company_data=$this->test_company_data;
 	    //removed because update resets this variable
-	    unset($company_data['title']);
+	    unset($company_data['profile']);
 	    unset($company_data['tax_id']);
             $company_info=$this->test_find_company($company_data);
             $this->assertTrue($company_info,"Failed to look up test company to delete.");
@@ -148,12 +148,46 @@ Class XRMSCompanyTest extends XRMS_TestCase {
     
     function test_update_unknown_company($test_company_id=1) {
         $ret=update_unknown_company($this->con, $test_company_id);
-        $ret_test=($ret=='');
-        if (!$ret_test) $ret_test=($ret==_("Upgraded company entry for Unknown Company.  New contacts will be attached here if no company is specified."));
-        $this->assertTrue($ret_test, "Failed to update unknown company into position $test_company_id");
-        return $ret;
-    }
 
+        //two success conditions, '', and result string
+        $ret_test=($ret=='');
+
+        if (!$ret_test) $ret_test=($ret==_("Upgraded company entry for Unknown Company.  New contacts will be attached here if no company is specified.") . '<br>');
+        $this->assertTrue($ret_test, "Failed to update unknown company into position $test_company_id");
+        return $ret_test;
+    }
+    function test_update_unknown_company_extended($old_company_id=false) {
+        if (!$old_company_id) {
+            $old_company_id=$this->test_add_company();
+            $company_data=$this->test_get_company($old_company_id);
+            $created_company=true;
+        }
+        $ret=$this->test_update_unknown_company($old_company_id);
+
+        if ($ret) {
+            $old_company_data=$this->test_get_company($old_company_id);
+            if ($old_company_data['company_name']=='Unknown Company') {
+                $delete_old_company=true;
+            } else { $this->fail("Failed to move company at $old_company_id and replace with unknown company: {$old_company_data['company_name']}"); $delete_old_company=false; }
+            unset($company_data['company_id']);
+            foreach ($company_data AS $ckey=>$cval) {
+                if (!$cval) unset($company_data[$ckey]);
+            }
+            $ret=$this->test_find_company($company_data);
+            if ($ret) {
+                if (is_array(current($ret))) { $ret=current($ret); }
+                $new_company_id=$ret['company_id'];
+                //delete unknown company record
+            } else $this->fail("Failed to find company after update with unknown company record");
+            if ($delete_old_company) $this->test_delete_company($old_company_id);
+        } else { $this->fail("Failed to update company $old_company_id with unknown company record, skipping further tests");  $new_company_id=false; }
+
+        if ($created_company AND $new_company_id) {
+            $this->test_delete_company($new_company_id);
+        }
+
+         return $new_company_id;
+    }
     function test_change_company_key($old_company_id=false, $new_company_id=false, $company_rst=false) {
         if (!$old_company_id) {
             $old_company_id=$this->test_add_company();
@@ -165,7 +199,7 @@ Class XRMSCompanyTest extends XRMS_TestCase {
 
         $this->assertTrue($ret, "Company key failed to be change correctly");
         if ($created_company) {
-            $this->test_delete_company($old_company_id);
+            $this->test_delete_company($new_company_id);
         }
         return $ret;
      }
@@ -198,9 +232,10 @@ Class XRMSCompanyTest extends XRMS_TestCase {
         $ret=$this->test_change_company_key($old_company_id, $new_company_id, $company_rst);
 
         $this->assertTrue($ret, "Failed to change company key for extended test");
+        $new_company_id=$ret;
         
         $contact = $contact_test->test_get_contact($new_contact);
-        $this->assertTrue($contact['company_id']==$ret, "Contact company id should be $ret, is {$contact['company_id']}");
+        $this->assertTrue($contact['company_id']==$new_company_id, "Contact company id should be $new_company_id, is {$contact['company_id']}");
         $contact_test->test_delete_contact($new_contact);
 
         $activity_data=array();
@@ -208,21 +243,27 @@ Class XRMSCompanyTest extends XRMS_TestCase {
         $activity = $activity_test->test_get_activity($activity_data);
         if ($activity) {
             $activity=current($activity);
-            $this->assertTrue($activity['company_id']==$ret, "Activity company id should be $ret, is {$activity['company_id']}");
+            $this->assertTrue($activity['company_id']==$new_company_id, "Activity company id should be $new_company_id, is {$activity['company_id']}");
             $activity_test->test_delete_activity($new_activity);
         } else $this->fail("Failed to find activity to test for company key change");
 
         if ($created_company) {
-            $this->test_delete_company($old_company_id);
+            $this->test_delete_company($new_company_id);
         }
 
         return $ret;
 
     }
+
+
 }
 
 /*
  * $Log: companies_test_class.php,v $
+ * Revision 1.2  2006/01/17 03:13:08  vanmer
+ * - added extended test for updating an existing company to a new company_id
+ * - added extended test for moving a company when adding the unknown company record
+ *
  * Revision 1.1  2006/01/17 02:25:32  vanmer
  * - initial revision of a companies test class
  * - used to test company API
