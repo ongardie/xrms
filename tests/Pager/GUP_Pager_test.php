@@ -3,7 +3,7 @@
  * Test harness for the XRMS GUP_GUP_Pager 
  *
  * @todo
- * $Id: GUP_Pager_test.php,v 1.1 2006/01/04 03:06:15 daturaarutad Exp $
+ * $Id: GUP_Pager_test.php,v 1.2 2006/01/18 20:43:57 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -376,7 +376,9 @@ Class XRMS_GUP_PagerTest extends PHPUnit_TestCase {
             fwrite($handle, $output);
             fclose($handle);
 
-            echo "Failed test: $filename" . WrapForm($output);
+            echo "Test Failed : $filename<br>\n";
+            echo "Output should have been : " . WrapForm($contents);
+            echo "But this was returned instead : " . WrapForm($output);
             $this->assertTrue(false, "$filename Mismatch.");
         }
     }
@@ -446,6 +448,9 @@ $display->show();
  */
 /*
  * $Log: GUP_Pager_test.php,v $
+ * Revision 1.2  2006/01/18 20:43:57  daturaarutad
+ * improve failed test display
+ *
  * Revision 1.1  2006/01/04 03:06:15  daturaarutad
  * new file
  *
