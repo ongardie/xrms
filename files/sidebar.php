@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.29 2006/01/05 14:07:18 braverock Exp $
+ * $Id: sidebar.php,v 1.30 2006/01/19 18:35:23 daturaarutad Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -16,6 +16,7 @@ require_once($include_directory . 'utils-files.php');
 // Set up the pager to display the current dir's data
 global $include_directory;
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 global $return_url;
 
@@ -132,6 +133,9 @@ if(!$file_rows && !$file_rows['error_status']) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.30  2006/01/19 18:35:23  daturaarutad
+ * add Pager_Columns include
+ *
  * Revision 1.29  2006/01/05 14:07:18  braverock
  * - localize column headers
  *
