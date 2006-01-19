@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.76 2006/01/02 21:23:18 vanmer Exp $
+ * $Id: edit-2.php,v 1.77 2006/01/19 22:20:44 daturaarutad Exp $
  */
 
 //include required files
@@ -57,6 +57,7 @@ $arr_vars = array (
                    'remove_participant' => arr_vars_POST_UNDEF ,
                    'mailmerge_participant' => arr_vars_POST_UNDEF ,
                    'saveandnext' => arr_vars_POST_UNDEF ,
+                   'print_view' => arr_vars_POST_UNDEF ,
                    );
 
 // get posted data
@@ -552,12 +553,17 @@ if ($followup) {
     header("Location: browse-next.php?activity_id=$activity_id");
 } elseif($recurrence) {
     header("Location: recurrence_sidebar.php?activity_id=$activity_id");
+} elseif($print_view) {
+    header("Location: " . $http_site_root . $return_url . "&print_view=true");
 } else {
     header("Location: " . $http_site_root . $return_url);
 }
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.77  2006/01/19 22:20:44  daturaarutad
+ * add handler for print_view button
+ *
  * Revision 1.76  2006/01/02 21:23:18  vanmer
  * - changed to use centralized database connection function
  *
