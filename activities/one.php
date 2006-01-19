@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.132 2006/01/19 16:22:11 braverock Exp $
+ * $Id: one.php,v 1.133 2006/01/19 22:20:32 daturaarutad Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -21,8 +21,11 @@ require_once('../activities/activities-widget.php');
 getGlobalVar($activity_id, 'activity_id');
 getGlobalVar($msg, 'msg');
 getGlobalVar($return_url, 'return_url');
+getGlobalVar($print_view, 'print_view');
 
 if (!$return_url) $return_url='/activities/some.php';
+
+
 
 $on_what_id=$activity_id;
 $session_user_id = session_check();
@@ -568,7 +571,14 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Activity Notes"); ?></td>
-                <td class=widget_content_form_element><textarea rows=10 cols=70 name=activity_description><?php  echo htmlspecialchars(trim($activity_description)); ?></textarea></td>
+                <td class=widget_content_form_element>
+                <?php if($print_view) { 
+                        echo htmlspecialchars(nl2br(trim($activity_description))); 
+                        echo "<input type=hidden name=activity_description value=\"" . htmlspecialchars(nl2br(trim($activity_description))) . "\">\n";
+                      } else { ?>
+                        <textarea rows=10 cols=70 name=activity_description><?php  echo htmlspecialchars(trim($activity_description)); ?></textarea>
+                <?php }  ?>
+                </td>
             </tr>
             <?php
             if($on_what_table == 'opportunities') {
@@ -673,6 +683,13 @@ function logTime() {
                         } else {
                             echo render_edit_button(_("Create Recurrence"),'submit',false,'recurrence');
                         }
+
+                        if($print_view) {
+                            echo render_edit_button(_("Edit View"),'submit','javascript:document.activity_data.return_url.value=\''."/activities/one.php?activity_id=$activity_id$save_and_next&return_url=".urlencode($return_url)."".'\'','edit_view', false,'activities',$activity_id);
+                        } else {
+                            echo render_edit_button(_("Print View"),'submit','javascript:document.activity_data.return_url.value=\''."/activities/one.php?activity_id=$activity_id$save_and_next&return_url=".urlencode($return_url)."".'\'','print_view', false,'activities',$activity_id);
+                        }
+
 
                         echo render_delete_button(_("Delete"),'button',"javascript:location.href='delete.php?activity_id=$activity_id$save_and_next&return_url=".urlencode($return_url)."'", false, false, 'activities',$activity_id);
                     ?>
@@ -780,6 +797,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.133  2006/01/19 22:20:32  daturaarutad
+ * add Print View button which displays textarea as a static element
+ *
  * Revision 1.132  2006/01/19 16:22:11  braverock
  * - add class="print" to the main form to aid in printing support
  *
