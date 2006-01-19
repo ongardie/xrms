@@ -1,6 +1,145 @@
-To use OWL:
 
--enable the plugin in the Administrative interface
--run the Database Structure Update in the Administrative interface
--set $owl_location in plugins/owl/owl_plugin.php
+README
+
+This document is intended to describe the inner workings of the OWL
+plugin to XRMS.
+
+
+HISTORY
+
+The OWL_API.php file which is the interface between OWL and XRMS was
+developed with the assistance of Steve Bourgeois of the OWL project.
+In order to have a usable plugin developed in a short time, the API
+was kept simple and forces some constraints on the usage of XRMS and
+OWL together.
+
+DESIGN
+
+At this time, manipulation of files and folders through the OWL 
+interface once the XRMS OWL plugin has been enabled is not supported.
+
+All files and folders added through XRMS are stored on the OWL side
+as being owned by the 'xrms' user.  On the XRMS side, the files' and
+folders' permissions are controlled by the ACL.
+
+Each 'entity' in XRMS may have an entire virtual filesystem attached,
+where an entity may be a company, activity, contact, or the 
+private/home.php page.
+
+
+For files displayed in /private/home.php, the document root of the 
+filesystem within OWL is:
+
+    /xrms/users/username/
+
+For files attached to entities which follow the on_what_table/on_what_id
+convention (companies, contacts, activities, etc.), the document root is:
+
+    /xrms/on_what_table/on_what_id/
+
+So files attached to company with company_id=23 would be found in
+
+    /xrms/companies/23/
+
+within OWL's directory structure.
+
+
+
+
+As part of the installation procedure, XRMS creates a folders table, and
+adds an 'external_id' column to the files table.  This field is used to
+link the XRMS file record to the OWL's file table.  
+
+Whenever a files sidebar is displayed, a 'current directory' is stored in
+the session by storing the owl_parent_id.  This owl_parent_id refers to a
+folder in OWL and is passed into the Browse function of the OWL_API.  When
+browsing files attached to company with company_id=23, for example, the
+session's owl_parent_id will be set to the folder record in OWL's folders
+table that corresponds to the /xrms/companies/23/ folder.
+
+Clicking on a folder in the sidebar therefore sets a new owl_parent_id in 
+the session, which then gets passed to the OWL Browse function, which 
+then returns the files which are found in that folder.
+
+
+
+
+
+
+INSTALLATION
+
+First install OWL.  Currently only the CVS version of owl-0.80 contains the
+OWL_API.php file needed by the XRMS OWL plugin.  This version may be fetched
+by issuing the command:
+
+    cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/owl co -P owl-0.80
+
+Then set $owl_location in plugins/owl/owl_plugin.php to reflect the location of 
+OWL in the filesystem.
+
+Next, enable the plugin in the XRMS Administrative interface.
+
+Then, run the Database Structure Update in the Administrative interface.
+
+
+
+
+USAGE
+
+New XRMS functionality enabled by this plugin is described below.
+
+Folders:
+    
+The files sidebar displays the 'current folder' in its caption (Files in:).
+In actuality it is hiding the first 3 folders from the true path (e.g.
+/xrms/users/user1).  The items in the Files in caption are links and provide
+easy navigation upward in the case of a deeply nested folder structure.
+"Add File" and "Add Folder" buttons should behave as expected.  The "Delete 
+Folder" button will delete the current folder and all contents.  This is
+a real delete, not a logical delete, you have been warned!
+
+Versions:
+
+After a file has been added, it is possible to update the file from the
+files/one.php page.  The filename must not change, or an error will be
+thrown from OWL.  If the file is uploaded again, a new version will be
+created and both versions will appear in the pager at the bottom of the
+files/one.php page.  Clicking on the older version will refresh the 
+files/one.php page with the older version and therefore allow the older file 
+to be downloaded.
+
+Searching Contents of Files:
+
+The OWL plugin uses a hook to add a "Search Contents of Files" field to 
+the files/some.php search page.  OWL must be configured correctly for this
+to work, particularly the locations of utilities such as antiword and pdf2text
+which are used to build text indexes of binary files.  Consult the OWL 
+installation instructions for more details.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
