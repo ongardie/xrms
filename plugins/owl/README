@@ -72,7 +72,7 @@ First install OWL.  Currently only the CVS version of owl-0.80 contains the
 OWL_API.php file needed by the XRMS OWL plugin.  This version may be fetched
 by issuing the command:
 
-    cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/owl co -P owl-0.80
+    cvs -z3 -d :pserver:anonymous@cvs.sourceforge.net:/cvsroot/owl co -P owl-0.80
 
 Then set $owl_location in plugins/owl/owl_plugin.php to reflect the location of 
 OWL in the filesystem.
