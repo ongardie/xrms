@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.131 2006/01/10 08:47:01 gpowers Exp $
+ * $Id: one.php,v 1.132 2006/01/19 16:22:11 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -483,7 +483,7 @@ function logTime() {
     <div id="Content">
 
 
-        <form action=edit-2.php method=post name=activity_data>
+        <form action=edit-2.php method=post class="print" name=activity_data>
         <input type=hidden name=return_url value="<?php  echo $return_url; ?>">
         <input type=hidden name=current_activity_status value="<?php  echo $activity_status; ?>">
         <input type=hidden name=activity_status value="<?php  echo $activity_status; ?>">
@@ -780,6 +780,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.132  2006/01/19 16:22:11  braverock
+ * - add class="print" to the main form to aid in printing support
+ *
+ *
  * Revision 1.131  2006/01/10 08:47:01  gpowers
  * - added activity_content_top plugin hook
  * - added activity_sidebar_top plugin hook
