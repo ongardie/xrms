@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.8 2006/01/02 22:38:16 vanmer Exp $
+ * $Id: updateto2.0.php,v 1.9 2006/01/19 14:09:05 braverock Exp $
  */
 
 // where do we include from
@@ -90,8 +90,8 @@ $rst = $con->execute($sql);
 
 //set "CLOSED" opportunity status_open_indicator to "c"
 //This is used for reports/open-items.php and reports/completed-items.php reports
-//This sets the default "Closed" campaign status with a status_open_indicator of "c" for "Closed"
-$sql = "SELECT * FROM opportunity_statuses WHERE opportunity_status_short_name like 'CL%'";
+//This sets the default "Closed" opportunity status with a status_open_indicator of "c" for "Closed"
+$sql = "SELECT * FROM opportunity_statuses WHERE opportunity_status_short_name = 'CLO'";
 $rst = $con->execute($sql);
 
 $rec = array();
@@ -4776,6 +4776,11 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.9  2006/01/19 14:09:05  braverock
+ * - fix issue of overwriting won/lost opportunity statuses
+ *   - issue reported by Jean Noel Hayart
+ *     https://sourceforge.net/forum/message.php?msg_id=3523591
+ *
  * Revision 1.8  2006/01/02 22:38:16  vanmer
  * - changed to use centralized dbconnection function
  *
