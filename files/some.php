@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.55 2006/01/05 14:56:54 braverock Exp $
+ * $Id: some.php,v 1.56 2006/01/20 20:08:42 daturaarutad Exp $
  */
 
 //include required files
@@ -374,8 +374,7 @@ if($file_plugin_params['error_status']) {
 
 $pager_widget = $pager_columns_selects;
 $endrows = "<tr><td class=widget_content_form_element colspan=10> "
-            . $pager_columns_button
-            . $pager->GetAndUseExportButton();
+            . $pager_columns_button;
 
 $pager->AddEndRows($endrows);
 $pager_widget .= $pager->Render($system_rows_per_page);
@@ -533,6 +532,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.56  2006/01/20 20:08:42  daturaarutad
+ * remove the export button once again
+ *
  * Revision 1.55  2006/01/05 14:56:54  braverock
  * - add summary back to default columns
  *
