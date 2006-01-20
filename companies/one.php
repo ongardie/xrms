@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.131 2005/12/12 21:54:57 vanmer Exp $
+ * $Id: one.php,v 1.132 2006/01/20 19:05:45 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -367,8 +367,15 @@ if ($division_id) { $relationships['company_division']=$division_id; }
 
 require_once("../relationships/sidebar.php");
 
+if ($division_id) {
+    $on_what_table='company_division';
+    $on_what_id=$division_id;
+}
 // include the files sidebar
 require_once("../files/sidebar.php");
+
+$on_what_table = 'companies';
+$on_what_id = $company_id;
 
 // include the notes sidebar
 require_once("../notes/sidebar.php");
@@ -730,6 +737,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.132  2006/01/20 19:05:45  braverock
+ * - filter files sidebar by division_id if division_id is set
+ *
  * Revision 1.131  2005/12/12 21:54:57  vanmer
  * - added extension to list of available fields in contact summary pager for single company view
  * - changed default columns to reflect work phone number being displayed in pager of contacts
