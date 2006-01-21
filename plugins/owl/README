@@ -74,6 +74,12 @@ by issuing the command:
 
     cvs -z3 -d :pserver:anonymous@cvs.sourceforge.net:/cvsroot/owl co -P owl-0.80
 
+Note that you must set the location of AntiWord, pdf2text using the OWL admin
+interface.
+
+Also note that there is a Temp Directory used by OWL when indexing files that
+must be set correctly for proper OWL operation.  
+
 Then set $owl_location in plugins/owl/owl_plugin.php to reflect the location of 
 OWL in the filesystem.
 
