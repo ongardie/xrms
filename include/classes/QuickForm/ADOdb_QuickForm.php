@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.22 2005/12/19 23:18:59 daturaarutad Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.23 2006/01/23 23:18:10 daturaarutad Exp $
  */
 
 
@@ -231,7 +231,7 @@
 		for($j=0; $j<count($this->Models); $j++) {
 		// handle files first?
 			$this->AddElementsToQuickForm($this->Models[$j]);
-			$this->SetModelDefaults($j);
+			$this->SetModelValuesAsDefaults($j);
 		}
 	}
 
@@ -268,7 +268,7 @@
 	* (if using PrependTablename, Model knows them as 'field', View as 'tablename_field')
 	* @param integer j Model index
 	*/
-	function SetModelDefaults($j) {
+	function SetModelValuesAsDefaults($j) {
 		$values = $this->Models[$j]->GetValues();
 		$tablename = $this->Models[$j]->GetTableName();
 
@@ -277,7 +277,25 @@
 		foreach($values as $k => $v) {
 			$my_values[$this->GetPrependedFieldName($tablename, $k)] = $v;
 		}
-		$this->QF->setDefaults($my_values);
+		$this->QF->SetDefaults($my_values);
+	}
+	/**
+	* This function is necessary to make sure that the values in Model
+	* override the ones that come in from GET/POST.
+	*/
+	function SetModelValuesAsConstants() {
+		for($j=0; $j<count($this->Models); $j++) {
+
+            $values = $this->Models[$j]->GetValues();
+            $tablename = $this->Models[$j]->GetTableName();
+
+            $my_values = array();
+
+            foreach($values as $k => $v) {
+                $my_values[$this->GetPrependedFieldName($tablename, $k)] = $v;
+            }
+            $this->QF->setConstants($my_values);
+		}
 	}
 
 	/**
@@ -603,20 +621,6 @@ END;
 		}
 	}
 
-	/**
-	* This function is necessary to make sure that the values in Model
-	* override the ones that come in from GET/POST.
-	*/
-	function SetConstants() {
-		for($j=0; $j<count($this->Models); $j++) {
-			$this->QF->SetConstants($this->Models[$j]->GetValues());
-		}
-	}
-	function SetDefaults() {
-		for($j=0; $j<count($this->Models); $j++) {
-			$this->QF->SetDefaults($this->Models[$j]->GetValues());
-		}
-	}
 
 	/**
 	* Make the form be non-editable
@@ -699,6 +703,9 @@ END;
 
 /**
 * $Log: ADOdb_QuickForm.php,v $
+* Revision 1.23  2006/01/23 23:18:10  daturaarutad
+* ADOdb_QuickForm.php
+*
 * Revision 1.22  2005/12/19 23:18:59  daturaarutad
 * change default form method to POST
 *

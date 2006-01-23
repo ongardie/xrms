@@ -10,7 +10,7 @@
 	* @author Justin Cooper <justin@braverock.com>
 	* @todo
 	*
-	* $Id: ADOdb_QuickForm_Controller.php,v 1.8 2005/12/19 23:11:57 daturaarutad Exp $
+	* $Id: ADOdb_QuickForm_Controller.php,v 1.9 2006/01/23 23:18:10 daturaarutad Exp $
 	*/
 
 
@@ -79,6 +79,8 @@
 		function ProcessAndRenderForm($show_submit = true) {
 			getGlobalVar($form_action, 'form_action');
 
+            //echo "QF form action is $form_action";
+
             if(!$form_action) {
                 $form_action = 'new';
             }
@@ -100,7 +102,7 @@
                         }
 						$this->View->AddModel($this->Models[$j]);
 					}
-				    $this->View->SetConstants();
+				    $this->View->SetModelValuesAsConstants();
 
 					$this->View->InitForm();
 					
@@ -119,7 +121,7 @@
                         }
 						$this->View->AddModel($this->Models[$j]);
 					}
-				    $this->View->SetConstants();
+				    $this->View->SetModelValuesAsConstants();
 					$this->View->InitForm();
 
 	    			$this->View->SetNextFormAction('update');
@@ -154,7 +156,7 @@
                     if(!$this->msg) {
                         $this->msg .= _("Update Successful");
                     }
-					$this->View->SetConstants();
+					$this->View->SetModelValuesAsConstants();
                                         
                     $die = $this->View->CheckReturnAfterUpdate();
                     if ($die) return false;
@@ -188,7 +190,7 @@
                     if(!$this->msg) {
                         $this->msg .= _("Create Successful");
                     }
-					$this->View->SetConstants();
+					$this->View->SetModelValuesAsConstants();
 
 		
 	    			$this->View->SetNextFormAction();
