@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.43 2006/01/18 21:57:58 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.44 2006/01/23 23:46:59 daturaarutad Exp $
  */
 
 
@@ -505,7 +505,7 @@ class GUP_Pager {
                     $user_data_fn = $this->data;
                     $this->data = array();
                     while (!$rs->EOF) {
-                        $row = call_user_func($user_data_fn, $rs->fields, $this->curr_page, $this->rows, $this->column_info[$this->sort_column-1]['index'], $this->sort_order);
+                        $row = call_user_func($user_data_fn, $rs->fields, $this->curr_page, $this->rows, $this->column_info[$this->sort_column-1]['index'], $this->sort_order, $this);
                         if($row) {
                             $this->data[] = $row;
                         }
@@ -1231,10 +1231,22 @@ END;
     *  Public function to enable debugging output for this pager
     */
     function SetCountSQL($count_sql) { $this->count_sql = $count_sql; }
+
+    /**
+    *  Public function to get column info array (sometimes useful for callback)
+    */
+    function GetColumns() { 
+        return $this->column_info; 
+    }
+
+
 }
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.44  2006/01/23 23:46:59  daturaarutad
+ * add pager object to pager callback params passed; add GetColumns() method
+ *
  * Revision 1.43  2006/01/18 21:57:58  daturaarutad
  * move HTML to Pager_Renderer class
  *
