@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: acl_results.php,v 1.13 2006/01/02 22:27:11 vanmer Exp $
+ * $Id: acl_results.php,v 1.14 2006/01/24 21:57:44 vanmer Exp $
  *
  * @author Aaron van Meerten
  */
@@ -164,9 +164,10 @@ function display_object_list($acl, $object, $ids=false, $extrafield=false, $con,
             $ret = $acl->get_controlled_object_data($object, false, $fieldRestriction, false, true, false, false, false, true);
 
             $sql=$ret['sql'];
+	    $ocon=$ret['con'];
 
             if ($extrafield) {
-                $radiofield=$con->CONCAT($con->qstr("<input type=radio name=on_what_id value=\""),$on_what_field,$con->qstr("\">")) ." as select_on_what_id";
+                $radiofield=$ocon->CONCAT($con->qstr("<input type=radio name=on_what_id value=\""),$on_what_field,$con->qstr("\">")) ." as select_on_what_id";
                 if(preg_match("|SELECT([^\e]*)FROM([^\e]*)|", $sql, $matched)) {
                     $fields = trim($matched[1]);
                     if ($fields=='*') {
@@ -178,7 +179,7 @@ function display_object_list($acl, $object, $ids=false, $extrafield=false, $con,
                 echo "</pre>";
             }
 
-            $tablecolumns=$con->MetaColumns($on_what_table);
+	    $tablecolumns=$ocon->MetaColumns($on_what_table);
             $columns = array();
             if ($extrafield) $columns[]=array('name'=>'SELECT','index_sql'=>'select_on_what_id');
             foreach ($tablecolumns as $tkey=>$tfield_info) {
@@ -186,11 +187,15 @@ function display_object_list($acl, $object, $ids=false, $extrafield=false, $con,
                 $columns[]=array('name'=>$fieldname, 'index_sql'=>$fieldname);
             }
 
-        $pager = new GUP_Pager($con, $sql,false, 'Results', $form_id, 'ControlledObjectData', $columns);
+        $pager = new GUP_Pager($ocon, $sql,false, 'Results', $form_id, 'ControlledObjectData', $columns);
         $pager->Render();
 }
  /*
   * $Log: acl_results.php,v $
+  * Revision 1.14  2006/01/24 21:57:44  vanmer
+  * - changed to allow results page to use database connection specific to the controlled object in
+  * question
+  *
   * Revision 1.13  2006/01/02 22:27:11  vanmer
   * - removed force of css theme for ACL interface
   * - changed to use centralized dbconnection function
