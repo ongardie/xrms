@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.26 2006/01/02 23:23:09 vanmer Exp $
+ * $Id: login-2.php,v 1.27 2006/01/25 23:43:36 vanmer Exp $
  */
 require_once('include-locations.inc');
 
@@ -149,11 +149,17 @@ if ($rst && !$rst->EOF && $ldapok) {
     // redirect
     header("Location: $target");
 } else {
+    // audit
+    add_audit_item($con, 0, 'login-failed', '', '', 2);
     header("Location: $http_site_root/login.php?msg=noauth");
 }
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.27  2006/01/25 23:43:36  vanmer
+ * - patch to log failed logins and include PHP session_id in audit items
+ * - credit to "Diego Ongaro at ETSZONE (diego@etszone.com)" for providing this patch
+ *
  * Revision 1.26  2006/01/02 23:23:09  vanmer
  * - changed to use centralized dbconnection function
  *

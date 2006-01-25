@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.169 2006/01/13 20:03:38 vanmer Exp $
+ * $Id: utils-misc.php,v 1.170 2006/01/25 23:43:36 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -239,7 +239,7 @@ function add_audit_item(&$con, $user_id, $audit_item_type, $on_what_table, $on_w
         if (isset($_SERVER['REMOTE_PORT'])) {
             $rec['remote_port'] = $_SERVER['REMOTE_PORT'];
         }
-        $rec['session_id'] = $_COOKIE['PHPSESSID'];
+        $rec['session_id'] = session_id();
         $rec['audit_item_timestamp'] = time();
 
         $tbl = 'audit_items';
@@ -2044,6 +2044,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.170  2006/01/25 23:43:36  vanmer
+ * - patch to log failed logins and include PHP session_id in audit items
+ * - credit to "Diego Ongaro at ETSZONE (diego@etszone.com)" for providing this patch
+ *
  * Revision 1.169  2006/01/13 20:03:38  vanmer
  * - wrapped the get_xrms_dbconnection call and require_once for utils_database.php inside session_startup, to allow utils_database functions to be defined/used outside this functions scope
  *
