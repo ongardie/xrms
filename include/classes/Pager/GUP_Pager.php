@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.45 2006/01/26 17:01:13 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.46 2006/01/26 17:30:31 daturaarutad Exp $
  */
 
 
@@ -956,8 +956,7 @@ END;
     */
     function Prepare_Last($anchor=true)
     {
-      if (!$this->db->pageExecuteCountRows) return;
-
+      if ($this->sql && !$this->db->pageExecuteCountRows) return;
       if (!$this->AtLastPage) {
         echo '<a href="javascript: ' . $this->pager_id . '_submitForm(' . $this->LastPageNo . ');">' . $this->last . '</a> &nbsp;';
       } else {
@@ -1245,6 +1244,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.46  2006/01/26 17:30:31  daturaarutad
+ * check for sql mode before conditional on $this->db->pageExecuteCountRows
+ *
  * Revision 1.45  2006/01/26 17:01:13  daturaarutad
  * fix current page session var name
  *
