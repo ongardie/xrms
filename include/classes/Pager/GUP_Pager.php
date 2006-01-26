@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.44 2006/01/23 23:46:59 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.45 2006/01/26 17:01:13 daturaarutad Exp $
  */
 
 
@@ -261,11 +261,11 @@ class GUP_Pager {
     
             // store current page in session
             if (isset($this->next_page)) {
-                $_SESSION[$pager_id . '_' . $curr_page] = $this->next_page;
+                $_SESSION[$this->pager_id . '_curr_page'] = $this->next_page;
             }
-            if (empty($_SESSION[$pager_id . '_' . $curr_page])) $_SESSION[$pager_id . '_' . $curr_page] = 1; ## at first page
+            if (empty($_SESSION[$this->pager_id . '_curr_page'])) $_SESSION[$this->pager_id . '_curr_page'] = 1; ## at first page
     
-            $this->curr_page = $_SESSION[$pager_id . '_' . $curr_page];
+            $this->curr_page = $_SESSION[$this->pager_id . '_curr_page'];
             // end sorted columns stuff
     }
 
@@ -459,7 +459,7 @@ class GUP_Pager {
             $this->using_cache = true;
 
         } else {
-            if($this->debug) echo "Not Using Cache<br>";
+            if($this->debug) echo "Not Using Cache $cache_name<br>";
 
             // clear the cache
             $_SESSION[$cache_name] = null;
@@ -561,6 +561,7 @@ class GUP_Pager {
             //echo "clause A<br>";
             $this->start_data_row = ($this->curr_page -1) * $this->rows;
             $this->end_data_row = min($this->start_data_row + $this->rows, count($this->data));
+			//echo $this->AbsolutePage . ':' . $this->LastPageNo .':'. $this->start_data_row .':'. $this->end_data_row;
 
         } else {
             if($this->rs) { 
@@ -1244,6 +1245,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.45  2006/01/26 17:01:13  daturaarutad
+ * fix current page session var name
+ *
  * Revision 1.44  2006/01/23 23:46:59  daturaarutad
  * add pager object to pager callback params passed; add GetColumns() method
  *
