@@ -3,7 +3,7 @@
  * Test harness for the XRMS GUP_QuickForm 
  *
  * @todo
- * $Id: QuickForm_test.php,v 1.2 2005/11/16 18:35:17 daturaarutad Exp $
+ * $Id: QuickForm_test.php,v 1.3 2006/01/27 22:49:43 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -31,6 +31,12 @@ $options['xrms_db_username'] = $xrms_db_username;
 $options['xrms_db_password'] = $xrms_db_password;
 $options['xrms_db_dbname'] = $xrms_db_dbname;
 
+/*
+    Tests to write:
+        -Test when prepend_tablename is used in all cases
+*/
+
+
 Class XRMSQuickFormTest extends PHPUnit_TestCase { 
     
     function XRMSQuickFormTest( $name = "XRMSQuickFormTest" ) {
@@ -57,6 +63,7 @@ Class XRMSQuickFormTest extends PHPUnit_TestCase {
                 description text,
                 entered_at datetime default NULL,
                 status char(1) default 'o',
+                booya enum('victor','victoria','pat'),
                 qf_test_filename varchar(255) default NULL,
                 qf_test_filetype varchar(255) default NULL,    
                 qf_test_filesize int(11) default NULL,
@@ -104,6 +111,72 @@ Class XRMSQuickFormTest extends PHPUnit_TestCase {
         global $session_user_id;
         $session_user_id=$this->session_user_id;        
 
+        // save $_POST
+        $OLDPOST = $_POST;
+
+        // new/create
+        $_POST = array();
+        $_POST['form_action'] = 'new';
+        $_POST['return_url'] = 'http://localhost/xrms/test.php?arg=val&arg2=val2';
+
+        $form_html = $this->MakeSimpleForm('CRUD_1');
+        $this->CompareTest($form_html, 'QuickForm_Test_CRUD_1');
+
+
+        // create/view
+        $_POST = array();
+        $_POST['form_action'] = 'create';
+        $_POST['qf_test_QF_description'] = 'Created by QuickForm test.';
+        $_POST['qf_test_QF_booya'] = 'victoria';
+        $_POST['return_url'] = 'http://localhost/xrms/test.php?arg=val&arg2=val2';
+
+        $form_html = $this->MakeSimpleForm('CRUD_2');
+
+        $rows = $this->CheckDBResults($con);
+
+        if(1 != count($rows)) {
+            $this->assertTrue(false, "test_CRUD_2 returned " . count($rows) . " instead of 1");
+        }
+
+        $this->CompareTest($form_html, 'QuickForm_Test_CRUD_2');
+
+        // view
+        $_POST = array();
+        $_POST['form_action'] = 'view';
+        $_POST['qf_test_QF_qf_id'] = 1;
+        $_POST['return_url'] = 'http://localhost/xrms/test.php?arg=val&arg2=val2';
+        $form_html = $this->MakeSimpleForm('CRUD_3');
+        $this->CompareTest($form_html, 'QuickForm_Test_CRUD_3');
+
+        // update
+        $_POST = array();
+        $_POST['form_action'] = 'update';
+        $_POST['qf_test_QF_qf_id'] = 1;
+        $_POST['qf_test_QF_description'] = 'Created by QuickForm test. (modified)';
+        $_POST['return_url'] = 'http://localhost/xrms/test.php?arg=val&arg2=val2';
+        $form_html = $this->MakeSimpleForm('CRUD_4');
+        $this->CompareTest($form_html, 'QuickForm_Test_CRUD_4');
+
+
+
+        // delete
+        $_POST = array();
+        $_POST['form_action'] = 'delete';
+        $_POST['qf_test_QF_qf_id'] = 1;
+        $_POST['return_url'] = 'http://localhost/xrms/test.php?arg=val&arg2=val2';
+
+        $form_html = $this->MakeSimpleForm('CRUD_5');
+
+        $rows = $this->CheckDBResults($con);
+
+        if(0 != count($rows)) {
+            $this->assertTrue(false, "test_CRUD_5 returned " . count($rows) . " instead of 0");
+        }
+
+        $this->CompareTest($form_html, 'QuickForm_Test_CRUD_5');
+
+        // restore $_POST
+        $_POST = $OLDPOST;
 
         //$this->assertTrue($activity_result, "Failed to get information about activity");
     }
@@ -126,6 +199,11 @@ Class XRMSQuickFormTest extends PHPUnit_TestCase {
 
 
     function test_SimpleForm() {
+        $form_html = $this->MakeSimpleForm('SimpleForm'); 
+        $this->CompareTest($form_html, 'QuickForm_Test_SimpleForm');
+    }
+
+    function MakeSimpleForm($form_name) {
 
 	    $model = new ADOdb_QuickForm_Model();
 	    $model->ReadSchemaFromDB($this->con, 'qf_test');
@@ -142,19 +220,17 @@ Class XRMSQuickFormTest extends PHPUnit_TestCase {
         $model->SetFieldType('qf_test_filesize', 'hidden');
 
         $model->SetDisplayOrders(array('description','case_type_id','status','title'));
-
-
 	
-	
-	    $view = new ADOdb_QuickForm_View($this->con, _('Edit Note'), 'POST');
+	    $view = new ADOdb_QuickForm_View($this->con, _('Edit Note'), 'POST', true);
 	    $view->SetReturnButton('Return to List', $return_url);
 	    $view->SetButtonText('A B C', 'Easy As', '1 2 3');
+        $view->EnableDeleteButton();
 	
 	    $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
-	    $form_html = $controller->ProcessAndRenderForm();
-
-        $this->CompareTest($form_html, 'QuickForm_Test_SimpleForm');
-
+	    $qf_html = $controller->ProcessAndRenderForm();
+        $msg = $controller->GetStatusMessage();
+	    $form_html = "<form name=$form_name>$msg\n$qf_html</form>";
+        return $form_html;
     }
 
 
@@ -170,8 +246,21 @@ Class XRMSQuickFormTest extends PHPUnit_TestCase {
             fwrite($handle, $output);
             fclose($handle);
 
-            echo "Failed test: $filename" . WrapForm($output);
+            echo "Test Failed : $filename<br>\n";
+// don't output the good form because <form name=> will clash
+            //echo "Output should have been : " . WrapForm($contents);
+            echo "But this was returned instead : " . WrapForm($output);
             $this->assertTrue(false, "$filename Mismatch.");
+        }
+    }
+    function CheckDBResults($con) {
+        $sql = "select * from qf_test";
+        $rst = $con->execute($sql);
+        if($rst) {
+            return $rst->GetAll();
+
+        } else {
+            $this->assertTrue(false, db_error_handler($con, $sql));
         }
     }
 
@@ -226,6 +315,9 @@ $display->show();
  */
 /*
  * $Log: QuickForm_test.php,v $
+ * Revision 1.3  2006/01/27 22:49:43  daturaarutad
+ * add tests for CRUD of records and prepend_tablename feature
+ *
  * Revision 1.2  2005/11/16 18:35:17  daturaarutad
  * newer better faster
  *
