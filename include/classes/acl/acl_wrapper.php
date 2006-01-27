@@ -7,7 +7,7 @@
  * All Rights Reserved.
  *
  * @package ACL
- * $Id: acl_wrapper.php,v 1.28 2005/09/21 21:03:18 vanmer Exp $
+ * $Id: acl_wrapper.php,v 1.29 2006/01/27 13:37:05 vanmer Exp $
  */
 
 define('ACL_PATH',$include_directory.'classes/acl/');
@@ -458,7 +458,7 @@ function check_permission($user_id, $action=false, $object=false,  $on_what_id, 
     //no object id, returning true to allow access to uncontrolled area
      if (!$object_id) { return array($action); }
      
-    $permissions = $acl->get_permissions_user($object_id, $on_what_id, $user_id, false, $action);
+    $permissions = $acl->get_permissions_user($object_id, $on_what_id, $user_id, false, array($action));
     if (!$permissions) return false;
     if (!is_array($permissions)) { $permissions=array($permissions); }
     $ret=array();
@@ -521,7 +521,7 @@ function check_object_permission($user_id, $object, $action, $table, $role=false
     //no object id, returning true to allow access to uncontrolled area
      if (!$object_id) { return array($action); }
     
-    $permissions = $acl->get_permission_user_object($object_id, $user_id, false, $action);
+    $permissions = $acl->get_permission_user_object($object_id, $user_id, false, array($action));
 //     echo "Checking $permissions=get_permission_user_object($object_id, $user_id, false, $action);<br>";
     if (!$permissions) return false;
     if (!is_array($permissions)) { $permissions=array($permissions); }
@@ -1097,6 +1097,11 @@ function delete_user_group($acl, $GroupUser_id=false, $group=false, $user_id=fal
 
 /**
   * $Log: acl_wrapper.php,v $
+  * Revision 1.29  2006/01/27 13:37:05  vanmer
+  * - changed ACL to require array input for actions (permissions)
+  * - removed check for array of permissions, now is always an array
+  * - changed test and wrapper to properly pass permissions as an array to ACL object
+  *
   * Revision 1.28  2005/09/21 21:03:18  vanmer
   * - added phpdoc blocks for all ACL install and wrapper functions
   *

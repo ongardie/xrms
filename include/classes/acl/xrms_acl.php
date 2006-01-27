@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.32 2005/12/19 22:19:55 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.33 2006/01/27 13:37:05 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -1408,14 +1408,13 @@ class xrms_acl {
          
         $rs = $con->execute($sql);
         if (!$rs) { db_error_handler($con, $sql); return false; }
-        if ($rs->numRows()>1) {
+        if (!$rs->EOF) {
+            $ret=array();
             while (!$rs->EOF) {
                 $ret[$rs->fields['RolePermission_id']] = $rs->fields;
                 $rs->movenext();
             }
             return $ret;
-        } elseif ($rs->numRows()==1) {
-            return $rs->fields;
         } else {
             return false;
         }        
@@ -1907,7 +1906,7 @@ class xrms_acl {
 //                    echo "$RolePermission = $this->get_role_permission($Role, $CORelationship_id, $Scope, $Permission_id)";
                     
                     if ($RolePermissions) {
-                        if (!is_array(current($RolePermissions))) { $RolePermissions=array($RolePermissions); }
+                        //if (!is_array(current($RolePermissions))) { $RolePermissions=array($RolePermissions); }
                         foreach ($RolePermissions as $RolePermission) {
                             switch ($RolePermission['Scope']) {
                                 //WORLD SCOPE
@@ -2093,7 +2092,7 @@ class xrms_acl {
         if (!$PermissionList) {
             $PermissionList=$this->get_permissions_list();
         }
-        if (!is_array($PermissionList)) { $PermissionList = array( $PermissionList ); }
+//        if (!is_array($PermissionList)) { $PermissionList = array( $PermissionList ); }
         foreach($PermissionList as $pkey=>$Perm) {
             if (!is_numeric($Perm)) {
                 $nPerm=$this->get_permission($Perm);
@@ -2111,7 +2110,7 @@ class xrms_acl {
         if (!$_ScopeList) {
             $ScopeList = $this->get_scope_list();
         }
-        if (!is_array($ScopeList)) { $ScopeList=array($ScopeList); }
+        //if (!is_array($ScopeList)) { $ScopeList=array($ScopeList); }
         $FoundPermissionList=array();    
         $ControlledObjectRelationships = $this->get_controlled_object_relationship(false, $ControlledObject_id, $_CORelationship_id, true);
 
@@ -2125,7 +2124,7 @@ class xrms_acl {
             //foreach ($UserRoleList as $Role) {
                 $RolePermission = $this->get_role_permission($UserRoleList, $ControlledObjectRelationship_ids, false,false,false,$inheritable);
                 if ($RolePermission) {
-                    if (!is_array(current($RolePermission))) $RolePermission=array($RolePermission);
+                    //if (!is_array(current($RolePermission))) $RolePermission=array($RolePermission);
                     foreach ($RolePermission as $IndividualRolePerm) {
                             //merge permissions with each individual permission
                         $FoundPermissionList = array_unique(array_merge($FoundPermissionList, array($IndividualRolePerm['Permission_id'])));
@@ -2263,7 +2262,7 @@ class xrms_acl {
             //$ApplyUserPerms=$SearchUser;
             $RolePermission = $this->get_role_permission($UserRoleList, $ControlledObjectRelationship_ids, $Scopes, false, false, $inheritable);
             if ($RolePermission) {
-                if (!is_array(current($RolePermission))) { $RolePermission = array ( $RolePermission); }
+                //if (!is_array(current($RolePermission))) { $RolePermission = array ( $RolePermission); }
                 //add up all permissions found
                 /* @todo Add checks to see if permissions propagate up/down */
                 foreach ($RolePermission as $IndividualRolePerm) {
@@ -2321,7 +2320,7 @@ class xrms_acl {
                     $Scopes=array('Group');
                     $RolePermission = $this->get_role_permission($GroupRoleList, $ControlledObjectRelationship_ids, $Scopes, false, false, $inheritable);
                     if ($RolePermission) {
-                        if (!is_array(current($RolePermission))) { $RolePermission = array ( $RolePermission); }
+                        //if (!is_array(current($RolePermission))) { $RolePermission = array ( $RolePermission); }
                         //add up all permissions found
                         /* @todo Add checks to see if permissions propagate up/down */
                         foreach ($RolePermission as $IndividualRolePerm) {
@@ -2468,6 +2467,11 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.33  2006/01/27 13:37:05  vanmer
+ * - changed ACL to require array input for actions (permissions)
+ * - removed check for array of permissions, now is always an array
+ * - changed test and wrapper to properly pass permissions as an array to ACL object
+ *
  * Revision 1.32  2005/12/19 22:19:55  vanmer
  * - removed check for applyUserPerms, unneeded and allowed more permissions than expected
  *

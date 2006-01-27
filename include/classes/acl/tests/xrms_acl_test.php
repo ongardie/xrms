@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_acl_test.php,v 1.12 2005/10/03 18:25:45 vanmer Exp $
+ * $Id: xrms_acl_test.php,v 1.13 2006/01/27 13:37:06 vanmer Exp $
  */
 
 if (!$include_directory) require_once('../../../../include-locations.inc');
@@ -547,6 +547,7 @@ Class ACLTest extends PHPUnit_TestCase {
         if ($_ControlledObjectRelationship) { $ControlledObjectRelationship=$_ControlledObjectRelationship; } else { $ControlledObjectRelationship=false; }
         
         $RolePermission=$this->test_get_role_permission($Role, $ControlledObjectRelationship, $Scope, $Permission);
+	$RolePermission=current($RolePermission);
         $result = $RolePermission['RolePermission_id'];
         $this->assertTrue($result, "Failed to find RolePermission with role $Role object rel $ControlledObjectRelationship scope $Scope Perms $Permission");
         
@@ -1200,7 +1201,7 @@ Class ACLTest extends PHPUnit_TestCase {
         //Add permissions 1 (Read) and 2 (Create) to test roles/objects with world scope
         $RolePermission_id=$this->test_add_role_permission($Role, $CORelationship_id,$Scope,$Permission);
         $this->assertTrue($RolePermission_id, "Failed to add $CORelationship_id to role $Role with permission $Permission scoped at $Scope");
-        $ret=$this->acl->get_permission_user_object($ControlledObject_id, $User_id, false, $Permission);
+        $ret=$this->acl->get_permission_user_object($ControlledObject_id, $User_id, false, array($Permission));
         $this->assertTrue($ret, "Failed to find any permissions on object $ControlledObject for user $User_id");
         $this->assertTrue(array_search($Permission, $ret)!==false,"Failed to find permission $Permission on object $ControlledObject for user $User_id");
                
@@ -1263,6 +1264,11 @@ $display->show();
  */
 /*
  * $Log: xrms_acl_test.php,v $
+ * Revision 1.13  2006/01/27 13:37:06  vanmer
+ * - changed ACL to require array input for actions (permissions)
+ * - removed check for array of permissions, now is always an array
+ * - changed test and wrapper to properly pass permissions as an array to ACL object
+ *
  * Revision 1.12  2005/10/03 18:25:45  vanmer
  * - changed to only call ACL test from central xrms tests
  *
