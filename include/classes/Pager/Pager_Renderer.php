@@ -12,7 +12,7 @@
  *
  * @example Pager_Renderer.doc.1.php check out
  *
- * $Id: Pager_Renderer.php,v 1.1 2006/01/18 21:57:58 daturaarutad Exp $
+ * $Id: Pager_Renderer.php,v 1.2 2006/01/27 13:47:38 vanmer Exp $
  */
 
 
@@ -169,9 +169,9 @@ class Pager_Renderer {
 		            for($j=0; $j<$render_data['column_count']; $j++) {
 		
 		                if($render_data[$j]['data_type']) {
-		                    if('currency' == $render_data[$j]['data_type']) {
+		                    if('currency' == $render_data[$j]['data_type'] AND is_numeric($render_data['rows'][$i]['columns'][$j])) {
 		                        echo "<td class='$row_classnames {$col_classnames[$j]}'>$" . number_format($render_data['rows'][$i]['columns'][$j], 2, '.', ',') . "</td>\n";
-		                    } elseif('currency_six_places' == $render_data[$j]['data_type']) {
+		                    } elseif('currency_six_places' == $render_data[$j]['data_type'] AND is_numeric($render_data['rows'][$i]['columns'][$j])) {
 		                        echo "<td class='$row_classnames {$col_classnames[$j]}'>$" . number_format($render_data['rows'][$i]['columns'][$j], 6, '.', ',') . "</td>\n";
 		                    } elseif('date' == $render_data[$j]['data_type']) {
 		                        echo "<td class='$row_classnames {$col_classnames[$j]}'>" .  date ( 'Y-m-d' , strtotime($render_data['rows'][$i]['columns'][$j])) . "</td>\n";
@@ -211,7 +211,6 @@ class Pager_Renderer {
 
             // starting with 1 because column 1 is used for the header, so sorry!
             for ($i=1; $i < count($this->pager->column_info); $i++) {
-
                 if(isset($values[$this->pager->column_info[$i]['index']])) {
                     if('currency' == $this->pager->column_info[$i]['data_type']) {
                         echo "<td class=\"$row_classnames {$col_classnames[$i]}\"><b>$" . number_format($values[$this->pager->column_info[$i]['index']], 2, '.', ',') . "</b></td>\n";
@@ -245,6 +244,9 @@ class Pager_Renderer {
 }
 /**
  * $Log: Pager_Renderer.php,v $
+ * Revision 1.2  2006/01/27 13:47:38  vanmer
+ * - added check to ensure that field is numeric before forcing it through numeric format on datatype of currencies
+ *
  * Revision 1.1  2006/01/18 21:57:58  daturaarutad
  * move HTML to Pager_Renderer class
  *
