@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.23 2006/01/23 23:18:10 daturaarutad Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.24 2006/01/27 22:45:05 daturaarutad Exp $
  */
 
 
@@ -166,7 +166,8 @@
 		foreach($values as $field_name => $v) {
 			
 			for($j=0; $j<count($this->Models); $j++) {
-				if(false !== $this->Models[$j]->GetFieldIndex($field_name)) {
+
+				if(false == $this->Models[$j]->GetFieldIndex($field_name)) {
 					$field_name = $this->GetOriginalFieldName($this->Models[$j]->GetTableName(), $field_name);
 					break;
 				}
@@ -703,6 +704,9 @@ END;
 
 /**
 * $Log: ADOdb_QuickForm.php,v $
+* Revision 1.24  2006/01/27 22:45:05  daturaarutad
+* fix to GetOriginalFieldName if field not found
+*
 * Revision 1.23  2006/01/23 23:18:10  daturaarutad
 * ADOdb_QuickForm.php
 *
