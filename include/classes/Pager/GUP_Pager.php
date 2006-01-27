@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.46 2006/01/26 17:30:31 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.47 2006/01/27 13:46:57 vanmer Exp $
  */
 
 
@@ -532,7 +532,7 @@ class GUP_Pager {
         if($this->modify_data_functions) {
             foreach($this->modify_data_functions as $fn) {
                 if(function_exists($fn)) 
-                    $this->data = call_user_func($fn, $this->data);
+                    $this->data = call_user_func($fn, $this->data, $this);
 
                     // experimental!  this makes the page count be based on $this->data instead of $this->rs
                     // which allows the modify callback to drop rows, yet get a full page each time
@@ -865,7 +865,7 @@ END;
                 }
             }
             // come mister tally man tally me subtotal columns
-            if(is_array($this->SubtotalColumns)) {
+            if($this->SubtotalColumns) {
                 foreach($this->SubtotalColumns as $index => $k) {
                     $this->SubtotalColumns[$index] += $this->data[$i][$index];
                 }
@@ -1244,6 +1244,10 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.47  2006/01/27 13:46:57  vanmer
+ * - changed is_array call to basic if for performance
+ * - added parameter to callback for data for pager object
+ *
  * Revision 1.46  2006/01/26 17:30:31  daturaarutad
  * check for sql mode before conditional on $this->db->pageExecuteCountRows
  *
