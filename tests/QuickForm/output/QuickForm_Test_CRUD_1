@@ -1,4 +1,4 @@
-<form name=SimpleForm>
+<form name=CRUD_1>
 
 <form action="/xrms/tests/QuickForm/QuickForm_test.php" method="post" name="Edit Note" id="Edit Note" enctype="multipart/form-data">
 <table border="0" class="widget"><tr><td colspan="2" class="widget_header">Edit Note</td> </tr>
@@ -56,7 +56,7 @@
 <input name="qf_test_QF_qf_test_filesize" type="hidden" value="" />
 <input name="MAX_FILE_SIZE" type="hidden" value="2097152" />
 <input name="form_action" type="hidden" value="create" />
-<input name="return_url" type="hidden" value="" />
+<input name="return_url" type="hidden" value="http://localhost/xrms/test.php?arg=val&amp;arg2=val2" />
 
 </table>
 </form>							<script language="JavaScript" type="text/javascript">

@@ -1,0 +1,54 @@
+
+<form action="/xrms/tests/QuickForm/QuickForm_test.php" method="post" name="" id="" enctype="multipart/form-data">
+<table border="0" class="widget"><tr><td colspan="2" class="widget_header"></td> </tr>
+<input type="hidden" name="division_id" value=""><input type="hidden" name="return_url"  value="">
+	<tr>
+		<td class="widget_content widget_label_right">Document Title</td>
+		<td valign="top" align="left" class="widget_content_form_element"><input name="fund_manager_docs_name" type="text" /></td>
+	</tr>
+	<tr>
+		<td class="widget_content widget_label_right">Description</td>
+		<td valign="top" align="left" class="widget_content_form_element"><textarea name="fund_manager_docs_desc"></textarea></td>
+	</tr>
+	<tr>
+		<td class="widget_content widget_label_right">Document Date</td>
+		<td valign="top" align="left" class="widget_content_form_element"><input id="fund_manager_docs_date" name="fund_manager_docs_date" type="text" /> <input id="f_trigger_0" style="CURSOR: hand" border="0" type="image" src="http://bassloada.braverock.com/xrms/img/cal.gif" /></td>
+	</tr>
+	<tr>
+		<td class="widget_content widget_label_right">fund_manager_docs_data_filename</td>
+		<td valign="top" align="left" class="widget_content_form_element"><input name="fund_manager_docs_data_filename" type="text" /></td>
+	</tr>
+	<tr>
+		<td class="widget_content widget_label_right">File</td>
+		<td valign="top" align="left" class="widget_content_form_element"><input name="fund_manager_docs_data_filedata" type="file" /></td>
+	</tr>
+	<tr>
+		<td class="widget_content widget_label_right"></td>
+		<td valign="top" align="left" class="widget_content_form_element"><input id="btnSubmit" class="button" name="btnSubmit" value="Create" type="submit" /></td>
+	</tr><input name="fund_manager_docs_id" type="hidden" value="" />
+<input name="fund_id" type="hidden" value="" />
+<input name="fund_manager_docs_data_filetype" type="hidden" value="" />
+<input name="fund_manager_docs_data_filesize" type="hidden" value="" />
+<input name="MAX_FILE_SIZE" type="hidden" value="2097152" />
+<input name="modified_by" type="hidden" value="" />
+<input name="modified_on" type="hidden" value="2005-11-16 12:34:30" />
+<input name="form_action" type="hidden" value="create" />
+<input name="return_url" type="hidden" value="" />
+
+</table>
+</form>							<script language="JavaScript" type="text/javascript">
+								Calendar.setup({
+	      						inputField     :    "fund_manager_docs_date",      // id of the input field
+	      						ifFormat       :    "%Y-%m-%d",       // format of the input field
+	      						showsTime      :    false,            // will display a time selector
+	      						button         :    "f_trigger_0",   // trigger for the calendar (button ID)
+	      						singleClick    :    true,           // double-click mode
+	      						step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+	      						align          :    "Bl"           // alignment (defaults to "Bl")
+									})
+							</script>       		<script language="JavaScript" type="text/javascript">
+           			document.forms[0].btnDelete.onclick = function() {
+           			    document.forms[0].form_action.value = 'delete';
+           			    document.forms[0].submit();
+           			} 
+       		</script>

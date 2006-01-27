@@ -50,41 +50,56 @@
 
     [6] => Array
         (
-            [name] => qf_test_filename
-            [type] => varchar
+            [name] => booya
+            [type] => enum
+            [enums] => Array
+                (
+                    [victor] => victor
+                    [victoria] => victoria
+                    [pat] => pat
+                )
+
             [displayOrder] => 6
-            [displayName] => qf_test_filename
+            [displayName] => booya
         )
 
     [7] => Array
         (
-            [name] => qf_test_filetype
+            [name] => qf_test_filename
             [type] => varchar
             [displayOrder] => 7
-            [displayName] => qf_test_filetype
+            [displayName] => qf_test_filename
         )
 
     [8] => Array
         (
-            [name] => qf_test_filesize
-            [type] => int
+            [name] => qf_test_filetype
+            [type] => varchar
             [displayOrder] => 8
-            [displayName] => qf_test_filesize
+            [displayName] => qf_test_filetype
         )
 
     [9] => Array
         (
-            [name] => qf_test_filedata
-            [type] => longblob
+            [name] => qf_test_filesize
+            [type] => int
             [displayOrder] => 9
-            [displayName] => qf_test_filedata
+            [displayName] => qf_test_filesize
         )
 
     [10] => Array
         (
+            [name] => qf_test_filedata
+            [type] => longblob
+            [displayOrder] => 10
+            [displayName] => qf_test_filedata
+        )
+
+    [11] => Array
+        (
             [name] => qf_test_record_status
             [type] => char
-            [displayOrder] => 10
+            [displayOrder] => 11
             [displayName] => qf_test_record_status
         )
 
