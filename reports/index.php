@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.23 2006/01/02 23:46:52 vanmer Exp $
+ * $Id: index.php,v 1.24 2006/01/28 22:22:40 niclowe Exp $
  */
 require_once('../include-locations.inc');
 
@@ -80,68 +80,120 @@ start_page($page_title, true, $msg);
             </tr>
         </table>
 
-        <table class=widget cellspacing=1 width="100%">
-            <col id="report" width="30%"><col id="description">
-            <tr>
-                <td colspan=2 class=widget_header><?php echo _("Reports"); ?></td>
-            </tr>
-            <tr>
-                <td colspan=2 class=widget_label_center><?php echo _("Company Reports"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content><a href="companies-list.php"><?php echo _("Company List"); ?></a></td>
-                <td class=widget_content><?php echo _("List of companies, addresses and phone numbers"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content><a href="company-contacts-printout.php"><?php echo _("Contacts at Companies"); ?></a></td>
-                <td class=widget_content><?php echo _("Printable contact summary information for Companies in search Results."); ?></td>
-            </tr>
-            <tr>
-                <td colspan=2 class=widget_label_center><?php echo _("User Reports"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content><a href="activitytimes.php"><?php echo _("Activity Time Sheets"); ?></a></td>
-                <td class=widget_content>
-                    <?php echo _("List Activiites by Start, End, and User (also shows Duration, Company and Contact)"); ?>
-                </td>
-            </tr>
-            <tr>
-                <td class=widget_content><a href="overdue-items.php"><?php echo _("Overdue Items"); ?></a></td>
-                <td class=widget_content><?php echo _("List Overdue Items by User and Type"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content><a href="open-items.php"><?php echo _("Open Items"); ?></a></td>
-                <td class=widget_content><?php echo _("List Open Items by User and Type"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content><a href="completed-items.php"><?php echo _("Completed Items"); ?></a></td>
-                <td class=widget_content><?php echo _("List Completed Items by Date Range, User and Type"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content><a href="audit-items.php"><?php echo _("Audit Items"); ?></a></td>
-                <td class=widget_content><?php echo _("List Audit Items by Date and User"); ?></td>
-            </tr>
-            <!-- <tr>
+        
+    <table class=widget cellspacing=1 width="100%">
+      <col id="report" width="30%"><col id="description"> 
+      <tr> 
+        <td colspan=2 class=widget_header> 
+          <?php echo _("Reports"); ?>
+        </td>
+      </tr>
+      <tr> 
+        <td colspan=2 class=widget_label_center> 
+          <?php echo _("Company Reports"); ?>
+        </td>
+      </tr>
+      <tr> 
+        <td class=widget_content><a href="companies-list.php"> 
+          <?php echo _("Company List"); ?>
+          </a></td>
+        <td class=widget_content> 
+          <?php echo _("List of companies, addresses and phone numbers"); ?>
+        </td>
+      </tr>
+      <tr> 
+        <td class=widget_content><a href="company-contacts-printout.php"> 
+          <?php echo _("Contacts at Companies"); ?>
+          </a></td>
+        <td class=widget_content> 
+          <?php echo _("Printable contact summary information for Companies in search Results."); ?>
+        </td>
+      </tr>
+      <tr> 
+        <td colspan=2 class=widget_label_center> 
+          <?php echo _("User Reports"); ?>
+        </td>
+      </tr>
+      <tr> 
+        <td class=widget_content><a href="activitytimes.php"> 
+          <?php echo _("Activity Time Sheets"); ?>
+          </a></td>
+        <td class=widget_content> 
+          <?php echo _("List Activiites by Start, End, and User (also shows Duration, Company and Contact)"); ?>
+        </td>
+      </tr>
+      <tr> 
+        <td class=widget_content><a href="overdue-items.php"> 
+          <?php echo _("Overdue Items"); ?>
+          </a></td>
+        <td class=widget_content> 
+          <?php echo _("List Overdue Items by User and Type"); ?>
+        </td>
+      </tr>
+      <tr> 
+        <td class=widget_content><a href="open-items.php"> 
+          <?php echo _("Open Items"); ?>
+          </a></td>
+        <td class=widget_content> 
+          <?php echo _("List Open Items by User and Type"); ?>
+        </td>
+      </tr>
+      <tr> 
+        <td class=widget_content><a href="completed-items.php"> 
+          <?php echo _("Completed Items"); ?>
+          </a></td>
+        <td class=widget_content> 
+          <?php echo _("List Completed Items by Date Range, User and Type"); ?>
+        </td>
+      </tr>
+      <tr> 
+        <td class=widget_content><a href="stale-opportunities.php">
+          <?php echo _("Stale Opportunities"); ?>
+          </a></td>
+        <td class=widget_content>
+          <?php echo _("Stale opportunities by Last Activity Date and User"); ?>
+        </td>
+      </tr>
+      <tr> 
+        <td class=widget_content><a href="stale-crm-status.php">
+          <?php echo _("Stale Companies"); ?>
+          </a></td>
+        <td class=widget_content>
+          <?php echo _("Stale Companies - by Crms Status, Last Activity Date and User"); ?>
+        </td>
+      </tr>
+      <tr> 
+        <td class=widget_content><a href="audit-items.php"> 
+          <?php echo _("Audit Items"); ?>
+          </a></td>
+        <td class=widget_content> 
+          <?php echo _("List Audit Items by Date and User"); ?>
+        </td>
+      </tr>
+      <!-- <tr>
                 <td class=widget_content><a href="sales-automation.php"><?php echo _("Sales Force Automation"); ?></a></td>
                 <td class=widget_content><?php echo _("Measure performance of users over a selectable timeframe"); ?></td>
             </tr> -->
-            <tr>
-                <td class=widget_content colspan="2">
-                    <form action="user-activity.php" method=post>
-                        <?php echo _("Activity Report for"); ?> <?php echo $user_menu; ?>
-                        <input class=button type=submit value="<?php echo _("Go"); ?>">
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td colspan=2 class=widget_label_center><?php echo _("Custom Reports"); ?></td>
-            </tr>
-            <?php
+      <tr> 
+        <td class=widget_content colspan="2"> 
+          <form action="user-activity.php" method=post>
+            <?php echo _("Activity Report for"); ?>
+            <?php echo $user_menu; ?>
+            <input class=button type=submit value="<?php echo _("Go"); ?>">
+          </form>
+        </td>
+      </tr>
+      <tr> 
+        <td colspan=2 class=widget_label_center> 
+          <?php echo _("Custom Reports"); ?>
+        </td>
+      </tr>
+      <?php
                 // allow plugins to insert thier own reports on the main reports page
                 do_hook ('reports_bottom');
                 // eventually, this will need to be one hook per report section, as more reports are created
             ?>
-        </table>
+    </table>
 
     </div>
 
@@ -153,6 +205,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.24  2006/01/28 22:22:40  niclowe
+ * First Commit of new reports - Stale Companies and Opportunities
+ *
  * Revision 1.23  2006/01/02 23:46:52  vanmer
  * - changed to use centralized dbconnection function
  *
