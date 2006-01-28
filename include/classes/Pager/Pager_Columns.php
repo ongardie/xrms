@@ -27,7 +27,7 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.15 2005/11/14 20:45:41 daturaarutad Exp $
+ * $Id: Pager_Columns.php,v 1.16 2006/01/28 13:07:16 vanmer Exp $
  */
 
 class Pager_Columns {
@@ -36,8 +36,9 @@ class Pager_Columns {
     var $pager_columns;
     var $default_columns;
     var $form_id;
+    var $visible_column_size;
 
-    function Pager_Columns($pager_name, $pager_columns, $default_columns, $form_id) {
+    function Pager_Columns($pager_name, $pager_columns, $default_columns, $form_id, $visible_column_size=4) {
 
         getGlobalVar($new_columns_view, $pager_name . '_New_Columns_View');
 
@@ -83,6 +84,7 @@ class Pager_Columns {
         $this->pager_columns = $pager_columns;
         $this->default_columns = $default_columns;
         $this->form_id = $form_id;
+	$this->visible_column_size=$visible_column_size;
     }
 
     function GetUserColumnNames() {
@@ -218,7 +220,7 @@ class Pager_Columns {
                 <td class="widget_content">
                     <select name="{$this->pager_name}_displayColumns"
                             id="{$this->pager_name}_displayColumns"
-                            size="4"
+			    size="{$this->visible_column_size}"
                             class="myList"
                             onFocus="objFocusList = this"
                             onChange="setDisplay(this)">
@@ -234,7 +236,7 @@ class Pager_Columns {
         <td class="widget_content">
             <select name="{$this->pager_name}_availColumns"
                     id="{$this->pager_name}_availColumns"
-                    size="4"
+		    size="{$this->visible_column_size}"
                     class="myList"
                     onFocus="objFocusList = this"
                     onChange="setDisplay(this)">
@@ -263,6 +265,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.16  2006/01/28 13:07:16  vanmer
+ * - added parameter to control the number of rows in each selectable column box
+ *
  * Revision 1.15  2005/11/14 20:45:41  daturaarutad
  * fix accidental commit
  *
