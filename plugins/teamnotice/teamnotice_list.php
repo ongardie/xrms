@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: teamnotice_list.php,v 1.1 2005/09/29 19:35:27 niclowe Exp $
+ * $Id: teamnotice_list.php,v 1.2 2006/01/30 17:56:13 niclowe Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -31,7 +31,7 @@ $page_title = _("Team Notice List");
 $form_name = 'TeamnoticeList';
 //$button1=$con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Delete")."\" onclick=\"javascript: location.href='del.php?teamnotice_id="), 'teamnotice_id', $con->qstr("'\">")) . ";
 $sql="SELECT " . 
-$con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Delete")."\" onclick=\"javascript: location.href='teamnotice_list.php?form_action=del&teamnotice_id="), 'teamnotice_id', $con->qstr("'\">")) . " AS LINK, teamnotices.notice_heading as 'Heading' FROM teamnotices";
+$con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Delete")."\" onclick=\"javascript: location.href='teamnotice_list.php?form_action=del&teamnotice_id="), 'teamnotice_id', $con->qstr("'\">")) . " AS LINK, teamnotices.notice_heading as 'Heading' FROM teamnotices where status='a'";
 
     $columns = array();
     $columns[] = array('name' => 'Delete', 'index_sql' => 'LINK');
@@ -86,6 +86,10 @@ end_page();
 
 /**
  * $Log: teamnotice_list.php,v $
+ * Revision 1.2  2006/01/30 17:56:13  niclowe
+ * fixed delete bug
+ * fixed deprecated call by function bug
+ *
  * Revision 1.1  2005/09/29 19:35:27  niclowe
  * first draft of team notices
  *
