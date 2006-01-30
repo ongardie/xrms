@@ -4,7 +4,7 @@
 *
 * @author Glenn Powers
 *
-* $Id: stale-crm-status.php,v 1.1 2006/01/28 22:22:40 niclowe Exp $
+* $Id: stale-crm-status.php,v 1.2 2006/01/30 17:48:01 niclowe Exp $
 */
 require_once('../include-locations.inc');
 
@@ -135,57 +135,55 @@ if ($all_users) {
 }
 
 if ($userArray) {
-	 		$crm_status_id=$_REQUEST['crm_status_id'];
-			//echo $_REQUEST['crm_status_id'];
-			foreach ($userArray as $key => $user_id) {
-
-						//mark
-						/* $sql = "SELECT * from opportunities, opportunity_statuses, activities where
-						opportunity_statuses.status_open_indicator = 'o'
-						and opportunity_record_status = 'a'
-						and opportunity_statuses.opportunity_status_id = opportunities.opportunity_status_id
-						and opportunities.user_id = $user_id
-						and opportunities.contact_id = activities.contact_id
-						and activities.user_id = $user_id
-						and opportunities.entered_at between " . $con->qstr($user_starting, get_magic_quotes_gpc())
-						. " and " . $con->qstr($user_ending, get_magic_quotes_gpc()) . "
-						order by opportunities.entered_at";
-						*/
-						$sql="select CONCAT('<a href=../companies/one.php?company_id=',c.company_id, '>', c.company_name,'</a>') as company_name,
-						a.last_modified_at
-						FROM companies c LEFT JOIN activities a ON a.company_id=c.company_id
-						WHERE
-						c.crm_status_id='".$crm_status_id."'
-						AND
-						c.user_id='$user_id'
-						AND
-						c.company_record_status='a'
-						AND
-						(
-						(a.activity_record_status='a' AND 
-						a.last_modified_at<".$con->qstr($user_ending, get_magic_quotes_gpc())."
-						) 
-						OR 
-						ISNULL(a.last_modified_at)
-						)
-						group by c.company_name";
-						
-						$columns = array();
-						$columns[] = array('name' => 'Company', 'index_sql' => 'company_name');
-						$columns[] = array('name' => 'Last Activity Date', 'index_sql' => 'last_modified_at');
-
-
-						$default_columns=array('Company','Last Activity Date');
-
-						$pager_columns = new Pager_Columns('StaleCompaniesColumns', $columns, $default_columns, $form_name);
-						$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
-						$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
-
-
-
-						$pager = new GUP_Pager($con, $sql,null, _("Stale Companies"), $form_name, 'StaleCompaniesColumns', $columns);
-						$pager->Render();
+			$crm_status_id=$_REQUEST['crm_status_id'];
+			$userlist="(";
+			$i=0;
+			$num_users=count($userArray);
+			if($num_users==1){
+						$userlist.=$userArray[0].")";
+			}else{
+						$i=1;
+						foreach ($userArray as $key => $user_id) {
+									if($i<>$num_users)$userlist.=$user_id.",";
+									if($i==$num_users)$userlist.=$user_id.")";
+									$i++;
+						}
 			}
+			$sql="select CONCAT('<a href=../companies/one.php?company_id=',c.company_id, '>', c.company_name,'</a>') as company_name,
+			a.last_modified_at
+			FROM companies c LEFT JOIN activities a ON a.company_id=c.company_id
+			WHERE
+			c.crm_status_id='".$crm_status_id."'
+			AND
+			c.user_id IN $userlist
+			AND
+			c.company_record_status='a'
+			AND
+			(
+			(a.activity_record_status='a' AND
+			a.last_modified_at<".$con->qstr($user_ending, get_magic_quotes_gpc())."
+			)
+			OR
+			ISNULL(a.last_modified_at)
+			)
+			group by c.company_name";
+
+			$columns = array();
+			$columns[] = array('name' => 'Company', 'index_sql' => 'company_name');
+			$columns[] = array('name' => 'Last Activity Date', 'index_sql' => 'last_modified_at');
+
+
+			$default_columns=array('Company','Last Activity Date');
+
+			$pager_columns = new Pager_Columns('StaleCompaniesColumns', $columns, $default_columns, $form_name);
+			$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+			$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+
+
+			$pager = new GUP_Pager($con, $sql,false, _("Stale Companies"), $form_name, 'StaleCompaniesColumns', $columns);
+			$pager->Render(500);//having difficulty with pager next buttons..did not have time to debug fully.
+
 }
 
 
@@ -197,8 +195,8 @@ if (($display) || (!$friendly)) {
 
 /**
 * $Log: stale-crm-status.php,v $
-* Revision 1.1  2006/01/28 22:22:40  niclowe
-* First Commit of new reports - Stale Companies and Opportunities
+* Revision 1.2  2006/01/30 17:48:01  niclowe
+* fixed bug in userlist for all users.
 *
 */
 ?>
