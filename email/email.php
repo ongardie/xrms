@@ -3,7 +3,7 @@
   *
   * Email.
   *
-  * $Id: email.php,v 1.15 2005/07/08 01:13:05 braverock Exp $
+  * $Id: email.php,v 1.16 2006/01/30 18:10:44 niclowe Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -66,8 +66,11 @@
       //I only pass companies the end of the sql, ie the from and the where.
       //I should have really done this in the first place for all of them.
       $from=$_SESSION["search_sql"]["from"];
-      //var_dump($_SESSION["search_sql"]);
+      
       $where=$_SESSION["search_sql"]["where"];
+			//added the null statement as a null record ruins email-3.php
+      $where.=" AND cont.contact_id IS NOT NULL ";
+
       $order_by=$_SESSION["search_sql"]["order"];
       $from.=" LEFT JOIN contacts cont on cont.company_id=c.company_id ";
       $sql="SELECT cont.contact_id ".$from.$where.$order_by;
@@ -81,6 +84,7 @@
       } else {
         db_error_handler ($con, $sql);
       }
+		
             break;
 
     case 'contact_list':
@@ -192,6 +196,9 @@
 
   /**
   * $Log: email.php,v $
+  * Revision 1.16  2006/01/30 18:10:44  niclowe
+  * fixed bug where search of companies returned a NULL record ruining the sql in email-3.php
+  *
   * Revision 1.15  2005/07/08 01:13:05  braverock
   * - fixes to array_of_contacts functionality for mail merge
   *
