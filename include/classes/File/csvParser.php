@@ -8,7 +8,7 @@
 // | Email         walter@torres.ws                                         |
 // | Web           http://web.php-yacs.org                                  |
 // | Mirror        http://php-yacs.sourceforge.net/                         |
-// | $Id: csvParser.php,v 1.3 2005/12/14 02:04:54 vanmer Exp $             |
+// | $Id: csvParser.php,v 1.4 2006/01/31 20:42:01 jswalter Exp $             |
 // +------------------------------------------------------------------------+
 // | This source file is subject to version 3.00 of the PHP License,        |
 // | that is available at http://www.php.net/license/3_0.txt.               |
@@ -42,8 +42,8 @@
  * @author      Walter Torres <walter@torres.ws>
  * @contributor Aaron Van Meerten
  *
- * @version   $Id: csvParser.php,v 1.3 2005/12/14 02:04:54 vanmer Exp $
- * @date      $Date: 2005/12/14 02:04:54 $
+ * @version   $Id: csvParser.php,v 1.4 2006/01/31 20:42:01 jswalter Exp $
+ * @date      $Date: 2006/01/31 20:42:01 $
  *
  * @copyright (c) 2004 Walter Torres
  * @license   Licensed under the GNU GPL. For full terms see the file COPYING.
@@ -262,7 +262,7 @@
  *
  * @extends File
  *
- * @date  $Date: 2005/12/14 02:04:54 $
+ * @date  $Date: 2006/01/31 20:42:01 $
  *
  * @todo Have this class extend FILE to utilize common File operations
  *
@@ -766,12 +766,6 @@ class csvParser //extends File
                     if ( $this->getRemoveBlankRecord () )
                         if ( implode("", $_aryRecord) == '' )
                         {
-                            // To make sure we keep track of actual data
-                            // placement incase an odd field is used in
-                            // an odd row for some special reason.
-                            // Next Record,
-                            $recID++;
-
                             continue;
                         }
 
@@ -2157,6 +2151,9 @@ class csvParser //extends File
 
 /**
   * $Log: csvParser.php,v $
+  * Revision 1.4  2006/01/31 20:42:01  jswalter
+  * row count was unchanged if 'setRemoveBlankRecord()' was set. remove rows are no longer counted
+  *
   * Revision 1.3  2005/12/14 02:04:54  vanmer
   * - changed csvParser to call a function to retrieves headers for each record as it is being loaded
   * - this is useful so the parser can be extended to provide different headers based on the contents of the record
