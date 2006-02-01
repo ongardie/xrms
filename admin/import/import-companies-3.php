@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.32 2006/01/02 21:50:29 vanmer Exp $
+ * $Id: import-companies-3.php,v 1.33 2006/02/01 09:01:48 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -102,7 +102,7 @@ start_page($page_title, true, $msg);
      <td>
        <table class=widget cellspacing=1>
            <tr>
-               <td class=widget_header colspan=54><?php echo _("Imported Data"); ?></td>
+               <td class=widget_header colspan=55><?php echo _("Imported Data"); ?></td>
            </tr>
 
        <tr>
@@ -128,7 +128,6 @@ start_page($page_title, true, $msg);
            <td class=widget_content><?php echo _("Division Name"); ?></td>
 
            <!-- contact info //-->
-           <td class=widget_content><?php echo _("Contact ID"); ?></td>
            <td class=widget_content><?php echo _("Contact ID"); ?></td>
            <td class=widget_content><?php echo _("First Names"); ?></td>
            <td class=widget_content><?php echo _("Last Name"); ?></td>
@@ -877,6 +876,9 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.33  2006/02/01 09:01:48  vanmer
+ * - fix in HTML provided by Diego Ongaro at ETSZONE (diego@etszone.com)
+ *
  * Revision 1.32  2006/01/02 21:50:29  vanmer
  * - changed to use centralized dbconnection function
  *
