@@ -10,7 +10,7 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.17 2006/02/01 21:41:00 daturaarutad Exp $
+ * $Id: Pager_Columns.php,v 1.18 2006/02/01 22:37:03 daturaarutad Exp $
  */
 
 class Pager_Columns {
@@ -183,6 +183,8 @@ class Pager_Columns {
         }
 
         // Include PEAR advmultiselect files
+		global $include_directory;
+		set_include_path(get_include_path().PATH_SEPARATOR.$include_directory."classes");
         require_once 'HTML/QuickForm.php';
         require_once 'HTML/QuickForm/advmultiselect.php';
         require_once 'HTML/QuickForm/Renderer/Default.php';
@@ -192,7 +194,7 @@ class Pager_Columns {
 		$form->removeAttribute('name');        // XHTML compliance
 
 	
-		$ams = $form->addElement('advmultiselect', $select_name, null, $avail_columns, array('size' => $this->visible_column_size));
+		$ams =& $form->addElement('advmultiselect', $select_name, null, $avail_columns, array('size' => $this->visible_column_size));
 
         // This determines which items appear in the "Displayed Columns" side
         $form->setConstants(array($select_name => $user_columns));
@@ -300,6 +302,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.18  2006/02/01 22:37:03  daturaarutad
+ * call set_include_path() before including PEAR HTML classes, add & to address advmultiselect by reference
+ *
  * Revision 1.17  2006/02/01 21:41:00  daturaarutad
  * big update to use HTML_QuickForm_advmultiselect class for widget and allow saveable views
  *
