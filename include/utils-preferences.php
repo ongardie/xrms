@@ -19,7 +19,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-preferences.php,v 1.13 2005/12/06 22:36:01 vanmer Exp $
+ * $Id: utils-preferences.php,v 1.14 2006/02/01 21:46:13 daturaarutad Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -157,9 +157,10 @@ function delete_default_user_preference($con, $user_id, $preference_type, $delet
  * @param string $preference_type specifying which preference type to set default for (name or number)
  * @param string $preference_name optionally specifying which of multiple entries to return
  * @param boolean $show_all optionally returning all available user preferences of specified type
+ * @param boolean $show_all optionally use function caching to improve performance
  * @return string specifying value of preference requested (or false for failure)
  */
-function get_user_preference($con, $user_id, $preference_type, $preference_name=false, $show_all=false) {
+function get_user_preference($con, $user_id, $preference_type, $preference_name=false, $show_all=false, $use_cache=true) {
     if (!$con) $con=get_xrms_dbconnection();
     if (!$user_id AND $user_id!==0) {
         return false;
@@ -177,9 +178,10 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
     $preference_type=$preference_type_data['user_preference_type_id'];
     $func_name='get_user_preference';
     $params=array($user_id,$preference_type, $show_all);
-    
-    if (function_cache_bool($func_name, $params)) {
-        return function_cache_get($func_name, $params);
+    if($use_cache) { 
+        if (function_cache_bool($func_name, $params)) {
+            return function_cache_get($func_name, $params);
+        }
     }
     if (!$preference_type) { return false; }
     if ($preference_type_data['allow_multiple_flag']==1) {
@@ -838,6 +840,9 @@ function move_system_parameters($con, $fields) {
 
 /**
  * $Log: utils-preferences.php,v $
+ * Revision 1.14  2006/02/01 21:46:13  daturaarutad
+ * add use_cache param to get_user_preference()
+ *
  * Revision 1.13  2005/12/06 22:36:01  vanmer
  * - added check to ensure that system parameter table exists before attempting to upgrade it to system preferences
  *
