@@ -10,7 +10,7 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.18 2006/02/01 22:37:03 daturaarutad Exp $
+ * $Id: Pager_Columns.php,v 1.19 2006/02/01 23:30:32 daturaarutad Exp $
  */
 
 class Pager_Columns {
@@ -217,33 +217,31 @@ class Pager_Columns {
         <table class=widget>
         <tr><td class=widget_header colspan=4>$widget_caption <div class=\"right\"><a href='' onclick=\"document.getElementById('{$widget_name}').style.display = 'none'\" >$text_cancel_columns</a></div></td></tr>
         <tr>
-            <td class=widget_content>$avail_text</td>
-            <td class=widget_content>&nbsp;</td>
-            <td class=widget_content>$displayed_text </td>
-            <td class=widget_content>"._('Views')."</td>
-        </tr>
-        <tr>
-        <td>{unselected}</td>
-        <td align=\"center\">
-            {add}<br />{remove}<br /><br />{moveup}<br />{movedown}<br />
-        </td>
-        <td>{selected}</td>
         <td class=\"widget_content_center\">
             <table>
-                <tr><td> 
-            <input type=\"button\" class=\"button\" name=\"button\" onclick=\"{$this->pager_name}_save_view(this)\" value=\"$text_save_columns\"><br/>
-            <input type=\"button\" class=\"button\" name=\"button\" onclick=\"{$this->pager_name}_load_view(this)\" value=\"$text_load_columns\"><br/>
-            <input type=\"button\" class=\"button\" name=\"button\" onclick=\"{$this->pager_name}_delete_view(this)\" value=\"$text_delete_columns\"><br/>
-                </td></tr>
-                <tr><td><input type=text size=10 name={$this->pager_name}_view_name_new><br/>
+                <tr><td>
+                        "._('View Name')."<br/>
+                        <input type=text size=10 name={$this->pager_name}_view_name_new><br/>
                         <select name={$this->pager_name}_view_name>
                             {$this->view_options}
                         </select>
                     </td>
                 </tr>
 
+
+                <tr><td> 
+            <input type=\"button\" class=\"button\" name=\"button\" onclick=\"{$this->pager_name}_save_view(this)\" value=\"$text_save_columns\"><br/>
+            <input type=\"button\" class=\"button\" name=\"button\" onclick=\"{$this->pager_name}_load_view(this)\" value=\"$text_load_columns\"><br/>
+            <input type=\"button\" class=\"button\" name=\"button\" onclick=\"{$this->pager_name}_delete_view(this)\" value=\"$text_delete_columns\"><br/>
+                </td></tr>
             </table>
         </td>
+        <td>$avail_text<br/>{unselected}</td>
+        <td align=\"center\">
+            {add}<br />{remove}<br /><br />{moveup}<br />{movedown}<br />
+        </td>
+        <td>$displayed_text<br/>{selected}</td>
+
         </tr>
         </table>
         ";
@@ -302,6 +300,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.19  2006/02/01 23:30:32  daturaarutad
+ * rearrange buttons in template
+ *
  * Revision 1.18  2006/02/01 22:37:03  daturaarutad
  * call set_include_path() before including PEAR HTML classes, add & to address advmultiselect by reference
  *
