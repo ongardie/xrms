@@ -2,7 +2,7 @@
 /**
  * Drop-in replacement for PHP core function mime_content_type
  *
- * $Id: mime-array.php,v 1.5 2005/07/06 18:16:20 braverock Exp $
+ * $Id: mime-array.php,v 1.6 2006/02/03 21:46:20 jswalter Exp $
  */
 if ( !defined('IN_XRMS') )
 {
@@ -549,6 +549,7 @@ function mime_content_type_ ( $file_system_name )
         'wmlscript' => 'text/vnd.wap.wmlscript',
         'wmls' => 'text/vnd.wap.wmlscript',
         'wml' => 'text/vnd.wap.wml',
+        'wmv' => 'video/x-ms-wmv',
         'wrl' => 'model/vrml',
         'wrq-hp3000-labelled' => 'application/vnd.wrq-hp3000-labelled',
         'x400-bp' => 'application/x400-bp',
@@ -638,6 +639,9 @@ function mime_content_type_ ( $file_system_name )
 
 /*
  * $Log: mime-array.php,v $
+ * Revision 1.6  2006/02/03 21:46:20  jswalter
+ *  - added 'wmv' to MIME type list
+ *
  * Revision 1.5  2005/07/06 18:16:20  braverock
  * - change back to custom function name as php mime_content_type fn
  *   causes problems on several configs
