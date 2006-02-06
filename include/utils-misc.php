@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.170 2006/01/25 23:43:36 vanmer Exp $
+ * $Id: utils-misc.php,v 1.171 2006/02/06 16:16:34 niclowe Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -637,6 +637,7 @@ function get_system_parameter(&$con, $param) {
  */
 function db_error_handler (&$con,$sql,$colspan=20) {
         $error = $con->ErrorMsg();
+				global $http_site_root;
         // figure out where to print this out.
         if ($error) {
             echo "\n<tr>\n\t<td class=widget_error colspan=$colspan>"
@@ -644,6 +645,10 @@ function db_error_handler (&$con,$sql,$colspan=20) {
                  ._("Unable to execute your query.").' '
                  ._("Please correct this error.")
                  ."<br>"
+								 ."<a href=$http_site_root/admin/index.php>"
+								 ._("You may need to update your database structure.")
+								 .'</a>'
+								 ."<br>"
                  . htmlspecialchars($error)
                  ."\t<br>"
                  ._("I tried to execute:")
@@ -2044,6 +2049,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.171  2006/02/06 16:16:34  niclowe
+ * On DB error, added suggestion to update database structure. This is a common error and a cause of many tickets on the site
+ *
  * Revision 1.170  2006/01/25 23:43:36  vanmer
  * - patch to log failed logins and include PHP session_id in audit items
  * - credit to "Diego Ongaro at ETSZONE (diego@etszone.com)" for providing this patch
@@ -2251,7 +2259,7 @@ require_once($include_directory . 'utils-database.php');
  *
  * Revision 1.106  2005/01/09 17:02:57  vanmer
  * - added optional action parameter to session check, for ACL permissions
- * - checking in now to allow other ACL-related changes to operate properly before ACL is checked in
+ * - checking in now to allow other ACL-related changes to operate properly before ACL is checked in.
  *
  * Revision 1.105  2005/01/09 02:46:06  braverock
  * - added additional test for $_SERVER['REQUEST_URI'] to handle IIS on XP lack of setting var
