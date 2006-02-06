@@ -4,7 +4,7 @@
  *
  * Email templates
  *
- * $Id: templates.php,v 1.5 2006/01/02 23:02:14 vanmer Exp $
+ * $Id: templates.php,v 1.6 2006/02/06 15:49:22 niclowe Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -46,7 +46,7 @@ if ($rst) {
 }
 
 if (strlen($tablerows) == 0) {
-    $tablerows = '<tr><td class=widget_content colspan=1>' _("No e-mail templates") . '</td></tr>';
+    $tablerows = '<tr><td class=widget_content colspan=1>'._("No e-mail templates") . '</td></tr>';
 }
 
 $page_title = _("E-Mail Templates");
@@ -83,6 +83,9 @@ end_page();
 
 /**
  * $Log: templates.php,v $
+ * Revision 1.6  2006/02/06 15:49:22  niclowe
+ * patch submitted by icheb 1385195 ] Parse error /email/templates.php
+ *
  * Revision 1.5  2006/01/02 23:02:14  vanmer
  * - changed to use centralized dbconnection function
  *
