@@ -1,43 +1,43 @@
 <?php
-/*
+/**
  *  setup.php
  *
  * Copyright (c) 2004 The XRMS Project Team
  *
- * $Id: setup.php,v 1.3 2006/02/21 13:17:55 braverock Exp $
+ * $Id: setup.php,v 1.4 2006/02/21 13:38:07 braverock Exp $
  */
 
 
 function xrms_plugin_init_custom_fields () {
     global $xrms_plugin_hooks;
     $xrms_plugin_hooks['company_accounting_inline_display']['custom_fields']
-      = 'company_accounting_inline_display';
+      = 'cf_company_accounting_inline_display';
     $xrms_plugin_hooks['company_accounting_inline_edit']['custom_fields']
-      = 'company_accounting_inline_edit';
+      = 'cf_company_accounting_inline_edit';
     $xrms_plugin_hooks['company_edit_2']['custom_fields']
-      = 'company_edit_2';
+      = 'cf_company_edit_2';
     $xrms_plugin_hooks['contact_accounting_inline_display']['custom_fields']
-      = 'contact_accounting_inline_display';
+      = 'cf_contact_accounting_inline_display';
     $xrms_plugin_hooks['contact_accounting_inline_edit']['custom_fields']
-      = 'contact_accounting_inline_edit';
+      = 'cf_contact_accounting_inline_edit';
     $xrms_plugin_hooks['contact_edit_2']['custom_fields']
-      = 'contact_edit_2';
+      = 'cf_contact_edit_2';
     $xrms_plugin_hooks['company_sidebar_bottom']['custom_fields']
-      = 'company_sidebar_bottom';
+      = 'cf_company_sidebar_bottom';
     $xrms_plugin_hooks['edit_division_form']['custom_fields']
-      = 'edit_division_form';
+      = 'cf_edit_division_form';
     $xrms_plugin_hooks['division_sidebar_bottom']['custom_fields']
-      = 'division_sidebar_bottom';
+      = 'cf_division_sidebar_bottom';
     $xrms_plugin_hooks['contact_sidebar_top']['custom_fields']
-      = 'contact_sidebar_top';
+      = 'cf_contact_sidebar_top';
     $xrms_plugin_hooks['contact_sidebar_bottom']['custom_fields']
-      = 'contact_sidebar_bottom';
+      = 'cf_contact_sidebar_bottom';
     $xrms_plugin_hooks['private_sidebar_bottom']['custom_fields']
-      = 'private_sidebar_bottom';
+      = 'cf_private_sidebar_bottom';
     $xrms_plugin_hooks['custom_fields_sidebar_bottom']['custom_fields']
-      = 'custom_fields_sidebar_bottom';
+      = 'cf_custom_fields_sidebar_bottom';
     $xrms_plugin_hooks['company_content_bottom']['custom_fields']
-      = 'company_content_bottom';
+      = 'cf_company_content_bottom';
     $xrms_plugin_hooks['plugin_admin']['custom_fields'] = 'custom_fields_setup';
     $xrms_plugin_hooks['xrms_install']['custom_fields'] = 'custom_fields_install';
     $xrms_plugin_hooks['xrms_update']['custom_fields'] = 'custom_fields_update';
@@ -71,71 +71,85 @@ function custom_fields_install ($con) {
 #
 #}
 
-function company_accounting_inline_display () {
+function cf_company_accounting_inline_display () {
     global $xrms_file_root, $company_id, $division_id;
     include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
     return get_display("company_accounting", $company_id, "", $division_id);
 }
 
-function company_accounting_inline_edit () {
+function cf_company_accounting_inline_edit () {
     global $xrms_file_root, $company_id, $division_id;
     include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
     return get_inline_edit("company_accounting", $company_id, $division_id);
 }
 
-function company_edit_2 () {
+function cf_company_edit_2 () {
     global $xrms_file_root, $company_id, $division_id;
     include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
     do_inline_edit_save("company_accounting", $company_id, $division_id);
 }
 
-function company_content_bottom ($_sidebar) {
+function cf_company_content_bottom ($_sidebar) {
     global $xrms_file_root, $company_id, $division_id;
     include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
     $return_url = urlencode($_SERVER['PHP_SELF']."?company_id=$company_id");
     return get_display("company_content_bottom", $company_id, $return_url, $division_id);
 }
 
-function company_sidebar_bottom () {
+function cf_edit_division_form ($_sidebar) {
+    global $xrms_file_root, $company_id, $division_id;
+    include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
+    $return_url = urlencode($_SERVER['PHP_SELF']."?company_id=$company_id&division_id=$division_id");
+    return get_display("edit_division_form", $company_id, $return_url, $division_id);
+}
+
+function cf_division_sidebar_bottom ($_sidebar) {
+    global $xrms_file_root, $company_id, $division_id;
+    include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
+    $return_url = urlencode($_SERVER['PHP_SELF']."?company_id=$company_id&division_id=$division_id");
+    return get_display("division_sidebar_bottom", $company_id, $return_url, $division_id);
+}
+
+function cf_company_sidebar_bottom () {
     global $xrms_file_root, $company_id, $division_id;
     include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
     $return_url = urlencode($_SERVER['PHP_SELF']."?company_id=$company_id");
     return get_display("company_sidebar_bottom", $company_id, $return_url, $division_id);
 }
 
-function contact_accounting_inline_display () {
+function cf_contact_accounting_inline_display () {
     global $xrms_file_root, $contact_id;
     include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
     return get_display("contact_accounting", $contact_id, "");
 }
 
-function contact_accounting_inline_edit () {
+function cf_contact_accounting_inline_edit () {
     global $xrms_file_root, $contact_id;
     include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
     return get_inline_edit("contact_accounting", $contact_id);
 }
 
-function contact_edit_2 () {
+function cf_contact_edit_2 () {
     global $xrms_file_root, $contact_id;
     include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
     do_inline_edit_save("contact_accounting", $contact_id);
 }
 
-function contact_sidebar_bottom () {
+function cf_contact_sidebar_bottom () {
     global $xrms_file_root, $contact_id;
     include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
     $return_url = urlencode($_SERVER['PHP_SELF']."?contact_id=$contact_id");
     return get_display("contact_sidebar_bottom", $contact_id, $return_url);
 }
 
-function contact_sidebar_top () {
+function cf_contact_sidebar_top () {
     global $xrms_file_root, $contact_id;
     include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
     $return_url = urlencode($_SERVER['PHP_SELF']."?contact_id=$contact_id");
     return get_display("contact_sidebar_top", $contact_id, $return_url);
 }
 
-function private_sidebar_bottom () {
+function cf_private_sidebar_bottom () {
     global $xrms_file_root, $userid;
     include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
     $return_url = urlencode($_SERVER['PHP_SELF']);
@@ -143,4 +157,11 @@ function private_sidebar_bottom () {
             $return_url);
 }
 
+/**
+ * $Log: setup.php,v $
+ * Revision 1.4  2006/02/21 13:38:07  braverock
+ * - add helper fn's for division hooks
+ * - change all helper fns to cf_[function_name] to avoid collisions
+ *
+ */
 ?>
