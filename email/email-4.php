@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.29 2006/01/02 23:02:14 vanmer Exp $
+* $Id: email-4.php,v 1.30 2006/02/21 01:58:19 vanmer Exp $
 *
 * @todo use a more secure method than 'unlink' to delete files after sending them
 */
@@ -126,7 +126,7 @@ if ( $_SESSION['email_sent'] === false )
 
             $objSMTP = new SMTPs ();
 
-            $objSMTP->setConfig( './SMTPs.ini.php');
+            $objSMTP->setConfig( $xrms_file_root.'/include/classes/SMTPs/SMTPs.ini.php');
 
             $objSMTP->setFrom ( '<' . $sender_name . '>' );
             $objSMTP->setSubject ( stripslashes($email_template_title) );
@@ -338,6 +338,9 @@ function getFile($file_to_open)
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.30  2006/02/21 01:58:19  vanmer
+* - changed to use SMTPs.ini.php file from include/classes/SMTPs instead of email directory
+*
 * Revision 1.29  2006/01/02 23:02:14  vanmer
 * - changed to use centralized dbconnection function
 *
