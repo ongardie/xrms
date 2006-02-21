@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2004 The XRMS Project Team
  *
- * $Id: setup.php,v 1.5 2006/02/21 14:07:19 braverock Exp $
+ * $Id: setup.php,v 1.6 2006/02/21 14:34:55 braverock Exp $
  */
 
 
@@ -111,7 +111,7 @@ function cf_division_sidebar_bottom ($_sidebar) {
     $return_url = urlencode($_SERVER['PHP_SELF']."?company_id=$company_id&division_id=$division_id");
     return get_display("division_sidebar_bottom", $company_id, $return_url, $division_id);
 }
-function cf_company_division__bottom ($_sidebar) {
+function cf_company_division_bottom ($_sidebar) {
     global $xrms_file_root, $company_id, $division_id;
     include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
     $return_url = urlencode($_SERVER['PHP_SELF']."?company_id=$company_id&division_id=$division_id");
@@ -167,6 +167,9 @@ function cf_private_sidebar_bottom () {
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.6  2006/02/21 14:34:55  braverock
+ * - fix typo in fn name
+ *
  * Revision 1.5  2006/02/21 14:07:19  braverock
  * - add company_division_bottom hook handler and fn
  *
