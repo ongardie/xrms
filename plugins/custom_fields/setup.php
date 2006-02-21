@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2004 The XRMS Project Team
  *
- * $Id: setup.php,v 1.4 2006/02/21 13:38:07 braverock Exp $
+ * $Id: setup.php,v 1.5 2006/02/21 14:07:19 braverock Exp $
  */
 
 
@@ -26,6 +26,8 @@ function xrms_plugin_init_custom_fields () {
       = 'cf_company_sidebar_bottom';
     $xrms_plugin_hooks['edit_division_form']['custom_fields']
       = 'cf_edit_division_form';
+    $xrms_plugin_hooks['company_division_bottom']['custom_fields']
+      = 'cf_company_division_bottom';
     $xrms_plugin_hooks['division_sidebar_bottom']['custom_fields']
       = 'cf_division_sidebar_bottom';
     $xrms_plugin_hooks['contact_sidebar_top']['custom_fields']
@@ -109,6 +111,12 @@ function cf_division_sidebar_bottom ($_sidebar) {
     $return_url = urlencode($_SERVER['PHP_SELF']."?company_id=$company_id&division_id=$division_id");
     return get_display("division_sidebar_bottom", $company_id, $return_url, $division_id);
 }
+function cf_company_division__bottom ($_sidebar) {
+    global $xrms_file_root, $company_id, $division_id;
+    include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
+    $return_url = urlencode($_SERVER['PHP_SELF']."?company_id=$company_id&division_id=$division_id");
+    return get_display("company_division_bottom", $company_id, $return_url, $division_id);
+}
 
 function cf_company_sidebar_bottom () {
     global $xrms_file_root, $company_id, $division_id;
@@ -159,6 +167,9 @@ function cf_private_sidebar_bottom () {
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.5  2006/02/21 14:07:19  braverock
+ * - add company_division_bottom hook handler and fn
+ *
  * Revision 1.4  2006/02/21 13:38:07  braverock
  * - add helper fn's for division hooks
  * - change all helper fns to cf_[function_name] to avoid collisions
