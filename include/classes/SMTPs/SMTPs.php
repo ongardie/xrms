@@ -32,11 +32,11 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.14 $
+   * @version $Revision: 1.15 $
    * @copyright copyright information
    * @license GNU General Public Licence
    *
-   * $Id: SMTPs.php,v 1.14 2005/08/29 16:22:10 jswalter Exp $
+   * $Id: SMTPs.php,v 1.15 2006/02/21 02:00:07 vanmer Exp $
    *
    **/
 
@@ -696,11 +696,11 @@ class SMTPs
                 // Ok, now we tell the server we are ready to start sending data
                 // with any custom headers...
                 // This is the last response code we look for until the end of the message.
-                $this->socket_send_str('DATA' . "\r\n" . $this->getHeader(), '354', '');
+		$this->socket_send_str('DATA', '354');
 
                 // Now we are ready for the message...
                 // Ok, all the ingredients are mixed in let's cook this puppy...
-                $this->socket_send_str($this->getBodyContent() . "\r\n" . '.', '250');
+                $this->socket_send_str($this->getHeader().$this->getBodyContent() . "\r\n" . '.', '250');
 
                 // Now tell the server we are done and close the socket...
                 fputs($this->socket, 'QUIT');
@@ -2225,6 +2225,10 @@ class SMTPs
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.15  2006/02/21 02:00:07  vanmer
+  * - patch to add support for sending to exim mail server
+  * - thanks to Diego Ongaro at ETSZONE (diego@etszone.com)
+  *
   * Revision 1.14  2005/08/29 16:22:10  jswalter
   *  - change 'multipart/alternative' to 'multipart/mixed', but Windows based mail servers have issues with this.
   * Bug 594
