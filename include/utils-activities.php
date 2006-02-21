@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-activities.php,v 1.22 2005/12/02 00:47:37 vanmer Exp $
+ * $Id: utils-activities.php,v 1.23 2006/02/21 01:59:03 vanmer Exp $
 
  */
 
@@ -96,7 +96,7 @@ function add_activity($con, $activity_data, $participants=false)
     // This does 2 things:
     //  * Checks to make sure that '$ends_at' is defined
     //  * Checks that '$ends_at' is defined as a date *after* '$scheduled_at'
-    $rec['ends_at']          = ($scheduled_at > $ends_at) ? $rec['scheduled_at'] : strtotime($ends_at);
+    $rec['ends_at']          = ($ends_at) ? (($scheduled_at > $ends_at) ? $rec['scheduled_at'] : strtotime($ends_at)) : $rec['scheduled_at'];
 
     // If this is not defined, then pull it from $session_user_id
     $rec['user_id']          = ($user_id)        ? $user_id        : $session_user_id;
@@ -709,6 +709,9 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.23  2006/02/21 01:59:03  vanmer
+  * - changed to ensure that activities with no end date are set to end date same as start date, to fix strtotime error
+  *
   * Revision 1.22  2005/12/02 00:47:37  vanmer
   * - added more PHPDoc comments
   * - added XRMS_API package tag
