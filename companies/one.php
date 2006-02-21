@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.132 2006/01/20 19:05:45 braverock Exp $
+ * $Id: one.php,v 1.133 2006/02/21 14:49:48 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -386,6 +386,10 @@ if ( !isset($sidebar_rows) ) {
 }
 //call the sidebar hook
 $sidebar_rows = do_hook_function('company_sidebar_bottom', $sidebar_rows);
+if ($division_id) {
+    // add division sidebars
+    $sidebar_rows .= do_hook_function('division_sidebar_bottom', $sidebar_rows);
+}
 
 // make sure $bottom_rows is defined
 if ( !isset($bottom_rows) ) {
@@ -393,6 +397,10 @@ if ( !isset($bottom_rows) ) {
 }
 //call the sidebar hook
 $bottom_rows = do_hook_function('company_content_bottom', $bottom_rows);
+if ($division_id) {
+    // add division sidebars
+    $bottom_rows .= do_hook_function('company_division_bottom', $bottom_rows);
+}
 
 // make sure $company_buttons is defined
 if ( !isset($company_buttons) ) {
@@ -737,6 +745,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.133  2006/02/21 14:49:48  braverock
+ * - add division hooks for display of division information when division is selected
+ *
  * Revision 1.132  2006/01/20 19:05:45  braverock
  * - filter files sidebar by division_id if division_id is set
  *
