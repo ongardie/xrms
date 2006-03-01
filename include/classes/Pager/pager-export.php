@@ -2,7 +2,7 @@
 /**
  * Export pager contents
  *
- * $Id: pager-export.php,v 1.6 2006/01/02 23:04:33 vanmer Exp $
+ * $Id: pager-export.php,v 1.7 2006/03/01 03:07:16 vanmer Exp $
  */
 
 if(!$include_directory) {
@@ -23,6 +23,9 @@ $session_user_id = session_check();
 
 
 getGlobalVar($pager_id, 'pager_id');
+getGlobalVar($custom_header, 'custom_header');
+getGlobalVar($custom_footer, 'custom_footer');
+getGlobalVar($hide_field_headers, 'hide_field_headers');
 
 $filename =  $pager_id .'-'. date('Y-m-d_H-i') . '.csv';
 
@@ -34,12 +37,18 @@ $column_info = $_SESSION[$pager_id . "_columns"];
 if(is_array($session_data) && is_array($column_info)) {
 	// first output the column names
 	$csvdata = '';
-	foreach($column_info as $column) {
-		$csvdata .= $column['name'] . ',';
-	}
-	$csvdata = substr($csvdata, 0, -1);
-	$csvdata .= "\n";
-	
+
+    //include custom headers if provided
+    if ($custom_header) $csvdata.=$custom_header."\n";
+
+    //by default, include field headers, unless hide field headers is explicitly set
+    if (!$hide_field_headers) {
+        foreach($column_info as $column) {
+            $csvdata .= $column['name'] . ',';
+        }
+        $csvdata = substr($csvdata, 0, -1);
+        $csvdata .= "\n";
+    }	
 	// now output the data
 	foreach($session_data as $row) {
 
@@ -67,6 +76,8 @@ if(is_array($session_data) && is_array($column_info)) {
 		$csvdata .= "\n";
 	}
 
+    if ($custom_footer) { $csvdata.=$custom_footer."\n"; }
+
 	$filesize = strlen($csvdata);
 	SendDownloadHeaders('text', 'csv', $filename, true, $filesize);
 	echo $csvdata;
@@ -84,6 +95,11 @@ if(is_array($session_data) && is_array($column_info)) {
 
 /**
  * $Log: pager-export.php,v $
+ * Revision 1.7  2006/03/01 03:07:16  vanmer
+ * - added extra parameters to control export file layout
+ * - added flag to control display of header row with fieldnames
+ * - added custom header/footer output, if provided
+ *
  * Revision 1.6  2006/01/02 23:04:33  vanmer
  * - changed to use centralized dbconnection function
  *
