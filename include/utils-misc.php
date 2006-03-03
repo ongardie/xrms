@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.171 2006/02/06 16:16:34 niclowe Exp $
+ * $Id: utils-misc.php,v 1.172 2006/03/03 21:19:20 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -149,7 +149,7 @@ function session_check($c_role='', $action='Read', $check_user_permission=false)
 
     // we are not logged in, go straight to login.php
     header("Location: $http_site_root" . "/login.php?target=$target");
-    //exit;
+    exit;
 }
 
 /**
@@ -2049,6 +2049,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.172  2006/03/03 21:19:20  vanmer
+ * - uncommented the exit statement, should be here for security
+ * - Thanks to Diego Ongaro at ETSZONE (diego@etszone.com) for noting it
+ *
  * Revision 1.171  2006/02/06 16:16:34  niclowe
  * On DB error, added suggestion to update database structure. This is a common error and a cause of many tickets on the site
  *
