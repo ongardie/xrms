@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.95 2005/12/02 01:13:54 vanmer Exp $
+ * $Id: utils-interface.php,v 1.96 2006/03/03 02:23:57 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -818,7 +818,7 @@ function get_user_menu(&$con, $user_id='', $blank_user=false, $fieldname='user_i
  *
  * @return string $html with html element defined by parameters
  */
-function create_form_element($element_type, $element_name, $element_value=false, $element_extra_attributes='', $element_length=false, $element_height=false, $possible_values=false, $show_blank_first=false, $read_only=false) {
+function create_form_element($element_type, $element_name, $element_value=false, $element_extra_attributes='', $element_length=false, $element_height=false, $possible_values=false, $show_blank_first=false, $read_only=false, $use_keys_for_option_values=true) {
 if (!$element_type) return false;
 if (!$element_name) return false;
 if ($read_only) $element_extra_attributes.=' readonly disabled';
@@ -833,7 +833,7 @@ switch ($element_type) {
     break;
 
   case "select":
-    $html=create_select_from_array($possible_values, $element_name, $element_value, $element_extra_attributes, $show_blank_first);
+    $html=create_select_from_array($possible_values, $element_name, $element_value, $element_extra_attributes, $show_blank_first, $use_keys_for_option_values);
     break;
 
   case "radio":
@@ -880,13 +880,18 @@ switch ($element_type) {
  *
  * @return string containing html widget for HTML SELECT Object
  */
-function create_select_from_array($array, $fieldname, $selected_value=false, $extra_html_elements='', $show_blank_first=true) {
+function create_select_from_array($array, $fieldname, $selected_value=false, $extra_html_elements='', $show_blank_first=true, $use_keys_as_option_values=true) {
     if (!$array OR !$fieldname) return false;
     $html_element="<SELECT name=\"$fieldname\" $extra_html_elements>\n";
     if ($show_blank_first) $html_element.="<OPTION value=\"\">---Please select one---</OPTION>\n";
     foreach ($array as $akey=>$aval) {
-        $selected=(($akey==$selected_value) ? ' SELECTED ' : '');
-        $html_element.="<OPTION value=\"$akey\"$selected>$aval</OPTION>\n";
+        if ($use_keys_as_option_values) {
+            $oval=$akey;
+        } else {
+            $oval=$aval;
+        }
+        $selected=(($oval==$selected_value) ? ' SELECTED ' : '');
+        $html_element.="<OPTION value=\"$oval\"$selected>$aval</OPTION>\n";
     }
     $html_element.="</SELECT>\n";
     return $html_element;
@@ -998,6 +1003,9 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.96  2006/03/03 02:23:57  vanmer
+ * - added parameter to control if array select is rendered with the key or the value
+ *
  * Revision 1.95  2005/12/02 01:13:54  vanmer
  * - added more PHPDoc comments
  * - added XRMS_API package tag
