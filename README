@@ -1,7 +1,7 @@
 XRMS - README
 
 =============================================================
-/** $Id: README,v 1.20 2005/05/07 17:41:25 braverock Exp $ **/
+/** $Id: README,v 1.21 2006/03/03 23:33:18 ongardie Exp $ **/
 
 ========================
 SUMMARY
@@ -386,6 +386,7 @@ John Fawcett      johnfawcett    Developer
 Ken Gregoire      kennyg1        Documentation
 Nic Lowe          niclowe        Developer
 Beth Macknik      maulani        Developer
+Diego Ongaro      ongardie       Developer
 Cal Page          cpsource       Developer
 Glenn Powers      gpowers        Developer
 Neil Roberts      neildogg       Developer
@@ -411,6 +412,9 @@ suggestions, bug fixes, and discussion contributed by each of you.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.21  2006/03/03 23:33:18  ongardie
+ * - Added Diego Ongaro (at ETSZONE) as a Developer
+ *
  * Revision 1.20  2005/05/07 17:41:25  braverock
  * - updated to reflect 2005-05-07 release
  *
