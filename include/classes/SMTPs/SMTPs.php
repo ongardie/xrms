@@ -32,11 +32,11 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.15 $
+   * @version $Revision: 1.16 $
    * @copyright copyright information
    * @license GNU General Public Licence
    *
-   * $Id: SMTPs.php,v 1.15 2006/02/21 02:00:07 vanmer Exp $
+   * $Id: SMTPs.php,v 1.16 2006/03/08 04:05:25 jswalter Exp $
    *
    **/
 
@@ -238,6 +238,37 @@ class SMTPs
     var $_msgContent = null;
 
    /**
+    * Property private string var $_msgXheader
+    *
+    * @property private array Custom X-Headers
+    * @name var $_msgXheader
+    *
+    * Custom X-Headers
+    *
+    * @access private
+    * @static
+    * @since 1.0
+    *
+    */
+    var $_msgXheader = null;
+
+   /**
+    * Property private string var $_smtpsCharSet
+    *
+    * @property private string Character set
+    * @name var $_smtpsCharSet
+    *
+    * Character set
+    * Defaulted to 'iso-8859-1'
+    *
+    * @access private
+    * @static
+    * @since 1.0
+    *
+    */
+    var $_smtpsCharSet = 'iso-8859-1';
+
+   /**
     * Property private int var $_msgSensitivity
     *
     * @property private string Message Sensitivity
@@ -308,35 +339,20 @@ class SMTPs
                                 'Lowest' );
 
    /**
-    * Property private string var $_msgXheader
-    *
-    * @property private array Custom X-Headers
-    * @name var $_msgXheader
-    *
-    * Custom X-Headers
-    *
-    * @access private
-    * @static
-    * @since 1.0
-    *
-    */
-    var $_msgXheader = null;
-
-   /**
-    * Property private string var $_smtpsCharSet
+    * Property private string var $_smtpsTransEncodeType
     *
     * @property private string Character set
-    * @name var $_smtpsCharSet
+    * @name var $_smtpsTransEncode
     *
-    * Character set
-    * Defaulted to 'iso-8859-1'
+    * Content-Transfer-Encoding
+    * Defaulted to 0 - 7bit
     *
     * @access private
     * @static
-    * @since 1.0
+    * @since 1.15
     *
     */
-    var $_smtpsCharSet = 'iso-8859-1';
+    var $_smtpsTransEncodeType = 0;
 
    /**
     * Property private string var $_smtpsTransEncodeTypes
@@ -351,13 +367,13 @@ class SMTPs
     * @since 1.0
     *
     */
-    var $_smtpsTransEncodeTypes = array('7bit',               // Simple 7-bit ASCII
-                                        '8bit',               // 8-bit coding with line termination characters
-                                        'base64',             // 3 octets encoded into 4 sextets with offset
-                                        'binary',             // Arbitrary binary stream
-                                        'mac-binhex40',       // Macintosh binary to hex encoding
-                                        'quoted-printable',   // Mostly 7-bit, with 8-bit characters encoded as "=HH"
-                                        'uuencode' );         // UUENCODE encoding
+    var $_smtpsTransEncodeTypes = array( '7bit',               // Simple 7-bit ASCII
+                                         '8bit',               // 8-bit coding with line termination characters
+                                         'base64',             // 3 octets encoded into 4 sextets with offset
+                                         'binary',             // Arbitrary binary stream
+                                         'mac-binhex40',       // Macintosh binary to hex encoding
+                                         'quoted-printable',   // Mostly 7-bit, with 8-bit characters encoded as "=HH"
+                                         'uuencode' );         // UUENCODE encoding
 
    /**
     * Property private string var $_smtpsTransEncode
@@ -370,7 +386,8 @@ class SMTPs
     *
     * @access private
     * @static
-    * @since 1.0
+    * @since 1.15
+    * @deprecated
     *
     */
     var $_smtpsTransEncode = '7bit';
@@ -401,7 +418,7 @@ class SMTPs
     * - 'pipe     [1] - use UNIX path to EXE
     * - 'phpmail  [2] - use the PHP built-in mail function
     *
-    * NOTE: Not yet implemented
+    * NOTE: Only 'sockets' is implemented
     *
     * @access private
     * @static
@@ -416,14 +433,15 @@ class SMTPs
     * @property private string Path to the sendmail execuable
     * @name var $_mailPath
     *
-    * Path to the sendmail execuable
+    * If '$_transportType' is set to '1', then this variable is used
+    * to define the UNIX file system path to the sendmail execuable
     *
     * @access private
     * @static
     * @since 1.8
     *
     */
-    var $_mailPath = '';
+    var $_mailPath = '/usr/lib/sendmail';
 
    /**
     * Property private int var $_smtpTimeout
@@ -441,6 +459,21 @@ class SMTPs
     var $_smtpTimeout = 10;
 
    /**
+    * Property private int var $_smtpMD5
+    *
+    * @property private boolean Determines whether to calculate message MD5 checksum.
+    * @name var $_smtpMD5
+    *
+    * Determines whether to calculate message MD5 checksum.
+    *
+    * @access private
+    * @static
+    * @since 1.15
+    *
+    */
+    var $_smtpMD5 = false;
+
+   /**
     * Property private array var $_smtpsErrors
     *
     * @property private array Class error codes and messages
@@ -456,6 +489,25 @@ class SMTPs
     var $_smtpsErrors = null;
 
    /**
+    * Property private boolean var $_log_level
+    *
+    * @property private integer Defines Log Level
+    * @name var $_log_level
+    *
+    * Defines log level
+    *  0 - no logging
+    *  1 - connectivity logging
+    *  2 - message generation logging
+    *  3 - detail logging
+    *
+    * @access private
+    * @static
+    * @since 1.15
+    *
+    */
+    var $_log_level = 0;
+
+   /**
     * Property private boolean var $_debug
     *
     * @property private boolean Place Class in" debug" mode
@@ -469,7 +521,6 @@ class SMTPs
     *
     */
     var $_debug = false;
-
 
 
 // =============================================================
@@ -523,9 +574,6 @@ class SMTPs
        /**
         * Default return value
         *
-        * Returns constructed SELECT Object string or boolean upon failure
-        * Default value is set at TRUE
-        *
         * @var mixed $_retVal Indicates if Object was created or not
         * @access private
         * @static
@@ -533,11 +581,11 @@ class SMTPs
         $_retVal = true;
 
         // We have to make sure the HOST given is valid
-        // I do this here because '@fsockopen' will not give me this
+        // This is done here because '@fsockopen' will not give me this
         // information if it failes to connect because it can't find the HOST
         if ( (gethostbyname ( $this->getHost() )) == $this->getHost() )
         {
-            $this->_setErr ( 99, $this->getHost() . ' is either offline or is an invalid host name' );
+            $this->_setErr ( 99, $this->getHost() . ' is either offline or is an invalid host name.' );
             $_retVal = false;
         }
         else
@@ -605,7 +653,7 @@ class SMTPs
             $this->socket_send_str(base64_encode($this->_smtpsID), '334');
 
             // The error here just means the ID/password combo doesn't work.
-            // we will not way to find out which is the problem
+            // There is not a method to determine which is the problem, ID or password
             if ( ! $_retVal = $this->socket_send_str(base64_encode($this->_smtpsPW), '235') )
                 $this->_setErr ( 130, 'Invalid Authentication Credentials.' );
         }
@@ -632,7 +680,7 @@ class SMTPs
     * @param  boolean $_bolTestMsg  whether to run this method in 'Test' mode.
     * @param  boolean $_bolDebug    whether to log all communication between this Class and the Mail Server.
     * @return mixed   void
-    *                 $_strMsg     If this is run in 'Test' mode, the actual message structure will be returned
+    *                 $_strMsg      If this is run in 'Test' mode, the actual message structure will be returned
     *
     * @TODO
     * Modify method to generate log of Class to Mail Server communication
@@ -643,9 +691,6 @@ class SMTPs
     {
        /**
         * Default return value
-        *
-        * Returns constructed SELECT Object string or boolean upon failure
-        * Default value is set at TRUE
         *
         * @var mixed $_retVal Indicates if Object was created or not
         * @access private
@@ -659,6 +704,7 @@ class SMTPs
             // If a User ID *and* a password is given, assume Authentication is desired
             if( !empty($this->_smtpsID) && !empty($this->_smtpsPW) )
             {
+                // Send the RFC2554 specified EHLO.
                 $_retVal = $this->_server_authenticate();
             }
 
@@ -693,10 +739,10 @@ class SMTPs
                     $this->socket_send_str('RCPT TO: <' . $_address . '>', '250');
                 }
 
-                // Ok, now we tell the server we are ready to start sending data
+                // Tell the server we are ready to start sending data
                 // with any custom headers...
                 // This is the last response code we look for until the end of the message.
-		$this->socket_send_str('DATA', '354');
+                $this->socket_send_str('DATA', '354');
 
                 // Now we are ready for the message...
                 // Ok, all the ingredients are mixed in let's cook this puppy...
@@ -1099,8 +1145,8 @@ class SMTPs
     */
     function setCharSet ( $_strCharSet )
     {
-        if ( $_strPW )
-            $this->_smtpsCharSet = $_strPW;
+        if ( $_strCharSet )
+            $this->_smtpsCharSet = $_strCharSet;
     }
 
    /**
@@ -1146,7 +1192,8 @@ class SMTPs
     * @final
     * @access public
     *
-    * @since 1.0
+    * @since 1.15
+    * @deprecated
     *
     * @param string $_strTransEncode Content-Transfer-Encoding
     * @return void
@@ -1169,7 +1216,8 @@ class SMTPs
     * @final
     * @access public
     *
-    * @since 1.0
+    * @since 1.15
+    * @deprecated
     *
     * @param  void
     * @return string $_smtpsTransEncode Content-Transfer-Encoding
@@ -1178,6 +1226,63 @@ class SMTPs
     function getTransEncode ()
     {
         return $this->_smtpsTransEncode;
+    }
+
+   /**
+    * Method public void setTransEncodeType( int )
+    *
+    * Content-Transfer-Encoding, Defaulted to '0' [ZERO]
+    * This can be changed for 2byte characers sets
+    *
+    * Known Encode Types
+    *  - [0] 7bit               Simple 7-bit ASCII
+    *  - [1] 8bit               8-bit coding with line termination characters
+    *  - [2] base64             3 octets encoded into 4 sextets with offset
+    *  - [3] binary             Arbitrary binary stream
+    *  - [4] mac-binhex40       Macintosh binary to hex encoding
+    *  - [5] quoted-printable   Mostly 7-bit, with 8-bit characters encoded as "=HH"
+    *  - [6] uuencode           UUENCODE encoding
+    *
+    * @name setTransEncodeType()
+    *
+    * @uses Class property $_smtpsTransEncodeType
+    * @uses Class property $_smtpsTransEncodeTypes
+    * @final
+    * @access public
+    *
+    * @since 1.15
+    *
+    * @param string $_strTransEncodeType Content-Transfer-Encoding
+    * @return void
+    *
+    */
+    function setTransEncode ( $_strTransEncodeType )
+    {
+        if ( array_search ( $_strTransEncodeType, $this->_smtpsTransEncodeTypes ) )
+            $this->_smtpsTransEncodeType = $_strTransEncodeType;
+    }
+
+   /**
+    * Method public string getTransEncodeType( void )
+    *
+    * Retrieves the Content-Transfer-Encoding
+    *
+    * @name getTransEncodeType()
+    *
+    * @uses Class property $_smtpsTransEncodeType
+    * @uses Class property $_smtpsTransEncodeTypes
+    * @final
+    * @access public
+    *
+    * @since 1.0
+    *
+    * @param  void
+    * @return string $_smtpsTransEncode Content-Transfer-Encoding
+    *
+    */
+    function getTransEncodeType ()
+    {
+        return $this->_smtpsTransEncodeTypes[$this->_smtpsTransEncodeType];
     }
 
 
@@ -1756,6 +1861,9 @@ class SMTPs
 
             $this->_msgContent[$strType]['mimeType'] = $strMimeType;
             $this->_msgContent[$strType]['data']     = $strContent;
+
+            if ( $this->getMD5flag() )
+                $this->_msgContent[$strType]['md5']      = md5($strContent);
         }
     }
 
@@ -1798,11 +1906,15 @@ class SMTPs
             $_msgData = $_msgData[$_types[0]];
 
             $content = 'Content-Type: ' . $_msgData['mimeType'] . '; charset="' . $this->getCharSet() . '"' . "\r\n"
-                     . 'Content-Transfer-Encoding: ' . $this->getTransEncode() . "\r\n"
+                     . 'Content-Transfer-Encoding: ' . $this->getTransEncodeType() . "\r\n"
                      . 'Content-Disposition: inline'  . "\r\n"
-                     . 'Content-Description: ' . $this->_msgContent[0] . ' message' . "\r\n"
-                     . "\r\n"
-                     . $_msgData['data'] . "\r\n";
+                     . 'Content-Description: ' . $this->_msgContent[0] . ' message' . "\r\n";
+
+            if ( $this->getMD5flag() )
+                $content .= 'Content-MD5: ' . $_msgData['md5'] . "\r\n";
+
+            $content .= "\r\n"
+                     .  $_msgData['data'] . "\r\n";
         }
 
         // If we have more than ONE, we use the multi-part format
@@ -1833,8 +1945,12 @@ class SMTPs
                                  .  'Content-Disposition: attachment; filename="' . $_data['fileName'] . '"' . "\r\n"
                                  .  'Content-Type: ' . $_data['mimeType'] . '; name="' . $_data['fileName'] . '"' . "\r\n"
                                  .  'Content-Transfer-Encoding: base64' . "\r\n"
-                                 .  'Content-Description: File Attachment' . "\r\n"
-                                 .  "\r\n"
+                                 .  'Content-Description: File Attachment' . "\r\n";
+
+                        if ( $this->getMD5flag() )
+                            $content .= 'Content-MD5: ' . $_data['md5'] . "\r\n";
+
+                        $content .= "\r\n"
                                  .  $_data['data'] . "\r\n";
                     }
                 }
@@ -1846,17 +1962,21 @@ class SMTPs
                     $content .= ( $type == 'html') ? '; name="HTML Part"' : '';
                     $content .=  "\r\n";
                     $content .= 'Content-Transfer-Encoding: ';
-                    $content .= ( $type == 'html') ? 'quoted-printable' : $this->getTransEncode();
+                    $content .= ( $type == 'html') ? 'quoted-printable' : $this->getTransEncodeType();
                     $content .=  "\r\n"
                              . 'Content-Disposition: inline'  . "\r\n"
-                             . 'Content-Description: ' . $type . ' message' . "\r\n"
-                             . "\r\n"
+                             . 'Content-Description: ' . $type . ' message' . "\r\n";
+
+                    if ( $this->getMD5flag() )
+                        $content .= 'Content-MD5: ' . $_content['md5'] . "\r\n";
+
+                    $content .= "\r\n"
                              . $_content['data'] . "\r\n";
                 }
             }
 
             // Close message boundries
-            $content .= "\r\n--" ;//. $this->_getBoundary() . "\r\n";
+            $content .= "\r\n--" . $this->_getBoundary() . '--' . "\r\n" ;
         }
 
         return $content;
@@ -1890,6 +2010,9 @@ class SMTPs
             $this->_msgContent['attachment'][$strFileName]['mimeType'] = $strMimeType;
             $this->_msgContent['attachment'][$strFileName]['fileName'] = $strFileName;
             $this->_msgContent['attachment'][$strFileName]['data']     = $strContent;
+
+            if ( $this->getMD5flag() )
+                $this->_msgContent['attachment'][$strFileName]['md5']      = md5($strContent);
         }
     }
 
@@ -2013,6 +2136,49 @@ class SMTPs
              . 'X-Priority: ' . $this->_msgPriority . ' (' . $this->_aryPriority[$this->_msgPriority] . ')' . "\r\n";
     }
 
+   /**
+    * Method public void setMD5flag( boolean )
+    *
+    * Set flag which determines whether to calculate message MD5 checksum.
+    *
+    * @name setMD5flag()
+    *
+    * @uses Class property $_smtpMD5
+    * @final
+    * @access public
+    *
+    * @since 1.14
+    *
+    * @param string $_value Message Priority
+    * @return void
+    *
+    */
+    function setMD5flag ( $_flag = false )
+    {
+        $this->_smtpMD5 = $_flag;
+    }
+
+   /**
+    * Method public boolean getMD5flag( void )
+    *
+    * Gets flag which determines whether to calculate message MD5 checksum.
+    *
+    * @name getMD5flag()
+    *
+    * @uses Class property $_smtpMD5
+    * @final
+    * @access public
+    *
+    * @since 1.14
+    *
+    * @param void
+    * @return string $_value Message Priority
+    *
+    */
+    function getMD5flag ( )
+    {
+        return $this->_smtpMD5;
+    }
 
    /**
     * Method public void setXheader( string )
@@ -2080,7 +2246,7 @@ class SMTPs
     */
     function _setBoundary()
     {
-        $this->_smtpsBoundary = "-----.==multipart_x." . time() . ".x_boundary==";
+        $this->_smtpsBoundary = "multipart_x." . time() . ".x_boundary";
     }
 
    /**
@@ -2104,8 +2270,6 @@ class SMTPs
     {
         return $this->_smtpsBoundary;
     }
-
-
 
     // This function has been modified as provided
     // by SirSir to allow multiline responses when
@@ -2144,7 +2308,6 @@ class SMTPs
 
         return $_retVal;
     }
-
 
     function socket_send_str ( $_strSend, $_returnCode = null, $CRLF = "\r\n" )
     {
@@ -2225,6 +2388,22 @@ class SMTPs
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.16  2006/03/08 04:05:25  jswalter
+  *  - '$_smtpsTransEncode' was removed and '$_smtpsTransEncodeType' is now used
+  *  - '$_smtpsTransEncodeType' is defaulted to ZERO
+  *  - corrected 'setCharSet()'  internal vars
+  *  - defined '$_mailPath'
+  *  - added '$_smtpMD5' as a class property
+  *  - added 'setMD5flag()' to set above property
+  *  - added 'getMD5flag()' to retrieve above property
+  *  - 'setAttachment()' will add an MD5 checksum to attachements if above property is set
+  *  - 'setBodyContent()' will add an MD5 checksum to message parts if above property is set
+  *  - 'getBodyContent()' will insert the MD5 checksum for messages and attachments if above property is set
+  *  - removed leading dashes from message boundry
+  *  - added propery "Close message boundry" tomessage block
+  *  - corrected some comments in various places
+  *  - removed some incorrect comments in others
+  *
   * Revision 1.15  2006/02/21 02:00:07  vanmer
   * - patch to add support for sending to exim mail server
   * - thanks to Diego Ongaro at ETSZONE (diego@etszone.com)
