@@ -10,7 +10,7 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.19 2006/02/01 23:30:32 daturaarutad Exp $
+ * $Id: Pager_Columns.php,v 1.20 2006/03/12 09:29:27 vanmer Exp $
  */
 
 class Pager_Columns {
@@ -166,7 +166,7 @@ class Pager_Columns {
     * @return string HTML for Select Column Layouts widget
     */
     function GetSelectableColumnsWidget() {
-
+        global $http_site_root;
         // Get the column names
         $user_columns = $this->GetUserColumnNames();
 
@@ -300,6 +300,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.20  2006/03/12 09:29:27  vanmer
+ * - added missing site root global, needed for path to javascript include file
+ *
  * Revision 1.19  2006/02/01 23:30:32  daturaarutad
  * rearrange buttons in template
  *
