@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.96 2006/03/03 02:23:57 vanmer Exp $
+ * $Id: utils-interface.php,v 1.97 2006/03/13 07:20:47 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -18,7 +18,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-preferences.php');
 
-/**
+**
  * Include the i18n files, as every file with output will need them
  *
  * @todo sort out a better include strategy to simplify it across
@@ -337,31 +337,66 @@ function render_nav_line() {
   <div id="navline">
 
       <?php
+            $item_separator=' &bull; ';
+            if ($_SESSION['active_nav_items']) {
+                $active_nav_items=$_SESSION['active_nav_items'];
+            } else {
+                $active_nav_items=get_active_nav_items();
+            }
+            $_SESSION['active_nav_items']=$active_nav_items;
 
-            //need a ACL check here
-            echo http_root_href('/private/home.php',       _("Home")). ' &bull; ';
+            foreach ($active_nav_items as $type=>$item) {
+                $output_html_array[]=http_root_href($item['href'],   $item['title']);
+            }
+            $output_html=implode($item_separator,$output_html_array);
+            echo $output_html;
 
-            if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'activities')) echo http_root_href('/activities/some.php',    _("Activities")). ' &bull; ';
-
-            if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'companies')) echo http_root_href('/companies/some.php',     _("Companies")).' &bull; ';
-            if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'contacts')) echo http_root_href('/contacts/some.php',      _("Contacts")).' &bull; ';
-            if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'campaigns')) echo http_root_href('/campaigns/some.php',     _("Campaigns")).' &bull; ';
-            if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'opportunities')) echo http_root_href('/opportunities/some.php', _("Opportunities")).' &bull; ';
-            if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'cases')) echo http_root_href('/cases/some.php',         _("Cases")).' &bull; ';
-            if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'files')) echo http_root_href('/files/some.php',         _("Files")).' &bull; ';
-
-            //place the menu_line hook before Reports and Adminstration link
+            //end of menuline hook, now deprecated in favor of menuline_nav_items
             do_hook ('menuline');
-
-            if (check_object_permission_bool($_SESSION['session_user_id'], 'Reports',  'Read')) echo http_root_href('/reports/index.php',      _("Reports")) . ' &bull; ';
-            if (check_object_permission_bool($_SESSION['session_user_id'], 'Administration', 'Read' )) echo http_root_href('/admin/routing.php',      _("Administration")). ' &bull; ';
-            echo http_root_href('/admin/users/self.php', _("Preferences"));
       ?>
 
   </div><!-- end of navline -->
 <?php
 
 }
+
+/**
+ * function get_active_nav_items
+ *
+ * This function returns an array of navigational items that the current user has permisison to
+ *
+ */
+function get_active_nav_items() {
+    $active_nav_items=array();
+    global $nav_items;
+    $nav_items=array();
+    $nav_items['home']=array('href'=>'/private/home.php', 'title'=>_("Home"), 'object'=>'User');
+    $nav_items['activity']=array('href'=>'/activities/some.php', 'table'=>'activities', 'title'=>_("Activities"));
+    $nav_items['company']=array('href'=>'/companies/some.php', 'table'=>'companies', 'title'=>_("Companies"));
+    $nav_items['contact']=array('href'=>'/contacts/some.php', 'table'=>'contacts', 'title'=>_("Contacts"));
+    $nav_items['campaign']=array('href'=>'/campaigns/some.php', 'table'=>'campaigns', 'title'=>_("Campaigns"));
+    $nav_items['opportunity']=array('href'=>'/opportunities/some.php', 'table'=>'opportunities', 'title'=>_("Opportunities"));
+    $nav_items['case']=array('href'=>'/cases/some.php', 'table'=>'cases', 'title'=>_("Cases"));
+    $nav_items['file']=array('href'=>'/files/some.php', 'table'=>'files', 'title'=>_("Files"));
+    do_hook ('menuline_nav_items');
+    $nav_items['reports']=array('href'=>'/reports/some.php', 'object'=>'Reports', 'title'=>_("Reports"));
+    $nav_items['administration']=array('href'=>'/admin/routing.php', 'object'=>'Administration', 'title'=>_("Administration"));
+    $nav_items['preferences']=array('href'=>'/admin/users/self.php',  'title'=>_("Preferences"), 'object'=>'User');
+    foreach ($nav_items as $nav_key=>$item) {
+        //if the navigation item specifies an object or a table, check the permission on it before making active
+        if ($item['object'] OR $item['table']) {
+            if (check_object_permission_bool($_SESSION['session_user_id'], $item['object'], 'Read', $item['table'])) {
+                $active_nav_items[$nav_key]=$item;
+            }
+        } else {
+            //otherwise, since no object/table was specified, item is always shown
+            $active_nav_items[$nav_key]=$item;
+        }
+    }
+    return $active_nav_items;
+}
+
+
 /**
  * function end_page
  *
@@ -1003,6 +1038,11 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.97  2006/03/13 07:20:47  vanmer
+ * - altered navigational bar setup functionality to allow caching of available items
+ * - added function to define and allow plugins to define navigational items in an array
+ * - removed previous hardcoded navigational elements
+ *
  * Revision 1.96  2006/03/03 02:23:57  vanmer
  * - added parameter to control if array select is rendered with the key or the value
  *
