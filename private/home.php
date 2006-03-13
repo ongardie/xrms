@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.68 2006/01/02 23:31:30 vanmer Exp $
+ * $Id: home.php,v 1.69 2006/03/13 07:23:30 vanmer Exp $
  */
 
 // include the common files
@@ -25,6 +25,25 @@ require_once('../activities/activities-pager-functions.php');
 
 //see if we are logged in
 $session_user_id = session_check();
+
+if (!$_SESSION['active_nav_items']) {
+    $_SESSION['active_nav_items']=get_active_nav_items();
+}
+$active_nav_items=$_SESSION['active_nav_items'];
+//check if there is only one more item than home and prefences, if so unset home and redirect to that item
+if ((!array_key_exists('home',$active_nav_items))) {
+    $redirect_url=false;
+    foreach ($active_nav_items as $key=>$item) {
+        if ($key!='preferences') {
+            $redirect_url=$http_site_root.$item['href'];
+        }
+    }
+    if ($redirect_url) {
+        $_SESSION['active_nav_items']=$active_nav_items;
+        Header("Location: $redirect_url");
+        exit;
+    }
+}
 
 // get call arguments
 $msg = isset($_POST['msg']) ? $_POST['msg'] : '';
@@ -181,6 +200,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.69  2006/03/13 07:23:30  vanmer
+ * - changed to redirect to another page if home is not in the list of available navigational items
+ *
  * Revision 1.68  2006/01/02 23:31:30  vanmer
  * - changed to use centralized dbconnection function
  *
