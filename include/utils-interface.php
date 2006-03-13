@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.97 2006/03/13 07:20:47 vanmer Exp $
+ * $Id: utils-interface.php,v 1.98 2006/03/13 07:24:10 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -18,7 +18,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-preferences.php');
 
-**
+/**
  * Include the i18n files, as every file with output will need them
  *
  * @todo sort out a better include strategy to simplify it across
@@ -1038,6 +1038,9 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.98  2006/03/13 07:24:10  vanmer
+ * - fixed stranged character in last commit
+ *
  * Revision 1.97  2006/03/13 07:20:47  vanmer
  * - altered navigational bar setup functionality to allow caching of available items
  * - added function to define and allow plugins to define navigational items in an array
