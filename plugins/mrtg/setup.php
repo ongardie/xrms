@@ -18,26 +18,29 @@
  * in another file.  It will improve the performance of the entire
  * system.
  *
- * $Id: setup.php,v 1.2 2004/07/22 12:57:27 gpowers Exp $
+ * $Id: setup.php,v 1.3 2006/03/13 07:49:12 vanmer Exp $
  */
 
 
 function xrms_plugin_init_mrtg() {
     global $xrms_plugin_hooks;
-    $xrms_plugin_hooks['menuline']['mrtg'] = 'mrtg';
+    $xrms_plugin_hooks['menuline_nav_items']['mrtg'] = 'mrtg';
 }
 
 
 function mrtg() {
 
-    global $http_site_root;
+    global $nav_items;
 
     //Add link to upper menu
-    echo "&nbsp;<a href='$http_site_root/plugins/mrtg/mrtg.php'>" . _("MRTG") . "</a>&nbsp;&bull;\n";
+    $nav_items['mrtg']=array('href'=>'/plugins/mrtg/mrtg.php','title'=>_("MRTG"));
 }
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.3  2006/03/13 07:49:12  vanmer
+ * - changed to reflect new method of registering navigational menu items
+ *
  * Revision 1.2  2004/07/22 12:57:27  gpowers
  * - Removed references to 'demo' plugin.
  *

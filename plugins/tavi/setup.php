@@ -5,28 +5,28 @@
  * Copyright (c) 2004 Glenn Powers <glenn@net127.com>
  * Licensed under the GNU GPL v2
  *
- * $Id: setup.php,v 1.2 2005/04/13 14:24:03 gpowers Exp $
+ * $Id: setup.php,v 1.3 2006/03/13 07:49:14 vanmer Exp $
  */
 
 
 function xrms_plugin_init_tavi() {
     global $xrms_plugin_hooks;
-    $xrms_plugin_hooks['menuline']['tavi'] = 'tavi';
+    $xrms_plugin_hooks['menuline_nav_items']['tavi'] = 'tavi';
 }
 
 
 function tavi() {
 
-    global $http_site_root;
-
+    global $nav_items;
     //Add link to upper menu
-    if (check_object_permission_bool($_SESSION['session_user_id'], 'wiki', 'Read')) {
-        echo "&nbsp;<a href='$http_site_root/plugins/tavi/index.php'>" . _("Wiki") . "</a>&nbsp;&bull;\n";
-    }
+    $nav_items['tavi']=array('href'=>'/plugins/tavi/index.php','title'=>_("Wiki"), 'object'=>'wiki');
 }
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.3  2006/03/13 07:49:14  vanmer
+ * - changed to reflect new method of registering navigational menu items
+ *
  * Revision 1.2  2005/04/13 14:24:03  gpowers
  * - added ACL control
  *

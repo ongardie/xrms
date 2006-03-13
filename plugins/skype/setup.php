@@ -48,7 +48,7 @@ function asteriskdial() {
 
 function voicemail() {
     global $http_site_root;
-    echo "&nbsp;<a href='$http_site_root/plugins/cti/voicemail.php'>" . _("Voice Mail") . "</a>&nbsp;&bull;\n";
+    echo "&nbsp;&bull;&nbsp;<a href='$http_site_root/plugins/cti/voicemail.php'>" . _("Voice Mail") . "</a>\n";
 }
 
 function do_admin_user_edit_sidebar() {

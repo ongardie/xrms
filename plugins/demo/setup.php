@@ -18,27 +18,30 @@
  * in another file.  It will improve the performance of the entire
  * system.
  *
- * $Id: setup.php,v 1.6 2004/05/06 15:12:01 gpowers Exp $
+ * $Id: setup.php,v 1.7 2006/03/13 07:49:09 vanmer Exp $
  */
 
 
 function xrms_plugin_init_demo() {
     global $xrms_plugin_hooks;
-    $xrms_plugin_hooks['menuline']['demo'] = 'demo';
+    $xrms_plugin_hooks['menuline_nav_items']['demo'] = 'demo';
     //$xrms_plugin_hooks['opportunity_detail']['demo'] = 'need_function';
 }
 
 
 function demo() {
 
-    global $http_site_root;
+    global $nav_items;
 
     //Add Demo link to upper menu
-    echo "&nbsp;<a href='$http_site_root/plugins/demo/demo.php'>Demo</a>&nbsp;&bull;\n";
+    $nav_items['demo']=array('href'=>'/plugins/demo/demo.php', 'title'=>_("Demo"));
 }
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.7  2006/03/13 07:49:09  vanmer
+ * - changed to reflect new method of registering navigational menu items
+ *
  * Revision 1.6  2004/05/06 15:12:01  gpowers
  * Note to self: do not copies CVS/ directories!
  *

@@ -10,14 +10,14 @@
 
 function xrms_plugin_init_useradmin() {
     global $xrms_plugin_hooks;
-    $xrms_plugin_hooks['menuline']['useradmin'] = 'useradmin';
+    $xrms_plugin_hooks['menuline_nav_items']['useradmin'] = 'useradmin';
 }
 
 function useradmin() {
 
-    global $http_site_root;
+    global $nav_items;
 
-    echo "&nbsp;<a href='$http_site_root/plugins/useradmin/useradmin.php'>User Admin</a>&nbsp;&bull;\n";
+    $nav_items['useradmin']=array('href'=>'/plugins/useradmin/useradmin.php', 'title'=>_("User Admin"));
 }
 
 function onlineusers() {
