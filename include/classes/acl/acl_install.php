@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @package ACL
- * $Id: acl_install.php,v 1.14 2005/09/21 21:03:18 vanmer Exp $
+ * $Id: acl_install.php,v 1.15 2006/03/13 07:11:37 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -200,6 +200,32 @@ function update_acl($con) {
     //add File as a child for an email template (to allow attachments)
     $ret3=$acl->add_controlled_object_relationship($email_template_id, $file_object_id, false, false, false, true);
     
+        //add Reports controlled object
+        if (!$acl->get_controlled_object("Reports")) {
+            //add object if missing
+            $reports_id=$acl->add_controlled_object("Reports", false,false, false, $data_source_id);
+            //add reports as a top level object
+            $reports_cor=$acl->add_controlled_object_relationship(null, $reports_id);
+
+            //add permissions for user and administrator on reports
+            $Role_id=get_role_id($acl, 'Administrator');
+            $Scope='World';
+            $Permission_id=1;
+            $ret4=$acl->add_role_permission ($Role_id, $reports_cor, $Scope, $Permission_id, true);
+            $Permission_id=2;
+            $ret4=$acl->add_role_permission ($Role_id, $reports_cor, $Scope, $Permission_id, true);
+            $Permission_id=3;
+            $ret4=$acl->add_role_permission ($Role_id, $reports_cor, $Scope, $Permission_id, true);
+            $Permission_id=4;
+            $ret4=$acl->add_role_permission ($Role_id, $reports_cor, $Scope, $Permission_id, true);
+            $Permission_id=5;
+            $ret4=$acl->add_role_permission ($Role_id, $reports_cor, $Scope, $Permission_id, true);
+
+            $Role_id=get_role_id($acl, 'User');
+            $Scope='World';
+            $Permission_id=2;
+            $ret4=$acl->add_role_permission ($Role_id, $reports_cor, $Scope, $Permission_id, true);
+        }
         //add Export permission type, if not already in existance
         $csql = "SELECT * FROM Permission";
         $crst=$con->execute($csql);
