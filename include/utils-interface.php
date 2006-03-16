@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.100 2006/03/16 06:36:01 ongardie Exp $
+ * $Id: utils-interface.php,v 1.101 2006/03/16 07:04:31 ongardie Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -391,7 +391,7 @@ function get_active_nav_items() {
     $nav_items['case']=array('href'=>'/cases/some.php', 'table'=>'cases', 'title'=>_("Cases"));
     $nav_items['file']=array('href'=>'/files/some.php', 'table'=>'files', 'title'=>_("Files"));
     do_hook ('menuline_nav_items');
-    $nav_items['reports']=array('href'=>'/reports/some.php', 'object'=>'Reports', 'title'=>_("Reports"));
+    $nav_items['reports']=array('href'=>'/reports/index.php', 'object'=>'Reports', 'title'=>_("Reports"));
     $nav_items['administration']=array('href'=>'/admin/routing.php', 'object'=>'Administration', 'title'=>_("Administration"));
     $nav_items['preferences']=array('href'=>'/admin/users/self.php',  'title'=>_("Preferences"), 'object'=>'User');
     foreach ($nav_items as $nav_key=>$item) {
@@ -1051,6 +1051,9 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.101  2006/03/16 07:04:31  ongardie
+ * - Fixed Reports href in Aaron's patch
+ *
  * Revision 1.100  2006/03/16 06:36:01  ongardie
  * - Write back to $_SESSION['active_nav_items'] only if we haven't just copied it.
  *
