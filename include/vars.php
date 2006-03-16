@@ -12,7 +12,7 @@ if ( !defined('IN_XRMS') )
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.41 2005/12/02 19:05:12 daturaarutad Exp $
+ * $Id: vars.php,v 1.42 2006/03/16 00:31:57 vanmer Exp $
  */
 
 /**
@@ -36,10 +36,12 @@ $xrms_db_username = 'your_mysql_username';
 $xrms_db_password = 'your_mysql_password';
 $xrms_db_dbname = 'your_mysql_database';
 
-// where is this application, web-wise? (no trailing slash)
-$http_site_root = "http://www.example.com/xrms";
+// where is this application, web-wise?
+// this can either be a path on the server (/xrms) or a full path including hostname (http://www.exampe.com/xrms)
+// in either case, no trailing slash should be included
+$http_site_root = "/xrms";
 
-//where is the appliation in the filesystem (no trailing slash)
+//where is the application in the filesystem (no trailing slash)
 $xrms_file_root = "/full/path/to/xrms";
 
 
