@@ -6,11 +6,22 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.69 2006/03/13 07:23:30 vanmer Exp $
+ * $Id: home.php,v 1.70 2006/03/16 00:37:39 vanmer Exp $
  */
 
 // include the common files
 require_once('../include-locations.inc');
+
+//BASIC CHECKS FOR CONFIGURATION
+if ($include_directory == "/full/path/to/xrms/include/") {
+    $path=realpath('..');
+    $msg=_("Please read the README file and configure your include-locations.inc file, in directory") ." $path";
+//    $redirect="../login.php?msg=$msg";
+//    Header("Location: $redirect");
+    echo $msg;
+    exit;
+}
+
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -21,6 +32,25 @@ require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once('../activities/activities-widget.php');
 require_once('../activities/activities-pager-functions.php');
+
+//connect to the database
+$con = @get_xrms_dbconnection();
+if (!$con->_connectionID) {
+    $msg=_("You must configure your database connection in vars.php before using XRMS.").'<br>'.$con->_errorMsg;
+    $redirect="../login.php?msg=$msg";
+    Header("Location: $redirect");
+    exit;
+}
+//$con->debug=1;
+
+$sql = "SELECT user_id FROM users";
+$rst=$con->SelectLimit($sql,1);
+if (!$rst) {
+    $msg=_("Installation of database tables must be completed before using XRMS.  Please read the README and then run install/install.php.");
+    $redirect="../login.php?msg=$msg";
+    Header("Location: $redirect");
+    exit;
+}
 
 
 //see if we are logged in
@@ -60,10 +90,6 @@ if (stristr($_SERVER['HTTP_USER_AGENT'], "MMP")) {
     header("Location: ../plugins/phone");
     exit;
 }
-
-//connect to the database
-$con = get_xrms_dbconnection();
-//$con->debug=1;
 
 /*********************************/
 /*** Include the sidebar boxes ***/
@@ -200,6 +226,10 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.70  2006/03/16 00:37:39  vanmer
+ * - added a few checks for broken pieces before continuing to render home page
+ * - redirects to login with error messages for better error handling
+ *
  * Revision 1.69  2006/03/13 07:23:30  vanmer
  * - changed to redirect to another page if home is not in the list of available navigational items
  *
