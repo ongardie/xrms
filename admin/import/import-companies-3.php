@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.33 2006/02/01 09:01:48 vanmer Exp $
+ * $Id: import-companies-3.php,v 1.34 2006/03/16 07:56:19 ongardie Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -102,7 +102,7 @@ start_page($page_title, true, $msg);
      <td>
        <table class=widget cellspacing=1>
            <tr>
-               <td class=widget_header colspan=55><?php echo _("Imported Data"); ?></td>
+               <td class=widget_header colspan=64><?php echo _("Imported Data"); ?></td>
            </tr>
 
        <tr>
@@ -115,7 +115,10 @@ start_page($page_title, true, $msg);
            <!-- address info //-->
            <td class=widget_header colspan=9><?php echo _("Address"); ?></td>
 
-           <!-- address info //-->
+           <!-- secondary address info //-->
+           <td class=widget_header colspan=9><?php echo _("Secondary Address"); ?></td>
+
+           <!-- company info //-->
            <td class=widget_header colspan=19><?php echo _("Additional Company Info"); ?></td>
        </tr>
 
@@ -154,6 +157,17 @@ start_page($page_title, true, $msg);
 
            <!-- address info //-->
            <td class=widget_content><?php echo _("Address Name"); ?></td>
+           <td class=widget_content><?php echo _("Line 1"); ?></td>
+           <td class=widget_content><?php echo _("Line 2"); ?></td>
+           <td class=widget_content><?php echo _("City"); ?></td>
+           <td class=widget_content><?php echo _("State"); ?></td>
+           <td class=widget_content><?php echo _("Postal Code"); ?></td>
+           <td class=widget_content><?php echo _("Country"); ?></td>
+           <td class=widget_content><?php echo _("Address Body"); ?></td>
+           <td class=widget_content><?php echo _("Use Pretty Address"); ?></td>
+
+	   <!-- secondary address info //-->
+           <td class=widget_content><?php echo _("Address 2 Name"); ?></td>
            <td class=widget_content><?php echo _("Line 1"); ?></td>
            <td class=widget_content><?php echo _("Line 2"); ?></td>
            <td class=widget_content><?php echo _("City"); ?></td>
@@ -229,6 +243,8 @@ foreach ($filearray as $row) {
     $division_id = 0;
     $address_name = 0;
     $address_id = 0;
+    $address2_name = 0;
+    $address2_id = 0;
 
     //debug line to view the array
     //echo "\n<br><pre>". print_r($row). "\n</pre>";
@@ -242,7 +258,7 @@ foreach ($filearray as $row) {
     $sql_fetch_company_id = "select comp.company_id,cont.contact_id from companies comp, contacts cont where
                             cont.company_id =  comp.company_id and
                             comp.company_name = '" . addslashes($company_name) ."' and ";
-    if ( $contact_first_name = '' )
+    if ( $contact_first_names != '' )
     {
         $sql_fetch_company_id .= "cont.first_names = '" . addslashes($contact_first_names) . "' and";
     }
@@ -254,7 +270,7 @@ foreach ($filearray as $row) {
 
     $rst_company_id = $con->execute($sql_fetch_company_id);
 
-    if ( $rst_company_id )
+    if ( $rst_company_id['company_id'] )
     {
         $company_id = $rst_company_id->fields['company_id'];
         $contact_id = $rst_company_id->fields['contact_id'];
@@ -330,7 +346,7 @@ foreach ($filearray as $row) {
         $rec['last_modified_by'] = $last_modified_by;
 
         if ($legal_name) {
-            $rec['legal_name'] = $legal_name;
+            $rec['legal_name'] = addslashes($legal_name);
         }
         if ($company_website) {
             $rec['url'] = $company_website;
@@ -348,16 +364,16 @@ foreach ($filearray as $row) {
             $rec['extref3'] = $extref3;
         }
         if ($company_custom1) {
-            $rec['custom1'] = $company_custom1;
+            $rec['custom1'] = addslashes($company_custom1);
         }
         if ($company_custom2) {
-            $rec['custom2'] = $company_custom2;
+            $rec['custom2'] = addslashes($company_custom2);
         }
         if ($company_custom3) {
-            $rec['custom3'] = $company_custom3;
+            $rec['custom3'] = addslashes($company_custom3);
         }
         if ($company_custom4) {
-            $rec['custom4'] = $company_custom4;
+            $rec['custom4'] = addslashes($company_custom4);
         }
         if ($employees) {
             $rec['employees'] = $employees;
@@ -485,7 +501,7 @@ foreach ($filearray as $row) {
                                   company_id = $company_id";
             debugSql($sql_check_address);
             $rst = $con->execute($sql_check_address);
-            if ($rst) {
+            if ($rst->fields['address_id']) {
                 $address_id = $rst->fields['address_id'];
                 //should probably echo here to indicate that we didn't import this address
         // The following line was added by cgg
@@ -545,7 +561,7 @@ foreach ($filearray as $row) {
                 $rec['line1'] = trim(addslashes($address_line1));
                 $rec['line2'] = trim(addslashes($address_line2));
                 $rec['city'] = trim(addslashes($address_city));
-                // $rec['province'] = $address_state;
+                $rec['province'] = trim(addslashes($address_state));
                 $rec['address_body'] = addslashes($address_body);
                 $rec['use_pretty_address'] = $address_use_pretty_address;
                 $rec['postal_code'] = $address_postal_code;
@@ -593,18 +609,153 @@ foreach ($filearray as $row) {
         {
             importFailedMessage("Did not import address '$address_line1'");
         }
+     } // end address (1) insert
+        //insert new address 2
+        if ($address2_city) {
+            //city is required, can't think of a simpler requirement
+            //if we don't have an address name, assign the city as the name
+            if (!$address2_name) {$address2_name = $address2_city;}
+
+            // now check to see if we already have an address that matches line1 and city
+            $sql_check_address = "select address_id from addresses where
+                                  line1 = '". addslashes($address2_line1) ."' and
+                                  city = '". addslashes($address2_city) ."' and
+                                  company_id = $company_id";
+            debugSql($sql_check_address);
+            $rst = $con->execute($sql_check_address);
+            if ($rst->fields['address_id']) {
+                $address2_id = $rst->fields['address_id'];
+                //should probably echo here to indicate that we didn't import this address
+        // The following line was added by cgg
+                importMessage(_("Duplicate address. Using address id: ") . $address_id);
+            }
+            if (!$address2_id and $company_id) {
+                //figure out a country, because country is required as well
+                if ($address2_country) {
+                    if (!is_numeric($address2_country)){
+                        // simplify the country to catalize the matching to existing country
+                        // example: The Netherlands -> Netherlands
+                        $country_simplified=$address2_country;
+                        $country_simplified=preg_replace("/\\bthe\\b/i", "", $country_simplified);
+                        $country_simplified=preg_replace("/\\bunited\\b/i", "", $country_simplified);
+                        $country_simplified=preg_replace("/\\bstates\\b/i", "", $country_simplified);
+                        $country_simplified=preg_replace("/\\brepublic\\b/i", "", $country_simplified);
+                        $country_simplified=preg_replace("/\\bof\\b/i", "", $country_simplified);
+                        $country_simplified=trim($country_simplified);
+
+                        $country_sql = "select country_name, country_id from countries
+                            where country_record_status = 'a' and
+                            country_name like "
+                            . $con->qstr('%' .$country_simplified.'%')
+                            . " limit 1";
+                        debugSql($country_sql);
+                        $addrrst = $con->execute($country_sql);
+                        if ($addrrst){
+                            $address2_country = $addrrst->fields('country_id');
+                            $addrrst->close();
+                            importMessage("Country found: ".$address2_country);
+                        } else {
+                            $address2_country = $default_country_id;
+                            importFailedMessage(_("Failed to get country. Using default country"));
+                        }
+                    }
+                } else {
+                    $address2_country = $default_country_id;
+                    importFailedMessage(_("Country not specified. Using default country"));
+                }
+        // added by cgg
+        if (!isset($address2_line2)) {
+            $address2_line2 = " ";
+        }
+
+        if (!isset($address2_body)) {
+            $address2_body = " ";
+        }
+
+        if (!isset($address2_use_pretty_address)) {
+            $address2_use_pretty_address = "f";
+        }
+
+                //insert the new address
+                $rec = array();
+                $rec['company_id'] = $company_id;
+                $rec['address_name'] = $address2_name;
+                $rec['line1'] = trim(addslashes($address2_line1));
+                $rec['line2'] = trim(addslashes($address2_line2));
+                $rec['city'] = trim(addslashes($address2_city));
+                $rec['province'] = trim(addslashes($address2_state));
+                $rec['address_body'] = addslashes($address2_body);
+                $rec['use_pretty_address'] = $address2_use_pretty_address;
+                $rec['postal_code'] = $address2_postal_code;
+                $rec['country_id'] = $address2_country;
+
+                $tbl = 'addresses';
+                $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+
+                debugSql($ins);
+                if (strlen($ins)>0) {
+                    $rst = $con->execute($ins);
+                    if (!$rst) {
+                        db_error_handler($con, $ins);
+                    }
+                    $address2_id = $con->insert_id();
+                }
+
+                if($time_zone_offset = time_zone_offset($con, $address2_id)) {
+                    $sql = 'SELECT *
+                            FROM addresses
+                            WHERE address_id=' . $address2_id;
+                    $rst = $con->execute($sql);
+                    if(!$rst) {
+                        db_error_handler($con, $sql);
+                    }
+                    elseif(!$rst->EOF) {
+                        $rec = array();
+                        $rec['daylight_savings_id'] = $time_zone_offset['daylight_savings_id'];
+                        $rec['gmt_offset'] = $time_zone_offset['offset'];
+
+                        $upd = $con->getUpdateSQL($rst, $rec, true, get_magic_quotes_gpc());
+                        if (strlen($upd)>0) {
+                        $rst = $con->execute($upd);
+                            if (!$rst) {
+                                db_error_handler($con, $upd);
+                            }
+                        }
+                    }
+                }
+
+                importMessage("Imported address '$address2_line1'");
+                $address2_id = $con->insert_id();
+            }
+        else
+        {
+            importFailedMessage("Did not import address '$address2_line1'");
+        }
+     } // end address insert
+
          // if we don't have a default address, set them now
          // this is kind of naive first through the post choosing, but oh well
-         if ( $address_id )
+         if ( $address_id || $address2_id)
          {
-             $sql = "SELECT * FROM companies WHERE company_id = $company_id";
-             $rst = $con->execute($sql);
-
              $rec = array();
              $rec['default_primary_address'] = $address_id;
              $rec['default_billing_address'] = $address_id;
              $rec['default_shipping_address'] = $address_id;
              $rec['default_payment_address'] = $address_id;
+
+	     if(!$address_id){
+	     	foreach($rec as $key=>$value)
+	     	    $rec[$key] = $address2_id;
+	     }else{
+		if(strpos(strtolower($address2_name), 'bill') !== false)
+			$rec['default_billing_address'] = $address2_id;
+		if(strpos(strtolower($address2_name), 'ship') !== false)
+			$rec['default_shipping_address'] = $address2_id;
+	     }
+	     
+	     	
+             $sql = "SELECT * FROM companies WHERE company_id = $company_id";
+             $rst = $con->execute($sql);
 
              $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
              debugSql($upd);
@@ -618,11 +769,10 @@ foreach ($filearray as $row) {
              }
              $default_address_id = $address_id;
          }
-     } // end address insert
 
         //check to see if we should insert a contact
         $sql_check_contact = "select contact_id, first_names, last_name from contacts where ";
-    if ( $contact_first_name = '' )
+    if ( $contact_first_names != '' )
     {
         $sql_check_contact .= " first_names = '". addslashes($contact_first_names) . "' and ";
     }
@@ -653,6 +803,9 @@ foreach ($filearray as $row) {
             } else {
                 $rec['address_id'] = $default_address_id;
             }
+	    if ($address2_id) {
+		$rec['home_address_id'] = $address2_id;
+	    }//else allow to default
             if ($division_id){
                 $rec['division_id'] = $division_id;
             }
@@ -699,16 +852,16 @@ foreach ($filearray as $row) {
                 $rec['interests'] = $contact_interests;
             }
             if ($contact_custom1){
-                $rec['custom1'] = $contact_custom1;
+                $rec['custom1'] = addslashes($contact_custom1);
             }
             if ($contact_custom2){
-                $rec['custom2'] = $contact_custom2;
+                $rec['custom2'] = addslashes($contact_custom2);
             }
             if ($contact_custom3){
-                $rec['custom3'] = $contact_custom3;
+                $rec['custom3'] = addslashes($contact_custom3);
             }
             if ($contact_custom4){
-                $rec['custom4'] = $contact_custom4;
+                $rec['custom4'] = addslashes($contact_custom4);
             }
             if ($contact_profile){
                 $rec['profile'] = addslashes($contact_profile);
@@ -822,6 +975,17 @@ foreach ($filearray as $row) {
            <td class=widget_content>$address_body</td>
            <td class=widget_content>$address_use_pretty_address</td>
 
+	   <!-- secondary address info //-->
+           <td class=widget_content>$address2_name</td>
+           <td class=widget_content>$address2_line1</td>
+           <td class=widget_content>$address2_line2</td>
+           <td class=widget_content>$address2_city</td>
+           <td class=widget_content>$address2_state</td>
+           <td class=widget_content>$address2_postal_code</td>
+           <td class=widget_content>$address2_country</td>
+           <td class=widget_content>$address2_body</td>
+           <td class=widget_content>$address2_use_pretty_address</td>
+
            <!-- extra company info //-->
            <td class=widget_content>$company_code</td>
            <td class=widget_content>$company_phone</td>
@@ -876,6 +1040,10 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.34  2006/03/16 07:56:19  ongardie
+ * - Added support for secondary addresses.
+ * - Re-enabled states/provinces.
+ *
  * Revision 1.33  2006/02/01 09:01:48  vanmer
  * - fix in HTML provided by Diego Ongaro at ETSZONE (diego@etszone.com)
  *

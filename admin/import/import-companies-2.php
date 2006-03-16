@@ -17,7 +17,7 @@
  * @author Brian Peterson
  *
  *
- * $Id: import-companies-2.php,v 1.11 2006/01/02 21:50:29 vanmer Exp $
+ * $Id: import-companies-2.php,v 1.12 2006/03/16 07:56:19 ongardie Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -62,7 +62,7 @@ start_page($page_title, true, $msg);
         <input type=hidden name=rating_id value="<?php echo $rating_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=54><?php echo _("Preview Data"); ?></td>
+                <td class=widget_header colspan=64><?php echo _("Preview Data"); ?></td>
             </tr>
 
         <tr>
@@ -74,6 +74,9 @@ start_page($page_title, true, $msg);
 
             <!-- address info //-->
            <td class=widget_header colspan=9><?php echo _("Address"); ?></td>
+
+	    <!-- secondary address info //-->
+           <td class=widget_header colspan=9><?php echo _("Secondary Address"); ?></td>
 
             <!-- address info //-->
            <td class=widget_header colspan=19><?php echo _("Additional Company Info"); ?></td>
@@ -113,6 +116,17 @@ start_page($page_title, true, $msg);
 
            <!-- address info //-->
            <td class=widget_content><?php echo _("Address Name"); ?></td>
+           <td class=widget_content><?php echo _("Line 1"); ?></td>
+           <td class=widget_content><?php echo _("Line 2"); ?></td>
+           <td class=widget_content><?php echo _("City"); ?></td>
+           <td class=widget_content><?php echo _("State"); ?></td>
+           <td class=widget_content><?php echo _("Postal Code"); ?></td>
+           <td class=widget_content><?php echo _("Country"); ?></td>
+           <td class=widget_content><?php echo _("Address Body"); ?></td>
+           <td class=widget_content><?php echo _("Use Pretty Address"); ?></td>
+
+	   <!-- secondary address info //-->
+           <td class=widget_content><?php echo _("Secondary Address Name"); ?></td>
            <td class=widget_content><?php echo _("Line 1"); ?></td>
            <td class=widget_content><?php echo _("Line 2"); ?></td>
            <td class=widget_content><?php echo _("City"); ?></td>
@@ -275,6 +289,16 @@ foreach ($filearray as $row) {
            <td class=widget_content>$address_country</td>
            <td class=widget_content>$address_body</td>
            <td class=widget_content>$address_use_pretty_address</td>
+           <!-- address 2 info //-->
+           <td class=widget_content>$address2_name</td>
+           <td class=widget_content>$address2_line1</td>
+           <td class=widget_content>$address2_line2</td>
+           <td class=widget_content>$address2_city</td>
+           <td class=widget_content>$address2_state</td>
+           <td class=widget_content>$address2_postal_code</td>
+           <td class=widget_content>$address2_country</td>
+           <td class=widget_content>$address2_body</td>
+           <td class=widget_content>$address2_use_pretty_address</td>
 
            <!-- extra company info //-->
            <td class=widget_content>$company_code</td>
@@ -307,7 +331,7 @@ TILLEND;
 $con->close();
 ?>
             <tr>
-                <td class=widget_content><input class=button type=submit value="<?php echo _("Import"); ?>"></td>
+                <td colspan=64 class=widget_content><input class=button type=submit value="<?php echo _("Import"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -329,6 +353,10 @@ end_page();
 
 /**
  * $Log: import-companies-2.php,v $
+ * Revision 1.12  2006/03/16 07:56:19  ongardie
+ * - Added support for secondary addresses.
+ * - Re-enabled states/provinces.
+ *
  * Revision 1.11  2006/01/02 21:50:29  vanmer
  * - changed to use centralized dbconnection function
  *
