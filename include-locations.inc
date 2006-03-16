@@ -18,7 +18,7 @@
  * If you are debugging a really thorny problem, you may want to uncomment the second
  * error_reporting line and sort through the Notices.
  *
- * $Id: include-locations.inc,v 1.19 2005/09/22 13:09:18 braverock Exp $
+ * $Id: include-locations.inc,v 1.20 2006/03/16 00:35:16 vanmer Exp $
  */
 
 //
@@ -29,8 +29,9 @@ if (!defined('IN_XRMS')) {
     define('IN_XRMS', true);
 }
 
+// This path should be the full filesystem path to the include directory for XRMS
 // include trailing slash in path
-$include_directory = "/full/path/to/xrms/";
+$include_directory = "/full/path/to/xrms/include/";
 
 // Report all errors except E_NOTICE
 // This is the default value set in php.ini
@@ -41,6 +42,9 @@ error_reporting(E_ALL ^E_NOTICE);
 
 /**
  * $Log: include-locations.inc,v $
+ * Revision 1.20  2006/03/16 00:35:16  vanmer
+ * - added better notes and a more easily understood example for the include path
+ *
  * Revision 1.19  2005/09/22 13:09:18  braverock
  * - remove trailing ?> from vars.php and include-locations.inc
  *   *trailing text on vars and include-locations file will now be parsed as php
