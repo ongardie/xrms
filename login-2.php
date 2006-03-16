@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.27 2006/01/25 23:43:36 vanmer Exp $
+ * $Id: login-2.php,v 1.28 2006/03/16 00:49:30 vanmer Exp $
  */
 require_once('include-locations.inc');
 
@@ -114,7 +114,10 @@ if ($xrms_use_ldap) {
      $sql = "select * from users where username = " . $con->qstr($username, get_magic_quotes_gpc()) . " AND password = " . $con->qstr($password_hash, get_magic_quotes_gpc()) . " AND user_record_status = 'a'";
      $rst = $con->execute($sql);
      if (!$rst) {
-         db_error_handler ($con,$sql);
+        $msg=_("Installation of database tables must be completed before using XRMS.  Please read the README and then run install/install.php.").'<br>'._("Error") . ': ' .$con->errorMsg();
+        $redirect="login.php?msg=$msg";
+        Header("Location: $redirect");
+        exit;
      }
 }
 
@@ -156,6 +159,9 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.28  2006/03/16 00:49:30  vanmer
+ * - added redirect and better error message in case the database is not properly installed when login occurs
+ *
  * Revision 1.27  2006/01/25 23:43:36  vanmer
  * - patch to log failed logins and include PHP session_id in audit items
  * - credit to "Diego Ongaro at ETSZONE (diego@etszone.com)" for providing this patch
