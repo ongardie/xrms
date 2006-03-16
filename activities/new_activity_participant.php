@@ -37,9 +37,11 @@ $con = get_xrms_dbconnection();
 
 if ($activity_id) {
     $activity_info=get_activity($con, array('activity_id'=>$activity_id));
-    $activity=current($activity_info);
-    $activity_type_id=$activity['activity_type_id'];
-    $activity_name=$activity['activity_title'];
+    if($activity_info){
+        $activity=current($activity_info);
+        $activity_type_id=$activity['activity_type_id'];
+        $activity_name=$activity['activity_title'];
+    }
 } else if ($activity_participant_action!='deleteActivityParticipant') {
     $msg=urlencode(_("Failed to find activity"));
     Header("Location:some.php?msg=$msg");
@@ -174,6 +176,9 @@ end_page();
 
 /*
  * $Log: new_activity_participant.php,v $
+ * Revision 1.5  2006/03/16 06:31:35  ongardie
+ * - Avoids a Warning when get_activity() returns false.
+ *
  * Revision 1.4  2006/01/02 21:23:18  vanmer
  * - changed to use centralized database connection function
  *
