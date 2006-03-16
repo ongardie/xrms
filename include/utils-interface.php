@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.101 2006/03/16 07:04:31 ongardie Exp $
+ * $Id: utils-interface.php,v 1.102 2006/03/16 21:57:33 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -311,7 +311,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '', $show_topn
 <?php if ($show_topnav) { ?>
   <body <?php do_hook('bodytags'); echo "DIR=".$_SESSION['DIR']; ?>>
   <?php do_hook('topofpage'); ?>
-  <div id="page_header"><?php echo $page_title; ?></div>
+  <div id="page_header"><?php echo $page_title; ?><span id="header_logo"></span></div>
 <?php
   // Show navbar..
   if ($show_navbar) {
@@ -1051,6 +1051,9 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.102  2006/03/16 21:57:33  vanmer
+ * - added span for header logo display
+ *
  * Revision 1.101  2006/03/16 07:04:31  ongardie
  * - Fixed Reports href in Aaron's patch
  *
