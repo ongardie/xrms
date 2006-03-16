@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.99 2006/03/16 00:38:44 vanmer Exp $
+ * $Id: utils-interface.php,v 1.100 2006/03/16 06:36:01 ongardie Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -354,8 +354,8 @@ function render_nav_line() {
                 $active_nav_items=$_SESSION['active_nav_items'];
             } else {
                 $active_nav_items=get_active_nav_items();
+                $_SESSION['active_nav_items']=$active_nav_items;
             }
-            $_SESSION['active_nav_items']=$active_nav_items;
 
             foreach ($active_nav_items as $type=>$item) {
                 $output_html_array[]=http_root_href($item['href'],   $item['title']);
@@ -1051,6 +1051,9 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.100  2006/03/16 06:36:01  ongardie
+ * - Write back to $_SESSION['active_nav_items'] only if we haven't just copied it.
+ *
  * Revision 1.99  2006/03/16 00:38:44  vanmer
  * - added case to attempt to guess css directory from current directory
  * - added output buffering to throw out errors when certain preferences fail due to database being unpopulated
