@@ -6,8 +6,14 @@
  *
  * It is used to input a background image (img/logo.gif) into the header of every page, as a logo.
  */
-#page_header {
+#header_logo {
+    z-index=-1;
+    width: 135px;
+    height: 45px;
+    float: right;
+    position: absolute;
+    top: 2px;
+    right: 200px; 
     background-image: url(../img/xrmslogo-dark.png);
     background-repeat: no-repeat;
-    background-position: 80%;
 }
