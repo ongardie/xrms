@@ -19,7 +19,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-preferences.php,v 1.14 2006/02/01 21:46:13 daturaarutad Exp $
+ * $Id: utils-preferences.php,v 1.15 2006/03/16 23:39:50 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -599,7 +599,9 @@ function add_user_preference_type($con,
                                                                     $allow_multiple=false,
                                                                     $allow_user_edit=false, 
                                                                     $form_element_type=false,
-                                                                    $read_only=false) {
+                                                                    $read_only=false,
+								    $skip_system_edit=false)
+								    {
     if (!$user_preference_name) {
         //if no preference name is specified, fail
         return false;
@@ -625,6 +627,9 @@ function add_user_preference_type($con,
 
     if ($read_only)
         $preference_type['read_only']=1;
+
+    if ($skip_system_edit)
+        $preference_type['skip_system_edit_flag']=1;
     
     if ($form_element_type)
         $preference_type['form_element_type']=$form_element_type;
@@ -741,6 +746,7 @@ function get_user_preferences_table($con, $user_id=false) {
         $user_preferences_table.="<tr><td colspan=2 class=widget_header>$table_title</td></tr>";
         foreach ($types as $type_info) {
             if ((!$type_info['allow_user_edit_flag']) AND (!$admin)) continue;
+	    if ($type_info['skip_system_edit_flag']) continue;
             $user_preference_type_id=$type_info['user_preference_type_id'];
             if ($type_info['user_preference_description']) {
                 $type_desc=_($type_info['user_preference_description']);
@@ -840,6 +846,9 @@ function move_system_parameters($con, $fields) {
 
 /**
  * $Log: utils-preferences.php,v $
+ * Revision 1.15  2006/03/16 23:39:50  vanmer
+ * - added system edit flag to control display of system preferences
+ *
  * Revision 1.14  2006/02/01 21:46:13  daturaarutad
  * add use_cache param to get_user_preference()
  *
