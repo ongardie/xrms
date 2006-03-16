@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.40 2005/12/08 05:23:37 vanmer Exp $
+ * $Id: data.php,v 1.41 2006/03/16 23:37:29 vanmer Exp $
  */
 
 /**
@@ -2882,6 +2882,13 @@ function user_preferences_db_data($con) {
         set_admin_preference($con, $session_storage_type, 'standard');
     }
 
+    $pager_columns_data=get_user_preference_type($con, 'pager_columns');
+    if ($pager_columns_data AND !$pager_columns_data['skip_system_edit_flag']) {
+	$sql = "UPDATE user_preference_types SET skip_system_edit_flag=1 WHERE user_preference_type_id=".$pager_columns_data['user_preference_type_id'];
+	$rst=$con->execute($sql);
+	if (!$rst) db_error_handler($con, $sql);
+    }
+
 
 }
 
@@ -2903,6 +2910,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.41  2006/03/16 23:37:29  vanmer
+ * - ensure that user preference for pager columns does not show up in system preferences menu
+ *
  * Revision 1.40  2005/12/08 05:23:37  vanmer
  * - added options for db handling of session data through XRMS or adodb to system preferences
  *
