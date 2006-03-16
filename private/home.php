@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.70 2006/03/16 00:37:39 vanmer Exp $
+ * $Id: home.php,v 1.71 2006/03/16 06:47:33 ongardie Exp $
  */
 
 // include the common files
@@ -66,6 +66,7 @@ if ((!array_key_exists('home',$active_nav_items))) {
     foreach ($active_nav_items as $key=>$item) {
         if ($key!='preferences') {
             $redirect_url=$http_site_root.$item['href'];
+	    break;
         }
     }
     if ($redirect_url) {
@@ -226,6 +227,10 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.71  2006/03/16 06:47:33  ongardie
+ * - When there is no Home menu item, it should redirect to the next one - not the last.
+ * - Redirecting to Activities rather than Reports/Admin (assuming defaults) makes more sense.
+ *
  * Revision 1.70  2006/03/16 00:37:39  vanmer
  * - added a few checks for broken pieces before continuing to render home page
  * - redirects to login with error messages for better error handling
