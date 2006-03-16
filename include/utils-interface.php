@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.98 2006/03/13 07:24:10 vanmer Exp $
+ * $Id: utils-interface.php,v 1.99 2006/03/16 00:38:44 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -197,10 +197,13 @@ function get_css_themes() {
             return $_SESSION['xrms_css_themes'];
         }
     }
+    $css_themes=array();
     $cssroot = $http_site_root.'/css';
     $cssdir = $xrms_file_root.'/css/';
+   if (!is_dir($cssdir)) {
+       $cssdir=realpath('css');
+   }
    if (is_dir($cssdir)) {
-        $css_themes=array();
         if ($dh = opendir($cssdir)) {
             while (($file = readdir($dh)) !== false) {
                 if ($file!='..' AND $file!='.' AND $file!='CVS') {
@@ -235,17 +238,21 @@ function start_page($page_title = '', $show_navbar = true, $msg = '', $show_topn
 
     //get the database connection
     if (!$xcon) {
-        $xcon=get_xrms_dbconnection();
+        $xcon=@get_xrms_dbconnection();
     }
 
     $user_id=$_SESSION['session_user_id'];
-
     $msg = status_msg($msg);
+    
+    if ($xcon->_connectionID) {
+    ob_start();
     if ($user_id) {
         $user_css_theme = get_user_preference($xcon, $user_id, 'css_theme');
     } else $user_css_theme = get_admin_preference($xcon, 'css_theme');
     if ($user_css_theme) $css_theme=$user_css_theme;
 //    echo "    $css_theme = get_user_preference($con, $user_id, 'css_theme');";
+    ob_end_clean();
+    }
     $curtheme = empty($css_theme) ? 'basic' : $css_theme;
     // Array containing list of named styles.
     //    array('basic' => '/path/to/basic.css');
@@ -276,7 +283,12 @@ function start_page($page_title = '', $show_navbar = true, $msg = '', $show_topn
     echo css_link($cssroot.'xrmsstyle-ie.css');
     //quick and dirty hack to include and force logo style before the theme styles have been applied
     //should also check system parameters to see if logo should be displayed
-    if ((get_system_parameter($xcon, 'Show Logo') == 'y') AND $show_topnav) {
+    ob_start();
+    $show_logo_pref=get_system_parameter($xcon, 'Show Logo');
+    //show logo by default, if no preference is set
+    if (!$show_logo_pref) $show_logo_pref='y';
+    ob_end_clean();
+    if (($show_logo_pref == 'y') AND $show_topnav) {
         echo css_link($cssroot.'logo.css', $curtheme, false);
     }
 
@@ -413,7 +425,7 @@ function end_page($use_hook = true) {
     if (!$session_user_id) { $user_id=0; }
     else { $user_id=$session_user_id; }
     global $con;
-    if (!$econ) $econ=get_xrms_dbconnection();
+    if (!$econ) @$econ=get_xrms_dbconnection();
 
     echo "\n".'<div id="footer">'."\n";
 
@@ -425,9 +437,10 @@ function end_page($use_hook = true) {
         */
         do_hook ('end_page');
     }
-
+    ob_start();
     $block_sf_page = get_user_preference($econ, $user_id, 'block_sf_link' );
     $hide_sf_image = get_user_preference($econ, $user_id, 'hide_sf_img');
+    ob_end_clean();
 
     $alt_string=htmlspecialchars(_("XRMS SourceForge Project Page"));
 
@@ -1038,6 +1051,10 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.99  2006/03/16 00:38:44  vanmer
+ * - added case to attempt to guess css directory from current directory
+ * - added output buffering to throw out errors when certain preferences fail due to database being unpopulated
+ *
  * Revision 1.98  2006/03/13 07:24:10  vanmer
  * - fixed stranged character in last commit
  *
