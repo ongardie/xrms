@@ -1,0 +1,20 @@
+/**
+ * Classic XRMS theme with left sidebar
+ * Imports the classic theme, and then modifies layout attributes
+ * to move sidebar to the left side
+ *  (URIs are always relative to the stylesheet)
+ */
+@import url("../classic/classic.css");
+@import url(../../js/jscalendar/calendar-blue.css);
+
+#page_header,
+table.widget .widget_header,
+table.widget .widget_label {
+    background-color: rgb(20%,40%,60%);
+    background-image: url(../../img/page_title_background2.gif); 
+}
+
+table.widget .widget_header {
+    background-image: url(../../img/widget_header_background2.gif);
+}
+
