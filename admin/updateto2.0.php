@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.9 2006/01/19 14:09:05 braverock Exp $
+ * $Id: updateto2.0.php,v 1.10 2006/03/17 00:14:34 vanmer Exp $
  */
 
 // where do we include from
@@ -4528,6 +4528,12 @@ else {
         if (!$rst) db_error_handler($con, $sql);
         else { $msg.="Added read only option to user preference types.\n"; }
     }
+    if ($rst->EOF OR !array_key_exists('skip_system_edit_flag', $rst->fields)) {
+        $sql = "ALTER TABLE user_preference_types ADD`skip_system_edit_flag` TINYINT( 1 ) DEFAULT '0' NOT NULL";
+        $rst=$con->execute($sql);
+        if (!$rst) db_error_handler($con, $sql);
+        else { $msg.="Added hidden preference flag option to user preference types.\n"; }
+    }
 }
 
 user_preferences_db_data($con);
@@ -4776,6 +4782,9 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.10  2006/03/17 00:14:34  vanmer
+ * - added preference type option to hide preference from system preferences menu
+ *
  * Revision 1.9  2006/01/19 14:09:05  braverock
  * - fix issue of overwriting won/lost opportunity statuses
  *   - issue reported by Jean Noel Hayart
