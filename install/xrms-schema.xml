@@ -30,6 +30,7 @@
       <row><f>9</f><f>Administration</f><f></f><f></f><f></f><f>1</f></row>
       <row><f>10</f><f>Email Template</f><f>email_templates</f><f>email_template_id</f><f></f><f>1</f></row>
       <row><f>11</f><f>User</f><f>users</f><f>user_id</f><f></f><f>1</f></row>
+      <row><f>12</f><f>Reports</f><f></f><f></f><f></f><f>1</f></row>
     </data>
   </table>
   <table name="ControlledObjectRelationship">
@@ -81,6 +82,7 @@
       <row><f>23</f><f>7</f><f>10</f><f></f><f></f><f></f><f>1</f></row>
       <row><f>24</f><f>7</f><f>8</f><f></f><f></f><f></f><f>1</f></row>
       <row><f>25</f><f>11</f><f>0</f><f></f><f></f><f></f><f>0</f></row>
+      <row><f>26</f><f>12</f><f></f><f></f><f></f><f></f><f></f></row>
     </data>
   </table>
   <table name="GroupMember">
@@ -284,6 +286,12 @@
       <row><f>26</f><f>2</f><f>25</f><f>World</f><f>5</f><f>1</f></row>
       <row><f>27</f><f>1</f><f>25</f><f>User</f><f>2</f><f>1</f></row>
       <row><f>28</f><f>1</f><f>25</f><f>User</f><f>3</f><f>1</f></row>
+      <row><f>29</f><f>2</f><f>26</f><f>World</f><f>1</f><f>1</f></row>
+      <row><f>30</f><f>2</f><f>26</f><f>World</f><f>2</f><f>1</f></row>
+      <row><f>31</f><f>2</f><f>26</f><f>World</f><f>3</f><f>1</f></row>
+      <row><f>32</f><f>2</f><f>26</f><f>World</f><f>4</f><f>1</f></row>
+      <row><f>33</f><f>2</f><f>26</f><f>World</f><f>5</f><f>1</f></row>
+      <row><f>34</f><f>1</f><f>26</f><f>World</f><f>2</f><f>1</f></row>
     </data>
   </table>
   <table name="account_statuses">
@@ -1319,10 +1327,7 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="namechange_at" type="T">
-      <NOTNULL/>
-      <DEFAULT value="0000-00-00 00:00:00"/>
-    </field>
+    <field name="namechange_at" type="T"/>
     <field name="former_name" type="C" size="100">
       <NOTNULL/>
     </field>
@@ -1343,10 +1348,7 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="established_at" type="T">
-      <NOTNULL/>
-      <DEFAULT value="0000-00-00 00:00:00"/>
-    </field>
+    <field name="established_at" type="T"/>
     <index name="company_from_id">
       <col>company_from_id</col>
       <col>company_to_id</col>
@@ -1427,10 +1429,7 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="companychange_at" type="T">
-      <NOTNULL/>
-      <DEFAULT value="0000-00-00 00:00:00"/>
-    </field>
+    <field name="companychange_at" type="T"/>
     <field name="former_company_id" type="I" size="11">
       <NOTNULL/>
       <DEFAULT value="0"/>
@@ -1893,7 +1892,7 @@
     </field>
     <field name="created_on" type="T"/>
     <data>
-      <row><f>1</f><f>Email Merge Letter</f><f>0</f><f>0000-00-00 00:00:00</f><f>0</f><f>0000-00-00 00:00:00</f></row>
+      <row><f>1</f><f>Email Merge Letter</f><f>0</f><f></f><f>0</f><f></f></row>
     </data>
   </table>
   <table name="email_templates">
@@ -1968,10 +1967,7 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="last_modified_on" type="T">
-      <NOTNULL/>
-      <DEFAULT value="0000-00-00 00:00:00"/>
-    </field>
+    <field name="last_modified_on" type="T"/>
     <field name="last_modified_by" type="C" size="11">
       <NOTNULL/>
     </field>
@@ -2552,10 +2548,7 @@
     <field name="session_id" type="C" size="255">
       <KEY/>
     </field>
-    <field name="last_updated" type="T">
-      <NOTNULL/>
-      <DEFAULT value="0000-00-00 00:00:00"/>
-    </field>
+    <field name="last_updated" type="T"/>
     <field name="data_value" type="X"/>
     <index name="last_update">
       <col>last_updated</col>
@@ -2590,10 +2583,7 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="last_update" type="D">
-      <NOTNULL/>
-      <DEFAULT value="0000-00-00"/>
-    </field>
+    <field name="last_update" type="D"/>
     <field name="current_hour_shift" type="N" size="10">
       <NOTNULL/>
       <DEFAULT value="0"/>
@@ -3443,14 +3433,8 @@
       <NOTNULL/>
       <DEFAULT value="a"/>
     </field>
-    <field name="preference_type_created_on" type="T">
-      <NOTNULL/>
-      <DEFAULT value="0000-00-00 00:00:00"/>
-    </field>
-    <field name="user_preference_type_modified_on" type="T">
-      <NOTNULL/>
-      <DEFAULT value="0000-00-00 00:00:00"/>
-    </field>
+    <field name="preference_type_created_on" type="T"/>
+    <field name="user_preference_type_modified_on" type="T"/>
     <field name="form_element_type" type="C" size="32">
       <NOTNULL/>
       <DEFAULT value="text"/>
@@ -3459,26 +3443,31 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
+    <field name="skip_system_edit_flag" type="I" size="1">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
     <data>
-      <row><f>1</f><f>user_language</f><f>Language</f><f></f><f>0</f><f>1</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
-      <row><f>2</f><f>css_theme</f><f>Theme</f><f>Color and Layout Theme for XRMS</f><f>0</f><f>1</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
-      <row><f>3</f><f>hide_sf_img</f><f>Hide SourceForge Image</f><f>Hides the SourceForge Image which appears at the bottom of every page</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
-      <row><f>4</f><f>block_sf_link</f><f>Block SourceForge Link</f><f>Disables the SourceForge image and link which appears at the bottom of every page</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
-      <row><f>5</f><f>company_search_type</f><f>Company Search Type</f><f>Search method used when searching company names</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
-      <row><f>7</f><f>Default GST Offset</f><f>Default GST Offset</f><f>Default timezone offset</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>text</f><f>0</f></row>
-      <row><f>8</f><f>Audit Level</f><f>Audit Level</f><f><![CDATA[What level of audit logging should be performed.  0 - no logging, 1 - inserts & updates, 2 - and login/logout, 3 - and views, 4 - and searches]]></f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
-      <row><f>9</f><f>Activities Default Behavior</f><f>Activities Default Behavior</f><f>How will activities behave.  Options are Fast or Long.  Fast will keep user within current screen while Long will move to the activites/one screen for detailed description entry.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
-      <row><f>10</f><f>LDAP Version</f><f>LDAP Version</f><f>Version of the LDAP server.  Will usually be 2 or 3.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
-      <row><f>11</f><f>RSS Feeds Enabled</f><f>RSS Feeds Enabled</f><f>Provide RSS Feeds.  y or n.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
-      <row><f>12</f><f>Maximum RSS Feed Entries</f><f>Maximum RSS Feed Entries</f><f>Maximum number of entries to include in any RSS feed.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>text</f><f>0</f></row>
-      <row><f>13</f><f>Sender Email Address</f><f>Sender Email Address</f><f>Email address to use as the sender address when sending reports via email.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>text</f><f>0</f></row>
-      <row><f>14</f><f>Reports--Use Horizontal Rule</f><f>Reports--Use Horizontal Rule</f><f>Use horizontal rule on reports.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
-      <row><f>15</f><f>Reports--Show No Items Found</f><f>Reports--Show No Items Found</f><f>Show text for items with no result on reports.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
-      <row><f>16</f><f>Allow Unassigned Activities</f><f>Allow Unassigned Activities</f><f>Unassigned activities are useful when creating activity pools, but can result in activities erroneously created without accountability.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
-      <row><f>17</f><f>Display Item Technical Details</f><f>Display Item Technical Details</f><f>Expose ID numbers and other technical tidbits on production screens. Useful for developers tracking issues in production. Otherwise not necessary.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
-      <row><f>18</f><f>Show Logo</f><f>Show Logo</f><f>Controls custom logo display in the head of every page in XRMS.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
-      <row><f>20</f><f>xrms_version</f><f>XRMS Version</f><f>XRMS Version (read-only)</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>text</f><f>1</f></row>
-      <row><f>21</f><f>session_storage_type</f><f>Session Data Storage Type</f><f>Controls where the PHP session data is stored (files or database).  Changing this parameter will cause all currently logged in users to be logged out.</f><f>0</f><f>0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0000-00-00 00:00:00</f><f>select</f><f>0</f></row>
+      <row><f>1</f><f>user_language</f><f>Language</f><f></f><f>0</f><f>1</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
+      <row><f>2</f><f>css_theme</f><f>Theme</f><f>Color and Layout Theme for XRMS</f><f>0</f><f>1</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
+      <row><f>3</f><f>hide_sf_img</f><f>Hide SourceForge Image</f><f>Hides the SourceForge Image which appears at the bottom of every page</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
+      <row><f>4</f><f>block_sf_link</f><f>Block SourceForge Link</f><f>Disables the SourceForge image and link which appears at the bottom of every page</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
+      <row><f>5</f><f>company_search_type</f><f>Company Search Type</f><f>Search method used when searching company names</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
+      <row><f>7</f><f>Default GST Offset</f><f>Default GST Offset</f><f>Default timezone offset</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>text</f><f>0</f><f>0</f></row>
+      <row><f>8</f><f>Audit Level</f><f>Audit Level</f><f><![CDATA[What level of audit logging should be performed.  0 - no logging, 1 - inserts & updates, 2 - and login/logout, 3 - and views, 4 - and searches]]></f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
+      <row><f>9</f><f>Activities Default Behavior</f><f>Activities Default Behavior</f><f>How will activities behave.  Options are Fast or Long.  Fast will keep user within current screen while Long will move to the activites/one screen for detailed description entry.</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
+      <row><f>10</f><f>LDAP Version</f><f>LDAP Version</f><f>Version of the LDAP server.  Will usually be 2 or 3.</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
+      <row><f>11</f><f>RSS Feeds Enabled</f><f>RSS Feeds Enabled</f><f>Provide RSS Feeds.  y or n.</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
+      <row><f>12</f><f>Maximum RSS Feed Entries</f><f>Maximum RSS Feed Entries</f><f>Maximum number of entries to include in any RSS feed.</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>text</f><f>0</f><f>0</f></row>
+      <row><f>13</f><f>Sender Email Address</f><f>Sender Email Address</f><f>Email address to use as the sender address when sending reports via email.</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>text</f><f>0</f><f>0</f></row>
+      <row><f>14</f><f>Reports--Use Horizontal Rule</f><f>Reports--Use Horizontal Rule</f><f>Use horizontal rule on reports.</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
+      <row><f>15</f><f>Reports--Show No Items Found</f><f>Reports--Show No Items Found</f><f>Show text for items with no result on reports.</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
+      <row><f>16</f><f>Allow Unassigned Activities</f><f>Allow Unassigned Activities</f><f>Unassigned activities are useful when creating activity pools, but can result in activities erroneously created without accountability.</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
+      <row><f>17</f><f>Display Item Technical Details</f><f>Display Item Technical Details</f><f>Expose ID numbers and other technical tidbits on production screens. Useful for developers tracking issues in production. Otherwise not necessary.</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
+      <row><f>18</f><f>Show Logo</f><f>Show Logo</f><f>Controls custom logo display in the head of every page in XRMS.</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
+      <row><f>20</f><f>xrms_version</f><f>XRMS Version</f><f>XRMS Version (read-only)</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>text</f><f>1</f><f>0</f></row>
+      <row><f>21</f><f>session_storage_type</f><f>Session Data Storage Type</f><f>Controls where the PHP session data is stored (files or database).  Changing this parameter will cause all currently logged in users to be logged out.</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
+      <row><f>22</f><f>pager_columns</f><f>Pager Columns Display Settings</f><f></f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>text</f><f>0</f><f>1</f></row>
     </data>
   </table>
   <table name="user_preferences">
@@ -3502,10 +3491,7 @@
       <NOTNULL/>
       <DEFAULT value="a"/>
     </field>
-    <field name="user_preference_modified_on" type="T">
-      <NOTNULL/>
-      <DEFAULT value="0000-00-00 00:00:00"/>
-    </field>
+    <field name="user_preference_modified_on" type="T"/>
     <field name="user_preference_created_by" type="I" size="11">
       <NOTNULL/>
       <DEFAULT value="0"/>
@@ -3518,26 +3504,26 @@
       <col>user_preference_type_id</col>
     </index>
     <data>
-      <row><f>1</f><f>0</f><f>3</f><f></f><f>y</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>2</f><f>0</f><f>4</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>3</f><f>0</f><f>5</f><f></f><f>contains</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>4</f><f>0</f><f>6</f><f></f><f>1.0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>5</f><f>0</f><f>7</f><f></f><f>-5</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>6</f><f>0</f><f>8</f><f></f><f>4</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>7</f><f>0</f><f>9</f><f></f><f>Fast</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>8</f><f>0</f><f>10</f><f></f><f>2</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>9</f><f>0</f><f>11</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>10</f><f>0</f><f>12</f><f></f><f>15</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>11</f><f>0</f><f>13</f><f></f><f>xrms@example.com</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>12</f><f>0</f><f>14</f><f></f><f>y</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>13</f><f>0</f><f>15</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>14</f><f>0</f><f>16</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>15</f><f>0</f><f>17</f><f></f><f>n</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>16</f><f>0</f><f>18</f><f></f><f>y</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>18</f><f>0</f><f>20</f><f></f><f>1.0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>19</f><f>0</f><f>1</f><f></f><f>en_US</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>20</f><f>0</f><f>2</f><f></f><f>basic</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
-      <row><f>21</f><f>0</f><f>20</f><f></f><f>1.0</f><f>a</f><f>0000-00-00 00:00:00</f><f>0</f><f>0</f></row>
+      <row><f>1</f><f>0</f><f>3</f><f></f><f>y</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>2</f><f>0</f><f>4</f><f></f><f>n</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>3</f><f>0</f><f>5</f><f></f><f>contains</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>4</f><f>0</f><f>6</f><f></f><f>1.0</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>5</f><f>0</f><f>7</f><f></f><f>-5</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>6</f><f>0</f><f>8</f><f></f><f>4</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>7</f><f>0</f><f>9</f><f></f><f>Fast</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>8</f><f>0</f><f>10</f><f></f><f>2</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>9</f><f>0</f><f>11</f><f></f><f>n</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>10</f><f>0</f><f>12</f><f></f><f>15</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>11</f><f>0</f><f>13</f><f></f><f>xrms@example.com</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>12</f><f>0</f><f>14</f><f></f><f>y</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>13</f><f>0</f><f>15</f><f></f><f>n</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>14</f><f>0</f><f>16</f><f></f><f>n</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>15</f><f>0</f><f>17</f><f></f><f>n</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>16</f><f>0</f><f>18</f><f></f><f>y</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>18</f><f>0</f><f>20</f><f></f><f>1.0</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>19</f><f>0</f><f>1</f><f></f><f>en_US</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>20</f><f>0</f><f>2</f><f></f><f>basic</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>21</f><f>0</f><f>20</f><f></f><f>1.0</f><f>a</f><f></f><f>0</f><f>0</f></row>
       <row><f>24</f><f>0</f><f>21</f><f></f><f>standard</f><f>a</f><f>2005-12-02 18:30:07</f><f>0</f><f>0</f></row>
     </data>
   </table>
@@ -3582,7 +3568,7 @@
       <col>username</col>
     </index>
     <data>
-      <row><f>1</f><f>0</f><f>user1</f><f>24c9e15e52afc47c225b757e7bee1f9d</f><f>One</f><f>User</f><f>user1@somecompany.com</f><f>english</f><f>0</f><f>0000-00-00 00:00:00</f><f>a</f></row>
+      <row><f>1</f><f>0</f><f>user1</f><f>24c9e15e52afc47c225b757e7bee1f9d</f><f>One</f><f>User</f><f>user1@somecompany.com</f><f>english</f><f>0</f><f></f><f>a</f></row>
     </data>
   </table>
   <table name="workflow_history">
@@ -3609,10 +3595,7 @@
       <DEFAULT value="0"/>
       <UNSIGNED/>
     </field>
-    <field name="status_change_timestamp" type="T">
-      <NOTNULL/>
-      <DEFAULT value="0000-00-00 00:00:00"/>
-    </field>
+    <field name="status_change_timestamp" type="T"/>
     <field name="status_change_by" type="I" size="10">
       <NOTNULL/>
       <DEFAULT value="0"/>
