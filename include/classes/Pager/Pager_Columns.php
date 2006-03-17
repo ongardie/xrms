@@ -10,7 +10,7 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.20 2006/03/12 09:29:27 vanmer Exp $
+ * $Id: Pager_Columns.php,v 1.21 2006/03/17 00:11:40 vanmer Exp $
  */
 
 class Pager_Columns {
@@ -61,8 +61,8 @@ class Pager_Columns {
         }
 
 
-        // this function checks for existance first and creates if it does not exist
-        add_user_preference_type($con, 'pager_columns');
+        // this function checks for existance first and creates if it does not exist, setting skip system edit to true
+        add_user_preference_type($con, 'pager_columns', _("Pager Columns Display Settings"),false,false,false,false,false,true);
 
 
         // read this user's pager_columns preference 
@@ -300,6 +300,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.21  2006/03/17 00:11:40  vanmer
+ * - added extra parameters when creating user preference type, to hide option from system preferences menu
+ *
  * Revision 1.20  2006/03/12 09:29:27  vanmer
  * - added missing site root global, needed for path to javascript include file
  *
