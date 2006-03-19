@@ -52,7 +52,7 @@ switch ($company_select_action) {
         }
         $header_text=_("Select a company or create a").'&nbsp;<a href="../companies/new.php">'._("New Company").'</a>';
         $company_search = $con->qstr(company_search_string($company_name));
-        $sql = "SELECT company_name, company_id FROM companies WHERE company_name LIKE $company_search";
+        $sql = "SELECT company_name, company_id FROM companies WHERE company_name LIKE $company_search AND company_record_status='a' ORDER BY company_name";
         $rst=$con->execute($sql);
         if (!$rst) { db_error_handler($con, $sql); exit; }
         if ($rst->EOF) {
@@ -104,6 +104,10 @@ end_page();
 
 /*
  * $Log: new_contact_company_select.php,v $
+ * Revision 1.7  2006/03/19 06:54:12  ongardie
+ * - Filters search to only include active companies.
+ * - Sorts returned search results (companies) by name.
+ *
  * Revision 1.6  2006/01/02 23:00:00  vanmer
  * - changed to use centralized dbconnection function
  *
