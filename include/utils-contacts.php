@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.15 2006/01/13 00:00:27 vanmer Exp $
+ * $Id: utils-contacts.php,v 1.16 2006/03/19 02:18:41 ongardie Exp $
  *
  */
 
@@ -205,7 +205,7 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
             $contact_data['user_id']          = (strlen($contact_data['user_id']) > 0)         ? $contact_data['user_id']         : $session_user_id;
 
             // If salutation is 0, make sure you replace it with an empty string
-            $contact_data['salutation']       = (strlen($contact_data['salutation']) > 0)      ? $contact_data['salutation']      : 0;
+            $contact_data['salutation']       = (strlen($contact_data['salutation']) > 0)      ? $contact_data['salutation']      : "";
 
             $contact_data['last_name']        = (strlen($contact_data['last_name']) > 0)       ? $contact_data['last_name']       : "[last name]";
             $contact_data['first_names']      = (strlen($contact_data['first_names']) > 0)     ? $contact_data['first_names']     : "[first names]";
@@ -486,6 +486,9 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.16  2006/03/19 02:18:41  ongardie
+ * - Allow empty salutation for new contacts.
+ *
  * Revision 1.15  2006/01/13 00:00:27  vanmer
  * - removed getRelationshipID function (moved to utils-relationships)
  *

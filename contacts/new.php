@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.40 2006/01/02 23:00:00 vanmer Exp $
+ * $Id: new.php,v 1.41 2006/03/19 02:18:41 ongardie Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -127,7 +127,7 @@ if ( !isset($address_menu) ) {
 if ( !isset($salutation) ) {
   $salutation = '';
 }
-$salutation_menu = build_salutation_menu($con, $salutation);
+$salutation_menu = build_salutation_menu($con, $salutation, true);
 
 
 // TBD - BUG - $gender should be set from database
@@ -352,6 +352,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.41  2006/03/19 02:18:41  ongardie
+ * - Allow empty salutation for new contacts.
+ *
  * Revision 1.40  2006/01/02 23:00:00  vanmer
  * - changed to use centralized dbconnection function
  *
