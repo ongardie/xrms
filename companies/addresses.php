@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.27 2006/01/02 22:56:26 vanmer Exp $
+ * $Id: addresses.php,v 1.28 2006/03/19 01:51:39 ongardie Exp $
  */
 
 require_once('../include-locations.inc');
@@ -83,7 +83,7 @@ function GetAddressesPagerData($row) {
 	$row['formatted_address'] = get_formatted_address($con, $row['address_id']);
 
 	// used_by_contacts
-    $sql2 = "select contact_id, address_id, last_name, first_names  from contacts where contact_record_status='a' and address_id = {$row['address_id']}";
+    $sql2 = "SELECT contact_id, address_id, home_address_id, last_name, first_names  FROM contacts WHERE contact_record_status='a' AND (address_id = ".$row['address_id']." OR home_address_id = ".$row['address_id'].")";
     $rst2 = $con->execute($sql2);
 
     $row['used_by_contacts'] = '';
@@ -213,6 +213,9 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.28  2006/03/19 01:51:39  ongardie
+ * - Used By Contacts now also includes contacts with the address as their home.
+ *
  * Revision 1.27  2006/01/02 22:56:26  vanmer
  * - changed to use centralized dbconnection function
  *
