@@ -2,7 +2,7 @@
 /**
  * Administration interface for managing permissions for one role
  *
- * $Id: role_permission_grid.php,v 1.7 2006/03/20 19:43:25 mig77 Exp $
+ * $Id: role_permission_grid.php,v 1.8 2006/03/20 21:23:45 vanmer Exp $
  *
  */
 
@@ -101,12 +101,10 @@ switch ($grid_action) {
                     } else {
                         if ($current_permissions[$scope][$cor][$perm]!=0) {
                             $ret=$acl->get_role_permission($gridrole_id,$cor,$scope,$perm);
-                            //print_r($ret);
-                            $role_permission_id=array_keys($ret);
-                            //print_r($role_permission_id);
-                            $delret=$acl->delete_role_permission($role_permission_id[0]);
-                            //echo "DELETED $role_permission_id[0] SUCCESSFULLY";
-                            
+			    $ret=current($ret);
+                            $role_permission_id=$ret['RolePermission_id'];
+                            $delret=$acl->delete_role_permission($role_permission_id);
+//                            if ($delret) echo "DELETED $role_permission_id SUCCESSFULLY";
                             $current_permissions[$scope][$cor][$perm]=0;
                         }
                     }
