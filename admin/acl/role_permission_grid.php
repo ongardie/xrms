@@ -2,7 +2,7 @@
 /**
  * Administration interface for managing permissions for one role
  *
- * $Id: role_permission_grid.php,v 1.6 2006/01/02 22:27:11 vanmer Exp $
+ * $Id: role_permission_grid.php,v 1.7 2006/03/20 19:43:25 mig77 Exp $
  *
  */
 
@@ -90,10 +90,10 @@ switch ($grid_action) {
         foreach ($current_permissions as $scope =>$scopedata) {
             foreach ($scopedata as $cor=>$permdata) {
                 foreach ($permdata as $perm=>$value) {
-  //                  echo "PROCESSING $scope $cor $perm<br>";
+//                 echo "PROCESSING $scope $cor $perm<br>";
                     if (array_key_exists("$scope,$cor,$perm",$_POST)) {
                         if ($current_permissions[$scope][$cor][$perm]!=1) {                        
-//                            echo "acl->add_role_permission($gridrole_id,$cor,$scope,$perm);<br>";
+                            echo "acl->add_role_permission($gridrole_id,$cor,$scope,$perm);<br>";
                             $ret=$acl->add_role_permission($gridrole_id,$cor,$scope,$perm);
  //                           if ($ret) echo "PERMISSION SET $scope,$cor,$perm";
                             $current_permissions[$scope][$cor][$perm]=1;
@@ -101,9 +101,12 @@ switch ($grid_action) {
                     } else {
                         if ($current_permissions[$scope][$cor][$perm]!=0) {
                             $ret=$acl->get_role_permission($gridrole_id,$cor,$scope,$perm);
-                            $role_permission_id=$ret['RolePermission_id'];
-                            $delret=$acl->delete_role_permission($role_permission_id);
-//                            if ($delret) echo "DELETED $role_permission_id SUCCESSFULLY";
+                            //print_r($ret);
+                            $role_permission_id=array_keys($ret);
+                            //print_r($role_permission_id);
+                            $delret=$acl->delete_role_permission($role_permission_id[0]);
+                            //echo "DELETED $role_permission_id[0] SUCCESSFULLY";
+                            
                             $current_permissions[$scope][$cor][$perm]=0;
                         }
                     }
