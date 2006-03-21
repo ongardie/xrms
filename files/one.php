@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.22 2006/01/02 23:03:52 vanmer Exp $
+ * $Id: one.php,v 1.23 2006/03/21 20:33:38 maulani Exp $
  */
 
 //include required files
@@ -77,7 +77,7 @@ if ($rst1) {
 
 
 $file_plugin_params = array('file_info' => $file_info);
-do_hook_function('file_get_file_info', &$file_plugin_params);
+do_hook_function('file_get_file_info', $file_plugin_params);
 $file_info =  $file_plugin_params['file_info'];
 
 
@@ -86,7 +86,7 @@ if($file_plugin_params['error_status']) {
     $msg = $file_plugin_params['error_text'];
 } else {
 	$file_plugin_params = array('file_info' => $file_info);
-	do_hook_function('file_get_one_file_html', &$file_plugin_params);
+	do_hook_function('file_get_one_file_html', $file_plugin_params);
 	$file_one_html = $file_plugin_params['file_one_html'];
 	$file_one_html_post = $file_plugin_params['file_one_html_post'];
 	$extra_download_args = $file_plugin_params['file_one_extra_download_args'];
@@ -222,6 +222,10 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.23  2006/03/21 20:33:38  maulani
+ *- Remove erroneous call-by-reference tag.  Function already defined with
+ *  call-by-reference
+ *
  *Revision 1.22  2006/01/02 23:03:52  vanmer
  *- changed to use centralized dbconnection function
  *
