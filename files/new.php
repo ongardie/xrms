@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.22 2006/01/02 23:03:52 vanmer Exp $
+ * $Id: new.php,v 1.23 2006/03/21 20:29:41 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -55,7 +55,7 @@ if ( $_POST['act'] == 'up' )
         $file_plugin_params = array('file_field_name' => 'file1', 'file_info' => $rec);
 
 
-        do_hook_function('file_add_file', &$file_plugin_params);
+        do_hook_function('file_add_file', $file_plugin_params);
 
         // external_id gets set by the hook
 		$rec = $file_plugin_params['file_info'];
@@ -196,6 +196,10 @@ if ( $_POST['act'] == 'up' )
 
 /**
  * $Log: new.php,v $
+ * Revision 1.23  2006/03/21 20:29:41  maulani
+ * - Remove deprecated call-by-reference item.  Function already defined with
+ *   call-by-reference
+ *
  * Revision 1.22  2006/01/02 23:03:52  vanmer
  * - changed to use centralized dbconnection function
  *
