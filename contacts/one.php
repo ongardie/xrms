@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.97 2006/01/02 23:00:00 vanmer Exp $
+ * $Id: one.php,v 1.98 2006/03/21 02:59:51 ongardie Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -461,6 +461,7 @@ function openMsnSession(strIMAddress) {
             ?>
         </form>
 
+        <?php do_hook('contact_content_bottom', $contact_id); ?>
 
     </div>
 
@@ -513,6 +514,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.98  2006/03/21 02:59:51  ongardie
+ * - Added contact_content_bottom plugin hook.
+ *
  * Revision 1.97  2006/01/02 23:00:00  vanmer
  * - changed to use centralized dbconnection function
  *
