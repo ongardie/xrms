@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.45 2006/01/16 14:47:54 niclowe Exp $
+ * $Id: edit.php,v 1.46 2006/03/21 03:04:01 ongardie Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -150,6 +150,7 @@ confGoTo_includes();
             <tr>
                 <td class=widget_header colspan=2><?php echo _("Contact Information"); ?></td>
             </tr>
+	    <?php do_hook('contact_edit_form_top'); ?>
             <tr>
                 <td class=widget_label_right><?php echo _("Salutation"); ?></td>
                 <td class=widget_content_form_element><?php echo $salutation_menu; ?></td>
@@ -319,6 +320,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.46  2006/03/21 03:04:01  ongardie
+ * - Added contact_edit_form_top plugin hook.
+ *
  * Revision 1.45  2006/01/16 14:47:54  niclowe
  * removed get_formatted_phone for phone numbers - you shouldnt format the phoen number on an edit as it will ruin the data when you save the edit
  *
