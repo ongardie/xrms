@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.133 2006/02/21 14:49:48 braverock Exp $
+ * $Id: one.php,v 1.134 2006/03/21 02:41:39 ongardie Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -380,15 +380,20 @@ $on_what_id = $company_id;
 // include the notes sidebar
 require_once("../notes/sidebar.php");
 
-// make sure $sidebar_rows is defined
-if ( !isset($sidebar_rows) ) {
-  $sidebar_rows = '';
+// make sure $sidebar_rows_* are defined
+if ( !isset($sidebar_rows_top) ) {
+  $sidebar_rows_top = '';
 }
-//call the sidebar hook
-$sidebar_rows = do_hook_function('company_sidebar_bottom', $sidebar_rows);
+if ( !isset($sidebar_rows_bottom) ) {
+  $sidebar_rows_bottom = '';
+}
+
+//call the sidebar hooks
+$sidebar_rows_top = do_hook_function('company_sidebar_top', $sidebar_rows_top);
+$sidebar_rows_bottom = do_hook_function('company_sidebar_bottom', $sidebar_rows_bottom);
 if ($division_id) {
     // add division sidebars
-    $sidebar_rows .= do_hook_function('division_sidebar_bottom', $sidebar_rows);
+    $sidebar_rows_bottom .= do_hook_function('division_sidebar_bottom', $sidebar_rows_bottom);
 }
 
 // make sure $bottom_rows is defined
@@ -705,7 +710,10 @@ function markComplete() {
 
         <!-- right column //-->
     <div id="Sidebar">
-
+        
+        <!-- sidebar plugins - top //-->
+        <?php echo $sidebar_rows_top; ?>
+        
         <!-- categories //-->
         <?php echo $category_rows; ?>
 
@@ -724,8 +732,8 @@ function markComplete() {
         <!-- files //-->
         <?php echo $file_rows; ?>
 
-        <!-- sidebar plugins //-->
-        <?php echo $sidebar_rows; ?>
+        <!-- sidebar plugins - bottom //-->
+        <?php echo $sidebar_rows_bottom; ?>
 
     </div>
 
@@ -745,6 +753,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.134  2006/03/21 02:41:39  ongardie
+ * - Added plugin hook for top of sidebar.
+ *
  * Revision 1.133  2006/02/21 14:49:48  braverock
  * - add division hooks for display of division information when division is selected
  *
