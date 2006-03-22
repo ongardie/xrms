@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: divisions.php,v 1.15 2006/01/02 22:56:27 vanmer Exp $
+ * $Id: divisions.php,v 1.16 2006/03/22 02:31:12 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -21,6 +21,9 @@ $session_user_id = session_check();
 
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $company_id = $_GET['company_id'];
+
+$return_url="divisions.php?company_id=$company_id";
+$url_return_url=urlencode($return_url);
 
 $con = get_xrms_dbconnection();
 // $con->debug = 1;
@@ -40,7 +43,7 @@ if ($rst) {
             $rst->fields['division_name'] = _("[none]");
         }
         $division_html .= '<tr>';
-        $division_html .= "<td class=widget_label><a href=edit-division.php?company_id=$company_id&division_id=" . $rst->fields['division_id'] . '>' . $rst->fields['division_name'] . '</a></td>';
+        $division_html .= "<td class=widget_label><a href=edit-division.php?return_url=$url_return_url&company_id=$company_id&division_id=". $rst->fields['division_id'] . '>' . $rst->fields['division_name'] . '</a></td>';
         $division_html .=   '<td class=widget_content>'
                           . $rst->fields['description'] . '</td>';
 
@@ -114,6 +117,11 @@ end_page();
 
 /**
  * $Log: divisions.php,v $
+ * Revision 1.16  2006/03/22 02:31:12  braverock
+ * - fix missing return_url
+ *   -  patch submitted by MarkoL
+ *   -  fixes https://sourceforge.net/tracker/?func=detail&atid=588128&aid=1440968&group_id=88850
+ *
  * Revision 1.15  2006/01/02 22:56:27  vanmer
  * - changed to use centralized dbconnection function
  *
