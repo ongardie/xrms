@@ -13,7 +13,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: import-companies.php,v 1.19 2006/01/02 21:50:29 vanmer Exp $
+ * $Id: import-companies.php,v 1.20 2006/03/22 18:12:22 jswalter Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -68,30 +68,31 @@ $con->close();
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
     <tr>
-        <td class=lcol width=35% valign=top>
+        <td class="lcol" width="35%" valign="top">
 
-        <form action="import-companies-2.php" method=post enctype="multipart/form-data">
-        <table class=widget cellspacing=1>
+        <form action="import-companies-2.php" method="post" enctype="multipart/form-data">
+        <table class="widget" cellspacing="1">
             <tr>
-                <td class=widget_header colspan=2><?php echo _("Import Companies"); ?></td>
+                <td class="widget_header" colspan="2"><?php echo _("Import Companies"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("File"); ?></td>
-                <td class=widget_content_form_element><input type=file name=file1></td>
+                <td class="widget_label_right"><?php echo _("File"); ?></td>
+                <td class="widget_content_form_element"><input type="file" name="file1"></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Field Delimiter"); ?></td>
-                <td class=widget_content_form_element>
-                    <input type=radio name=delimiter value=comma checked><?php echo _("comma"); ?>
-                    <input type=radio name=delimiter value=tab><?php echo _("tab"); ?>
-                    <input type=radio name=delimiter value=pipe><?php echo _("pipe"); ?>
-                    <input type=radio name=delimiter value='semi-colon'><?php echo _("semi-colon"); ?></td>
+                <td class="widget_label_right"><?php echo _("Field Delimiter"); ?></td>
+                <td class="widget_content_form_element">
+                    <input type="radio" name="delimiter" value="comma" checked> <?php echo _("comma"); ?>
+                    <input type="radio" name="delimiter" value="tab"> <?php echo _("tab"); ?>
+                    <input type="radio" name="delimiter" value="pipe"> <?php echo _("pipe"); ?>
+                    <input type="radio" name="delimiter" value="semi-colon"> <?php echo _("semi-colon"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("File Format"); ?></td>
-                <td class=widget_content_form_element><select name="file_format">
+                <td class="widget_label_right"><?php echo _("File Format"); ?></td>
+                <td class="widget_content_form_element">
+                <select name="file_format">
 <?php
 if ($handle = opendir('.')) {
    $opts = array();
@@ -99,13 +100,16 @@ if ($handle = opendir('.')) {
    while (false !== ($filename = readdir($handle))) {
       if (preg_match($mask, $filename)) {
          preg_match($mask,$filename,$format_name);
-         $opts[] = '<option value="' . $format_name[2] . '">' . $format_name[2] . '</option>';
+         $opts[] = $format_name[2];
       }
    }
    if (!empty($opts)) {
+       // DEFAULT needs to be first! [walter]
+       echo '<option value="default">default</option>';
        natsort($opts);
        foreach ($opts as $opt) {
-           echo $opt;
+          if ( $opt != 'default' )  // skip it (default) when we find it here [walter]
+             echo '<option value="' . $opt . '">' . $opt . '</option>';
        }
    }
 };
@@ -114,46 +118,46 @@ if ($handle = opendir('.')) {
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Account Owner"); ?></td>
-                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
+                <td class="widget_label_right"><?php echo _("Account Owner"); ?></td>
+                <td class="widget_content_form_element"><?php  echo $user_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("CRM Status"); ?></td>
-                <td class=widget_content_form_element><?php  echo $crm_status_menu; ?></td>
+                <td class="widget_label_right"><?php echo _("CRM Status"); ?></td>
+                <td class="widget_content_form_element"><?php  echo $crm_status_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Company Source"); ?></td>
-                <td class=widget_content_form_element><?php  echo $company_source_menu; ?></td>
+                <td class="widget_label_right"><?php echo _("Company Source"); ?></td>
+                <td class="widget_content_form_element"><?php  echo $company_source_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Category"); ?></td>
-                <td class=widget_content_form_element><?php  echo $category_menu; ?></td>
+                <td class="widget_label_right"><?php echo _("Category"); ?></td>
+                <td class="widget_content_form_element"><?php  echo $category_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Industry"); ?></td>
-                <td class=widget_content_form_element><?php  echo $industry_menu; ?></td>
+                <td class="widget_label_right"><?php echo _("Industry"); ?></td>
+                <td class="widget_content_form_element"><?php  echo $industry_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Account Status"); ?></td>
-                <td class=widget_content_form_element><?php  echo $account_status_menu; ?></td>
+                <td class="widget_label_right"><?php echo _("Account Status"); ?></td>
+                <td class="widget_content_form_element"><?php  echo $account_status_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Rating"); ?></td>
-                <td class=widget_content_form_element><?php  echo $rating_menu; ?></td>
+                <td class="widget_label_right"><?php echo _("Rating"); ?></td>
+                <td class="widget_content_form_element"><?php  echo $rating_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Import"); ?>"></td>
+                <td class="widget_content_form_element" colspan="2"><input class="button" type="submit" value="<?php echo _("Import"); ?>"></td>
             </tr>
         </table>
         </form>
 
         </td>
         <!-- gutter //-->
-        <td class=gutter width=2%>
+        <td class="gutter" width="2%">
         &nbsp;
         </td>
         <!-- right column //-->
-        <td class=rcol width=63% valign=top>
+        <td class="rcol" width="63%" valign="top'>
 
         </td>
     </tr>
@@ -162,6 +166,10 @@ if ($handle = opendir('.')) {
 <?php end_page();
 /**
  * $Log: import-companies.php,v $
+ * Revision 1.20  2006/03/22 18:12:22  jswalter
+ *  - modified the import filter SELECT list generator to have 'default' as the first item
+ *  - placed double quotes around HTML tag attributes
+ *
  * Revision 1.19  2006/01/02 21:50:29  vanmer
  * - changed to use centralized dbconnection function
  *
