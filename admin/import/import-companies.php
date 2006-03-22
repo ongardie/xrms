@@ -13,7 +13,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: import-companies.php,v 1.20 2006/03/22 18:12:22 jswalter Exp $
+ * $Id: import-companies.php,v 1.21 2006/03/22 20:58:45 ongardie Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -157,7 +157,7 @@ if ($handle = opendir('.')) {
         &nbsp;
         </td>
         <!-- right column //-->
-        <td class="rcol" width="63%" valign="top'>
+        <td class="rcol" width="63%" valign="top">
 
         </td>
     </tr>
@@ -166,6 +166,9 @@ if ($handle = opendir('.')) {
 <?php end_page();
 /**
  * $Log: import-companies.php,v $
+ * Revision 1.21  2006/03/22 20:58:45  ongardie
+ * - Changed (1) incorrect single quote to a double quote.
+ *
  * Revision 1.20  2006/03/22 18:12:22  jswalter
  *  - modified the import filter SELECT list generator to have 'default' as the first item
  *  - placed double quotes around HTML tag attributes
