@@ -68,8 +68,8 @@ switch ($company_select_action) {
     break;
     default:
     case 'newCompanySearch':
-        $header_text=_("Search for a company");
-        $body_content.="Company: <input type=text name=company_name>";
+        $header_text=_("Search for Company");
+        $body_content.= _("Company").": <input type=text name=company_name>";
         $body_content.="<input type=hidden name=company_select_action  value='showCompanies'>";
         $body_content.="<input type=hidden name=return_url  value='$return_url'>";
         $body_content.="<input type=submit class=button name=btNewContact value=\""._("Search") ."\">";
@@ -104,6 +104,12 @@ end_page();
 
 /*
  * $Log: new_contact_company_select.php,v $
+ * Revision 1.8  2006/03/25 00:31:29  ongardie
+ * - Changed "Search for a company" to "Search for Company" because
+ *   there are far more translations available, no supported languages dropped,
+ *   and it is more appropriate for a header.
+ * - "Company" is now translated.
+ *
  * Revision 1.7  2006/03/19 06:54:12  ongardie
  * - Filters search to only include active companies.
  * - Sorts returned search results (companies) by name.
