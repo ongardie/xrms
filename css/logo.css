@@ -7,7 +7,7 @@
  * It is used to input a background image (img/logo.gif) into the header of every page, as a logo.
  */
 #header_logo {
-    z-index=-1;
+    z-index: 0;
     width: 135px;
     height: 45px;
     float: right;
