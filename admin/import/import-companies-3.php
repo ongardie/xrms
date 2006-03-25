@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.34 2006/03/16 07:56:19 ongardie Exp $
+ * $Id: import-companies-3.php,v 1.35 2006/03/25 19:08:06 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -257,12 +257,12 @@ foreach ($filearray as $row) {
 
     $sql_fetch_company_id = "select comp.company_id,cont.contact_id from companies comp, contacts cont where
                             cont.company_id =  comp.company_id and
-                            comp.company_name = '" . addslashes($company_name) ."' and ";
+                            comp.company_name = " . $con->qstr($company_name) ." and ";
     if ( $contact_first_names != '' )
     {
-        $sql_fetch_company_id .= "cont.first_names = '" . addslashes($contact_first_names) . "' and";
+        $sql_fetch_company_id .= "cont.first_names = " . $con->qstr($contact_first_names) . " and";
     }
-    $sql_fetch_company_id .= " cont.last_name = '" . addslashes($contact_last_name) . "' and
+    $sql_fetch_company_id .= " cont.last_name = " . $con->qstr($contact_last_name) . " and
                             cont.contact_record_status='a' and
                             comp.company_record_status='a' " ;
     debugSql($sql_fetch_company_id);
@@ -281,7 +281,7 @@ foreach ($filearray as $row) {
     {
         $company_id = 0;
           $sql_fetch_company_id = "select comp.company_id from companies comp where
-                                  comp.company_name =  '" . addslashes($company_name) ."' and
+                                  comp.company_name =  " . $con->qstr($company_name) ." and
                                   comp.company_record_status='a' " ;
    //echo "\n<br><pre> "._("Only Searching for Company") .' '. $sql_fetch_company_id . "\n</pre>" ;
 
@@ -332,7 +332,7 @@ foreach ($filearray as $row) {
             $rec['rating_id'] = $rating_id;
             $rec['entered_at'] = $entered_at;
             $rec['entered_by'] = $entered_by;
-            $rec['company_name'] = addslashes($company_name);
+            $rec['company_name'] = $company_name;
 
             importMessage(_("Created company ") + $company_name);
         } else {
@@ -346,7 +346,7 @@ foreach ($filearray as $row) {
         $rec['last_modified_by'] = $last_modified_by;
 
         if ($legal_name) {
-            $rec['legal_name'] = addslashes($legal_name);
+            $rec['legal_name'] = $legal_name;
         }
         if ($company_website) {
             $rec['url'] = $company_website;
@@ -364,16 +364,16 @@ foreach ($filearray as $row) {
             $rec['extref3'] = $extref3;
         }
         if ($company_custom1) {
-            $rec['custom1'] = addslashes($company_custom1);
+            $rec['custom1'] = $company_custom1;
         }
         if ($company_custom2) {
-            $rec['custom2'] = addslashes($company_custom2);
+            $rec['custom2'] = $company_custom2;
         }
         if ($company_custom3) {
-            $rec['custom3'] = addslashes($company_custom3);
+            $rec['custom3'] = $company_custom3;
         }
         if ($company_custom4) {
-            $rec['custom4'] = addslashes($company_custom4);
+            $rec['custom4'] = $company_custom4;
         }
         if ($employees) {
             $rec['employees'] = $employees;
@@ -388,7 +388,7 @@ foreach ($filearray as $row) {
             $rec['terms'] = $terms;
         }
         if ($company_profile) {
-            $rec['profile'] = addslashes($company_profile);
+            $rec['profile'] = $company_profile;
         }
         if ($company_code) {
             $rec['company_code'] = $company_code;
@@ -410,7 +410,7 @@ foreach ($filearray as $row) {
             $sql = "SELECT * FROM companies WHERE company_id = $company_id";
             $rst = $con->execute($sql);
 
-            $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+            $upd = $con->GetUpdateSQL($rst, $rec, false, false);
             debugSql($upd);
             if (strlen($upd)>0) {
                 $rst = $con->execute($upd);
@@ -421,7 +421,7 @@ foreach ($filearray as $row) {
         } else {
             //INSERT
             $tbl = 'companies';
-            $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+            $ins = $con->GetInsertSQL($tbl, $rec, false);
             debugSql($ins);
             if (strlen($ins)>0) {
                 $rst = $con->execute($ins);
@@ -461,7 +461,7 @@ foreach ($filearray as $row) {
 
             $sql = "SELECT * FROM companies WHERE company_id = $company_id";
             $rst = $con->execute($sql);
-            $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+            $upd = $con->GetUpdateSQL($rst, $rec, false, false);
             debugSql($upd);
             if (strlen($upd)>0) {
                 $rst = $con->execute($upd);
@@ -477,7 +477,7 @@ foreach ($filearray as $row) {
             $rec['division_name'] = $division_name;
 
             $tbl = 'company_division';
-            $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+            $ins = $con->GetInsertSQL($tbl, $rec, false);
             debugSql($ins);
             if (strlen($ins)>0) {
                 $rst = $con->execute($ins);
@@ -496,8 +496,8 @@ foreach ($filearray as $row) {
 
             // now check to see if we already have an address that matches line1 and city
             $sql_check_address = "select address_id from addresses where
-                                  line1 = '". addslashes($address_line1) ."' and
-                                  city = '". addslashes($address_city) ."' and
+                                  line1 = ". $con->qstr($address_line1) ." and
+                                  city = ". $con->qstr($address_city) ." and
                                   company_id = $company_id";
             debugSql($sql_check_address);
             $rst = $con->execute($sql_check_address);
@@ -558,17 +558,17 @@ foreach ($filearray as $row) {
                 $rec = array();
                 $rec['company_id'] = $company_id;
                 $rec['address_name'] = $address_name;
-                $rec['line1'] = trim(addslashes($address_line1));
-                $rec['line2'] = trim(addslashes($address_line2));
-                $rec['city'] = trim(addslashes($address_city));
-                $rec['province'] = trim(addslashes($address_state));
-                $rec['address_body'] = addslashes($address_body);
+                $rec['line1'] = trim($address_line1);
+                $rec['line2'] = trim($address_line2);
+                $rec['city'] = trim($address_city);
+                $rec['province'] = trim($address_state);
+                $rec['address_body'] = $address_body;
                 $rec['use_pretty_address'] = $address_use_pretty_address;
                 $rec['postal_code'] = $address_postal_code;
                 $rec['country_id'] = $address_country;
 
                 $tbl = 'addresses';
-                $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+                $ins = $con->GetInsertSQL($tbl, $rec, false);
 
                 debugSql($ins);
                 if (strlen($ins)>0) {
@@ -592,7 +592,7 @@ foreach ($filearray as $row) {
                         $rec['daylight_savings_id'] = $time_zone_offset['daylight_savings_id'];
                         $rec['gmt_offset'] = $time_zone_offset['offset'];
 
-                        $upd = $con->getUpdateSQL($rst, $rec, true, get_magic_quotes_gpc());
+                        $upd = $con->getUpdateSQL($rst, $rec, true, false);
                         if (strlen($upd)>0) {
                         $rst = $con->execute($upd);
                             if (!$rst) {
@@ -618,8 +618,8 @@ foreach ($filearray as $row) {
 
             // now check to see if we already have an address that matches line1 and city
             $sql_check_address = "select address_id from addresses where
-                                  line1 = '". addslashes($address2_line1) ."' and
-                                  city = '". addslashes($address2_city) ."' and
+                                  line1 = ". $con->qstr($address2_line1) ." and
+                                  city = ". $con->qstr($address2_city) ." and
                                   company_id = $company_id";
             debugSql($sql_check_address);
             $rst = $con->execute($sql_check_address);
@@ -680,17 +680,17 @@ foreach ($filearray as $row) {
                 $rec = array();
                 $rec['company_id'] = $company_id;
                 $rec['address_name'] = $address2_name;
-                $rec['line1'] = trim(addslashes($address2_line1));
-                $rec['line2'] = trim(addslashes($address2_line2));
-                $rec['city'] = trim(addslashes($address2_city));
-                $rec['province'] = trim(addslashes($address2_state));
-                $rec['address_body'] = addslashes($address2_body);
+                $rec['line1'] = trim($address2_line1);
+                $rec['line2'] = trim($address2_line2);
+                $rec['city'] = trim($address2_city);
+                $rec['province'] = trim($address2_state);
+                $rec['address_body'] = $address2_body;
                 $rec['use_pretty_address'] = $address2_use_pretty_address;
                 $rec['postal_code'] = $address2_postal_code;
                 $rec['country_id'] = $address2_country;
 
                 $tbl = 'addresses';
-                $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+                $ins = $con->GetInsertSQL($tbl, $rec, false);
 
                 debugSql($ins);
                 if (strlen($ins)>0) {
@@ -714,7 +714,7 @@ foreach ($filearray as $row) {
                         $rec['daylight_savings_id'] = $time_zone_offset['daylight_savings_id'];
                         $rec['gmt_offset'] = $time_zone_offset['offset'];
 
-                        $upd = $con->getUpdateSQL($rst, $rec, true, get_magic_quotes_gpc());
+                        $upd = $con->getUpdateSQL($rst, $rec, true, false);
                         if (strlen($upd)>0) {
                         $rst = $con->execute($upd);
                             if (!$rst) {
@@ -757,7 +757,7 @@ foreach ($filearray as $row) {
              $sql = "SELECT * FROM companies WHERE company_id = $company_id";
              $rst = $con->execute($sql);
 
-             $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+             $upd = $con->GetUpdateSQL($rst, $rec, false, false);
              debugSql($upd);
              if (strlen($upd)>0)
              {
@@ -774,10 +774,10 @@ foreach ($filearray as $row) {
         $sql_check_contact = "select contact_id, first_names, last_name from contacts where ";
     if ( $contact_first_names != '' )
     {
-        $sql_check_contact .= " first_names = '". addslashes($contact_first_names) . "' and ";
+        $sql_check_contact .= " first_names = ". $con->qstr($contact_first_names) . " and ";
     }
 
-    $sql_check_contact .= " last_name   = '". addslashes($contact_last_name) . "' and company_id  = ". $company_id;
+    $sql_check_contact .= " last_name   = ". $con->qstr($contact_last_name) . " and company_id  = ". $company_id;
 
         debugSql($sql_check_contact);
         $rst = $con->execute($sql_check_contact);
@@ -791,8 +791,8 @@ foreach ($filearray as $row) {
         // doesn't exist, create new one
             $rec = array();
             $rec['company_id'] = $company_id;
-            $rec['first_names'] = addslashes($contact_first_names);
-            $rec['last_name'] = addslashes($contact_last_name);
+            $rec['first_names'] = $contact_first_names;
+            $rec['last_name'] = $contact_last_name;
             $rec['entered_at'] = $entered_at;
             $rec['entered_by'] = $entered_by;
             $rec['last_modified_at'] = $last_modified_at;
@@ -828,13 +828,13 @@ foreach ($filearray as $row) {
                 $rec['date_of_birth'] = $contact_date_of_birth;
             }
             if ($contact_summary){
-                $rec['summary'] = addslashes($contact_summary);
+                $rec['summary'] = $contact_summary;
             }
             if ($contact_title){
-                $rec['title'] = addslashes($contact_title);
+                $rec['title'] = $contact_title;
             }
             if ($contact_description){
-                $rec['description'] = addslashes($contact_description);
+                $rec['description'] = $contact_description;
             }
             if ($contact_cell_phone){
                 $rec['cell_phone'] = $contact_cell_phone;
@@ -852,26 +852,26 @@ foreach ($filearray as $row) {
                 $rec['interests'] = $contact_interests;
             }
             if ($contact_custom1){
-                $rec['custom1'] = addslashes($contact_custom1);
+                $rec['custom1'] = $contact_custom1;
             }
             if ($contact_custom2){
-                $rec['custom2'] = addslashes($contact_custom2);
+                $rec['custom2'] = $contact_custom2;
             }
             if ($contact_custom3){
-                $rec['custom3'] = addslashes($contact_custom3);
+                $rec['custom3'] = $contact_custom3;
             }
             if ($contact_custom4){
-                $rec['custom4'] = addslashes($contact_custom4);
+                $rec['custom4'] = $contact_custom4;
             }
             if ($contact_profile){
-                $rec['profile'] = addslashes($contact_profile);
+                $rec['profile'] = $contact_profile;
             }
             if ($gender){
                 $rec['gender'] = $gender;
             }
 
             $tbl = 'contacts';
-            $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+            $ins = $con->GetInsertSQL($tbl, $rec, false);
             debugSql($ins);
             if (strlen($ins)>0) {
                 $rst = $con->execute($ins);
@@ -910,7 +910,7 @@ foreach ($filearray as $row) {
                $rec['on_what_id'] = $company_id;
 
                $tbl = 'entity_category_map';
-               $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+               $ins = $con->GetInsertSQL($tbl, $rec, false);
                debugSql($ins);
                if (strlen($ins)>0) {
                    $rst = $con->execute($ins);
@@ -1040,6 +1040,11 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.35  2006/03/25 19:08:06  vanmer
+ * - removed all addslashes calls, taken care of by getInsert/getUpdateSQL calls
+ * - added qstr where required instead of explicit quotes
+ * - thanks to Diego Ongaro at ETSZONE (diego@etszone.com) for testing this patch
+ *
  * Revision 1.34  2006/03/16 07:56:19  ongardie
  * - Added support for secondary addresses.
  * - Re-enabled states/provinces.
