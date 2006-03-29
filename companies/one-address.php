@@ -2,7 +2,7 @@
 /**
  * Edit address for a company
  *
- * $Id: one-address.php,v 1.12 2006/03/29 18:23:05 maulani Exp $
+ * $Id: one-address.php,v 1.13 2006/03/29 18:24:38 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -37,6 +37,8 @@ $company_name = fetch_company_name($con, $company_id);
             case 'new':
                 $page_title = _("New Business Address");
                 $_POST['address_type']='commercial';
+				global $default_country_id;
+                $_POST['country_id']=$default_country_id;
             break;
             case 'edit':
                 $page_title=_("Edit Business Address");
@@ -214,6 +216,9 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.13  2006/03/29 18:24:38  maulani
+ * - Set default country instead of a blank option when creating a new address
+ *
  * Revision 1.12  2006/03/29 18:23:05  maulani
  * - Remove deprecated pass-by-reference indicator.  Pass-by-reference already
  *   indicated in class definition
