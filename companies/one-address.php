@@ -2,7 +2,7 @@
 /**
  * Edit address for a company
  *
- * $Id: one-address.php,v 1.11 2005/12/18 02:57:20 vanmer Exp $
+ * $Id: one-address.php,v 1.12 2006/03/29 18:23:05 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -130,7 +130,7 @@ $company_name = fetch_company_name($con, $company_id);
     }
 
     // Controller
-    $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
+    $controller = new ADOdb_QuickForm_Controller(array(&$model), $view);
 
     $template_form_html = $controller->ProcessAndRenderForm();
 
@@ -214,6 +214,10 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.12  2006/03/29 18:23:05  maulani
+ * - Remove deprecated pass-by-reference indicator.  Pass-by-reference already
+ *   indicated in class definition
+ *
  * Revision 1.11  2005/12/18 02:57:20  vanmer
  * - changed to use gmt_offset instead of offset field
  * - Thanks to kennyholden for this patch
