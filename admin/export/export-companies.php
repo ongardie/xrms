@@ -18,6 +18,32 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
+$con = get_xrms_dbconnection();
+
+$user_id     = $_POST['user_id'];
+$category_id = $_POST['category_id'];
+$csv_output  = $_POST['csv_output'];
+$page_title = _("Full Export");
+
+// get users
+$sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
+$rst = $con->execute($sql2);
+$user_menu = $rst->getmenu2('user_id', $user_id, true);
+$rst->close();
+
+// get categories
+$sql2  = "select category_pretty_name, c.category_id";
+$sql2 .= " from categories c, category_scopes cs, category_category_scope_map ccsm";
+$sql2 .= " where c.category_id = ccsm.category_id";
+$sql2 .= " and cs.on_what_table =  'companies'";
+$sql2 .= " and ccsm.category_scope_id = cs.category_scope_id";
+$sql2 .= " and category_record_status =  'a'";
+$sql2 .= " order by category_pretty_name";
+$rst = $con->execute($sql2);
+$category_menu = $rst->getmenu2('category_id', $category_id, true);
+$rst->close();
+
+if ($csv_output) {
 $sql = " SELECT
   cont.salutation AS 'Salutation',
   cont.last_name AS 'Last Name',
@@ -72,8 +98,9 @@ $sql = " SELECT
   i.industry_pretty_name AS 'Industry',
   crm.crm_status_pretty_name AS 'CRM Status',
   ast.account_status_pretty_name AS 'Account Status',
-  coun.country_name AS 'Country'
-FROM contacts cont, companies c, addresses a, company_sources cs, industries i, crm_statuses crm, account_statuses ast, countries coun
+  coun.country_name AS 'Country',
+  catmap.on_what_id, catmap.on_what_table
+FROM contacts cont, companies c, addresses a, company_sources cs, industries i, crm_statuses crm, account_statuses ast, countries coun, entity_category_map catmap
 WHERE
   cont.contact_record_status = 'a' AND
   c.company_record_status = 'a' AND
@@ -83,12 +110,17 @@ WHERE
   c.industry_id = i.industry_id AND
   c.crm_status_id = crm.crm_status_id AND
   c.account_status_id = ast.account_status_id AND
-  a.country_id = coun.country_id
-ORDER BY c.company_name DESC, cont.last_name DESC, cont.first_names DESC";
+  a.country_id = coun.country_id ";
+  if ($category_id) {
+    $sql .= "AND category_id = $category_id ";
+    $sql .= "AND catmap.on_what_id=c.company_id and catmap.on_what_table='companies' ";
+  }
+  if ($user_id) $sql .= "AND c.user_id = $user_id ";
 
-$con = get_xrms_dbconnection();
+$sql.=" ORDER BY c.company_name DESC, cont.last_name DESC, cont.first_names DESC";
 
 $rst = $con->execute($sql);
+if (!$rst) { db_error_handler($con, $sql); return false; }
 
 $fp = fopen($xrms_file_root . '/tmp/contacts-export.csv', 'w');
 
@@ -101,13 +133,39 @@ if (($fp)) {
     $con->close();
     exit;
 }
+} else {
+       start_page($page_title, true, $msg);
+       echo "<form action='export-companies.php' method=post>\n"
+       ."<table class =widget><tr>"
+                       ."<td class=widget_label></td>\n"
+                       ."<td class=widget_label>"._("User")."</td>\n"
+                       ."<td class=widget_label>"._("Category")."</td>\n"
+                       ."<td class=widget_label></td></tr>\n"
+               ."<tr><td class=widget_content_form_element></td>"
+                       ."<td class=widget_content_form_element>$user_menu</td>\n"
+                       ."<td class=widget_content_form_element>$category_menu</td>"
+                       ."</tr></table>\n";
+       echo "<table class=widget>\n"
+               ."<tr><td class=widget_content_form_element>"
+                       ."<td class=widget_content_form_element>\n"
+                               ."<table class=widget_content_form_element>"
+                               ."<td>"._("Generate a CSV file")."</td>"
+                               ."<td><input class=button name=csv_output type=submit "
+                               ."value='Output'>\n"
+               ,"</td></table></table></form>\n";
+       end_page();
+}
+
 
 $con->close();
 
-header("Location: {$http_site_root}/tmp/contacts-export.csv");
+if ($csv_output) header("Location: {$http_site_root}/tmp/contacts-export.csv");
 
 /**
  * $Log: export-companies.php,v $
+ * Revision 1.9  2006/04/05 01:11:27  vanmer
+ * - updated to give some granularity of the export of companies/contacts data
+ *
  * Revision 1.8  2006/01/02 21:50:29  vanmer
  * - changed to use centralized dbconnection function
  *
