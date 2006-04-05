@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Aaron van Meerten
- * $Id: one_GroupUser.php,v 1.7 2006/01/02 22:27:11 vanmer Exp $
+ * $Id: one_GroupUser.php,v 1.8 2006/04/05 01:10:45 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -33,7 +33,8 @@ global $symbol_precendence;
 	getGlobalVar($return_url, 'return_url');
         getGlobalVar($msg, 'msg');
         getGlobalVar($form_action,'form_action');
-        
+        getGlobalVar($GroupUser_id, 'GroupUser_id');
+
         if ($form_action=='create' OR $form_action=='update') {
             getGlobalVar($Group_id, 'Group_id');
             getGlobalVar($user_id, 'user_id');
@@ -99,6 +100,9 @@ end_page();
 
 /**
  * $Log: one_GroupUser.php,v $
+ * Revision 1.8  2006/04/05 01:10:45  vanmer
+ * - added global var retrieval for key value
+ *
  * Revision 1.7  2006/01/02 22:27:11  vanmer
  * - removed force of css theme for ACL interface
  * - changed to use centralized dbconnection function
