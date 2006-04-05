@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.77 2006/01/19 22:20:44 daturaarutad Exp $
+ * $Id: edit-2.php,v 1.78 2006/04/05 00:53:10 vanmer Exp $
  */
 
 //include required files
@@ -261,7 +261,7 @@ $rec['resolution_description'] = trim($resolution_description);
 $rec['activity_resolution_type_id'] = $activity_resolution_type_id;
 
 
-$upd=update_activity($con, $rec, false, $activity);
+$upd=update_activity($con, $rec, false, $activity, true, get_magic_quotes_gpc());
 
 $param = array($activity, $rec);
 do_hook_function('activity_edit_2', $param);
@@ -561,6 +561,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.78  2006/04/05 00:53:10  vanmer
+ * - pass magic quotes into activities API
+ *
  * Revision 1.77  2006/01/19 22:20:44  daturaarutad
  * add handler for print_view button
  *

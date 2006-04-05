@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.45 2006/01/02 21:23:18 vanmer Exp $
+ * $Id: new-2.php,v 1.46 2006/04/05 00:53:11 vanmer Exp $
  */
 
 //where do we include from
@@ -183,10 +183,10 @@ else {
     $rec['opportunity_status']  = "o";
     $rec['opportunity_title'] = (strlen($activity_title) > 0) ? $activity_title : _("[none]");
 }
-
+$magic_quotes=get_magic_quotes_gpc();
 if(empty($opportunity_status_id)) {
     //add activity using API
-    $activity_id = add_activity($con, $rec);    
+    $activity_id = add_activity($con, $rec, false, $magic_quotes);
     if (!$activity_id) {
         $msg=urlencode(_("Failed to add activity"));
         header("Location: " . $http_site_root . $return_url."&msg=$msg");
@@ -198,7 +198,7 @@ if(empty($opportunity_status_id)) {
 }
 else {
     $tbl = 'opportunities';
-    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $ins = $con->GetInsertSQL($tbl, $rec, $magic_quotes);
     $con->execute($ins);
 
     $opportunity_id = $con->insert_id();
@@ -236,6 +236,9 @@ if ($activity_status == 'c') {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.46  2006/04/05 00:53:11  vanmer
+ *- pass magic quotes into activities API
+ *
  *Revision 1.45  2006/01/02 21:23:18  vanmer
  *- changed to use centralized database connection function
  *
