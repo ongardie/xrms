@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.35 2006/03/25 19:08:06 vanmer Exp $
+ * $Id: import-companies-3.php,v 1.36 2006/04/05 01:12:03 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -270,7 +270,7 @@ foreach ($filearray as $row) {
 
     $rst_company_id = $con->execute($sql_fetch_company_id);
 
-    if ( $rst_company_id['company_id'] )
+    if ( $rst_company_id->fields['company_id'] )
     {
         $company_id = $rst_company_id->fields['company_id'];
         $contact_id = $rst_company_id->fields['contact_id'];
@@ -289,7 +289,7 @@ foreach ($filearray as $row) {
 
           $rst_company_id = $con->execute($sql_fetch_company_id);
 
-          if ($rst_company_id)
+	  if (($rst_company_id) && ($rst_company_id->NumRows() > 0))
           {
               $company_id = $rst_company_id->fields['company_id'];
               $contact_id = 0;
@@ -297,7 +297,7 @@ foreach ($filearray as $row) {
           }
           else
           {
-              $company_id = 0;
+            $company_id = 0;
             $contact_id = 0;
           }
     }
@@ -781,7 +781,7 @@ foreach ($filearray as $row) {
 
         debugSql($sql_check_contact);
         $rst = $con->execute($sql_check_contact);
-        if ($rst)
+	if ($rst && ($rst->NumRows() > 0))
         {
             $contact_id = $rst->fields['contact_id'];
             //should probably echo here to indicate that we didn't import this contact
@@ -1040,6 +1040,9 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.36  2006/04/05 01:12:03  vanmer
+ * - fixed basic logic issues when importing companies
+ *
  * Revision 1.35  2006/03/25 19:08:06  vanmer
  * - removed all addslashes calls, taken care of by getInsert/getUpdateSQL calls
  * - added qstr where required instead of explicit quotes
