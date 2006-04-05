@@ -3,7 +3,7 @@
  * Test harness for the XRMS GUP_QuickForm 
  *
  * @todo
- * $Id: QuickForm_test.php,v 1.3 2006/01/27 22:49:43 daturaarutad Exp $
+ * $Id: QuickForm_test.php,v 1.4 2006/04/05 01:31:42 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-preferences.php');
+require_once($include_directory . 'utils-database.php');
 require_once($include_directory . 'utils-recurrence.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
@@ -51,10 +52,8 @@ Class XRMSQuickFormTest extends PHPUnit_TestCase {
        $session_user_id=$this->session_user_id;
 
        $this->options = $options;
-       $this->con = &adonewconnection($options['xrms_db_dbtype']);
+       $this->con = get_xrms_dbconnection();
        //connect to the xrms database
-       $this->con->nconnect($options['xrms_db_server'], $options['xrms_db_username'], $options['xrms_db_password'], $options['xrms_db_dbname']);
-
 
        $sql = "CREATE TABLE qf_test (
                 qf_id int(11) NOT NULL auto_increment,
@@ -315,6 +314,9 @@ $display->show();
  */
 /*
  * $Log: QuickForm_test.php,v $
+ * Revision 1.4  2006/04/05 01:31:42  vanmer
+ * - changed to use centralized XRMS dbconnection
+ *
  * Revision 1.3  2006/01/27 22:49:43  daturaarutad
  * add tests for CRUD of records and prepend_tablename feature
  *
