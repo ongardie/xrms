@@ -19,7 +19,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-preferences.php,v 1.15 2006/03/16 23:39:50 vanmer Exp $
+ * $Id: utils-preferences.php,v 1.16 2006/04/05 00:51:42 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -80,8 +80,12 @@ function set_user_preference(&$con, $user_id, $preference_type, $preference_valu
     if ($preference_name AND $set_default) {
         set_default_user_preference($con, $user_id, $preference_type, $preference_name);
     }
-    $params=array($user_id, $preference_type, false);
-    function_cache_set('get_user_preference',$params, $preference_value, false);
+
+    //clear the function cache for ALL value and the named value (or default)
+    $params=array($user_id, $preference_type, false, $preference_name);
+    function_cache_unset($func_name,$params,false);
+    $params=array($user_id, $preference_type, true, false);
+    function_cache_unset($func_name,$params,false);
     return true;
 }
 
@@ -177,7 +181,7 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
     }
     $preference_type=$preference_type_data['user_preference_type_id'];
     $func_name='get_user_preference';
-    $params=array($user_id,$preference_type, $show_all);
+    $params=array($user_id,$preference_type, $show_all, $preference_name);
     if($use_cache) { 
         if (function_cache_bool($func_name, $params)) {
             return function_cache_get($func_name, $params);
@@ -207,6 +211,8 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
     if ($show_all AND $allow_multiple) $sql.=" ASC";
     //otherwise show user options first, to allow user preference to be used if available
     else $sql.=" DESC";
+
+//    echo "<p><hr>$sql<p>\n";
     
     $pref_rst=$con->execute($sql);
     
@@ -846,6 +852,10 @@ function move_system_parameters($con, $fields) {
 
 /**
  * $Log: utils-preferences.php,v $
+ * Revision 1.16  2006/04/05 00:51:42  vanmer
+ * - changed to use preference name in cache settings
+ * - use new function cache unset function to clear function cache when setting new preferences
+ *
  * Revision 1.15  2006/03/16 23:39:50  vanmer
  * - added system edit flag to control display of system preferences
  *
