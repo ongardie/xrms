@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupUser_list.php,v 1.11 2005/12/12 21:17:20 vanmer Exp $
+ * $Id: GroupUser_list.php,v 1.12 2006/04/05 01:10:01 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -33,7 +33,7 @@ $page_title = _("Manage Group Users");
 $form_name = 'GroupUserPager';
 
 $sql="SELECT " . 
-$con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Edit")."\" onclick=\"javascript: location.href='one_GroupUser.php?form_action=edit&return_url=GroupUser_list.php&GroupUser_id="), 'GroupUser_id', $con->qstr("'\">"),$con->qstr("<input type=\"button\" class=\"button\" value=\""._("Delete") . "\" onclick=\"javascript: location.href='edit_GroupUser.php?userAction=deleteRole&return_url=GroupUser_list.php&GroupUser_id="), 'GroupUser_id', $con->qstr("'\">")) . "AS LINK, Groups.Group_name as 'UserGroup', " . 
+$con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Edit")."\" onclick=\"javascript: location.href='one_GroupUser.php?form_action=edit&GroupUser_id="), 'GroupUser_id', $con->qstr("&return_url=GroupUser_list.php'\">"),$con->qstr("<input type=\"button\" class=\"button\" value=\""._("Delete") . "\" onclick=\"javascript: location.href='edit_GroupUser.php?userAction=deleteRole&return_url=GroupUser_list.php&GroupUser_id="), 'GroupUser_id', $con->qstr("'\">")) . "AS LINK, Groups.Group_name as 'UserGroup', " . 
 $con->Concat('users.last_name', $con->qstr(', '), 'users.first_names') . " AS 'User', " .  
 "Role_name as Role, GroupUser.* FROM GroupUser LEFT OUTER JOIN Groups on Groups.Group_id=GroupUser.Group_id LEFT OUTER JOIN Role on Role.Role_id=GroupUser.Role_id LEFT OUTER JOIN users on users.user_id=GroupUser.user_id WHERE GroupUser.user_id IS NOT NULL";
 
@@ -101,6 +101,9 @@ end_page();
 
 /**
  * $Log: GroupUser_list.php,v $
+ * Revision 1.12  2006/04/05 01:10:01  vanmer
+ * - added return URL for Group User List
+ *
  * Revision 1.11  2005/12/12 21:17:20  vanmer
  * - added internationalization calls to strings which were only english
  *
