@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.31 2006/01/02 22:59:59 vanmer Exp $
+ * $Id: edit-2.php,v 1.32 2006/04/05 00:48:31 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -132,7 +132,7 @@ if ($salutation != '0') {
     $rec['salutation'] = '';
 }
 
-$ret=update_contact($con, $rec, $contact_id, $contact_rst);
+$ret=update_contact($con, $rec, $contact_id, $contact_rst, get_magic_quotes_gpc());
 
 if (!$return_url) {
     $return_url="one.php?msg=saved&contact_id=$contact_id";
@@ -141,6 +141,9 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.32  2006/04/05 00:48:31  vanmer
+ * - pass magic quotes value into contacts API
+ *
  * Revision 1.31  2006/01/02 22:59:59  vanmer
  * - changed to use centralized dbconnection function
  *

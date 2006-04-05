@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.33 2006/01/03 21:21:05 vanmer Exp $
+ * $Id: new-2.php,v 1.34 2006/04/05 00:48:52 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -146,7 +146,7 @@ $rec['last_modified_at'] = time();
 $rec['last_modified_by'] = $session_user_id;
 $rec['home_address_id']=$home_address_id;
 
-$contact_data=add_contact($con, $rec);
+$contact_data=add_contact($con, $rec, get_magic_quotes_gpc());
 
 if ($contact_data) {
     if (is_array($contact_data)) { $contact_id=$contact_data['contact_id']; }
@@ -169,6 +169,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.34  2006/04/05 00:48:52  vanmer
+ * - pass magic quotes value into contacts API
+ *
  * Revision 1.33  2006/01/03 21:21:05  vanmer
  * - changed to take either an array or an integer back from add_contact, to reflect API changes
  *
