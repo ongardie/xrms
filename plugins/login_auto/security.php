@@ -13,7 +13,7 @@
  *  View the INSTALL document for information on installing this.  Also view
  *  the README document and plugins/README.plugins for more information.
  *
- * $Id: security.php,v 1.2 2005/11/27 15:17:30 braverock Exp $
+ * $Id: security.php,v 1.3 2006/04/05 01:20:26 vanmer Exp $
  */
 
 
@@ -48,7 +48,7 @@ CELLPADDING="2" ALIGN="CENTER">
     <TD>
 <?php
 echo _("When you sign in with your name and password, your browser can 'remember' or store this information. Check the box and you won't have to enter this information each time you come back. If you don't log in for a period of time set by your administrator, this information will be 'forgotten'.");
-echo '<br>'. _("The time limit is currently set to:".' ';
+echo '<br>'. _("The time limit is currently set to:").' ';
 global $auto_expire_days, $auto_expire_hours, $auto_expire_minutes;
 $x=$auto_expire_days*86400 + $auto_expire_hours*3600 + $auto_expire_minutes*60;
 if ($x<60) echo (int)$x.' '._("seconds");
@@ -61,7 +61,7 @@ else echo (int)($x/86400).' '._("days");
   </TR>
   <TR>
     <TD>
-    <br><b><?php echo _("Should I be concerned about security?")</b>
+    <br><b><?php echo _("Should I be concerned about security?");?></b>
     </TD>
   </TR>
   <TR>
@@ -128,6 +128,9 @@ if ($auto_user && !$auto_pass)
 <?php
 /**
  * $Log: security.php,v $
+ * Revision 1.3  2006/04/05 01:20:26  vanmer
+ * - fixed parse errors in plugin
+ *
  * Revision 1.2  2005/11/27 15:17:30  braverock
  * - relocalize some strings... foiled by editor auto-save
  *
