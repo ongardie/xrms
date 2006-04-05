@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: update.php,v 1.108 2005/12/03 00:23:19 vanmer Exp $
+ * $Id: update.php,v 1.109 2006/04/05 01:06:40 vanmer Exp $
  */
 
 // where do we include from
@@ -21,6 +21,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-activities.php');
+require_once($include_directory . 'utils-database.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'adodb/adodb-datadict.inc.php');
@@ -76,55 +77,26 @@ $table_list = list_db_tables($con);
  *, another is a text field and the third is a float:
 **/
 /*
-
     //Upgrade to add the TEST table, used to demonstrate CreateTableSQL call    
     $table_name='TEST';
-    //ensure that table is not already in existance
-    if (!in_array($table_name,$table_list)) {
-        //define details of the table in the fields array
-        $table_fields=array();
-        $table_fields[]=array('NAME'=>'TEST_ID','TYPE'=>'I','SIZE'=>'','NOTNULL'=>'NOTNULL','KEY'=>'KEY','AUTOINCREMENT'=>'AUTOINCREMENT');
-        $table_fields[]=array('NAME'=>'TEST_NAME','TYPE'=>'C','SIZE'=>32);
-        $table_fields[]=array('NAME'=>'TEST_VALUE','TYPE'=>'F');
-        
-        //no global table options needed, so setting to false
-        $table_opts=false;
-
-        $sql=$dict->CreateTableSQL( $table_name, $table_fields, $table_opts );
-        foreach ($sql AS $sql_line) {
-            $rst=$con->execute($sql_line);
-            if (!$rst) db_error_handler($con, $sql_line);
-        }
-        $upgrade_msgs[]="Added new TEST table<br>";
-    }
+    $table_fields=array();
+    $table_fields[]=array('NAME'=>'TEST_ID','TYPE'=>'I','SIZE'=>'','NOTNULL'=>'NOTNULL','KEY'=>'KEY','AUTOINCREMENT'=>'AUTOINCREMENT');
+    $table_fields[]=array('NAME'=>'TEST_NAME','TYPE'=>'C','SIZE'=>32);
+    $table_fields[]=array('NAME'=>'TEST_VALUE','TYPE'=>'F');
+    $table_opts=false;
+    create_table($con, $table_name, $table_fields, $table_opts, $upgrade_msgs);
 */
+
 /** 
  * Example 2:
  * Rename a field that already exists in a table
 **/
 /*
-    $table_list = list_db_tables($con);
     //Upgrade to add the TEST table, used to demonstrate CreateTableSQL call    
     $table_name='TEST';
     $old_field_name='TEST_NAME';
     $new_field_name='TEST_STRING';
-    //ensure that table already exists
-    if (in_array($table_name,$table_list)) {
-        //get list of fields from table, to ensure that we have a field to change
-        $cols=$dict->MetaColumns($table_name);
-//        print_r($cols);
-        if (array_key_exists($old_field_name, $cols)) {
-            //definition of new field, needed by MYSQL
-            $field_definition=array();
-            $field_definition[]=array('NAME'=>$new_field_name,'TYPE'=>'C','SIZE'=>32);
-            $sql=$dict->RenameColumnSQL($table_name, $old_field_name, $new_field_name,$field_definition);
-            foreach ($sql AS $sql_line) {
-                $rst=$con->execute($sql_line);
-                if (!$rst) db_error_handler($con, $sql_line);
-            }
-            $upgrade_msgs[]="Changed fieldname in $table_name from $old_field_name to $new_field_name<br>";
-        }
-    }
+    rename_fieldname($con, $table_name, $old_field_name, $new_field_name, $upgrade_msgs);
 */
 
 /** 
@@ -132,28 +104,15 @@ $table_list = list_db_tables($con);
  * Adding a boolean field to a table
 **/
 /*
-    $table_list = list_db_tables($con);
-
     //Upgrade to add a field to the TEST table
     $table_name='TEST';
     $field_name='TEST_FLAG';
-    //ensure that table already exists
-    if (in_array($table_name,$table_list)) {
-        $cols=$dict->MetaColumns($table_name);
-//        print_r($cols);
-        if (!array_key_exists($field_name, $cols)) {
-            $field_definition=array();
-            //add a boolean flag
-            $field_definition[]=array('NAME'=>$field_name,'TYPE'=>'L','SIZE'=>1);
-            $table_opts='';
-            $sql=$dict->ChangeTableSQL($table_name, $field_definition, $table_opts);
-            foreach ($sql AS $sql_line) {
-                $rst=$con->execute($sql_line);
-                if (!$rst) db_error_handler($con, $sql_line);
-            }
-            $upgrade_msgs[]="Added field $field_name in $table_name<br>";
-        }
-     }
+    $field_definition=array();
+    //add a boolean flag
+    $field_definition[]=array('NAME'=>$field_name,'TYPE'=>'L','SIZE'=>1);
+
+    $table_opts='';
+    add_field($con, $table_name, $field_definition, $table_opts, &$upgrade_msgs);
 */
 /** 
  * Example 4:
@@ -181,20 +140,10 @@ $table_list = list_db_tables($con);
  * Dropping the TEST table
 **/
 /*
-    //refresh table list
-    $table_list = list_db_tables($con);
-
     //Drop the TEST table, used in previous examples
     $table_name='TEST';
-    //ensure that table is already in existance, cannot drop it without it existing
-    if (in_array($table_name,$table_list)) {
-        $sql=$dict->DropTableSQL( $table_name );
-        foreach ($sql AS $sql_line) {
-            $rst=$con->execute($sql_line);
-            if (!$rst) db_error_handler($con, $sql_line);
-        }
-        $upgrade_msgs[]="Removed TEST table<br>";
-    }
+
+    drop_table($con, $table_name, &$upgrade_msgs);
 */
 
 //LET PLUGINS RUN THEIR UPDATES
@@ -226,6 +175,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.109  2006/04/05 01:06:40  vanmer
+ * - updated demo SQL to use wrapper functions for creating SQL
+ *
  * Revision 1.108  2005/12/03 00:23:19  vanmer
  * - Initial revision of the new upgrade requirements
  * - Redirects to updateto2.0.php for pre-2.0 upgrades
