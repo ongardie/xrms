@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.16 2006/03/19 02:18:41 ongardie Exp $
+ * $Id: utils-contacts.php,v 1.17 2006/04/05 00:44:59 vanmer Exp $
  *
  */
 
@@ -252,9 +252,9 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
  *
  * @return $contact_id with newly created contact, or false if failure occured
  */
-function add_contact($con, $contact)
+function add_contact($con, $contact, $magic_quotes)
 {
-    return add_update_contact($con, $contact);
+    return add_update_contact($con, $contact, false, $magic_quotes);
 };
 
 /**********************************************************************/
@@ -357,7 +357,7 @@ function get_contact($con, $contact_id, $return_rst = false) {
  *
  * @return boolean specifying if update succeeded
  */
-function update_contact($con, $contact, $contact_id = false, $contact_rst = false)
+function update_contact($con, $contact, $contact_id = false, $contact_rst = false, $magic_quotes=false)
 {
 
     global $session_user_id;
@@ -376,7 +376,7 @@ function update_contact($con, $contact, $contact_id = false, $contact_rst = fals
     $rec['last_modified_by'] = $session_user_id;
 
 
-    $upd = $con->GetUpdateSQL($contact_rst, $contact);
+    $upd = $con->GetUpdateSQL($contact_rst, $contact, false, $magic_quotes);
     if ($upd) {
         $rst=$con->execute($upd);
         if (!$rst) { db_error_handler($con, $upd); return false; }
@@ -486,6 +486,9 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.17  2006/04/05 00:44:59  vanmer
+ * - added magic quotes parameters to all contacts functions which call getUpdateSQL or getInsertSQL
+ *
  * Revision 1.16  2006/03/19 02:18:41  ongardie
  * - Allow empty salutation for new contacts.
  *
