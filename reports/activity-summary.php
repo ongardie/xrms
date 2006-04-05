@@ -5,7 +5,7 @@
  *
  * @author John Read
  *
- * $Id: activity-summary.php,v 1.1 2006/04/05 01:21:10 vanmer Exp $
+ * $Id: activity-summary.php,v 1.2 2006/04/05 03:46:38 ongardie Exp $
  */
 require_once('../include-locations.inc');
 
@@ -62,8 +62,7 @@ if (!strlen($ending) > 0) $ending = date("Y-m-d");
 
 $page_title = _("Activity Summary Report");
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 //uncomment this line if you suspect a problem with the SQL query
 //$con->debug = 1;
@@ -95,7 +94,7 @@ $rst->close();
 if (!$_POST['csv_output']) {
 	start_page($page_title, true, $msg);
 	echo "<form action='activity-summary.php' method=post>\n"
-		,"<table class =widget><tr>"
+		,"<table class=widget><tr>"
 			,"<td class=widget_label>",_("Start"),"</td>\n"
 			,"<td class=widget_label>",_("End"),"</td>\n"
 			,"<td class=widget_label>",_("User"),"</td>\n"
@@ -134,7 +133,7 @@ if (!$_POST['csv_output']) {
 }
 
 if ($user_id) {
-     $sql = "select username from users where user_id = $user_id";
+     $sql = "select username from users where user_id = $user_id limit 1";
     $rst = $con->execute($sql);
     $username = $rst->fields['username'];
     $rst->close();
