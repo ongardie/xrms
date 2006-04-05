@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_test_class.php,v 1.1 2005/11/18 20:05:58 vanmer Exp $
+ * $Id: xrms_test_class.php,v 1.2 2006/04/05 00:46:37 vanmer Exp $
  */
 require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -29,6 +29,7 @@ Class XRMS_TestCase extends PHPUnit_TestCase {
        global $con;
        if (!$con) $this->con=get_xrms_dbconnection();
        else $this->con=$con;
+       $this->user_id=1;
 /*
        $this->options = $options;
        $this->con = &adonewconnection($options['xrms_db_dbtype']);
@@ -106,7 +107,8 @@ Class XRMSTest extends XRMS_TestCase {
     }
     
     function test_set_multi_user_preference($user_id=1, $preference_type=false, $preference_values=false) {
-        $con = $this->con;    
+        $con = $this->con;
+	//print_r($_SESSION['XRMS_function_cache']['get_user_preference']);
         if (!$preference_type) { $preference_type='random_multi_option'; $user_preference_type_id=$this->test_add_user_preference_type($preference_type, 'TEST MULTI OPTION', 'Test Type for Multiple Options: Ignore', true, false); $created=true; }
         if (!$preference_values) { $preference_values=array('size'=>'1','shape'=>'two and two is four','texture'=>'testTexture'); }
         foreach ($preference_values as $pkey=>$pval) {
@@ -122,13 +124,13 @@ Class XRMSTest extends XRMS_TestCase {
                 $this->assertTrue(array_key_exists($pkey, $prefs), "Failed to find newly set preference $preference_type $pkey=$pval");
                 $this->assertTrue($pval==$prefs[$pkey], "Newly set option $preference_type $pkey={$prefs[$pkey]} not equal to stored option $pval");
             }
-            
             foreach ($prefs as $pkey=>$pval) {
                 $ret = get_user_preference($con, $user_id, $preference_type, $pkey);
                 $this->assertTrue($pval==$ret, "Failed match user preference for $preference_type name $pkey: $pval!=$ret");
             }
             $default_pref_value=get_user_preference($con, $user_id, $preference_type);
             $this->assertTrue($default_value==$default_pref_value, "Failed to set default value correctly, expected $default_value but returned $default_pref_value");
+	    //print_r($_SESSION['XRMS_function_cache']['get_user_preference']);
         }
         $dret = delete_user_preference($con, $user_id, $preference_type, false, true, true);
         if ($created) {
@@ -171,7 +173,7 @@ Class XRMSTest extends XRMS_TestCase {
     }
     
     function test_add_workflow_history($on_what_table='TEST', $on_what_id=1, $old_status=1, $new_status=2, $delete_from_database=true) {
-        $ret=add_workflow_history($this->con, $on_what_table, $on_what_id, $old_status, $new_status);
+        $ret=add_workflow_history($this->con, $on_what_table, $on_what_id, $old_status, $new_status, $this->user_id);
         $this->assertTrue($ret, "Failed to add workflow history for $on_what_table $on_what_id, $old_status -> $new_status");
         if ($delete_from_database AND $ret) {
             $sql="DELETE FROM workflow_history WHERE on_what_table=".$this->con->qstr($on_what_table)." AND on_what_id=$on_what_id";
@@ -184,6 +186,9 @@ Class XRMSTest extends XRMS_TestCase {
 }
 /*
  * $Log: xrms_test_class.php,v $
+ * Revision 1.2  2006/04/05 00:46:37  vanmer
+ * - added user_id parameter for workflow history
+ *
  * Revision 1.1  2005/11/18 20:05:58  vanmer
  * - Moved XRMS tests into a seperate test class, includeable without the GUI
  *
