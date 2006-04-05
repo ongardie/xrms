@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-companies.php,v 1.9 2006/01/17 03:14:14 vanmer Exp $
+ * $Id: utils-companies.php,v 1.10 2006/04/05 19:48:12 vanmer Exp $
  *
  */
 
@@ -69,7 +69,7 @@
  *
  * @return $company_id of newly created or modified company, or false if failure occured
  */
-function add_update_company($con, $company_data)
+function add_update_company($con, $company_data, $magic_quotes=false)
 {
    /**
     * Default return value
@@ -101,7 +101,7 @@ function add_update_company($con, $company_data)
         // Because the way ADOdb is written, we can't let it take care of force
         // updates if a record exists, and INSERT if the record does not exist.
         // We have to do the checking, so... we need to use the XRMS version...
-        $_retVal = __record_add_update ( $con, 'companies', 'company_name', $company_info, true );
+        $_retVal = __record_add_update ( $con, 'companies', 'company_name', $company_info, $magic_quotes );
     }
 
     // Place address ID into data set
@@ -122,7 +122,7 @@ function add_update_company($con, $company_data)
  *
  * @return $company_id with newly created company, or false if failure occured
  */
-function add_company($con, $company_data)
+function add_company($con, $company_data, $magic_quotes=false)
 {
    /**
     * Default return value
@@ -142,7 +142,7 @@ function add_company($con, $company_data)
         // Session data
         global $session_user_id;
         $table='companies';
-        $sql = $con->getInsertSQL($table, $company_data);
+        $sql = $con->getInsertSQL($table, $company_data, $magic_quotes);
         if ($sql) {
             $rst=$con->execute($sql);
             if (!$rst) {db_error_handler($con, $sql); return false; }
@@ -185,11 +185,10 @@ function find_company($con, $company_data, $show_deleted = false, $return_record
         $extra_where=array();
         foreach ($company_data as $ckey=>$cval) {
             switch ($ckey) {
-                case 'email':
-                case 'title':
-                case 'last_name':
-                case 'first_names':
-                case 'description':
+                case 'legal_name':
+                case 'company_name':
+                case 'tax_id':
+                case 'profile':
                     unset($company_data[$ckey]);
                     $extra_where[]="$ckey LIKE ".$con->qstr($cval);
                 break;
@@ -265,7 +264,7 @@ function get_company($con, $company_id, $return_rst=false)
  *
  * @return boolean specifying if update succeeded
  */
-function update_company($con, $company_data, $company_id=false, $company_rst=false)
+function update_company($con, $company_data, $company_id=false, $company_rst=false, $magic_quotes=false)
 {
 
     global $session_user_id;
@@ -284,7 +283,7 @@ function update_company($con, $company_data, $company_id=false, $company_rst=fal
     $rec['last_modified_by'] = $session_user_id;
 
 
-    $upd = $con->GetUpdateSQL($company_rst, $company_data, false, get_magic_quotes_gpc());
+    $upd = $con->GetUpdateSQL($company_rst, $company_data, false, $magic_quotes);
     if ($upd) {
         $rst=$con->execute($upd);
         if (!$rst) { db_error_handler($con, $upd); return false; }
@@ -534,6 +533,10 @@ include_once $include_directory . 'utils-addresses.php';
 
  /**
  * $Log: utils-companies.php,v $
+ * Revision 1.10  2006/04/05 19:48:12  vanmer
+ * - added magic quote parameter to companies API
+ * - fixed find_company to search appropriate fields
+ *
  * Revision 1.9  2006/01/17 03:14:14  vanmer
  * - disabled check that only updates a company if it is deleted or Bushwood, when replacing for unknown company entry
  * - added parameter to allow unknown company to replace any company (for tests)
