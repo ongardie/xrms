@@ -5,7 +5,7 @@
  * Users who do not have admin privileges can update their own
  * user record and password.
  *
- * $Id: self.php,v 1.17 2006/01/02 22:09:39 vanmer Exp $
+ * $Id: self.php,v 1.18 2006/04/05 01:26:46 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -15,7 +15,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check('', 'Update', true);
 $user_id=$session_user_id;
 
 getGlobalVar($msg, 'msg');
@@ -113,6 +113,9 @@ end_page();
 
 /**
  *$Log: self.php,v $
+ *Revision 1.18  2006/04/05 01:26:46  vanmer
+ *- ensure that user has update permission on self
+ *
  *Revision 1.17  2006/01/02 22:09:39  vanmer
  *- changed to use centralized dbconnection function
  *
