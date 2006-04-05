@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.24 2006/01/28 22:22:40 niclowe Exp $
+ * $Id: index.php,v 1.25 2006/04/05 01:21:28 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -109,6 +109,15 @@ start_page($page_title, true, $msg);
           <?php echo _("Printable contact summary information for Companies in search Results."); ?>
         </td>
       </tr>
+      <tr>
+        <td class=widget_content><a href="activity-summary.php">
+          <?php echo _("Activity Summary"); ?>
+          </a></td>
+        <td class=widget_content>
+           <?php echo _("Summarizes the count of activities by type, for companies.  Can be restricted by user, category and
+ dates"); ?>
+        </td>
+      </tr>
       <tr> 
         <td colspan=2 class=widget_label_center> 
           <?php echo _("User Reports"); ?>
@@ -205,6 +214,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.25  2006/04/05 01:21:28  vanmer
+ * - added link to new activity summary report
+ *
  * Revision 1.24  2006/01/28 22:22:40  niclowe
  * First Commit of new reports - Stale Companies and Opportunities
  *
