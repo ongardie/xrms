@@ -6,9 +6,7 @@
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="ControlledObject_name" type="C" size="128">
-      <NOTNULL/>
-    </field>
+    <field name="ControlledObject_name" type="C" size="128"/>
     <field name="on_what_table" type="C" size="128"/>
     <field name="on_what_field" type="C" size="128"/>
     <field name="user_field" type="C" size="32"/>
@@ -125,12 +123,8 @@
       <DEFAULT value="0"/>
       <UNSIGNED/>
     </field>
-    <field name="criteria_fieldname" type="C" size="60">
-      <NOTNULL/>
-    </field>
-    <field name="criteria_value" type="C" size="50">
-      <NOTNULL/>
-    </field>
+    <field name="criteria_fieldname" type="C" size="60"/>
+    <field name="criteria_value" type="C" size="50"/>
     <field name="criteria_operator" type="C" size="8">
       <NOTNULL/>
       <DEFAULT value="="/>
@@ -178,9 +172,7 @@
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="Group_name" type="C" size="128">
-      <NOTNULL/>
-    </field>
+    <field name="Group_name" type="C" size="128"/>
     <data>
       <row><f>1</f><f>Users</f></row>
     </data>
@@ -191,12 +183,8 @@
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="Permission_name" type="C" size="64">
-      <NOTNULL/>
-    </field>
-    <field name="Permission_abbr" type="C" size="5">
-      <NOTNULL/>
-    </field>
+    <field name="Permission_name" type="C" size="64"/>
+    <field name="Permission_abbr" type="C" size="5"/>
     <data>
       <row><f>1</f><f>Create</f><f>C</f></row>
       <row><f>2</f><f>Read</f><f>R</f></row>
@@ -211,9 +199,7 @@
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="Role_name" type="C" size="128">
-      <NOTNULL/>
-    </field>
+    <field name="Role_name" type="C" size="128"/>
     <data>
       <row><f>1</f><f>User</f></row>
       <row><f>2</f><f>Administrator</f></row>
@@ -299,18 +285,10 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="account_status_short_name" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="account_status_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="account_status_pretty_plural" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="account_status_display_html" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="account_status_short_name" type="C" size="10"/>
+    <field name="account_status_pretty_name" type="C" size="100"/>
+    <field name="account_status_pretty_plural" type="C" size="100"/>
+    <field name="account_status_display_html" type="C" size="100"/>
     <field name="account_status_record_status" type="C" size="1">
       <DEFAULT value="a"/>
     </field>
@@ -345,9 +323,7 @@
     <field name="address_id" type="I" size="10">
       <UNSIGNED/>
     </field>
-    <field name="on_what_table" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="on_what_table" type="C" size="100"/>
     <field name="on_what_id" type="I" size="11">
       <NOTNULL/>
       <DEFAULT value="0"/>
@@ -360,9 +336,7 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="activity_title" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="activity_title" type="C" size="100"/>
     <field name="activity_description" type="X"/>
     <field name="entered_at" type="T"/>
     <field name="entered_by" type="I" size="11">
@@ -434,9 +408,7 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="period" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="period" type="C" size="100"/>
     <field name="day_offset" type="I" size="11">
       <DEFAULT value="0"/>
     </field>
@@ -457,9 +429,7 @@
     <field name="activity_type_id" type="I" size="10">
       <UNSIGNED/>
     </field>
-    <field name="participant_position_name" type="C" size="50">
-      <NOTNULL/>
-    </field>
+    <field name="participant_position_name" type="C" size="50"/>
     <field name="global_flag" type="I" size="3">
       <NOTNULL/>
       <DEFAULT value="0"/>
@@ -533,12 +503,8 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="resolution_short_name" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="resolution_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="resolution_short_name" type="C" size="10"/>
+    <field name="resolution_pretty_name" type="C" size="100"/>
     <field name="resolution_type_record_status" type="C" size="1">
       <NOTNULL/>
       <DEFAULT value="a"/>
@@ -569,16 +535,12 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="on_what_table" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="on_what_table" type="C" size="100"/>
     <field name="on_what_id" type="I" size="11">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="activity_title" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="activity_title" type="C" size="100"/>
     <field name="activity_description" type="X"/>
     <field name="default_text" type="X"/>
     <field name="duration" type="C" size="20">
@@ -601,18 +563,10 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="activity_type_short_name" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="activity_type_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="activity_type_pretty_plural" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="activity_type_display_html" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="activity_type_short_name" type="C" size="10"/>
+    <field name="activity_type_pretty_name" type="C" size="100"/>
+    <field name="activity_type_pretty_plural" type="C" size="100"/>
+    <field name="activity_type_display_html" type="C" size="100"/>
     <field name="activity_type_score_adjustment" type="I" size="11">
       <NOTNULL/>
       <DEFAULT value="0"/>
@@ -677,12 +631,8 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="address_type" type="C" size="20">
-      <NOTNULL/>
-    </field>
-    <field name="address_type_sort_value" type="C" size="20">
-      <NOTNULL/>
-    </field>
+    <field name="address_type" type="C" size="20"/>
+    <field name="address_type_sort_value" type="C" size="20"/>
     <data>
       <row><f>1</f><f>unknown</f><f>100</f></row>
       <row><f>2</f><f>commercial</f><f>200</f></row>
@@ -702,27 +652,13 @@
       <NOTNULL/>
       <DEFAULT value="1"/>
     </field>
-    <field name="address_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="address_body" type="C" size="255">
-      <NOTNULL/>
-    </field>
-    <field name="line1" type="C" size="255">
-      <NOTNULL/>
-    </field>
-    <field name="line2" type="C" size="255">
-      <NOTNULL/>
-    </field>
-    <field name="city" type="C" size="255">
-      <NOTNULL/>
-    </field>
-    <field name="province" type="C" size="255">
-      <NOTNULL/>
-    </field>
-    <field name="postal_code" type="C" size="255">
-      <NOTNULL/>
-    </field>
+    <field name="address_name" type="C" size="100"/>
+    <field name="address_body" type="C" size="255"/>
+    <field name="line1" type="C" size="255"/>
+    <field name="line2" type="C" size="255"/>
+    <field name="city" type="C" size="255"/>
+    <field name="province" type="C" size="255"/>
+    <field name="postal_code" type="C" size="255"/>
     <field name="address_type" type="C" size="20">
       <NOTNULL/>
       <DEFAULT value="unknown"/>
@@ -781,18 +717,10 @@
       <NOTNULL/>
       <DEFAULT value="o"/>
     </field>
-    <field name="campaign_status_short_name" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="campaign_status_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="campaign_status_pretty_plural" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="campaign_status_display_html" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="campaign_status_short_name" type="C" size="10"/>
+    <field name="campaign_status_pretty_name" type="C" size="100"/>
+    <field name="campaign_status_pretty_plural" type="C" size="100"/>
+    <field name="campaign_status_display_html" type="C" size="100"/>
     <field name="campaign_status_record_status" type="C" size="3">
       <NOTNULL/>
       <DEFAULT value="a"/>
@@ -813,18 +741,10 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="campaign_type_short_name" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="campaign_type_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="campaign_type_pretty_plural" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="campaign_type_display_html" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="campaign_type_short_name" type="C" size="10"/>
+    <field name="campaign_type_pretty_name" type="C" size="100"/>
+    <field name="campaign_type_pretty_plural" type="C" size="100"/>
+    <field name="campaign_type_display_html" type="C" size="100"/>
     <field name="campaign_type_record_status" type="C" size="3">
       <NOTNULL/>
       <DEFAULT value="a"/>
@@ -856,9 +776,7 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="campaign_title" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="campaign_title" type="C" size="100"/>
     <field name="campaign_description" type="X"/>
     <field name="starts_at" type="T"/>
     <field name="ends_at" type="T"/>
@@ -886,18 +804,10 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="case_priority_short_name" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="case_priority_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="case_priority_pretty_plural" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="case_priority_display_html" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="case_priority_short_name" type="C" size="10"/>
+    <field name="case_priority_pretty_name" type="C" size="100"/>
+    <field name="case_priority_pretty_plural" type="C" size="100"/>
+    <field name="case_priority_display_html" type="C" size="100"/>
     <field name="case_priority_score_adjustment" type="I" size="11">
       <NOTNULL/>
       <DEFAULT value="0"/>
@@ -926,21 +836,11 @@
       <NOTNULL/>
       <DEFAULT value="o"/>
     </field>
-    <field name="case_status_short_name" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="case_status_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="case_status_pretty_plural" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="case_status_display_html" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="case_status_long_desc" type="C" size="200">
-      <NOTNULL/>
-    </field>
+    <field name="case_status_short_name" type="C" size="10"/>
+    <field name="case_status_pretty_name" type="C" size="100"/>
+    <field name="case_status_pretty_plural" type="C" size="100"/>
+    <field name="case_status_display_html" type="C" size="100"/>
+    <field name="case_status_long_desc" type="C" size="200"/>
     <field name="case_type_id" type="I" size="11">
       <NOTNULL/>
       <DEFAULT value="1"/>
@@ -971,18 +871,10 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="case_type_short_name" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="case_type_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="case_type_pretty_plural" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="case_type_display_html" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="case_type_short_name" type="C" size="10"/>
+    <field name="case_type_pretty_name" type="C" size="100"/>
+    <field name="case_type_pretty_plural" type="C" size="100"/>
+    <field name="case_type_display_html" type="C" size="100"/>
     <field name="case_type_record_status" type="C" size="1">
       <NOTNULL/>
       <DEFAULT value="a"/>
@@ -1027,9 +919,7 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="case_title" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="case_title" type="C" size="100"/>
     <field name="case_description" type="X"/>
     <field name="due_at" type="T"/>
     <field name="entered_at" type="T"/>
@@ -1062,18 +952,10 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="category_short_name" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="category_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="category_pretty_plural" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="category_display_html" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="category_short_name" type="C" size="10"/>
+    <field name="category_pretty_name" type="C" size="100"/>
+    <field name="category_pretty_plural" type="C" size="100"/>
+    <field name="category_display_html" type="C" size="100"/>
     <field name="category_record_status" type="C" size="1">
       <NOTNULL/>
       <DEFAULT value="a"/>
@@ -1116,21 +998,11 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="category_scope_short_name" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="category_scope_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="category_scope_pretty_plural" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="category_scope_display_html" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="on_what_table" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="category_scope_short_name" type="C" size="10"/>
+    <field name="category_scope_pretty_name" type="C" size="100"/>
+    <field name="category_scope_pretty_plural" type="C" size="100"/>
+    <field name="category_scope_display_html" type="C" size="100"/>
+    <field name="on_what_table" type="C" size="100"/>
     <field name="category_scope_record_status" type="C" size="1">
       <DEFAULT value="a"/>
     </field>
@@ -1171,37 +1043,17 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="company_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="company_code" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="legal_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="tax_id" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="company_name" type="C" size="100"/>
+    <field name="company_code" type="C" size="10"/>
+    <field name="legal_name" type="C" size="100"/>
+    <field name="tax_id" type="C" size="100"/>
     <field name="profile" type="X"/>
-    <field name="phone" type="C" size="50">
-      <NOTNULL/>
-    </field>
-    <field name="phone2" type="C" size="50">
-      <NOTNULL/>
-    </field>
-    <field name="fax" type="C" size="50">
-      <NOTNULL/>
-    </field>
-    <field name="url" type="C" size="50">
-      <NOTNULL/>
-    </field>
-    <field name="employees" type="C" size="50">
-      <NOTNULL/>
-    </field>
-    <field name="revenue" type="C" size="50">
-      <NOTNULL/>
-    </field>
+    <field name="phone" type="C" size="50"/>
+    <field name="phone2" type="C" size="50"/>
+    <field name="fax" type="C" size="50"/>
+    <field name="url" type="C" size="50"/>
+    <field name="employees" type="C" size="50"/>
+    <field name="revenue" type="C" size="50"/>
     <field name="credit_limit" type="I" size="11">
       <NOTNULL/>
       <DEFAULT value="0"/>
@@ -1236,27 +1088,13 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="custom1" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="custom2" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="custom3" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="custom4" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="extref1" type="C" size="50">
-      <NOTNULL/>
-    </field>
-    <field name="extref2" type="C" size="50">
-      <NOTNULL/>
-    </field>
-    <field name="extref3" type="C" size="50">
-      <NOTNULL/>
-    </field>
+    <field name="custom1" type="C" size="100"/>
+    <field name="custom2" type="C" size="100"/>
+    <field name="custom3" type="C" size="100"/>
+    <field name="custom4" type="C" size="100"/>
+    <field name="extref1" type="C" size="50"/>
+    <field name="extref2" type="C" size="50"/>
+    <field name="extref3" type="C" size="50"/>
     <field name="company_record_status" type="C" size="1">
       <DEFAULT value="a"/>
     </field>
@@ -1292,9 +1130,7 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="division_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="division_name" type="C" size="100"/>
     <field name="description" type="X"/>
     <field name="entered_at" type="T"/>
     <field name="entered_by" type="I" size="11">
@@ -1306,18 +1142,10 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="custom1" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="custom2" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="custom3" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="custom4" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="custom1" type="C" size="100"/>
+    <field name="custom2" type="C" size="100"/>
+    <field name="custom3" type="C" size="100"/>
+    <field name="custom4" type="C" size="100"/>
     <field name="division_record_status" type="C" size="1">
       <DEFAULT value="a"/>
     </field>
@@ -1359,18 +1187,10 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="company_source_short_name" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="company_source_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="company_source_pretty_plural" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="company_source_display_html" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="company_source_short_name" type="C" size="10"/>
+    <field name="company_source_pretty_name" type="C" size="100"/>
+    <field name="company_source_pretty_plural" type="C" size="100"/>
+    <field name="company_source_display_html" type="C" size="100"/>
     <field name="company_source_record_status" type="C" size="1">
       <DEFAULT value="a"/>
     </field>
@@ -1396,18 +1216,10 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="company_type_short_name" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="company_type_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="company_type_pretty_plural" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="company_type_display_html" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="company_type_short_name" type="C" size="10"/>
+    <field name="company_type_pretty_name" type="C" size="100"/>
+    <field name="company_type_pretty_plural" type="C" size="100"/>
+    <field name="company_type_display_html" type="C" size="100"/>
     <field name="company_type_record_status" type="C" size="1">
       <DEFAULT value="a"/>
     </field>
@@ -1461,72 +1273,38 @@
     <field name="home_address_id" type="I" size="10">
       <UNSIGNED/>
     </field>
-    <field name="salutation" type="C" size="20">
-      <NOTNULL/>
-    </field>
-    <field name="last_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="first_names" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="salutation" type="C" size="20"/>
+    <field name="last_name" type="C" size="100"/>
+    <field name="first_names" type="C" size="100"/>
     <field name="gender" type="C" size="1">
       <NOTNULL/>
       <DEFAULT value="u"/>
     </field>
-    <field name="date_of_birth" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="summary" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="title" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="description" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="email" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="date_of_birth" type="C" size="100"/>
+    <field name="summary" type="C" size="100"/>
+    <field name="title" type="C" size="100"/>
+    <field name="description" type="C" size="100"/>
+    <field name="email" type="C" size="100"/>
     <field name="email_status" type="C" size="1">
       <DEFAULT value="a"/>
     </field>
-    <field name="work_phone" type="C" size="50">
-      <NOTNULL/>
-    </field>
+    <field name="work_phone" type="C" size="50"/>
     <field name="work_phone_ext" type="I" size="11">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="cell_phone" type="C" size="50">
-      <NOTNULL/>
-    </field>
-    <field name="home_phone" type="C" size="50">
-      <NOTNULL/>
-    </field>
-    <field name="fax" type="C" size="50">
-      <NOTNULL/>
-    </field>
+    <field name="cell_phone" type="C" size="50"/>
+    <field name="home_phone" type="C" size="50"/>
+    <field name="fax" type="C" size="50"/>
     <field name="aol_name" type="C" size="50"/>
     <field name="yahoo_name" type="C" size="50"/>
     <field name="msn_name" type="C" size="50"/>
-    <field name="interests" type="C" size="50">
-      <NOTNULL/>
-    </field>
+    <field name="interests" type="C" size="50"/>
     <field name="profile" type="X"/>
-    <field name="custom1" type="C" size="50">
-      <NOTNULL/>
-    </field>
-    <field name="custom2" type="C" size="50">
-      <NOTNULL/>
-    </field>
-    <field name="custom3" type="C" size="50">
-      <NOTNULL/>
-    </field>
-    <field name="custom4" type="C" size="50">
-      <NOTNULL/>
-    </field>
+    <field name="custom1" type="C" size="50"/>
+    <field name="custom2" type="C" size="50"/>
+    <field name="custom3" type="C" size="50"/>
+    <field name="custom4" type="C" size="50"/>
     <field name="extref1" type="C" size="50"/>
     <field name="extref2" type="C" size="50"/>
     <field name="extref3" type="C" size="50"/>
@@ -1568,31 +1346,17 @@
       <NOTNULL/>
       <DEFAULT value="1"/>
     </field>
-    <field name="country_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="un_code" type="C" size="50">
-      <NOTNULL/>
-    </field>
-    <field name="iso_code1" type="C" size="50">
-      <NOTNULL/>
-    </field>
-    <field name="iso_code2" type="C" size="50">
-      <NOTNULL/>
-    </field>
-    <field name="iso_code3" type="C" size="50">
-      <NOTNULL/>
-    </field>
-    <field name="telephone_code" type="C" size="50">
-      <NOTNULL/>
-    </field>
+    <field name="country_name" type="C" size="100"/>
+    <field name="un_code" type="C" size="50"/>
+    <field name="iso_code1" type="C" size="50"/>
+    <field name="iso_code2" type="C" size="50"/>
+    <field name="iso_code3" type="C" size="50"/>
+    <field name="telephone_code" type="C" size="50"/>
     <field name="country_record_status" type="C" size="1">
       <NOTNULL/>
       <DEFAULT value="a"/>
     </field>
-    <field name="phone_format" type="C" size="25">
-      <NOTNULL/>
-    </field>
+    <field name="phone_format" type="C" size="25"/>
     <field name="currency_code" type="C" size="3"/>
     <data>
       <row><f>1</f><f>1</f><f></f><f></f><f></f><f></f><f></f><f></f><f>a</f><f></f><f></f></row>
@@ -1837,18 +1601,10 @@
       <NOTNULL/>
       <DEFAULT value="1"/>
     </field>
-    <field name="crm_status_short_name" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="crm_status_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="crm_status_pretty_plural" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="crm_status_display_html" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="crm_status_short_name" type="C" size="10"/>
+    <field name="crm_status_pretty_name" type="C" size="100"/>
+    <field name="crm_status_pretty_plural" type="C" size="100"/>
+    <field name="crm_status_display_html" type="C" size="100"/>
     <field name="crm_status_record_status" type="C" size="1">
       <DEFAULT value="a"/>
     </field>
@@ -1866,9 +1622,7 @@
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="data_source_name" type="C" size="128">
-      <NOTNULL/>
-    </field>
+    <field name="data_source_name" type="C" size="128"/>
     <data>
       <row><f>1</f><f>XRMS</f></row>
     </data>
@@ -1878,9 +1632,7 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="email_template_type_name" type="C" size="64">
-      <NOTNULL/>
-    </field>
+    <field name="email_template_type_name" type="C" size="64"/>
     <field name="modified_by" type="I" size="11">
       <NOTNULL/>
       <DEFAULT value="0"/>
@@ -1904,9 +1656,7 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="email_template_title" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="email_template_title" type="C" size="100"/>
     <field name="email_template_body" type="X"/>
     <field name="email_template_record_status" type="C" size="1">
       <NOTNULL/>
@@ -1925,9 +1675,7 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="on_what_table" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="on_what_table" type="C" size="100"/>
     <field name="on_what_id" type="I" size="11">
       <NOTNULL/>
       <DEFAULT value="0"/>
@@ -1938,26 +1686,16 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="file_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="file_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="file_name" type="C" size="100"/>
+    <field name="file_pretty_name" type="C" size="100"/>
     <field name="file_description" type="X"/>
-    <field name="file_filesystem_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="file_filesystem_name" type="C" size="100"/>
     <field name="file_size" type="I" size="11">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="file_type" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="on_what_table" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="file_type" type="C" size="100"/>
+    <field name="on_what_table" type="C" size="100"/>
     <field name="on_what_id" type="I" size="11">
       <NOTNULL/>
       <DEFAULT value="0"/>
@@ -1980,18 +1718,10 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="industry_short_name" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="industry_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="industry_pretty_plural" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="industry_display_html" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="industry_short_name" type="C" size="10"/>
+    <field name="industry_pretty_name" type="C" size="100"/>
+    <field name="industry_pretty_plural" type="C" size="100"/>
+    <field name="industry_display_html" type="C" size="100"/>
     <field name="industry_record_status" type="C" size="1">
       <DEFAULT value="a"/>
     </field>
@@ -2066,13 +1796,9 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="opportunity_title" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="opportunity_title" type="C" size="100"/>
     <field name="opportunity_description" type="X"/>
-    <field name="next_step" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="next_step" type="C" size="100"/>
     <field name="size" type="N" size="10">
       <NOTNULL/>
       <DEFAULT value="0"/>
@@ -2123,27 +1849,17 @@
       <NOTNULL/>
       <DEFAULT value="o"/>
     </field>
-    <field name="opportunity_status_short_name" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="opportunity_status_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="opportunity_status_pretty_plural" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="opportunity_status_display_html" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="opportunity_status_short_name" type="C" size="10"/>
+    <field name="opportunity_status_pretty_name" type="C" size="100"/>
+    <field name="opportunity_status_pretty_plural" type="C" size="100"/>
+    <field name="opportunity_status_display_html" type="C" size="100"/>
     <field name="opportunity_status_record_status" type="C" size="1">
       <NOTNULL/>
       <DEFAULT value="a"/>
     </field>
-    <field name="opportunity_status_long_desc" type="C" size="255">
-      <NOTNULL/>
-    </field>
+    <field name="opportunity_status_long_desc" type="C" size="255"/>
     <data>
-      <row><f>1</f><f>1</f><f>1</f><f>o</f><f>NEW</f><f>New</f><f>New</f><f>New</f><f>a</f><f></f></row>
+      <row><f>1</f><f>1</f><f>1</f><f>o</f><f>New</f><f>New</f><f>New</f><f>a</f><f></f></row>
       <row><f>2</f><f>1</f><f>2</f><f>o</f><f>PRE</f><f>Preliminaries</f><f>Preliminaries</f><f>Preliminaries</f><f>a</f><f></f></row>
       <row><f>3</f><f>1</f><f>3</f><f>o</f><f>DIS</f><f>Discussion</f><f>Discussion</f><f>Discussion</f><f>a</f><f></f></row>
       <row><f>4</f><f>1</f><f>4</f><f>o</f><f>NEG</f><f>Negotiation</f><f>Negotiation</f><f>Negotiation</f><f>a</f><f></f></row>
@@ -2156,18 +1872,10 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="opportunity_type_short_name" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="opportunity_type_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="opportunity_type_pretty_plural" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="opportunity_type_display_html" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="opportunity_type_short_name" type="C" size="10"/>
+    <field name="opportunity_type_pretty_name" type="C" size="100"/>
+    <field name="opportunity_type_pretty_plural" type="C" size="100"/>
+    <field name="opportunity_type_display_html" type="C" size="100"/>
     <field name="opportunity_type_record_status" type="C" size="1">
       <NOTNULL/>
       <DEFAULT value="a"/>
@@ -2181,18 +1889,10 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="rating_short_name" type="C" size="10">
-      <NOTNULL/>
-    </field>
-    <field name="rating_pretty_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="rating_pretty_plural" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="rating_display_html" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="rating_short_name" type="C" size="10"/>
+    <field name="rating_pretty_name" type="C" size="100"/>
+    <field name="rating_pretty_plural" type="C" size="100"/>
+    <field name="rating_display_html" type="C" size="100"/>
     <field name="rating_record_status" type="C" size="1">
       <DEFAULT value="a"/>
     </field>
@@ -2212,12 +1912,8 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="on_what_table" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="recent_action" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="on_what_table" type="C" size="100"/>
+    <field name="recent_action" type="C" size="100"/>
     <field name="on_what_id" type="I" size="11">
       <NOTNULL/>
       <DEFAULT value="0"/>
@@ -2230,21 +1926,11 @@
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="relationship_name" type="C" size="48">
-      <NOTNULL/>
-    </field>
-    <field name="from_what_table" type="C" size="24">
-      <NOTNULL/>
-    </field>
-    <field name="to_what_table" type="C" size="24">
-      <NOTNULL/>
-    </field>
-    <field name="from_what_text" type="C" size="32">
-      <NOTNULL/>
-    </field>
-    <field name="to_what_text" type="C" size="32">
-      <NOTNULL/>
-    </field>
+    <field name="relationship_name" type="C" size="48"/>
+    <field name="from_what_table" type="C" size="24"/>
+    <field name="to_what_table" type="C" size="24"/>
+    <field name="from_what_text" type="C" size="32"/>
+    <field name="to_what_text" type="C" size="32"/>
     <field name="relationship_status" type="C" size="1">
       <NOTNULL/>
       <DEFAULT value="a"/>
@@ -2301,12 +1987,8 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="salutation" type="C" size="20">
-      <NOTNULL/>
-    </field>
-    <field name="salutation_sort_value" type="C" size="20">
-      <NOTNULL/>
-    </field>
+    <field name="salutation" type="C" size="20"/>
+    <field name="salutation_sort_value" type="C" size="20"/>
     <data>
       <row><f>1</f><f>Mr.</f><f>100</f></row>
       <row><f>2</f><f>Mrs.</f><f>103</f></row>
@@ -2510,20 +2192,14 @@
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="saved_title" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="saved_title" type="C" size="100"/>
     <field name="user_id" type="I" size="10">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
     </field>
-    <field name="on_what_table" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="saved_action" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="on_what_table" type="C" size="100"/>
+    <field name="saved_action" type="C" size="100"/>
     <field name="group_item" type="I" size="1">
       <NOTNULL/>
       <DEFAULT value="0"/>
@@ -2539,10 +2215,6 @@
     <index name="group_item">
       <col>group_item</col>
     </index>
-    <data>
-      <row><f>1</f><f>Current</f><f>1</f><f>cases</f><f>search</f><f>0</f><f>a%3A2%3A%7Bs%3A3%3A%22sql%22%3Bs%3A671%3A%22SELECT+CONCAT%28%27%3Ca+href%3D%22one.php%3Fcase_id%3D%27%2Cca.case_id%2C%27%22%3E%27%2Cca.case_title%2C%27%3C%2Fa%3E%27%29+AS+case_name%2C+c.company_name+AS+company%2C+u.username+AS+owner%2C+cat.case_type_pretty_name+AS+type%2C+cap.case_priority_pretty_name+AS+priority%2C+cas.case_status_pretty_name+AS+status%2C+DATE_FORMAT%28ca.due_at%2C%27%25Y-%25m-%25d%27%29+AS+due+from+companies+c%2C+cases+ca%2C+case_types+cat%2C+case_priorities+cap%2C+case_statuses+cas%2C+users+u++%2Ccontacts+cont+where+ca.case_status_id+%3D+cas.case_status_id+and+ca.case_priority_id+%3D+cap.case_priority_id+and+ca.case_type_id+%3D+cat.case_type_id+and+ca.company_id+%3D+c.company_id+and+ca.user_id+%3D+u.user_id+and+case_record_status+%3D+%27a%27and+cont.contact_id%3Dca.contact_id++and+1+%3D+2%22%3Bs%3A8%3A%22day_diff%22%3BN%3B%7D</f><f>a</f></row>
-      <row><f>2</f><f>Current</f><f>1</f><f>opportunities</f><f>search</f><f>0</f><f>a%3A2%3A%7Bs%3A3%3A%22sql%22%3Bs%3A928%3A%22SELECT+CONCAT%28%27%3Ca+id%3D%22%27%2Copp.opportunity_title%2C%27%22+href%3D%22one.php%3Fopportunity_id%3D%27%2Copp.opportunity_id%2C%27%22%3E%27%2Copp.opportunity_title%2C%27%3C%2Fa%3E%27%29+AS+opportunity%2C%0A++c.company_name+AS+%27company%27%2C+u.username+AS+owner+%2C%0A++ot.opportunity_type_pretty_name+AS+type%2C%0A++CASE%0A++++WHEN+%28opp.size+%3E+0%29+THEN+opp.size%0A++++ELSE+0%0A++END+AS+opportunity_size%2C%0A++CASE%0A++++WHEN+%28opp.size+%3E+0%29+THEN+%28%28opp.size+%2A+opp.probability%29+%2F+100%29%0A++++ELSE+0%0A++END+AS+weighted_size%2C%0A++os.opportunity_status_pretty_name+AS+status+%2C+DATE_FORMAT%28close_at%2C%27%25Y-%25b-%25d%27%29+AS+close_date%2C+close_at%2C+opp.opportunity_title+FROM+companies+c%2C+opportunities+opp%2C+opportunity_statuses+os%2C+opportunity_types+ot%2C+users+u+%2Ccontacts+cont+where+opp.opportunity_status_id+%3D+os.opportunity_status_id+and+opp.opportunity_type_id+%3D+ot.opportunity_type_id+and+opp.company_id+%3D+c.company_id+and+opp.user_id+%3D+u.user_id+and+opportunity_record_status+%3D+%27a%27++and+cont.contact_id%3Dopp.contact_id++and+1+%3D+2%22%3Bs%3A8%3A%22day_diff%22%3BN%3B%7D</f><f>a</f></row>
-    </data>
   </table>
   <table name="sessions">
     <field name="session_id" type="C" size="255">
@@ -2559,22 +2231,14 @@
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="start_position" type="C" size="5">
-      <NOTNULL/>
-    </field>
-    <field name="start_day" type="C" size="10">
-      <NOTNULL/>
-    </field>
+    <field name="start_position" type="C" size="5"/>
+    <field name="start_day" type="C" size="10"/>
     <field name="start_month" type="I" size="2">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="end_position" type="C" size="5">
-      <NOTNULL/>
-    </field>
-    <field name="end_day" type="C" size="10">
-      <NOTNULL/>
-    </field>
+    <field name="end_position" type="C" size="5"/>
+    <field name="end_day" type="C" size="10"/>
     <field name="end_month" type="I" size="2">
       <NOTNULL/>
       <DEFAULT value="0"/>
@@ -2614,9 +2278,7 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="confirmed" type="C" size="1">
-      <NOTNULL/>
-    </field>
+    <field name="confirmed" type="C" size="1"/>
     <index name="country_id">
       <col>country_id</col>
     </index>
@@ -3357,9 +3019,7 @@
       <DEFAULT value="0"/>
       <UNSIGNED/>
     </field>
-    <field name="option_value" type="C" size="255">
-      <NOTNULL/>
-    </field>
+    <field name="option_value" type="C" size="255"/>
     <field name="sort_order" type="I" size="10">
       <NOTNULL/>
       <DEFAULT value="1"/>
@@ -3369,9 +3029,7 @@
       <NOTNULL/>
       <DEFAULT value="a"/>
     </field>
-    <field name="option_display" type="C" size="255">
-      <NOTNULL/>
-    </field>
+    <field name="option_display" type="C" size="255"/>
     <data>
       <row><f>1</f><f>3</f><f>y</f><f>1</f><f>a</f><f>Yes</f></row>
       <row><f>2</f><f>3</f><f>n</f><f>2</f><f>a</f><f>No</f></row>
@@ -3412,15 +3070,9 @@
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="user_preference_name" type="C" size="64">
-      <NOTNULL/>
-    </field>
-    <field name="user_preference_pretty_name" type="C" size="128">
-      <NOTNULL/>
-    </field>
-    <field name="user_preference_description" type="C" size="255">
-      <NOTNULL/>
-    </field>
+    <field name="user_preference_name" type="C" size="64"/>
+    <field name="user_preference_pretty_name" type="C" size="128"/>
+    <field name="user_preference_description" type="C" size="255"/>
     <field name="allow_multiple_flag" type="I" size="1">
       <NOTNULL/>
       <DEFAULT value="0"/>
@@ -3536,21 +3188,11 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="username" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="password" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="last_name" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="first_names" type="C" size="100">
-      <NOTNULL/>
-    </field>
-    <field name="email" type="C" size="100">
-      <NOTNULL/>
-    </field>
+    <field name="username" type="C" size="100"/>
+    <field name="password" type="C" size="100"/>
+    <field name="last_name" type="C" size="100"/>
+    <field name="first_names" type="C" size="100"/>
+    <field name="email" type="C" size="100"/>
     <field name="language" type="C" size="50">
       <NOTNULL/>
       <DEFAULT value="english"/>
@@ -3577,9 +3219,7 @@
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="on_what_table" type="C" size="32">
-      <NOTNULL/>
-    </field>
+    <field name="on_what_table" type="C" size="32"/>
     <field name="on_what_id" type="I" size="10">
       <NOTNULL/>
       <DEFAULT value="0"/>
