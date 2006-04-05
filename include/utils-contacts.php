@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.17 2006/04/05 00:44:59 vanmer Exp $
+ * $Id: utils-contacts.php,v 1.18 2006/04/05 19:22:22 vanmer Exp $
  *
  */
 
@@ -252,7 +252,7 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
  *
  * @return $contact_id with newly created contact, or false if failure occured
  */
-function add_contact($con, $contact, $magic_quotes)
+function add_contact($con, $contact, $magic_quotes=false)
 {
     return add_update_contact($con, $contact, false, $magic_quotes);
 };
@@ -486,6 +486,9 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.18  2006/04/05 19:22:22  vanmer
+ * - added needed default parameter on add_contact
+ *
  * Revision 1.17  2006/04/05 00:44:59  vanmer
  * - added magic quotes parameters to all contacts functions which call getUpdateSQL or getInsertSQL
  *
