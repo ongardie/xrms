@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.172 2006/03/03 21:19:20 vanmer Exp $
+ * $Id: utils-misc.php,v 1.173 2006/04/05 00:47:54 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -1811,11 +1811,36 @@ $this_request_only = true) {
     if ($this_request_only) {
         //echo("setting value for this request<br>\n");
         $xrms_function_cache[$func_name][$key] = $ret;
-        unset($_SESSION['XRMS_function_cache'][$func_name][$key]);
+        //unset($_SESSION['XRMS_function_cache'][$func_name][$key]);
     } else {
         //echo("setting $params value for duration of session<br>\n");
         $_SESSION['XRMS_function_cache'][$func_name][$key] = $ret;
-        unset($xrms_function_cache[$func_name][$key]);
+        //unset($xrms_function_cache[$func_name][$key]); 
+    }
+    //unset key in storage method which is NOT being used now, to avoid confusion between session function cache and global (request) function cache
+    function_cache_unset($func_name,$params,!$this_request_only,$key);
+}
+
+/**
+ * Clear function return value from cache
+ *
+ * This function will clear the cached value in the global var or session where it was stored.
+ * This should be useful for functions which need to clear the cache when the cached value is out of date or invalid
+ *
+ * @author Aaron van Meerten
+ *
+ * @param string $func_name Name of the Function
+ * @param array $params Parameters returned from
+ * @param bool $this_request_only If this is set then the result cleared just for this page request in a global var
+ * @param string $key used as key to function cache, if known.  Using this value will ignore $params
+ */
+function function_cache_unset($func_name,$params,$this_request_only=true,$key=false) {
+    global $xrms_function_cache;
+    if (!$key) $key= implode('|',$params);
+    if ($this_request_only) {
+    	unset($xrms_function_cache[$func_name][$key]);
+    } else {
+    	unset($_SESSION['XRMS_function_cache'][$func_name][$key]);
     }
 }
 
@@ -1827,16 +1852,18 @@ $this_request_only = true) {
  * @param integer $on_what_id with db identifier for entity in table
  * @param integer $old_status with number of status entity has now
  * @param integer $new_status with number of status entity will have after change
+ * @param integer $user_id optionally providing a user_id who made the change, otherwise $_SESSION['session_user_id'] is used
  * @return integer with database identifier of history entry, or false if failed
  *
 **/
-function add_workflow_history($con, $on_what_table, $on_what_id, $old_status, $new_status) {
+function add_workflow_history($con, $on_what_table, $on_what_id, $old_status, $new_status, $user_id=false) {
     if (!$on_what_table OR !$on_what_id OR !$old_status OR !$new_status) return false;
     $ins['on_what_table']=$on_what_table;
     $ins['on_what_id']=$on_what_id;
     $ins['old_status']=$old_status;
     $ins['new_status']=$new_status;
-    $ins['status_change_by']=$_SESSION['session_user_id'];
+    if (!$user_id) $user_id=$_SESSION['session_user_id'];
+    $ins['status_change_by']=$user_id;
     $ins['status_change_timestamp']=time();
 
     $table='workflow_history';
@@ -1845,6 +1872,7 @@ function add_workflow_history($con, $on_what_table, $on_what_id, $old_status, $n
     if ($sql) {
         $rst=$con->execute($sql);
         if ($rst) return $con->Insert_ID();
+	else db_error_handler($con, $sql);
     }
     return false;
 }
@@ -2049,6 +2077,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.173  2006/04/05 00:47:54  vanmer
+ * - added function_cache_unset function for clearing function cache
+ * - added parameter when adding workflow history, to provide user_id, instead of retrieving from the session
+ *
  * Revision 1.172  2006/03/03 21:19:20  vanmer
  * - uncommented the exit statement, should be here for security
  * - Thanks to Diego Ongaro at ETSZONE (diego@etszone.com) for noting it
