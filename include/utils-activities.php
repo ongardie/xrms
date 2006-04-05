@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-activities.php,v 1.23 2006/02/21 01:59:03 vanmer Exp $
+ * $Id: utils-activities.php,v 1.24 2006/04/05 00:44:10 vanmer Exp $
 
  */
 
@@ -59,7 +59,7 @@
  *
  * @return integer $activity_id identifying newly created activity or false for failure
  */
-function add_activity($con, $activity_data, $participants=false)
+function add_activity($con, $activity_data, $participants=false, $magic_quotes=false)
 {
 
     // Right off the bat, if these are not set, we can't do anything!
@@ -126,7 +126,7 @@ function add_activity($con, $activity_data, $participants=false)
     if ($resolution_description > 0) { $rec['resolution_description']           = $resolution_description; }
 
     $tbl = 'activities';
-    $ins = $con->GetInsertSQL($tbl, $rec, false);
+    $ins = $con->GetInsertSQL($tbl, $rec, $magic_quotes);
     $rst=$con->execute($ins);
     if (!$rst) { db_error_handler($con, $ins); return false; }
     $activity_id = $con->insert_id();
@@ -217,7 +217,7 @@ function get_activity($con, $activity_data, $show_deleted=false, $return_records
  *
  * @return boolean specifying if update succeeded
  */
-function update_activity($con, $activity_data, $activity_id=false, $activity_rst=false, $update_default_participant=true) {
+function update_activity($con, $activity_data, $activity_id=false, $activity_rst=false, $update_default_participant=true, $magic_quotes=false) {
     global $session_user_id;
     if (!$activity_id AND !$activity_rst) return false;
     if (!$activity_data) return false;
@@ -260,7 +260,7 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
             $activity_data['completed_at']='NULL';
         }
 
-    $update_sql = $con->getUpdateSQL($activity_rst, $activity_data,false,  get_magic_quotes_gpc());
+    $update_sql = $con->getUpdateSQL($activity_rst, $activity_data, false, $magic_quotes);
 
     if ($update_sql) {
         $update_rst=$con->execute($update_sql);
@@ -362,7 +362,7 @@ function delete_activities($con, $where_clause=false, $delete_from_database=fals
  *
  * @return integer $participant_position_id with ID of newly created activity participant position
  */
-function add_participant_position($con, $activity_type_id=false, $activity_participant_position_name=false) {
+function add_participant_position($con, $activity_type_id=false, $activity_participant_position_name=false, $magic_quotes=false) {
     if ((!$activity_type_id) AND ($activity_type_id!==false)) { echo "MISSING activity_type_id $activity_type_id"; return false; }
     if (!$activity_participant_position_name) return false;
 
@@ -374,7 +374,7 @@ function add_participant_position($con, $activity_type_id=false, $activity_parti
     }
     $table="activity_participant_positions";
 //    print_r($add);
-    $insql=$con->GetInsertSQL($table, $add);
+    $insql=$con->GetInsertSQL($table, $add, $magic_quotes);
     if ($insql) {
         $rst=$con->Execute($insql);
         if (!$rst) { db_error_handler($con, $insql); return false; }
@@ -591,7 +591,7 @@ function get_activity_type($con, $short_name=false, $pretty_name=false, $type_id
  * @param $user_editable optionally specifying if the activity type can be edited by the administrator or is a locked system activity type (defaults to true, administrators may edit this activity type)
  * @return integer $activity_type_id with existing or newly added activity type, or false for error
 **/
-function add_activity_type($con, $short_name, $pretty_name, $pretty_plural, $display_html, $score_adjustment=0, $sort_order=1, $user_editable=true) {
+function add_activity_type($con, $short_name, $pretty_name, $pretty_plural, $display_html, $score_adjustment=0, $sort_order=1, $user_editable=true, $magic_quotes=false) {
     if (!$con) return false;
     if (!$short_name) return false;
     $type = get_activity_type($con, $short_name);
@@ -618,7 +618,7 @@ function add_activity_type($con, $short_name, $pretty_name, $pretty_plural, $dis
     $rec['activity_type_display_html']=$display_html;
 
     $table="activity_types";
-    $ins = $con->getInsertSQL($table, $rec);
+    $ins = $con->getInsertSQL($table, $rec, $magic_quotes);
     if ($ins) {
         $rst=$con->execute($ins);
         if (!$rst) { db_error_handler($con, $ins); }
@@ -709,6 +709,9 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.24  2006/04/05 00:44:10  vanmer
+  * - added magic quote parameter to all activities functions which call getUpdateSQL or getInsertSQL
+  *
   * Revision 1.23  2006/02/21 01:59:03  vanmer
   * - changed to ensure that activities with no end date are set to end date same as start date, to fix strtotime error
   *
