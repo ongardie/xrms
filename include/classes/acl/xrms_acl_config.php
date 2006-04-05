@@ -5,7 +5,7 @@
  * Design copyright 2004 Explorer Fund Advisors
  * All Rights Reserved
  *
- * $Id: xrms_acl_config.php,v 1.8 2005/11/17 23:54:44 daturaarutad Exp $
+ * $Id: xrms_acl_config.php,v 1.9 2006/04/05 01:29:42 vanmer Exp $
  */
 
 /**
@@ -66,7 +66,7 @@ function xrms_acl_auth_callback(&$authInfo, $data_source_name) {
     
     //try to get back a return (adodbconnection) or pluginInfo populated with $pluginInfo[$data_source_name]  
     $option_value=do_hook_function('xrms_acl_auth', $pluginInfo);
-    if ($option_value AND (get_class($option_value)=='adodbconnection')) {
+    if ($option_value AND (substr(get_class($option_value),0,5)=='adodb')) {
         return $option_value;
     } else {
         if (count($pluginInfo[$data_source_name])>0) {
@@ -81,6 +81,9 @@ function xrms_acl_auth_callback(&$authInfo, $data_source_name) {
  
 /**
  * $Log: xrms_acl_config.php,v $
+ * Revision 1.9  2006/04/05 01:29:42  vanmer
+ * - ensure class is adodb connection before using as connection object
+ *
  * Revision 1.8  2005/11/17 23:54:44  daturaarutad
  * add strtolower to get_class calls on $con for php5
  *
