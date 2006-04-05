@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: companies_test_class.php,v 1.2 2006/01/17 03:13:08 vanmer Exp $
+ * $Id: companies_test_class.php,v 1.3 2006/04/05 00:46:08 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -255,11 +255,33 @@ Class XRMSCompanyTest extends XRMS_TestCase {
 
     }
 
+    function test_company_strange_characters($company_data=false, $delete_from_database=true) {
+        if (!$company_data) $company_data= array(
+                   'company_name'   => 'Test Suite Company O\'doole & Tomlin: Ignore',
+                   'profile' =>'This company was added automatically by the test suite.  It shouldn\'t be visible, and can safely be ignored',
+                    'tax_id' => '0987-12-2033'
+            );
+
+        $test_company_id=$this->test_add_company($company_data);
+        $this->assertTrue($test_company_id, "Failed to add a new company with strange characters, failing other tests");
+        if ($test_company_id) {
+            $ret=$this->test_find_company($company_data);
+            $this->assertTrue($ret, "Failed to find company with strange data");
+        } else return false;
+        
+        $company_data['profile']="This company with added automatically, and can't be seen because it should've been deleted by &";
+        $ret=$this->test_update_company($company_data, $test_company_id);
+        $this->assertTrue($ret, "Failed to update company with strange data");
+        $this->test_delete_company($test_company_id, $delete_from_database);
+    }
 
 }
 
 /*
  * $Log: companies_test_class.php,v $
+ * Revision 1.3  2006/04/05 00:46:08  vanmer
+ * - added test for strange characters in companies API
+ *
  * Revision 1.2  2006/01/17 03:13:08  vanmer
  * - added extended test for updating an existing company to a new company_id
  * - added extended test for moving a company when adding the unknown company record
