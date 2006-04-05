@@ -32,11 +32,11 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.16 $
+   * @version $Revision: 1.17 $
    * @copyright copyright information
    * @license GNU General Public Licence
    *
-   * $Id: SMTPs.php,v 1.16 2006/03/08 04:05:25 jswalter Exp $
+   * $Id: SMTPs.php,v 1.17 2006/04/05 03:15:40 ongardie Exp $
    *
    **/
 
@@ -1256,7 +1256,7 @@ class SMTPs
     * @return void
     *
     */
-    function setTransEncode ( $_strTransEncodeType )
+    function setTransEncodeType ( $_strTransEncodeType )
     {
         if ( array_search ( $_strTransEncodeType, $this->_smtpsTransEncodeTypes ) )
             $this->_smtpsTransEncodeType = $_strTransEncodeType;
@@ -2388,6 +2388,9 @@ class SMTPs
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.17  2006/04/05 03:15:40  ongardie
+  * -Fixed method name typo that resulted in a fatal error.
+  *
   * Revision 1.16  2006/03/08 04:05:25  jswalter
   *  - '$_smtpsTransEncode' was removed and '$_smtpsTransEncodeType' is now used
   *  - '$_smtpsTransEncodeType' is defaulted to ZERO
