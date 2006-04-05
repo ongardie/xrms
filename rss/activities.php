@@ -11,7 +11,7 @@
  * status = open or scheduled or overdue or closed or current (open or closed).  Default all.
  * type = limit activity type.  Default all.
  *
- * $Id: activities.php,v 1.7 2006/01/02 23:46:52 vanmer Exp $
+ * $Id: activities.php,v 1.8 2006/04/05 01:21:51 vanmer Exp $
  */
 
 //include required files
@@ -260,8 +260,8 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
       <link><?php echo $feed_location; ?></link>
       <description>A list of activities from XRMS</description>
       <language>en-US</language>
-      <pubDate>$now</pubDate>
-      <lastBuildDate>$last_date</lastBuildDate>
+      <pubDate><?php echo $now; ?></pubDate>
+      <lastBuildDate><?php echo $last_date; ?></lastBuildDate>
       <docs>http://blogs.law.harvard.edu/tech/rss</docs>
       <generator>XRMS</generator>
       <ttl>30</ttl>
@@ -274,6 +274,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
 
 /**
  * $Log: activities.php,v $
+ * Revision 1.8  2006/04/05 01:21:51  vanmer
+ * - ensure last date is provided to rss stream
+ *
  * Revision 1.7  2006/01/02 23:46:52  vanmer
  * - changed to use centralized dbconnection function
  *
