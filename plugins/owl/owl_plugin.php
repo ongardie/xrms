@@ -596,11 +596,11 @@ function op_browse_files(&$params) {
 			} else {
 				$return_url_base = "/$on_what_table/one.php?" . make_singular($on_what_table) . "_id=$on_what_id";
 			}
-			$return_url = urlencode("$return_url_base&owl_parent_id=$owl_parent_id");
+			$return_url_encoded = urlencode("$return_url_base&owl_parent_id=$owl_parent_id");
 			
 		} else {
-			$return_url_base = urlencode("/private/home.php");
-			$return_url = urlencode("$return_url_base?owl_parent_id=$owl_parent_id");
+			$return_url_base = "/private/home.php";
+			$return_url_encoded = urlencode("$return_url_base?owl_parent_id=$owl_parent_id");
 		}
 
         //$folder_caption = BuildFolderPath($folder_data, $owl_parent_id);
@@ -692,9 +692,9 @@ function op_browse_files(&$params) {
 				//}
 				
                 // the <!-- 1 --> is so that the pager will sort folders before files, alphabetically
-				$owl_data[$k]['icon'] = "<a href='$http_site_root/files/one.php?file_id={$owl_data[$k]['file_id']}&return_url=$return_url' alt=\"File Name: " .$owl_data[$k]['file_name'] . "\" title=\"File Name: " .$owl_data[$k]['file_name'] . "\"><img src=\"$default->owl_graphics_url/$default->system_ButtonStyle/icon_filetype/$sDispIcon\" border=\"0\" alt=\"\"></img></a>";
+				$owl_data[$k]['icon'] = "<a href='$http_site_root/files/one.php?file_id={$owl_data[$k]['file_id']}&return_url=$return_url_encoded' alt=\"File Name: " .$owl_data[$k]['file_name'] . "\" title=\"File Name: " .$owl_data[$k]['file_name'] . "\"><img src=\"$default->owl_graphics_url/$default->system_ButtonStyle/icon_filetype/$sDispIcon\" border=\"0\" alt=\"\"></img></a>";
 
-				$owl_data[$k]['file_pretty_name'] = "<!-- 1 {$owl_data[$k]['file_pretty_name']} --><a href='$http_site_root/files/one.php?file_id={$owl_data[$k]['file_id']}&return_url=$return_url' alt=\"File Name: " .$owl_data[$k]['file_name'] . "\" title=\"File Name: " .$owl_data[$k]['file_name'] . "\">" . $owl_data[$k]['file_pretty_name'] . '</a>';
+				$owl_data[$k]['file_pretty_name'] = "<!-- 1 {$owl_data[$k]['file_pretty_name']} --><a href='$http_site_root/files/one.php?file_id={$owl_data[$k]['file_id']}&return_url=$return_url_encoded' alt=\"File Name: " .$owl_data[$k]['file_name'] . "\" title=\"File Name: " .$owl_data[$k]['file_name'] . "\">" . $owl_data[$k]['file_pretty_name'] . '</a>';
 			}
 		}
 
@@ -725,18 +725,17 @@ function op_browse_files(&$params) {
     
         $columns = $file_pager_columns->GetUserColumns('default');
         $colspan = count($columns);
-
         $pager = new GUP_Pager($con, null, $owl_data, $caption, 'Files_Sidebar_Form', 'Files_Sidebar', $columns, false, true);
 
         $colspan = count($columns);
 
 
 
-        $new_file_button=render_create_button(_('Add File'), 'button', "javascript:location.href='$http_site_root/files/new.php?on_what_table=$on_what_table&on_what_id=$on_what_id&return_url=$return_url'");
-        $new_folder_button=render_create_button(_('Add Folder'), 'button', "javascript:location.href='$http_site_root/plugins/owl/new_folder.php?on_what_table=$on_what_table&on_what_id=$on_what_id&return_url=$return_url'");
+        $new_file_button=render_create_button(_('Add File'), 'button', "javascript:location.href='$http_site_root/files/new.php?on_what_table=$on_what_table&on_what_id=$on_what_id&return_url=$return_url_encoded'");
+        $new_folder_button=render_create_button(_('Add Folder'), 'button', "javascript:location.href='$http_site_root/plugins/owl/new_folder.php?on_what_table=$on_what_table&on_what_id=$on_what_id&return_url=$return_url_encoded'");
 
         if($folder_name) {
-            $delete_folder_button=render_delete_button(_("Delete Folder - $folder_name"), 'button', "javascript:location.href='$http_site_root/plugins/owl/delete_folder.php?on_what_table=$on_what_table&on_what_id=$on_what_id&folder_id=$owl_parent_id&return_url=$return_url'", false, false, 'folders', $owl_parent_id);
+            $delete_folder_button=render_delete_button(_("Delete Folder - $folder_name"), 'button', "javascript:location.href='$http_site_root/plugins/owl/delete_folder.php?on_what_table=$on_what_table&on_what_id=$on_what_id&folder_id=$owl_parent_id&return_url=$return_url_encoded'", false, false, 'folders', $owl_parent_id);
         }
 
 
@@ -863,6 +862,10 @@ function op_template(&$params) {
 
 /**
  * $Log: owl_plugin.php,v $
+ * Revision 1.13  2006/04/06 23:37:58  vanmer
+ * - changed to ensure return_url variable isn't changed by plugin
+ * - remove urlencode from private/home.php base url when looking at user files (was urlencoding twice)
+ *
  * Revision 1.12  2006/01/17 20:21:00  daturaarutad
  * fix return_url
  *
