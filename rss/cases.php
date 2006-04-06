@@ -133,4 +133,13 @@ echo '<?xml version="1.0" encoding="ISO-8859-1"?>' . "\n\n";
 </rss>
 <?php
 
+/**
+ * $Log: cases.php,v $
+ * Revision 1.2  2006/04/06 13:48:16  maulani
+ * - Add phpdoc
+ *
+ * Revision 1.1  2006/04/05 23:11:30  vanmer
+ * - added RSS feeds for cases and opportunities
+ *
+ */
 ?>
