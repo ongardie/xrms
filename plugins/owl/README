@@ -87,7 +87,13 @@ Next, enable the plugin in the XRMS Administrative interface.
 
 Then, run the Database Structure Update in the Administrative interface.
 
+If you fail to see any files listed, be sure to go into the Select Columns
+function of the files sidebar, and ensure that you select the desired OWL
+plugin fields, rather than the standard fields from XRMS.
 
+XRMS Files are by default controlled by the ACL, and this includes files
+within the OWL plugin.  If you do not see certain files, be sure that 
+your user has permission to the files using the ACL tools.
 
 
 USAGE
