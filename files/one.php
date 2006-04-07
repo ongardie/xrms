@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.23 2006/03/21 20:33:38 maulani Exp $
+ * $Id: one.php,v 1.24 2006/04/07 04:31:00 maulani Exp $
  */
 
 //include required files
@@ -126,7 +126,7 @@ start_page($page_title, true, $msg);
                     <?php echo _("Attached to"); ?>
                     <?php  echo $table_singular ?>
                 </td>
-                <td class=clear><a href="<?php  echo $http_site_root?>/<?php  echo $on_what_table?>/one.php?<?php  echo $table_singular?>_id=<?php echo $on_what_id;; ?>"><?php echo $attached_to_name; ?></td>
+                <td class=clear><a href="<?php  echo $http_site_root?>/<?php  echo $on_what_table?>/one.php?<?php  echo $table_singular?>_id=<?php echo $on_what_id; ?>"><?php echo $attached_to_name; ?></td>
                 </td>
             </tr>
             <tr>
@@ -222,6 +222,9 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.24  2006/04/07 04:31:00  maulani
+ *- Remove extra semicolon
+ *
  *Revision 1.23  2006/03/21 20:33:38  maulani
  *- Remove erroneous call-by-reference tag.  Function already defined with
  *  call-by-reference
