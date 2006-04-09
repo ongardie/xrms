@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-20 19:28-0600\n"
-"PO-Revision-Date: 2006-03-21 08:34+0100\n"
+"PO-Revision-Date: 2006-04-03 17:42+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr " - "
 
 #: activities/recurrence_sidebar.php:263
 msgid " business day of "
-msgstr "Jour de travail de"
+msgstr " Jour de travail de"
 
 #: activities/recurrence_sidebar.php:240
 msgid " business day of the  month"
@@ -28,7 +28,7 @@ msgstr " jour travaillé du mois"
 
 #: activities/recurrence_sidebar.php:257
 msgid " day of "
-msgstr "Jour de "
+msgstr " Jour de "
 
 #: activities/recurrence_sidebar.php:235
 msgid " day of the  month"
@@ -40,7 +40,7 @@ msgstr " jour de l'année"
 
 #: activities/recurrence_sidebar.php:208
 msgid " day(s)"
-msgstr "jour(s)"
+msgstr " jour(s)"
 
 #: include/utils-misc.php:1931
 msgid " has been created.  To access it, you can use the link here:"
@@ -48,11 +48,11 @@ msgstr " a été créé. Pour y accéder utiliser ce lien :"
 
 #: activities/recurrence_sidebar.php:230
 msgid " month(s)"
-msgstr "Mois"
+msgstr " Mois"
 
 #: activities/recurrence_sidebar.php:287
 msgid " occurence(s)"
-msgstr "Occurence(s)"
+msgstr " Occurence(s)"
 
 #: activities/recurrence_sidebar.php:270
 msgid " of "
@@ -64,11 +64,11 @@ msgstr " du mois"
 
 #: activities/recurrence_sidebar.php:221
 msgid " week(s)"
-msgstr "Semaine(s)"
+msgstr " Semaine(s)"
 
 #: activities/recurrence_sidebar.php:252
 msgid " year(s)"
-msgstr "Année(s)"
+msgstr " Année(s)"
 
 #: companies/some.php:558
 #: companies/some.php:566
@@ -135,19 +135,19 @@ msgstr "ACL"
 
 #: admin/acl/xrms_acl_nav.php:5
 msgid "ACL Administration"
-msgstr "ACL Administration"
+msgstr "Administration des ACL "
 
 #: admin/acl/index.php:47
 msgid "ACL Management"
-msgstr "ACL Management"
+msgstr "Management des ACL"
 
 #: admin/acl/acl_results.php:143
 msgid "ACL Result Test"
-msgstr "ACL Result Test"
+msgstr "Resultat du Test ACL"
 
 #: admin/acl/acl_results.php:44
 msgid "ACL Results"
-msgstr "ACL Resultat"
+msgstr "Resultats ACL"
 
 #: plugins/cti/cdr.php:278
 msgid "AMA Flags"
@@ -178,7 +178,7 @@ msgstr "De cette activité"
 
 #: plugins/cti/cdr.php:265
 msgid "Account Code"
-msgstr "Account Code"
+msgstr "Code du compte"
 
 #: admin/import/import-companies.php:117
 #: cases/one.php:233
@@ -455,7 +455,7 @@ msgstr "Ajouter une Evaluation de Société"
 
 #: activities/recurrence_sidebar.php:302
 msgid "Add New Recurring Activity"
-msgstr "Ajouter une nouvelle activitée  recurente"
+msgstr "Ajouter une nouvelle activité  recurente"
 
 #: admin/relationship-types/some.php:67
 msgid "Add New Role"
@@ -574,7 +574,7 @@ msgstr "Format d'adresse"
 #: contacts/edit-address.php:193
 #: contacts/new.php:299
 msgid "Address Name"
-msgstr "Nom"
+msgstr "Nom de l'adresse"
 
 #: companies/edit-address.php:103
 #: companies/one-address.php:82
@@ -603,7 +603,7 @@ msgstr "Admin"
 
 #: companies/one.php:215
 msgid "Administer Division"
-msgstr "Editer les services-Division"
+msgstr "administrer les Services"
 
 #: admin/index.php:33
 #: include/utils-interface.php:395
@@ -772,15 +772,15 @@ msgstr "BCC"
 #: plugins/info/one.php:205
 #: plugins/radtest/radtest.php:48
 msgid "Back"
-msgstr "En arrière"
+msgstr "Retour"
 
 #: companies/addresses.php:138
 msgid "Back To Company"
-msgstr "Revenir à la société"
+msgstr "Retour à la société"
 
 #: companies/relationships.php:126
 msgid "Back to"
-msgstr "En arrière à"
+msgstr "Retour à"
 
 #: email/email-2.php:217
 #: email/one-template.php:81
@@ -799,7 +799,7 @@ msgstr "Adresse de facturation"
 
 #: companies/addresses.php:72
 msgid "Billing Default"
-msgstr "Facturation de défaut"
+msgstr "Facturation par défaut"
 
 #: install/data.php:2826
 msgid "Block Sourceforge Link"
@@ -836,7 +836,7 @@ msgstr "E-mail Massif"
 #: contacts/new.php:192
 #: contacts/one.php:385
 msgid "Business Address"
-msgstr "Adresse Entreprise"
+msgstr "Adresse Professionnelle"
 
 #: include/utils-activities.php:641
 msgid "CC"
@@ -872,15 +872,15 @@ msgstr "OPPORTUNITES ACHEVÉES pour"
 #: plugins/phone/contacts_one.php:432
 #: reports/companies-list.php:102
 msgid "CRM Status"
-msgstr "CRM Statut"
+msgstr "Statut CRM"
 
 #: admin/crm-statuses/one.php:37
 msgid "CRM Status Details"
-msgstr "CRM détails de statut"
+msgstr "Detail de Statut CRM"
 
 #: admin/index.php:198
 msgid "CRM Statuses"
-msgstr "CRM Statuts"
+msgstr "Statuts CRM"
 
 #: activities/activities-widget.php:483
 msgid "Calendar View"
@@ -1362,7 +1362,7 @@ msgstr "Sociétés par statut CRM"
 #: reports/companies-by-industry.php:49
 #: reports/index.php:46
 msgid "Companies by Industry"
-msgstr "Sociétés par Activité"
+msgstr "Sociétés par type d'activité"
 
 #: reports/companies-by-company-source.php:36
 #: reports/companies-by-company-source.php:47
@@ -1428,7 +1428,7 @@ msgstr "Société ajoutée"
 
 #: reports/company-contacts-printout.php:209
 msgid "Company Category"
-msgstr "Activité de la société"
+msgstr "catégorie de la société"
 
 #: reports/company-contacts-printout.php:210
 msgid "Company City"
@@ -1494,7 +1494,7 @@ msgstr "Nom de la société"
 #: companies/some-advanced.php:382
 #: companies/some.php:952
 msgid "Company Options"
-msgstr "Options de société"
+msgstr "Options de la société"
 
 #: reports/index.php:93
 msgid "Company Reports"
@@ -1524,7 +1524,7 @@ msgstr "Sources de société"
 
 #: reports/company-contacts-printout.php:211
 msgid "Company State"
-msgstr "État de société"
+msgstr "province de la société"
 
 #: admin/company-types/one.php:36
 msgid "Company Type Details"
@@ -1537,7 +1537,7 @@ msgstr "Types de société"
 
 #: reports/company-contacts-printout.php:208
 msgid "Company User"
-msgstr "Utilisateur de société"
+msgstr "Utilisateur de la société"
 
 #: locale/datastrings.php:38
 msgid "Competitor"
@@ -1561,7 +1561,7 @@ msgstr "Complétée"
 #: reports/completed-items.php:44
 #: reports/index.php:143
 msgid "Completed Items"
-msgstr "Eléments achevés"
+msgstr "Eléments Complétés"
 
 #: activities/one.php:645
 msgid "Completed?"
@@ -1668,7 +1668,7 @@ msgstr "Contact ID :"
 #: admin/import/import-companies-2.php:73
 #: admin/import/import-companies-3.php:113
 msgid "Contact Info"
-msgstr "Contact Info"
+msgstr "Info Contact"
 
 #: companies/new.php:238
 #: contacts/edit.php:151
@@ -1703,7 +1703,7 @@ msgstr "Contacts pour les sociétés"
 
 #: files/some.php:425
 msgid "Contacts of Companies"
-msgstr "Contacts des Sociétés"
+msgstr "Contacts de la Société"
 
 #: activities/activity-reconnect.php:44
 msgid "Containing"
@@ -3320,7 +3320,7 @@ msgstr "Accueil"
 #: contacts/new.php:297
 #: contacts/one.php:389
 msgid "Home Address"
-msgstr "Adresse de la maison"
+msgstr "Adresse personnelle"
 
 #: admin/import/import-companies-2.php:99
 #: admin/import/import-companies-3.php:140
@@ -3360,7 +3360,7 @@ msgstr "Quel est le revenu potentiel dans chaque étape du processus de ventes ?"
 
 #: reports/index.php:72
 msgid "How much potential revenue is tied to companies in each industry?"
-msgstr "Quel est le revenu potentiel lié aux sociétés dans chaque activité ?"
+msgstr "Quel est le revenu potentiel lié aux sociétés dans chaque secteur d'activité ?"
 
 #: admin/import/import-companies-3.php:444
 #: include/utils-misc.php:654
@@ -3427,7 +3427,7 @@ msgstr "En cours"
 #: admin/index.php:203
 #: admin/industries/some.php:43
 msgid "Industries"
-msgstr "Activites"
+msgstr "Activites des sociétés"
 
 #: admin/import/import-companies.php:133
 #: companies/edit.php:123
@@ -3599,11 +3599,11 @@ msgstr "Ligne 2"
 
 #: admin/case-statuses/one.php:177
 msgid "Link Workflow Activity To Case Status"
-msgstr "Liéer une activitée du workflow à un statut de ticket"
+msgstr "Liéer une activité du workflow à un statut de ticket"
 
 #: admin/opportunity-statuses/one.php:178
 msgid "Link Workflow Activity To Opportunity Status"
-msgstr "Liéer une activitée du workflow à un statut d'opportunité"
+msgstr "Liéer une activité du workflow à un statut d'opportunité"
 
 #: relationships/sidebar.php:107
 msgid "Linked Relationships"
@@ -3655,7 +3655,7 @@ msgstr "Heure locale entre"
 
 #: activities/one.php:597
 msgid "Location"
-msgstr "endroit"
+msgstr "Localisation"
 
 #: include/utils-interface.php:343
 msgid "Logged in as"
@@ -4087,7 +4087,7 @@ msgstr "Nouveau"
 
 #: activities/activities-widget.php:645
 msgid "New Activity"
-msgstr "Nouvelle activitée"
+msgstr "Nouvelle activité"
 
 #: companies/addresses.php:202
 msgid "New Address"
@@ -4135,7 +4135,7 @@ msgstr "Demande de nouvelle fonctionalité"
 
 #: companies/one-address.php:51
 msgid "New Home Address"
-msgstr "Ajouter l'adresse de la maison"
+msgstr "Ajouter l'adresse personnelle"
 
 #: opportunities/new.php:84
 msgid "New Opportunity"
@@ -4266,7 +4266,7 @@ msgstr "Aucunes campagnes vues récemment "
 
 #: cases/some.php:185
 msgid "No recently viewed cases"
-msgstr "Aucun ticket vu récemment"
+msgstr "Aucun ticket consulté récemment"
 
 #: companies/some-advanced.php:309
 #: companies/some.php:434
@@ -4840,15 +4840,15 @@ msgstr "Merci d'essayer encore"
 
 #: admin/index.php:240
 msgid "Plugin Activation"
-msgstr "Plugin Activation"
+msgstr "Activation des PlugIn"
 
 #: admin/plugin/plugin-admin.php:170
 msgid "Plugin Administration"
-msgstr "Plugin Administration"
+msgstr "Administration des PlugIn "
 
 #: admin/plugin/plugin-admin.php:247
 msgid "Plugin directory could not be found: "
-msgstr "Plugin directory could not be found: "
+msgstr "Le dossier contenant les plugin ne peut etre localisé"
 
 #: admin/index.php:236
 #: admin/plugin/plugin-admin.php:188
@@ -5363,7 +5363,7 @@ msgstr "Décaler"
 #: activities/one.php:634
 #: activities/some.php:311
 msgid "Scheduled End"
-msgstr "Fin prévue le"
+msgstr "Fin le"
 
 #: activities/activities-widget.php:456
 #: activities/activities-widget.php:741
@@ -5607,7 +5607,7 @@ msgstr "Singulier?"
 #: files/some.php:481
 #: opportunities/one.php:239
 msgid "Size"
-msgstr "Taille"
+msgstr "Montant"
 
 #: opportunities/edit.php:211
 #: opportunities/new.php:142
