@@ -1,7 +1,7 @@
-XRMS Installation READ_ME
+XRMS CRM Installation
 
-Author: Beth Macknik (maulani)
-$Id: INSTALL,v 1.8 2005/06/24 13:29:24 braverock Exp $
+Original Author: Beth Macknik (maulani)
+$Id: INSTALL,v 1.9 2006/04/09 04:09:39 braverock Exp $
 
 INSTALLATION
 ============
@@ -11,9 +11,12 @@ location where your web server can access it.  For greater security, you
 can move the include directory to another location that is not accessible
 by your web server.
 
-You must also have access to a mySQL database for your data.
-(Support for other databases are planned in the future, but
-mySQL is required for now.)
+You must also have access to a database for your data.  We believe that
+XRMS has reasonable support for any database supported by an ADOdb
+driver, as described in the README.  MySQL and MS SQL Server are probably
+the most completely tested and reported on by the XRMS community.
+The rest of this section will assume MySQL.  Please let the development
+team know about your success or problems on other databases.
 
 Create a MySQL database to hold the XRMS tables, and pick a valid MySQL
 account for XRMS to use.
@@ -52,17 +55,16 @@ Administration -> Data Cleanup
 to avoid possible errors when using features.
 
 If you wish to have a more secure installation, you should consider changing the
-xrms database user to have only INSERT and UPDATE privileges.  If you want to 
+xrms database user to have only INSERT and UPDATE privileges.  If you want to
 continue to use the upgrade scripts without problems, you will also need ALTER TABLE
-privileges.  The xrms database user should not need DROP or DELETE privileges, as 
+privileges.  The xrms database user should not need DROP or DELETE privileges, as
 these SQL commands are not used in the XRMS code.
- 
+
 If no errors are detected, it will then ask if you wish to create some sample data.
 This is optional, and you can move directly to using xrms if you wish.
 
 Please note that all of the installation code is non-destructive.
 If you mistakenly run this over a live database, your data will not be harmed.
-
 
 
 UPDATE/UPGRADE
@@ -84,7 +86,7 @@ that you will need for full functionality.
 - log in as an administrative user
 
 - run the 'Database Structure Update' and 'Data Cleanup' scripts from
-the 'Administration' menu.
+the 'Administration' menu, just to be sure.
 
 That should be it.  The developers have worked pretty hard to make sure
 that upgrades go smoothly, because we are all running current CVS in
@@ -133,6 +135,9 @@ several pages of information about your php installation.
 /**
  * Change Log for INSTALL file
  * $Log: INSTALL,v $
+ * Revision 1.9  2006/04/09 04:09:39  braverock
+ * - update to include more information on other supported databases
+ *
  * Revision 1.8  2005/06/24 13:29:24  braverock
  * - add paragraph about INSERT, UPDATE, ALTER TABLE privs for a 'tighter' installation
  *
