@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.37 2006/01/02 22:38:16 vanmer Exp $
+ * $Id: index.php,v 1.38 2006/04/09 00:41:08 braverock Exp $
  */
 
 //include required stuff
@@ -53,6 +53,7 @@ start_page($page_title, true, $msg);
             </tr>
         </table>
 
+        <?php do_hook ('admin_body_bottom'); ?>
 
     </div>
 
@@ -253,6 +254,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.38  2006/04/09 00:41:08  braverock
+ * - add hook admin_body_bottom
+ *   patch requested by Jean-Noel Hayart
+ *
  * Revision 1.37  2006/01/02 22:38:16  vanmer
  * - changed to use centralized dbconnection function
  *
