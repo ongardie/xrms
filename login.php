@@ -2,7 +2,7 @@
 /**
  * Display login screen
  *
- * $Id: login.php,v 1.14 2005/11/27 14:17:20 braverock Exp $
+ * $Id: login.php,v 1.15 2006/04/09 00:23:02 braverock Exp $
  */
 require_once('include-locations.inc');
 
@@ -41,7 +41,7 @@ start_page($page_title, false, $msg);
 
 ?>
 
-<div style="position: absolute; width: 240px; height: 140px; left: 50%; top: 50%; margin-left: -120px; margin-top: -70px;">
+<div style="position: absolute; left: 45%; top: 50%; right: 40%; margin-left: -120px; margin-top: -70px;">
 <form action="login-2.php" method=post>
 <input type=hidden name=target value="<?php echo $target; ?>" >
 <table class=widget cellspacing=1>
@@ -82,6 +82,10 @@ end_page();
 
 /**
  * $Log: login.php,v $
+ * Revision 1.15  2006/04/09 00:23:02  braverock
+ * - adjust DIV size to allow for non-wrapping localized labels
+ *   - patch suggested by Jean-Noel Hayart
+ *
  * Revision 1.14  2005/11/27 14:17:20  braverock
  * - added hooks to support more advanced login/logout functionality
  *   - patches provided by Brendon Baumgartner <brendon@brendon.com>
