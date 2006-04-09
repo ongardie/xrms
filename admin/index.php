@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.38 2006/04/09 00:41:08 braverock Exp $
+ * $Id: index.php,v 1.39 2006/04/09 14:24:24 braverock Exp $
  */
 
 //include required stuff
@@ -51,6 +51,16 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_content><a href="data_clean.php"><?php echo _("Data Cleanup"); ?></a></td>
             </tr>
+        </table>
+
+        <table class=widget cellspacing=1 width="100%">
+            <tr>
+                <td class=widget_header><?php echo _("Documentation"); ?></td>
+            </tr>
+            <tr>
+                <td><a href="../doc/users/XRMS_Administrator_Guide.pdf" target="_blank"><?php echo _("Administrator Guide"); ?></a> (PDF)</td>
+            </tr>
+            <?php $param=NULL; echo do_hook_function('admin_docs', $param); ?>
         </table>
 
         <?php do_hook ('admin_body_bottom'); ?>
@@ -254,6 +264,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.39  2006/04/09 14:24:24  braverock
+ * - Add Administrator Guide PDF link
+ * - add admin_docs plugin hook
+ *
  * Revision 1.38  2006/04/09 00:41:08  braverock
  * - add hook admin_body_bottom
  *   patch requested by Jean-Noel Hayart
