@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.17 2006/01/02 23:29:27 vanmer Exp $
+ * $Id: new.php,v 1.18 2006/04/09 00:14:19 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -35,19 +35,22 @@ $rst->close();
 //get a campaign menu
 $sql2 = "select campaign_title, campaign_id from campaigns where campaign_record_status = 'a' order by campaign_title";
 $rst = $con->execute($sql2);
-if ( $rst && !$rst->EOF ) {
-  $campaign_id = $rst->fields['campaign_id'];
+if($rst) {
+    $campaign_menu = $rst->getmenu2('campaign_id', false, true);
+    $rst->close();
 } else {
-  $campaign_id = '';
+    db_error_handler ($con, $sql2);
 }
-$campaign_menu = $rst->getmenu2('campaign_id', $campaign_id, true);
-$rst->close();
 
 //division menu
 $sql2 = "select division_name, division_id from company_division where company_id=$company_id order by division_name";
 $rst = $con->execute($sql2);
-$division_menu = $rst->getmenu2('division_id', $division_id, true);
-$rst->close();
+if($rst) {
+    $division_menu = $rst->getmenu2('division_id', $division_id, true);
+    $rst->close();
+} else {
+    db_error_handler($con, $sql2);
+}
 
 $user_menu = get_user_menu($con, $session_user_id);
 
@@ -233,6 +236,11 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.18  2006/04/09 00:14:19  braverock
+ * - default campaign list to empty selection
+ * - add db_error_handler calls
+ * - patch suggested by Jean-Noel Hayart
+ *
  * Revision 1.17  2006/01/02 23:29:27  vanmer
  * - changed to use centralized dbconnection function
  *
