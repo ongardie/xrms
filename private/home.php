@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.71 2006/03/16 06:47:33 ongardie Exp $
+ * $Id: home.php,v 1.72 2006/04/09 14:22:24 braverock Exp $
  */
 
 // include the common files
@@ -198,7 +198,7 @@ start_page($page_title,true,$msg);
                 <td class=widget_header><?php echo _("Documentation"); ?></td>
             </tr>
             <tr>
-                <td><a href="../doc/users/XRMS_User_Manual.pdf"><?php echo _("User Manual"); ?></a> (PDF)</td>
+                <td><a href="../doc/users/XRMS_User_Manual.pdf" target="_blank"><?php echo _("User Manual"); ?></a> (PDF)</td>
             </tr>
 <?php $param=NULL; echo do_hook_function('home_docs', $param); ?>
         </table>
@@ -227,6 +227,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.72  2006/04/09 14:22:24  braverock
+ * - make User Manual pdf link open a new window
+ *
  * Revision 1.71  2006/03/16 06:47:33  ongardie
  * - When there is no Home menu item, it should redirect to the next one - not the last.
  * - Redirecting to Activities rather than Reports/Admin (assuming defaults) makes more sense.
