@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.65 2006/01/02 23:29:27 vanmer Exp $
+ * $Id: some.php,v 1.66 2006/04/11 01:57:46 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -17,6 +17,8 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
+
+require_once('opportunities-pager-functions.php');
 
 
 $con = get_xrms_dbconnection();
@@ -50,6 +52,9 @@ $arr_vars = array ( // local var name       // session variable name
            'industry_id'             => array ( 'industry_id', arr_vars_GET_SESSION ),
            'before_after'            => array ( 'before_after', arr_vars_GET_SESSION ),
            'search_date'            => array ( 'search_date', arr_vars_GET_SESSION ),
+// JNH           
+           'hide_closed' 			 => array ( 'hide_closed', arr_vars_SESSION ),
+// JNH
            );
 
 // get all passed in variables
@@ -61,10 +66,27 @@ arr_vars_session_set ( $arr_vars );
 
 $close_at = $con->SQLDate('Y-M-D', 'close_at');
 
-$sql = "SELECT "
+if (check_user_role(false, $_SESSION['session_user_id'], 'Administrator')) 
+{
+ $isadmin = true;
+}
+else
+{
+ $isadmin = false;
+       $user_id = $session_user_id;
+       $hide_closed = true;
+}   
+
+$close_at = $con->SQLDate('d-m-Y', 'close_at');
+
+$is_overdue_field="(CASE WHEN (os.status_open_indicator='o') AND (close_at < " . $con->DBTimeStamp(time()) . ") THEN 1 ELSE 0 END)";
+
+// fin Modif
+
+$sql = "SELECT $is_overdue_field AS is_overdue,"
 . $con->Concat("'<a id=\"'", "opp.opportunity_title",  "'\" href=\"one.php?opportunity_id='", "opp.opportunity_id", "'\">'", "opp.opportunity_title","'</a>'")
 . " AS opportunity" . ",
-  c.company_name AS company, u.username AS owner " . ",
+  c.company_name AS 'company',crst.crm_status_pretty_name as 'crm_status', u.username AS owner " . ",
   ot.opportunity_type_pretty_name AS type,
   CASE
     WHEN (opp.size > 0) THEN opp.size
@@ -74,14 +96,14 @@ $sql = "SELECT "
     WHEN (opp.size > 0) THEN ((opp.size * opp.probability) / 100)
     ELSE 0
   END AS weighted_size" . ",
-  os.opportunity_status_pretty_name AS status " . ","
+  os.opportunity_status_pretty_name AS status " . ", opp.probability as 'prob', "
   . " $close_at AS close_date, close_at, opp.opportunity_title"  . ' ';
 
 
 if ($opportunity_category_id > 0) {
-    $from = "FROM companies c, opportunities opp, opportunity_statuses os, opportunity_types ot, users u, entity_category_map ecm ";
+    $from = "FROM companies c, opportunities opp, opportunity_statuses os, opportunity_types ot, crm_statuses crst,users u, entity_category_map ecm ";
 } else {
-    $from = "FROM companies c, opportunities opp, opportunity_statuses os, opportunity_types ot, users u ";
+    $from = "FROM companies c, opportunities opp, opportunity_statuses os, opportunity_types ot, users u, crm_statuses crst ";
 }
 
 //added by Nic to be able to create mail merge to contacts
@@ -91,7 +113,16 @@ $where  = "where opp.opportunity_status_id = os.opportunity_status_id ";
 $where .= "and opp.opportunity_type_id = ot.opportunity_type_id ";
 $where .= "and opp.company_id = c.company_id ";
 $where .= "and opp.user_id = u.user_id ";
+$where .= "and c.crm_status_id = crst.crm_status_id ";
 $where .= "and opportunity_record_status = 'a' ";
+
+// Begin Add JNH
+if ( $hide_closed )
+{
+    $where .= " AND os.status_open_indicator='o' ";
+}
+// end Add JNH
+
 if($campaign_id) {
     $where .= " AND opp.campaign_id = '$campaign_id'";
 }
@@ -122,12 +153,12 @@ if (strlen($user_id) > 0) {
 
 if (strlen($opportunity_status_id) > 0) {
     $criteria_count++;
-    $where .= " and opp.opportunity_status_id = $opportunity_status_id";
+    $where .= " and opp.opportunity_status_id = $opportunity_status_id ";
 }
 
 if (strlen($opportunity_type_id) > 0) {
     $criteria_count++;
-    $where .= " and ot.opportunity_type_id = $opportunity_type_id";
+    $where .= " and ot.opportunity_type_id = $opportunity_type_id ";
 }
 if (strlen($industry_id) > 0) {
     $criteria_count++;
@@ -261,7 +292,8 @@ if (strlen($recently_viewed_table_rows) == 0) {
 
 $user_menu = get_user_menu($con, $user_id, true);
 
-$sql2 = "select " . $con->concat('opportunity_type_pretty_name', $con->qstr(' - '), 'opportunity_status_pretty_name') . ", opportunity_status_id from opportunity_statuses join opportunity_types ON opportunity_statuses.opportunity_type_id=opportunity_types.opportunity_type_id where opportunity_status_record_status = 'a' order by opportunity_statuses.opportunity_type_id, sort_order";
+// Ajout JNH classement par le sort order
+$sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql2);
 $opportunity_status_menu = $rst->getmenu2('opportunity_status_id', $opportunity_status_id, true);
 $rst->close();
@@ -335,7 +367,16 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $opportunity_status_menu; ?></td>
+                <td class=widget_content_form_element><?php  echo $opportunity_status_menu; ?>
+<input name="hide_closed" type=checkbox 
+<?php
+    if ($hide_closed) {
+        echo "checked=\"true\"";
+    }
+
+    echo ">" . _("Hide Closed");
+?>
+                </td>
                 <td class=widget_content_form_element><?php  echo $opportunity_category_menu; ?></td>
                 <td class=widget_content_form_element>
                     <select name="before_after">
@@ -373,39 +414,54 @@ start_page($page_title, true, $msg);
 $_SESSION['search_sql']=$sql;
 
 $owner_query_list = "select " . $con->Concat("u.username", "' ('", "count(u.user_id)", "')'") . ", u.user_id $from $where group by u.username order by u.username";
-
 $owner_query_select = $sql . 'AND u.user_id = XXX-value-XXX';
 
+// add jNH
+
+//   $is_overdue_field="(CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->DBTimeStamp(time()) . ") THEN 1 ELSE 0 END)";
+//   $is_overdue_text_field="(CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->DBTimeStamp(time()) . ") THEN ".$con->qstr(_("Yes"))." ELSE " . $con->qstr("")." END)";
+
+//   $overdue_query_list = "select DISTINCT $is_overdue_text_field AS is_overdue, $is_overdue_field FROM $from_list $joins $where $group_by";
+ //  $overdue_query_select = "$select FROM $from_list $joins $where $group_by HAVING $is_overdue_field = XXX-value-XXX";
+
+
+// end Add JNH
 
 $status_query_list = "select " . $con->Concat("os.opportunity_status_pretty_name", "' ('", "count(os.opportunity_status_id)", "')'") . ", os.opportunity_status_id $from $where group by os.opportunity_status_id order by os.sort_order";
-
 $status_query_select = $sql . ' AND os.opportunity_status_id = XXX-value-XXX';
 
 $type_query_list = "select " . $con->Concat("ot.opportunity_type_pretty_name", "' ('", "count(ot.opportunity_type_id)", "')'") . ", ot.opportunity_type_id $from $where group by ot.opportunity_type_id order by ot.opportunity_type_pretty_name";
-
 $type_query_select = $sql . ' AND ot.opportunity_type_id = XXX-value-XXX';
 
 $company_query_list = "select " . $con->Concat("c.company_name", "' ('", "count(c.company_id)", "')'") . ", c.company_id $from $where group by c.company_id order by c.company_name";
-
 $company_query_select = $sql . 'AND c.company_id = XXX-value-XXX';
 
 $columns = array();
+// Add JNH
+$columns[] = array('name' => _("Overdue"), 'index_sql' => 'is_overdue');
+// End Add Jnh
 $columns[] = array('name' => _('Opportunity'), 'index_sql' => 'opportunity', 'sql_sort_column' => 'opportunity_title', 'type' => 'url');
 $columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'group_query_list' => $company_query_list, 'group_query_select' => $company_query_select);
+$columns[] = array('name' => _('CRM Status'), 'index_sql' => 'crm_status');
 $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner', 'group_query_list' => $owner_query_list, 'group_query_select' => $owner_query_select);
 $columns[] = array('name' => _('Opportunity Size'), 'index_sql' => 'opportunity_size', 'subtotal' => true, 'css_classname' => 'right');
+$columns[] = array('name' => _('Probability'), 'index_sql' => 'prob', 'css_classname' => 'right');
 $columns[] = array('name' => _('Weighted Size'), 'index_sql' => 'weighted_size', 'subtotal' => true, 'css_classname' => 'right');
-$columns[] = array('name' => _('Type'), 'index_sql' => 'type', 'group_query_list' => $type_query_list, 'group_query_select' => $type_query_select);
+//$columns[] = array('name' => _('Type'), 'index_sql' => 'type', 'group_query_list' => $type_query_list, 'group_query_select' => $type_query_select);
 $columns[] = array('name' => _('Status'), 'index_sql' => 'status', 'group_query_list' => $status_query_list, 'group_query_select' => $status_query_select);
-$columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date', 'sql_sort_column' => 'close_at');
+//$columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date', 'sql_sort_column' => 'close_at');
+//JNH
+$columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date', 'sql_sort_column' => 'close_at', 'default_sort' => 'asc');
+//JNH
 
 
 
 // selects the columns this user is interested in
 // no reason to set this if you don't want all by default
-$default_columns = null;
-//$default_columns =  array('opportunity', 'company', 'owner', 'opportunity_size', 'weighted_size', 'status', 'close_date');
-
+//$default_columns = null;
+// Add JNH
+$default_columns =  array('opportunity', 'company', 'owner','opportunity_size', 'prob', 'weighted_size', 'status', 'close_date');
+// End Add JNH
 $pager_columns = new Pager_Columns('OpportunityPager', $columns, $default_columns, 'OpportunityData');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
 $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
@@ -416,7 +472,7 @@ echo $pager_columns_selects;
 
 
 
-$pager = new GUP_Pager($con, $sql, null,  _('Search Results'), 'OpportunityData', 'OpportunityPager', $columns);
+$pager = new GUP_Pager($con, $sql, 'GetOpportunityPagerData',  _('Search Results'), 'OpportunityData', 'OpportunityPager', $columns);
 
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
@@ -497,6 +553,12 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.66  2006/04/11 01:57:46  vanmer
+ * - added marking of overdue opportunites in red, like activities
+ * - added extra columns and groupability on the opportunites pager
+ * - added ability to hide closed opportunities
+ * - Thanks to Jean-Noël HAYART for providing this patch
+ *
  * Revision 1.65  2006/01/02 23:29:27  vanmer
  * - changed to use centralized dbconnection function
  *
