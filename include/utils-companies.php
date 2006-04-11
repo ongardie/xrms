@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-companies.php,v 1.10 2006/04/05 19:48:12 vanmer Exp $
+ * $Id: utils-companies.php,v 1.11 2006/04/11 00:41:50 vanmer Exp $
  *
  */
 
@@ -66,6 +66,7 @@
  *
  * @param adodbconnection $con with handle to the database
  * @param array $company_data with data about the company, to add
+ * @param boolean          $magic_quotes     F - inbound data is not magic_quoted by php, T - data is magic quoted
  *
  * @return $company_id of newly created or modified company, or false if failure occured
  */
@@ -119,6 +120,7 @@ function add_update_company($con, $company_data, $magic_quotes=false)
  *
  * @param adodbconnection $con with handle to the database
  * @param array $company_data with data about the company, to add
+ * @param boolean          $magic_quotes     F - inbound data is not magic_quoted by php, T - data is magic quoted
  *
  * @return $company_id with newly created company, or false if failure occured
  */
@@ -261,6 +263,7 @@ function get_company($con, $company_id, $return_rst=false)
  * @param array $company_data with associative array defining company data to update
  * @param integer $company_id optionally identifying company in the database (required if not passing in a ecordset to $company_rst)
  * @param adodbrecordset $company_rst optionally providing a recordset to use for the update (required if not passing in an integer for $company_id)
+ * @param boolean          $magic_quotes     F - inbound data is not magic_quoted by php, T - data is magic quoted
  *
  * @return boolean specifying if update succeeded
  */
@@ -533,6 +536,9 @@ include_once $include_directory . 'utils-addresses.php';
 
  /**
  * $Log: utils-companies.php,v $
+ * Revision 1.11  2006/04/11 00:41:50  vanmer
+ * - added needed PHPDoc parameters
+ *
  * Revision 1.10  2006/04/05 19:48:12  vanmer
  * - added magic quote parameter to companies API
  * - fixed find_company to search appropriate fields
