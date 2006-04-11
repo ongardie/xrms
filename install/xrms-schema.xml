@@ -3169,11 +3169,10 @@
       <row><f>14</f><f>0</f><f>16</f><f></f><f>n</f><f>a</f><f></f><f>0</f><f>0</f></row>
       <row><f>15</f><f>0</f><f>17</f><f></f><f>n</f><f>a</f><f></f><f>0</f><f>0</f></row>
       <row><f>16</f><f>0</f><f>18</f><f></f><f>y</f><f>a</f><f></f><f>0</f><f>0</f></row>
-      <row><f>18</f><f>0</f><f>20</f><f></f><f>1.0</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>18</f><f>0</f><f>20</f><f></f><f>1.99</f><f>a</f><f></f><f>0</f><f>0</f></row>
       <row><f>19</f><f>0</f><f>1</f><f></f><f>en_US</f><f>a</f><f></f><f>0</f><f>0</f></row>
       <row><f>20</f><f>0</f><f>2</f><f></f><f>basic</f><f>a</f><f></f><f>0</f><f>0</f></row>
-      <row><f>21</f><f>0</f><f>20</f><f></f><f>1.0</f><f>a</f><f></f><f>0</f><f>0</f></row>
-      <row><f>24</f><f>0</f><f>21</f><f></f><f>standard</f><f>a</f><f>2005-12-02 18:30:07</f><f>0</f><f>0</f></row>
+      <row><f>21</f><f>0</f><f>21</f><f></f><f>standard</f><f>a</f><f>2005-12-02 18:30:07</f><f>0</f><f>0</f></row>
     </data>
   </table>
   <table name="users">
