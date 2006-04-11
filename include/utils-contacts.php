@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.18 2006/04/05 19:22:22 vanmer Exp $
+ * $Id: utils-contacts.php,v 1.19 2006/04/11 00:42:08 vanmer Exp $
  *
  */
 
@@ -247,6 +247,7 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
  *
  * @param adodbconnection  $con      with ADOdb connection Object
  * @param array            $contact  with data about the contact, to add
+ * @param boolean          $magic_quotes     F - inbound data is not magic_quoted by php, T - data is magic quoted
  *
  * @depreciated
  *
@@ -354,6 +355,7 @@ function get_contact($con, $contact_id, $return_rst = false) {
  * @param array            $contact_data  with associative array defining contact data to update
  * @param integer          $contact_id    optionally identifying contact in the database (required if not passing in a recordset to $contact_rst)
  * @param adodbrecordset   $contact_rst   optionally providing a recordset to use for the update (required if not passing in an integer for $contact_id)
+ * @param boolean          $magic_quotes     F - inbound data is not magic_quoted by php, T - data is magic quoted
  *
  * @return boolean specifying if update succeeded
  */
@@ -486,6 +488,9 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.19  2006/04/11 00:42:08  vanmer
+ * - added missing PHPDoc parameters
+ *
  * Revision 1.18  2006/04/05 19:22:22  vanmer
  * - added needed default parameter on add_contact
  *
