@@ -2,7 +2,7 @@
 /**
  * Administration interface for managing permissions for one role
  *
- * $Id: role_permission_grid.php,v 1.8 2006/03/20 21:23:45 vanmer Exp $
+ * $Id: role_permission_grid.php,v 1.9 2006/04/11 00:24:54 vanmer Exp $
  *
  */
 
@@ -67,7 +67,12 @@ if ($gridrole_id) {
                 foreach ($relationships as $cor => $relationship) {
                     $rolePerm=$acl->get_role_permission($gridrole_id, $cor, $scope, $perm);
                     if ($rolePerm) {
-                        $current_permissions[$scope][$cor][$perm]=1;
+                        $rolePerm=current($rolePerm);
+                        if ($rolePerm['Inheritable_flag']) {
+                            $current_permissions[$scope][$cor][$perm]=2;
+                        } else {
+                            $current_permissions[$scope][$cor][$perm]=1;
+                        }
                     } else $current_permissions[$scope][$cor][$perm]=0;
                 }
             }
@@ -92,37 +97,40 @@ switch ($grid_action) {
                 foreach ($permdata as $perm=>$value) {
 //                 echo "PROCESSING $scope $cor $perm<br>";
                     if (array_key_exists("$scope,$cor,$perm",$_POST)) {
-                        if ($current_permissions[$scope][$cor][$perm]!=1) {                        
-                            echo "acl->add_role_permission($gridrole_id,$cor,$scope,$perm);<br>";
-                            $ret=$acl->add_role_permission($gridrole_id,$cor,$scope,$perm);
- //                           if ($ret) echo "PERMISSION SET $scope,$cor,$perm";
-                            $current_permissions[$scope][$cor][$perm]=1;
-                        }
-                    } else {
-                        if ($current_permissions[$scope][$cor][$perm]!=0) {
-                            $ret=$acl->get_role_permission($gridrole_id,$cor,$scope,$perm);
-			    $ret=current($ret);
-                            $role_permission_id=$ret['RolePermission_id'];
-                            $delret=$acl->delete_role_permission($role_permission_id);
-//                            if ($delret) echo "DELETED $role_permission_id SUCCESSFULLY";
-                            $current_permissions[$scope][$cor][$perm]=0;
+                        if ($current_permissions[$scope][$cor][$perm]!=$_POST["$scope,$cor,$perm"]) {
+//                            echo "CHANGING PERMISSION FROM {$current_permissions[$scope][$cor][$perm]} TO {$_POST["$scope,$cor,$perm"]}<br>";
+                            if ($current_permissions[$scope][$cor][$perm] OR !$_POST["$scope,$cor,$perm"]) {
+//                                echo "DELETING PERMISSION {$current_permissions[$scope][$cor][$perm]} FOR $scope,$cor,$perm<br>";
+                                $ret=$acl->get_role_permission($gridrole_id,$cor,$scope,$perm);
+                                $ret=current($ret);
+                                $role_permission_id=$ret['RolePermission_id'];
+                                $delret=$acl->delete_role_permission($role_permission_id);
+                            }
+                            if ($_POST["$scope,$cor,$perm"]) {
+                                if ($_POST["$scope,$cor,$perm"]==1) $inheritable=false;
+                                if ($_POST["$scope,$cor,$perm"]==2) $inheritable=true;
+//                                echo "ADDING PERMISSION {$_POST["$scope,$cor,$perm"]} FOR $scope,$cor,$perm<br>";
+                                $ret=$acl->add_role_permission($gridrole_id,$cor,$scope,$perm,$inheritable);
+                            }
+                            $current_permissions[$scope][$cor][$perm]=$_POST["$scope,$cor,$perm"];
                         }
                     }
                 }
             }
-        }                    
-/*        foreach ($relationships as $cor=>$rel) {
-            $ret=$acl->get_role_permission($gridrole_id, $cor, false, false);
         }
-*/
     case 'showGrid':
         echo <<<TILLEND
                 <input type=hidden name=grid_action value="assignPerms">
                 <input type=hidden name=gridrole_id value="$gridrole_id">                
                 <tr><td class=widget_header>Manage Permissions for $role_name</td></tr>
                 <tr><td class=widget_content>
-                <table class=widget><tr><th>&nbsp;</th>
 TILLEND;
+                echo _("Role Permissions are used to manage the intersection between roles, permissions, and controlled object relationships.  Permissions for a role are assigned on individual Controlled Object Relationships.  Each permission assigned can be considered inheritable or non-inheritable.  Inheritable permissions will propagate through to all controlled objects related to the child object in the relationship for which the permission is being defined.  For example, inheritable World Read on the top level Company relationship will extend to all contacts, activities, files, cases, opportunities and other entities which are linked to all companies.  Non-inheritable permissions mean that this permission is only valid for the current level of Controlled Object Relationship, and will not extend to child relationships.");
+                echo "<p><b>". _("Permission Codes") . "</b><br>";
+                echo "<ul><li>" . _("I - Permission is Inheritable") . '<br>';
+                echo "<li>" . _("N - Permission is Non-Inheritable") . '<br>';
+                echo "<li>" . _("empty - No Permission assigned") . '<br></ul>';
+                echo "<table class=widget><tr><th>&nbsp;</th>\n";
                 foreach ($scopes as $scope) {
                     echo "<th colspan=$permcount>$scope</th>";
                 }
@@ -143,9 +151,15 @@ TILLEND;
                     echo "<tr><td class=widget_label_right>{$rel['ControlledObject_name']}{$parent_name}</td>";
                     foreach ($scopes as $scope) {
                         foreach ($permissions as $perm) {
-                            echo "<td><input type=checkbox name=\"{$scope},{$cor},{$perm}\"";
-                            if ($current_permissions[$scope][$cor][$perm]) echo " CHECKED";
-                            echo "></td>";
+                            $inherit_selected=($current_permissions[$scope][$cor][$perm]==2) ? 'SELECTED' : '';
+                            $noninherit_selected=($current_permissions[$scope][$cor][$perm]==1) ? 'SELECTED' : '';
+                            echo "<td><select name=\"{$scope},{$cor},{$perm}\">";
+                            echo "<option value=0></option>";
+                            echo "<option value=2 $inherit_selected>"._("I")."</option>";
+                            echo "<option value=1 $noninherit_selected>"._("N")."</option>";
+                            echo "</select>";
+//                            if ($current_permissions[$scope][$cor][$perm]) echo " CHECKED";
+                            echo "</td>";
                         }
                     }
                     echo "</tr>";
