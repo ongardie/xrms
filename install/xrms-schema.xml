@@ -23,7 +23,7 @@
       <row><f>4</f><f>Case</f><f>cases</f><f>case_id</f><f></f><f>1</f></row>
       <row><f>5</f><f>Opportunity</f><f>opportunities</f><f>opportunity_id</f><f></f><f>1</f></row>
       <row><f>6</f><f>Activity</f><f>activities</f><f>activity_id</f><f></f><f>1</f></row>
-      <row><f>7</f><f>File</f><f>files</f><f>file_id</f><f></f><f>1</f></row>
+      <row><f>7</f><f>File</f><f>files</f><f>file_id</f><f>entered_by</f><f>1</f></row>
       <row><f>8</f><f>Division</f><f>company_division</f><f>division_id</f><f></f><f>1</f></row>
       <row><f>9</f><f>Administration</f><f></f><f></f><f></f><f>1</f></row>
       <row><f>10</f><f>Email Template</f><f>email_templates</f><f>email_template_id</f><f></f><f>1</f></row>
@@ -68,7 +68,7 @@
       <row><f>11</f><f>6</f><f>4</f><f></f><f></f><f></f><f>1</f></row>
       <row><f>12</f><f>6</f><f>8</f><f></f><f></f><f></f><f>1</f></row>
       <row><f>13</f><f>6</f><f>5</f><f></f><f></f><f></f><f>1</f></row>
-      <row><f>14</f><f>6</f><f>2</f><f></f><f></f><f></f><f>1</f></row>
+      <row><f>14</f><f>6</f><f>2</f><f></f><f></f><f></f><f>0</f></row>
       <row><f>15</f><f>7</f><f>6</f><f></f><f></f><f></f><f>1</f></row>
       <row><f>16</f><f>7</f><f>1</f><f></f><f></f><f></f><f>1</f></row>
       <row><f>17</f><f>7</f><f>4</f><f></f><f></f><f></f><f>1</f></row>
@@ -80,7 +80,8 @@
       <row><f>23</f><f>7</f><f>10</f><f></f><f></f><f></f><f>1</f></row>
       <row><f>24</f><f>7</f><f>8</f><f></f><f></f><f></f><f>1</f></row>
       <row><f>25</f><f>11</f><f>0</f><f></f><f></f><f></f><f>0</f></row>
-      <row><f>26</f><f>12</f><f></f><f></f><f></f><f></f><f></f></row>
+      <row><f>26</f><f>12</f><f></f><f></f><f></f><f></f><f>0</f></row>
+      <row><f>27</f><f>7</f><f>11</f><f>entered_by</f><f></f><f></f><f>0</f></row>
     </data>
   </table>
   <table name="GroupMember">
@@ -372,12 +373,6 @@
     <field name="activity_resolution_type_id" type="I" size="11"/>
     <field name="activity_priority_id" type="I" size="11"/>
     <field name="resolution_description" type="X"/>
-    <index name="act_comp_indx">
-      <col>company_id</col>
-    </index>
-    <index name="act_contact_indx">
-      <col>contact_id</col>
-    </index>
     <index name="act_company_idx">
       <col>company_id</col>
     </index>
@@ -436,9 +431,6 @@
       <UNSIGNED/>
     </field>
     <index name="activity_type_id">
-      <col>activity_type_id</col>
-    </index>
-    <index name="actpartpos_id_indx">
       <col>activity_type_id</col>
     </index>
     <data>
@@ -1680,6 +1672,11 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
+    <index name="entity_category_index">
+      <col>category_id</col>
+      <col>on_what_table</col>
+      <col>on_what_id</col>
+    </index>
   </table>
   <table name="files">
     <field name="file_id" type="I" size="11">
