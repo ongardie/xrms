@@ -5,7 +5,7 @@
  * Form to enter a new password for a user
  * @todo - add javascript validation on the save.
  *
- * $Id: change-owner.php,v 1.4 2006/01/02 22:09:39 vanmer Exp $
+ * $Id: change-owner.php,v 1.5 2006/04/11 01:42:45 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -21,17 +21,18 @@ $session_user_id = session_check();
 // become Admin aware - Don't accept the user to edit from the URL
 // for non-Admin types.
 //
-if ( 'Admin' != $_SESSION['role_short_name'] ) {
-  $edit_user_id = $session_user_id;
+if ( check_user_role(false, $_SESSION['session_user_id'], 'Administrator')) {
+  getGlobalVar($edit_user_id, 'edit_user_id');
 } else {
-  $edit_user_id = $_GET['edit_user_id'];
+  $edit_user_id = $session_user_id;
 }
 
 //connect to the database
 $con = get_xrms_dbconnection();
+getGlobalVar($msg, 'msg');
 
 $page_title = _("Change Record Owner");
-start_page($page_title);
+start_page($page_title, true, $msg);
 
 ?>
 
@@ -83,12 +84,17 @@ if ($rst3) {
 
 ?>
                     <td>
-                        <input type=submit value="<?php echo _("Change"); ?>">        
+                        <input type=submit name="Change" value="<?php echo _("Change All"); ?>">
+                        <input type=submit name="Change" value="<?php echo _("Change Selected"); ?>">        
                     </td>
                 </tr>
             </table>
         </form>
-        <?php echo _("This will change the owner of open activities, companies, campaigns, opportunities and cases."); ?>
+        <?php 
+        	echo _("Change all : This will change the owner of open activities, companies, campaigns, opportunities and cases and remove the old user from these entities");
+			echo "<BR>"; 
+        	echo _("Change Selected : This will change the owner of open companies, campaigns, opportunities and cases.");
+         ?>
     </div>
 
         <!-- right column //-->
@@ -105,6 +111,13 @@ end_page();
 
 /**
  *$Log: change-owner.php,v $
+ *Revision 1.5  2006/04/11 01:42:45  vanmer
+ *- changed the change owner application to use ACL administrator check instead of SESSION variable check
+ *- added ability to selectively change ownership by company
+ *- changed all variables from GET/POST to use getGlobalVar
+ *- added extra error handling
+ *- changes provided by and inspired by patches thanks to Jean-Noël HAYART
+ *
  *Revision 1.4  2006/01/02 22:09:39  vanmer
  *- changed to use centralized dbconnection function
  *
