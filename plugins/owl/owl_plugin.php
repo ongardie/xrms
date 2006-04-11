@@ -76,8 +76,8 @@ function op_get_search_fields_sql() {
 *
 * @return array ('file_id' => 'the XRMS file id');
 */
-function op_get_xrms_file_id(&$params) { 
-	global $owl_location; 
+function op_get_xrms_file_id(&$params) {
+	global $owl_location;
 
     require_once('../include-locations.inc');
     global $include_directory;
@@ -97,15 +97,15 @@ function op_get_xrms_file_id(&$params) {
 }
 
 
-/** 
+/**
 * Get Extra HTML rows for display in files/one.php
-*   
+*
 * @param array ('pager' => $pager);
-*   
+*
 * @return array ('pager' => 'pager object with modify callback set');
 */
-function op_search_files_callback(&$params) { 
-	global $owl_location; 
+function op_search_files_callback(&$params) {
+	global $owl_location;
 
     require_once('../include-locations.inc');
     global $include_directory;
@@ -128,11 +128,11 @@ function op_search_files_callback(&$params) {
 	$params['pager'] = $pager;
 
 }
-/** 
+/**
 * Get Extra HTML rows for display in files/one.php
-*   
+*
 * @param array all db rows
-*   
+*
 * @return array all db rows filtered by OWL search
 */
 function OWLFileDataCallback($rows) {
@@ -151,11 +151,11 @@ function OWLFileDataCallback($rows) {
 
 
 
-/** 
+/**
 * This function is called by XRMS whenever the admin updates the databases
-*   
+*
 * @param object XRMS connection object
-*   
+*
 * @return none
 */
 function op_owl_xrms_update($con) {
@@ -210,8 +210,8 @@ function op_owl_xrms_update($con) {
 *
 * @param array ('file_info' => $file_info)
 *
-* @return array ('file_one_html' => '<html>', 
-*				 'file_one_html_post' => 'html after the one.php form', 
+* @return array ('file_one_html' => '<html>',
+*				 'file_one_html_post' => 'html after the one.php form',
 * 				 'file_one_extra_download_args' => '&selected_version=N')
 */
 function op_get_one_file_html(&$params) {
@@ -255,24 +255,24 @@ function op_get_one_file_html(&$params) {
 
 		   	$file_versions[] =  $file_version;
 		}
-	} 
+	}
 
 
 
 	// Pager for other versions
 	global $include_directory;
-	
+
 	require_once($include_directory . 'vars.php');
 	require_once($include_directory . 'adodb/adodb.inc.php');
-	
-	
+
+
 	require_once($include_directory . 'adodb-params.php');
 	require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 	require_once($include_directory . 'classes/Pager/Pager_Columns.php');
-	
-   	
+
+
 	$con = get_xrms_dbconnection();
-	
+
 	$columns = array();
 	$columns[] = array('name' => _("Name"), 'index_data' => 'link');
 	$columns[] = array('name' => _("Filename"), 'index_data' => 'file_name');
@@ -280,13 +280,13 @@ function op_get_one_file_html(&$params) {
 	$columns[] = array('name' => _("Created"), 'index_data' => 'entered_at');
 	$columns[] = array('name' => _("Modified"), 'index_data' => 'last_modified_on');
 	$columns[] = array('name' => _("Size"), 'index_data' => 'file_size');
-	$columns[] = array('name' => _("Version"), 'index_data' => 'selected_version', 'default_sort' => 'asc'); 
+	$columns[] = array('name' => _("Version"), 'index_data' => 'selected_version', 'default_sort' => 'asc');
 
 
-	
+
 	$pager = new GUP_Pager($con, null, $file_versions, _('All File Versions'), 'FileForm', 'FilePager', $columns, false, true);
-	
-	$pager->AddEndRows($endrows);                                                                                         
+
+	$pager->AddEndRows($endrows);
 	$pager_html = $pager->Render($system_rows_per_page);
 	$params['file_one_html_post'] = <<<END
 	<form action="one.php" name="FileForm">
@@ -297,7 +297,7 @@ function op_get_one_file_html(&$params) {
 	</form>
 END;
    	$con->close();
-	
+
 	$params['file_one_extra_download_args'] = "selected_version={$file_info['selected_version']}";
 }
 
@@ -309,13 +309,13 @@ END;
 
 
 
-/** 
+/**
 * Add a file to OWL
-*   
+*
 * @param array ('file_field_name' => $file_field_name, 'file_info' => $file_info);
-*   
-* @return array ('external_id' => 'The OWL file ID', 
-*                'other owl_fields' => 'other OWL file fields', 
+*
+* @return array ('external_id' => 'The OWL file ID',
+*                'other owl_fields' => 'other OWL file fields',
 *                'error_status' => 'boolean indicating error status',
 *				 'error_text' => 'text of the error message')
 */
@@ -352,13 +352,13 @@ function op_add_file(&$params) {
 }
 
 
-/** 
+/**
 * Update a file's information or file in OWL
-*   
+*
 * @param array ('file_field_name' => $file_field_name, 'file_info' => $file_info);
-*   
-* @return array ('external_id' => 'The OWL file ID', 
-*                'other owl_fields' => 'other OWL file fields', 
+*
+* @return array ('external_id' => 'The OWL file ID',
+*                'other owl_fields' => 'other OWL file fields',
 *                'error_status' => 'boolean indicating error status',
 *                'error_text' => 'text of the error message')
 */
@@ -393,11 +393,11 @@ function op_upd_file(&$params) {
 
 
 
-/** 
+/**
 * Delete a file in OWL
-*   
+*
 * @param array (0 => $file_field_name, 1 => $file_info);
-*   
+*
 * @return array ('error_status' => 'boolean indicating error status',
 *                'error_text' => 'text of the error message')
 */
@@ -422,11 +422,11 @@ function op_delete_file(&$params) {
 }
 
 
-/** 
+/**
 * Add a Folder in OWL
-*   
+*
 * @param array ('folder_info' => $folder_info);
-*   
+*
 * @return array ('error_status' => 'boolean indicating error status',
 *                'error_text' => 'text of the error message')
 */
@@ -454,11 +454,11 @@ function op_add_folder(&$params) {
 }
 
 
-/** 
+/**
 * Delete a folder from OWL
-*   
+*
 * @param array ('folder_info' => $folder_info);
-*   
+*
 * @return array ('error_status' => 'boolean indicating error status',
 *                'error_text' => 'text of the error message')
 */
@@ -494,17 +494,17 @@ function op_delete_folder(&$params) {
 }
 
 
-/** 
+/**
 * Download a file in OWL (send to the browser)
-*   
+*
 * @param array ('file_info' => $file_info);
-*   
+*
 * @return array ('error_status' => 'boolean indicating error status',
 *                'error_text' => 'text of the error message')
 */
-function op_download_file(&$params) { 
-	global $owl_location; 
-	require_once($owl_location . '/lib/OWL_API.php'); 
+function op_download_file(&$params) {
+	global $owl_location;
+	require_once($owl_location . '/lib/OWL_API.php');
 
 	getGlobalVar($selected_version, 'selected_version');
 
@@ -521,11 +521,11 @@ function op_download_file(&$params) {
 	$params = array_merge($params, $owl_error);
 }
 
-/** 
-* Browse files (pager) 
-*   
+/**
+* Browse files (pager)
+*
 * @param array ('rst' => $rst, 'on_what_table' => $on_what_table, 'on_what_id' => $on_what_id);
-*   
+*
 * @return array ('file_rows' => 'pager content',
 *				 'error_status' => 'boolean indicating error status',
 *                'error_text' => 'text of the error message')
@@ -545,7 +545,7 @@ function op_browse_files(&$params) {
 
 		$file_data = $rst->GetArray();
 
-		
+
 		/* 	The lowdown on owl_parent_id:
 			This variable tracks where in the hierarchy a user is.
 			A seperate copy is kept in the user's session for 'regular use', which I suppose is their 'home directory'
@@ -597,7 +597,7 @@ function op_browse_files(&$params) {
 				$return_url_base = "/$on_what_table/one.php?" . make_singular($on_what_table) . "_id=$on_what_id";
 			}
 			$return_url_encoded = urlencode("$return_url_base&owl_parent_id=$owl_parent_id");
-			
+
 		} else {
 			$return_url_base = "/private/home.php";
 			$return_url_encoded = urlencode("$return_url_base?owl_parent_id=$owl_parent_id");
@@ -629,10 +629,10 @@ function op_browse_files(&$params) {
                         unset($owl_data[$k]);
                         continue;
                     } else {
-                        $owl_data[$k]['name'] = '.. (' . _('back') . ')';
+                        $owl_data[$k]['name'] = '.. (' . _("back") . ')';
                     }
-                } 
-			
+                }
+
 				$owl_data[$k]['file_size'] = '';
 
 				// folder link always sets a new owl_parent_id
@@ -640,7 +640,7 @@ function op_browse_files(&$params) {
 					if('company_division' == $on_what_table) {
 						getGlobalVar($division_id, 'division_id');
 						getGlobalVar($company_id, 'company_id');
-		
+
                     	$folder_link = "$http_site_root/companies/edit-division.php?company_id=$company_id&division_id=$division_id&owl_parent_id={$owl_data[$k]['id']}";
 					} else {
                     	$folder_link = "$http_site_root/$on_what_table/one.php?" . make_singular($on_what_table) . "_id=$on_what_id&owl_parent_id={$owl_data[$k]['id']}";
@@ -669,28 +669,28 @@ function op_browse_files(&$params) {
 				{
 					$sDispIcon = "NoExtension";
 				}
-								
+
 				if (($ext == "gz") && ($pos > 2))
 				{
 					$exttar = strtolower($choped[$pos-2]);
 					if (strtolower($choped[$pos-2]) == "tar")
 						$ext = "tar.gz";
 				}
-				
+
 				//if ($sql->f("url") == "1")
 				//{
 				//print("<img src=\"$default->owl_graphics_url/$default->sButtonStyle/icon_filetype/url.gif\" border=\"0\" alt=\"\"></img>");
 				//}
 				//else
 				//{
-				
+
 				if (!file_exists("$default->owl_fs_root/graphics/$default->system_ButtonStyle/icon_filetype/$sDispIcon"))
 				{
 					$sDispIcon = "file.gif";
 				}
 				//$owl_data[$k]['file_pretty_name'] = "<img src=\"$default->owl_graphics_url/$default->sButtonStyle/icon_filetype/$sDispIcon\" border=\"0\" alt=\"\"></img>&nbsp;";
 				//}
-				
+
                 // the <!-- 1 --> is so that the pager will sort folders before files, alphabetically
 				$owl_data[$k]['icon'] = "<a href='$http_site_root/files/one.php?file_id={$owl_data[$k]['file_id']}&return_url=$return_url_encoded' alt=\"File Name: " .$owl_data[$k]['file_name'] . "\" title=\"File Name: " .$owl_data[$k]['file_name'] . "\"><img src=\"$default->owl_graphics_url/$default->system_ButtonStyle/icon_filetype/$sDispIcon\" border=\"0\" alt=\"\"></img></a>";
 
@@ -714,15 +714,15 @@ function op_browse_files(&$params) {
         $columns[] = array('name' => 'Description', 'index_calc' => 'file_description');
         $columns[] = array('name' => 'Date', 'index_calc' => 'entered_at');
 
-        $caption = _("Files in $folder_caption");
+        $caption = _("Files in")'&nbsp;'.$folder_caption;
 
 
         if(!$file_sidebar_default_columns) $file_sidebar_default_columns = array('icon', 'file_pretty_name', 'file_size','username', 'entered_at');
-    
+
         $file_pager_columns = new Pager_Columns('Files_Sidebar', $columns, $file_sidebar_default_columns, 'Files_Sidebar_Form');
         $file_pager_columns_button = $file_pager_columns->GetSelectableColumnsButton();
         $file_pager_columns_selects = $file_pager_columns->GetSelectableColumnsWidget();
-    
+
         $columns = $file_pager_columns->GetUserColumns('default');
         $colspan = count($columns);
         $pager = new GUP_Pager($con, null, $owl_data, $caption, 'Files_Sidebar_Form', 'Files_Sidebar', $columns, false, true);
@@ -731,11 +731,11 @@ function op_browse_files(&$params) {
 
 
 
-        $new_file_button=render_create_button(_('Add File'), 'button', "javascript:location.href='$http_site_root/files/new.php?on_what_table=$on_what_table&on_what_id=$on_what_id&return_url=$return_url_encoded'");
-        $new_folder_button=render_create_button(_('Add Folder'), 'button', "javascript:location.href='$http_site_root/plugins/owl/new_folder.php?on_what_table=$on_what_table&on_what_id=$on_what_id&return_url=$return_url_encoded'");
+        $new_file_button=render_create_button(_("Add File"), 'button', "javascript:location.href='$http_site_root/files/new.php?on_what_table=$on_what_table&on_what_id=$on_what_id&return_url=$return_url_encoded'");
+        $new_folder_button=render_create_button(_("Add Folder"), 'button', "javascript:location.href='$http_site_root/plugins/owl/new_folder.php?on_what_table=$on_what_table&on_what_id=$on_what_id&return_url=$return_url_encoded'");
 
         if($folder_name) {
-            $delete_folder_button=render_delete_button(_("Delete Folder - $folder_name"), 'button', "javascript:location.href='$http_site_root/plugins/owl/delete_folder.php?on_what_table=$on_what_table&on_what_id=$on_what_id&folder_id=$owl_parent_id&return_url=$return_url_encoded'", false, false, 'folders', $owl_parent_id);
+            $delete_folder_button=render_delete_button(_("Delete Folder")." - $folder_name", 'button', "javascript:location.href='$http_site_root/plugins/owl/delete_folder.php?on_what_table=$on_what_table&on_what_id=$on_what_id&folder_id=$owl_parent_id&return_url=$return_url_encoded'", false, false, 'folders', $owl_parent_id);
         }
 
 
@@ -747,7 +747,7 @@ function op_browse_files(&$params) {
         		$_SESSION['owl_parent_id'] =  $owl_parent_id;
 			}
 		} else {
-	
+
       		unset($_SESSION[$on_what_table][$on_what_id]['owl_parent_id']);
        		unset($_SESSION['owl_parent_id']);
 		}
@@ -783,11 +783,11 @@ function op_browse_files(&$params) {
 }
 
 
-/** 
+/**
 * Search for files in OWL
-*   
+*
 * @param array (0 => $file_data);
-*   
+*
 * @return array (0	=> 'array of matching files',
 *				'error_status' => 'boolean indicating error status',
 *               'error_text' => 'text of the error message')
@@ -813,11 +813,11 @@ function op_search_files(&$params) {
 }
 
 
-/** 
+/**
 * Get a file's info from OWL
-*   
+*
 * @param array ('file_info' => $file_info);
-*   
+*
 * @return array ('file_info' => 'file info containing OWLs data',
 *				 'error_status' => 'boolean indicating error status',
 *                'error_text' => 'text of the error message')
@@ -862,6 +862,9 @@ function op_template(&$params) {
 
 /**
  * $Log: owl_plugin.php,v $
+ * Revision 1.14  2006/04/11 21:06:52  braverock
+ * - fix localization of a few strings
+ *
  * Revision 1.13  2006/04/06 23:37:58  vanmer
  * - changed to ensure return_url variable isn't changed by plugin
  * - remove urlencode from private/home.php base url when looking at user files (was urlencoding twice)
