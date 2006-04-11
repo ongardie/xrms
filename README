@@ -1,7 +1,7 @@
 XRMS - README
 
 =============================================================
-/** $Id: README,v 1.21 2006/03/03 23:33:18 ongardie Exp $ **/
+/** $Id: README,v 1.22 2006/04/11 16:00:15 braverock Exp $ **/
 
 ========================
 SUMMARY
@@ -24,13 +24,9 @@ are using XRMS contribute money and developer time to improve the system.
 ========================
 VERSION
 
-2005-03-07
+1.99.0 (v2.0rc1) 2006-04-11
 
-This version has had many many bug fixes and enhancements.  We have also
-added an automated installation, update, and data integrity process. See
-the file install/INSTALL for details.
-
-This release fixes over 30 bugs, and adds many many enhancements.
+This release fixes over 200 bugs, and adds many many enhancements.
 
 We have added significant improvements to the Workflow system, usability across
 XRMS, related activity tracking, and the CSS themes.  This version also
@@ -40,7 +36,7 @@ Many new plugins have been contributed by companies using XRMS.
 
 The list goes on and on.
 
-We recommend that if more than a few days has passed since the date on a release
+We recommend that if more than a few days has passed since the date on a stable release
 tarball that you consider downloading and installing a development snapshot
 instead.  These are normally quite stable, as the development team is probably
 using that code in production at their respective companies.
@@ -48,8 +44,8 @@ using that code in production at their respective companies.
 
 COPYRIGHTS
 
+Copyright (c) 2003-2006 XRMS Development Team http://xrms.sourceforge.net/ http://xrms.org/
 Copyright (c) 2000-2003 Chris Woofter <chris_at_brokerstream_dot_com>
-Copyright (c) 2003-2005 XRMS Development Team http://xrms.sourceforge.net/
 
 ========================
 REQUIREMENTS
@@ -69,9 +65,8 @@ multi-database compliant, and the rest of the development team is very grateful
 for David's hard work.  At this point, any database supported by
 ADOdb version 4.22 *should* work seamlessly with XRMS.  To the best of our
 knowledge, XRMS has been successfully deployed on MySQL, MS SQL Server,
-Postgres, and SAP-DB/MaxDB.  It should work flawlessly on Oracle and DB/2 as
-well.  Installing on PostgreSQL still requires manual modification of the
-installation scripts. If you encounter problems or would like to tweak things to
+Postgres, and SAP-DB/MaxDB.  It should work on Oracle and DB/2 as
+well. If you encounter problems or would like to tweak things to
 work better with some other database, please let the development team know,
 and we will be happy to work with you to get your issue resolved.
 
@@ -98,8 +93,8 @@ IMPORTING YOUR DATA
 
 To import companies, export a .csv file of companies and contacts.
 We've included templates for many common CRM/SFA applications, such as
-Microsoft Outlook, Act!, SalesForce.com, and Goldmine, as well as a 'default'
-import template.
+Microsoft Outlook, Act!, SalesForce.com, Goldmine, Intuit Quickbooks,
+and a 'default' import template.
 
 Then visit Administration -> Import Companies/Contacts, select the appropriate
 default values, and upload the file.  You will be able to preview the upload before
@@ -229,34 +224,26 @@ http://dynarch.com/mishoo/calendar.epl
 We also currently use Aditus Consulting's JPGraph classes in some reports.
 http://www.aditus.nu/jpgraph/index.php
 
-Some administration pages currently make use of the PEAR HTML_QuickForm classes.
+Some pages currently make use of the PEAR HTML_QuickForm classes.
 These may be downloaded from http://pear.php.net/package/HTML_QuickForm or by
 simply entering 'pear install HTML_QuickForm' on the command line, if you have
-PEAR installed.
+PEAR installed. If you don't have PEAR installed, you may have errors
+on PEAR.php.
 
-
-
-
-
+XRMS was originally written by Chris Woofter, and is now maintained
+and extended by a dedicated community of developers and translators
+from companies around the world. See "XRMS Development Team" below.
 ========================
 NOTES
 
 1. We are still adding validation on form submits, and have a long way to go here,
    so don't try anything funny.
 
-2. We never finished some mail-merge stuff, but the mail-merge functionality is now
-   available for preliminary testing and bug-fixing.
-
-3. We're still trying to figure out how best to include a flexible security layer
-   (roles, permissions, etc.) into XRMS, so for now, there's only limited ability
-   to limit what a logged-in user may do.  We've got some ideas for this, but it
-   really is difficult to make this both flexible and convenient.
-
-4. Documentation is still improving  We are happily accepting contributions of user
+2. Documentation is still improving  We are happily accepting contributions of user
    documentation. Until further notice, just use the forums at SourceForge
-   for support.  We'll be around to answer questions.
+   or #xrms on irc.feenode.net for support.  We'll be around to answer questions.
 
-5. If you've got suggestions, please pass them along!
+3. If you've got suggestions, please pass them along!
 
 ========================
 CONTRIBUTING to XRMS
@@ -273,14 +260,14 @@ save you some work (someone else may have fixed it already), and in the
 case of enhancements or other more complex patches, it will save work
 for the developers by making very clear what has changed. For large,
 sweeping changes, you probably want to discuss your proposed change on
-the SourceForge Forums, so that the development team and the XRMS user
-community can comment on your proposed changes.
+the SourceForge Forums or the irc channel, so that the development team
+and the XRMS user community can comment on your proposed changes.
 
 If you want to integrate third party software to XRMS, you should probably
 familiarize yourself with the Plugin architecture, as that is what plugins
 are for.  If you find yourself needing more plugin hooks as you develop your
-plugin, let the development team know by posting to the Plugins
-Forum on SourceForge.  Somebody there will be happy to help you.
+plugin, let the development team know by posting to the Plugins Forum
+on SourceForge.  Somebody there will be happy to help you.
 
 Start with a clean checkout from CVS or with a release tarball or snapshot.
 The rest of these instructions will assume that you are working from a
@@ -322,10 +309,13 @@ where to insert the changed lines, even if the file has changed slightly
 since the patch was generated.
 
 Post your patch with a description of the changes to the SourceForge
-Patches Forum.  It usually helps to submit both a patch file and a copy
+Patches Forum.  It often helps to submit both a patch file and a copy
 of the full,modified file.
 
 One of the XRMS developers will review it and commit your changes to CVS.
+
+Contributions made by you will be placed under Copyright by the
+"XRMS Development Team", unless you indicate differently.
 
 Thanks for your interest in contributing to XRMS!
 
@@ -338,8 +328,7 @@ While editing the above mentioned php files you will have
 to change the path name to XRMS.
 Please enter the path name with slashes "/" (NOT
 backslashes "\", as commonly used in windows),
-e.g. "C:/Program Files/Apache
-Group/Apache/htdocs/xrms"
+e.g. "C:/Program Files/Apache Group/Apache/htdocs/xrms"
 
 Preventing some common errors
 To prevent getting too many php warning messages you
@@ -348,7 +337,7 @@ might want to modify your php.ini as follows:
 error_reporting = E_ALL & ~E_NOTICE
 
 If you get errors like "Warning: Cannot modify header
-information -.. " the set the following option in your php.ini:
+information -.. " then set the following option in your php.ini:
 output_buffering = On
 Note that turning on output buffering if you don't need it can cause
 all sorts of problems, so leave it off unless absolutely necessary.
@@ -376,12 +365,13 @@ XRMS Development Team
 
 Name              SF ID          Role
 ------------------------------------------------------------
-Chris Woofter     cdwtech        Original Author of XRMS
-Brian Peterson    braverock      Acting Project Coordinator
+Brian Peterson    braverock      Project Coordinator
 
 Andrew            s-t            Developer
 Olivier Colonna   obac           Developer
+Miguel Gonçalves  mig77          Developer
 Justin Cooper     daturaarutad   Developer
+Keith Edmunds                    Developer
 John Fawcett      johnfawcett    Developer
 Ken Gregoire      kennyg1        Documentation
 Nic Lowe          niclowe        Developer
@@ -391,27 +381,47 @@ Cal Page          cpsource       Developer
 Glenn Powers      gpowers        Developer
 Neil Roberts      neildogg       Developer
 David Rogers      introspectshun Developer
+Walter Torres     jswalter       Developer
 David Uhlman      d2uhlman       Developer
 Aaron van Meerten vanmer         Developer
 Neil Williams     metamedia      Developer
+Chris Woofter     cdwtech        Developer - Original Author of XRMS
 
 Brunno Barrera                   Translator - Spanish
+Alan Baghumian                   Translator - Farsi
 Sebastian Becker                 Translator - German
-Roberto Durrer                   Translator - Brazilian Portugese
+Özgür Çaycý                      Translator - Turkish
+Miguel Gonçalves                 Translator - Portuguese
+Roberto Durrer                   Translator - Brazilian Portuguese
 John Fawcett                     Translator - Italian
 Jean-Noel Hayart                 Translator - French
+Holger Hahn                      Translator - German
 Piotr Kabath                     Translator - Polish
+Iosif Kanakaris                  Translator - Greek
+Timo Laine                       Translator - Finnish
+Giacomo Nardone                  Translator - Italian
 Bert-Jan van Rein                Translator - Dutch
-Junbao Wu                        Translator - Chinese, Simplified
+Daniel Rodriguez                 Translator - Spanish
+Eugene N Shylaev                 Translator - Russian
+Kristóf Tóth                     Translator - Hungarian
+Yi Yang                          Translator - Chinese
+Jun Bao Wu                       Translator - Chinese
 
 XRMS also contains code contributed by many, many users.
 The XRMS Development Team is grateful for all of the code,
 suggestions, bug fixes, and discussion contributed by each of you.
 
+If you're not on this list, and think you should be,
+please let us know.
+
 ============================================================
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.22  2006/04/11 16:00:15  braverock
+ * - bump version to 1.99.0
+ * - last text changes
+ *
  * Revision 1.21  2006/03/03 23:33:18  ongardie
  * - Added Diego Ongaro (at ETSZONE) as a Developer
  *
