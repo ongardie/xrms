@@ -1,4 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
+# Copyright (C) Yi Yang
 # Copyright (C) Junbao wu
 # This file is distributed under the same license as the XRMS package.
 # AUTHORS
@@ -10,7 +11,7 @@ msgstr ""
 "Project-Id-Version: XRMS - CVS July 23, 2005\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-20 19:28-0600\n"
-"PO-Revision-Date: 2005-07-23 16:00-0800\n"
+"PO-Revision-Date: 2006-04-08 16:00-0800\n"
 "Last-Translator: yi yang <yang_yi_cn@yahoo.com>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -51,7 +52,7 @@ msgstr "天"
 
 #: include/utils-misc.php:1931
 msgid " has been created.  To access it, you can use the link here:"
-msgstr ""
+msgstr " 已经创建了。要访问它，您可以使用这里的链接："
 
 #: activities/recurrence_sidebar.php:230
 msgid " month(s)"
@@ -86,7 +87,7 @@ msgstr " 年 "
 #: companies/some.php:766 companies/some.php:775 companies/some.php:816
 #: companies/some.php:824 companies/some.php:836
 msgid "!"
-msgstr ""
+msgstr "！"
 
 #: opportunities/one.php:240
 msgid "$"
@@ -116,11 +117,11 @@ msgstr "<h1>QuickForm 出错：表单方法 GET 和文件上载插件不兼容�
 
 #: include/utils-misc.php:1930
 msgid "A new workflow has been started"
-msgstr ""
+msgstr "一个新的工作流已经开始了"
 
 #: include/utils-misc.php:1931
 msgid "A new workflow of type"
-msgstr ""
+msgstr "一个新的工作流，类型"
 
 #: admin/index.php:96
 msgid "ACL"
@@ -156,9 +157,8 @@ msgid "AOL IM"
 msgstr "AOL即时通"
 
 #: admin/acl/Permission_list.php:46
-#, fuzzy
 msgid "Abbreviation"
-msgstr "目的地"
+msgstr "缩写"
 
 #: activities/activities-widget.php:461 plugins/phone/companies_one.php:687
 #: plugins/phone/contacts_one.php:513
@@ -197,11 +197,11 @@ msgstr "账户状态"
 
 #: locale/datastrings.php:12
 msgid "Acquired"
-msgstr ""
+msgstr "获取了"
 
 #: locale/datastrings.php:13
 msgid "Acquired by"
-msgstr ""
+msgstr "获取了，由"
 
 #: activities/associate-activities.php:31 admin/acl/GroupMember_list.php:48
 #: admin/acl/GroupUser_list.php:50 admin/acl/Groups_list.php:43
@@ -448,13 +448,12 @@ msgid "Added"
 msgstr "添加成功"
 
 #: admin/updateto2.0.php:4630
-#, fuzzy
 msgid "Added New Countries."
-msgstr "新增地址"
+msgstr "新国家增加完成"
 
 #: include/utils-database.php:268
 msgid "Added sessions table"
-msgstr ""
+msgstr "增加会话表"
 
 #: admin/acl/edit_GroupUser.php:61 admin/users/edit-2.php:61
 msgid "Added user to role in group successfully"
@@ -475,9 +474,8 @@ msgid "Address"
 msgstr "地址"
 
 #: admin/import/import-companies-3.php:170
-#, fuzzy
 msgid "Address 2 Name"
-msgstr "地址名"
+msgstr "地址2 名字"
 
 #: include/utils-interface.php:55
 msgid "Address Added."
@@ -545,9 +543,8 @@ msgid "Advanced Search"
 msgstr "高级搜索"
 
 #: companies/some.php:643 companies/some.php:798
-#, fuzzy
 msgid "Advanced Search Criteria"
-msgstr "高级搜索"
+msgstr "高级搜索条件"
 
 #: locale/datastrings.php:17
 msgid "Advertisement"
@@ -640,22 +637,19 @@ msgid "Attach Note"
 msgstr "备注"
 
 #: email/email-4.php:281
-#, fuzzy
 msgid "Attached Files"
-msgstr "附加文件"
+msgstr "附加的文件"
 
 #: activities/attachment_sidebar.php:46 activities/attachment_sidebar.php:52
 #: activities/one.php:525 files/edit-form.php:41 notes/sidebar.php:22
 msgid "Attached To"
-msgstr "附件"
+msgstr "附件添加到"
 
 #: files/one.php:126
-#, fuzzy
 msgid "Attached to"
-msgstr "附件"
+msgstr "附件添加到"
 
 #: email/email-2.php:243
-#, fuzzy
 msgid "Attachments"
 msgstr "附件"
 
@@ -673,7 +667,7 @@ msgstr "八月"
 
 #: include/classes/Pager/Pager_Columns.php:204
 msgid "Available Columns"
-msgstr ""
+msgstr "空闲的表格列"
 
 #: include/utils-activities.php:642
 msgid "BCC"
@@ -722,12 +716,11 @@ msgstr "缺陷"
 
 #: locale/datastrings.php:23
 msgid "Bug Report Closed"
-msgstr ""
+msgstr "错误报告完毕"
 
 #: locale/datastrings.php:24
-#, fuzzy
 msgid "Bug Report In Progress"
-msgstr "处理中"
+msgstr "Bug 报告处理中"
 
 #: locale/datastrings.php:25
 msgid "Bugs"
@@ -1028,20 +1021,20 @@ msgstr "化工"
 
 #: admin/acl/ControlledObjectRelationship_list.php:50
 msgid "Child Field"
-msgstr ""
+msgstr "子栏位"
 
 #: admin/acl/GroupGroup_list.php:42
 msgid "Child Group"
-msgstr ""
+msgstr "子群组"
 
 #: admin/acl/ControlledObjectRelationship_list.php:48
 #: admin/acl/RolePermission_list.php:71
 msgid "Child Object"
-msgstr ""
+msgstr "子对象"
 
 #: admin/acl/RolePermission_list.php:76
 msgid "Child Object ID"
-msgstr ""
+msgstr "子对象ID"
 
 #: contacts/edit.php:184
 msgid "Choose New Address"
@@ -1061,9 +1054,8 @@ msgid "City"
 msgstr "城市"
 
 #: activities/activities-widget.php:768
-#, fuzzy
 msgid "Clear Filter"
-msgstr "清除搜索"
+msgstr "清除搜索条件"
 
 #: activities/some.php:428 campaigns/some.php:269 cases/some.php:293
 #: companies/some.php:878 contacts/some.php:340 files/some.php:458
@@ -1109,9 +1101,8 @@ msgid "Closed"
 msgstr "完毕"
 
 #: locale/datastrings.php:31
-#, fuzzy
 msgid "Closed/Duplicate"
-msgstr "完毕的日期"
+msgstr "已完毕/重复"
 
 #: admin/opportunity-statuses/one.php:159
 #: admin/opportunity-statuses/some.php:168 locale/datastrings.php:32
@@ -1143,9 +1134,8 @@ msgid "Code"
 msgstr "编码"
 
 #: include/utils-interface.php:970
-#, fuzzy
 msgid "Collapse"
-msgstr "事例"
+msgstr "折叠"
 
 #: install/data.php:2816
 msgid "Color and Layout Theme for XRMS"
@@ -1247,9 +1237,8 @@ msgid "Company ID"
 msgstr "公司ID"
 
 #: companies/one.php:221
-#, fuzzy
 msgid "Company ID:"
-msgstr "公司ID"
+msgstr "公司ID："
 
 #: companies/new.php:101 companies/some.php:643
 msgid "Company Information"
@@ -1279,9 +1268,8 @@ msgid "Company Reports"
 msgstr "公司报告"
 
 #: install/data.php:2846
-#, fuzzy
 msgid "Company Search Type"
-msgstr "公司类型"
+msgstr "公司搜索类型"
 
 #: admin/import/import-companies.php:125 companies/edit.php:119
 #: companies/new.php:120 companies/one.php:585 companies/some.php:684
@@ -1367,9 +1355,8 @@ msgid "Construction"
 msgstr "建造施工"
 
 #: locale/datastrings.php:43
-#, fuzzy
 msgid "Consultant for"
-msgstr "联系人信息"
+msgstr "顾问于"
 
 #: locale/datastrings.php:44
 msgid "Consulting"
@@ -1414,9 +1401,8 @@ msgid "Contact ID"
 msgstr "联系人ID"
 
 #: contacts/one.php:169
-#, fuzzy
 msgid "Contact ID:"
-msgstr "联系人ID"
+msgstr "联系人ID："
 
 #: admin/import/import-companies-2.php:73
 #: admin/import/import-companies-3.php:113
@@ -1462,30 +1448,28 @@ msgid "Continue"
 msgstr "继续"
 
 #: admin/acl/GroupMember_list.php:49
-#, fuzzy
 msgid "Controlled Object"
-msgstr "管理可控制的对象"
+msgstr "已控制的对象"
 
 #: admin/acl/GroupMember_list.php:55
-#, fuzzy
 msgid "Controlled Object ID"
-msgstr "管理可控制的对象"
+msgstr "已控制的对象ID"
 
 #: admin/acl/ControlledObjectRelationship_list.php:72
-#, fuzzy
 msgid "Controlled Object Relationships"
-msgstr "管理可控对象关系"
+msgstr "已控对象关系"
 
 #: admin/acl/ControlledObject_list.php:62
-#, fuzzy
 msgid "Controlled Objects"
-msgstr "管理可控制的对象"
+msgstr "已控制的对象"
 
 #: install/data.php:2872
 msgid ""
 "Controls where the PHP session data is stored (files or database).  Changing "
 "this parameter will cause all currently logged in users to be logged out."
 msgstr ""
+"控制PHP会话数据存放在哪里（文件或数据库）。改变"
+"这个参数会导致所有现在登录中的用户登出"
 
 #: campaigns/edit.php:105 campaigns/new.php:98 campaigns/one.php:132
 msgid "Cost"
@@ -1548,9 +1532,8 @@ msgid "Create Recurrence"
 msgstr "创建重复事件"
 
 #: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:191
-#, fuzzy
 msgid "Create Successful"
-msgstr "参数成功写入"
+msgstr "创建成功"
 
 #: contacts/edit-address.php:180
 msgid "Create a New Address?"
@@ -1578,21 +1561,19 @@ msgstr "信用额度"
 
 #: admin/acl/GroupMember_list.php:53
 msgid "Criteria Result Field"
-msgstr ""
+msgstr "条件结果栏位"
 
 #: admin/acl/GroupMember_list.php:52
-#, fuzzy
 msgid "Criteria Table"
-msgstr "重要"
+msgstr "条件表"
 
 #: locale/datastrings.php:47
 msgid "Critical"
 msgstr "重要"
 
 #: admin/acl/ControlledObjectRelationship_list.php:52
-#, fuzzy
 msgid "Cross Table"
-msgstr "表格"
+msgstr "交叉表格"
 
 #: admin/users/change-owner.php:46
 msgid "Current Owner"
@@ -1648,7 +1629,7 @@ msgstr "顾客"
 
 #: plugins/dunfinder/setup.php:21
 msgid "DUN Finder"
-msgstr ""
+msgstr "DUN 查找器"
 
 #: activities/recurrence_sidebar.php:207
 msgid "Daily"
@@ -1663,27 +1644,24 @@ msgid "Data Cleanup"
 msgstr "清除数据"
 
 #: admin/acl/ControlledObject_list.php:43
-#, fuzzy
 msgid "Data Source"
-msgstr "管理数据源"
+msgstr "数据源"
 
 #: admin/acl/data_source_list.php:41
-#, fuzzy
 msgid "Data Source Name"
-msgstr "管理数据源"
+msgstr "数据源名称"
 
 #: admin/acl/data_source_list.php:60
-#, fuzzy
 msgid "Data Sources"
-msgstr "管理数据源"
+msgstr "数据源"
 
 #: install/data.php:2875
 msgid "Database (ADOdb)"
-msgstr ""
+msgstr "数据库(ADOdb)"
 
 #: install/data.php:2874
 msgid "Database (XRMS)"
-msgstr ""
+msgstr "数据库(XRMS)"
 
 #: admin/data_clean.php:331
 msgid "Database Cleanup Complete"
@@ -1861,9 +1839,8 @@ msgid "Delete Contact?"
 msgstr "删除联系人？"
 
 #: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:219
-#, fuzzy
 msgid "Delete Failed"
-msgstr "删除角色"
+msgstr "删除失败"
 
 #: admin/industries/one.php:76
 msgid "Delete Industry"
@@ -1874,9 +1851,8 @@ msgid "Delete Industry?"
 msgstr "删除行业？"
 
 #: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:204
-#, fuzzy
 msgid "Delete Not Allowed"
-msgstr "删除角色"
+msgstr "不允许删除"
 
 #: admin/opportunity-statuses/one.php:225
 msgid "Delete Opportunity Status"
@@ -1928,9 +1904,8 @@ msgstr "删除选中的"
 
 #: admin/acl/one_GroupMember.php:43
 #: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:217
-#, fuzzy
 msgid "Delete Successful"
-msgstr "删除地址"
+msgstr "删除成功"
 
 #: admin/users/one.php:142
 msgid "Delete User"
@@ -1945,9 +1920,8 @@ msgid "Deleted"
 msgstr "已删除"
 
 #: plugins/demo/setup.php:37
-#, fuzzy
 msgid "Demo"
-msgstr "删除"
+msgstr "演示"
 
 #: activities/activities-widget.php:454 admin/activity-templates/edit.php:112
 #: admin/case-statuses/some.php:114 admin/case-statuses/some.php:168
@@ -1983,9 +1957,8 @@ msgid "Destination"
 msgstr "目的地"
 
 #: activities/attachment_sidebar.php:29
-#, fuzzy
 msgid "Detach"
-msgstr "搜索"
+msgstr "取消联系"
 
 #: plugins/info/one.php:178
 msgid "Details"
@@ -2044,9 +2017,8 @@ msgid "Display in Sidebar"
 msgstr "在侧栏显示"
 
 #: include/classes/Pager/Pager_Columns.php:203
-#, fuzzy
 msgid "Displayed Columns"
-msgstr "显示名字"
+msgstr "显示表格列"
 
 #: locale/datastrings.php:54
 msgid "Distribution"
@@ -2275,9 +2247,8 @@ msgid "Edit User Information"
 msgstr "编辑用户信息"
 
 #: activities/one.php:688
-#, fuzzy
 msgid "Edit View"
-msgstr "列表视图"
+msgstr "编辑视图"
 
 #: contacts/edit-address.php:178
 msgid ""
@@ -2300,7 +2271,6 @@ msgid "Email"
 msgstr "电子邮件"
 
 #: locale/datastrings.php:58
-#, fuzzy
 msgid "Email Template"
 msgstr "E-Mail 模板"
 
@@ -2431,9 +2401,8 @@ msgid "Existing CRM Statuses"
 msgstr "顾客关系状态"
 
 #: include/utils-interface.php:969
-#, fuzzy
 msgid "Expand"
-msgstr "和"
+msgstr "展开"
 
 #: locale/datastrings.php:60 plugins/cti/cdr.php:295
 msgid "Export"
@@ -2483,9 +2452,8 @@ msgid "Failed to add activity"
 msgstr "添加活动失败"
 
 #: contacts/new-2.php:155
-#, fuzzy
 msgid "Failed to add contact"
-msgstr "添加活动失败"
+msgstr "添加联系人失败"
 
 #: admin/activity-types/one_activity_participant_position.php:35
 #: admin/activity-types/one_activity_participant_position.php:44
@@ -2523,9 +2491,8 @@ msgid "Failed to set preference value for preference"
 msgstr "设置首选项值失败"
 
 #: include/utils-companies.php:367 include/utils-companies.php:376
-#, fuzzy
 msgid "Failed to upgrade company entry for unknown company."
-msgstr "无法提供公司ID，失败"
+msgstr "失败，无法升级公司条目，公司未知，"
 
 #: admin/system-parameters/one.php:48 admin/system-parameters/one.php:54
 msgid "Failure to get system parameter "
@@ -2551,14 +2518,12 @@ msgid "Feature Request"
 msgstr "功能要求"
 
 #: locale/datastrings.php:63
-#, fuzzy
 msgid "Feature Request Closed"
-msgstr "功能要求"
+msgstr "功能要求关闭"
 
 #: locale/datastrings.php:64
-#, fuzzy
 msgid "Feature Request In Progress"
-msgstr "功能要求"
+msgstr "功能要求处理中"
 
 #: locale/datastrings.php:65
 msgid "Feature Requests"
@@ -2574,7 +2539,6 @@ msgid "Female"
 msgstr "女性"
 
 #: admin/acl/one_GroupMember.php:82
-#, fuzzy
 msgid "Field"
 msgstr "用户域"
 
@@ -2611,22 +2575,18 @@ msgid "File Name"
 msgstr "文件名"
 
 #: files/some.php:404
-#, fuzzy
 msgid "File Summary"
-msgstr "摘要"
+msgstr "文件摘要"
 
 #: files/new.php:108
-#, fuzzy
 msgid "File added successfully"
-msgstr "参数成功写入"
+msgstr "文件添加成功"
 
 #: files/edit-2.php:78 files/edit-2.php:109
-#, fuzzy
 msgid "File was updated successfully."
-msgstr "参数成功写入"
+msgstr "文件升级成功"
 
 #: files/one.php:120
-#, fuzzy
 msgid "Filename"
 msgstr "文件名"
 
@@ -2662,11 +2622,11 @@ msgstr "后续行动"
 
 #: include/utils-misc.php:1941
 msgid "Forked from old workflow"
-msgstr ""
+msgstr "从旧工作流分支"
 
 #: include/utils-misc.php:1935
 msgid "Forked workflow process"
-msgstr ""
+msgstr "分出来的工作流进程"
 
 #: reports/company-contacts-printout.php:226
 msgid "Format for Printer"
@@ -2681,9 +2641,8 @@ msgid "Formatting"
 msgstr "格式"
 
 #: contacts/one.php:178
-#, fuzzy
 msgid "Former Companies"
-msgstr "其他公司"
+msgstr "前公司"
 
 #: companies/former-names.php:88 companies/one.php:333
 #: plugins/phone/companies_one.php:267
@@ -2788,48 +2747,40 @@ msgstr "图表"
 
 #: admin/acl/GroupGroup_list.php:41 admin/acl/GroupMember_list.php:50
 #: admin/acl/GroupUser_list.php:52
-#, fuzzy
 msgid "Group"
-msgstr "断开组"
+msgstr "组"
 
 #: admin/acl/GroupGroup_list.php:61
-#, fuzzy
 msgid "Group Groups"
-msgstr "群组管理"
+msgstr "群组归组"
 
 #: admin/acl/GroupMember_list.php:56 admin/acl/GroupUser_list.php:55
 msgid "Group ID"
-msgstr ""
+msgstr "群组ID"
 
 #: admin/acl/one_GroupMember.php:81
-#, fuzzy
 msgid "Group Member Criteria"
-msgstr "搜索标准"
+msgstr "群组成员标准"
 
 #: admin/acl/GroupMember_list.php:54
-#, fuzzy
 msgid "Group Member ID"
-msgstr "管理群组成员"
+msgstr "群组成员ID"
 
 #: admin/acl/GroupMember_list.php:68
-#, fuzzy
 msgid "Group Members"
-msgstr "管理群组成员"
+msgstr "群组成员"
 
 #: admin/acl/one_GroupMember.php:52
-#, fuzzy
 msgid "Group Name"
-msgstr "公司名称"
+msgstr "群组名称"
 
 #: admin/acl/GroupUser_list.php:76
-#, fuzzy
 msgid "Group Users"
-msgstr "管理组用户"
+msgstr "群组用户"
 
 #: admin/acl/Groups_list.php:58
-#, fuzzy
 msgid "Groups"
-msgstr "图表"
+msgstr "群组"
 
 #: contacts/sidebar.php:70 files/sidebar.php:10
 #: include/categories-sidebar.php:10 include/utils-misc.php:28
@@ -2853,7 +2804,7 @@ msgstr "帮助项"
 #: include/classes/Pager/GUP_Pager.php:147
 #: include/classes/Pager/Pager_Columns.php:207
 msgid "Hide"
-msgstr ""
+msgstr "隐藏"
 
 #: install/data.php:2825
 msgid "Hide Sourceforge Image"
@@ -2938,7 +2889,7 @@ msgstr "图标视图"
 
 #: admin/acl/ControlledObject_list.php:42
 msgid "Identifying Field"
-msgstr ""
+msgstr "辨认栏位中"
 
 #: admin/import/import-companies-2.php:334
 #: admin/import/import-companies.php:28 admin/import/import-companies.php:145
@@ -2986,11 +2937,11 @@ msgstr "行业详情"
 
 #: admin/acl/RolePermission_list.php:75
 msgid "Inheritable"
-msgstr ""
+msgstr "可继承"
 
 #: admin/acl/one_RolePermission.php:67
 msgid "Inheritable Flag"
-msgstr ""
+msgstr "可继承标志"
 
 #: activities/one.php:590
 msgid "Insert Log"
@@ -3001,6 +2952,8 @@ msgid ""
 "Installation of database tables must be completed before using XRMS.  Please "
 "read the README and then run install/install.php."
 msgstr ""
+"在使用 XRMS之前，必须完成数据库表安装。请 "
+"读 README 文件然后运行 install/install.php"
 
 #: locale/datastrings.php:77
 msgid "Insurance"
@@ -3048,9 +3001,8 @@ msgid "Last Modified"
 msgstr "最后修改"
 
 #: activities/one.php:621
-#, fuzzy
 msgid "Last Modified By"
-msgstr "最后修改"
+msgstr "最后修改人是"
 
 #: admin/import/import-companies-2.php:95
 #: admin/import/import-companies-3.php:136 admin/users/one.php:103
@@ -3155,9 +3107,8 @@ msgid "List of companies, addresses and phone numbers"
 msgstr "公司，地址，和电话号码列表清单"
 
 #: include/classes/Pager/Pager_Columns.php:206
-#, fuzzy
 msgid "Load"
-msgstr "线索"
+msgstr "载入"
 
 #: activities/one.php:606
 msgid "Local Time"
@@ -3168,9 +3119,8 @@ msgid "Local Time Between"
 msgstr "本地时间介乎"
 
 #: activities/one.php:597
-#, fuzzy
 msgid "Location"
-msgstr "行动"
+msgstr "位置"
 
 #: include/utils-interface.php:343
 msgid "Logged in as"
@@ -3370,22 +3320,19 @@ msgstr "用户管理"
 
 #: admin/acl/index.php:59
 msgid "Manage XRMS ACL"
-msgstr ""
+msgstr "管理XRMS ACL访问控制列表 "
 
 #: locale/datastrings.php:84
-#, fuzzy
 msgid "Managed By"
-msgstr "管理"
+msgstr "管理人是"
 
 #: locale/datastrings.php:85
-#, fuzzy
 msgid "Manages"
 msgstr "管理"
 
 #: locale/datastrings.php:86
-#, fuzzy
 msgid "Manufactures for"
-msgstr "制造业"
+msgstr "制造，为"
 
 #: locale/datastrings.php:87
 msgid "Manufacturing"
@@ -3523,21 +3470,20 @@ msgid "Name"
 msgstr "名称"
 
 #: install/data.php:2848
-#, fuzzy
 msgid "Name Contains"
-msgstr "无联系人"
+msgstr "名字包括"
 
 #: install/data.php:2850
 msgid "Name Ends With"
-msgstr ""
+msgstr "名字结尾是"
 
 #: install/data.php:2851
 msgid "Name Exactly Matches"
-msgstr ""
+msgstr "名字完全匹配"
 
 #: install/data.php:2849
 msgid "Name Starts With"
-msgstr ""
+msgstr "名字开始为"
 
 #: contacts/transfer.php:48
 msgid "Name or ID"
@@ -3562,9 +3508,8 @@ msgid "New Address"
 msgstr "新建地址"
 
 #: locale/datastrings.php:92
-#, fuzzy
 msgid "New Bug Report"
-msgstr "用户报告"
+msgstr "新建错误报告"
 
 #: companies/one-address.php:38
 msgid "New Business Address"
@@ -3597,9 +3542,8 @@ msgid "New Division"
 msgstr "新建部门"
 
 #: locale/datastrings.php:93
-#, fuzzy
 msgid "New Feature Request"
-msgstr "功能要求"
+msgstr "新增功能要求"
 
 #: companies/one-address.php:51
 msgid "New Home Address"
@@ -3623,11 +3567,11 @@ msgstr "新建关系"
 
 #: include/utils-companies.php:367
 msgid "New contacts with no company will be attach to Company:"
-msgstr ""
+msgstr "没有公司的新联系人会被加入公司："
 
 #: include/utils-misc.php:1925
 msgid "New workflow process"
-msgstr ""
+msgstr "新建工作流程序"
 
 #: plugins/phone/companies_one.php:630
 msgid "News"
@@ -3635,7 +3579,7 @@ msgstr "新闻"
 
 #: admin/acl/RolePermission_list.php:35 admin/acl/one_RolePermission.php:66
 msgid "No"
-msgstr ""
+msgstr "不"
 
 #: plugins/phone/companies_one.php:415
 msgid "No Activities"
@@ -3658,9 +3602,8 @@ msgid "No Contacts"
 msgstr "无联系人"
 
 #: admin/acl/one_GroupMember.php:95
-#, fuzzy
 msgid "No Criteria Defined"
-msgstr "没有指定的角色"
+msgstr "没有定义规则"
 
 #: include/utils-files.php:143
 msgid "No File Upload information Given"
@@ -3709,9 +3652,8 @@ msgid "No matches"
 msgstr "没有符合的结果"
 
 #: include/classes/Pager/Pager_Renderer_Table.php:136
-#, fuzzy
 msgid "No news items found."
-msgstr "没有找到公司"
+msgstr "没有找到新闻条目"
 
 #: private/home.php:168
 msgid "No open activities"
@@ -3758,9 +3700,8 @@ msgid "No statuses defined for specified case type"
 msgstr "对于指定的事例，没有定义过状态"
 
 #: admin/opportunity-statuses/some.php:84
-#, fuzzy
 msgid "No statuses defined for specified opportunity type"
-msgstr "对于指定的事例，没有定义过状态"
+msgstr "对于指定的机会类型，没有定义过状态"
 
 #: include/utils-users.php:28
 msgid "No username specified"
@@ -3864,14 +3805,12 @@ msgid "OVERDUE OPPORTUNITIES for"
 msgstr "逾期机会，关于"
 
 #: admin/acl/GroupMember_list.php:51 admin/acl/one_GroupMember.php:52
-#, fuzzy
 msgid "Object ID"
-msgstr "主题"
+msgstr "对象ID"
 
 #: admin/acl/ControlledObject_list.php:40
-#, fuzzy
 msgid "Object Name"
-msgstr "昵称"
+msgstr "对象名称"
 
 #: admin/acl/one_ControlledObjectRelationship.php:49
 msgid "Object/Child Object combination fails recursion check."
@@ -3933,7 +3872,7 @@ msgstr "待处理状态"
 
 #: admin/acl/one_GroupMember.php:82
 msgid "Operator"
-msgstr ""
+msgstr "操作者"
 
 #: activities/activity-reconnect.php:32 admin/activity-templates/edit.php:57
 #: files/some.php:428 include/utils-interface.php:390
@@ -4019,7 +3958,6 @@ msgid "Opportunity Title"
 msgstr "机会标题"
 
 #: admin/opportunity-statuses/some.php:110
-#, fuzzy
 msgid "Opportunity Type"
 msgstr "机会类型"
 
@@ -4073,9 +4011,8 @@ msgid "Owl File Management"
 msgstr "Owl文件管理"
 
 #: locale/datastrings.php:99
-#, fuzzy
 msgid "Owned By"
-msgstr "输入者"
+msgstr "拥有者是"
 
 #: activities/activities-widget.php:459 activities/activities-widget.php:757
 #: activities/one.php:569 activities/some.php:300 campaigns/edit.php:87
@@ -4093,9 +4030,8 @@ msgid "Owner"
 msgstr "拥有者"
 
 #: locale/datastrings.php:100
-#, fuzzy
 msgid "Owns"
-msgstr "拥有者"
+msgstr "拥有"
 
 #: reports/companies-list.php:121
 msgid "PDF"
@@ -4109,30 +4045,28 @@ msgstr "传呼"
 
 #: include/classes/Pager/Pager_Columns.php:65
 msgid "Pager Columns Display Settings"
-msgstr ""
+msgstr "传呼列显示设定"
 
 #: admin/system-parameters/some.php:49
 msgid "Parameter"
 msgstr "参数"
 
 #: locale/datastrings.php:101
-#, fuzzy
 msgid "Parent Company of"
-msgstr "新建公司"
+msgstr "母公司of"
 
 #: admin/acl/ControlledObjectRelationship_list.php:51
-#, fuzzy
 msgid "Parent Field"
-msgstr "打印机友好"
+msgstr "母公司栏位"
 
 #: admin/acl/ControlledObjectRelationship_list.php:49
 #: admin/acl/RolePermission_list.php:72
 msgid "Parent Object"
-msgstr ""
+msgstr "父对象"
 
 #: admin/acl/RolePermission_list.php:77
 msgid "Parent Object ID"
-msgstr ""
+msgstr "父对象ID"
 
 #: activities/new_activity_participant.php:56
 msgid "Participant"
@@ -4163,23 +4097,20 @@ msgid "Payment Default"
 msgstr "付款默认"
 
 #: admin/acl/RolePermission_list.php:73
-#, fuzzy
 msgid "Permission"
-msgstr "权限管理"
+msgstr "权限"
 
 #: admin/acl/RolePermission_list.php:78
-#, fuzzy
 msgid "Permission ID"
-msgstr "会话ID"
+msgstr "权限会话ID"
 
 #: admin/acl/Permission_list.php:60
-#, fuzzy
 msgid "Permissions"
-msgstr "权限管理"
+msgstr "权限"
 
 #: admin/acl/role_permission_grid.php:79
 msgid "Permissions Assigned"
-msgstr ""
+msgstr "权限指定完毕"
 
 #: admin/import/import-companies-2.php:141
 #: admin/import/import-companies-3.php:182 companies/edit.php:127
@@ -4209,6 +4140,8 @@ msgid ""
 "Please read the README file and configure your include-locations.inc file, "
 "in directory"
 msgstr ""
+"请阅读 README 文件并且配置您的 include-locations.inc 文件, "
+"在目录"
 
 #: admin/acl/one_ControlledObjectRelationship.php:44
 msgid "Please select a Parent/Child controlled object combination"
@@ -4231,6 +4164,7 @@ msgid ""
 "Please select a workflow entity and workflow entity type for the new "
 "activity template"
 msgstr ""
+"请为新活动模板选择一个工作流实体和工作流实体类型"
 
 #: admin/acl/acl_results.php:144
 msgid "Please select an action:"
@@ -4283,7 +4217,6 @@ msgid "Postal Code"
 msgstr "邮政编码"
 
 #: companies/addresses.php:174
-#, fuzzy
 msgid "Postcode"
 msgstr "邮政编码"
 
@@ -4326,9 +4259,8 @@ msgid "Primary Default"
 msgstr "主要地址默认值"
 
 #: activities/one.php:690
-#, fuzzy
 msgid "Print View"
-msgstr "列表视图"
+msgstr "打印用视图"
 
 #: reports/index.php:109
 msgid "Printable contact summary information for Companies in search Results."
@@ -4394,22 +4326,22 @@ msgstr "数量，按状态分"
 
 #: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:184
 msgid "QuickForm Create Failed for "
-msgstr ""
+msgstr "快速表单创建失败，为 "
 
 #: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:152
 msgid "QuickForm Re-Read Failed for "
-msgstr ""
+msgstr "快速表单重新读取失败，为"
 
 #: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:101
 #: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:120
 #: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:136
 #: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:187
 msgid "QuickForm Read Failed for "
-msgstr ""
+msgstr "快速表单读取失败，为"
 
 #: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:148
 msgid "QuickForm Write Failed for "
-msgstr ""
+msgstr "快速表单写失败，为"
 
 #: locale/datastrings.php:110
 msgid "Radio"
@@ -4485,9 +4417,8 @@ msgid "Relationship"
 msgstr "关系"
 
 #: admin/acl/RolePermission_list.php:79
-#, fuzzy
 msgid "Relationship ID"
-msgstr "关系"
+msgstr "关系ID"
 
 #: admin/relationship-types/one.php:57 admin/relationship-types/some.php:70
 msgid "Relationship Name"
@@ -4507,7 +4438,6 @@ msgid "Relationships"
 msgstr "关系"
 
 #: relationships/sidebar.php:78
-#, fuzzy
 msgid "Relationships for"
 msgstr "关系，对"
 
@@ -4523,6 +4453,7 @@ msgstr "远程端口"
 msgid ""
 "Removed deprecated Owl preference, now entirely controlled by Owl Plugin"
 msgstr ""
+"删除了没有用处的Owl 首选项，现在全部由Owl 插件控制"
 
 #: email/email-2.php:213 email/one-template.php:77
 msgid "Reply to"
@@ -4554,9 +4485,8 @@ msgid "Restrict by Division"
 msgstr "以部门为限"
 
 #: admin/acl/one_GroupMember.php:52
-#, fuzzy
 msgid "Result Field"
-msgstr "结果视图"
+msgstr "结果栏位"
 
 #: activities/some.php:423
 msgid "Results View"
@@ -4568,7 +4498,7 @@ msgstr "零售"
 
 #: locale/datastrings.php:116
 msgid "Retains Consultant"
-msgstr ""
+msgstr "获得顾问"
 
 #: admin/import/import-companies-2.php:155
 #: admin/import/import-companies-3.php:196 companies/edit.php:149
@@ -4584,14 +4514,12 @@ msgid "Role"
 msgstr "角色"
 
 #: admin/acl/GroupUser_list.php:56 admin/acl/RolePermission_list.php:80
-#, fuzzy
 msgid "Role ID"
-msgstr "角色"
+msgstr "角色ID"
 
 #: admin/acl/RolePermission_list.php:99
-#, fuzzy
 msgid "Role Permissions"
-msgstr "角色权限管理"
+msgstr "角色权限"
 
 #: admin/acl/Role_list.php:51
 msgid "Roles"
@@ -4703,7 +4631,7 @@ msgstr "计划开始"
 
 #: admin/acl/RolePermission_list.php:74
 msgid "Scope"
-msgstr ""
+msgstr "范围"
 
 #: admin/activity-types/one.php:75 admin/activity-types/some.php:89
 #: admin/case-priorities/one.php:71 admin/case-priorities/some.php:81
@@ -4785,18 +4713,16 @@ msgstr "搜索公司"
 
 #: install/data.php:2847
 msgid "Search method used when searching company names"
-msgstr ""
+msgstr "当检索公司名的时候使用的搜索方式"
 
 #: admin/import/import-companies-2.php:79
 #: admin/import/import-companies-3.php:119
-#, fuzzy
 msgid "Secondary Address"
-msgstr "搜索地址"
+msgstr "第二地址"
 
 #: admin/import/import-companies-2.php:129
-#, fuzzy
 msgid "Secondary Address Name"
-msgstr "地址名"
+msgstr "第二地址名"
 
 #: plugins/cti/cdr.php:276
 msgid "Seconds Billed"
@@ -4811,9 +4737,8 @@ msgid "Select Column Layouts"
 msgstr "选择表格布局"
 
 #: include/classes/Pager/Pager_Columns.php:202
-#, fuzzy
 msgid "Select Columns for Display"
-msgstr "选择表格布局"
+msgstr "选择表格布局，显示用"
 
 #: admin/case-statuses/some.php:81
 msgid "Select a case type"
@@ -4824,9 +4749,8 @@ msgid "Select a company or create a"
 msgstr "选择一个公司或创建一个"
 
 #: admin/opportunity-statuses/some.php:87
-#, fuzzy
 msgid "Select a opportunity type"
-msgstr "删除机会？"
+msgstr "删除一个机会类型"
 
 #: locale/datastrings.php:119
 msgid "Seminar"
@@ -4847,7 +4771,7 @@ msgstr "九月"
 
 #: install/data.php:2871
 msgid "Session Data Storage Type"
-msgstr ""
+msgstr "会话数据存储类型"
 
 #: reports/audit-items.php:102
 msgid "Session Id"
@@ -4881,14 +4805,12 @@ msgid "Short Name"
 msgstr "短名"
 
 #: include/classes/Pager/GUP_Pager.php:146
-#, fuzzy
 msgid "Show"
-msgstr "显示图标"
+msgstr "显示"
 
 #: admin/acl/ControlledObjectRelationship_list.php:53
-#, fuzzy
 msgid "Singular?"
-msgstr "研讨会"
+msgstr "单独？"
 
 #: files/one.php:141 files/sidebar.php:90 files/some.php:343
 #: files/some.php:481 opportunities/one.php:239
@@ -4926,9 +4848,8 @@ msgid "Source"
 msgstr "来源"
 
 #: admin/acl/ControlledObject_list.php:41
-#, fuzzy
 msgid "Source Table"
-msgstr "来源"
+msgstr "来源表"
 
 #: locale/datastrings.php:121
 msgid "Special"
@@ -4943,26 +4864,24 @@ msgid "Src Channel"
 msgstr "源渠道"
 
 #: reports/index.php:159 reports/stale-crm-status.php:184
-#, fuzzy
 msgid "Stale Companies"
-msgstr "其他公司"
+msgstr "失去时效的公司"
 
 #: reports/index.php:162
 msgid "Stale Companies - by Crms Status, Last Activity Date and User"
-msgstr ""
+msgstr "失去时效的公司 - 按照客户关系状态，最后活动日期，和用户"
 
 #: reports/index.php:151
 msgid "Stale Opportunities"
-msgstr "旧机会"
+msgstr "失去时效的机会"
 
 #: reports/index.php:154
 msgid "Stale opportunities by Last Activity Date and User"
-msgstr ""
+msgstr "失去时效的机会，按照最后活动时期和用户"
 
 #: install/data.php:2873
-#, fuzzy
 msgid "Standard"
-msgstr "开始"
+msgstr "标准"
 
 #: reports/activitytimes.php:48 reports/activitytimes.php:69
 #: reports/audit-items.php:40 reports/completed-items.php:65
@@ -5038,13 +4957,12 @@ msgid "Submit"
 msgstr "提交"
 
 #: locale/datastrings.php:122
-#, fuzzy
 msgid "Subsidiary of"
-msgstr " 工作日"
+msgstr "子公司of"
 
 #: include/classes/Pager/Pager_Renderer.php:196
 msgid "Subtotals this page:"
-msgstr ""
+msgstr "本页小计："
 
 #: admin/updateto2.0.php:4427
 msgid "Successfully added activity resolution types table."
@@ -5057,9 +4975,8 @@ msgid ""
 msgstr "活动决议类型添加到活动决议类型表成功。"
 
 #: admin/acl/edit_GroupMemberCriteria.php:42
-#, fuzzy
 msgid "Successfully added criteria"
-msgstr "参与者位置添加成功"
+msgstr "条件添加成功"
 
 #: admin/updateto2.0.php:4459 install/database.php:887
 msgid "Successfully added default opportunity type record."
@@ -5086,13 +5003,12 @@ msgid "Successfully added participant position"
 msgstr "参与者位置添加成功"
 
 #: activities/edit-2.php:95
-#, fuzzy
 msgid "Successfully detached activity"
-msgstr "参与者位置添加成功"
+msgstr "活动联系取消成功"
 
 #: admin/acl/edit_GroupMemberCriteria.php:47
 msgid "Successfully removed criteria"
-msgstr ""
+msgstr "成功删除条件"
 
 #: admin/updateto2.0.php:4313
 msgid ""
@@ -5119,7 +5035,7 @@ msgstr "星期日"
 
 #: locale/datastrings.php:123
 msgid "Supplier for"
-msgstr ""
+msgstr "供应商，为"
 
 #: admin/index.php:43
 msgid "System Administration"
@@ -5140,7 +5056,7 @@ msgstr "系统设置选项"
 
 #: admin/acl/RolePermission_list.php:36
 msgid "TOP"
-msgstr ""
+msgstr "顶"
 
 #: reports/activitytimes.php:118
 msgid "TOTAL"
@@ -5220,9 +5136,8 @@ msgid "There is no data to export!"
 msgstr "没有数据可以导出！"
 
 #: admin/users/change-password-2.php:59
-#, fuzzy
 msgid "There was a problem with the user ID. Password not Changed."
-msgstr "导出过程中有错误"
+msgstr "用户ID有问题，密码没有改变。"
 
 #: activities/export.php:108 include/classes/Pager/pager-export.php:86
 msgid "There was a problem with your export"
@@ -5238,16 +5153,15 @@ msgstr "这个活动仍待处理。"
 
 #: email/email-4.php:250
 msgid "This email message has already been sent"
-msgstr ""
+msgstr "这个电子邮件已经发送了"
 
 #: admin/acl/index.php:57
-#, fuzzy
 msgid "This is the Access Control List system for datasource:"
-msgstr "这是XRMS的访问控制列表系统。"
+msgstr "这是数据源的访问控制列表系统。"
 
 #: include/utils-misc.php:1942
 msgid "This process was forked from a previous workflow of type:"
-msgstr ""
+msgstr "本进程是由之前这个类型的工作流分支出来的："
 
 #: admin/users/change-owner.php:91
 msgid ""
@@ -5301,16 +5215,15 @@ msgstr "至表"
 
 #: include/utils-misc.php:1942
 msgid "To access it, you can use the link here:"
-msgstr ""
+msgstr "要访问它，您可以使用这里的链接："
 
 #: reports/companies-list.php:276
 msgid "Total records"
 msgstr "总纪录数"
 
 #: include/classes/Pager/Pager_Renderer.php:197
-#, fuzzy
 msgid "Totals:"
-msgstr "表格"
+msgstr "总计："
 
 #: locale/datastrings.php:127
 msgid "Trade Show"
@@ -5440,7 +5353,7 @@ msgstr "更新重复的活动"
 
 #: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:157
 msgid "Update Successful"
-msgstr ""
+msgstr "升级成功"
 
 #: email/email-2.php:301 email/one-template.php:94
 msgid "Update Template"
@@ -5455,6 +5368,8 @@ msgid ""
 "Upgraded company entry for Unknown Company.  New contacts will be attached "
 "here if no company is specified."
 msgstr ""
+"为未知的公司升级公司条目。新的联系人将被加到 "
+"这里，如果没有指定公司。"
 
 #: files/edit-form.php:72 files/edit-form.php:81
 msgid "Upload"
@@ -5517,9 +5432,8 @@ msgid "User Field"
 msgstr "用户域"
 
 #: admin/acl/GroupUser_list.php:54
-#, fuzzy
 msgid "User ID"
-msgstr "用户"
+msgstr "用户ID"
 
 #: private/home.php:201
 msgid "User Manual"
@@ -5543,22 +5457,20 @@ msgid "Users"
 msgstr "用户"
 
 #: locale/datastrings.php:131
-#, fuzzy
 msgid "Uses Manufacturer"
-msgstr "制造业"
+msgstr "使用制造者"
 
 #: locale/datastrings.php:132
 msgid "Uses Supplier"
-msgstr ""
+msgstr "使用供应商"
 
 #: plugins/cti/setup.php:115
 msgid "VM Password"
 msgstr "VM密码"
 
 #: admin/acl/one_GroupMember.php:82
-#, fuzzy
 msgid "Value"
-msgstr "排序值"
+msgstr "值"
 
 #: plugins/vcard/setup.php:18
 msgid "Vcard"
@@ -5593,9 +5505,8 @@ msgid "View Home Address"
 msgstr "查看家庭地址"
 
 #: include/classes/Pager/Pager_Columns.php:223
-#, fuzzy
 msgid "View Name"
-msgstr "文件名"
+msgstr "察看名字"
 
 #: opportunities/opportunity-view.php:40
 msgid "View Opportunity Statuses"
@@ -5669,30 +5580,28 @@ msgid "Work Phone"
 msgstr "工作电话"
 
 #: contacts/some.php:126
-#, fuzzy
 msgid "Work Phone Ext"
-msgstr "工作电话"
+msgstr "工作电话分机"
 
 #: admin/activity-templates/edit.php:98
 msgid "Workflow Entity"
-msgstr ""
+msgstr "工作流实体"
 
 #: admin/activity-templates/edit.php:103
 msgid "Workflow Entity Type"
-msgstr ""
+msgstr "工作流实体类型"
 
 #: include/utils-interface.php:445 include/utils-interface.php:454
 msgid "XRMS SourceForge Project Page"
 msgstr "XRMS SourceForge 项目开发主页"
 
 #: install/data.php:2863
-#, fuzzy
 msgid "XRMS Version"
-msgstr "LDAP 版本"
+msgstr "XRMS 版本"
 
 #: install/data.php:2864
 msgid "XRMS Version (read-only)"
-msgstr ""
+msgstr "XRMS 版本(只读)"
 
 #: reports/open-items.php:366
 msgid "XRMS: Open Items"
@@ -5727,7 +5636,7 @@ msgstr "是"
 
 #: include/utils-interface.php:85
 msgid "You are not authorized to perform this function."
-msgstr ""
+msgstr "你无权执行这个功能"
 
 #: plugins/cti/cdr.php:364
 msgid "You do not have permission to access this report."
@@ -5735,12 +5644,13 @@ msgstr "你没有权限访问这个报告"
 
 #: include/utils-misc.php:649
 msgid "You may need to update your database structure."
-msgstr ""
+msgstr "您可能需要升级您的数据库结构"
 
 #: private/home.php:39
 msgid ""
 "You must configure your database connection in vars.php before using XRMS."
 msgstr ""
+"在使用 XRMS 之前,您必须在 vars.php 文件里配置您的数据库连接"
 
 #: campaigns/edit.php:147 campaigns/new.php:136
 msgid "You must enter a campaign title."
@@ -5755,22 +5665,20 @@ msgid "You must enter a company name."
 msgstr "你必须输入公司名"
 
 #: include/utils-users.php:32
-#, fuzzy
 msgid "You must enter a last name"
 msgstr "你必须输入姓氏"
 
 #: admin/users/some.php:151
 msgid "You must enter a last name."
-msgstr "你必须输入姓氏"
+msgstr "你必须输入姓氏。"
 
 #: email/email-2.php:339 email/one-template.php:135
 msgid "You must enter a name to let the recipient know who the email is from."
 msgstr "你必须输入一个名字以便收件人知道这个电子邮件是从哪里来的。"
 
 #: include/utils-users.php:31
-#, fuzzy
 msgid "You must enter a password"
-msgstr "你必须输入密码。"
+msgstr "你必须输入密码"
 
 #: admin/users/some.php:156
 msgid "You must enter a password."
@@ -5833,7 +5741,7 @@ msgstr "一周的每一天"
 
 #: include/utils-users.php:30
 msgid "already exists in the system, please choose a different username"
-msgstr ""
+msgstr "已经在系统里存在,请选择一个不同的用户名"
 
 #: activities/some.php:370
 msgid "and"
@@ -5852,9 +5760,8 @@ msgid "by"
 msgstr "按"
 
 #: include/utils-companies.php:367
-#, fuzzy
 msgid "by default"
-msgstr "默认"
+msgstr "按默认"
 
 #: locale/datastrings.php:140
 msgid "call from"
@@ -5921,14 +5828,12 @@ msgid "companies/contacts"
 msgstr "公司/联系人"
 
 #: locale/datastrings.php:149
-#, fuzzy
 msgid "company link"
-msgstr "公司ID"
+msgstr "公司链接"
 
 #: locale/datastrings.php:150
-#, fuzzy
 msgid "company relationships"
-msgstr "关系"
+msgstr "公司关系"
 
 #: locale/datastrings.php:151
 msgid "company_division"
@@ -5993,14 +5898,12 @@ msgid "e-mails to"
 msgstr "发送电子邮件到"
 
 #: locale/datastrings.php:160
-#, fuzzy
 msgid "email_template_id"
-msgstr "没有e-mail模板"
+msgstr "e-mail模板ID"
 
 #: locale/datastrings.php:161
-#, fuzzy
 msgid "email_templates"
-msgstr "没有e-mail模板"
+msgstr "e-mail模板"
 
 #: companies/some.php:282
 msgid "employees"
@@ -6089,7 +5992,7 @@ msgstr "处理"
 #: include/classes/Pager/Pager_Renderer.php:99
 #: include/classes/Pager/Pager_Renderer_Table.php:87
 msgid "records found"
-msgstr ""
+msgstr "记录找到"
 
 #: admin/salutations/some.php:27
 msgid "salutation"
@@ -6118,9 +6021,8 @@ msgid "up"
 msgstr "向上"
 
 #: locale/datastrings.php:175
-#, fuzzy
 msgid "user_id"
-msgstr "事例ID"
+msgstr "用户ID"
 
 #: include/utils-preferences.php:752
 msgid "user_preference_description"
@@ -6135,7 +6037,6 @@ msgid "user_preference_pretty_name"
 msgstr "用户首选项昵称"
 
 #: locale/datastrings.php:176
-#, fuzzy
 msgid "users"
 msgstr "用户"
 
