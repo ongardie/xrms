@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.20 2006/01/02 22:09:39 vanmer Exp $
+ * $Id: some.php,v 1.21 2006/04/11 01:15:31 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -25,27 +25,45 @@ getGlobalVar($gmt_offset, 'gmt_offset');
 getGlobalVar($email, 'email');
 
 $con = get_xrms_dbconnection();
+
 //$con->debug=1;
 
-$sql = "select * from users order by last_name, first_names";
+$sql = "select * from users where user_record_status ='a' order by last_name, first_names ";
 
 $rst = $con->execute($sql);
 
 if ($rst) {
     while (!$rst->EOF) {
-        $enabled = ($rst->fields['user_record_status']=='a') ? 'X' : '';
-        $table_rows .= '<tr>';
-        $table_rows .= '<td class=widget_content>' . $enabled . '</td>';
-        $table_rows .= '<td class=widget_content>' . $rst->fields['last_name'] . ', ' . $rst->fields['first_names'] . '</td>';
-        $table_rows .= '<td class=widget_content>' . $rst->fields['email'] . '</td>';
-        $table_rows .= '<td class=widget_content><a href="one.php?edit_user_id=' . $rst->fields['user_id'] . '">' . $rst->fields['username'] . '</a></td>';
-        $table_rows .= '</tr>';
+        $table_rows_a .= '<tr>';
+        $table_rows_a .= '<td class=widget_content>' . $rst->fields['last_name'] . ', ' . $rst->fields['first_names'] . '</td>';
+        $table_rows_a .= '<td class=widget_content>' . $rst->fields['email'] . '</td>';
+        $table_rows_a .= '<td class=widget_content><a href="one.php?edit_user_id=' . $rst->fields['user_id'] . '">' . $rst->fields['username'] . '</a></td>';
+        $table_rows_a .= '</tr>';
         $rst->movenext();
     }
     $rst->close();
 } else {
     db_error_handler($con, $sql);
-    $table_rows = '<tr><td>'._("Unable to get data from database").'</td> </tr>';
+    $table_rows_a = '<tr><td>'._("Unable to get data from database").'</td> </tr>';
+}
+
+$sql = "select * from users where user_record_status = 'd' order by last_name, first_names ";
+
+$rst = $con->execute($sql);
+
+if ($rst) {
+    while (!$rst->EOF) {
+        $table_rows_d .= '<tr>';
+        $table_rows_d .= '<td class=widget_content>' . $rst->fields['last_name'] . ', ' . $rst->fields['first_names'] . '</td>';
+        $table_rows_d .= '<td class=widget_content>' . $rst->fields['email'] . '</td>';
+        $table_rows_d .= '<td class=widget_content><a href="one.php?edit_user_id=' . $rst->fields['user_id'] . '">' . $rst->fields['username'] . '</a></td>';
+        $table_rows_d .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+} else {
+    db_error_handler($con, $sql);
+    $table_rows_d = '<tr><td>'._("Unable to get data from database").'</td> </tr>';
 }
 
 //hack to show ACL roles, no initlal element in the menu
@@ -67,16 +85,28 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Users"); ?></td>
+                <td class=widget_header colspan=4><?php echo _("Active Users"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Enabled"); ?></td>
                 <td class=widget_label><?php echo _("Full Name"); ?></td>
                 <td class=widget_label><?php echo _("E-Mail"); ?></td>
                 <td class=widget_label><?php echo _("Username"); ?></td>
             </tr>
-            <?php echo $table_rows;; ?>
+            <?php echo $table_rows_a; ?>
         </table>
+<?php if ($table_rows_d) { ?>
+        <table class=widget cellspacing=1 width="100%">
+            <tr>
+                <td class=widget_header colspan=4><?php echo _("Disabled Users"); ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label><?php echo _("Full Name"); ?></td>
+                <td class=widget_label><?php echo _("E-Mail"); ?></td>
+                <td class=widget_label><?php echo _("Username"); ?></td>
+            </tr>
+            <?php echo $table_rows_d; ?>
+        </table>
+<?php } ?>
     </div>
 
     <!-- right column //-->
@@ -173,6 +203,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.21  2006/04/11 01:15:31  vanmer
+ * - applied patch to split users tables into Active and Disabled
+ * - thanks to Jean-Noël HAYART for the patch
+ *
  * Revision 1.20  2006/01/02 22:09:39  vanmer
  * - changed to use centralized dbconnection function
  *
