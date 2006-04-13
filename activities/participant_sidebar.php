@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: participant_sidebar.php,v 1.9 2006/04/13 21:10:23 braverock Exp $
+ * $Id: participant_sidebar.php,v 1.10 2006/04/13 21:18:59 braverock Exp $
  */
 require_once($include_directory.'utils-activities.php');
 
@@ -25,7 +25,7 @@ if (!$activity_id) { $participant_block=''; return false; }
 $participant_return_url="/activities/one.php?activity_id=$activity_id";
 
 
-$participant_block=<<<TILLEND
+$participant_block='
 <script language="JavaScript" type="text/javascript">
 
 function addParticipant() {
@@ -42,8 +42,7 @@ function mailmergeParticipants(contacts) {
       document.forms[0].mailmerge_participant.value=contacts;
       document.forms[0].submit();
 }
-</script>
-TILLEND;
+</script>';
 
 
 $participant_block .= '<table class=widget cellspacing=1 width="100%">
@@ -63,19 +62,34 @@ if (!$participants) {
     foreach ($participants as $participant_info) {
         $contact_ids[]=$participant_info['contact_id'];
         $remove_link="javascript: removeParticipant({$participant_info['activity_participant_id']});";
-        $participant_block.="\n<tr><td class=widget_content><a href=\"$http_site_root/contacts/one.php?contact_id={$participant_info['contact_id']}\">{$participant_info['contact_name']}</a></td><td>"._($participant_info['participant_position_name'])."</td><td><a href=\"$remove_link\">"._("Remove")."</a></td></tr>";
+        $participant_block.="\n<tr><td class=widget_content><a href=\"$http_site_root/contacts/one.php?contact_id={$participant_info['contact_id']}\">{$participant_info['contact_name']}</a>
+        </td>
+        <td>"._($participant_info['participant_position_name'])."</td>
+        <td><a href=\"$remove_link\">"._("Remove").'</a></td>
+        </tr>';
     }
 }
 if (count($contact_ids)>0) {
     $contacts=implode(",",$contact_ids);
-} else $contacts=false;
-$participant_block.="\n<tr><td colspan=$colspan class=widget_content_form_element><input type=button onclick=\"addParticipant()\" value=\""._("Add New Participant")."\" class=button name=btAddParticipant>";
+} else {
+    $contacts=false;
+}
+
+$participant_block.="\n".'<tr>
+    <td colspan=$colspan class=widget_content_form_element>
+    <input type=button onclick="addParticipant()" value="'
+    ._("Add New Participant")
+    .'" class=button name=btAddParticipant>';
+
 if ($contacts) { $participant_block .= "<input type=button class=button onclick=\"mailmergeParticipants('$contacts');\" value=\""._("Mail Merge") ."\">"; }
-$participant_block.= "</td></tr>";
+$participant_block.= "\n\t</td>\n</tr>";
 $participant_block .= "\n</table></form>";
 
 /**
  * $Log: participant_sidebar.php,v $
+ * Revision 1.10  2006/04/13 21:18:59  braverock
+ * - fix unlocalized string
+ *
  * Revision 1.9  2006/04/13 21:10:23  braverock
  * - fix unlocalized string
  *
