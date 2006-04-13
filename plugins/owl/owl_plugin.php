@@ -714,7 +714,7 @@ function op_browse_files(&$params) {
         $columns[] = array('name' => 'Description', 'index_calc' => 'file_description');
         $columns[] = array('name' => 'Date', 'index_calc' => 'entered_at');
 
-        $caption = _("Files in")'&nbsp;'.$folder_caption;
+        $caption = _("Files in").'&nbsp;'.$folder_caption;
 
 
         if(!$file_sidebar_default_columns) $file_sidebar_default_columns = array('icon', 'file_pretty_name', 'file_size','username', 'entered_at');
@@ -862,6 +862,9 @@ function op_template(&$params) {
 
 /**
  * $Log: owl_plugin.php,v $
+ * Revision 1.15  2006/04/13 21:07:04  braverock
+ * - fix unlocalized string
+ *
  * Revision 1.14  2006/04/11 21:06:52  braverock
  * - fix localization of a few strings
  *
