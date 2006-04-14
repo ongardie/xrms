@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: participant_sidebar.php,v 1.10 2006/04/13 21:18:59 braverock Exp $
+ * $Id: participant_sidebar.php,v 1.11 2006/04/14 14:22:22 braverock Exp $
  */
 require_once($include_directory.'utils-activities.php');
 
@@ -29,7 +29,7 @@ $participant_block='
 <script language="JavaScript" type="text/javascript">
 
 function addParticipant() {
-      document.forms[0].add_participant.value='true';
+      document.forms[0].add_participant.value=true;
       document.forms[0].submit();
 }
 
@@ -87,6 +87,9 @@ $participant_block .= "\n</table></form>";
 
 /**
  * $Log: participant_sidebar.php,v $
+ * Revision 1.11  2006/04/14 14:22:22  braverock
+ * - unquote javascript value attribute
+ *
  * Revision 1.10  2006/04/13 21:18:59  braverock
  * - fix unlocalized string
  *
