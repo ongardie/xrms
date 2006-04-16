@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.25 2006/01/02 22:09:39 vanmer Exp $
+ * $Id: one.php,v 1.26 2006/04/16 17:49:52 johnfawcett Exp $
  */
 
 //include required files
@@ -39,7 +39,6 @@ if ($rst) {
     $email           = $rst->fields['email'];
     $role_id         = $rst->fields['role_id'];
     $gmt_offset      = $rst->fields['gmt_offset'];
-    $language        = $rst->fields['language'];
     $record_status  = $rst->fields['user_record_status'];
     if ($record_status=='a') $enabled=true;
     else $enabled=false;
@@ -59,6 +58,7 @@ if($my_company_id) {
 $current_return_url=$return_url;
 require_once('user_roles_sidebar.php');
 $return_url=$current_return_url;
+$user_preferences_table=get_user_preferences_table($con);
 
 // make sure $sidebar_rows is defined
 if ( !isset($sidebar_rows) ) {
@@ -116,10 +116,6 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text size=40 name=email value="<?php  echo $email; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Language"); ?></td>
-                <td class=widget_content_form_element>English</td></td>
-            </tr>
-            <tr>
                 <td class=widget_label_right><?php echo _("GMT Offset"); ?></td>
                 <td class=widget_content_form_element><input type=text size=5 name=gmt_offset value="<?php  echo $gmt_offset; ?>"></td>
             </tr>
@@ -133,6 +129,9 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
         </table>
+        </form>
+         <form action='user_prefs.php' method=POST>
+          <?php echo $user_preferences_table; ?>
         </form>
 
         <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete User?"); ?>');">
@@ -167,6 +166,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.26  2006/04/16 17:49:52  johnfawcett
+ * removed hardcoded language
+ * added user preferences display / modification
+ *
  * Revision 1.25  2006/01/02 22:09:39  vanmer
  * - changed to use centralized dbconnection function
  *
