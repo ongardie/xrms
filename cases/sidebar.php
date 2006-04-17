@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.21 2005/08/28 16:18:52 braverock Exp $
+ * $Id: sidebar.php,v 1.22 2006/04/17 19:03:41 vanmer Exp $
  */
 if ( !defined('IN_XRMS') )
 {
@@ -16,15 +16,18 @@ if ( !defined('IN_XRMS') )
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
-/*  // Commented until ACL system is fully implemented
-    $caseList=get_list($session_user_id, 'Read', false, 'cases');
+///*  // Commented until ACL system is fully implemented
+    $caseList=acl_get_list($session_user_id, 'Read', false, 'cases');
     if (!$caseList) {
         $case_rows=''; return false;
-    } else {
-        $caseList=implode(",",$caseList);
-        $case_limit_sql.=" AND cases.case_id IN ($caseList) ";
+    } 
+    else {
+    	if ($caseList!==true) {
+            $caseList=implode(",",$caseList);
+            $case_limit_sql.=" AND cases.case_id IN ($caseList) ";
+	}
     }
-*/
+//*/
 
 $case_sidebar_header=_("Open Cases");
 $case_sidebar_form_id='SidebarCases';
@@ -141,6 +144,9 @@ $case_rows .= "</form></div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.22  2006/04/17 19:03:41  vanmer
+ * - added proper ACL restriction to sidebar output
+ *
  * Revision 1.21  2005/08/28 16:18:52  braverock
  * - remove commented export code, non-relevant for this page
  *

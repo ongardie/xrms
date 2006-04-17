@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.20 2005/12/17 21:28:43 vanmer Exp $
+ * $Id: sidebar.php,v 1.21 2006/04/17 19:03:43 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -11,12 +11,12 @@ if ( !defined('IN_XRMS') )
   exit;
 }
 
-/*
-Commented until ACL system is fully implemented
+///*
+//Commented until ACL system is fully implemented
 $opList=acl_get_list($session_user_id, 'Read', false, 'opportunities');
 if (!$opList) { $opportunity_rows=''; return false; }
-else { $opList=implode(",",$opList); $opportunity_limit_sql.=" AND opportunities.opportunity_id IN ($opList) "; }
-*/
+else { if ($opList!==true) { $opList=implode(",",$opList); $opportunity_limit_sql.=" AND opportunities.opportunity_id IN ($opList) "; } }
+//*/
 
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
@@ -149,6 +149,9 @@ $opportunity_rows .= "</form></div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.21  2006/04/17 19:03:43  vanmer
+ * - added proper ACL restriction to sidebar output
+ *
  * Revision 1.20  2005/12/17 21:28:43  vanmer
  * - removed quotes from company fieldname
  * - patch provided by kennyholden

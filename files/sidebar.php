@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.30 2006/01/19 18:35:23 daturaarutad Exp $
+ * $Id: sidebar.php,v 1.31 2006/04/17 19:03:43 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -23,12 +23,12 @@ global $return_url;
 
 
 
-/*
-COMMENTED until ACL is integrated
+///*
+//COMMENTED until ACL is integrated
 $fileList=acl_get_list($session_user_id, 'Read', false, 'files');
 if (!$fileList) { $file_rows=''; return false; }
-else { $fileList=implode(",",$fileList); $file_limit_sql.=" AND files.file_id IN ($fileList) "; }
-*/
+else { if ($fileList!==true) { $fileList=implode(",",$fileList); $file_limit_sql.=" AND files.file_id IN ($fileList) "; } }
+//*/
 
 // Avoid undefined errors until ACL is integrated
 $file_limit_sql = '';
@@ -133,6 +133,9 @@ if(!$file_rows && !$file_rows['error_status']) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.31  2006/04/17 19:03:43  vanmer
+ * - added proper ACL restriction to sidebar output
+ *
  * Revision 1.30  2006/01/19 18:35:23  daturaarutad
  * add Pager_Columns include
  *
