@@ -40,6 +40,19 @@ require_once('../calendar/Calendar_View.php');
 function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session_user_id, $return_url, $extra_where='', $end_rows='', $default_columns = null, $show_mini_search = true, $default_sort = null) {
 
 global $http_site_root;
+// acl filtering
+
+$list=acl_get_list($session_user_id, 'Read', false, 'activities');
+
+if ($list) {
+    if ($list!==true) {
+        $list=implode(",",$list);
+        $list_where = " and a.activity_id IN ($list) ";
+    } else $list_where=false;
+} else {
+    return '';
+}
+
 
 // This should probably be a system preference.
 $description_substring_length = 80;
@@ -327,17 +340,7 @@ if($search_terms['campaign_id']) {
     $where .= " AND a.on_what_table='campaigns' AND a.on_what_id=" . $search_terms['campaign_id'];
 }
 
-// acl filtering
-$list=acl_get_list($session_user_id, 'Read', false, 'activities');
-
-if ($list) {
-    if ($list!==true) {
-        $list=implode(",",$list);
-        $where .= " and a.activity_id IN ($list) ";
-    }
-} else {
-    $where .= ' AND 1 = 2 ';
-}
+if ($list_where) $where.=$list_where;
 
 // MS-SQL server requires that when using GROUP BY, all fields in select clause must be mentioned
 $group_by .=" GROUP BY a.activity_id, cont.first_names, cont.last_name, cont.contact_id, a.ends_at, a.scheduled_at, a.activity_status, a.activity_title, u.username, u.user_id, at.activity_type_pretty_name, a.on_what_table, a.on_what_id, a.activity_description, rt.resolution_short_name, cp.case_priority_pretty_name, c.company_name,c.company_id $extra_group_by";
@@ -583,6 +586,14 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
 
 global $http_site_root;
 
+//ensure that user has create activity permission
+$table='activities';
+$action='Create';
+$object=false;
+$ret=check_object_permission($session_user_id, $object, $action, $table);
+if (!$ret) return '';
+
+
 $form_name = 'NewActivity';
 
 if(!$company_id) $company_id = 0;
@@ -800,6 +811,10 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.41  2006/04/17 19:19:15  vanmer
+* - added ACL checks to the beginning of the activities widget, so widget does not render if no ACL permission is allowed
+* - added ACL checks to new activities widget, checks Create permission on activities before rendering new activity line
+*
 * Revision 1.40  2005/10/21 18:45:19  vanmer
 * - patch to fix export of activities pager, thanks to tomver at SF
 *
