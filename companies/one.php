@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.134 2006/03/21 02:41:39 ongardie Exp $
+ * $Id: one.php,v 1.135 2006/04/17 19:26:55 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -292,11 +292,6 @@ $columns = $pager_columns->GetUserColumns('default');
 $new_contact_location="../contacts/new.php?company_id=$company_id";
 if ($division_id) $new_contact_location.= "&division_id=$division_id";
 
-$endrows = "<tr><td class=widget_content_form_element colspan=10>
-            $pager_columns_button
-            <input class=button type=button value=\"" .  _('Mail Merge') . "\" onclick=\"javascript: location.href='../email/email.php?scope=company&company_id=$company_id'\">" .
-            render_create_button("New",'button',"location.href='$new_contact_location';") .  "</td></tr>";
-
     // this is the callback function that the pager uses to fill in the calculated data.
     function getContactDetails($row) {
         global $con;
@@ -315,6 +310,13 @@ $endrows = "<tr><td class=widget_content_form_element colspan=10>
 
 
 $pager = new GUP_Pager($con, $sql, 'getContactDetails', _('Contacts'), $contacts_form_name, 'ContactsPager', $columns, false, true);
+$contacts_export_button=$pager->GetAndUseExportButton();
+$endrows = "<tr><td class=widget_content_form_element colspan=10>
+            $pager_columns_button $contacts_export_button 
+            <input class=button type=button value=\"" .  _('Mail Merge') . "\" onclick=\"javascript: location.href='../email/email.php?scope=company&company_id=$comp
+any_id'\">" .
+            render_create_button("New",'button',"location.href='$new_contact_location';") .  "</td></tr>";
+
 $pager->AddEndRows($endrows);
 
 $contact_rows = $pager->Render($system_rows_per_page);
@@ -753,6 +755,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.135  2006/04/17 19:26:55  vanmer
+ * - added export button to contacts pager on single company page
+ *
  * Revision 1.134  2006/03/21 02:41:39  ongardie
  * - Added plugin hook for top of sidebar.
  *
