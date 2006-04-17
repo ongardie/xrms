@@ -2,7 +2,7 @@
 /**
  * Administration interface for managing permissions for one role
  *
- * $Id: role_permission_grid.php,v 1.9 2006/04/11 00:24:54 vanmer Exp $
+ * $Id: role_permission_grid.php,v 1.10 2006/04/17 19:40:15 vanmer Exp $
  *
  */
 
@@ -65,7 +65,7 @@ if ($gridrole_id) {
         foreach ($scopes as $scope) {
             foreach ($permissions as $perm) {
                 foreach ($relationships as $cor => $relationship) {
-                    $rolePerm=$acl->get_role_permission($gridrole_id, $cor, $scope, $perm);
+                    $rolePerm=$acl->get_role_permission($gridrole_id, $cor, $scope, $perm, false, false);
                     if ($rolePerm) {
                         $rolePerm=current($rolePerm);
                         if ($rolePerm['Inheritable_flag']) {
