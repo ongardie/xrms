@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.126 2006/01/02 21:23:18 vanmer Exp $
+ * $Id: some.php,v 1.127 2006/04/17 17:56:40 jnhayart Exp $
  */
 
 // handle includes
@@ -181,16 +181,18 @@ if (!isset($user_id)) {
 }
 
 //get menu for users
-$sql2 = "(SELECT " . $con->qstr(_("Current User"),get_magic_quotes_gpc()) . ", '-1')"
-    . " UNION (select username, user_id from users where user_record_status = 'a')"
-       . " UNION (SELECT " . $con->qstr(_("Not Set"),get_magic_quotes_gpc()) . ", '-2')  ORDER BY 1";
-$rst = $con->execute($sql2);
-if (!$rst) {
-    db_error_handler($con, $sql2);
-} elseif ($rst->rowcount()) {
-    $user_menu = $rst->getmenu2('user_id', $user_id, true);
-    $rst->close();
-}
+//$sql2 = "(SELECT " . $con->qstr(_("Current User"),get_magic_quotes_gpc()) . ", '-1')"
+//    . " UNION (select username, user_id from users where user_record_status = 'a')"
+//       . " UNION (SELECT " . $con->qstr(_("Not Set"),get_magic_quotes_gpc()) . ", '-2')  ORDER BY 1";
+//$rst = $con->execute($sql2);
+//if (!$rst) {
+//    db_error_handler($con, $sql2);
+//} elseif ($rst->rowcount()) {
+//    $user_menu = $rst->getmenu2('user_id', $user_id, true);
+//    $rst->close();
+//}
+
+$user_menu = get_user_menu($con, $user_id, true);
 
 if($advanced_search) {
     //get menu for opportunity_statuses
@@ -535,6 +537,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.127  2006/04/17 17:56:40  jnhayart
+ * change way to populate list of user with centralized function
+ * get_user_menu() from /include/utils-interface.php
+ *
  * Revision 1.126  2006/01/02 21:23:18  vanmer
  * - changed to use centralized database connection function
  *
