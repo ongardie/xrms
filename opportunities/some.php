@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.66 2006/04/11 01:57:46 vanmer Exp $
+ * $Id: some.php,v 1.67 2006/04/18 14:44:39 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -51,10 +51,8 @@ $arr_vars = array ( // local var name       // session variable name
            'campaign_id'             => array ( 'opportunities_campaign_id', arr_vars_SESSION ) ,
            'industry_id'             => array ( 'industry_id', arr_vars_GET_SESSION ),
            'before_after'            => array ( 'before_after', arr_vars_GET_SESSION ),
-           'search_date'            => array ( 'search_date', arr_vars_GET_SESSION ),
-// JNH           
-           'hide_closed' 			 => array ( 'hide_closed', arr_vars_SESSION ),
-// JNH
+           'search_date'             => array ( 'search_date', arr_vars_GET_SESSION ),
+           'hide_closed'             => array ( 'hide_closed', arr_vars_SESSION ),
            );
 
 // get all passed in variables
@@ -63,21 +61,7 @@ arr_vars_get_all ( $arr_vars );
 // set all session variables
 arr_vars_session_set ( $arr_vars );
 
-
 $close_at = $con->SQLDate('Y-M-D', 'close_at');
-
-if (check_user_role(false, $_SESSION['session_user_id'], 'Administrator')) 
-{
- $isadmin = true;
-}
-else
-{
- $isadmin = false;
-       $user_id = $session_user_id;
-       $hide_closed = true;
-}   
-
-$close_at = $con->SQLDate('d-m-Y', 'close_at');
 
 $is_overdue_field="(CASE WHEN (os.status_open_indicator='o') AND (close_at < " . $con->DBTimeStamp(time()) . ") THEN 1 ELSE 0 END)";
 
@@ -367,15 +351,15 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $opportunity_status_menu; ?>
-<input name="hide_closed" type=checkbox 
-<?php
-    if ($hide_closed) {
-        echo "checked=\"true\"";
-    }
-
-    echo ">" . _("Hide Closed");
-?>
+                <td class=widget_content_form_element>
+                    <?php  echo $opportunity_status_menu; ?>
+                    <input name="hide_closed" type=checkbox
+                    <?php
+                        if ($hide_closed) {
+                            echo "checked=\"true\"";
+                        }
+                        echo ">" . _("Hide Closed");
+                    ?>
                 </td>
                 <td class=widget_content_form_element><?php  echo $opportunity_category_menu; ?></td>
                 <td class=widget_content_form_element>
@@ -553,6 +537,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.67  2006/04/18 14:44:39  braverock
+ * - remove unnecessary admin check from 'hide closed' option
+ *
  * Revision 1.66  2006/04/11 01:57:46  vanmer
  * - added marking of overdue opportunites in red, like activities
  * - added extra columns and groupability on the opportunites pager
