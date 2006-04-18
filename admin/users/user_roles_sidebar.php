@@ -2,7 +2,7 @@
 /**
  * Roles sidebar, used to display/edit roles for a user
  *
- * $Id: user_roles_sidebar.php,v 1.6 2005/09/26 01:40:57 vanmer Exp $
+ * $Id: user_roles_sidebar.php,v 1.7 2006/04/18 14:34:48 braverock Exp $
 **/
 if (!$edit_user_id) {
     $edit_user_id=$session_user_id;
@@ -16,7 +16,7 @@ if (!$user_roles_returnform) $user_roles_returnform="document.forms[0]";
 
 if (!$acl) $acl=get_acl_object($acl_options);
 //hack to show ACL roles
-$role_menu=get_role_list($acl, true, 'role_id', $role_id); 
+$role_menu=get_role_list($acl, true, 'role_id', $role_id);
 
 $user_roles=get_user_roles_with_groups($acl, $edit_user_id);
 $this_return_url=urlencode($http_site_root.current_page());
@@ -24,7 +24,7 @@ $this_return_url=urlencode($http_site_root.current_page());
 $group_menu=get_group_select($user_roles_con, 'group', 1, '', false, $attributes='style="font-size: x-small; border: outset; width: 80px;"', 0);
 
 if ($action=='edit') {
-$role_rows=<<<TILLEND
+$role_rows="
 <script language=javascript>
 <!---
     function deleteRole(GroupUser_id) {
@@ -39,8 +39,7 @@ $role_rows=<<<TILLEND
         $user_roles_returnform.$user_roles_returnvar.value=return_url;
         $user_roles_returnform.submit();
     };
-</script>
-TILLEND;
+</script>";
 }
 
 if ($user_roles) {
@@ -59,12 +58,11 @@ if ($user_roles) {
 }
 if ($action=='edit') {
 $role_rows.="<tr><td>$group_menu</td><td>$role_menu</td><td><input type=button onclick=\"addRole()\" class=button name=btAddRole value=\""._("Add Role") . "\"></td></tr>";
-$user_role_sidebar=<<<TILLEND
+$user_role_sidebar="
     <form method=POST name=user_role_sidebar_form action='{$http_site_root}$user_roles_handler'>
         <input type=hidden name=userAction value=addRole>
         <input type=hidden name=acl_datasource_name value="$acl_datasource_name">
-        <input type=hidden name=edit_user_id value=$edit_user_id>
-TILLEND;
+        <input type=hidden name=edit_user_id value=$edit_user_id>";
 }
 if ($action=='edit') $colspan=3;
 else $colspan=2;
@@ -72,13 +70,17 @@ $user_role_sidebar.= "<table class=widget><tr><td class=widget_header colspan=$c
 $user_role_sidebar.= "<tr><td class=widget_label>"._("Group") . "</td><td class=widget_label>"._("Role") . "</td>";
 if ($action=='edit') $user_role_sidebar.="<td class=widget_label>"._("Action") . "</td>";
 $user_role_sidebar.="</tr>";
-$user_role_sidebar.=<<<TILLEND
+$user_role_sidebar.="
         $role_rows
     </table>
-   </form>
-TILLEND;
+   </form>";
+
+/*************************************************************************/
 /**
  * $Log: user_roles_sidebar.php,v $
+ * Revision 1.7  2006/04/18 14:34:48  braverock
+ * - remove TILLEND assignments for better support of gettext i18n
+ *
  * Revision 1.6  2005/09/26 01:40:57  vanmer
  * - changed user roles sidebar to submit form on page for which sidebar is attached.
  * - changed return_url to allow form to save its data and then redirect to the user roles action
