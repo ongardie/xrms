@@ -2,12 +2,10 @@
 /**
  * one_email-template.php - Display HTML form for a single email template
  *
- * Copyright (c) 2004 Explorer Fund Advisors, LLC
- * All Rights Reserved.
- *
+ * Copyright (c) 2004-2006 XRMS Development Team
  *
  * @author Aaron van Meerten
- * $Id: one_email_template_type.php,v 1.3 2006/01/02 22:12:31 vanmer Exp $
+ * $Id: one_email_template_type.php,v 1.4 2006/04/18 15:48:38 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -27,7 +25,7 @@ $session_user_id = session_check();
 
 getGlobalVar($return_url, 'return_url');
 
-$page_title = 'Manage Email Template Types';
+$page_title = _("Manage Email Template Types");
 
 
 start_page($page_title);
@@ -55,7 +53,7 @@ start_page($page_title);
         $model->SetFieldType('created_on', 'hidden');
 
   $view = new ADOdb_QuickForm_View($con, _("Email Template"));
-  $view->SetReturnButton('Return to List', $return_url);
+  $view->SetReturnButton(_("Return to List"), $return_url);
 
   $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
   $form_html = $controller->ProcessAndRenderForm();
@@ -74,7 +72,7 @@ start_page($page_title);
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
     <tr>
         <td class=lcol width=30% valign=top>
-					<?php echo $form_html ?>
+            <?php echo $form_html ?>
         </td>
     </tr>
 </table>
@@ -87,6 +85,10 @@ start_page($page_title);
 
 /**
  * $Log: one_email_template_type.php,v $
+ * Revision 1.4  2006/04/18 15:48:38  braverock
+ * - localize missed i18n strings
+ * - fix indentation for better legibility
+ *
  * Revision 1.3  2006/01/02 22:12:31  vanmer
  * - changed to use centralized dbconnection function
  *
