@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a contact
  *
- * $Id: edit-address-2.php,v 1.15 2006/01/02 22:59:59 vanmer Exp $
+ * $Id: edit-address-2.php,v 1.16 2006/04/21 22:16:51 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -55,7 +55,7 @@ if ($alt_address) {
     $rec['address_id'] = $alt_address;
 
     $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-    
+
     $con->execute($upd);
 
     add_audit_item($con, $session_user_id, 'changed address', 'contacts', $contact_id, 1);
@@ -71,9 +71,6 @@ if ($alt_address) {
 
     add_audit_item($con, $session_user_id, 'changed home address', 'contacts', $contact_id, 1);
 } elseif ($address_id && !$new) {
-    $sql = "SELECT * FROM addresses WHERE address_id = $address_id";
-    $rst = $con->execute($sql);
-
     $rec = array();
     $rec['country_id'] = $country_id;
     $rec['line1'] = $line1;
@@ -86,8 +83,7 @@ if ($alt_address) {
     $rec['address_body'] = $address_body;
     $rec['use_pretty_address'] = $use_pretty_address;
 
-    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-    $con->execute($upd);
+    update_address($con, $rec, false, get_magic_quotes_gpc());
 
     add_audit_item($con, $session_user_id, 'updated', 'addresses', $address_id, 1);
 
@@ -111,8 +107,12 @@ if ($alt_address) {
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
 
-    $address_id = $con->insert_id();
-    add_audit_item($con, $session_user_id, 'created', 'addresses', $address_id, 1);
+    $address_id = add_address($con, $rec, get_magic_quotes_gpc());
+    if ($address_id) {
+        add_audit_item($con, $session_user_id, 'created', 'addresses', $address_id, 1);
+    } else {
+        $msg=urlencode(_("Creating Address Failed"));
+    }
 
     if($time_zone_offset = time_zone_offset($con, $address_id)) {
         $sql = 'SELECT *
@@ -160,6 +160,9 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.16  2006/04/21 22:16:51  braverock
+ * - changed to use centralized API functions add_address() and update_address();
+ *
  * Revision 1.15  2006/01/02 22:59:59  vanmer
  * - changed to use centralized dbconnection function
  *
@@ -204,7 +207,7 @@ header("Location: $return_url");
  * - added processing for "Use Alternate Address" section
  *
  * Revision 1.2  2004/06/09 17:36:09  gpowers
- * - added $Id: edit-address-2.php,v 1.15 2006/01/02 22:59:59 vanmer Exp $Log: tags.
+ * - added $Id: edit-address-2.php,v 1.16 2006/04/21 22:16:51 braverock Exp $Log: tags.
  *
  * Revision 1.1  2004/06/09 16:52:14  gpowers
  * - Contact Address Editing
