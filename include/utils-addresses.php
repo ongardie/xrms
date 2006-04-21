@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @author Brian Peterson
  *
- * $Id: utils-addresses.php,v 1.6 2006/04/21 22:03:36 braverock Exp $
+ * $Id: utils-addresses.php,v 1.7 2006/04/21 22:56:25 braverock Exp $
  *
  */
 
@@ -142,7 +142,7 @@ function add_update_address($con, $address_data, $return_recordset = false, $_ma
 
         // Define address name if one is not already defined
         if ( ( ! strlen($address_info['address_name']) ) && ( ! strlen($found_data['address_name']) ) ) {
-            if (strlen($address_info['city']) {
+            if (strlen($address_info['city'])) {
                 $address_info['address_name'] = $address_info['city']." - ".$address_info['line1'];
             } else {
                 $address_info['address_name'] = _("Main");
@@ -187,7 +187,11 @@ function add_update_address($con, $address_data, $return_recordset = false, $_ma
 function add_address($con, $address_data, $_magic_quotes=false)
 {
     $add=add_update_address($con, $address_data, $return_recordset, $_magic_quotes);
-    if ($add){return $add['address_id']} else { return false; }
+    if ($add){
+        return $add['address_id'];
+    } else {
+        return false;
+    }
 };
 
 /**********************************************************************/
@@ -377,7 +381,10 @@ function pull_address_fields ( $array_data )
 /**********************************************************************/
  /**
  * $Log: utils-addresses.php,v $
- * Revision 1.6  2006/04/21 22:03:36  braverock
+ * Revision 1.7  2006/04/21 22:56:25  braverock
+ * - clean up error checking
+ *
+ * Revision 1.6  2006/04/21 22:03:36  braverock
  * - update add_address and update_address API to more closely match contacts and companies API
  *
  * Revision 1.5  2006/04/21 21:37:38  braverock
