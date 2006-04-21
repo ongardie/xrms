@@ -2,7 +2,7 @@
 /**
  * Add an address
  *
- * $Id: add-address.php,v 1.17 2006/04/21 21:43:06 braverock Exp $
+ * $Id: add-address.php,v 1.18 2006/04/21 22:04:27 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -53,7 +53,7 @@ $rec['address_type'] = $address_type;
 $rec['address_body'] = $address_body;
 $rec['use_pretty_address'] = $use_pretty_address;
 
-$address_id = add_update_address($con, $rec, false, get_magic_quotes_gpc());
+$address_id = add_address($con, $rec, get_magic_quotes_gpc());
 if ($address_id) {
     add_audit_item($con, $session_user_id, 'created', 'addresses', $address_id['primarykey'], 1);
 } else {
@@ -90,8 +90,8 @@ header("Location: addresses.php?msg=address_added&company_id=$company_id");
 
 /**
  * $Log: add-address.php,v $
- * Revision 1.17  2006/04/21 21:43:06  braverock
- * - add correct magic_quotes handling to API call
+ * Revision 1.18  2006/04/21 22:04:27  braverock
+ * - update to use add_address fn
  *
  * Revision 1.16  2006/04/21 20:26:07  braverock
  * - modify to use addresses API
