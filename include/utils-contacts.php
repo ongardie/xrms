@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.19 2006/04/11 00:42:08 vanmer Exp $
+ * $Id: utils-contacts.php,v 1.20 2006/04/21 22:58:33 braverock Exp $
  *
  */
 
@@ -207,8 +207,8 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
             // If salutation is 0, make sure you replace it with an empty string
             $contact_data['salutation']       = (strlen($contact_data['salutation']) > 0)      ? $contact_data['salutation']      : "";
 
-            $contact_data['last_name']        = (strlen($contact_data['last_name']) > 0)       ? $contact_data['last_name']       : "[last name]";
-            $contact_data['first_names']      = (strlen($contact_data['first_names']) > 0)     ? $contact_data['first_names']     : "[first names]";
+            $contact_data['last_name']        = (strlen($contact_data['last_name']) > 0)       ? $contact_data['last_name']       : _("[last name]");
+            $contact_data['first_names']      = (strlen($contact_data['first_names']) > 0)     ? $contact_data['first_names']     : _("[first names]");
 
             // If 'gender' is not defined, define it
             if(!$contact_data['gender'])
@@ -484,10 +484,13 @@ function pull_contact_fields ( $array_data )
 include_once $include_directory . 'utils-misc.php';
 
 
-// ============================================================================
-
+/**********************************************************************/
+/**********************************************************************/
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.20  2006/04/21 22:58:33  braverock
+ * - localize default first name and last name
+ *
  * Revision 1.19  2006/04/11 00:42:08  vanmer
  * - added missing PHPDoc parameters
  *
@@ -549,6 +552,5 @@ include_once $include_directory . 'utils-misc.php';
  *
  * Revision 1.1  2005/11/18 20:04:48  vanmer
  * -Initial revision of an API for managing contacts in XRMS
- *
-**/
+ **/
  ?>
