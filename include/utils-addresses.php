@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @author Brian Peterson
  *
- * $Id: utils-addresses.php,v 1.5 2006/04/21 21:37:38 braverock Exp $
+ * $Id: utils-addresses.php,v 1.6 2006/04/21 22:03:36 braverock Exp $
  *
  */
 
@@ -180,14 +180,14 @@ function add_update_address($con, $address_data, $return_recordset = false, $_ma
  *
  * @param adodbconnection $con            ADOdb connection Object
  * @param array           $address_data   with data about the address, to add
- * @param boolean         $return_recordset  indicating if adodb recordset object should be returned (defaults to false)
  * @param boolean         $_magic_quotes     F - inbound data is not "add slashes", T - data is "add slashes"
  *
  * @return $address_id with newly created address id, or false if failure occured
  */
-function add_address($con, $address_data, $return_recordset=false, $_magic_quotes=false)
+function add_address($con, $address_data, $_magic_quotes=false)
 {
-    return add_update_address($con, $address_data, $return_recordset, $_magic_quotes);
+    $add=add_update_address($con, $address_data, $return_recordset, $_magic_quotes);
+    if ($add){return $add['address_id']} else { return false; }
 };
 
 /**********************************************************************/
@@ -286,7 +286,15 @@ function get_address($con, $address_id, $return_rst=false)
  */
 function update_address($con, $address_data, $return_recordset=false, $_magic_quotes=false)
 {
-    return add_update_address($con, $address_data, $return_recordset, $_magic_quotes);
+    $result = add_update_address($con, $address_data, $return_recordset, $_magic_quotes);
+
+    if ($result && !$return_recordset) {
+        return true;
+    } elseif ($result && $return_recordset) {
+        return $result;
+    } else {
+        return false;
+    };
 };
 
 /**********************************************************************/
@@ -369,6 +377,9 @@ function pull_address_fields ( $array_data )
 /**********************************************************************/
  /**
  * $Log: utils-addresses.php,v $
+ * Revision 1.6  2006/04/21 22:03:36  braverock
+ * - update add_address and update_address API to more closely match contacts and companies API
+ *
  * Revision 1.5  2006/04/21 21:37:38  braverock
  * - implement add_address wrapper fn -> add_update_address
  * - implement update_address wrapper fn -> add_update_address
