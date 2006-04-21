@@ -2,7 +2,7 @@
 /**
  * Add an address
  *
- * $Id: add-address.php,v 1.14 2006/01/02 22:56:26 vanmer Exp $
+ * $Id: add-address.php,v 1.15 2006/04/21 20:12:12 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -53,13 +53,16 @@ $rec['address_type'] = $address_type;
 $rec['address_body'] = $address_body;
 $rec['use_pretty_address'] = $use_pretty_address;
 
-$tbl = 'addresses';
-$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-$con->execute($ins);
+$address_id = add_update_address($con, $rec);
+if ($address_id) {
+    add_audit_item($con, $session_user_id, 'created', 'addresses', $address_id, 1);
+} else {
+    $msg=urlencode(_("Creating Address Failed"));
+    header("Location: addresses.php?msg=$msg&company_id=$company_id");
+}
 
-$address_id = $con->insert_id();
-add_audit_item($con, $session_user_id, 'created', 'addresses', $address_id, 1);
-
+/*
+//I think that the API handles this correctly, but until that can be verified, I'm going to leave this code here...
 if($time_zone_offset = time_zone_offset($con, $address_id)) {
     $sql = 'SELECT *
             FROM addresses
@@ -79,14 +82,17 @@ if($time_zone_offset = time_zone_offset($con, $address_id)) {
             db_error_handler($con, $sql);
         }
     }
-} 
-
+}
+*/
 $con->close();
 
 header("Location: addresses.php?msg=address_added&company_id=$company_id");
 
 /**
  * $Log: add-address.php,v $
+ * Revision 1.15  2006/04/21 20:12:12  braverock
+ * - modify to use addresses API
+ *
  * Revision 1.14  2006/01/02 22:56:26  vanmer
  * - changed to use centralized dbconnection function
  *
@@ -125,7 +131,5 @@ header("Location: addresses.php?msg=address_added&company_id=$company_id");
  * Revision 1.4  2004/03/26 20:55:59  maulani
  * - Add audit trail to company-related items
  * - Add phpdoc
- *
- *
  */
 ?>
