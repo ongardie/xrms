@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division.php,v 1.17 2006/02/21 14:01:52 braverock Exp $
+ * $Id: edit-division.php,v 1.18 2006/04/21 00:00:39 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -55,6 +55,7 @@ $edit_division_form = do_hook_function('edit_division_form', $edit_division_form
 
 $company_division_bottom_extra='';
 $company_division_bottom= do_hook_function('company_division_bottom', $company_division_bottom_extra);
+$company_division_bottom.=$company_division_bottom_extra;
 
 // include the files sidebar
 require_once("../files/sidebar.php");
@@ -123,6 +124,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: edit-division.php,v $
+ * Revision 1.18  2006/04/21 00:00:39  vanmer
+ * - ensure that plugin output for division bottom works the same for company and division pages
+ *
  * Revision 1.17  2006/02/21 14:01:52  braverock
  * - add company_division_bottom hook
  *

@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.135 2006/04/17 19:26:55 vanmer Exp $
+ * $Id: one.php,v 1.136 2006/04/21 00:00:40 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -395,7 +395,9 @@ $sidebar_rows_top = do_hook_function('company_sidebar_top', $sidebar_rows_top);
 $sidebar_rows_bottom = do_hook_function('company_sidebar_bottom', $sidebar_rows_bottom);
 if ($division_id) {
     // add division sidebars
-    $sidebar_rows_bottom .= do_hook_function('division_sidebar_bottom', $sidebar_rows_bottom);
+    $sidebar_rows_bottom_extra='';
+    $sidebar_rows_bottom = do_hook_function('division_sidebar_bottom', $sidebar_rows_bottom_extra);
+    $sidebar_rows_bottom .=$sidebar_rows_bottom_extra;
 }
 
 // make sure $bottom_rows is defined
@@ -755,6 +757,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.136  2006/04/21 00:00:40  vanmer
+ * - ensure that plugin output for division bottom works the same for company and division pages
+ *
  * Revision 1.135  2006/04/17 19:26:55  vanmer
  * - added export button to contacts pager on single company page
  *
