@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a company
  *
- * $Id: edit-address-2.php,v 1.10 2006/01/02 22:56:27 vanmer Exp $
+ * $Id: edit-address-2.php,v 1.11 2006/04/21 20:26:07 braverock Exp $
  */
 
 
@@ -34,9 +34,6 @@ $use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
 $con = get_xrms_dbconnection();
 // $con->debug=1;
 
-$sql = "SELECT * FROM addresses WHERE address_id = $address_id";
-$rst = $con->execute($sql);
-
 $rec = array();
 $rec['country_id'] = $country_id;
 $rec['line1'] = $line1;
@@ -49,10 +46,15 @@ $rec['address_name'] = $address_name;
 $rec['address_body'] = $address_body;
 $rec['use_pretty_address'] = $use_pretty_address;
 
-$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-$con->execute($upd);
+$result = add_update_address($con, $rec);
+if ($address_id) {
+    add_audit_item($con, $session_user_id, 'updated', 'addresses', $result['primarykey'], 1);
+} else {
+    $msg=urlencode(_("Updating Address Failed"));
+    header("Location: addresses.php?msg=$msg&company_id=$company_id");
+}
 
-$param = array( $_POST, $rst, $rec);
+$param = array( $_POST, $result, $rec);
 do_hook_function('company_edit_address_2', $param);
 
 $con->close();
@@ -61,6 +63,9 @@ header("Location: addresses.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.11  2006/04/21 20:26:07  braverock
+ * - modify to use addresses API
+ *
  * Revision 1.10  2006/01/02 22:56:27  vanmer
  * - changed to use centralized dbconnection function
  *

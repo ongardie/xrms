@@ -2,7 +2,7 @@
 /**
  * delete address for a company
  *
- * $Id: delete-address.php,v 1.5 2006/01/02 22:56:26 vanmer Exp $
+ * $Id: delete-address.php,v 1.6 2006/04/21 20:26:07 braverock Exp $
  */
 
 
@@ -22,21 +22,23 @@ $address_id = $_GET['address_id'];
 
 $con = get_xrms_dbconnection();
 
-$sql = "SELECT * FROM addresses WHERE address_id = $address_id";
-$rst = $con->execute($sql);
-
-$rec = array();
-$rec['address_record_status'] = 'd';
-
-$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-$con->execute($upd);
+$test = delete_address($con, $address_id);
 
 $con->close();
 
-header("Location: addresses.php?msg=address_deleted&company_id=$company_id");
+if ($test) {
+    add_audit_item($con, $session_user_id, 'created', 'addresses', $address_id['primarykey'], 1);
+    header("Location: addresses.php?msg=address_deleted&company_id=$company_id");
+} else {
+    $msg=urlencode(_("Updating Address Failed"));
+    header("Location: addresses.php?msg=$msg&company_id=$company_id");
+}
 
 /**
  * $Log: delete-address.php,v $
+ * Revision 1.6  2006/04/21 20:26:07  braverock
+ * - modify to use addresses API
+ *
  * Revision 1.5  2006/01/02 22:56:26  vanmer
  * - changed to use centralized dbconnection function
  *

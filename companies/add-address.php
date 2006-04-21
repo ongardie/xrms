@@ -2,7 +2,7 @@
 /**
  * Add an address
  *
- * $Id: add-address.php,v 1.15 2006/04/21 20:12:12 braverock Exp $
+ * $Id: add-address.php,v 1.16 2006/04/21 20:26:07 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -55,7 +55,7 @@ $rec['use_pretty_address'] = $use_pretty_address;
 
 $address_id = add_update_address($con, $rec);
 if ($address_id) {
-    add_audit_item($con, $session_user_id, 'created', 'addresses', $address_id, 1);
+    add_audit_item($con, $session_user_id, 'created', 'addresses', $address_id['primarykey'], 1);
 } else {
     $msg=urlencode(_("Creating Address Failed"));
     header("Location: addresses.php?msg=$msg&company_id=$company_id");
@@ -90,6 +90,9 @@ header("Location: addresses.php?msg=address_added&company_id=$company_id");
 
 /**
  * $Log: add-address.php,v $
+ * Revision 1.16  2006/04/21 20:26:07  braverock
+ * - modify to use addresses API
+ *
  * Revision 1.15  2006/04/21 20:12:12  braverock
  * - modify to use addresses API
  *
