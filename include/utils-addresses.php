@@ -7,7 +7,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-addresses.php,v 1.3 2005/12/22 22:39:26 jswalter Exp $
+ * $Id: utils-addresses.php,v 1.4 2006/04/21 20:30:07 braverock Exp $
  *
  */
 
@@ -29,7 +29,7 @@
  * - user_id                     - "Account Owner" of address data, Defaults to who created the record
  * - company_id                  - [FK] Company ID to which this address belongs to
  * - country_id                  - [FK] Country ID, this has many uses within XRMS
- * - address_name                - Label used to identify this address - defaults to "Main"
+ * - address_name                - Label used to identify this address - defaults to $address_info['city']." - ".$address_info['line1']
  * - address_body                - A 'non-standard' address format
  * - line1                       - First Line of address
  * - line2                       - Second Line of address
@@ -139,12 +139,18 @@ function add_update_address($con, $address_data, $return_recordset = false )
         // What's the primary key for this data set
         $_primay_key = $found_data['primarykey'];
 
+        // Define address name if one is not already defined
+        if ( ( ! strlen($address_info['address_name']) ) && ( ! strlen($found_data['address_name']) ) ) {
+            if (strlen($address_info['city']) {
+                $address_info['address_name'] = $address_info['city']." - ".$address_info['line1'];
+            } else {
+                $address_info['address_name'] = _("Main");
+            }
+        }
+
         // If this contact exists already
         if ( $found_data[$_primay_key] )
         {
-            // Define address name if one is not already defined
-            if ( ( ! $address_info['address_name'] ) && ( ! $found_data['address_name'] ) )
-                $address_info['address_name'] = 'Main';
 
             // We found it, so pull record ID
             $address_info[$_primay_key] = $found_data[$_primay_key];
@@ -156,14 +162,7 @@ function add_update_address($con, $address_data, $return_recordset = false )
                 $_retVal[$_primary_key] = $found_data[$_primay_key];
                 $_retVal['primarykey'] = $_primary_key;
             }
-        }
-        // This is a new addresses
-        else
-        {
-            // Define address name if one is not already defined
-            if ( ! $address_info['address_name'] )
-                $address_info['address_name'] = 'Main';
-
+        } else { // This is a new addresses
             // make new record
             $_retVal = __record_insert ( $con, $_table_name, $address_info, $_magic_quotes, $_return_recordset );
         }
@@ -354,7 +353,14 @@ function delete_address($con, $address_id = false, $delete_from_database = false
 
     if ( $con && $address_id )
     {
+        $sql = "SELECT * FROM addresses WHERE address_id = $address_id";
+        $rst = $con->execute($sql);
 
+        $rec = array();
+        $rec['address_record_status'] = 'd';
+
+        $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+        $_retVal = $con->execute($upd);
     }
 
     return $_retVal;
@@ -402,6 +408,11 @@ function pull_address_fields ( $array_data )
 
  /**
  * $Log: utils-addresses.php,v $
+ * Revision 1.4  2006/04/21 20:30:07  braverock
+ * - add better default address name
+ * - implement delete_address function
+ * - remove redundant code
+ *
  * Revision 1.3  2005/12/22 22:39:26  jswalter
  *  - moved primary key retrieval to near top of method 'add_update_address()'
  *
