@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.20 2006/01/02 22:56:27 vanmer Exp $
+ * $Id: edit-2.php,v 1.21 2006/04/21 23:21:40 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -12,77 +12,41 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
+require_once($include_directory . 'utils-companies.php');
 
-$company_id = $_POST['company_id'];
-$on_what_id=$company_id;
+$rec = array();
+$rec['company_id'] = $_POST['company_id'];
+
+$company_id=$rec['company_id'];
 
 $session_user_id = session_check('','Update');
 
-$company_name = $_POST['company_name'];
-$legal_name = $_POST['legal_name'];
-$company_code = $_POST['company_code'];
-$crm_status_id = $_POST['crm_status_id'];
-$company_source_id = $_POST['company_source_id'];
-$industry_id = $_POST['industry_id'];
-$rating_id = $_POST['rating_id'];
-$user_id = $_POST['user_id'];
-$phone = preg_replace("/[^\d]/", '', $_POST['phone']);
-$phone2 = preg_replace("/[^\d]/", '',$_POST['phone2']);
-$fax = preg_replace("/[^\d]/", '',$_POST['fax']);
-$url = $_POST['url'];
-$employees = $_POST['employees'];
-$revenue = $_POST['revenue'];
-$profile = $_POST['profile'];
-$custom1 = $_POST['custom1'];
-$custom2 = $_POST['custom2'];
-$custom3 = $_POST['custom3'];
-$custom4 = $_POST['custom4'];
-
-if (!$rating_id) { $rating_id = 0; }
+$rec['company_name'] = $_POST['company_name'];
+$rec['legal_name'] = $_POST['legal_name'];
+$rec['company_code'] = $_POST['company_code'];
+$rec['crm_status_id'] = $_POST['crm_status_id'];
+$rec['company_source_id'] = $_POST['company_source_id'];
+$rec['industry_id'] = $_POST['industry_id'];
+$rec['rating_id'] = $_POST['rating_id'];
+$rec['user_id'] = $_POST['user_id'];
+$rec['phone'] = preg_replace("/[^\d]/", '', $_POST['phone']);
+$rec['phone2'] = preg_replace("/[^\d]/", '',$_POST['phone2']);
+$rec['fax'] = preg_replace("/[^\d]/", '',$_POST['fax']);
+$rec['url'] = $_POST['url'];
+$rec['employees'] = $_POST['employees'];
+$rec['revenue'] = $_POST['revenue'];
+$rec['profile'] = $_POST['profile'];
+$rec['custom1'] = $_POST['custom1'];
+$rec['custom2'] = $_POST['custom2'];
+$rec['custom3'] = $_POST['custom3'];
+$rec['custom4'] = $_POST['custom4'];
 
 $con = get_xrms_dbconnection();
 
 // $con->debug=1;
-
-$sql = "SELECT * FROM companies WHERE company_id = $company_id";
-$rst = $con->execute($sql);
-
-$rec = array();
-$rec['last_modified_by'] = $session_user_id;
-$rec['last_modified_at'] = mktime();
-$rec['crm_status_id'] = $crm_status_id;
-$rec['company_source_id'] = $company_source_id;
-$rec['industry_id'] = $industry_id;
-$rec['rating_id'] = $rating_id;
-$rec['user_id'] = $user_id;
-$rec['company_name'] = $company_name;
-$rec['legal_name'] = $legal_name;
-$rec['company_code'] = $company_code;
-$rec['phone'] = $phone;
-$rec['phone2'] = $phone2;
-$rec['fax'] = $fax;
-$rec['url'] = $url;
-$rec['employees'] = $employees;
-$rec['revenue'] = $revenue;
-$rec['custom1'] = $custom1;
-$rec['custom2'] = $custom2;
-$rec['custom3'] = $custom3;
-$rec['custom4'] = $custom4;
-$rec['profile'] = $profile;
-
-$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-$sysst = $con->execute($upd);
-if (!$sysst){
-	//there was a problem, notify the user
-	db_error_handler ($con, $upd);
-}
-
-$param = array($rst, $rec);
-do_hook_function('company_edit_2', $param);
+update_company($con, $rec, $rec['company_id'], false, get_magic_quotes_gpc());
 
 $accounting_rows = do_hook_function('company_accounting_inline_edit_2', $accounting_rows);
-
-add_audit_item($con, $session_user_id, 'updated', 'companies', $company_id, 1);
 
 $con->close();
 
@@ -90,6 +54,9 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.21  2006/04/21 23:21:40  braverock
+ * - first revision to use update_company api fn
+ *
  * Revision 1.20  2006/01/02 22:56:27  vanmer
  * - changed to use centralized dbconnection function
  *
@@ -139,6 +106,5 @@ header("Location: one.php?msg=saved&company_id=$company_id");
  * Revision 1.6  2004/01/26 19:18:29  braverock
  * - cleaned up sql format
  * - added phpdoc
- *
  */
 ?>
