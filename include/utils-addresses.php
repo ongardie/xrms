@@ -6,15 +6,15 @@
  * This file should be included anywhere companies need to be created or modified
  *
  * @author Aaron van Meerten
+ * @author Brian Peterson
  *
- * $Id: utils-addresses.php,v 1.4 2006/04/21 20:30:07 braverock Exp $
+ * $Id: utils-addresses.php,v 1.5 2006/04/21 21:37:38 braverock Exp $
  *
  */
 
 
 /**********************************************************************/
 /**
- *
  * Adds or modifies a address within XRMS, based on array of data about the address
  *
  * Define this field if the record should be updated, otherwise leave out of array
@@ -51,10 +51,11 @@
  * @param adodbconnection $con               ADOdb connection Object
  * @param array           $address_data      with data about the address to add
  * @param boolean         $return_recordset  indicating if adodb recordset object should be returned (defaults to false)
+ * @param boolean         $_magic_quotes     F - inbound data is not "add slashes", T - data is "add slashes"
  *
  * @return $address_id with newly created address id, array of address records, a recordset object or false if failure occured
  */
-function add_update_address($con, $address_data, $return_recordset = false )
+function add_update_address($con, $address_data, $return_recordset = false, $_magic_quotes =  false  )
 {
    /**
     * Default return value
@@ -179,35 +180,18 @@ function add_update_address($con, $address_data, $return_recordset = false )
  *
  * @param adodbconnection $con            ADOdb connection Object
  * @param array           $address_data   with data about the address, to add
+ * @param boolean         $return_recordset  indicating if adodb recordset object should be returned (defaults to false)
+ * @param boolean         $_magic_quotes     F - inbound data is not "add slashes", T - data is "add slashes"
  *
  * @return $address_id with newly created address id, or false if failure occured
  */
-function add_address($con, $address_data)
+function add_address($con, $address_data, $return_recordset=false, $_magic_quotes=false)
 {
-   /**
-    * Default return value
-    *
-    * Returns newly created address id, or false if failure occured
-    * Default value is set at FALSE
-    *
-    * @var mixed $_retVal newly created address id, or false if failure occured
-    * @access private
-    * @static
-    */
-    $_retVal = false;
-
-    if ( $con && $address_id )
-    {
-        global $session_user_id;
-
-    }
-
-    return $_retVal;
+    return add_update_address($con, $address_data, $return_recordset, $_magic_quotes);
 };
 
 /**********************************************************************/
 /**
- *
  * Searches for a address based on data about the address
  *
  * @param adodbconnection $con               ADOdb connection Object
@@ -260,7 +244,6 @@ function find_address($con, $address_data, $show_deleted = false, $return_record
 
 /**********************************************************************/
 /**
- *
  * Gets a address based on the database identifer if that address exists
  *
  * @param adodbconnection $con                ADOdb connection Object
@@ -290,44 +273,24 @@ function get_address($con, $address_id, $return_rst=false)
 
 /**********************************************************************/
 /**
- *
  * Updates an address in XRMS from an associative array
  * Either an address_id must be explicitly set or an adodbrecordset for
  * the record to be updated must be passed in or the function will fail
  *
  * @param adodbconnection $con          ADOdb connection Object
  * @param array           $address_data with associative array defining address data to update
- * @param integer         $address_id   optionally identifying address in the database (required if not passing in a ecordset to $address_rst)
- * @param adodbrecordset  $address_rst  optionally providing a recordset to use for the update (required if not passing in an integer for $address_id)
+ * @param boolean         $return_recordset  indicating if adodb recordset object should be returned (defaults to false)
+ * @param boolean         $_magic_quotes     F - inbound data is not "add slashes", T - data is "add slashes"
  *
  * @return boolean specifying if update succeeded
  */
-function update_address($con, $address_data, $address_id=false, $address_rst=false)
+function update_address($con, $address_data, $return_recordset=false, $_magic_quotes=false)
 {
-   /**
-    * Default return value
-    *
-    * Returns a boolean of success or failure
-    * Default value is set at FALSE
-    *
-    * @var mixed $_retVal Indicates success or failure
-    * @access private
-    * @static
-    */
-    $_retVal = false;
-
-    if ( $con && $address_id )
-    {
-        global $session_user_id;
-
-    }
-
-    return $_retVal;
+    return add_update_address($con, $address_data, $return_recordset, $_magic_quotes);
 };
 
 /**********************************************************************/
 /**
- *
  * Deletes an address from XRMS, based on passed in address_id
  * Can delete address from database or mark as removed using record status
  *
@@ -369,7 +332,6 @@ function delete_address($con, $address_id = false, $delete_from_database = false
 /**********************************************************************/
 
 /**
- *
  * Pulls only address field data from given array
  *
  * @param array $array_data array to retrieve address data from
@@ -405,9 +367,13 @@ function pull_address_fields ( $array_data )
 }
 /**********************************************************************/
 /**********************************************************************/
-
  /**
  * $Log: utils-addresses.php,v $
+ * Revision 1.5  2006/04/21 21:37:38  braverock
+ * - implement add_address wrapper fn -> add_update_address
+ * - implement update_address wrapper fn -> add_update_address
+ * - implement correct handling of magic_quotes
+ *
  * Revision 1.4  2006/04/21 20:30:07  braverock
  * - add better default address name
  * - implement delete_address function
@@ -422,8 +388,5 @@ function pull_address_fields ( $array_data )
  *
  * Revision 1.1  2005/12/19 05:34:18  jswalter
  *  - initial commit
- *
- *
- *
-**/
+ **/
  ?>
