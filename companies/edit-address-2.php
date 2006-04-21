@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a company
  *
- * $Id: edit-address-2.php,v 1.11 2006/04/21 20:26:07 braverock Exp $
+ * $Id: edit-address-2.php,v 1.12 2006/04/21 21:43:07 braverock Exp $
  */
 
 
@@ -46,7 +46,7 @@ $rec['address_name'] = $address_name;
 $rec['address_body'] = $address_body;
 $rec['use_pretty_address'] = $use_pretty_address;
 
-$result = add_update_address($con, $rec);
+$result = add_update_address($con, $rec, false, get_magic_quotes_gpc());
 if ($address_id) {
     add_audit_item($con, $session_user_id, 'updated', 'addresses', $result['primarykey'], 1);
 } else {
@@ -63,6 +63,9 @@ header("Location: addresses.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.12  2006/04/21 21:43:07  braverock
+ * - add correct magic_quotes handling to API call
+ *
  * Revision 1.11  2006/04/21 20:26:07  braverock
  * - modify to use addresses API
  *
