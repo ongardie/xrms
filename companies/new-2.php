@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.28 2006/01/02 22:56:27 vanmer Exp $
+ * $Id: new-2.php,v 1.29 2006/04/21 23:00:27 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -16,6 +16,9 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
+require_once($include_directory . 'utils-contacts.php');
+require_once($include_directory . 'utils-companies.php');
+require_once($include_directory . 'utils-addresses.php');
 
 $session_user_id = session_check('','Create');
 
@@ -65,9 +68,7 @@ getGlobalVar($cell_phone, 'cell_phone');
 getGlobalVar($home_phone, 'home_phone');
 getGlobalVar($contact_profile, 'contact_profile');
 
-$address_name = (strlen($address_name) > 0) ? $address_name : '[address]';
 $use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
-
 
 $con = get_xrms_dbconnection();
 // $con->debug = 1;
@@ -99,14 +100,8 @@ $rec['entered_by'] = $session_user_id;
 $rec['last_modified_by'] = $session_user_id;
 $rec['last_modified_at'] = time();
 
-$tbl = 'companies';
-$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-$rst = $con->execute($ins);
-if (!$rst) {
-    db_error_handler ($con, $ins);
-}
+$company_id=add_company($con, $rec, get_magic_quotes_gpc());
 
-$company_id = $con->insert_id();
 $rec['company_id']=$company_id;
 
 do_hook_function('company_new_2', $rec);
@@ -142,16 +137,9 @@ $rec['postal_code'] = $postal_code;
 $rec['address_body'] = $address_body;
 $rec['use_pretty_address'] = $use_pretty_address;
 
-$tbl = 'addresses';
-$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-$adr_rst = $con->execute($ins);
-if (!$adr_rst) {
-    db_error_handler ($con, $ins);
-}
-
+$address_id = add_address($con, $rec, get_magic_quotes_gpc()) ;
 
 // make that address the default, and set the customer and vendor references
-$address_id = $con->insert_id();
 
 if($time_zone_offset = time_zone_offset($con, $address_id)) {
     $sql = 'SELECT *
@@ -181,10 +169,10 @@ if (!$rst) {
 }
 
 $rec = array();
-$rec['default_primary_address'] = $address_id;
-$rec['default_billing_address'] = $address_id;
+$rec['default_primary_address']  = $address_id;
+$rec['default_billing_address']  = $address_id;
 $rec['default_shipping_address'] = $address_id;
-$rec['default_payment_address'] = $address_id;
+$rec['default_payment_address']  = $address_id;
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $upd_rst = $con->execute($upd);
@@ -197,8 +185,8 @@ if (!$upd_rst) {
 $rec = array();
 $rec['company_id'] = $company_id;
 $rec['address_id'] = $address_id;
-$rec['first_names'] = $first_names;
-$rec['last_name'] = $last_name;
+$rec['last_name']  = (strlen($last_name) > 0) ? $last_name : _("[last name]");
+$rec['first_names']  = (strlen($first_names) > 0) ? $first_names : _("[first names]");
 $rec['email'] = $email;
 if ($title) {
     $rec['title'] = $title;
@@ -221,17 +209,8 @@ if ($contact_profile) {
     $rec['profile']=$contact_profile;
 }
 $rec['fax'] = $fax;
-$rec['entered_at'] = time();
-$rec['entered_by'] = $session_user_id;
-$rec['last_modified_by'] = $session_user_id;
-$rec['last_modified_at'] = time();
 
-$tbl = 'contacts';
-$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-$con_rst = $con->execute($ins);
-if (!$con_rst) {
-    db_error_handler ($con, $ins);
-}
+$contact_id=add_contact($con, $rec, get_magic_quotes_gpc());
 
 if (strlen($accounting_system) > 0) {
     add_accounting_customer($con, $company_id, $company_name, $company_code, $customer_credit_limit, $customer_terms);
@@ -247,6 +226,10 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.29  2006/04/21 23:00:27  braverock
+ * - first revision to use add_* API functions for contact, company, address
+ *   @todo: examine API utilization for timezone, default address indicators
+ *
  * Revision 1.28  2006/01/02 22:56:27  vanmer
  * - changed to use centralized dbconnection function
  *
