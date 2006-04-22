@@ -1,7 +1,7 @@
 XRMS - README
 
 =============================================================
-/** $Id: README,v 1.22 2006/04/11 16:00:15 braverock Exp $ **/
+/** $Id: README,v 1.23 2006/04/22 16:00:44 braverock Exp $ **/
 
 ========================
 SUMMARY
@@ -50,7 +50,8 @@ Copyright (c) 2000-2003 Chris Woofter <chris_at_brokerstream_dot_com>
 ========================
 REQUIREMENTS
 
-PHP v4.2 or higher with database extensions for your database.
+PHP v4.3.0 or higher with database extensions for your database.
+PHP v4.2 or higher with the PEAR PHP_Compat package should also work.
 
 A web server that supports PHP.
 XRMS has been extensively deployed on Apache and IIS.
@@ -418,6 +419,9 @@ please let us know.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.23  2006/04/22 16:00:44  braverock
+ * - bump recommended PHP version to 4.3.x, add note about PEAR PHP_Compat
+ *
  * Revision 1.22  2006/04/11 16:00:15  braverock
  * - bump version to 1.99.0
  * - last text changes
