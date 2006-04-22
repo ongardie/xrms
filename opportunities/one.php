@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.54 2006/01/02 23:29:27 vanmer Exp $
+ * $Id: one.php,v 1.55 2006/04/22 08:38:49 jnhayart Exp $
  */
 
 require_once('../include-locations.inc');
@@ -187,6 +187,8 @@ require("../relationships/sidebar.php");
 
 /** End of the sidebar includes **/
 /*********************************/
+
+add_audit_item($con, $session_user_id, 'viewed', 'opportunities', $opportunity_id, 3);
 
 $con->close();
 
@@ -393,6 +395,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.55  2006/04/22 08:38:49  jnhayart
+ * add tracability on opportinites
+ *
  * Revision 1.54  2006/01/02 23:29:27  vanmer
  * - changed to use centralized dbconnection function
  *

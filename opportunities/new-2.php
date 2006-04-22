@@ -2,7 +2,7 @@
 /**
  * Insert a new opportunity into the database
  *
- * $Id: new-2.php,v 1.11 2006/01/02 23:29:27 vanmer Exp $
+ * $Id: new-2.php,v 1.12 2006/04/22 08:38:49 jnhayart Exp $
  */
 
 //include common files
@@ -61,6 +61,8 @@ $con->execute($ins);
 
 $opportunity_id = $con->insert_id();
 
+add_audit_item($con, $session_user_id, 'created', 'opportunities', $opportunity_id, 1);
+
 $on_what_table = "opportunities";
 $on_what_id = $opportunity_id;
 //generate activities for the new opportunity
@@ -75,6 +77,9 @@ header("Location: one.php?msg=opportunity_added&opportunity_id=$opportunity_id")
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.12  2006/04/22 08:38:49  jnhayart
+ * add tracability on opportinites
+ *
  * Revision 1.11  2006/01/02 23:29:27  vanmer
  * - changed to use centralized dbconnection function
  *

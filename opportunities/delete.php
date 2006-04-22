@@ -26,6 +26,8 @@ $rec['opportunity_record_status'] = 'd';
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
+add_audit_item($con, $session_user_id, 'deleted', 'opportunities', $opportunity_id, 1);
+
 $con->close();
 
 header("Location: some.php?msg=opportunity_deleted");

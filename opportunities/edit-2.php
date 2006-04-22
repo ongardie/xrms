@@ -95,6 +95,9 @@ if (!$no_update) {
 
     $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
     $con->execute($upd);
+    
+    add_audit_item($con, $session_user_id, 'updated', 'opportunities', $opportunity_id, 1);
+    
     if ($old_status!==$opportunity_status_id) {
         add_workflow_history($con, 'opportunities', $opportunity_id, $old_status, $opportunity_status_id);
     }
