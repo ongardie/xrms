@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @author Brian Peterson
  *
- * $Id: utils-addresses.php,v 1.7 2006/04/21 22:56:25 braverock Exp $
+ * $Id: utils-addresses.php,v 1.8 2006/04/25 14:35:42 braverock Exp $
  *
  */
 
@@ -57,6 +57,8 @@
  */
 function add_update_address($con, $address_data, $return_recordset = false, $_magic_quotes =  false  )
 {
+   //$con->debug=1;
+
    /**
     * Default return value
     *
@@ -78,42 +80,53 @@ function add_update_address($con, $address_data, $return_recordset = false, $_ma
     $address_info = pull_address_fields ( $address_data );
 
     // If nothing was sent back, we can't make an address. Default to '1'
-    if ( ! $address_info )
-    {
+    if ( ! $address_info ) {
         $address_info['address_id'] = 1;
         $address_info['primarykey'] = $_primary_key;
 
         return $address_info;
+    } elseif (
+        ! $address_info['line1'] &&
+        ! $address_info['city']
+    ) {
+        //useless address, so set to unknown
+        $address_info['address_id'] = 1;
+        $address_info['primarykey'] = $_primary_key;
+
     }
 
-    // If a company_is was not passed in, set it to ONE
-    if ( ! $address_info['company_id'] )
-        $address_info['company_id'] = 1;
+    //if this is an unknown address, just return
+    if ($address_info['address_id'] == 1) { return $address_info; }
 
-    // If 'country' is not defined, use the systems default value
+    // If a company_id was not passed in, set it to ONE
+    if ( ! $address_info['company_id'] ) {
+        $address_info['company_id'] = 1;
+    }
+
+    //set up the country
+    global $default_country_id;
     if ( ( ! $address_info['country_id'] ) && ( ! $address_info['country'] ) )
     {
-        global $default_country_id;
-            $address_info['country_id'] = $default_country_id;
-     }
-    // Otherwise retrieve XRMS Country ID
-    else
-    {
+        // If 'country' is not defined, use the systems default value
+        $address_info['country_id'] = $default_country_id;
+    } elseif ( ( ! $address_info['country_id']) && ( strlen(trim($address_info['country']))>0 )  ) {
+        // Otherwise look up the country id from the string
         $_country_data = get_country($con, $address_info['country']);
-        $address_info['country_id'] = $_country_data['country_id'];
-    }
+        if ($_country_data['country_id']) {
+            $address_info['country_id'] = $_country_data['country_id'];
+        } else {
+            $address_info['country_id'] = $default_country_id;
+        }
+    } //end country checks
 
-    // If we have a record ID, we don't need to find the record (as we have it)
-    // it just needs to be updated.
 
-    if ( 0 )
+    if ( $address_info['address_id'] )
     {
-
-
-    }
-    // Need to see if this address exists already
-    else
-    {
+      // If we have a record ID, we don't need to find the record (as we have it)
+      // it just needs to be updated.
+      $_retVal = __record_update ( $con, $_table_name, $_primay_key, $address_info, $_magic_quotes, $_return_recordset, $_deleteRecord );
+    } else {
+        // Need to see if this address exists already
         // Prep array for "search", only on these fields
         $extra_where = array();
         foreach ($address_info as $_field => $_value) {
@@ -126,7 +139,7 @@ function add_update_address($con, $address_data, $return_recordset = false, $_ma
             }
         }
 
-        // Determine if this contact already exists
+        // Determine if this address already exists
         $found_data = __record_find ( $con, $_table_name, $extra_where, $_magic_quotes );
 
         // Retrieve timezone and GMT data if not already defined
@@ -141,6 +154,11 @@ function add_update_address($con, $address_data, $return_recordset = false, $_ma
         $_primay_key = $found_data['primarykey'];
 
         // Define address name if one is not already defined
+        if ( $address_info['address_name'] = _("Main") ) {
+            //clear the 'Main' address... bad convention
+            $address_info['address_name'] = '';
+            //NOTE: this is still messy, and needs cleaning up
+        }
         if ( ( ! strlen($address_info['address_name']) ) && ( ! strlen($found_data['address_name']) ) ) {
             if (strlen($address_info['city'])) {
                 $address_info['address_name'] = $address_info['city']." - ".$address_info['line1'];
@@ -149,7 +167,7 @@ function add_update_address($con, $address_data, $return_recordset = false, $_ma
             }
         }
 
-        // If this contact exists already
+        // If this address exists already
         if ( $found_data[$_primay_key] )
         {
 
@@ -381,6 +399,14 @@ function pull_address_fields ( $array_data )
 /**********************************************************************/
  /**
  * $Log: utils-addresses.php,v $
+ * Revision 1.8  2006/04/25 14:35:42  braverock
+ * - multiple updates to add_update_address function
+ *   - better checks to see if we have enough information to create an address
+ *   - better handling of address name
+ *   - better update handling on updated address_id
+ *   - correct improper country lookups on new address
+ *   - eliminate extra database calls where possible
+ *
  * Revision 1.7  2006/04/21 22:56:25  braverock
  * - clean up error checking
  *
