@@ -2,7 +2,7 @@
 /**
  * Roles sidebar, used to display/edit roles for a user
  *
- * $Id: user_roles_sidebar.php,v 1.7 2006/04/18 14:34:48 braverock Exp $
+ * $Id: user_roles_sidebar.php,v 1.8 2006/04/25 18:13:10 jnhayart Exp $
 **/
 if (!$edit_user_id) {
     $edit_user_id=$session_user_id;
@@ -61,7 +61,7 @@ $role_rows.="<tr><td>$group_menu</td><td>$role_menu</td><td><input type=button o
 $user_role_sidebar="
     <form method=POST name=user_role_sidebar_form action='{$http_site_root}$user_roles_handler'>
         <input type=hidden name=userAction value=addRole>
-        <input type=hidden name=acl_datasource_name value="$acl_datasource_name">
+        <input type=hidden name=acl_datasource_name value=" . $acl_datasource_name . ">
         <input type=hidden name=edit_user_id value=$edit_user_id>";
 }
 if ($action=='edit') $colspan=3;
@@ -78,6 +78,9 @@ $user_role_sidebar.="
 /*************************************************************************/
 /**
  * $Log: user_roles_sidebar.php,v $
+ * Revision 1.8  2006/04/25 18:13:10  jnhayart
+ * Syntax error after remove Tillend
+ *
  * Revision 1.7  2006/04/18 14:34:48  braverock
  * - remove TILLEND assignments for better support of gettext i18n
  *
