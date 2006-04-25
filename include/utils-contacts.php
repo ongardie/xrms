@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.20 2006/04/21 22:58:33 braverock Exp $
+ * $Id: utils-contacts.php,v 1.21 2006/04/25 15:23:04 braverock Exp $
  *
  */
 
@@ -96,15 +96,14 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
         {
             // Since there is not info to create or derive a company name
             $contact_info['company_id'] = 1;
-        }
-
-        else
-        {
+        } else {
+            // Check here to see if the Unknown company flag is set
             // There needs to be a company name
-            if ( ! $contact_info['company_name'] )
+            if ( ! $contact_info['company_name'] ) {
                 $contact_info['company_name'] = $contact_info['first_names'] . ' ' . $contact_info['last_name'];
+            }
 
-            // Retrieve comany id
+            // Retrieve company id
             $_company_data = add_update_company ( $con, $contact_info );
 
             // Pull out company_id
@@ -139,10 +138,12 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
             case 'email':
             case 'last_name':
             case 'first_names':
-//                case 'work_phone':
-//                case 'cell_phone':
-//                case 'home_phone':
                 $extra_where[$_field] = $_value;
+            case 'company_id':
+                if ($_value>1) {
+                    //add company_id to the WHERE clause search list if we have a non-1 id
+                    $extra_where[$_field] = $_value;
+                }
             break;
         }
     }
@@ -191,11 +192,8 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
         do_hook_function('contact_edit_2', $param);
 
         $audit_type = 'updated';
-    }
-
-    // This is a new Record
-    else
-    {
+    } else {
+        // This is a new Record
         // If a company has not been defined, AND names are not given, this can be be dealt with
         if ( ( $contact_data['company_id'] ) && ( ( $contact_data['last_name'] ) || ( $contact_data['first_names'] ) ) )
         {
@@ -488,6 +486,12 @@ include_once $include_directory . 'utils-misc.php';
 /**********************************************************************/
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.21  2006/04/25 15:23:04  braverock
+ * - fix switch/case in add_update_contact to include company_id
+ *   in record search if we have a valid company_id
+ *   fixes SF bug: https://sourceforge.net/tracker/index.php?func=detail&aid=1475671&group_id=88850&atid=588128
+ * - NOTE: still lots to do on this function to make it behave/perform better, but should be safe now
+ *
  * Revision 1.20  2006/04/21 22:58:33  braverock
  * - localize default first name and last name
  *
