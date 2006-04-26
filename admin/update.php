@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: update.php,v 1.109 2006/04/05 01:06:40 vanmer Exp $
+ * $Id: update.php,v 1.110 2006/04/26 02:12:37 vanmer Exp $
  */
 
 // where do we include from
@@ -53,7 +53,7 @@ $dict = NewDataDictionary( $con );
 //CHECK FOR VERSION HERE, REDIRECT TO OLD UPDATE IF VERSION IS NOT CORRECT
 $ret=get_admin_preference($con, 'xrms_version');
 $allow_old_upgrade=true;
-if ((!$ret OR $ret=='1.0') AND $allow_old_upgrade) {
+if ((!$ret OR $ret=='1.0' OR $ret=='1.99') AND $allow_old_upgrade) {
     $con->close();
     Header('Location: updateto2.0.php');
     exit();
@@ -175,6 +175,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.110  2006/04/26 02:12:37  vanmer
+ * - ensure that version 1.99 will still run updateto2.0.php
+ *
  * Revision 1.109  2006/04/05 01:06:40  vanmer
  * - updated demo SQL to use wrapper functions for creating SQL
  *
