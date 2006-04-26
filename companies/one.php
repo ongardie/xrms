@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.136 2006/04/21 00:00:40 vanmer Exp $
+ * $Id: one.php,v 1.137 2006/04/26 20:03:53 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -58,22 +58,23 @@ $accounting_rows = do_hook_function('company_accounting_inline_display', $accoun
 
 update_recent_items($con, $session_user_id, "companies", $company_id);
 
-$sql = 'select cs.*, c.*, account_status_display_html, rating_display_html,
-        company_source_display_html, i.industry_pretty_name, c.default_primary_address, ' .
-        $con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS owner_username," .
-        $con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS entered_by," .
-        $con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS last_modified_by " .
+$sql = 'select cs.*, c.*, account_status_display_html, account_status_short_name
+            rating_short_name, rating_display_html,
+            company_source_display_html, i.industry_pretty_name, c.default_primary_address, ' .
+            $con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS owner_username," .
+            $con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS entered_by," .
+            $con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS last_modified_by " .
        "from crm_statuses cs, companies c, account_statuses as1, ratings r,
-        company_sources cs2, industries i, users u1, users u2, users u3
+            company_sources cs2, industries i, users u1, users u2, users u3
         where c.account_status_id = as1.account_status_id
-        and c.industry_id = i.industry_id
-        and c.rating_id = r.rating_id
-        and c.company_source_id = cs2.company_source_id
-        and c.crm_status_id = cs.crm_status_id
-        and c.user_id = u1.user_id
-        and c.entered_by = u2.user_id
-        and c.last_modified_by = u3.user_id
-        and c.company_id = $company_id";
+            and c.industry_id = i.industry_id
+            and c.rating_id = r.rating_id
+            and c.company_source_id = cs2.company_source_id
+            and c.crm_status_id = cs.crm_status_id
+            and c.user_id = u1.user_id
+            and c.entered_by = u2.user_id
+            and c.last_modified_by = u3.user_id
+            and c.company_id = $company_id";
 
 $rst = $con->execute($sql);
 
@@ -96,14 +97,23 @@ if ($rst) {
     $phone2 = get_formatted_phone($con, $address_id, $rst->fields['phone2']);
     $fax = get_formatted_phone($con, $address_id, $rst->fields['fax']);
     $url = $rst->fields['url'];
+    $employees = $rst->fields['employees'];
+    $revenue = $rst->fields['revenue'];
     if ((substr($url, 0, 4)!=='http') and (strlen(trim($url)) >0)) {
         $url = 'http://'.$url;
     }
-    $employees = $rst->fields['employees'];
-    $revenue = $rst->fields['revenue'];
-    $account_status = $rst->fields['account_status_display_html'];
-    $credit_limit = $rst->fields['credit_limit'];
-    $rating = $rst->fields['rating_display_html'];
+    if ( ! $rst->fields['account_status_short_name'] = "N/A" ) {
+        $account_status = $rst->fields['account_status_display_html'];
+    };
+    if ($rst->fields['credit_limit'] > 0 ) {
+        $credit_limit = number_format($rst->fields['credit_limit'], 2);
+        $current_credit_limit = fetch_current_customer_credit_limit($extref1);
+    } else {
+        $credit_limit = '';
+    }
+    if ( ! $rst->fields['rating_short_name'] = "N/A" ) {
+        $rating = $rst->fields['rating_display_html'];
+    };
     $terms = $rst->fields['terms'];
     $profile = $rst->fields['profile'];
     $profile = str_replace ("\n","<br>\n",htmlspecialchars($profile));
@@ -143,7 +153,6 @@ if ($rst) {
     $rating = '';
     $terms = '';
     $profile = '';
-    $profile = '';
     $entered_by = '';
     $entered_at = '';
     $last_modified_by = '';
@@ -164,8 +173,6 @@ if ($rst) {
     db_error_handler ($con, $sql);
 }
 
-$credit_limit = number_format($credit_limit, 2);
-$current_credit_limit = fetch_current_customer_credit_limit($extref1);
 
 
 if (strlen($url) > 0) {
@@ -312,7 +319,7 @@ if ($division_id) $new_contact_location.= "&division_id=$division_id";
 $pager = new GUP_Pager($con, $sql, 'getContactDetails', _('Contacts'), $contacts_form_name, 'ContactsPager', $columns, false, true);
 $contacts_export_button=$pager->GetAndUseExportButton();
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
-            $pager_columns_button $contacts_export_button 
+            $pager_columns_button $contacts_export_button
             <input class=button type=button value=\"" .  _('Mail Merge') . "\" onclick=\"javascript: location.href='../email/email.php?scope=company&company_id=$comp
 any_id'\">" .
             render_create_button("New",'button',"location.href='$new_contact_location';") .  "</td></tr>";
@@ -582,13 +589,13 @@ function markComplete() {
                                     <td class=sublabel><?php echo _("Terms"); ?></td>
                                     <td class=clear><?php echo $terms.' '. _("days"); ?></td>
                                 </tr>
-                                <?php }; ?>
-                                <!-- accounting plugin -->
-                                <?php echo $accounting_rows; ?>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
+                                <?php }; ?>
+                                <!-- accounting plugin -->
+                                <?php echo $accounting_rows; ?>
                                 <?php if ($company_source) { ?>
                                 <tr>
                                     <td width=1% class=sublabel><?php echo _("Company Source"); ?></td>
@@ -653,15 +660,14 @@ function markComplete() {
                             </td>
                         </tr>
                     </table>
-
-                    <p id="profile" class="hidden"><?php if(strlen($profile) >= 500) { echo substr($profile, 0, 500); ?><span><?php echo substr($profile, 500); ?></span><a href="#" onclick="document.getElementById('profile').className = (document.getElementById('profile').className == '') ? 'hidden' : ''; return false">...</a><?php } else { echo $profile; } ?></p>
-
+                    <?php if ( strlen(trim($profile)) > 0 ) { ?>
+                        <p id="profile" class="hidden"><?php if(strlen($profile) >= 500) { echo substr($profile, 0, 500); ?><span><?php echo substr($profile, 500); ?></span><a href="#" onclick="document.getElementById('profile').className = (document.getElementById('profile').className == '') ? 'hidden' : ''; return false">...</a><?php } else { echo $profile; } ?></p>
+                    <?php } ?>
                 </td>
             </tr>
             <tr>
                 <td class=widget_content_form_element>
                 <?php echo render_edit_button("Edit", 'button', "javascript: location.href='edit.php?company_id=$company_id';"); ?>
-                <input class=button type=button value="<?php echo _("Admin"); ?>" onclick="javascript:location.href='admin.php?company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="<?php echo _("Clone"); ?>" onclick="javascript: location.href='new.php?clone_id=<?php echo $company_id ?>';">
                 <input class=button type=button value="<?php echo _("Addresses"); ?>" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
                 <?php
@@ -714,10 +720,10 @@ function markComplete() {
 
         <!-- right column //-->
     <div id="Sidebar">
-        
+
         <!-- sidebar plugins - top //-->
         <?php echo $sidebar_rows_top; ?>
-        
+
         <!-- categories //-->
         <?php echo $category_rows; ?>
 
@@ -757,6 +763,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.137  2006/04/26 20:03:53  braverock
+ * - do a better job of not showing empty fields in Company Details
+ * - remove 'Admin' button, fields moved to edit.php
+ *
  * Revision 1.136  2006/04/21 00:00:40  vanmer
  * - ensure that plugin output for division bottom works the same for company and division pages
  *
