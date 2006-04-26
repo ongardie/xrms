@@ -1,3 +1,448 @@
+2006-04-26 16:16  braverock
+
+	* README:
+
+	- bump version to 1.99.1
+	- last text changes
+
+2006-04-26 16:10  braverock
+
+	* admin/updateto2.0.php:
+
+	- bump version to 1.99.1
+
+2006-04-26 16:08  vanmer
+
+	* install/xrms-schema.xml:
+
+	- removed row without association to a user_preference_type
+
+2006-04-26 16:08  braverock
+
+	* locale/xrms.pot:
+
+	- last text changes for v1.99.1
+
+2006-04-26 15:09  braverock
+
+	* companies/: admin-2.php, admin.php:
+
+	- move accounting and credit fields from companies/admin* pages to companies/edit*
+	- move Delete button to companies/edit.php and properly ACL wrap
+
+2006-04-26 15:07  braverock
+
+	* companies/edit-2.php:
+
+	- move accounting and credit fields from old companies/admin* pages
+
+2006-04-26 15:06  braverock
+
+	* companies/edit.php:
+
+	- move accounting and credit fields from old companies/admin* pages
+	- add Delete button here, for consistency with other XRMS object types
+
+2006-04-26 15:03  braverock
+
+	* companies/one.php:
+
+	- do a better job of not showing empty fields in Company Details
+	- remove 'Admin' button, fields moved to edit.php
+
+2006-04-26 14:59  braverock
+
+	* companies/new-2.php:
+
+	- remove forced setting of legal_name
+
+2006-04-26 14:49  braverock
+
+	* companies/delete.php:
+
+	- change to use GetGlobalVar to handle both $_POST and $_GET
+
+2006-04-26 08:15  braverock
+
+	* contacts/some.php:
+
+	- don't close the table twice
+
+2006-04-26 08:13  braverock
+
+	* include/utils-preferences.php:
+
+	- order preference display by user_preference_pretty_name
+
+2006-04-26 08:02  braverock
+
+	* contacts/some.php:
+
+	- update unknown or contact_name new contact string
+	- move all 'new contact' buttons to the same place on the screen for consistency
+
+2006-04-26 07:45  braverock
+
+	* locale/xrms.pot:
+
+	- add newly localized strings
+
+2006-04-25 21:39  vanmer
+
+	* admin/update.php:
+
+	- ensure that 1.99.1 release also runs updateto2.0.php
+
+2006-04-25 21:38  vanmer
+
+	* install/xrms-schema.xml:
+
+	- added new system preference for handling contacts with no company defined
+	- changed version to reflect new release 1.99.1
+
+2006-04-25 21:18  vanmer
+
+	* include/vars.php:
+
+	- updated comments to reflect status of  use_contact_self functionality as deprecated
+
+2006-04-25 21:15  vanmer
+
+	* install/data.php:
+
+	- added system preference to control behavior of contacts API when adding a new contact with no company specified
+
+2006-04-25 21:14  vanmer
+
+	* include/utils-contacts.php:
+
+	- added user preference handling for adding a new contact with no company specified
+
+2006-04-25 21:14  vanmer
+
+	* include/utils-companies.php:
+
+	- added sensible defaults to a new company, if not provided
+
+2006-04-25 21:13  vanmer
+
+	* contacts/: new.php, some.php, new-2.php:
+
+	- removed deprecated use_self_contacts option, now uses system preference controlling behavior
+
+2006-04-25 21:12  vanmer
+
+	* admin/update.php:
+
+	- ensure that version 1.99 will still run updateto2.0.php
+
+2006-04-25 19:56  vanmer
+
+	* tests/companies_test_class.php:
+
+	- added proper array key for companies when add fails
+
+2006-04-25 19:55  vanmer
+
+	* tests/: cases_test_class.php, integration_test_class.php,
+	  type_status_class.php, xrms_test.php:
+
+	- added new test classes for cases, statuses and types and integration tests
+
+2006-04-25 15:20  vanmer
+
+	* install/fix_postgres_sequences.php:
+
+	- Initial revision of a script to fix the sequences in postgres after install
+
+2006-04-25 13:13  jnhayart
+
+	* admin/users/user_roles_sidebar.php:
+
+	Syntax error after remove Tillend
+
+2006-04-25 10:23  braverock
+
+	* include/utils-contacts.php:
+
+	- fix switch/case in add_update_contact to include company_id
+	  in record search if we have a valid company_id
+	  fixes SF bug: https://sourceforge.net/tracker/index.php?func=detail&aid=1475671&group_id=88850&atid=588128
+	- NOTE: still lots to do on this function to make it behave/perform better, but should be safe now
+
+2006-04-25 09:35  braverock
+
+	* include/utils-addresses.php:
+
+	- multiple updates to add_update_address function
+	  - better checks to see if we have enough information to create an address
+	  - better handling of address name
+	  - better update handling on updated address_id
+	  - correct improper country lookups on new address
+	  - eliminate extra database calls where possible
+
+2006-04-22 11:00  braverock
+
+	* README:
+
+	- bump recommended PHP version to 4.3.x, add note about PEAR PHP_Compat
+
+2006-04-22 03:38  jnhayart
+
+	* opportunities/: delete.php, edit-2.php, new-2.php, one.php:
+
+	add tracability on opportinites
+
+2006-04-21 18:21  braverock
+
+	* companies/edit-2.php:
+
+	- first revision to use update_company api fn
+
+2006-04-21 18:00  braverock
+
+	* companies/new-2.php:
+
+	- first revision to use add_* API functions for contact, company, address
+	  @todo: examine API utilization for timezone, default address indicators
+
+2006-04-21 17:58  braverock
+
+	* include/utils-contacts.php:
+
+	- localize default first name and last name
+
+2006-04-21 17:56  braverock
+
+	* include/utils-addresses.php:
+
+	- clean up error checking
+
+2006-04-21 17:16  braverock
+
+	* contacts/edit-address-2.php:
+
+	- changed to use centralized API functions add_address() and update_address();
+
+2006-04-21 17:09  braverock
+
+	* companies/add-address.php:
+
+	- update to handle integer return from add_address()
+
+2006-04-21 17:05  braverock
+
+	* companies/edit-address-2.php:
+
+	- update to use update_address fn
+
+2006-04-21 17:04  braverock
+
+	* companies/add-address.php:
+
+	- update to use add_address fn
+
+2006-04-21 17:03  braverock
+
+	* include/utils-addresses.php:
+
+	- update add_address and update_address API to more closely match contacts and companies API
+
+2006-04-21 16:43  braverock
+
+	* companies/: add-address.php, edit-address-2.php:
+
+	- add correct magic_quotes handling to API call
+
+2006-04-21 16:37  braverock
+
+	* include/utils-addresses.php:
+
+	- implement add_address wrapper fn -> add_update_address
+	- implement update_address wrapper fn -> add_update_address
+	- implement correct handling of magic_quotes
+
+2006-04-21 15:30  braverock
+
+	* include/utils-addresses.php:
+
+	- add better default address name
+	- implement delete_address function
+	- remove redundant code
+
+2006-04-21 15:26  braverock
+
+	* companies/: add-address.php, delete-address.php,
+	  edit-address-2.php:
+
+	- modify to use addresses API
+
+2006-04-21 15:12  braverock
+
+	* companies/add-address.php:
+
+	- modify to use addresses API
+
+2006-04-21 01:55  jnhayart
+
+	* locale/fr_FR/LC_MESSAGES/: xrms.mo, xrms.po:
+
+	Reflect last change on xrms.pot
+
+2006-04-20 19:00  vanmer
+
+	* companies/: edit-division.php, one.php:
+
+	- ensure that plugin output for division bottom works the same for company and division pages
+
+2006-04-18 10:57  braverock
+
+	* locale/: xrms.pot, fr_FR/LC_MESSAGES/xrms.mo,
+	  fr_FR/LC_MESSAGES/xrms.po:
+
+	- update to reflect recently localized strings
+
+2006-04-18 10:48  braverock
+
+	* admin/email-templates/one_email_template_type.php:
+
+	- localize missed i18n strings
+	- fix indentation for better legibility
+
+2006-04-18 10:45  braverock
+
+	* admin/email-templates/one_email_template.php:
+
+	- localize missed i18n strings
+	- fix indentation for better legibility
+
+2006-04-18 10:36  braverock
+
+	* email/update-template.php:
+
+	- localize Template for i18n
+	- add phpdoc
+
+2006-04-18 09:44  braverock
+
+	* opportunities/some.php:
+
+	- remove unnecessary admin check from 'hide closed' option
+
+2006-04-18 09:34  braverock
+
+	* admin/users/user_roles_sidebar.php:
+
+	- remove TILLEND assignments for better support of gettext i18n
+
+2006-04-17 14:40  vanmer
+
+	* admin/acl/role_permission_grid.php:
+
+	- ensure that display of role permissions in a grid are not restricted to those that are inheritable
+
+2006-04-17 14:26  vanmer
+
+	* companies/one.php:
+
+	- added export button to contacts pager on single company page
+
+2006-04-17 14:19  vanmer
+
+	* activities/activities-widget.php:
+
+	- added ACL checks to the beginning of the activities widget, so widget does not render if no ACL permission is allowed
+	- added ACL checks to new activities widget, checks Create permission on activities before rendering new activity line
+
+2006-04-17 14:03  vanmer
+
+	* cases/sidebar.php, files/sidebar.php, opportunities/sidebar.php:
+
+	- added proper ACL restriction to sidebar output
+
+2006-04-17 12:56  jnhayart
+
+	* activities/some.php:
+
+	change way to populate list of user with centralized function
+	get_user_menu() from /include/utils-interface.php
+
+2006-04-16 12:49  johnfawcett
+
+	* admin/users/one.php:
+
+	removed hardcoded language
+	added user preferences display / modification
+
+2006-04-16 06:02  jnhayart
+
+	* locale/fr_FR/LC_MESSAGES/: xrms.mo, xrms.po:
+
+	Update french locale file from dot file of 2006/04/16
+	Jean Noel HAYART (jnhayart)
+
+2006-04-15 14:10  johnfawcett
+
+	* locale/it_IT/LC_MESSAGES/: xrms.mo, xrms.po:
+
+	updated translations
+
+2006-04-15 14:10  johnfawcett
+
+	* locale/xrms.pot:
+
+	updated strings
+
+2006-04-14 09:22  braverock
+
+	* activities/participant_sidebar.php:
+
+	- unquote javascript value attribute
+
+2006-04-13 16:33  braverock
+
+	* locale/de_DE/LC_MESSAGES/: xrms.mo, xrms.po:
+
+	- updated German translation from Holger Hahn
+
+2006-04-13 16:18  braverock
+
+	* activities/participant_sidebar.php:
+
+	- fix unlocalized string
+
+2006-04-13 16:10  braverock
+
+	* activities/participant_sidebar.php:
+
+	- fix unlocalized string
+
+2006-04-13 16:07  braverock
+
+	* plugins/owl/owl_plugin.php:
+
+	- fix unlocalized string
+
+2006-04-13 12:54  braverock
+
+	* locale/fa_IR/LC_MESSAGES/: xrms.mo, xrms.po:
+
+	- updated Farsi translation by Alan Baghumian
+
+2006-04-11 16:06  braverock
+
+	* plugins/owl/owl_plugin.php:
+
+	- fix localization of a few strings
+
+2006-04-11 11:41  tag xrms_2006-04-11_v1_99_0
+
+2006-04-11 11:41  braverock
+
+	* CHANGELOG:
+
+	- update for 1.99.0
+
 2006-04-11 11:00  braverock
 
 	* README:
@@ -1389,12 +1834,6 @@
 	* files/some.php:
 
 	- normalize the use of 'Summary' and 'Name' to reflect correct usage
-
-2006-01-05 08:50  braverock
-
-	* files/some.php:
-
-	[no log message]
 
 2006-01-05 08:47  braverock
 
@@ -3094,493 +3533,6 @@
 	* tests/QuickForm/QuickForm_test.php:
 
 	newer better faster
-
-2005-11-15 23:07  braverock
-
-	* include/fckeditor/_samples/_plugins/: findreplace/lang/en.js,
-	  findreplace/fckplugin.js, findreplace/find.gif,
-	  findreplace/find.html, findreplace/replace.gif,
-	  findreplace/replace.html, findreplace/lang/fr.js,
-	  findreplace/lang/it.js, samples/fckplugin.js:
-
-	[no log message]
-
-2005-11-15 23:00  braverock
-
-	* include/fckeditor/editor/filemanager/upload/: php/config.php,
-	  php/upload.php, php/util.php, test.html:
-
-	[no log message]
-
-2005-11-15 22:57  braverock
-
-	* include/fckeditor/editor/filemanager/browser/mcpuk/: browser.css,
-	  browser.html, frmactualfolder.html, frmcreatefolder.html,
-	  frmfolders.html, frmimageeditor.html, frmresourceslist.html,
-	  frmresourcetype.html, frmupload.html, js/EditorContent.js,
-	  js/common.js, js/fckxml.js, js/wz_jsgraphics.js:
-
-	[no log message]
-
-2005-11-15 22:54  braverock
-
-	* include/fckeditor/editor/filemanager/browser/mcpuk/:
-	  connectors/php/config.php, connectors/php/connector.php,
-	  connectors/php/test.html.suspended,
-	  connectors/php/testme.php.suspended,
-	  connectors/php/dtd/iso-lat1.ent, connectors/php/images/ascii.jpg,
-	  connectors/php/images/binary.jpg,
-	  connectors/php/images/document2.jpg,
-	  connectors/php/images/email.jpg, connectors/php/images/empty.jpg,
-	  connectors/php/images/html.jpg, connectors/php/images/image.jpg,
-	  connectors/php/images/info.jpg, connectors/php/images/kmplot.jpg,
-	  connectors/php/images/kmultiple.jpg,
-	  connectors/php/images/pdf.jpg, connectors/php/images/php.jpg,
-	  connectors/php/images/postscript.jpg,
-	  connectors/php/images/real_doc.jpg,
-	  connectors/php/images/sound.jpg,
-	  connectors/php/images/spreadsheet.jpg,
-	  connectors/php/images/tar.jpg, connectors/php/images/video.jpg,
-	  images/icons/ai.gif, images/icons/avi.gif, images/icons/bmp.gif,
-	  images/icons/cs.gif, images/icons/default.icon.gif,
-	  images/icons/dll.gif, images/icons/doc.gif, images/icons/exe.gif,
-	  images/icons/fla.gif, images/icons/gif.gif, images/icons/htm.gif,
-	  images/icons/html.gif, images/icons/jpg.gif, images/icons/js.gif,
-	  images/icons/mdb.gif, images/icons/mp3.gif, images/icons/pdf.gif,
-	  images/icons/ppt.gif, images/icons/rdp.gif, images/icons/swf.gif,
-	  images/icons/swt.gif, images/icons/txt.gif, images/icons/vsd.gif,
-	  images/icons/xls.gif, images/icons/xml.gif, images/icons/zip.gif,
-	  images/icons/32/ai.gif, images/icons/32/avi.gif,
-	  images/icons/32/bmp.gif, images/icons/32/cs.gif,
-	  images/icons/32/default.icon.gif, images/icons/32/dll.gif,
-	  images/icons/32/doc.gif, images/icons/32/exe.gif,
-	  images/icons/32/fla.gif, images/icons/32/gif.gif,
-	  images/icons/32/htm.gif, images/icons/32/html.gif,
-	  images/icons/32/jpg.gif, images/icons/32/js.gif,
-	  images/icons/32/mdb.gif, images/icons/32/mp3.gif,
-	  images/icons/32/pdf.gif, images/icons/32/ppt.gif,
-	  images/icons/32/rdp.gif, images/icons/32/swf.gif,
-	  images/icons/32/swt.gif, images/icons/32/txt.gif,
-	  images/icons/32/vsd.gif, images/icons/32/xls.gif,
-	  images/icons/32/xml.gif, images/icons/32/zip.gif, images/2x2.gif,
-	  images/2x2_w.gif, images/ButtonArrow.gif, images/Folder.gif,
-	  images/Folder32.gif, images/Folder96.jpg,
-	  images/FolderOpened.gif, images/FolderOpened32.gif,
-	  images/FolderUp.gif, images/close.gif, images/delete.gif,
-	  images/edit.gif, images/editImage.gif, images/spacer.gif,
-	  images/toolbar/close.gif, images/toolbar/crop.gif,
-	  images/toolbar/flip.gif, images/toolbar/resize.gif,
-	  images/toolbar/rotate.gif, images/toolbar/save.gif:
-
-	[no log message]
-
-2005-11-15 22:19  braverock
-
-	*
-	  include/fckeditor/editor/filemanager/browser/mcpuk/connectors/php/Docs/:
-	  AuthenticationHandlers.txt, license.txt, readme.txt:
-
-	[no log message]
-
-2005-11-15 22:08  braverock
-
-	*
-	  include/fckeditor/editor/filemanager/browser/mcpuk/connectors/php/:
-	  Auth/Default.php, Commands/CreateFolder.php,
-	  Commands/DeleteFile.php, Commands/DeleteFolder.php,
-	  Commands/FileUpload.php, Commands/GetFolders.php,
-	  Commands/GetFoldersAndFiles.php, Commands/GetUploadProgress.php,
-	  Commands/RenameFile.php, Commands/RenameFolder.php,
-	  Commands/Thumbnail.php, Commands/helpers/.htaccess,
-	  Commands/helpers/header.cgi, Commands/helpers/iconlookup.php,
-	  Commands/helpers/progress.cgi, Commands/helpers/upload.cgi:
-
-	[no log message]
-
-2005-11-15 21:53  braverock
-
-	* include/fckeditor/editor/filemanager/browser/default/:
-	  images/ButtonArrow.gif, images/Folder.gif, images/Folder32.gif,
-	  images/FolderOpened.gif, images/FolderOpened32.gif,
-	  images/FolderUp.gif, images/spacer.gif, images/icons/ai.gif,
-	  images/icons/avi.gif, images/icons/bmp.gif, images/icons/cs.gif,
-	  images/icons/default.icon.gif, images/icons/dll.gif,
-	  images/icons/doc.gif, images/icons/exe.gif, images/icons/fla.gif,
-	  images/icons/gif.gif, images/icons/htm.gif,
-	  images/icons/html.gif, images/icons/jpg.gif, images/icons/js.gif,
-	  images/icons/mdb.gif, images/icons/mp3.gif, images/icons/pdf.gif,
-	  images/icons/ppt.gif, images/icons/rdp.gif, images/icons/swf.gif,
-	  images/icons/swt.gif, images/icons/txt.gif, images/icons/vsd.gif,
-	  images/icons/xls.gif, images/icons/xml.gif, images/icons/zip.gif,
-	  images/icons/32/ai.gif, images/icons/32/avi.gif,
-	  images/icons/32/bmp.gif, images/icons/32/cs.gif,
-	  images/icons/32/default.icon.gif, images/icons/32/dll.gif,
-	  images/icons/32/doc.gif, images/icons/32/exe.gif,
-	  images/icons/32/fla.gif, images/icons/32/gif.gif,
-	  images/icons/32/htm.gif, images/icons/32/html.gif,
-	  images/icons/32/jpg.gif, images/icons/32/js.gif,
-	  images/icons/32/mdb.gif, images/icons/32/mp3.gif,
-	  images/icons/32/pdf.gif, images/icons/32/ppt.gif,
-	  images/icons/32/rdp.gif, images/icons/32/swf.gif,
-	  images/icons/32/swt.gif, images/icons/32/txt.gif,
-	  images/icons/32/vsd.gif, images/icons/32/xls.gif,
-	  images/icons/32/xml.gif, images/icons/32/zip.gif, js/common.js,
-	  js/fckxml.js, browser.css, browser.html, frmactualfolder.html,
-	  frmcreatefolder.html, frmfolders.html, frmresourceslist.html,
-	  frmresourcetype.html, frmupload.html:
-
-	[no log message]
-
-2005-11-15 21:49  braverock
-
-	* include/fckeditor/editor/: images/anchor.gif, images/spacer.gif,
-	  images/smiley/fun/aiua.gif, images/smiley/fun/ak.gif,
-	  images/smiley/fun/alien.gif, images/smiley/fun/alien2.gif,
-	  images/smiley/fun/angry.gif, images/smiley/fun/angry1.gif,
-	  images/smiley/fun/apophys.gif, images/smiley/fun/assjani.gif,
-	  images/smiley/fun/asthanos.gif, images/smiley/fun/bazuzeus.gif,
-	  images/smiley/fun/beaute.gif, images/smiley/fun/bigsmile.gif,
-	  images/smiley/fun/blush.gif, images/smiley/fun/boid.gif,
-	  images/smiley/fun/bonk.gif, images/smiley/fun/bored.gif,
-	  images/smiley/fun/borg.gif, images/smiley/fun/capo.gif,
-	  images/smiley/fun/confused.gif, images/smiley/fun/cool.gif,
-	  images/smiley/fun/crazy.gif, images/smiley/fun/cwm14.gif,
-	  images/smiley/fun/demis_roussos.gif, images/smiley/fun/devil.gif,
-	  images/smiley/fun/devil2.gif, images/smiley/fun/double0smile.gif,
-	  images/smiley/fun/eek3.gif, images/smiley/fun/eltaf.gif,
-	  images/smiley/fun/gele.gif, images/smiley/fun/halm.gif,
-	  images/smiley/fun/happy.gif, images/smiley/fun/icon12.gif,
-	  images/smiley/fun/icon23.gif, images/smiley/fun/icon26.gif,
-	  images/smiley/fun/icon_angel.gif,
-	  images/smiley/fun/icon_bandit.gif,
-	  images/smiley/fun/icon_bravo.gif,
-	  images/smiley/fun/icon_clown.gif, images/smiley/fun/jesors.gif,
-	  images/smiley/fun/jesors1.gif, images/smiley/fun/lol3.gif,
-	  images/smiley/fun/love.gif, images/smiley/fun/mad.gif,
-	  images/smiley/fun/megaphone.gif, images/smiley/fun/mmm.gif,
-	  images/smiley/fun/music.gif, images/smiley/fun/notify.gif,
-	  images/smiley/fun/nuts.gif, images/smiley/fun/obanon.gif,
-	  images/smiley/fun/ouaip.gif, images/smiley/fun/pleure.gif,
-	  images/smiley/fun/plugin.gif, images/smiley/fun/question.gif,
-	  images/smiley/fun/question2.gif, images/smiley/fun/rasta2.gif,
-	  images/smiley/fun/rastapop.gif, images/smiley/fun/rosebud.gif,
-	  images/smiley/fun/sad.gif, images/smiley/fun/sad2.gif,
-	  images/smiley/fun/shocked.gif, images/smiley/fun/sick.gif,
-	  images/smiley/fun/sick2.gif, images/smiley/fun/slaap.gif,
-	  images/smiley/fun/sleep.gif, images/smiley/fun/smile.gif,
-	  images/smiley/fun/smiley_peur.gif, images/smiley/fun/sors.gif,
-	  images/smiley/fun/sovxx.gif, images/smiley/fun/spamafote.gif,
-	  images/smiley/fun/tap67.gif, images/smiley/fun/thumbdown.gif,
-	  images/smiley/fun/thumbup.gif, images/smiley/fun/tigi.gif,
-	  images/smiley/fun/toad666.gif, images/smiley/fun/tongue.gif,
-	  images/smiley/fun/tuffgong.gif, images/smiley/fun/urgeman.gif,
-	  images/smiley/fun/vanadium.gif, images/smiley/fun/wink.gif,
-	  images/smiley/fun/worship.gif, images/smiley/fun/wouaf.gif,
-	  images/smiley/fun/wow.gif, images/smiley/fun/xp1700.gif,
-	  images/smiley/fun/yltype.gif, images/smiley/fun/yopyopyop.gif,
-	  images/smiley/fun/youpi.gif, images/smiley/fun/zoor.gif,
-	  images/smiley/msn/angel_smile.gif,
-	  images/smiley/msn/angry_smile.gif,
-	  images/smiley/msn/broken_heart.gif, images/smiley/msn/cake.gif,
-	  images/smiley/msn/confused_smile.gif,
-	  images/smiley/msn/cry_smile.gif,
-	  images/smiley/msn/devil_smile.gif,
-	  images/smiley/msn/embaressed_smile.gif,
-	  images/smiley/msn/envelope.gif, images/smiley/msn/heart.gif,
-	  images/smiley/msn/kiss.gif, images/smiley/msn/lightbulb.gif,
-	  images/smiley/msn/omg_smile.gif,
-	  images/smiley/msn/regular_smile.gif,
-	  images/smiley/msn/sad_smile.gif,
-	  images/smiley/msn/shades_smile.gif,
-	  images/smiley/msn/teeth_smile.gif,
-	  images/smiley/msn/thumbs_down.gif,
-	  images/smiley/msn/thumbs_up.gif,
-	  images/smiley/msn/tounge_smile.gif,
-	  images/smiley/msn/whatchutalkingabout_smile.gif,
-	  images/smiley/msn/wink_smile.gif,
-	  filemanager/browser/default/connectors/test.html,
-	  filemanager/browser/default/connectors/php/basexml.php,
-	  filemanager/browser/default/connectors/php/commands.php,
-	  filemanager/browser/default/connectors/php/config.php,
-	  filemanager/browser/default/connectors/php/connector.php,
-	  filemanager/browser/default/connectors/php/io.php,
-	  filemanager/browser/default/connectors/php/util.php:
-
-	[no log message]
-
-2005-11-15 21:46  braverock
-
-	* include/fckeditor/: _documentation.html, _whatsnew.html,
-	  fckconfig.js, fckeditor.afp, fckeditor.asp, fckeditor.cfc,
-	  fckeditor.cfm, fckeditor.js, fckeditor.lasso, fckeditor.php,
-	  fckeditor.pl, fckstyles.xml, fcktemplates.xml, htaccess.txt,
-	  license.txt, editor/plugins/placeholder/fck_placeholder.html,
-	  editor/plugins/placeholder/fckplugin.js,
-	  editor/plugins/placeholder/placeholder.gif,
-	  editor/plugins/simplecommands/fckplugin.js,
-	  editor/plugins/tablecommands/fckplugin.js,
-	  editor/js/fck_startup.js, editor/js/fckeditorcode_gecko_1.js,
-	  editor/js/fckeditorcode_gecko_2.js,
-	  editor/js/fckeditorcode_ie_1.js, editor/js/fckeditorcode_ie_2.js,
-	  editor/lang/_translationstatus.txt, editor/lang/ar.js,
-	  editor/lang/bg.js, editor/lang/bs.js, editor/lang/ca.js,
-	  editor/lang/cs.js, editor/lang/da.js, editor/lang/de.js,
-	  editor/lang/el.js, editor/lang/en-au.js, editor/lang/en-uk.js,
-	  editor/lang/en.js, editor/lang/eo.js, editor/lang/es.js,
-	  editor/lang/et.js, editor/lang/eu.js, editor/lang/fa.js,
-	  editor/lang/fcklanguagemanager.js, editor/lang/fi.js,
-	  editor/lang/fo.js, editor/lang/fr.js, editor/lang/gl.js,
-	  editor/lang/he.js, editor/lang/hr.js, editor/lang/hu.js,
-	  editor/lang/it.js, editor/lang/ja.js, editor/lang/ko.js,
-	  editor/lang/lt.js, editor/lang/mn.js, editor/lang/ms.js,
-	  editor/lang/nl.js, editor/lang/no.js, editor/lang/pl.js,
-	  editor/lang/pt-br.js, editor/lang/pt.js, editor/lang/ro.js,
-	  editor/lang/ru.js, editor/lang/sk.js, editor/lang/sl.js,
-	  editor/lang/sr-latn.js, editor/lang/sr.js, editor/lang/sv.js,
-	  editor/lang/th.js, editor/lang/tr.js, editor/lang/uk.js,
-	  editor/lang/vi.js, editor/lang/zh-cn.js, editor/lang/zh.js:
-
-	[no log message]
-
-2005-11-15 21:43  braverock
-
-	* include/fckeditor/editor/: plugins/placeholder/lang/de.js,
-	  plugins/placeholder/lang/en.js, plugins/placeholder/lang/fr.js,
-	  plugins/placeholder/lang/it.js,
-	  skins/default/fck_contextmenu.css, skins/default/fck_dialog.css,
-	  skins/default/fck_editor.css,
-	  skins/default/images/toolbar.arrowright.gif,
-	  skins/default/images/toolbar.buttonarrow.gif,
-	  skins/default/images/toolbar.collapse.gif,
-	  skins/default/images/toolbar.end.gif,
-	  skins/default/images/toolbar.expand.gif,
-	  skins/default/images/toolbar.separator.gif,
-	  skins/default/images/toolbar.start.gif,
-	  skins/default/toolbar/about.gif,
-	  skins/default/toolbar/anchor.gif,
-	  skins/default/toolbar/bgcolor.gif,
-	  skins/default/toolbar/bold.gif,
-	  skins/default/toolbar/bulletedlist.gif,
-	  skins/default/toolbar/button.gif,
-	  skins/default/toolbar/checkbox.gif,
-	  skins/default/toolbar/copy.gif, skins/default/toolbar/cut.gif,
-	  skins/default/toolbar/docprops.gif,
-	  skins/default/toolbar/find.gif, skins/default/toolbar/flash.gif,
-	  skins/default/toolbar/form.gif,
-	  skins/default/toolbar/hiddenfield.gif,
-	  skins/default/toolbar/image.gif,
-	  skins/default/toolbar/imagebutton.gif,
-	  skins/default/toolbar/indent.gif,
-	  skins/default/toolbar/inserthorizontalrule.gif,
-	  skins/default/toolbar/insertorderedlist.gif,
-	  skins/default/toolbar/insertunorderedlist.gif,
-	  skins/default/toolbar/italic.gif,
-	  skins/default/toolbar/justifycenter.gif,
-	  skins/default/toolbar/justifyfull.gif,
-	  skins/default/toolbar/justifyleft.gif,
-	  skins/default/toolbar/justifyright.gif,
-	  skins/default/toolbar/link.gif,
-	  skins/default/toolbar/newpage.gif,
-	  skins/default/toolbar/numberedlist.gif,
-	  skins/default/toolbar/outdent.gif,
-	  skins/default/toolbar/pagebreak.gif,
-	  skins/default/toolbar/paste.gif,
-	  skins/default/toolbar/pastetext.gif,
-	  skins/default/toolbar/pasteword.gif,
-	  skins/default/toolbar/preview.gif,
-	  skins/default/toolbar/print.gif, skins/default/toolbar/radio.gif,
-	  skins/default/toolbar/redo.gif,
-	  skins/default/toolbar/removeformat.gif,
-	  skins/default/toolbar/replace.gif,
-	  skins/default/toolbar/save.gif, skins/default/toolbar/select.gif,
-	  skins/default/toolbar/selectall.gif,
-	  skins/default/toolbar/showdetails.gif,
-	  skins/default/toolbar/showtableborders.gif,
-	  skins/default/toolbar/smiley.gif,
-	  skins/default/toolbar/source.gif,
-	  skins/default/toolbar/specialchar.gif,
-	  skins/default/toolbar/spellcheck.gif,
-	  skins/default/toolbar/strikethrough.gif,
-	  skins/default/toolbar/subscript.gif,
-	  skins/default/toolbar/superscript.gif,
-	  skins/default/toolbar/table.gif,
-	  skins/default/toolbar/tablecell.gif,
-	  skins/default/toolbar/tabledeletecells.gif,
-	  skins/default/toolbar/tabledeletecolumns.gif,
-	  skins/default/toolbar/tabledeleterows.gif,
-	  skins/default/toolbar/tableinsertcell.gif,
-	  skins/default/toolbar/tableinsertcolumn.gif,
-	  skins/default/toolbar/tableinsertrow.gif,
-	  skins/default/toolbar/tablemergecells.gif,
-	  skins/default/toolbar/tablesplitcell.gif,
-	  skins/default/toolbar/templates.gif,
-	  skins/default/toolbar/textarea.gif,
-	  skins/default/toolbar/textcolor.gif,
-	  skins/default/toolbar/textfield.gif,
-	  skins/default/toolbar/underline.gif,
-	  skins/default/toolbar/undo.gif,
-	  skins/default/toolbar/universalkey.gif,
-	  skins/default/toolbar/unlink.gif,
-	  skins/default/toolbar/unorderedlist.gif,
-	  skins/office2003/fck_contextmenu.css,
-	  skins/office2003/fck_dialog.css, skins/office2003/fck_editor.css,
-	  skins/office2003/images/toolbar.arrowright.gif,
-	  skins/office2003/images/toolbar.bg.gif,
-	  skins/office2003/images/toolbar.buttonarrow.gif,
-	  skins/office2003/images/toolbar.collapse.gif,
-	  skins/office2003/images/toolbar.end.gif,
-	  skins/office2003/images/toolbar.expand.gif,
-	  skins/office2003/images/toolbar.separator.gif,
-	  skins/office2003/images/toolbar.start.gif,
-	  skins/office2003/toolbar/about.gif,
-	  skins/office2003/toolbar/anchor.gif,
-	  skins/office2003/toolbar/bgcolor.gif,
-	  skins/office2003/toolbar/bold.gif,
-	  skins/office2003/toolbar/bulletedlist.gif,
-	  skins/office2003/toolbar/button.gif,
-	  skins/office2003/toolbar/checkbox.gif,
-	  skins/office2003/toolbar/copy.gif,
-	  skins/office2003/toolbar/cut.gif,
-	  skins/office2003/toolbar/docprops.gif,
-	  skins/office2003/toolbar/find.gif,
-	  skins/office2003/toolbar/flash.gif,
-	  skins/office2003/toolbar/fontstyleadv.gif,
-	  skins/office2003/toolbar/form.gif,
-	  skins/office2003/toolbar/hidden.gif,
-	  skins/office2003/toolbar/hiddenfield.gif,
-	  skins/office2003/toolbar/image.gif,
-	  skins/office2003/toolbar/imagebutton.gif,
-	  skins/office2003/toolbar/indent.gif,
-	  skins/office2003/toolbar/input.gif,
-	  skins/office2003/toolbar/inserthorizontalrule.gif,
-	  skins/office2003/toolbar/insertorderedlist.gif,
-	  skins/office2003/toolbar/insertunorderedlist.gif,
-	  skins/office2003/toolbar/italic.gif,
-	  skins/office2003/toolbar/justifycenter.gif,
-	  skins/office2003/toolbar/justifyfull.gif,
-	  skins/office2003/toolbar/justifyleft.gif,
-	  skins/office2003/toolbar/justifyright.gif,
-	  skins/office2003/toolbar/link.gif,
-	  skins/office2003/toolbar/mail.gif,
-	  skins/office2003/toolbar/new.gif,
-	  skins/office2003/toolbar/newpage.gif,
-	  skins/office2003/toolbar/numberedlist.gif,
-	  skins/office2003/toolbar/open.gif,
-	  skins/office2003/toolbar/outdent.gif,
-	  skins/office2003/toolbar/pagebreak.gif,
-	  skins/office2003/toolbar/paste.gif,
-	  skins/office2003/toolbar/pastetext.gif,
-	  skins/office2003/toolbar/pasteword.gif,
-	  skins/office2003/toolbar/preview.gif,
-	  skins/office2003/toolbar/print.gif,
-	  skins/office2003/toolbar/radio.gif,
-	  skins/office2003/toolbar/redo.gif,
-	  skins/office2003/toolbar/removeformat.gif,
-	  skins/office2003/toolbar/replace.gif,
-	  skins/office2003/toolbar/save.gif,
-	  skins/office2003/toolbar/select.gif,
-	  skins/office2003/toolbar/selectall.gif,
-	  skins/office2003/toolbar/showdetails.gif,
-	  skins/office2003/toolbar/showtableborders.gif,
-	  skins/office2003/toolbar/smiley.gif,
-	  skins/office2003/toolbar/source.gif,
-	  skins/office2003/toolbar/specialchar.gif,
-	  skins/office2003/toolbar/spellcheck.gif,
-	  skins/office2003/toolbar/strikethrough.gif,
-	  skins/office2003/toolbar/subscript.gif,
-	  skins/office2003/toolbar/superscript.gif,
-	  skins/office2003/toolbar/table.gif,
-	  skins/office2003/toolbar/tablecell.gif,
-	  skins/office2003/toolbar/tabledeletecells.gif,
-	  skins/office2003/toolbar/tabledeletecolumns.gif,
-	  skins/office2003/toolbar/tabledeleterows.gif,
-	  skins/office2003/toolbar/tableinsertcell.gif,
-	  skins/office2003/toolbar/tableinsertcolumn.gif,
-	  skins/office2003/toolbar/tableinsertrow.gif,
-	  skins/office2003/toolbar/tablemergecells.gif,
-	  skins/office2003/toolbar/tablesplitcell.gif,
-	  skins/office2003/toolbar/templates.gif,
-	  skins/office2003/toolbar/textarea.gif,
-	  skins/office2003/toolbar/textcolor.gif,
-	  skins/office2003/toolbar/textfield.gif,
-	  skins/office2003/toolbar/underline.gif,
-	  skins/office2003/toolbar/undo.gif,
-	  skins/office2003/toolbar/universalkey.gif,
-	  skins/office2003/toolbar/unlink.gif,
-	  skins/office2003/toolbar/unorderedlist.gif,
-	  skins/silver/images/toolbar.arrowright.gif,
-	  skins/silver/images/toolbar.buttonarrow.gif,
-	  skins/silver/images/toolbar.buttonbg.gif,
-	  skins/silver/images/toolbar.collapse.gif,
-	  skins/silver/images/toolbar.end.gif,
-	  skins/silver/images/toolbar.expand.gif,
-	  skins/silver/images/toolbar.separator.gif,
-	  skins/silver/images/toolbar.start.gif,
-	  skins/silver/toolbar/about.gif, skins/silver/toolbar/anchor.gif,
-	  skins/silver/toolbar/bgcolor.gif, skins/silver/toolbar/bold.gif,
-	  skins/silver/toolbar/bulletedlist.gif,
-	  skins/silver/toolbar/button.gif,
-	  skins/silver/toolbar/checkbox.gif, skins/silver/toolbar/copy.gif,
-	  fckblank.html, fckdebug.html, fckdialog.html, fckeditor.html,
-	  fckeditor.original.html, skins/silver/fck_contextmenu.css,
-	  skins/silver/fck_dialog.css, skins/silver/fck_editor.css,
-	  skins/silver/toolbar/cut.gif, skins/silver/toolbar/docprops.gif,
-	  skins/silver/toolbar/find.gif, skins/silver/toolbar/flash.gif,
-	  skins/silver/toolbar/form.gif,
-	  skins/silver/toolbar/hiddenfield.gif,
-	  skins/silver/toolbar/image.gif,
-	  skins/silver/toolbar/imagebutton.gif,
-	  skins/silver/toolbar/indent.gif,
-	  skins/silver/toolbar/inserthorizontalrule.gif,
-	  skins/silver/toolbar/insertorderedlist.gif,
-	  skins/silver/toolbar/insertunorderedlist.gif,
-	  skins/silver/toolbar/italic.gif,
-	  skins/silver/toolbar/justifycenter.gif,
-	  skins/silver/toolbar/justifyfull.gif,
-	  skins/silver/toolbar/justifyleft.gif,
-	  skins/silver/toolbar/justifyright.gif,
-	  skins/silver/toolbar/link.gif, skins/silver/toolbar/newpage.gif,
-	  skins/silver/toolbar/numberedlist.gif,
-	  skins/silver/toolbar/outdent.gif,
-	  skins/silver/toolbar/pagebreak.gif,
-	  skins/silver/toolbar/paste.gif,
-	  skins/silver/toolbar/pastetext.gif,
-	  skins/silver/toolbar/pasteword.gif,
-	  skins/silver/toolbar/preview.gif, skins/silver/toolbar/print.gif,
-	  skins/silver/toolbar/radio.gif, skins/silver/toolbar/redo.gif,
-	  skins/silver/toolbar/removeformat.gif,
-	  skins/silver/toolbar/replace.gif, skins/silver/toolbar/save.gif,
-	  skins/silver/toolbar/select.gif,
-	  skins/silver/toolbar/selectall.gif,
-	  skins/silver/toolbar/showdetails.gif,
-	  skins/silver/toolbar/showtableborders.gif,
-	  skins/silver/toolbar/smiley.gif, skins/silver/toolbar/source.gif,
-	  skins/silver/toolbar/specialchar.gif,
-	  skins/silver/toolbar/spellcheck.gif,
-	  skins/silver/toolbar/strikethrough.gif,
-	  skins/silver/toolbar/subscript.gif,
-	  skins/silver/toolbar/superscript.gif,
-	  skins/silver/toolbar/table.gif,
-	  skins/silver/toolbar/tablecell.gif,
-	  skins/silver/toolbar/tabledeletecells.gif,
-	  skins/silver/toolbar/tabledeletecolumns.gif,
-	  skins/silver/toolbar/tabledeleterows.gif,
-	  skins/silver/toolbar/tableinsertcell.gif,
-	  skins/silver/toolbar/tableinsertcolumn.gif,
-	  skins/silver/toolbar/tableinsertrow.gif,
-	  skins/silver/toolbar/tablemergecells.gif,
-	  skins/silver/toolbar/tablesplitcell.gif,
-	  skins/silver/toolbar/templates.gif,
-	  skins/silver/toolbar/textarea.gif,
-	  skins/silver/toolbar/textcolor.gif,
-	  skins/silver/toolbar/textfield.gif,
-	  skins/silver/toolbar/underline.gif,
-	  skins/silver/toolbar/undo.gif,
-	  skins/silver/toolbar/universalkey.gif,
-	  skins/silver/toolbar/unlink.gif,
-	  skins/silver/toolbar/unorderedlist.gif:
-
-	[no log message]
 
 2005-11-15 16:53  daturaarutad
 
@@ -14199,12 +14151,6 @@
 
 	Pager/index.php
 
-2005-02-16 12:01  daturaarutad
-
-	* include/classes/index.php:
-
-	[no log message]
-
 2005-02-16 11:55  vanmer
 
 	* include/classes/acl/xrms_acl.php:
@@ -15849,12 +15795,6 @@
 	- added ACL requirement to utils-misc.php (MAY BREAK existing installs unless update is run)
 	- added ACL restriction into session_check
 
-2005-01-13 11:32  vanmer
-
-	* install/install.php:
-
-	[no log message]
-
 2005-01-13 11:26  vanmer
 
 	* admin/update.php:
@@ -17486,14 +17426,6 @@
 
 	Erin
 
-2004-12-22 17:30  ebullient
-
-	* css/: layout.css, print.css, style.css, xrmsstyle-ie.css,
-	  xrmsstyle.css, basic/basic-left-ie.css, basic/basic-left.css,
-	  basic/basic.css:
-
-	[no log message]
-
 2004-12-21 13:38  braverock
 
 	* include-locations.inc:
@@ -18078,12 +18010,6 @@
 	* contacts/one.php:
 
 	- added contact_sidebar_top plugin hook
-
-2004-10-21 00:53  gpowers
-
-	* plugins/idphoto/setup.php:
-
-	[no log message]
 
 2004-10-21 00:52  gpowers
 
@@ -25128,7 +25054,7 @@
 
 	* contacts/edit-address-2.php:
 
-	- added $Id: CHANGELOG,v 1.4 2006/04/11 16:41:13 braverock Exp $Log: tags.
+	- added $Id: CHANGELOG,v 1.5 2006/04/26 21:24:17 braverock Exp $Log: tags.
 
 2004-06-09 11:53  gpowers
 
@@ -27533,12 +27459,6 @@
 
 	 - correct phpdoc entries
 
-2004-03-03 18:05  maulani
-
-	* files/: download.php, new-2.php:
-
-	[no log message]
-
 2004-03-03 17:53  maulani
 
 	* files/download.php, files/new-2.php, sql/mysql/1-misc.sql,
@@ -27767,12 +27687,6 @@
 
 	- change url to 'website'
 	- fixed syntax errror on insert
-
-2004-02-08 06:21  maulani
-
-	* sql/mysql/cvs_upgrade.sql:
-
-	[no log message]
 
 2004-02-06 16:47  maulani
 
@@ -28122,12 +28036,6 @@
 	* sql/mysql/upgrade-2003Dec22-2004Jan12.sql:
 
 	date_of_birth can't be null
-
-2004-01-12 02:50  cdwtech
-
-	* sql/mysql/upgrade-2003Dec22-2004Jan12.sql:
-
-	[no log message]
 
 2004-01-12 01:03  cdwtech
 
@@ -28657,12 +28565,6 @@
 	* companies/one.php:
 
 	fix - recently-viewed companies weren't showing up
-
-2003-11-28 20:27  cdwtech
-
-	* sql/mysql/: 1-misc.sql, upgrade.sql:
-
-	[no log message]
 
 2003-11-28 18:23  cdwtech
 
