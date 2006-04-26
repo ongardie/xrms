@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-companies.php,v 1.11 2006/04/11 00:41:50 vanmer Exp $
+ * $Id: utils-companies.php,v 1.12 2006/04/26 02:14:21 vanmer Exp $
  *
  */
 
@@ -83,7 +83,7 @@ function add_update_company($con, $company_data, $magic_quotes=false)
     * @static
     */
     $_retVal = false;
-
+    global $session_user_id;
     // This needs a company name
     if ( $company_data['company_name'] )
     {
@@ -98,6 +98,28 @@ function add_update_company($con, $company_data, $magic_quotes=false)
         $_address_id = $_address_info[$_address_info['primarykey']];
 
         $company_info = pull_company_fields ( $company_data );
+
+
+        //set some sensible defaults if they are not yet set
+        if (!array_key_exists('industry_id', $company_info)) {
+            $company_info['industry_id']=1;
+        }
+        if (!array_key_exists('crm_status_id', $company_info)) {
+            $company_info['crm_status_id']=1;
+        }
+        if (!array_key_exists('rating_id', $company_info)) {
+            $company_info['rating_id']=1;
+        }
+        if (!array_key_exists('account_status_id', $company_info)) {
+            $company_info['account_status_id']=1;
+        }
+        if (!array_key_exists('company_source_id', $company_info)) {
+            $company_info['company_source_id']=1;
+        }
+        if (!array_key_exists('user_id', $company_info)) {
+            $company_info['user_id']=$session_user_id;
+        }
+
 
         // Because the way ADOdb is written, we can't let it take care of force
         // updates if a record exists, and INSERT if the record does not exist.
@@ -485,6 +507,7 @@ function get_division_owner ( $company_id )
  */
 function pull_company_fields ( $array_data )
 {
+    global $session_user_id;
     if ( ! $array_data )
         return $array_data;
 
@@ -536,6 +559,9 @@ include_once $include_directory . 'utils-addresses.php';
 
  /**
  * $Log: utils-companies.php,v $
+ * Revision 1.12  2006/04/26 02:14:21  vanmer
+ * - added sensible defaults to a new company, if not provided
+ *
  * Revision 1.11  2006/04/11 00:41:50  vanmer
  * - added needed PHPDoc parameters
  *
