@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.67 2006/04/26 13:02:32 braverock Exp $
+ * $Id: some.php,v 1.68 2006/04/26 13:15:59 braverock Exp $
  */
 
 //include the standard files
@@ -359,8 +359,7 @@ if(!isset($contacts_next_page)) {
                       <td class=widget_content_form_element colspan=4>
                        <input class=button type=button onclick="javascript: createContact();" value="' . _("Create Contact without a Company") . '">
                       </td>
-                    </tr>
-                  </table>';
+                    </tr>';
       } else { $self_contacts = ''; }
 
 
@@ -495,6 +494,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.68  2006/04/26 13:15:59  braverock
+ * - don't close the table twice
+ *
  * Revision 1.67  2006/04/26 13:02:32  braverock
  * - update unknown or contact_name new contact string
  * - move all 'new contact' buttons to the same place on the screen for consistency
