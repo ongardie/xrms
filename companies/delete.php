@@ -2,7 +2,7 @@
 /**
  * Delete company
  *
- * $Id: delete.php,v 1.6 2006/01/02 22:56:26 vanmer Exp $
+ * $Id: delete.php,v 1.7 2006/04/26 19:49:46 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -13,13 +13,15 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
-$company_id = $_POST['company_id'];
+getGlobalVar($company_id,'company_id');
 $on_what_id=$company_id;
 
 $session_user_id = session_check('','Delete');
 
 
 $con = get_xrms_dbconnection();
+//$con->debug=1;
+
 
 $sql = "SELECT * FROM companies WHERE company_id = $company_id";
 $rst = $con->execute($sql);
@@ -98,6 +100,9 @@ header("Location: some.php?msg=company_deleted");
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.7  2006/04/26 19:49:46  braverock
+ * - change to use GetGlobalVar to handle both $_POST and $_GET
+ *
  * Revision 1.6  2006/01/02 22:56:26  vanmer
  * - changed to use centralized dbconnection function
  *
