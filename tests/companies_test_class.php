@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: companies_test_class.php,v 1.3 2006/04/05 00:46:08 vanmer Exp $
+ * $Id: companies_test_class.php,v 1.4 2006/04/26 00:56:08 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -61,7 +61,7 @@ Class XRMSCompanyTest extends XRMS_TestCase {
             $company_data=$this->test_company_data;
         }
         $company_result=add_company($con, $company_data);
-        $this->assertTrue($company_result, "Failed to add company: {$company_data['title']}");
+        $this->assertTrue($company_result, "Failed to add company: {$company_data['company_name']}");
         return $company_result;
    }
    
@@ -279,6 +279,9 @@ Class XRMSCompanyTest extends XRMS_TestCase {
 
 /*
  * $Log: companies_test_class.php,v $
+ * Revision 1.4  2006/04/26 00:56:08  vanmer
+ * - added proper array key for companies when add fails
+ *
  * Revision 1.3  2006/04/05 00:46:08  vanmer
  * - added test for strange characters in companies API
  *
