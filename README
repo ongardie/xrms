@@ -1,19 +1,20 @@
-XRMS - README
+XRMS CRM - README
 
 =============================================================
-/** $Id: README,v 1.23 2006/04/22 16:00:44 braverock Exp $ **/
+/** $Id: README,v 1.24 2006/04/26 21:16:34 braverock Exp $ **/
 
 ========================
 SUMMARY
 
-XRMS is a web-based application for managing business entities such as
+XRMS CRM is a web-based application for managing business entities such as
 employees, customers, contacts, activities with those contacts, etc.
 
 XRMS generally falls into the category of application known as Customer
 Relationship Management (CRM), Sales Force Automation (SFA), with aspects
 of Business Intelligence (BI).  Basically, if your company needs to manage
 relationships with your customers and business partners, XRMS should be able
-to fulfill your needs.
+to fulfill your needs. We believe XRMS is the only open source CRM
+application with full Computer Telephony Integration (CTI) interfaces.
 
 We believe that XRMS is the most advanced open source CRM application
 written in PHP.  We hope that you will find it useful.
@@ -24,19 +25,25 @@ are using XRMS contribute money and developer time to improve the system.
 ========================
 VERSION
 
-1.99.0 (v2.0rc1) 2006-04-11
+1.99.1 (v2.0rc2) 2006-04-26
 
-This release fixes over 200 bugs, and adds many many enhancements.
+We released XRMS v1.99.0 two weeks ago on 2006-04-11.
+The response from the community has been outstanding.
+We recommend that all users upgrade to the newest version.
+This version makes a number of minor enhancements and bug fixes over version 1.99.0.
+One fairly narrow bug bug has been corrected in v1.99.0 in the Contacts API layer
+could have resulted in overwriting an existing contact with new data in a limited
+set of circumstances. v1.99.1 also implements full new and edit support for the
+centralized API functions in Contacts, Companies, and Addresses.
+A number of XRMS's dedicated translators have helped us find unlocalized strings
+and get those resolved in current code.
+We have also made a number of user interface usability improvements in Companies
+and Contacts. The speed of execution of Companies and Contacts has been improved
+by the implementation of the API functions, which are more efficient than the old
+non-API code in most cases.
+This should result in more stable and predictable code for developers integrating to XRMS.
 
-We have added significant improvements to the Workflow system, usability across
-XRMS, related activity tracking, and the CSS themes.  This version also
-introduces the User Preference system, starting with preferences for Language
-and Theme. RSS feeds for new companies, contacts, and activites have been added.
-Many new plugins have been contributed by companies using XRMS.
-
-The list goes on and on.
-
-We recommend that if more than a few days has passed since the date on a stable release
+As always, we recommend that if more than a week or two has passed since the date on a stable release
 tarball that you consider downloading and installing a development snapshot
 instead.  These are normally quite stable, as the development team is probably
 using that code in production at their respective companies.
@@ -66,8 +73,10 @@ multi-database compliant, and the rest of the development team is very grateful
 for David's hard work.  At this point, any database supported by
 ADOdb version 4.22 *should* work seamlessly with XRMS.  To the best of our
 knowledge, XRMS has been successfully deployed on MySQL, MS SQL Server,
-Postgres, and SAP-DB/MaxDB.  It should work on Oracle and DB/2 as
-well. If you encounter problems or would like to tweak things to
+and SAP-DB/MaxDB.  It should work on Oracle and DB/2 as well.
+The XRMS development team is currently collaborating with Kenny Holden
+to provide support for PostgreSQL >= v8.1.
+If you encounter problems or would like to tweak things to
 work better with some other database, please let the development team know,
 and we will be happy to work with you to get your issue resolved.
 
@@ -419,6 +428,10 @@ please let us know.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.24  2006/04/26 21:16:34  braverock
+ * - bump version to 1.99.1
+ * - last text changes
+ *
  * Revision 1.23  2006/04/22 16:00:44  braverock
  * - bump recommended PHP version to 4.3.x, add note about PEAR PHP_Compat
  *
