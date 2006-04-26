@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.29 2006/04/21 23:00:27 braverock Exp $
+ * $Id: new-2.php,v 1.30 2006/04/26 19:59:22 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -44,7 +44,7 @@ $custom4 = array_key_exists('custom4',$_POST) ? $_POST['custom4'] : "";
 $account_status_id = 1;
 $rating_id = 1;
 
-$legal_name = (strlen($legal_name) > 0) ? $legal_name : $company_name;
+//$legal_name = (strlen($legal_name) > 0) ? $legal_name;
 
 $company_name = (strlen($company_name) > 0) ? $company_name : _("[none]");
 
@@ -226,6 +226,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.30  2006/04/26 19:59:22  braverock
+ * - remove forced setting of legal_name
+ *
  * Revision 1.29  2006/04/21 23:00:27  braverock
  * - first revision to use add_* API functions for contact, company, address
  *   @todo: examine API utilization for timezone, default address indicators
