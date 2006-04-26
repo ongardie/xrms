@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.65 2006/01/02 23:00:00 vanmer Exp $
+ * $Id: some.php,v 1.66 2006/04/26 02:13:54 vanmer Exp $
  */
 
 //include the standard files
@@ -343,6 +343,17 @@ if(!isset($contacts_next_page)) {
         </table>
 
 <?php
+      $undefined_company_method=get_user_preference($con, $session_user_id, 'undefined_company_method');
+      switch ($undefined_company_method) {
+        case 'reject':
+            $use_self_contacts=false;
+        break;
+        case 'unknown':
+        case 'contact_name':
+        default:
+            $use_self_contacts=true;
+        break;
+      }
       if ( $use_self_contacts ) {
         echo '<table class=widget cellspacing=1 width="100%">
                     <tr>
@@ -482,6 +493,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.66  2006/04/26 02:13:54  vanmer
+ * - removed deprecated use_self_contacts option, now uses system preference controlling behavior
+ *
  * Revision 1.65  2006/01/02 23:00:00  vanmer
  * - changed to use centralized dbconnection function
  *

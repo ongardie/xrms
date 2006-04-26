@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.41 2006/03/19 02:18:41 ongardie Exp $
+ * $Id: new.php,v 1.42 2006/04/26 02:13:54 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -57,7 +57,10 @@ if ($clone_id > 0) {
       // was passed in
       $company_id = $_GET['company_id'];
       $division_id = $_GET['division_id'];
-    } elseif ( $use_self_contacts ) {
+    }
+/*
+ deprecated
+ elseif ( $use_self_contacts ) {
       // get from database
       $sql = "select company_id from companies where company_name = 'Self'";
       //$con->debug=1;
@@ -67,6 +70,7 @@ if ($clone_id > 0) {
         $rst->close();
       }
     }
+*/
 }
 
 // get $company_name, $phone, $fax
@@ -352,6 +356,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.42  2006/04/26 02:13:54  vanmer
+ * - removed deprecated use_self_contacts option, now uses system preference controlling behavior
+ *
  * Revision 1.41  2006/03/19 02:18:41  ongardie
  * - Allow empty salutation for new contacts.
  *

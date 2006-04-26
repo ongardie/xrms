@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.34 2006/04/05 00:48:52 vanmer Exp $
+ * $Id: new-2.php,v 1.35 2006/04/26 02:13:55 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -149,11 +149,20 @@ $rec['home_address_id']=$home_address_id;
 $contact_data=add_contact($con, $rec, get_magic_quotes_gpc());
 
 if ($contact_data) {
-    if (is_array($contact_data)) { $contact_id=$contact_data['contact_id']; }
-    else { $contact_id=$contact_data; }
+    if (is_array($contact_data)) { 
+        $contact_id=$contact_data['contact_id']; 
+//        $new_contact_record=$contact_data; 
+    } else { 
+        $contact_id=$contact_data;
+//        $new_contact_record=get_contact($con, $contact_id);
+    }
 } else {
     $msg = urlencode(_("Failed to add contact"));
-    $return_url="../companies/one.php?msg=$msg&company_id=$company_id";
+    if ($company_id) {
+        $return_url="../companies/one.php?msg=$msg&company_id=$company_id";
+    } else {
+        $return_url="some.php?msg=$msg";
+    }
 }
 
 $con->close();
@@ -161,7 +170,11 @@ if ($edit_address == "on") {
     header("Location: edit-address.php?msg=contact_added&contact_id=$contact_id");
 } else {
     if (!$return_url) {
-        $return_url="../companies/one.php?msg=contact_added&company_id=$company_id";
+        if ($company_id) {
+            $return_url="../companies/one.php?msg=contact_added&company_id=$company_id";
+        } else {
+            $return_url="one.php?msg=contact_added&contact_id=$contact_id";
+        }
     }
     $return_url=str_replace('XXX-contact_id-XXX',$contact_id, $return_url);
     header("Location: $return_url");
@@ -169,6 +182,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.35  2006/04/26 02:13:55  vanmer
+ * - removed deprecated use_self_contacts option, now uses system preference controlling behavior
+ *
  * Revision 1.34  2006/04/05 00:48:52  vanmer
  * - pass magic quotes value into contacts API
  *
