@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.41 2006/03/16 23:37:29 vanmer Exp $
+ * $Id: data.php,v 1.42 2006/04/26 02:15:23 vanmer Exp $
  */
 
 /**
@@ -2889,6 +2889,22 @@ function user_preferences_db_data($con) {
 	if (!$rst) db_error_handler($con, $sql);
     }
 
+    $s=_("Undefined Company Method");
+    $s=_("Insert method used when no Company is defined for a new Contact");
+    $s=_("Use Unknown Company");
+    $s=_("New Company uses Contact Name");
+    $s=_("Reject Contact");
+
+    $undefined_company_method=add_user_preference_type($con, 'undefined_company_method', "Undefined Company Method", "Insert method used when no Company is defined for a new Contact", false, false, 'select');
+    add_preference_option($con, $undefined_company_method, 'unknown', 'Use Unknown Company');
+    add_preference_option($con, $undefined_company_method, 'contact_name', 'New Company uses Contact Name');
+    add_preference_option($con, $undefined_company_method, 'reject', 'Reject Contact');
+    $ret=get_admin_preference($con, $undefined_company_method);
+    if (!$ret) {
+        set_admin_preference($con, $undefined_company_method, 'unknown');
+    }
+
+
 
 }
 
@@ -2910,6 +2926,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.42  2006/04/26 02:15:23  vanmer
+ * - added system preference to control behavior of contacts API when adding a new contact with no company specified
+ *
  * Revision 1.41  2006/03/16 23:37:29  vanmer
  * - ensure that user preference for pager columns does not show up in system preferences menu
  *
