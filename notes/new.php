@@ -2,7 +2,7 @@
 /**
  * Create a note
  *
- * $Id: new.php,v 1.8 2006/01/02 23:29:27 vanmer Exp $
+ * $Id: new.php,v 1.9 2006/04/26 21:50:09 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,10 +15,11 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
-$on_what_table = $_POST['on_what_table'];
-$on_what_id = $_POST['on_what_id'];
-$return_url = $_POST['return_url'];
+getGlobalVar($on_what_table,'on_what_table');
+getGlobalVar($on_what_id, 'on_what_id');
+getGlobalVar($return_url, 'return_url');
 
+$return_url_button = $http_site_root.$return_url;
 $con = get_xrms_dbconnection();
 
 $con->close();
@@ -43,10 +44,13 @@ start_page($page_title, true, $msg);
                 <td class=widget_label><?php echo _("Note Body"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><textarea rows=5 cols=80 name=note_description></textarea></td>
+                <td class=widget_content><textarea rows=25 cols=80 name=note_description></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
+                <td class=widget_content_form_element>
+			<input class=button type=submit value="<?php echo _("Save Changes"); ?>">
+			<input class=button type=button value="<?php echo _("Cancel"); ?>" onclick="javascript: location.href='<?php echo $return_url_button; ?>'">
+		</td>
             </tr>
         </table>
         </form>
@@ -67,6 +71,11 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.9  2006/04/26 21:50:09  vanmer
+ * - resized textarea to be 25 rows tall
+ * - added cancel button to redirect to return_url
+ * - changed all _GET and _POST references to getGlobalVar function calls
+ *
  * Revision 1.8  2006/01/02 23:29:27  vanmer
  * - changed to use centralized dbconnection function
  *
