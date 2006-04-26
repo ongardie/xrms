@@ -3059,6 +3059,9 @@
       <row><f>31</f><f>21</f><f>standard</f><f>1</f><f>a</f><f>Standard</f></row>
       <row><f>32</f><f>21</f><f>db</f><f>1</f><f>a</f><f>Database (XRMS)</f></row>
       <row><f>33</f><f>21</f><f>adodb-session</f><f>1</f><f>a</f><f>Database (ADOdb)</f></row>
+      <row><f>34</f><f>23</f><f>unknown</f><f>1</f><f>a</f><f>Use Unknown Company</f></row>
+      <row><f>35</f><f>23</f><f>contact_name</f><f>1</f><f>a</f><f>New Company uses Contact Name</f></row>
+      <row><f>36</f><f>23</f><f>reject</f><f>1</f><f>a</f><f>Reject Contact</f></row>
     </data>
   </table>
   <table name="user_preference_types">
@@ -3117,6 +3120,7 @@
       <row><f>20</f><f>xrms_version</f><f>XRMS Version</f><f>XRMS Version (read-only)</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>text</f><f>1</f><f>0</f></row>
       <row><f>21</f><f>session_storage_type</f><f>Session Data Storage Type</f><f>Controls where the PHP session data is stored (files or database).  Changing this parameter will cause all currently logged in users to be logged out.</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
       <row><f>22</f><f>pager_columns</f><f>Pager Columns Display Settings</f><f></f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>text</f><f>0</f><f>1</f></row>
+      <row><f>23</f><f>undefined_company_method</f><f>Undefined Company Method</f><f>Insert method used when no Company is defined for a new Contact</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
     </data>
   </table>
   <table name="user_preferences">
@@ -3169,10 +3173,11 @@
       <row><f>14</f><f>0</f><f>16</f><f></f><f>n</f><f>a</f><f></f><f>0</f><f>0</f></row>
       <row><f>15</f><f>0</f><f>17</f><f></f><f>n</f><f>a</f><f></f><f>0</f><f>0</f></row>
       <row><f>16</f><f>0</f><f>18</f><f></f><f>y</f><f>a</f><f></f><f>0</f><f>0</f></row>
-      <row><f>18</f><f>0</f><f>20</f><f></f><f>1.99</f><f>a</f><f></f><f>0</f><f>0</f></row>
+      <row><f>18</f><f>0</f><f>20</f><f></f><f>1.99.1</f><f>a</f><f></f><f>0</f><f>0</f></row>
       <row><f>19</f><f>0</f><f>1</f><f></f><f>en_US</f><f>a</f><f></f><f>0</f><f>0</f></row>
       <row><f>20</f><f>0</f><f>2</f><f></f><f>basic</f><f>a</f><f></f><f>0</f><f>0</f></row>
       <row><f>21</f><f>0</f><f>21</f><f></f><f>standard</f><f>a</f><f>2005-12-02 18:30:07</f><f>0</f><f>0</f></row>
+      <row><f>23</f><f>0</f><f>23</f><f></f><f>unknown</f><f>a</f><f>2006-04-25 19:31:53</f><f>0</f><f>0</f></row>
     </data>
   </table>
   <table name="users">
