@@ -6,20 +6,20 @@
  * Almost all files in the system include this file.
  *
  * User Preferences are based on User Preference Types, which control the visibility and function of user preferences
- * Each user preference is associated with a type.  
+ * Each user preference is associated with a type.
  *
  * Depending on the way the type is configured, the user preference can store more than one option for a user in a preference type, with a name.
- * This makes sense for certain configuration items which might be for instance different named views on a pager, or different saved searches for a particular 
- * page.  Each preference for which multiple options exist also allow the setting of a default, which can be fetched 
+ * This makes sense for certain configuration items which might be for instance different named views on a pager, or different saved searches for a particular
+ * page.  Each preference for which multiple options exist also allow the setting of a default, which can be fetched
  * Other preferences might only allow a single value, such as the users theme preference or the number of columns to display by default on a search
  *
- * The preferences are also configured to provide system level defaults for user-specific preferences.  These preferences will be used only if there are no user 
+ * The preferences are also configured to provide system level defaults for user-specific preferences.  These preferences will be used only if there are no user
  * preferences set.
  *
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-preferences.php,v 1.16 2006/04/05 00:51:42 vanmer Exp $
+ * $Id: utils-preferences.php,v 1.17 2006/04/26 13:13:53 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -47,12 +47,12 @@ function set_user_preference(&$con, $user_id, $preference_type, $preference_valu
         $preference_type=$preference_type_data['user_preference_type_id'];
         if (!$preference_type) return false;
     }
-    
+
     $sql = "SELECT * FROM user_preferences WHERE user_preference_type_id=$preference_type AND user_id=$user_id";
     if ($preference_name) $sql.= " AND user_preference_name=".$con->qstr($preference_name);
     $pref_rst=$con->execute($sql);
 //    echo $sql;
-    if (!$pref_rst) { 
+    if (!$pref_rst) {
         db_error_handler($con, $sql);
         return false;
     }
@@ -61,10 +61,10 @@ function set_user_preference(&$con, $user_id, $preference_type, $preference_valu
     $preference_record['user_preference_value']=$preference_value;
     $preference_record['user_preference_modified_on']=time();
     $preference_record['user_id']=$user_id;
-     
+
     if ($preference_name)
         $preference_record['user_preference_name']=$preference_name;
-        
+
 
     if ($pref_rst->numRows()==0) {
         $pref_table='user_preferences';
@@ -72,11 +72,11 @@ function set_user_preference(&$con, $user_id, $preference_type, $preference_valu
     } else {
         $pref_sql = $con->GetUpdateSQL($pref_rst, $preference_record);
     }
-    if ($pref_sql) { 
+    if ($pref_sql) {
         $pref_result=$con->execute($pref_sql);
         if (!$pref_result) { db_error_handler($con, $pref_sql); return false; }
     } //else echo "NO SQL USED<br>";
-    
+
     if ($preference_name AND $set_default) {
         set_default_user_preference($con, $user_id, $preference_type, $preference_name);
     }
@@ -169,7 +169,7 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
     if (!$user_id AND $user_id!==0) {
         return false;
     }
-    
+
 //    echo "IN get_user_preference<br>";
     if (is_numeric($preference_type)) {
 //        echo "NUMERIC";
@@ -182,7 +182,7 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
     $preference_type=$preference_type_data['user_preference_type_id'];
     $func_name='get_user_preference';
     $params=array($user_id,$preference_type, $show_all, $preference_name);
-    if($use_cache) { 
+    if($use_cache) {
         if (function_cache_bool($func_name, $params)) {
             return function_cache_get($func_name, $params);
         }
@@ -191,15 +191,15 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
     if ($preference_type_data['allow_multiple_flag']==1) {
         $allow_multiple=true;
     } else $allow_multiple=false;
-    
+
     if (!$show_all AND !$preference_name AND ($preference_type_data['allow_multiple_flag']==1)) {
         $preference_name = get_default_user_preference($con, $user_id, $preference_type);
     }
-    
+
     $where=array();
     $where[]="user_preference_type_id=$preference_type";
     $where[]="user_preference_status='a'";
-    
+
     //find preference for user, or system (user_id 0)
     $where[]="( user_id=$user_id OR user_id=0)";
     if ($preference_name) {
@@ -213,11 +213,11 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
     else $sql.=" DESC";
 
 //    echo "<p><hr>$sql<p>\n";
-    
+
     $pref_rst=$con->execute($sql);
-    
+
     if (!$pref_rst) { db_error_handler( $con, $sql); return false; }
-    
+
     if ($allow_multiple AND $show_all) {
         $ret=array();
         while (!$pref_rst->EOF) {
@@ -237,7 +237,7 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
 }
 
 /**
- * Remove a preference setting for a user.  
+ * Remove a preference setting for a user.
  * Can remove a specific instance of a preference or all preferences of a type for a user, and can optionally delete from
  * the database instead of simply marking the record_status field with a 'd'
  *
@@ -264,7 +264,7 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
     if ($preference_type_data['allow_multiple_flag']==1) {
         $allow_multiple=true;
     } else $allow_multiple=false;
-    
+
     if (!$delete_all AND $preference_name AND $allow_multiple) {
         //make sure the deleted preference is not the default.  If it is, unset the default
         $default_preference_name = get_default_user_preference($con, $user_id, $preference_type);
@@ -275,10 +275,10 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
     } else {
         if ($delete_all AND $allow_multiple) delete_default_user_preference($con, $user_id, $preference_type, $delete_from_db);
     }
-    
+
     $where=array();
     $where[]="user_preference_type_id=$preference_type";
-    
+
     //find preference for user, or system (user_id 0)
     $where[]="user_id=$user_id";
     if ($preference_name) {
@@ -319,7 +319,7 @@ function render_preference_form_multi_element($con, $user_id, $user_preference_t
 
 /**
  * This function returns a string with the HTML to change/edit a user preference entry
- * 
+ *
  * @param adodbconnection $con
  * @param integer $user_preference_type_id with type of user preference to render form element
  * @param integer $element_value with existing user preference value, if one exists
@@ -355,13 +355,13 @@ function render_preference_form_element($con, $user_preference_type_id, $element
     }
     $element=create_form_element($element_type, $element_name, $element_value, $element_extra_attributes, $element_length, $element_height, $possible_values, $show_blank_first, $read_only);
 
-    return $element;    
+    return $element;
 
 }
 
 /**
  * This function returns an array of possible css themes with the name also as the array key
- * Used when rendering the CSS theme selector in the user preferences 
+ * Used when rendering the CSS theme selector in the user preferences
  *
 **/
 function get_css_theme_possible_values() {
@@ -409,7 +409,7 @@ function get_language_possible_values() {
 **/
 function get_preference_possible_values($con, $user_preference_type_id, $type_info=false) {
     if (!$user_preference_type_id) return false;
-    
+
     if (!$type_info) {
         $type_info=get_user_preference_type($con, false, $user_preference_type_id);
     }
@@ -456,10 +456,10 @@ function get_preference_options($con, $user_preference_type_id, $show_all=false,
         if ($rst->EOF) return false;
         $options=array();
         while (!$rst->EOF) {
-            
+
             $display=$rst->fields['option_display'];
             if (!$display) { $display=$rst->fields['option_value']; }
-            
+
             if (!$return_possible_values) {
                 $options[$rst->fields['up_option_id']]=$rst->fields['option_value'];
             } else {
@@ -486,7 +486,7 @@ function get_preference_options($con, $user_preference_type_id, $show_all=false,
  **/
  function add_preference_option($con, $user_preference_type_id, $option_value, $option_display=false, $sort_order=1) {
     if (!$user_preference_type_id OR !$option_value) return false;
-    
+
     $options=get_preference_options($con, $user_preference_type_id, true);
     if ($options) {
         //option already exists, so return true
@@ -502,10 +502,10 @@ function get_preference_options($con, $user_preference_type_id, $show_all=false,
             return $key;
          }
     }
-    
+
     //option doesn't exist, so add it
     if (!$option_display) $option_display=$option_value;
-    $ins=array(); 
+    $ins=array();
     $ins['sort_order']=$sort_order;
     $ins['user_preference_type_id']=$user_preference_type_id;
     $ins['option_value']=$option_value;
@@ -517,7 +517,7 @@ function get_preference_options($con, $user_preference_type_id, $show_all=false,
         if (!$ins_rst) { db_error_handler($con, $ins_sql); return false; }
         else return $con->Insert_ID();
     }
-    return false;    
+    return false;
 }
 
 /**
@@ -561,11 +561,11 @@ function get_user_preference_type($con, $type_name=false, $type_id=false, $retur
     if ($type_name) $where[]="user_preference_name=". $con->qstr($type_name);
     if ($type_id) $where[]="user_preference_type_id=$type_id";
     $wherestr= implode(" AND ", $where);
-    $sql = "SELECT * FROM user_preference_types WHERE $wherestr";
+    $sql = "SELECT * FROM user_preference_types WHERE $wherestr ORDER BY user_preference_pretty_name";
     $type_rst=$con->execute($sql);
-    
+
     if ($return_all) $types=array();
-    
+
     if (!$type_rst) { db_error_handler($con, $sql); return false; }
     if ($type_rst->numRows()>0) {
         if ($return_all) {
@@ -598,12 +598,12 @@ function get_user_preference_type($con, $type_name=false, $type_id=false, $retur
   * @param boolean $read_only optionally specifying if preference should be included in the UI for as read-only (not editable) (defaults to false, allow edit in UI)
   * @return integer with database id of newly created preference type (or pre-existing id), or false for failure
 **/
-function add_user_preference_type($con, 
-                                                                    $user_preference_name, 
+function add_user_preference_type($con,
+                                                                    $user_preference_name,
                                                                     $user_preference_pretty_name=false,
-                                                                    $user_preference_description=false, 
+                                                                    $user_preference_description=false,
                                                                     $allow_multiple=false,
-                                                                    $allow_user_edit=false, 
+                                                                    $allow_user_edit=false,
                                                                     $form_element_type=false,
                                                                     $read_only=false,
 								    $skip_system_edit=false)
@@ -615,19 +615,19 @@ function add_user_preference_type($con,
     //if user preference already exists, return it
     $pref_info = get_user_preference_type($con, $user_preference_name);
     if ($pref_info) return $pref_info['user_preference_type_id'];
-    
+
     $preference_type=array();
     $preference_type['user_preference_name']=$user_preference_name;
-    
+
     if ($user_preference_pretty_name)
         $preference_type['user_preference_pretty_name']=$user_preference_pretty_name;
-        
+
     if ($user_preference_description)
         $preference_type['user_preference_description']=$user_preference_description;
-        
+
     if ($allow_multiple)
         $preference_type['allow_multiple_flag']=1;
-    
+
     if ($allow_user_edit)
         $preference_type['allow_user_edit_flag']=1;
 
@@ -636,24 +636,24 @@ function add_user_preference_type($con,
 
     if ($skip_system_edit)
         $preference_type['skip_system_edit_flag']=1;
-    
+
     if ($form_element_type)
         $preference_type['form_element_type']=$form_element_type;
-    
+
     $table = "user_preference_types";
     $insert_sql = $con->getInsertSQL($table, $preference_type);
-    
+
     if ($insert_sql) {
         $rst=$con->execute($insert_sql);
         if (!$rst) { db_error_handler($con, $insert_sql); return false; }
         else return $con->Insert_ID();
     } else return false;
-    
+
 }
 
 /**
  *  Deletes a user preference type, optionally from the database
- * 
+ *
  * @param adodbconnection $con handle to databsae
  * @param integer $user_preference_type_id with database identifier for user preference type
  * @param boolean $delete_from_database indicating if record should be deleted or just marked with status 'd' (defaults to false, status 'd')
@@ -666,7 +666,7 @@ function delete_user_preference_type($con, $user_preference_type_id, $delete_fro
     } else {
         $sql = "UPDATE user_preference_type SET user_preference_type_status='d'";
     }
-    
+
     $sql .= " WHERE user_preference_type_id=$user_preference_type_id";
     $rst=$con->execute($sql);
     if (!$rst) {
@@ -695,7 +695,7 @@ function list_user_preference_types($con, $show_only_active=true){
             $type_rst->movenext();
         }
         return $ret;
-    } else return false;    
+    } else return false;
 }
 
 /**
@@ -734,11 +734,11 @@ function get_user_preferences_table($con, $user_id=false) {
     if (!$user_id AND $user_id!==0) {
         $user_id=$session_user_id;
     }
-    
+
     if ($user_id==0) {
         $admin=true;
     } else $admin=false;
-    
+
     if ($admin) {
         $table_title=_("System Preferences");
     } else {
@@ -759,22 +759,22 @@ function get_user_preferences_table($con, $user_id=false) {
             } else $type_desc='';
             $type_pretty_name=_($type_info['user_preference_pretty_name']);
             if (!$type_pretty_name) $type_pretty_name=_($type_info['user_preference_name']);
-            
+
             if ($type_info['allow_multiple_flag']==1) {
-                //branch for showing multiple options, fetch all user set options   
+                //branch for showing multiple options, fetch all user set options
                 $element_field=render_preference_form_multi_element($con, $user_id, $user_preference_type_id, $type_info);
             } else {
             //branch for showing single option
                 $preference_value=get_user_preference($con, $user_id, $user_preference_type_id);
                 $element_field=render_preference_form_element($con, $user_preference_type_id, $preference_value, $type_info);
             }
-            
-            //this is to avoid printing translation file header instead of type description! 
+
+            //this is to avoid printing translation file header instead of type description!
             if($type_desc != NULL){
                     $user_preferences_table.="<tr><td class=widget_content_label><b>"._($type_pretty_name)."</b><br>"._($type_desc)."</td><td class=widget_content_form_element>$element_field</td></tr>";
                 }else{
                     $user_preferences_table.="<tr><td class=widget_content_label><b>"._($type_pretty_name)."</b><br>$type_desc</td><td class=widget_content_form_element>$element_field</td></tr>";
-                }   
+                }
         }
         $user_preferences_table.="<tr><td colspan=2 class=widget_content_form_element><input type=hidden name=preference_action value=savePrefs><input class=button type=submit value=\""._("Save Preferences") . "\"></tr></td>";
         $user_preferences_table.="</table>";
@@ -825,15 +825,15 @@ function move_system_parameters($con, $fields) {
     if (!$rst->EOF) {
         $element_type='select';
     } else { $element_type='text'; }
-    
+
     $type_id=add_user_preference_type($con, $param, $param, $description,  false, false,$element_type);
     set_admin_preference($con, $type_id, $value);
-    
+
     while (!$rst->EOF) {
         $fields=$rst->fields;
         $sort_order=$fields['sort_order'];
         $option_value = (($fields['string_val']) ? $fields['string_val'] : (($fields['int_val']) ? $fields['int_val'] : (($fields['float_val']) ? $fields['float_val'] : (($fields['datetime']) ? $fields['datetime'] : false) ) ) );
-                
+
         $option_display=false;
         switch ($option_value) {
             case 'y':
@@ -843,15 +843,18 @@ function move_system_parameters($con, $fields) {
                 $option_display='No';
             break;
         }
-        
-        add_preference_option($con, $type_id, $option_value, $option_display, $sort_order); 
+
+        add_preference_option($con, $type_id, $option_value, $option_display, $sort_order);
         $rst->movenext();
     }
-    
+
 }
 
 /**
  * $Log: utils-preferences.php,v $
+ * Revision 1.17  2006/04/26 13:13:53  braverock
+ * - order preference display by user_preference_pretty_name
+ *
  * Revision 1.16  2006/04/05 00:51:42  vanmer
  * - changed to use preference name in cache settings
  * - use new function cache unset function to clear function cache when setting new preferences
@@ -899,6 +902,6 @@ function move_system_parameters($con, $fields) {
  * Revision 1.3  2005/05/06 00:49:17  vanmer
  * - added needed expansion of user preferences to handle default options on a preference
  * - expanded preferences system
- * 
+ *
 **/
 ?>
