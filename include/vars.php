@@ -12,7 +12,7 @@ if ( !defined('IN_XRMS') )
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.42 2006/03/16 00:31:57 vanmer Exp $
+ * $Id: vars.php,v 1.43 2006/04/26 02:18:12 vanmer Exp $
  */
 
 /**
@@ -284,12 +284,9 @@ $use_php_iconv = false;
 /*** End Language settings ***/
 
 /**
- * If use_self_contacts is true, contacts can be managed
- * independent of companies, and are assigned automatically
- * to company 'Self'.
- *
- * To use the feature, first create a company called 'Self',
- * then set use_self_contacts to true.
+ * The use_self option is deprecated, and will not affect the behavior 
+ * of the system anymore. Please use the system preference 
+ * labeled Undefined Company Method to control the behavior of contacts without companies
  *
  */
 $use_self_contacts = false;
