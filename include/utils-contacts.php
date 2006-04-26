@@ -8,11 +8,11 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.21 2006/04/25 15:23:04 braverock Exp $
+ * $Id: utils-contacts.php,v 1.22 2006/04/26 02:14:50 vanmer Exp $
  *
  */
 
-
+require_once($include_directory.'utils-companies.php');
 /**********************************************************************/
 /**
  *
@@ -92,23 +92,41 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
     // If there is not a 'company_id', one needs to be located or created
     if ( (! $contact_info['company_id']) || ( $contact_info['company_id']) == 0 )
     {
+        $undefined_company_method=get_user_preference($con, $session_user_id, 'undefined_company_method');
+
         if ( (! $contact_info['company_name']) && (! $contact_info['first_names']) && (! $contact_info['last_name']) )
         {
-            // Since there is not info to create or derive a company name
+            if ($undefined_company_method=='reject') return false;
+
+            // Since there is not info to create or derive a company name, use unknown company
             $contact_info['company_id'] = 1;
         } else {
-            // Check here to see if the Unknown company flag is set
-            // There needs to be a company name
-            if ( ! $contact_info['company_name'] ) {
-                $contact_info['company_name'] = $contact_info['first_names'] . ' ' . $contact_info['last_name'];
+
+            switch ($undefined_company_method) {
+                case 'contact_name':
+                    // Check here to see if the Unknown company flag is set
+                    // There needs to be a company name
+                    if ( ! $contact_info['company_name'] ) {
+                        $contact_info['company_name'] = $contact_info['first_names'] . ' ' . $contact_info['last_name'];
+                    }
+        
+                    // Retrieve company id
+                    $_company_data = add_update_company ( $con, $contact_info );
+        
+                    // Pull out company_id
+                    $contact_info['company_id'] = $_company_data['company_id'];
+                    $contact_info['address_id'] = $_company_data['address_id'];
+                break;
+
+                case 'reject':
+                    return false;
+                break;
+
+                case 'unknown':
+                default:
+                    $contact_info['company_id']=1;
+                break;
             }
-
-            // Retrieve company id
-            $_company_data = add_update_company ( $con, $contact_info );
-
-            // Pull out company_id
-            $contact_info['company_id'] = $_company_data['company_id'];
-            $contact_info['address_id'] = $_company_data['address_id'];
         }
     }
 
@@ -486,6 +504,9 @@ include_once $include_directory . 'utils-misc.php';
 /**********************************************************************/
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.22  2006/04/26 02:14:50  vanmer
+ * - added user preference handling for adding a new contact with no company specified
+ *
  * Revision 1.21  2006/04/25 15:23:04  braverock
  * - fix switch/case in add_update_contact to include company_id
  *   in record search if we have a valid company_id
