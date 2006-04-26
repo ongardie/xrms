@@ -2,19 +2,21 @@
 /**
  * Edit company details
  *
- * $Id: edit.php,v 1.22 2006/01/02 22:56:27 vanmer Exp $
+ * $Id: edit.php,v 1.23 2006/04/26 20:06:27 braverock Exp $
  */
 
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'confgoto.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
-$company_id = $_GET['company_id'];
+getGlobalVar($company_id,'company_id');
+
 $on_what_id=$company_id;
 
 $session_user_id = session_check('','Update');
@@ -51,6 +53,13 @@ if ($rst) {
     $country = $rst->fields['country'];
     $employees = $rst->fields['employees'];
     $revenue = $rst->fields['revenue'];
+    $tax_id = $rst->fields['tax_id'];
+    $account_status_id = $rst->fields['account_status_id'];
+    $credit_limit = $rst->fields['credit_limit'];
+    $rating_id = $rst->fields['rating_id'];
+    $terms = $rst->fields['terms'];
+    $extref1 = $rst->fields['extref1'];
+    $extref2 = $rst->fields['extref2'];
     $custom1 = $rst->fields['custom1'];
     $custom2 = $rst->fields['custom2'];
     $custom3 = $rst->fields['custom3'];
@@ -77,12 +86,20 @@ $rst = $con->execute($sql2);
 $rating_menu = $rst->getmenu2('rating_id', $rating_id, false);
 $rst->close();
 
+$sql = "select account_status_pretty_name, account_status_id from account_statuses where account_status_record_status = 'a'";
+$rst = $con->execute($sql);
+$account_status_menu = $rst->getmenu2('account_status_id', $account_status_id, false);
+$rst->close();
+
 $accounting_rows = do_hook_function('company_accounting_inline_edit', $accounting_rows);
 
 $con->close();
 
 $page_title = $company_name . " - " . _("Edit Profile");
 start_page($page_title, true, $msg);
+
+// include confGoTo javascript module
+confGoTo_includes();
 
 ?>
 
@@ -143,17 +160,42 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php echo _("Employees"); ?></td>
                 <td class=widget_content_form_element><input type=text name=employees size=10 value="<?php echo $employees; ?>"></td>
             </tr>
-            <!-- accounting plugin -->
-            <?php echo $accounting_rows; ?>
             <tr>
                 <td class=widget_label_right><?php echo _("Revenue"); ?></td>
                 <td class=widget_content_form_element><input type=text name=revenue size=10 value="<?php echo $revenue; ?>"></td>
+            </tr>
+            <!-- accounting plugin -->
+            <?php echo $accounting_rows; ?>
+            <tr>
+                <td class=widget_label_right><?php echo _("Account Status"); ?></td>
+                <td class=widget_content_form_element><?php echo $account_status_menu; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Tax ID"); ?></td>
+                <td class=widget_content_form_element><input type=text size=10 name=tax_id value="<?php echo $tax_id; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Credit Limit"); ?></td>
+                <td class=widget_content_form_element><input type=text size=10 name=credit_limit value="<?php echo $credit_limit; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Rating"); ?></td>
                 <td class=widget_content_form_element><?php echo $rating_menu; ?></td>
             </tr>
-	    <?php if ($company_custom1_label!='(Custom 1)') { ?>
+            <tr>
+                <td class=widget_label_right><?php echo _("Terms"); ?></td>
+                <td class=widget_content_form_element>Net &nbsp;<input type=text size=3 name=terms value="<?php echo $terms; ?>"> Days</td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Customer Key"); ?></td>
+                <td class=widget_content_form_element><input type=text size=10 name=extref1 value="<?php echo $extref1; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Vendor Key"); ?></td>
+                <td class=widget_content_form_element><input type=text size=10 name=extref2 value="<?php echo $extref2; ?>"></td>
+            </tr>
+
+        <?php if ($company_custom1_label!='(Custom 1)') { ?>
             <tr>
                 <td class=widget_label_right><?php echo $company_custom1_label ?></td>
                 <td class=widget_content_form_element><input type=text name=custom1 size=30 value="<?php echo $custom1; ?>"></td>
@@ -180,7 +222,17 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content_form_element><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
-                <td class=widget_content_form_element><input class=button type=button value="<?php echo _("Edit Former Names"); ?>" onclick="javascript: location.href='former-names.php?company_id=<?php echo $company_id; ?>';"></td>
+                <td class=widget_content_form_element>
+                    <input class=button type=button value="<?php echo _("Edit Former Names"); ?>" onclick="javascript: location.href='former-names.php?company_id=<?php echo $company_id; ?>';">
+                    <?php
+                        if ( $company_id > 1 ) {
+                            $quest = _("Are you sure you want to remove this company (and all associated contacts, activities, opportunities, cases, etc.) from the system?");
+                            $button = _("Delete Company");
+                            $to_url = "delete.php?company_id=$company_id";
+                            acl_confGoTo( $quest, $button, $to_url, 'companies', $company_id, 'Delete' );
+                        }
+                    ?>
+                </td>
             </tr>
         </table>
         </form>
@@ -227,6 +279,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.23  2006/04/26 20:06:27  braverock
+ * - move accounting and credit fields from old companies/admin* pages
+ * - add Delete button here, for consistency with other XRMS object types
+ *
  * Revision 1.22  2006/01/02 22:56:27  vanmer
  * - changed to use centralized dbconnection function
  *
