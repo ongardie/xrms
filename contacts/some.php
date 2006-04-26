@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.66 2006/04/26 02:13:54 vanmer Exp $
+ * $Id: some.php,v 1.67 2006/04/26 13:02:32 braverock Exp $
  */
 
 //include the standard files
@@ -355,14 +355,15 @@ if(!isset($contacts_next_page)) {
         break;
       }
       if ( $use_self_contacts ) {
-        echo '<table class=widget cellspacing=1 width="100%">
-                    <tr>
+        $self_contacts = "\n\t".'<tr>
                       <td class=widget_content_form_element colspan=4>
-                       <input class=button type=button onclick="javascript: createContact();" value="' . _('Create Contact for \'Self\'') . '">
+                       <input class=button type=button onclick="javascript: createContact();" value="' . _("Create Contact without a Company") . '">
                       </td>
                     </tr>
                   </table>';
-      }
+      } else { $self_contacts = ''; }
+
+
 $_SESSION["search_sql"]=$sql;
     "company_code, title, description, u.username, cont.email, cont.contact_id, cont.last_name, cont.first_names, c.company_name";
 
@@ -427,6 +428,7 @@ $con->close();
                     <input type=submit class=button name=btnewContact value="<?php echo _("New Contact"); ?>">
                 </td>
             </tr>
+            <?php echo $self_contacts; ?>
         </table>
         </form>
         <!-- recently viewed support items //-->
@@ -493,6 +495,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.67  2006/04/26 13:02:32  braverock
+ * - update unknown or contact_name new contact string
+ * - move all 'new contact' buttons to the same place on the screen for consistency
+ *
  * Revision 1.66  2006/04/26 02:13:54  vanmer
  * - removed deprecated use_self_contacts option, now uses system preference controlling behavior
  *
