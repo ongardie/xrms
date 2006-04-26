@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.21 2006/04/21 23:21:40 braverock Exp $
+ * $Id: edit-2.php,v 1.22 2006/04/26 20:07:29 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -40,7 +40,17 @@ $rec['custom1'] = $_POST['custom1'];
 $rec['custom2'] = $_POST['custom2'];
 $rec['custom3'] = $_POST['custom3'];
 $rec['custom4'] = $_POST['custom4'];
+$rec['account_status_id'] = $_POST['account_status_id'];
+$rec['tax_id'] = $_POST['tax_id'];
+$rec['credit_limit'] = $_POST['credit_limit'];
+$rec['rating_id'] = $_POST['rating_id'];
+$rec['terms'] = $_POST['terms'];
+$rec['extref1'] = $_POST['extref1'];
+$rec['extref2'] = $_POST['extref2'];
 
+//set some values that can't be NULL
+$rec['credit_limit'] = ($rec['credit_limit'] > 0) ? $rec['credit_limit'] : 0;
+$rec['terms'] = ($rec['terms'] > 0) ? $rec['terms'] : 0;
 $con = get_xrms_dbconnection();
 
 // $con->debug=1;
@@ -48,12 +58,22 @@ update_company($con, $rec, $rec['company_id'], false, get_magic_quotes_gpc());
 
 $accounting_rows = do_hook_function('company_accounting_inline_edit_2', $accounting_rows);
 
+/*
+    // these will probably go away soon or be moved to a hook, since they aren't implemented anyway
+        // update_vendor_account_information($extref2, $vendor_credit_limit, $vendor_terms);
+        // update_customer_account_information($extref1, $customer_credit_limit, $customer_terms);
+    // placed here as reminders to normalize how we're going to deal with accounting data
+*/
+
 $con->close();
 
 header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.22  2006/04/26 20:07:29  braverock
+ * - move accounting and credit fields from old companies/admin* pages
+ *
  * Revision 1.21  2006/04/21 23:21:40  braverock
  * - first revision to use update_company api fn
  *
