@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.11 2006/04/11 05:18:12 vanmer Exp $
+ * $Id: updateto2.0.php,v 1.12 2006/04/26 21:10:06 braverock Exp $
  */
 
 // where do we include from
@@ -4756,7 +4756,7 @@ $msg .= update_unknown_company($con);
 
 
 //FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
-set_admin_preference($con, 'xrms_version', '1.99');
+set_admin_preference($con, 'xrms_version', '1.99.1');
 
 do_hook_function('xrms_update', $con);
 
@@ -4782,6 +4782,9 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.12  2006/04/26 21:10:06  braverock
+ * - bump version to 1.99.1
+ *
  * Revision 1.11  2006/04/11 05:18:12  vanmer
  * - updated version in system tables to 1.99
  *
