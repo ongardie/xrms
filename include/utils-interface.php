@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.102 2006/03/16 21:57:33 vanmer Exp $
+ * $Id: utils-interface.php,v 1.103 2006/04/27 11:26:46 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -260,13 +260,17 @@ function start_page($page_title = '', $show_navbar = true, $msg = '', $show_topn
     //    array('multi' => array('first.css','second.css','third.css'));
     $cssroot=$http_site_root.'/css/';
     $cssthemes=get_css_themes();
+
+    //pull in the $languages array into function scope
+    global $languages;
 ?>
 <!DOCTYPE HTML PUBLIC
     "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd" />
 <html>
 <head>
-  <title><?php echo "$app_title : $page_title"; ?></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $languages[$xrms_notAlias]['CHARSET']; ?>">
+    <title><?php echo "$app_title : $page_title"; ?></title>
 <?php
     // include the jscalendar scripts
     jscalendar_includes();
@@ -1051,6 +1055,9 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.103  2006/04/27 11:26:46  braverock
+ * - add Charset encoding Header to start_page() for i18n
+ *
  * Revision 1.102  2006/03/16 21:57:33  vanmer
  * - added span for header logo display
  *
