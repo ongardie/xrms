@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: cases_test_class.php,v 1.1 2006/04/26 00:55:30 vanmer Exp $
+ * $Id: cases_test_class.php,v 1.2 2006/04/27 03:23:11 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -29,20 +29,40 @@ $options['xrms_db_username'] = $xrms_db_username;
 $options['xrms_db_password'] = $xrms_db_password;
 $options['xrms_db_dbname'] = $xrms_db_dbname;
 
+
+global $test_types;
+global $test_statuses;
+
 Class XRMSCaseTest extends XRMS_TestCase {
-    
+
     function XRMSCaseTest( $name = "XRMSCaseTest" ) {
         $this->PHPUnit_TestCase( $name );
-    }
-   function setUp() {
-        parent::setUp();
-       $this->session_user_id= session_check();
         $this->type_status_test = new XRMSTypeStatusTest();
         $this->type_status_test->_result =& $this->_result;
         $this->type_status_test->setUp();
+        $this->entity_type='case';
+        $this->test_type_id=$this->type_status_test->test_add_entity_type($this->entity_type);
+        $this->test_status_id=$this->type_status_test->test_add_entity_status($this->entity_type);
 
-        $this->test_type_id=$this->type_status_test->test_get_entity_type();
-        $this->test_status_id=$this->type_status_test->test_get_entity_status();
+       if (isset($this->classname))
+          $this->classname = get_parent_class($this->classname);
+       else
+          $this->classname = get_class($this);
+
+       if (method_exists($this, "_".$this->classname)) {
+          register_shutdown_function(array($this, "_".$this->classname));
+       }
+    }
+
+    function _XRMSCaseTest() {
+        $this->type_status_test->test_delete_entity_type($this->entity_type, $this->test_type_id);
+        $this->type_status_test->test_delete_entity_status($this->entity_type, $this->test_status_id);
+        $this->type_status_test->teardown();
+    }
+
+   function setUp() {
+        parent::setUp();
+       $this->session_user_id= session_check();
 
         $this->test_case_data= array(
                    'case_title'   => 'Test Suite Case: Ignore',
@@ -58,9 +78,6 @@ Class XRMSCaseTest extends XRMS_TestCase {
     }
 
    function teardown() {
-        $this->type_status_test->test_delete_entity_type($this->test_type_id);
-        $this->type_status_test->test_delete_entity_status($this->test_status_id);
-        $this->type_status_test->teardown();
         parent::teardown();
     }
     function test_XRMSTEST() {
@@ -110,7 +127,7 @@ Class XRMSCaseTest extends XRMS_TestCase {
         return $case_result;
     }
 
-    function test_update_case($case_data=false, $case_id=false, $case_rst=false) {
+    function test_update_case($case_data=NULL, $case_id=false, $case_rst=false) {
         $con = $this->con;
 	//if no case id or recordset is provided, use test case data	
 	if (!$case_id AND !$case_rst) {
@@ -121,9 +138,10 @@ Class XRMSCaseTest extends XRMS_TestCase {
 		$this->assertTrue($case_id, "Failed to identify case for update");		
 	}
 	//if no case data is provided, create test data
-	if (!$case_data) {
-		$case_data['profile'].=' Changed For Test';
-                $case_data['tax_id']='123-45-6789';
+	if ($case_data===NULL) {
+                $case_data=$this->test_case_data;
+		$case_data['case_description'].=' Changed For Test';
+                $case_data['due_at']='2006-04-21 00:00:00';
 	}
 	$result = update_case($con, $case_data, $case_id, $case_rst);
 	$this->assertTrue($result, "Update to case $case_id recordset $case_rst failed.");
@@ -139,14 +157,14 @@ Class XRMSCaseTest extends XRMS_TestCase {
 	return $result;
    }
     
-    function test_delete_case($case_id=false, $delete_from_database=true) {
+    function test_delete_case($case_id=false, $delete_from_database=false) {
         $con = $this->con;
         $session_user_id=$this->session_user_id;
         if (!$case_id) {
             $case_data=$this->test_case_data;
 	    //removed because update resets this variable
-	    unset($case_data['profile']);
-	    unset($case_data['tax_id']);
+            unset($case_data['case_description']);
+            unset($case_data['due_at']);
             $case_info=$this->test_find_case($case_data);
             $this->assertTrue($case_info,"Failed to look up test case to delete.");
             if ($case_info) {
@@ -160,11 +178,13 @@ Class XRMSCaseTest extends XRMS_TestCase {
         return $case_result;
     }
 
-    function test_case_strange_characters($case_data=false, $delete_from_database=true) {
-        if (!$case_data) $case_data= array(
-                   'case_name'   => 'Test Suite Company O\'doole & Tomlin: Ignore',
-                   'profile' =>'This case was added automatically by the test suite.  It shouldn\'t be visible, and can safely be ignored',
-                    'tax_id' => '0987-12-2033'
+    function test_case_strange_characters($case_data=NULL, $delete_from_database=false) {
+        if ($case_data===NULL) $case_data= array(
+                   'case_title'   => 'Test Suite Case O\'doole & Tomlin: Ignore',
+                   'case_description' =>'This case was added automatically by the test suite.  It shouldn\'t be visible, and can safely be ignored',
+                    'due_at' => '1987-12-30 00:00:00',
+                    'case_type_id'=>$this->test_type_id,
+                    'case_status_id'=>$this->test_status_id
             );
 
         $test_case_id=$this->test_add_case($case_data);
@@ -174,7 +194,7 @@ Class XRMSCaseTest extends XRMS_TestCase {
             $this->assertTrue($ret, "Failed to find case with strange data");
         } else return false;
         
-        $case_data['profile']="This case with added automatically, and can't be seen because it should've been deleted by &";
+        $case_data['case_description']="This case was added automatically, and can't be seen because it should've been deleted by &";
         $ret=$this->test_update_case($case_data, $test_case_id);
         $this->assertTrue($ret, "Failed to update case with strange data");
         $this->test_delete_case($test_case_id, $delete_from_database);
@@ -184,6 +204,9 @@ Class XRMSCaseTest extends XRMS_TestCase {
 
 /*
  * $Log: cases_test_class.php,v $
+ * Revision 1.2  2006/04/27 03:23:11  vanmer
+ * - updated cases tests to use auto-generated types/statuses from types/statuses API
+ *
  * Revision 1.1  2006/04/26 00:55:30  vanmer
  * - added new test classes for cases, statuses and types and integration tests
  *
