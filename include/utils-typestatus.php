@@ -509,4 +509,256 @@
 
         return true;
     }
+
+
+
+/** PRIORITIES API ****/
+
+
+/**********************************************************************/
+/**
+  * Adds an entity priority to the database or finds an existing priority with an identical short_name
+  *
+  * @param adodbconnection $con with handle to the DB
+  * @param string $entity_type with priority of entity (currently case)
+  * @param string $entity_priority_short_name 10 character unique identifier for the new priority
+  * @param string $entity_priority_pretty_name multi-word name for the priority
+  * @param string $entity_priority_pretty_plural plural pretty version of the priority name
+  * @param string $entity_priority_display_html HTML-enabled version of the pretty name
+  * @param integer $entity_priority_score_adjustment with priority score adjustment on entity
+  * @param boolean $magic_quotes indicating if incoming strings are magic_quote'd or not (for _POST/_GET strings the output of get_magic_quotes_gpc() should be passed here)
+  *
+  * @return integer $priority_id with database identifier for the newly added (or identified existing priority with the same short_name), or false for failure
+  *
+**/
+    function add_entity_priority($con, $entity_type='case', $entity_priority_short_name, $entity_priority_pretty_name=false, $entity_priority_pretty_plural=false, $entity_priority_display_html=false, $entity_priority_score_adjustment=false, $magic_quotes=false) {
+        //we require con, entity_priority, short name and pretty name
+        if (!$con) return false;
+
+        if (!$entity_type) return false;
+
+        if (!$entity_priority_short_name) return false;
+
+        if (!$entity_priority_pretty_name) return false;
+
+        $table=$entity_type."_priorities";
+
+        //find existing priority with same short name, if it exists
+        $ret=get_entity_priority($con, $entity_type, false, $entity_priority_short_name);
+        if ($ret) {
+            $entity_priority_id=$ret["{$entity_type}_priority_id"];
+            //undelete if marked as logically deleted
+            if ($ret["{$entity_type}_priority_record_status"]=='d') {
+                $upd="UPDATE $table SET {$entity_type}_priority_record_status=".$con->qstr("a") . " WHERE {$entity_type}_priority_id=$entity_priority_id";
+                $rst=$con->execute($upd);
+                if (!$rst) { db_error_handler($con, $upd); return false; }
+            }
+            //return existing priority
+            return $entity_priority_id;
+        }
+
+        $rec=array();
+
+        $rec["{$entity_type}_priority_short_name"]=$entity_priority_short_name;
+        $rec["{$entity_type}_priority_pretty_name"]=$entity_priority_pretty_name;
+
+        //optionally add pretty plural and display HTML
+        if ($entity_priority_pretty_plural) {
+            $rec["{$entity_type}_priority_pretty_plural"]=$entity_priority_pretty_plural;
+        }
+        if ($entity_priority_display_html) {
+            $rec["{$entity_type}_priority_display_html"]=$entity_priority_display_html;
+        }
+        if ($entity_priority_score_adjustment) {
+            $rec["{$entity_type}_priority_score_adjustment"]=$entity_priority_score_adjustment;
+        }
+
+        $rec["{$entity_type}_priority_record_status"]='a';
+
+        //get insert sql statement
+        $ins = $con->getInsertSQL($table, $rec, $magic_quotes);
+        if (!$ins) return false;
+
+        //execute
+        $rst = $con->execute($ins);
+
+        if (!$rst) { db_error_handler($con, $ins); return false; }
+
+        $priority_id=$con->Insert_ID();
+
+        return $priority_id;
+
+    }
+
+/**********************************************************************/
+/**
+  * Find an entity priority in the database
+  *
+  * @param adodbconnection $con with handle to the DB
+  * @param string $entity_type with priority of entity (currently case)
+  * @param string $entity_priority_short_name 10 character unique identifier for the priority
+  * @param string $entity_priority_pretty_name multi-word name for the priority
+  * @param integer $entity_priority_score_adjustment with priority score adjustment on entity
+  * @param boolean $show_all indicating if records with a record_status other than 'a' should be shown (defaults to false, only show active records)
+  *
+  * @return array of associative arrays, each with the data for one entity_priority, or false for failure/no results
+  *
+**/
+    function find_entity_priority($con, $entity_type='case', $entity_priority_short_name=false, $entity_priority_pretty_name=false, $entity_priority_score_adjustment=false, $show_all=false) {
+        if (!$con) return false;
+        if (!$entity_type) return false;
+        if (!$entity_priority_short_name AND !$entity_priority_pretty_name) return false;
+
+        $table=$entity_type."_priorities";
+        $where=array();
+        if ($entity_priority_short_name) { $where[]="{$entity_type}_priority_short_name LIKE ".$con->qstr($entity_priority_short_name); }
+        if ($entity_priority_pretty_name) { $where[]="{$entity_type}_priority_pretty_name LIKE ".$con->qstr($entity_priority_pretty_name); }
+        if ($entity_priority_score_adjustment) { $where[]="{$entity_type}_priority_score_adjustment=$entity_priority_score_adjustment"; }
+        if (!$show_all) { $where[]= "{$entity_type}_priority_record_status = " . $con->qstr('a'); }
+        $wherestr=implode(" AND ", $where);
+        if (!$wherestr) return false;
+
+        $sql = "SELECT * FROM $table WHERE $wherestr";
+
+        $rst=$con->execute($sql);
+        if (!$rst) { db_error_handler($con, $sql); return false; }
+
+        $ret=array();
+        while (!$rst->EOF) {
+            $ret[]=$rst->fields;
+            $rst->movenext();
+        }
+
+        //if we have any records, return them, otherwise return false
+        if (count($ret)>0) {
+            return $ret;
+        } else return false;
+
+    }
+
+/**********************************************************************/
+/**
+  * Get an entity priority from the database by ID or short name
+  *
+  * @param adodbconnection $con with handle to the DB
+  * @param string $entity_type with priority of entity (currently case)
+  * @param integer $entity_priority_id DB identifier for the entity_priority (required if short_name is not provided)
+  * @param string $entity_priority_short_name 10 character unique identifier for the priority (required if ID is not provided)
+  * @param boolean $return_rst indicating if return should be recordset or associative array
+  *
+  * @return array or recordset for one entity_priority, or false for failure/no results
+  *
+**/
+    function get_entity_priority($con, $entity_type='case', $entity_priority_id=false, $entity_priority_short_name=false, $return_rst=false) {
+        if (!$con) return false;
+        if (!$entity_type) return false;
+        if (!$entity_priority_short_name AND !$entity_priority_id) return false;
+
+        $table=$entity_type."_priorities";
+        $where=array();
+        if ($entity_priority_id) { $where[]="{$entity_type}_priority_id = $entity_priority_id"; }
+        elseif ($entity_priority_short_name) { $where[]="{$entity_type}_priority_short_name LIKE ".$con->qstr($entity_priority_short_name); }
+        $wherestr=implode(" AND ", $where);
+        if (!$wherestr) return false;
+
+        $sql = "SELECT * FROM $table WHERE $wherestr";
+
+        $rst=$con->execute($sql);
+        if (!$rst) { db_error_handler($con, $sql); return false; }
+
+        if (!$rst->EOF) {
+            if (!$return_rst) {
+                $ret=$rst->fields;
+            } else $ret=$rst;
+            return $ret;
+        } else return false;
+    }
+
+/**********************************************************************/
+/**
+  * Updates an entity priority in the database by ID and fields to update
+  *
+  * @param adodbconnection $con with handle to the DB
+  * @param string $entity_type with priority of entity (currently case)
+  * @param integer $entity_priority_id DB identifier (required)
+  * @param string $entity_priority_short_name 10 character unique identifier for the status, to change the existing value if provided
+  * @param string $entity_priority_pretty_name multi-word name for the priority, to change the existing value if provided
+  * @param string $entity_priority_pretty_plural plural pretty version of the priority name, to change the existing value if provided
+  * @param string $entity_priority_display_html HTML-enabled version of the pretty name, to change the existing value if provided
+  * @param integer $entity_priority_score_adjustment with priority score adjustment on entity
+  * @param boolean $magic_quotes indicating if incoming strings are magic_quote'd or not (for _POST/_GET strings the output of get_magic_quotes_gpc() should be passed here)
+  *
+  * @return entity_priority_id of the updated priority, or false if update failed
+  *
+**/
+    function update_entity_priority($con, $entity_type='case', $entity_priority_id, $entity_priority_short_name=false, $entity_priority_pretty_name=false, $entity_priority_pretty_plural=false, $entity_priority_display_html=false, $entity_priority_score_adjustment, $magic_quotes=false) {
+        if (!$con) return false;
+        if (!$entity_type) return false;
+        if (!$entity_priority_id) return false;
+
+        $priority_rst=get_entity_priority($con, $entity_type, $entity_priority_id, false, true);
+        if (!$priority_rst) return false;
+
+        $rec=array();
+        
+        //optionally add pretty plural and display HTML
+        if ($entity_priority_short_name) {
+            $rec["{$entity_type}_priority_short_name"]=$entity_priority_short_name;
+        }
+        if ($entity_priority_pretty_name) {
+            $rec["{$entity_type}_priority_pretty_name"]=$entity_priority_pretty_name;
+        }
+        if ($entity_priority_pretty_plural) {
+            $rec["{$entity_type}_priority_pretty_plural"]=$entity_priority_pretty_plural;
+        }
+        if ($entity_priority_display_html) {
+            $rec["{$entity_type}_priority_display_html"]=$entity_priority_display_html;
+        }
+        if ($entity_priority_score_adjustment) {
+            $rec["{$entity_type}_priority_score_adjustment"]=$entity_priority_score_adjustment;
+        }
+
+        $upd=$con->getUpdateSQL($priority_rst, $rec, false, $magic_quotes);
+        if ($upd) {
+            $rst=$con->execute($upd);
+            if (!$rst) { db_error_handler($con, $upd); return false; }
+        }
+
+        return $entity_priority_id;
+
+    }
+
+/**********************************************************************/
+/**
+  * Deletes an entity priority from the database by ID
+  *
+  * @param adodbconnection $con with handle to the DB
+  * @param string $entity_type with priority of entity (currently case)
+  * @param integer $entity_priority_id DB identifier (required)
+  * @param boolean $delete_from_database indicating if record should be deleted from database or just marked as deleted (logical delete by default)
+  *
+  * @return boolean indicating success of delete operation
+  *
+**/
+    function delete_entity_priority($con, $entity_type='case', $entity_priority_id, $delete_from_database=false) {
+        if (!$con) return false;
+        if (!$entity_type) return false;
+        if (!$entity_priority_id) return false;
+
+        $table=$entity_type."_priorities";
+
+        if ($delete_from_database) {
+            $sql = "DELETE FROM $table WHERE {$entity_type}_priority_id=$entity_priority_id";
+        } else {
+            $sql = "UPDATE $table SET {$entity_type}_priority_record_status=".$con->qstr("d")." WHERE {$entity_type}_priority_id=$entity_priority_id";
+        }
+
+        $rst=$con->execute($sql);
+        if (!$rst) { db_error_handler($con, $sql); return false; }
+
+        return true;
+    }
+
+
+
 ?>
