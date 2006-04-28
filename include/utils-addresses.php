@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @author Brian Peterson
  *
- * $Id: utils-addresses.php,v 1.8 2006/04/25 14:35:42 braverock Exp $
+ * $Id: utils-addresses.php,v 1.9 2006/04/28 02:42:52 vanmer Exp $
  *
  */
 
@@ -279,7 +279,7 @@ function get_address($con, $address_id, $return_rst=false)
     if (!$address_id)
         return false;
 
-    $sql = "SELECT * FROM address WHERE address_id=$address_id";
+    $sql = "SELECT addresses.*,countries.* FROM addresses JOIN countries ON addresses.country_id=countries.country_id WHERE address_id=$address_id";
     $rst = $con->execute($sql);
     if (!$rst) {
         db_error_handler($con, $sql); return false;
@@ -399,6 +399,9 @@ function pull_address_fields ( $array_data )
 /**********************************************************************/
  /**
  * $Log: utils-addresses.php,v $
+ * Revision 1.9  2006/04/28 02:42:52  vanmer
+ * - added country to address API, corrected address table in select
+ *
  * Revision 1.8  2006/04/25 14:35:42  braverock
  * - multiple updates to add_update_address function
  *   - better checks to see if we have enough information to create an address
