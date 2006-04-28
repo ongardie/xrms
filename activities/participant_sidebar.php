@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: participant_sidebar.php,v 1.11 2006/04/14 14:22:22 braverock Exp $
+ * $Id: participant_sidebar.php,v 1.12 2006/04/28 16:48:51 braverock Exp $
  */
 require_once($include_directory.'utils-activities.php');
 
@@ -76,7 +76,7 @@ if (count($contact_ids)>0) {
 }
 
 $participant_block.="\n".'<tr>
-    <td colspan=$colspan class=widget_content_form_element>
+    <td colspan='.$colspan.' class=widget_content_form_element>
     <input type=button onclick="addParticipant()" value="'
     ._("Add New Participant")
     .'" class=button name=btAddParticipant>';
@@ -87,6 +87,9 @@ $participant_block .= "\n</table></form>";
 
 /**
  * $Log: participant_sidebar.php,v $
+ * Revision 1.12  2006/04/28 16:48:51  braverock
+ * - fix colspan
+ *
  * Revision 1.11  2006/04/14 14:22:22  braverock
  * - unquote javascript value attribute
  *
