@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-activities.php,v 1.24 2006/04/05 00:44:10 vanmer Exp $
+ * $Id: utils-activities.php,v 1.25 2006/04/28 16:37:12 braverock Exp $
 
  */
 
@@ -160,20 +160,25 @@ function add_activity($con, $activity_data, $participants=false, $magic_quotes=f
  */
 function get_activity($con, $activity_data, $show_deleted=false, $return_recordset=false) {
 
-        $sql = "select a.*, addr.*, c.company_id, c.company_name, cont.first_names, cont.last_name
-        from activities a
-        left join contacts cont on a.contact_id = cont.contact_id
-        join companies c ON c.company_id = a.company_id
-        left join addresses addr ON addr.address_id = c.default_primary_address";
+    $sql = "SELECT
+                a.*, addr.*, c.company_id, c.company_name, cont.first_names, cont.last_name, " .
+                $con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS entered_by_username, " .
+                $con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS last_modified_by_username, " .
+                $con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS completed_by_username " . "
+            FROM
+                users u1, users u2, users u3,
+                activities a
+                    left join contacts cont on a.contact_id = cont.contact_id
+                    join companies c ON c.company_id = a.company_id
+                    left join addresses addr ON addr.address_id = c.default_primary_address";
 
-        $where=array();
-        if (!$show_deleted) $activity_data['activity_record_status']='a';
-        $tablename='a';
+    $where=array();
+    if (!$show_deleted) $activity_data['activity_record_status']='a';
+    $tablename='a';
     if (array_key_exists('activity_id',$activity_data) AND trim($activity_data['activity_id'])) {
         $where['activity_id'] = $activity_data['activity_id'];
         $wherestr=make_where_string($con, $where, $tablename);
     } else {
-
         $extra_where=array();
         foreach ($activity_data as $akey=>$aval) {
             switch ($akey) {
@@ -183,16 +188,31 @@ function get_activity($con, $activity_data, $show_deleted=false, $return_records
                 break;
             }
         }
+        $extra_where[]= "a.entered_by = u1.user_id";
+        $extra_where[]= "a.last_modified_by = u2.user_id";
+        $extra_where[]= "a.completed_by = u3.user_id";
         if (count($extra_where)==0) $extra_where=false;
         $wherestr=make_where_string($con, $activity_data, $tablename, $extra_where);
     }
     if ($wherestr) $sql.=" WHERE $wherestr";
 
     $rst = $con->execute($sql);
-    if (!$rst) { db_error_handler($con, $sql); return false; }
-    if ($rst->EOF) return false;
-    else {
-    if ($return_recordset) return $rst;
+    if (!$rst) { //database error
+        db_error_handler($con, $sql);
+        return false;
+    } elseif ($rst->EOF) { //no record returned
+        return false;
+    } else { //we got a record
+        //set recurrance id
+        $recurrance_sql = "SELECT activity_recurrence_id FROM activities_recurrence where activity_id=$activity_id";
+        $recurrence_rst=$con->execute($recurrance_sql);
+        if (!$recurrence_rst) { db_error_handler($con, $recurrance_sql); }
+        if ($recurrence_rst->fields['activity_recurrence_id']) {
+            $rst->fields['activity_recurrence_id'] = $recurrence_rst->fields['activity_recurrence_id'];
+        } //end recurrance processing
+
+        //now process our return options
+        if ($return_recordset) return $rst;
         while (!$rst->EOF) {
             $ret[]=$rst->fields;
             $rst->movenext();
@@ -709,6 +729,12 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.25  2006/04/28 16:37:12  braverock
+  * - update get_activity() fn to retrieve all fields required by the UI
+  * - add check in get_activity()  to make sure we have a record, and not just an empty result set
+  * - add standardized processing of entered,modified,completed fields and usernames to get_activity()
+  * - add lookup for activity recurrence in get_activity()
+  *
   * Revision 1.24  2006/04/05 00:44:10  vanmer
   * - added magic quote parameter to all activities functions which call getUpdateSQL or getInsertSQL
   *
