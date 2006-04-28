@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.133 2006/01/19 22:20:32 daturaarutad Exp $
+ * $Id: one.php,v 1.134 2006/04/28 16:31:38 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -52,38 +52,21 @@ and activity_record_status='a'";
 $activity_rst = $con->execute($sql);
 
 if ($activity_rst) {
-    $activity_type_id = $activity_rst->fields['activity_type_id'];
-    $activity_priority_id = $activity_rst->fields['activity_priority_id'];
-    $activity_resolution_type_id = $activity_rst->fields['activity_resolution_type_id'];
-    $resolution_description = $activity_rst->fields['resolution_description'];
-    $current_activity_type_id = $activity_rst->fields['activity_type_id'];
-    $activity_title = $activity_rst->fields['activity_title'];
-    $activity_description = $activity_rst->fields['activity_description'];
-    $activity_user_id = $activity_rst->fields['user_id'];
-    $entered_by = $activity_rst->fields['entered_by'];
+    // Instantiating variables for each activity field, so that  fields
+    // are accessible to plugin code without an extra read from database.
+    foreach ($activity_rst->fields as $activity_field => $activity_field_value ) {
+        $$activity_field = $activity_field_value;
+    }
+
     $entered_at = date('Y-m-d H:i:s', strtotime($activity_rst->fields['entered_at']));
-    $last_modified_by = $activity_rst->fields['last_modified_by'];
     $last_modified_at = date('Y-m-d H:i:s', strtotime($activity_rst->fields['last_modified_at']));
-    $company_id = $activity_rst->fields['company_id'];
-    $company_name = $activity_rst->fields['company_name'];
-    $contact_id = $activity_rst->fields['contact_id'];
-    $on_what_table = $activity_rst->fields['on_what_table'];
-    $current_on_what_table = $activity_rst->fields['on_what_table'];
-    $activity_template_id=$activity_rst->fields['activity_template_id'];
-    $on_what_id = $activity_rst->fields['on_what_id'];
-    $address_id = $activity_rst->fields['address_id'];
     $scheduled_at = date('Y-m-d H:i:s', strtotime($activity_rst->fields['scheduled_at']));
     $ends_at = date('Y-m-d H:i:s', strtotime($activity_rst->fields['ends_at']));
     $local_time = calculate_time_zone_time($con, $activity_rst->fields['daylight_savings_id'], $rst->fields['gmt_offset']);
-    $activity_status = $activity_rst->fields['activity_status'];
-    $completed_at = $activity_rst->fields['completed_at'];
-    $completed_by = $activity_rst->fields['completed_by'];
-    $thread_id = $activity_rst->fields['thread_id'];
-    $followup_from_id = $activity_rst->fields['followup_from_id'];
-    $on_what_table = $activity_rst->fields['on_what_table'];
+
     $activity_rst->close();
 } else {
-    db_error_handler($con, $sql);
+    // add to $msg
 }
 
 // set thread_id to activity_id if it's not set already.
@@ -105,18 +88,6 @@ if (!strlen($completed_at)) {
     }
 } // end time rationalization on uncompleted activities
 
-$sql = "SELECT activity_recurrence_id FROM activities_recurrence where activity_id=$activity_id";
-$recurrence_rst=$con->execute($sql);
-if (!$recurrence_rst) { db_error_handler($con, $sql); }
-$activity_recurrence_id = $recurrence_rst->fields['activity_recurrence_id'];
-
-if ($completed_by) {
-    $sql = "SELECT " . $con->concat('first_names', "' '", 'last_name') . " as name FROM users WHERE user_id=$completed_by";
-    $completed_user_rst=$con->execute($sql);
-    if (!$completed_user_rst) { db_error_handler($con, $sql); }
-    $completed_by_user=$completed_user_rst->fields['name'];
-}
-
 if($on_what_table == 'opportunities') {
     $sql = "select o.probability
         from opportunities as o, activities as a
@@ -133,7 +104,6 @@ if($on_what_table == 'opportunities') {
 
 // since the activity can be attached to many things -- a company, contact, opportunity, or case -- we need to figure
 // out a way to display the link... this is probably less than perfect, but it works ok
-
 if ($on_what_table == 'opportunities') {
     $attached_to_link = "<a href='$http_site_root/opportunities/one.php?opportunity_id=$on_what_id'>";
     $sql = "select opportunity_title as attached_to_name from opportunities where opportunity_id = $on_what_id";
@@ -150,44 +120,21 @@ if ($on_what_table == 'opportunities') {
     $attached_to_link = "N/A";
     $sql = "select * from companies where 1 = 2";
 }
-
 $rst = $con->execute($sql);
-
 if ($rst) {
     $attached_to_name = $rst->fields['attached_to_name'];
     $attached_to_link .= $attached_to_name . "</a>";
     $rst->close();
+} else {
+    db_error_handler($con,$sql);
 }
+// end attached_to processing
+
 
 $show_blank = (get_system_parameter($con, 'Allow Unassigned Activities') == "y" ? true : false);
-$user_menu = get_user_menu($con, $activity_user_id, $show_blank, 'user_id', false);
+$user_menu = get_user_menu($con, $user_id, $show_blank, 'user_id', false);
 
 $activity_id_text = _("Activity ID:") . ' ' . $activity_id;
-
-   //get user info for who entered the activity
-    $sql = "select first_names, last_name from users where user_id = $entered_by";
-    $rst = $con->execute($sql);
-    if ($rst) {
-        $entered_by_firstname = $rst->fields['first_names'];
-        $entered_by_lastname = $rst->fields['last_name'];
-
-        $rst->close();
-    } else {
-        db_error_handler($con, $sql);
-    }
-
-if ($last_modified_by) {
-    //get user info for who modified the activity
-    $sql = "select first_names, last_name from users where user_id = $last_modified_by";
-    $rst = $con->execute($sql);
-    if ($rst) {
-        $last_modified_by_firstname = $rst->fields['first_names'];
-        $last_modified_by_lastname = $rst->fields['last_name'];
-        $rst->close();
-    } else {
-        db_error_handler($con, $sql);
-    }
-}
 
 
 if (get_system_parameter($con, 'Display Item Technical Details') == 'y') {
@@ -195,10 +142,10 @@ if (get_system_parameter($con, 'Display Item Technical Details') == 'y') {
 
     //display user info for who entered the activity
     $history_text .= _("ID") . ' ' . $activity_id . ' ' .
-                     _("entered by") . ' ' . $entered_by_firstname . ' ' . $entered_by_lastname . ' ' .
+                     _("entered by") . ' ' . $entered_by_username . ' ' .
                      _("at") . ' ' . $entered_at . '. ';
 
-    $history_text .= _("Last modified by") . ' ' . $last_modified_by_firstname . ' ' . $last_modified_by_lastname . ' ' .
+    $history_text .= _("Last modified by") . ' ' . $last_modified_username . ' ' .
                          _("at") . ' ' . $last_modified_at . '.';
     $history_text .= '</td> </tr>';
 } else {
@@ -572,8 +519,8 @@ function logTime() {
             <tr>
                 <td class=widget_label_right><?php echo _("Activity Notes"); ?></td>
                 <td class=widget_content_form_element>
-                <?php if($print_view) { 
-                        echo htmlspecialchars(nl2br(trim($activity_description))); 
+                <?php if($print_view) {
+                        echo htmlspecialchars(nl2br(trim($activity_description)));
                         echo "<input type=hidden name=activity_description value=\"" . htmlspecialchars(nl2br(trim($activity_description))) . "\">\n";
                       } else { ?>
                         <textarea rows=10 cols=70 name=activity_description><?php  echo htmlspecialchars(trim($activity_description)); ?></textarea>
@@ -614,12 +561,12 @@ function logTime() {
             <?php } ?>
             <tr>
                 <td class=widget_label_right><?php echo _("Entered By"); ?></td>
-                <td class=widget_content_form_element><?php echo $entered_by_firstname.' '.$entered_by_lastname.' '._("on").' '.$entered_at; ?></td>
+                <td class=widget_content_form_element><?php echo $entered_by_username.' '._("on").' '.$entered_at; ?></td>
             </tr>
             <?php if ($last_modified_by) { ?>
             <tr>
                 <td class=widget_label_right><?php echo _("Last Modified By"); ?></td>
-                <td class=widget_content_form_element><?php echo $last_modified_by_firstname.' '.$last_modified_by_lastname.' '._("on").' '.$last_modified_at; ?></td>
+                <td class=widget_content_form_element><?php echo $last_modified_by_username.' '._("on").' '.$last_modified_at; ?></td>
             </tr>
            <?php } ?>
             <tr>
@@ -644,7 +591,7 @@ function logTime() {
             <tr>
                 <td class=widget_label_right><?php echo _("Completed?"); ?></td>
                 <td class=widget_content_form_element><input type=checkbox id=activity_completed name=activity_status value='on' <?php if ($activity_status == 'c') {print "checked";}; ?>>
-                    <?php if ($completed_by) echo _("by").' '.$completed_by_user; if ($completed_at AND ($completed_at!='0000-00-00 00:00:00')) echo ' '._("on").' '. $completed_at; ?>
+                    <?php if ($completed_by) echo _("by").' '.$completed_by_username; if ($completed_at AND ($completed_at!='0000-00-00 00:00:00')) echo ' '._("on").' '. $completed_at; ?>
                 </td>
             </tr>
             <tr id='resolution_type' >
@@ -797,6 +744,12 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.134  2006/04/28 16:31:38  braverock
+ * - use get_activity API call
+ *   - move created,modified,completed by processing into API
+ *   - standardize how variables are assigned from the result set
+ *   - limit processing in this file to UI-directed items
+ *
  * Revision 1.133  2006/01/19 22:20:32  daturaarutad
  * add Print View button which displays textarea as a static element
  *
