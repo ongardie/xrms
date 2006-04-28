@@ -8,11 +8,11 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-cases.php,v 1.1 2006/04/27 03:24:04 vanmer Exp $
+ * $Id: utils-cases.php,v 1.2 2006/04/28 02:45:59 vanmer Exp $
  *
  */
 
-
+require_once('utils-typestatus.php');
 /**********************************************************************/
 /**
  *
@@ -90,6 +90,7 @@ function add_update_case($con, $case_info, $_return_data = false, $_magic_quotes
     global $session_user_id;
 
     // If there is not a 'company_id', one needs to be located or created
+
     if ( (! $case_info['company_id']) || ( $case_info['company_id']) == 0 )
     {
             $case_info['company_id'] = 1;
@@ -144,6 +145,12 @@ function add_update_case($con, $case_info, $_return_data = false, $_magic_quotes
         if (strlen($case_data['company_id']) == 0)
                 $case_data['company_id']  = $found_case_data['company_id'];
 
+        if ($case_data['case_status_id']) {
+            if ($case_data['case_status_id']!=$found_case_data['case_status_id']) {
+                $case_data=set_case_open_closed_by_status($con, $case_data, $case_data['case_status_id']);
+            }
+        }
+
         // Update case data record
         $_retVal = __record_update ( $con, $_table_name, 'case_id', $case_data, $_magic_quotes );
 
@@ -156,13 +163,17 @@ function add_update_case($con, $case_info, $_return_data = false, $_magic_quotes
         $param = array($_retVal, $case_data);
         do_hook_function('case_edit_2', $param);
 
+        if ($case_data['case_status_id'] != $found_case_data['case_status_id']) {
+            add_workflow_history($con, 'cases', $case_id, $found_case_data['case_status_id'], $case_data['case_status_id']);
+        }
+
         $audit_type = 'updated';
     }
 
     // This is a new Record
     else
     {
-        // If a company has not been defined, AND names are not given, this can be be dealt with
+        // If a case has the needed elements, we will add it
         if ( ( $case_data['company_id'] ) && ( ( $case_data['case_title'] ) && ( $case_data['case_type_id'] ) ) && ($case_data['case_status_id']) )
         {
             // Need to clean up the data
@@ -171,20 +182,22 @@ function add_update_case($con, $case_info, $_return_data = false, $_magic_quotes
             $case_data['user_id']          = (strlen($case_data['user_id']) > 0)         ? $case_data['user_id']         : $session_user_id;
 
             //do other case defaults here
-
+            $case_data=set_case_open_closed_by_status($con, $case_data, $case_data['case_status_id']);
 
             $case_array = __record_insert ( $con, 'cases', $case_data, $_magic_quotes, true );
 
             $case_id=$case_array['case_id'];
             $_retVal = $case_id;
 
-            //add to recently viewed list
-            update_recent_items($con, $session_user_id, $_table_name, $case_id);
-
-            $case_data['case_id'] = $case_id;
-            do_hook_function('case_new_2', $case_data);
-
-            $audit_type = 'created';
+            if ($case_id) {
+                //add to recently viewed list
+                update_recent_items($con, $session_user_id, $_table_name, $case_id);
+    
+                $case_data['case_id'] = $case_id;
+                do_hook_function('case_new_2', $case_data);
+    
+                $audit_type = 'created';
+            }
         }
     }
 
@@ -263,7 +276,7 @@ function find_case($con, $case_data, $show_deleted = false, $return_recordset = 
     else {
     if ($return_recordset) return $rst;
         while (!$rst->EOF) {
-            $ret[]=$rst->fields;
+            $ret[]=$rst->getRowAssoc(false);
             $rst->movenext();
         }
     }
@@ -291,7 +304,7 @@ function get_case($con, $case_id, $return_rst = false) {
     else {
         if ($return_rst) {
             return $rst;
-       } else return $rst->fields;
+       } else return $rst->getRowAssoc(false);
     }
     //shouldn't ever get here
     return false;
@@ -314,7 +327,14 @@ function get_case($con, $case_id, $return_rst = false) {
  */
 function update_case($con, $case, $case_id = false, $case_rst = false, $magic_quotes=false)
 {
-
+    //if we're passed a recordset and it's not empty, populate case_id from it if it was not provided
+    if ($case_rst AND !$case_rst->EOF AND !$case_id) {
+         $case_id=$case_rst->fields['case_id'];
+    }
+    if ($case_id) $case['case_id']=$case_id;
+    else return false;
+    return add_update_case($con, $case, false, $magic_quotes);
+/*
     global $session_user_id;
 
     if (!$case) return false;
@@ -326,6 +346,13 @@ function update_case($con, $case, $case_id = false, $case_rst = false, $magic_qu
     $rec['last_modified_at'] = time();
     $rec['last_modified_by'] = $session_user_id;
 
+    $case_status_id=$case['case_status_id'];
+    if ($new_status) {
+        $old_status=$case_rst->fields['case_status_id'];
+        if ($old_status != $case_status_id) {
+            $case=set_case_open_closed_by_status($con, $case, $new_status);
+        }
+    }
 
     $upd = $con->GetUpdateSQL($case_rst, $case, false, $magic_quotes);
     if ($upd) {
@@ -339,9 +366,31 @@ function update_case($con, $case, $case_id = false, $case_rst = false, $magic_qu
 
     add_audit_item($con, $session_user_id, 'updated', 'cases', $case_id, 1);
 
+        if ($old_status != $case_status_id) {
+            add_workflow_history($con, 'cases', $case_id, $old_status, $case_status_id);
+        }
     return true;
-
+*/
 };
+
+function set_case_open_closed_by_status($con, $rec=false, $status_id=false) {
+    global $session_user_id;
+    if (!$rec OR !$status_id) return false;
+    $status_data=get_entity_status($con, 'case',$status_id);
+    $open_indicator=$status_data['status_open_indicator'];
+    switch ($open_indicator) {
+        case 'o':
+            $rec['closed_at']=NULL;
+            $rec['closed_by']=0;
+        break;
+        case 'u':
+        case 'r':
+            $rec['closed_at']=time();
+            $rec['closed_by']=$session_user_id;
+        break;
+    }
+    return $rec;
+}
 
 /**********************************************************************/
 /**
@@ -357,6 +406,7 @@ function update_case($con, $case, $case_id = false, $case_rst = false, $magic_qu
  */
 function delete_case($con, $case_id, $delete_from_database = false)
 {
+    global $session_user_id;
     if (!$case_id) return false;
     if ($delete_from_database) {
         $sql = "DELETE FROM cases";
@@ -367,6 +417,8 @@ function delete_case($con, $case_id, $delete_from_database = false)
 
     $rst=$con->execute($sql);
     if (!$rst) { db_error_handler($con, $sql); return false; }
+
+    add_audit_item($con, $session_user_id, 'deleted', 'cases', $case_id, 1);
 
     return true;
 };
@@ -437,6 +489,10 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-cases.php,v $
+ * Revision 1.2  2006/04/28 02:45:59  vanmer
+ * - added status check to see if case should be open or closed
+ * - added types and status API include
+ *
  * Revision 1.1  2006/04/27 03:24:04  vanmer
  * - Initial revision of a cases API, implements basic add/update/get/find/delete
  * - still needs to be updated with phpdoc and advanced functionality
