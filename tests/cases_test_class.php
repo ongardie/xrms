@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: cases_test_class.php,v 1.2 2006/04/27 03:23:11 vanmer Exp $
+ * $Id: cases_test_class.php,v 1.3 2006/04/28 02:47:59 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -67,7 +67,7 @@ Class XRMSCaseTest extends XRMS_TestCase {
         $this->test_case_data= array(
                    'case_title'   => 'Test Suite Case: Ignore',
                    'case_description' =>'This case was added automatically by the test suite.  It should not be visible, and can safely be ignored',
-                    'due_at' => '2006-04-20',
+                    'due_at' => '2006-04-20 12:01:01',
                     'case_type_id'=>$this->test_type_id,
                     'case_status_id'=>$this->test_status_id,
                     'company_id'=>1,
@@ -93,6 +93,8 @@ Class XRMSCaseTest extends XRMS_TestCase {
         }
         $case_result=add_case($con, $case_data);
         $this->assertTrue($case_result, "Failed to add case: {$case_data['title']}");
+        $ret=$this->test_case_status_consistency($case_result, $case_data['case_status_id']);
+        $this->assertTrue($ret, "Failed test_case_status_consistency check, should succeed");
         return $case_result;
    }
    
@@ -116,13 +118,14 @@ Class XRMSCaseTest extends XRMS_TestCase {
     
     function test_get_case($case_id=false, $return_rst=false) {
         $con = $this->con;
-        if (!$case_data) {
-            $case_data=$this->test_case_data;
-        }
         $case_result=get_case($con, $case_id, $return_rst);
         if ($case_id) {
             $this->assertTrue($case_result, "Failed to get information about case");
-            $this->assertTrue(is_array($case_result),"Case info is not an array, should be");
+            if (!$return_rst) {
+                $this->assertTrue(is_array($case_result),"Case info is not an array, should be");
+            } else {
+                $this->assertTrue(is_object($case_result),"Case info is not an object, should be");
+            }
         } else { $this->assertTrue($case_result==false, "Expected to fail retreiving case, instead found a case"); }
         return $case_result;
     }
@@ -135,11 +138,12 @@ Class XRMSCaseTest extends XRMS_TestCase {
                 if (!$case) { $this->fail("No case found to update using find_case function, failing further tests"); return false; }
                 $case=current($case);
 		$case_id=$case['case_id'];
-		$this->assertTrue($case_id, "Failed to identify case for update");		
+		$this->assertTrue($case_id, "Failed to identify case for update.  Skipping further tests.");
+                if (!$case_id) return false;		
 	}
-	//if no case data is provided, create test data
+	//if no case data is provided, retrieve it
 	if ($case_data===NULL) {
-                $case_data=$this->test_case_data;
+                $case_data=$this->test_get_case($case_id);
 		$case_data['case_description'].=' Changed For Test';
                 $case_data['due_at']='2006-04-21 00:00:00';
 	}
@@ -151,13 +155,20 @@ Class XRMSCaseTest extends XRMS_TestCase {
 	if ($new_case) {
 		$new_case_data=$new_case;
 		foreach ($case_data as $ckey=>$cval) {
-			$this->assertTrue($new_case_data[$ckey]==$cval, "Update error: $ckey values do not match: {$new_case_data[$ckey]}!=$cval");
+            switch ($ckey) {
+                case 'last_modified_at':
+                    //don't compare this one
+                break;
+                default: 
+        			$this->assertTrue($new_case_data[$ckey]==$cval, "Update error: $ckey values do not match: {$new_case_data[$ckey]}!=$cval");
+                break;
+            }
 		}
 	}
 	return $result;
    }
     
-    function test_delete_case($case_id=false, $delete_from_database=false) {
+    function test_delete_case($case_id=false, $delete_from_database=true) {
         $con = $this->con;
         $session_user_id=$this->session_user_id;
         if (!$case_id) {
@@ -200,10 +211,88 @@ Class XRMSCaseTest extends XRMS_TestCase {
         $this->test_delete_case($test_case_id, $delete_from_database);
     }
 
+    function test_case_change_status($case_data=NULL, $new_status=NULL) {
+        if ($case_data===NULL) {
+            $case_data=$this->test_case_data;
+        }
+
+        $case_id=$this->test_add_case($case_data);
+
+        if (!$case_id)  {
+            $this->fail("Failed to add case for status change test, skipping further tests.");
+            return false;
+        }
+
+        if ($new_status===NULL) {
+            $this->type_status_test->_result =& $this->_result;
+            $new_status=$this->type_status_test->test_add_entity_status_closed_resolved($this->entity_type);
+            $delete_new_status=true;
+        } else $delete_new_status=false;
+
+        $case_data["{$this->entity_type}_status_id"]=$new_status;
+        $ret=$this->test_update_case($case_data, $case_id);
+        if (!$ret) {
+            $this->fail("Failed to update case for status change test, skipping further tests");
+        } else {
+            $ret=$this->test_case_status_consistency($case_id, $new_status);
+            $this->assertTrue($ret, "Failed test_case_status_consistency check, should succeed");
+        }
+
+        if ($delete_new_status) {
+            $this->type_status_test->test_delete_entity_status($this->entity_type, $new_status);
+        }
+
+        $this->test_delete_case($case_id);
+
+    }
+
+
+    function test_case_change_status_unresolved_to_open($case_data=NULL) {
+        if ($case_data===NULL) {
+            $case_data=$this->test_case_data;
+            $new_status=$case_data['case_status_id'];
+            $ustatus=$this->type_status_test->test_add_entity_status_closed_unresolved($this->entity_type);
+            $delete_ustatus=true;
+            $case_data['case_status_id']=$ustatus;
+        } else $delete_ustatus=false;
+
+        $ret= $this->test_case_change_status($case_data, $new_status);
+        if ($delete_ustatus) {
+            $this->type_status_test->test_delete_entity_status_closed_unresolved($this->entity_type);
+        }
+        return $ret;
+    }
+
+    function test_case_status_consistency($case_id=false, $new_status=false) {
+        if ((!$case_id) OR (!$new_status)) return false;
+        $new_status_data=$this->type_status_test->test_get_entity_status($this->entity_type, $new_status);
+        $open_indicator=$new_status_data['status_open_indicator'];
+
+        $new_case_data=$this->test_get_case($case_id);
+        switch ($open_indicator) {
+            case 'o':
+                $this->assertTrue(!$new_case_data['closed_at'], "Case is closed while status indicates open.");
+                $ret=!$new_case_data['closed_at'];
+            break;
+            case 'r':
+            case 'u':
+                $this->assertTrue($new_case_data['closed_at'], "Case is open status indicates closed");
+                $ret= ( $new_case_data['closed_at'] ) ? true: false;
+            break;
+            default:
+                $ret=false;
+            break;
+        }
+        return $ret;
+    }
 }
 
 /*
  * $Log: cases_test_class.php,v $
+ * Revision 1.3  2006/04/28 02:47:59  vanmer
+ * - added tests for status on a case matching case closed_by/closed_at fields
+ * - update tests to reflect integration of cases API into UI
+ *
  * Revision 1.2  2006/04/27 03:23:11  vanmer
  * - updated cases tests to use auto-generated types/statuses from types/statuses API
  *
