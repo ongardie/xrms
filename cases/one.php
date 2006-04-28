@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.47 2006/01/02 22:47:25 vanmer Exp $
+ * $Id: one.php,v 1.48 2006/04/28 02:52:51 vanmer Exp $
  */
 
 //include required files
@@ -37,11 +37,12 @@ $sql = "SELECT
         cas.case_status_display_html, cap.case_priority_display_html, cat.case_type_id, cat.case_type_display_html,
         u1.username as entered_by_username, u2.username as last_modified_by_username,
         u3.username as case_owner_username, u4.username as account_owner_username,
-        as1.account_status_display_html, r.rating_display_html, crm_status_display_html
+        u5.username as closed_by_username, as1.account_status_display_html, r.rating_display_html, crm_status_display_html
         FROM
         case_statuses cas, case_priorities cap, case_types cat, companies c, contacts cont,
         users u1, users u2, users u3, users u4, account_statuses as1, ratings r, crm_statuses crm,
         cases ca LEFT OUTER JOIN company_division d on ca.division_id=d.division_id
+        LEFT OUTER JOIN users u5 ON u5.user_id=ca.closed_by
         WHERE
         ca.company_id = c.company_id
         and ca.case_status_id = cas.case_status_id
@@ -87,6 +88,8 @@ if ($rst) {
     $last_modified_at = $con->userdate($rst->fields['last_modified_at']);
     $entered_by = $rst->fields['entered_by_username'];
     $last_modified_by = $rst->fields['last_modified_by_username'];
+    $closed_at = $con->userdate($rst->fields['closed_at']);
+    $closed_by = $rst->fields['closed_by_username'];
     $rst->close();
 } else {
     db_error_handler ($con, $sql);
@@ -199,6 +202,12 @@ start_page($page_title, true, $msg);
                                     <td class=sublabel><?php echo _("Last Modified"); ?></td>
                                     <td class=clear><?php  echo $last_modified_at; ?> (<?php  echo $last_modified_by; ?>)</td>
                                 </tr>
+<?php if ($closed_at AND $closed_by) { ?>
+                                <tr>
+                                    <td class=sublabel><?php echo _("Closed"); ?></td>
+                                    <td class=clear><?php  echo $closed_at; ?> (<?php  echo $closed_by; ?>)</td>
+                                </tr>
+<?php } ?>
                                 </table>
                             </td>
 
@@ -215,7 +224,7 @@ start_page($page_title, true, $msg);
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("E-Mail"); ?></td>
-                                    <td class=clear><a href='mailto:<?php echo $email . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$case_id&contact_id=$contact_id&on_what_table=cases&activity_title=email RE: $case_title&company_id=$company_id&email=$email&return_url=/cases/one.php?case_id=$case_id'\" >" . htmlspecialchars($email); ?></a></td>
+                                    <td class=clear><?php echo "<a href='mailto:$email' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$case_id&contact_id=$contact_id&on_what_table=cases&activity_title=email RE: $case_title&company_id=$company_id&email=$email&return_url=/cases/one.php?case_id=$case_id'\" >" . htmlspecialchars($email); ?></a></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
@@ -297,6 +306,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.48  2006/04/28 02:52:51  vanmer
+ * - added join on optional closed_by field for cases
+ * - added display of closed_by and closed_on user/date
+ * - altered display of mailto: href link so as not to confuse the HTML parser in quanta
+ *
  * Revision 1.47  2006/01/02 22:47:25  vanmer
  * - changed to use centralized dbconnection function
  *
