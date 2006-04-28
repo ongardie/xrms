@@ -8,7 +8,7 @@
  * @author Beth Macknik
  * @package XRMS_API
  *
- * $Id: utils-database.php,v 1.30 2006/01/11 21:49:21 vanmer Exp $
+ * $Id: utils-database.php,v 1.31 2006/04/28 02:44:17 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -852,7 +852,7 @@ function __record_update ( $_objCon, $_strTableName, $_identifier, $_aryData, $_
         }
 
         // Only UPDATE if any of the fields have changed
-        if ( $_objCon->GetUpdateSQL($rs, $_aryData, $_magic_quotes) )
+        if ( $_objCon->GetUpdateSQL($rs, $_aryData, false, $_magic_quotes) )
         {
             // Since something is different, set the modified fields
 
@@ -865,7 +865,7 @@ function __record_update ( $_objCon, $_strTableName, $_identifier, $_aryData, $_
             $_aryData['last_modified_at'] = $_timeStamp;
 
             // Build new SQL
-            $updateSQL = $_objCon->GetUpdateSQL($rs, $_aryData, $_magic_quotes);
+            $updateSQL = $_objCon->GetUpdateSQL($rs, $_aryData, false, $_magic_quotes);
 
             if ( $rs =& $_objCon->Execute($updateSQL) )
             {
@@ -1270,6 +1270,9 @@ function drop_table($con, $table_name, &$upgrade_msgs) {
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.31  2006/04/28 02:44:17  vanmer
+ * - added parameter in getUpdateSQL to fix bug where updates were forced where fields were not defined when magic_quotes is enabled, fix passes magic quotes in the right parameter order
+ *
  * Revision 1.30  2006/01/11 21:49:21  vanmer
  * - changed to only display errors renaming a field if requested
  * - changed to only report success when no database errors occurred
