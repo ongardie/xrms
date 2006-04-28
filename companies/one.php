@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.137 2006/04/26 20:03:53 braverock Exp $
+ * $Id: one.php,v 1.138 2006/04/28 23:31:51 jnhayart Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -304,12 +304,13 @@ if ($division_id) $new_contact_location.= "&division_id=$division_id";
         global $con;
         global $session_user_id;
         global $company_id;
-
+        global $address_id;
+        
         // this is for the CTI dialing bit
         global $contact_id;
         $contact_id = $row['contact_id'];
 
-        $row['phone'] = get_formatted_phone($con, $row['address_id'], $row['work_phone']);
+        $row['work_phone'] = get_formatted_phone($con, $address_id, $row['work_phone']);
         $row['email'] = "<a href='mailto:{$row['email']}' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&company_id=$company_id&contact_id={$row['contact_id']}&email=true&return_url=/companies/one.php%3Fcompany_id=$company_id&activity_title=email%20to%20{$row['first_names']}%20{$row['last_name']}'\" >" . htmlspecialchars($row['email']) . '</a>';
 
         return $row;
@@ -763,6 +764,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.138  2006/04/28 23:31:51  jnhayart
+ * fix display Work_phone with get_formatted_phone
+ *
  * Revision 1.137  2006/04/26 20:03:53  braverock
  * - do a better job of not showing empty fields in Company Details
  * - remove 'Admin' button, fields moved to edit.php
