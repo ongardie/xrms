@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-cases.php,v 1.2 2006/04/28 02:45:59 vanmer Exp $
+ * $Id: utils-cases.php,v 1.3 2006/04/28 03:25:59 vanmer Exp $
  *
  */
 
@@ -23,48 +23,30 @@ require_once('utils-typestatus.php');
  *
  * These 'cases' tables fields are required.
  * This method will fail without them.
- * - company_id              - Company this person belongs to
- * - address_id              - Which address to use for this person
- * - home_address_id         - This persons home address
- * - last_name               - Last Name
- * - first_names             - First Name
- * - email                   - Cases eMail Address
+ * - integer company_id              - Company this case belongs to
+ * - string case_title               - Title for the case
+ * - integer case_type_id              - type_id for the case type, from the case_types table
+ * - integer case_status_id         - status_id for the case status, from the case_statuses table
+ * - date due_at ? used to determine the deadline on this case
  *
  * These fields are optional, some may be derived from other fields if not defined.
- * - user_id                 - "Account Owner" of case data, Defaults to who created the record
- * - division_id             - Division with the company
- * - salutation              - Salutation for Addressing
- * - gender                  - Case Gender
- * - date_of_birth           - Cases Birth Date
- * - summary                 -
- * - title                   - Title within Company
- * - description             -
- * - work_phone              - Cases Work Phone Number
- * - work_phone_ext          - Cases Work Number Extention
- * - cell_phone              - Cases Cellphone Number
- * - home_phone              - Cases Home Phone Number
- * - fax                     - Cases FAX Number
- * - tax_id                  - Cases SSN/TIN
- * - aol_name                - America Online IM "handle" name
- * - yahoo_name              - Yahoo IM "handle" name
- * - msn_name                - MSN IM "handle" name
- * - interests               -
- * - profile                 -
- * - custom1                 - Custom Field #1
- * - custom2                 - Custom Field #2
- * - custom3                 - Custom Field #3
- * - custom4                 - Custom Field #4
- * - extref1                 - External Reference Field #1
- * - extref2                 - External Reference Field #2
- * - extref3                 - External Reference Field #3
+ * - integer case_priority_id ? indicates which specific case_priority this case has
+ * -integer company_id ? identifies the company record associated with this case
+ * -integer division_id ? identifies the particular division within the company associated with this case
+ * -integer contact_id ? identifies the contact associated with the case
+ * -integer user_id ? identifies the system user who owns the case
+ * -integer priority ? identifies the priority of the case
+ * -string case_title ? string identifying the case
+ * -string case_description ? text field with a long description of the case
  *
  * Do not define these fields, they are auto-defined
- * - entered_at              - when was record created
- * - entered_by              - who created the record
- * - last_modified_at        - when was record modified - this will be the same as 'entered_at'
- * - last_modified_by        - who modified the record  - this will be the same as 'entered_by'
- * - case_record_status   - the database defaults this to [a] Active
- * - email_status            - the database defaults this to [a] Active
+ * -date last_modified_at ? timestamp for when the case was last changed, automatically generated
+ * -integer last_modified_by ? identifies the system user who last changed the case, automatically generated
+ * -char case_record_status ? character identifying the status of the record (a for active, d for del *
+ * -integer closed_by ? identifies the system user who last changed the case to a closed status, automatically generated
+ * -integer closed_at ? when was record modified - this will be the same as 'entered_at'
+ * -date entered_at              - when was record created
+ * -integer entered_by              - who created the record
  *
  * @param adodbconnection  $con               with handle to the database
  * @param array            $case_info      with data about the case, to add/update
@@ -96,11 +78,8 @@ function add_update_case($con, $case_info, $_return_data = false, $_magic_quotes
             $case_info['company_id'] = 1;
     }
 
-    // Other sub-systems can handle "personal" information. They may or may not
-    // utilize other fields that the 'cases' table don't need to deal with.
-    // This array (below) will pull out only the fields we need and process them.
-    // This way we make sure we hae the data we need, and only that data.
-    $case_data = $case_info; //pull_case_fields ( $case_info );
+    //associate case info as case_data.  Could parse case_info and only pull case fields, but for now we'll use all fields passed in
+    $case_data = $case_info;
 
 
     // If 'field' this exists, but has no data, remove it
@@ -174,7 +153,7 @@ function add_update_case($con, $case_info, $_return_data = false, $_magic_quotes
     else
     {
         // If a case has the needed elements, we will add it
-        if ( ( $case_data['company_id'] ) && ( ( $case_data['case_title'] ) && ( $case_data['case_type_id'] ) ) && ($case_data['case_status_id']) )
+        if ( ( $case_data['company_id'] ) && ( ( $case_data['case_title'] ) && ( $case_data['case_type_id'] ) ) && ($case_data['case_status_id']) && ($case_data['due_at']) )
         {
             // Need to clean up the data
 
@@ -288,7 +267,7 @@ function find_case($con, $case_data, $show_deleted = false, $return_recordset = 
 /**********************************************************************/
 /**
  *
- * Gets a case based on the database identifer if that case
+ * Gets a case based on the database identifer of that case
  *
  * @param adodbconnection  $con               with ADOdb connection Object
  * @param integer          $case_id        with ID of the case to get details about
@@ -316,6 +295,7 @@ function get_case($con, $case_id, $return_rst = false) {
  * Updates an case in XRMS from an associative array
  * Either an case_id must be explicitly set or an adodbrecordset for the record to be updated
  * must be passed in or the function will fail
+ * Is a wrapper for add_update_case which can pull case_id from a recordset if provided
  *
  * @param adodbconnection  $con           ADOdb connection Object
  * @param array            $case_data  with associative array defining case data to update
@@ -334,45 +314,20 @@ function update_case($con, $case, $case_id = false, $case_rst = false, $magic_qu
     if ($case_id) $case['case_id']=$case_id;
     else return false;
     return add_update_case($con, $case, false, $magic_quotes);
-/*
-    global $session_user_id;
-
-    if (!$case) return false;
-    if (!$case_rst) {
-        $case_rst=get_case($con, $case_id, true);
-    }
-    if (!$case_rst) return false;
-
-    $rec['last_modified_at'] = time();
-    $rec['last_modified_by'] = $session_user_id;
-
-    $case_status_id=$case['case_status_id'];
-    if ($new_status) {
-        $old_status=$case_rst->fields['case_status_id'];
-        if ($old_status != $case_status_id) {
-            $case=set_case_open_closed_by_status($con, $case, $new_status);
-        }
-    }
-
-    $upd = $con->GetUpdateSQL($case_rst, $case, false, $magic_quotes);
-    if ($upd) {
-        $rst=$con->execute($upd);
-        if (!$rst) { db_error_handler($con, $upd); return false; }
-    }
-
-    //this will run whether or not base case changed
-    $param = array($case_rst, $case);
-    do_hook_function('case_edit_2', $param);
-
-    add_audit_item($con, $session_user_id, 'updated', 'cases', $case_id, 1);
-
-        if ($old_status != $case_status_id) {
-            add_workflow_history($con, 'cases', $case_id, $old_status, $case_status_id);
-        }
-    return true;
-*/
 };
 
+
+/**********************************************************************/
+/**
+ *
+ * Takes a case record array and adds a closed_by and closed_at fieldset based on the status of the case
+ *
+ * @param adodbconnection  $con           ADOdb connection Object
+ * @param array            $rec  with associative array defining case data
+ * @param integer          $status_id    identifying case status in the database
+ *
+ * @return array with original $rec with new keys 'closed_at' and 'closed_by' based on status provided
+ */
 function set_case_open_closed_by_status($con, $rec=false, $status_id=false) {
     global $session_user_id;
     if (!$rec OR !$status_id) return false;
@@ -424,62 +379,6 @@ function delete_case($con, $case_id, $delete_from_database = false)
 };
 
 
-
-/**
- *
- * Pulls only case field data from given array
- *
- * @param array $array_data array to retrieve case data from
- *
- * @return array $case_fields case "only" fields found in given array
- */
-function pull_case_fields ( $array_data )
-{
-    if ( ! $array_data )
-        return $array_data;
-
-    // Retrieve only the field names we can handle
-    $case_fields = array ( 'company_id'           => '',
-                              'division_id'          => '',
-                              'address_id'           => '',
-                              'home_address_id'      => '',
-                              'last_name'            => '',
-                              'first_names'          => '',
-                              'email'                => '',
-                              'salutation'           => '',
-                              'gender'               => '',
-                              'date_of_birth'        => '',
-                              'summary'              => '',
-                              'title'                => '',
-                              'description'          => '',
-                              'work_phone'           => '',
-                              'work_phone_ext'       => '',
-                              'cell_phone'           => '',
-                              'home_phone'           => '',
-                              'fax'                  => '',
-                              'tax_id'               => '',
-                              'interests'            => '',
-                              'profile'              => '',
-                              'custom1'              => '',
-                              'custom2'              => '',
-                              'custom3'              => '',
-                              'custom4'              => '',
-                              'extref1'              => '',
-                              'extref2'              => '',
-                              'extref3'              => '',
-                              'address_name'         => '',
-                              'address_body'         => '',
-                              'address_type'         => '',
-                              'use_pretty_address'   => '',
-                              'offset'               => '',
-                              'daylight_savings_id'  => ''
-                          );
-
-    // Now pull out the fields we need
-    return array_intersect_key_2($case_fields, $array_data);
-
-};
-
 /**********************************************************************/
 /** Include the misc utilities file */
 include_once $include_directory . 'utils-misc.php';
@@ -489,6 +388,10 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-cases.php,v $
+ * Revision 1.3  2006/04/28 03:25:59  vanmer
+ * - updated case API with proper PHPDoc
+ * - removed commented and unused code
+ *
  * Revision 1.2  2006/04/28 02:45:59  vanmer
  * - added status check to see if case should be open or closed
  * - added types and status API include
