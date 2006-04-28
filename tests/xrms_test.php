@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_test.php,v 1.10 2006/04/26 00:55:30 vanmer Exp $
+ * $Id: xrms_test.php,v 1.11 2006/04/28 04:30:09 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -29,6 +29,7 @@ require_once($include_directory.'../tests/companies_test_class.php');
 require_once($include_directory.'../tests/integration_test_class.php');
 require_once($include_directory.'../tests/type_status_class.php');
 require_once($include_directory.'../tests/cases_test_class.php');
+require_once($include_directory.'../tests/opportunities_test_class.php');
 require_once($include_directory.'../tests/activities/xrms_activity_test.php');
 require_once($include_directory.'classes/File/tests/files_test_class.php');
 require_once($include_directory.'classes/File/tests/fixed_width_parser_test.php');
@@ -56,6 +57,7 @@ $suite_array[]= new PHPUnit_TestSuite( "XRMSCompanyTest" );
 $suite_array[]= new PHPUnit_TestSuite( "XRMSContactTest" );
 $suite_array[]= new PHPUnit_TestSuite( "XRMSTypeStatusTest" );
 $suite_array[]= new PHPUnit_TestSuite( "XRMSCaseTest" );
+$suite_array[]= new PHPUnit_TestSuite( "XRMSOpportunityTest" );
 $suite_array[]= new PHPUnit_TestSuite( "XRMSActivityTest" );
 $suite_array[] = new PHPUnit_TestSuite( "XRMSIntegrationTest" );
 $suite_array[] = new PHPUnit_TestSuite( "FilesStaticTest" );
@@ -89,6 +91,9 @@ $display->show();
  */
 /*
  * $Log: xrms_test.php,v $
+ * Revision 1.11  2006/04/28 04:30:09  vanmer
+ * - added opportunities test suite to main tests
+ *
  * Revision 1.10  2006/04/26 00:55:30  vanmer
  * - added new test classes for cases, statuses and types and integration tests
  *
