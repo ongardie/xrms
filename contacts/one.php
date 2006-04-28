@@ -7,13 +7,14 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.98 2006/03/21 02:59:51 ongardie Exp $
+ * $Id: one.php,v 1.99 2006/04/28 15:20:49 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-contacts.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
@@ -51,23 +52,8 @@ $contact_buttons = do_hook_function('one_contact_buttons', $contact_buttons);
 
 update_recent_items($con, $session_user_id, "contacts", $contact_id);
 
-$sql = "select cont.*,
-c.company_id, company_name, company_code, home_address_id, " .
-$con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS entered_by_username," .
-$con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS last_modified_by_username," .
-$con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS account_owner," .
-"account_status_display_html, crm_status_display_html
-from contacts cont, companies c, users u1, users u2, users u3, account_statuses as1, crm_statuses crm
-where cont.company_id = c.company_id
-and cont.entered_by = u1.user_id
-and cont.last_modified_by = u2.user_id
-and c.user_id = u3.user_id
-and c.account_status_id = as1.account_status_id
-and c.crm_status_id = crm.crm_status_id
-and contact_id = $contact_id";
-
-$rst = $con->execute($sql);
-
+// Get the Contact Record
+$rst = get_contact($con, $contact_id, $return_rst = true);
 if ($rst) {
 
     // Instantiating variables for each contact field, so that custom fields
@@ -84,7 +70,7 @@ if ($rst) {
             $work_phone_ext_display = '&nbsp;' . _("x") . $work_phone_ext;
     }
     $cell_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['cell_phone']);
-    $home_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['home_phone']);
+    $home_phone = get_formatted_phone($con, $rst->fields['home_address_id'], $rst->fields['home_phone']);
     $fax = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['fax']);
     $entered_at = $con->userdate($rst->fields['entered_at']);
     $last_modified_at = $con->userdate($rst->fields['last_modified_at']);
@@ -92,6 +78,8 @@ if ($rst) {
     $last_modified_by = $rst->fields['last_modified_by_username'];
 
     $rst->close();
+} else {
+    //$msg="Problem";
 }
 
 
@@ -491,7 +479,7 @@ function openMsnSession(strIMAddress) {
 
         <!-- former companies sidebar //-->
         <?php echo $former_rows; ?>
-        
+
         <!-- bottom sidebar plugins //-->
         <?php echo $sidebar_rows_bottom; ?>
 
@@ -514,6 +502,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.99  2006/04/28 15:20:49  braverock
+ * - use get_contact API
+ *
  * Revision 1.98  2006/03/21 02:59:51  ongardie
  * - Added contact_content_bottom plugin hook.
  *
