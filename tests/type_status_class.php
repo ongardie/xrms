@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: type_status_class.php,v 1.4 2006/04/28 04:09:49 vanmer Exp $
+ * $Id: type_status_class.php,v 1.5 2006/04/28 23:08:47 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -376,4 +376,11 @@ Class XRMSTypeStatusTest extends XRMS_TestCase {
     }
 
 }
+
+/**
+ * $Log: type_status_class.php,v $
+ * Revision 1.5  2006/04/28 23:08:47  vanmer
+ * - added log to type/status class
+ *
+**/
 ?>
