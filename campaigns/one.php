@@ -2,7 +2,7 @@
 /**
  * View Campaign Details
  *
- * $Id: one.php,v 1.21 2006/01/02 22:41:51 vanmer Exp $
+ * $Id: one.php,v 1.22 2006/04/28 23:33:20 jnhayart Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -72,6 +72,10 @@ require_once($include_locations_location . 'notes/sidebar.php');
 
 //include the files sidebar
 require_once($include_locations_location . 'files/sidebar.php');
+
+//include the opportunities sidebar
+$opportunity_limit_sql = "and campaign_id = $campaign_id ";
+require_once("../opportunities/sidebar.php");
 
 // get the new activities widget
 $new_activity_widget = GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_table, $on_what_id, $company_id, $contact_id); 
@@ -189,6 +193,9 @@ start_page($page_title, true, $msg);
         <!-- categories //-->
         <?php echo $category_rows; ?>
 
+         <!-- opportunities //-->
+         <?php  echo $opportunity_rows; ?>
+
         <!-- notes //-->
             <?php echo $note_rows; ?>
 
@@ -207,6 +214,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.22  2006/04/28 23:33:20  jnhayart
+ * Add in sidebar display of all opportunties in campaign
+ *
  * Revision 1.21  2006/01/02 22:41:51  vanmer
  * - changed to use centralized database connection function
  *
