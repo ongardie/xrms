@@ -8,11 +8,13 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.22 2006/04/26 02:14:50 vanmer Exp $
+ * $Id: utils-contacts.php,v 1.23 2006/04/28 15:24:53 braverock Exp $
  *
  */
 
 require_once($include_directory.'utils-companies.php');
+require_once($include_directory.'utils-typestatus.php');
+
 /**********************************************************************/
 /**
  *
@@ -109,10 +111,10 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
                     if ( ! $contact_info['company_name'] ) {
                         $contact_info['company_name'] = $contact_info['first_names'] . ' ' . $contact_info['last_name'];
                     }
-        
+
                     // Retrieve company id
                     $_company_data = add_update_company ( $con, $contact_info );
-        
+
                     // Pull out company_id
                     $contact_info['company_id'] = $_company_data['company_id'];
                     $contact_info['address_id'] = $_company_data['address_id'];
@@ -337,24 +339,54 @@ function find_contact($con, $contact_data, $show_deleted = false, $return_record
 
 /**********************************************************************/
 /**
+ * Gets a contact based on the database identifer contact_id
  *
- * Gets a contact based on the database identifer if that contact
+ *
+ * Return all fields required by the UI to display the contact,
+ * including joins and queries on other tables.
  *
  * @param adodbconnection  $con               with ADOdb connection Object
  * @param integer          $contact_id        with ID of the contact to get details about
  * @param boolean          $return_recordset  indicating if adodb recordset object should be returned (defaults to false)
  *
  * @return array $results with either an array of contact fields, or a recordset object (false on failure)
-*/
+ */
 function get_contact($con, $contact_id, $return_rst = false) {
     if (!$contact_id) return false;
-    $sql = "SELECT * FROM contacts WHERE contact_id=$contact_id";
+    $sql = "SELECT
+                cont.*,c.company_id, company_name, company_code, " .
+                $con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS entered_by_username, " .
+                $con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS last_modified_by_username, " .
+                $con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS account_owner " . "
+            FROM
+                contacts cont, companies c, users u1, users u2, users u3
+            WHERE
+                cont.company_id = c.company_id
+                and cont.entered_by = u1.user_id
+                and cont.last_modified_by = u2.user_id
+                and c.user_id = u3.user_id
+                and contact_id = $contact_id";
+
     $rst = $con->execute($sql);
     if (!$rst) { db_error_handler($con, $sql); return false; }
-    else {
-        if ($return_rst) {
-            return $rst;
-       } else return $rst->fields;
+    else { //OK, we have a result set.
+        // Make sure we have a contact
+        if ($rst->NumRows()) {
+            //now get the statuses account_status_display_html, crm_status_display_html
+            $account_status_fields = get_entity_status($con, 'account', $rst->fields['account_status_id']);
+            if ($account_status_fields) {
+                $rst->fields['account_status_pretty_name']  = $account_status_fields['account_status_pretty_name'];
+                $rst->fields['account_status_display_html'] = $account_status_fields['account_status_display_html'];
+            }
+            $crm_status_fields = get_entity_status($con, 'crm', $rst->fields['crm_status_id']);
+            if ($crm_status_fields) {
+                $rst->fields['crm_status_pretty_name']      = $crm_status_fields['crm_status_pretty_name'];
+                $rst->fields['crm_status_display_html']     = $crm_status_fields['crm_status_display_html'];
+            }
+            if ($return_rst) {
+                return $rst;
+            } else return $rst->fields;
+        } else return false; //no contact record found
     }
     //shouldn't ever get here
     return false;
@@ -504,6 +536,11 @@ include_once $include_directory . 'utils-misc.php';
 /**********************************************************************/
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.23  2006/04/28 15:24:53  braverock
+ * - update get_contact() fn to retrieve all fields required by the UI
+ *   - use types and statuses API to retrieve account_status and crm_status information
+ * - add check in get_contact()  to make sure we have a record, and not just an empty result set
+ *
  * Revision 1.22  2006/04/26 02:14:50  vanmer
  * - added user preference handling for adding a new contact with no company specified
  *
