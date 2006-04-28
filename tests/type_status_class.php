@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: type_status_class.php,v 1.2 2006/04/27 01:26:18 vanmer Exp $
+ * $Id: type_status_class.php,v 1.3 2006/04/28 02:47:01 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -54,6 +54,7 @@ Class XRMSTypeStatusTest extends XRMS_TestCase {
     
         return $ret;
     }
+
     
     function test_find_entity_type($entity_type='case', $entity_type_short_name='TESTTYPE', $entity_type_pretty_name=false, $show_all=false, $success=true) {
     
@@ -176,6 +177,37 @@ Class XRMSTypeStatusTest extends XRMS_TestCase {
         return $ret;
     }
 
+    function test_add_entity_status_closed_resolved($entity_type='case', $entity_type_id=NULL, $entity_status_short_name='TESTRESOLV', $entity_status_pretty_name='TESTCASE RESOLVED STATUS: IGNORE', $entity_status_pretty_plural='TESTCASE RESOLVED STATUSES: IGNORE', $entity_status_display_html=false, $entity_status_long_desc="THIS RESOLVED STATUS WAS ADDED BY THE PHPUnit TEST SYSTEM, SHOULD BE IGNORED, AND SHOULD HAVE BEEN AUTOMATICALLY DELETED.", $sort_order=2, $status_open_indicator='r') {
+        $ret=$this->test_add_entity_status($entity_type, $entity_type_id, $entity_status_short_name, $entity_status_pretty_name, $entity_status_pretty_plural, $entity_status_display_html, $entity_status_long_desc, $sort_order, $status_open_indicator);
+        return $ret;
+    }
+
+    function test_delete_entity_status_closed_resolved($entity_type='case', $entity_type_id=NULL, $entity_status_short_name='TESTRESOLV') {
+        $ret=$this->test_find_entity_status($entity_type, $entity_type_id, $entity_status_short_name);
+        if (!$ret) { $this->fail("Failed to delete closed resolved entity status $entity_status_short_name"); return false; }
+        else { 
+            $status_data=current($ret); 
+            $status_id=$status_data["{$entity_type}_status_id"];
+            return $this->test_delete_entity_status($entity_type, $status_id);
+        }
+    }
+
+    function test_add_entity_status_closed_unresolved($entity_type='case', $entity_type_id=NULL, $entity_status_short_name='TESTUNRESO', $entity_status_pretty_name='TESTCASE RESOLVED STATUS: IGNORE', $entity_status_pretty_plural='TESTCASE RESOLVED STATUSES: IGNORE', $entity_status_display_html=false, $entity_status_long_desc="THIS RESOLVED STATUS WAS ADDED BY THE PHPUnit TEST SYSTEM, SHOULD BE IGNORED, AND SHOULD HAVE BEEN AUTOMATICALLY DELETED.", $sort_order=3, $status_open_indicator='u') {
+        $ret=$this->test_add_entity_status($entity_type, $entity_type_id, $entity_status_short_name, $entity_status_pretty_name, $entity_status_pretty_plural, $entity_status_display_html, $entity_status_long_desc, $sort_order, $status_open_indicator);
+        return $ret;
+    }
+
+    function test_delete_entity_status_closed_unresolved($entity_type='case', $entity_type_id=NULL, $entity_status_short_name='TESTUNRESO') {
+        $ret=$this->test_find_entity_status($entity_type, $entity_type_id, $entity_status_short_name);
+        if (!$ret) { $this->fail("Failed to delete closed resolved entity status $entity_status_short_name"); return false; }
+        else { 
+            $status_data=current($ret); 
+            $status_id=$status_data["{$entity_type}_status_id"];
+            return $this->test_delete_entity_status($entity_type, $status_id);
+        }
+    }
+
+
     function test_delete_entity_type($entity_type='case', $entity_type_id=NULL, $delete_from_database=true) {
         if ($entity_type_id===NULL) { 
             $entity_type_data=$this->test_get_entity_type($entity_type); 
@@ -272,5 +304,7 @@ Class XRMSTypeStatusTest extends XRMS_TestCase {
     function test_add_delete_add_entity_type_opp($entity_type='opportunity') {
         return $this->test_add_delete_add_entity_type($entity_type);
     }
+
+
 }
 ?>
