@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: type_status_class.php,v 1.3 2006/04/28 02:47:01 vanmer Exp $
+ * $Id: type_status_class.php,v 1.4 2006/04/28 04:09:49 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -305,6 +305,75 @@ Class XRMSTypeStatusTest extends XRMS_TestCase {
         return $this->test_add_delete_add_entity_type($entity_type);
     }
 
+
+
+    function test_add_entity_priority($entity_type='case', $entity_priority_short_name='TESTPRIOR', $entity_priority_pretty_name='TESTCASE PRIORITY: IGNORE', $entity_priority_pretty_plural='TESTCASE PRIORITIES: IGNORE', $entity_priority_display_html=false, $entity_priority_score_adjustment=10) {
+    
+        $ret=add_entity_priority($this->con, $entity_type, $entity_priority_short_name, $entity_priority_pretty_name, $entity_priority_pretty_plural, $entity_priority_display_html, $entity_priority_score_adjustment);
+    
+        $this->assertTrue($ret, "Failed to add entity priority for priority $entity_type short name $entity_priority_short_name pretty $entity_priority_pretty_name plural $entity_priority_pretty_plural display ".htmlspecialchars($entity_priority_display_html));
+    
+        return $ret;
+    }
+
+    function test_find_entity_priority($entity_type='case', $entity_priority_short_name='TESTPRIOR', $entity_priority_pretty_name=false, $entity_priority_score_adjustment=10, $show_all=false, $success=true) {
+    
+        $ret=find_entity_priority($this->con, $entity_type, $entity_priority_short_name, $entity_priority_pretty_name, $entity_priority_score_adjustment, $show_all);
+    
+        if ($success)
+            $this->assertTrue($ret, "Failed to find entity matching priority $entity_type, short $entity_priority_short_name, pretty $entity_priority_pretty_name showing all: $show_all");
+        else
+            $this->assertTrue(!$ret, "Found entity when intending to fail matching priority $entity_type, short $entity_priority_short_name, pretty $entity_priority_pretty_name showing all: $show_all");
+    
+        return $ret;
+    }
+
+    function test_get_entity_priority($entity_type='case', $entity_priority_id=false, $entity_priority_short_name='TESTPRIOR') {
+    
+        $ret=get_entity_priority($this->con, $entity_type, $entity_priority_id, $entity_priority_short_name);
+    
+        $this->assertTrue($ret, "Failed to get entity priority for priority $entity_type, priority_id $entity_priority_id, short $entity_priority_short_name");
+    
+        return $ret;
+    
+    }
+
+    function test_update_entity_priority($entity_type='case', $entity_priority_id=NULL, $entity_priority_short_name='TESTPRIOR', $entity_priority_pretty_name='TESTCASE priority:PLEASE IGNORE', $entity_priority_pretty_plural='TESTCASE priorities: PLEASE IGNORE', $entity_priority_display_html=false, $entity_priority_score_adjustment=25) {
+
+        if ($entity_priority_id===NULL) {
+            $entity_priority_data=$this->test_get_entity_priority($entity_type);
+            $entity_priority_id=$entity_priority_data["{$entity_type}_priority_id"];
+        }
+    
+        $ret=update_entity_priority($this->con, $entity_type, $entity_priority_id, $entity_priority_short_name, $entity_priority_pretty_name, $entity_priority_pretty_plural, $entity_priority_display_html, $entity_priority_score_adjustment);
+    
+        $this->assertTrue($ret, "Failed to update entity priority for priority $entity_type short name $entity_priority_short_name pretty $entity_priority_pretty_name plural $entity_priority_pretty_plural display ".htmlspecialchars($entity_priority_display_html));
+    
+        $entity_priority_data=$this->test_get_entity_priority($entity_type, $entity_priority_id);
+        if (!$entity_priority_data) { $this->fail("Failed to get entity priority data for update comparison, skipping further tests");  }
+        else {
+            $this->assertTrue($entity_priority_data["{$entity_type}_priority_short_name"]==$entity_priority_short_name,"Failed to update field priority_short_name to $entity_priority_short_name: is {$entity_priority_data["{$entity_type}_priority_short_name"]}");
+            $this->assertTrue($entity_priority_data["{$entity_type}_priority_pretty_name"]==$entity_priority_pretty_name,"Failed to update field priority_pretty_name to $entity_priority_pretty_name: is {$entity_priority_data["{$entity_type}_priority_pretty_name"]}");
+            $this->assertTrue($entity_priority_data["{$entity_type}_priority_pretty_plural"]==$entity_priority_pretty_plural,"Failed to update field priority_pretty_plural to $entity_priority_pretty_plural: is {$entity_priority_data["{$entity_type}_priority_pretty_plural"]}");
+            $this->assertTrue($entity_priority_data["{$entity_type}_priority_display_html"]==$entity_priority_display_html,"Failed to update field priority_display_html to $entity_priority_display_html: is {$entity_priority_data["{$entity_type}_priority_display_html"]}");
+            $this->assertTrue($entity_priority_data["{$entity_type}_priority_score_adjustment"]==$entity_priority_score_adjustment,"Failed to update field entity_priority_score_adjustment to $entity_priority_score_adjustment: is {$entity_priority_data["{$entity_type}_priority_score_adjustment"]}");
+
+        }
+
+        return $ret;
+    }
+    function test_delete_entity_priority($entity_type='case', $entity_priority_id=NULL, $delete_from_database=true) {
+        if ($entity_priority_id===NULL) { 
+            $entity_priority_data=$this->test_get_entity_priority($entity_type); 
+            $entity_priority_id=$entity_priority_data["{$entity_type}_priority_id"]; 
+        }
+    
+        $ret=delete_entity_priority($this->con, $entity_type, $entity_priority_id, $delete_from_database);
+    
+        $this->assertTrue($ret, "Failed to delete entity priority for priority $entity_type ID $entity_priority_id from_db flag: $delete_from-database");
+    
+        return $ret;
+    }
 
 }
 ?>
