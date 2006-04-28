@@ -1,5 +1,20 @@
 <?php
-    function add_entity_type($con, $entity_type, $entity_type_short_name, $entity_type_pretty_name, $entity_type_pretty_plural=false, $entity_type_display_html=false, $magic_quotes=false) {
+/**********************************************************************/
+/**
+  * Adds an entity type to the database or finds an existing type with an identical short_name
+  *
+  * @param adodbconnection $con with handle to the DB
+  * @param string $entity_type with type of entity (currently case or opportunity)
+  * @param string $entity_type_short_name 10 character unique identifier for the new type
+  * @param string $entity_type_pretty_name multi-word name for the type
+  * @param string $entity_type_pretty_plural plural pretty version of the type name
+  * @param string $entity_type_display_html HTML-enabled version of the pretty name
+  * @param boolean $magic_quotes indicating if incoming strings are magic_quote'd or not (for _POST/_GET strings the output of get_magic_quotes_gpc() should be passed here)
+  *
+  * @return integer $type_id with database identifier for the newly added (or identified existing type with the same short_name), or false for failure
+  *
+**/
+    function add_entity_type($con, $entity_type, $entity_type_short_name, $entity_type_pretty_name=false, $entity_type_pretty_plural=false, $entity_type_display_html=false, $magic_quotes=false) {
         //we require con, entity_type, short name and pretty name
         if (!$con) return false;
 
@@ -54,8 +69,27 @@
         return $type_id;
 
     }
+/**********************************************************************/
+/**
+  * Adds an entity status to the database or finds an existing status with an identical short_name and type_id
+  *
+  * @param adodbconnection $con with handle to the DB
+  * @param string $entity_type with type of entity (currently case or opportunity)
+  * @param integer $entity_type_id to associate the status with
+  * @param string $entity_status_short_name 10 character unique identifier for the new status
+  * @param string $entity_status_pretty_name multi-word name for the status
+  * @param string $entity_status_pretty_plural plural pretty version of the status name
+  * @param string $entity_status_display_html HTML-enabled version of the pretty name
+  * @param string $entity_status_long_desc longer description of status to add
+  * @param integer $sort_id with level of sort for the status
+  * @param character $status_open_indicator with 'o' for open, 'r' for resolved and 'u' for unresolved (both r and u indicate a closed status)
+  * @param boolean $magic_quotes indicating if incoming strings are magic_quote'd or not (for _POST/_GET strings the output of get_magic_quotes_gpc() should be passed here)
+  *
+  * @return integer $status_id with database identifier for the newly added (or identified existing status with the same short_name and type_id), or false for failure
+  *
+**/
     
-    function add_entity_status($con, $entity_type, $entity_type_id, $entity_status_short_name, $entity_status_pretty_name, $entity_status_pretty_plural, $entity_status_display_html, $entity_status_long_desc, $sort_order=1, $status_open_indicator='o') {
+    function add_entity_status($con, $entity_type, $entity_type_id, $entity_status_short_name, $entity_status_pretty_name=false, $entity_status_pretty_plural=false, $entity_status_display_html=false, $entity_status_long_desc=false, $sort_order=1, $status_open_indicator='o', $magic_quotes=false) {
         //we require con, entity_type, entity_type_id, short name and pretty name
         if (!$con) return false;
 
@@ -120,8 +154,21 @@
 
     
     }
-    
-    function find_entity_type($con, $entity_type, $entity_type_short_name, $entity_type_pretty_name, $show_all=false) {
+
+/**********************************************************************/
+/**
+  * Find an entity type in the database
+  *
+  * @param adodbconnection $con with handle to the DB
+  * @param string $entity_type with type of entity (currently case or opportunity)
+  * @param string $entity_type_short_name 10 character unique identifier for the type
+  * @param string $entity_type_pretty_name multi-word name for the type
+  * @param boolean $show_all indicating if records with a record_status other than 'a' should be shown (defaults to false, only show active records)
+  *
+  * @return array of associative arrays, each with the data for one entity_type, or false for failure/no results
+  *
+**/
+    function find_entity_type($con, $entity_type, $entity_type_short_name=false, $entity_type_pretty_name=false, $show_all=false) {
         if (!$con) return false;
         if (!$entity_type) return false;
         if (!$entity_type_short_name AND !$entity_type_pretty_name) return false;
@@ -152,7 +199,23 @@
 
     }
     
-    function find_entity_status($con, $entity_type, $entity_type_id, $entity_status_short_name, $entity_status_pretty_name, $entity_status_long_desc, $sort_order, $show_all=false) {
+/**********************************************************************/
+/**
+  * Find an entity status in the database
+  *
+  * @param adodbconnection $con with handle to the DB
+  * @param string $entity_type with type of entity (currently case or opportunity)
+  * @param integer $entity_type_id that status is associated with (required)
+  * @param string $entity_status_short_name 10 character unique identifier for the status
+  * @param string $entity_status_pretty_name multi-word name for the status
+  * @param string $entity_status_long_desc piece of long description to search for (% is added to front and back, for SQL search)
+  * @param integer $sort_order indicating order that status has
+  * @param boolean $show_all indicating if records with a record_status other than 'a' should be shown (defaults to false, only show active records)
+  *
+  * @return array of associative arrays, each with the data for one entity_status, or false for failure/no results
+  *
+**/
+    function find_entity_status($con, $entity_type, $entity_type_id, $entity_status_short_name=false, $entity_status_pretty_name=false, $entity_status_long_desc=false, $sort_order=false, $show_all=false) {
         if (!$con) return false;
         if (!$entity_type) return false;
         if (!$entity_type_id) return false;
@@ -188,6 +251,19 @@
     
     }
     
+/**********************************************************************/
+/**
+  * Get an entity type from the database by ID or short name
+  *
+  * @param adodbconnection $con with handle to the DB
+  * @param string $entity_type with type of entity (currently case or opportunity)
+  * @param integer $entity_type_id DB identifier for the entity_type (required if short_name is not provided)
+  * @param string $entity_type_short_name 10 character unique identifier for the type (required if ID is not provided)
+  * @param boolean $return_rst indicating if return should be recordset or associative array
+  *
+  * @return array or recordset for one entity_type, or false for failure/no results
+  *
+**/
     function get_entity_type($con, $entity_type, $entity_type_id=false, $entity_type_short_name=false, $return_rst=false) {
         if (!$con) return false;
         if (!$entity_type) return false;
@@ -213,6 +289,20 @@
         } else return false;
     }
     
+/**********************************************************************/
+/**
+  * Get an entity status from the database by ID or short name
+  *
+  * @param adodbconnection $con with handle to the DB
+  * @param string $entity_type with type of entity (currently case or opportunity)
+  * @param integer $entity_status_id DB identifier for status (required if type_id/short_name are not provided)
+  * @param integer $entity_type_id that status is associated with (required if status_id is not provided)
+  * @param string $entity_status_short_name 10 character unique identifier for the status (required if status_id is not provided)
+  * @param boolean $return_rst indicating if return should be recordset or associative array
+  *
+  * @return array or recordset for one entity_type, or false for failure/no results
+  *
+**/
     function get_entity_status($con, $entity_type, $entity_status_id=false, $entity_type_id=false, $entity_status_short_name=false, $return_rst=false) {
         if (!$con) return false;
         if (!$entity_type) return false;
@@ -243,7 +333,22 @@
             return $ret;
         } else return false;
     }
-
+/**********************************************************************/
+/**
+  * Updates an entity type in the database by ID and fields to update
+  *
+  * @param adodbconnection $con with handle to the DB
+  * @param string $entity_type with type of entity (currently case or opportunity)
+  * @param integer $entity_type_id DB identifier (required)
+  * @param string $entity_type_short_name 10 character unique identifier for the status, to change the existing value if provided
+  * @param string $entity_type_pretty_name multi-word name for the type, to change the existing value if provided
+  * @param string $entity_type_pretty_plural plural pretty version of the type name, to change the existing value if provided
+  * @param string $entity_type_display_html HTML-enabled version of the pretty name, to change the existing value if provided
+  * @param boolean $magic_quotes indicating if incoming strings are magic_quote'd or not (for _POST/_GET strings the output of get_magic_quotes_gpc() should be passed here)
+  *
+  * @return entity_type_id of the updated type, or false if update failed
+  *
+**/
     function update_entity_type($con, $entity_type, $entity_type_id, $entity_type_short_name=false, $entity_type_pretty_name=false, $entity_type_pretty_plural=false, $entity_type_display_html=false, $magic_quotes=false) {
         if (!$con) return false;
         if (!$entity_type) return false;
@@ -277,8 +382,27 @@
         return $entity_type_id;
 
     }
-
-    function update_entity_status($con, $entity_type, $entity_status_id, $entity_type_id, $entity_status_short_name, $entity_status_pretty_name, $entity_status_pretty_plural, $entity_status_display_html, $entity_status_long_desc, $sort_order=1, $status_open_indicator='o', $magic_quotes=false) {
+/**********************************************************************/
+/**
+  * Updates an entity status in the database by ID and fields to update
+  *
+  * @param adodbconnection $con with handle to the DB
+  * @param string $entity_type with type of entity (currently case or opportunity)
+  * @param integer $entity_status_id DB identifier (required)
+  * @param integer $entity_type_id that status is associated with, to change the existing value if provided
+  * @param string $entity_status_short_name 10 character unique identifier for the status, to change the existing value if provided
+  * @param string $entity_status_pretty_name multi-word name for the status, to change the existing value if provided
+  * @param string $entity_status_pretty_plural plural pretty version of the status name, to change the existing value if provided
+  * @param string $entity_status_display_html HTML-enabled version of the pretty name, to change the existing value if provided
+  * @param string $entity_status_long_desc longer description of status, to change the existing value if provided
+  * @param integer $sort_id with level of sort for the status, to change the existing value if provided
+  * @param character $status_open_indicator with 'o' for open, 'r' for resolved and 'u' for unresolved (both r and u indicate a closed status)
+  * @param boolean $magic_quotes indicating if incoming strings are magic_quote'd or not (for _POST/_GET strings the output of get_magic_quotes_gpc() should be passed here)
+  *
+  * @return entity_status_id of the updated status, or false if update failed
+  *
+**/
+    function update_entity_status($con, $entity_type, $entity_status_id, $entity_type_id=false, $entity_status_short_name=false, $entity_status_pretty_name=false, $entity_status_pretty_plural=false, $entity_status_display_html=false, $entity_status_long_desc=false, $sort_order=1, $status_open_indicator='o', $magic_quotes=false) {
         if (!$con) return false;
         if (!$entity_type) return false;
         if (!$entity_status_id) return false;
@@ -324,6 +448,18 @@
 
     }
 
+/**********************************************************************/
+/**
+  * Deletes an entity type from the database by ID
+  *
+  * @param adodbconnection $con with handle to the DB
+  * @param string $entity_type with type of entity (currently case or opportunity)
+  * @param integer $entity_type_id DB identifier (required)
+  * @param boolean $delete_from_database indicating if record should be deleted from database or just marked as deleted (logical delete by default)
+  *
+  * @return boolean indicating success of delete operation
+  *
+**/
     function delete_entity_type($con, $entity_type, $entity_type_id, $delete_from_database=false) {
         if (!$con) return false;
         if (!$entity_type) return false;
@@ -343,6 +479,18 @@
         return true;
     }
 
+/**********************************************************************/
+/**
+  * Deletes an entity status from the database by ID
+  *
+  * @param adodbconnection $con with handle to the DB
+  * @param string $entity_type with type of entity (currently case or opportunity)
+  * @param integer $entity_status_id DB identifier (required)
+  * @param boolean $delete_from_database indicating if record should be deleted from database or just marked as deleted (logical delete by default)
+  *
+  * @return boolean indicating success of delete operation
+  *
+**/
     function delete_entity_status($con, $entity_type, $entity_status_id, $delete_from_database=false) {
         if (!$con) return false;
         if (!$entity_type) return false;
