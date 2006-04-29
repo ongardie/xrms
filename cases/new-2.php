@@ -2,7 +2,7 @@
 /**
  * Insert a new Case into the Database
  *
- * $Id: new-2.php,v 1.12 2006/04/28 02:56:59 vanmer Exp $
+ * $Id: new-2.php,v 1.13 2006/04/29 01:46:12 vanmer Exp $
  */
  
 require_once('../include-locations.inc');
@@ -59,12 +59,6 @@ $rec['last_modified_by'] = $session_user_id;
 $case_id=add_case($con, $rec, get_magic_quotes_gpc());
 
 if ($case_id) {
-    //generate activities for the new case
-    $on_what_table = "cases";
-    $on_what_id = $case_id;
-    $on_what_table_template = "case_statuses";
-    $on_what_id_template = $case_status_id;
-    require_once("../activities/workflow-activities.php");
     if (!$return_url) {
         header("Location: one.php?msg=case_added&case_id=$case_id");
     } else {
@@ -82,6 +76,9 @@ $con->close();
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.13  2006/04/29 01:46:12  vanmer
+ * - moved workflow activity instantiation into cases API and out of edit-2.php and new-2.php
+ *
  * Revision 1.12  2006/04/28 02:56:59  vanmer
  * - updated cases UI to use the new cases API functions
  * - altered workflow functions to use activities API

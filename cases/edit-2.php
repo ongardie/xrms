@@ -39,16 +39,12 @@ $rst = $con->execute($sql);
 $old_status = $rst->fields['case_status_id'];
 if ($old_status != $case_status_id) {
 
-    $on_what_id = $case_id;
-    $on_what_id_template = $case_status_id;
-    $on_what_table_template = "case_statuses";
-
     /* ADD CHECK TO SEE IF THERE ARE STILL OPEN ACTIVITIES FROM
         THE PREVIOUS STATUS, THEN GIVE THEM OPTIONS  */
     $activity_data=array();
     $activity_data['on_what_status']=$old_status;
-    $activity_data['on_what_table'] = $on_what_table;
-    $activity_data['on_what_id']=$on_what_id;
+    $activity_data['on_what_table'] = 'cases';
+    $activity_data['on_what_id']=$case_id;
     $activity_data['contact_id']= $contact_id;
     $activity_data['company_id']=$company_id;
     $activity_data['activity_status']='o';
@@ -59,11 +55,6 @@ if ($old_status != $case_status_id) {
         $activity_id=$first_activity['activity_id'];
         header("Location: ../activities/one.php?msg=no_change&activity_id=$activity_id");
         $no_update = true;
-    }
-
-    if (!$no_update) {
-        //run workflow case edit functions
-        require_once("../activities/workflow-activities.php");
     }
 
 }

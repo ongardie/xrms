@@ -8,11 +8,12 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-cases.php,v 1.3 2006/04/28 03:25:59 vanmer Exp $
+ * $Id: utils-cases.php,v 1.4 2006/04/29 01:46:12 vanmer Exp $
  *
  */
 
 require_once('utils-typestatus.php');
+require_once('utils-workflow.php');
 /**********************************************************************/
 /**
  *
@@ -143,6 +144,7 @@ function add_update_case($con, $case_info, $_return_data = false, $_magic_quotes
         do_hook_function('case_edit_2', $param);
 
         if ($case_data['case_status_id'] != $found_case_data['case_status_id']) {
+            $add_workflow_activities=true;
             add_workflow_history($con, 'cases', $case_id, $found_case_data['case_status_id'], $case_data['case_status_id']);
         }
 
@@ -169,6 +171,9 @@ function add_update_case($con, $case_info, $_return_data = false, $_magic_quotes
             $_retVal = $case_id;
 
             if ($case_id) {
+
+                $add_workflow_activities=true;
+
                 //add to recently viewed list
                 update_recent_items($con, $session_user_id, $_table_name, $case_id);
     
@@ -178,6 +183,12 @@ function add_update_case($con, $case_info, $_return_data = false, $_magic_quotes
                 $audit_type = 'created';
             }
         }
+    }
+
+    if ($add_workflow_activities) {
+        $on_what_id_template = $case_data['case_status_id'];
+        $on_what_table_template = "case_statuses";
+        add_workflow_activities($con, $on_what_table_template, $on_what_id_template, 'cases',$case_id, $case_data['company_id'], $case_data['contact_id']);
     }
 
     // Set audit trail
@@ -388,6 +399,9 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-cases.php,v $
+ * Revision 1.4  2006/04/29 01:46:12  vanmer
+ * - moved workflow activity instantiation into cases API and out of edit-2.php and new-2.php
+ *
  * Revision 1.3  2006/04/28 03:25:59  vanmer
  * - updated case API with proper PHPDoc
  * - removed commented and unused code
