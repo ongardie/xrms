@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: opportunities_test_class.php,v 1.1 2006/04/28 04:29:37 vanmer Exp $
+ * $Id: opportunities_test_class.php,v 1.2 2006/04/29 01:52:05 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -189,7 +189,7 @@ Class XRMSOpportunityTest extends XRMS_TestCase {
         return $opportunity_result;
     }
 
-    function test_opportunity_strange_characters($opportunity_data=NULL, $delete_from_database=false) {
+    function test_opportunity_strange_characters($opportunity_data=NULL, $delete_from_database=true) {
         if ($opportunity_data===NULL) $opportunity_data= array(
                    'opportunity_title'   => 'Test Suite Opportunity O\'doole & Tomlin: Ignore',
                    'opportunity_description' =>'This opportunity was added automatically by the test suite.  It shouldn\'t be visible, and can safely be ignored',
@@ -225,7 +225,7 @@ Class XRMSOpportunityTest extends XRMS_TestCase {
 
         if ($new_status===NULL) {
             $this->type_status_test->_result =& $this->_result;
-            $new_status=$this->type_status_test->test_add_entity_status_closed_resolved($this->entity_type);
+            $new_status=$this->type_status_test->test_add_entity_status_closed_won($this->entity_type);
             $delete_new_status=true;
         } else $delete_new_status=false;
 
@@ -247,18 +247,18 @@ Class XRMSOpportunityTest extends XRMS_TestCase {
     }
 
 
-    function test_opportunity_change_status_unresolved_to_open($opportunity_data=NULL) {
+    function test_opportunity_change_status_lost_to_open($opportunity_data=NULL) {
         if ($opportunity_data===NULL) {
             $opportunity_data=$this->test_opportunity_data;
             $new_status=$opportunity_data['opportunity_status_id'];
-            $ustatus=$this->type_status_test->test_add_entity_status_closed_unresolved($this->entity_type);
+            $ustatus=$this->type_status_test->test_add_entity_status_closed_lost($this->entity_type);
             $delete_ustatus=true;
             $opportunity_data['opportunity_status_id']=$ustatus;
         } else $delete_ustatus=false;
 
         $ret= $this->test_opportunity_change_status($opportunity_data, $new_status);
         if ($delete_ustatus) {
-            $this->type_status_test->test_delete_entity_status_closed_unresolved($this->entity_type);
+            $this->type_status_test->test_delete_entity_status($this->entity_type, $ustatus);
         }
         return $ret;
     }
@@ -274,8 +274,8 @@ Class XRMSOpportunityTest extends XRMS_TestCase {
                 $this->assertTrue(!$new_opportunity_data['closed_at'], "Opportunity is closed while status indicates open.");
                 $ret=!$new_opportunity_data['closed_at'];
             break;
-            case 'r':
-            case 'u':
+            case 'w':
+            case 'l':
                 $this->assertTrue($new_opportunity_data['closed_at'], "Opportunity is open status indicates closed");
                 $ret= ( $new_opportunity_data['closed_at'] ) ? true: false;
             break;
@@ -289,6 +289,11 @@ Class XRMSOpportunityTest extends XRMS_TestCase {
 
 /*
  * $Log: opportunities_test_class.php,v $
+ * Revision 1.2  2006/04/29 01:52:05  vanmer
+ * - added tests for statuses for opportunities to reflect won/lost closed code
+ * - updated opportunities test to use appropriate won/lost tests from statuses tests
+ * - updated main test class to include proper file for workflow tests
+ *
  * Revision 1.1  2006/04/28 04:29:37  vanmer
  * - Initial revision of the opportunities API and complete test suite
  * - still TODO is to update the PHPDoc for opportunities (still refects cases origins)

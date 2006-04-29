@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: type_status_class.php,v 1.5 2006/04/28 23:08:47 vanmer Exp $
+ * $Id: type_status_class.php,v 1.6 2006/04/29 01:52:05 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -207,6 +207,35 @@ Class XRMSTypeStatusTest extends XRMS_TestCase {
         }
     }
 
+    function test_add_entity_status_closed_won($entity_type='opportunity', $entity_type_id=NULL, $entity_status_short_name='TESTWON', $entity_status_pretty_name='TESTCASE WON STATUS: IGNORE', $entity_status_pretty_plural='TESTCASE WON STATUSES: IGNORE', $entity_status_display_html=false, $entity_status_long_desc="THIS WON STATUS WAS ADDED BY THE PHPUnit TEST SYSTEM, SHOULD BE IGNORED, AND SHOULD HAVE BEEN AUTOMATICALLY DELETED.", $sort_order=2, $status_open_indicator='w') {
+        $ret=$this->test_add_entity_status($entity_type, $entity_type_id, $entity_status_short_name, $entity_status_pretty_name, $entity_status_pretty_plural, $entity_status_display_html, $entity_status_long_desc, $sort_order, $status_open_indicator);
+        return $ret;
+    }
+
+    function test_delete_entity_status_closed_won($entity_type='opportunity', $entity_type_id=NULL, $entity_status_short_name='TESTWON') {
+        $ret=$this->test_find_entity_status($entity_type, $entity_type_id, $entity_status_short_name);
+        if (!$ret) { $this->fail("Failed to delete closed resolved entity status $entity_status_short_name"); return false; }
+        else { 
+            $status_data=current($ret); 
+            $status_id=$status_data["{$entity_type}_status_id"];
+            return $this->test_delete_entity_status($entity_type, $status_id);
+        }
+    }
+
+    function test_add_entity_status_closed_lost($entity_type='opportunity', $entity_type_id=NULL, $entity_status_short_name='TESTLOST', $entity_status_pretty_name='TESTCASE LOST STATUS: IGNORE', $entity_status_pretty_plural='TESTCASE LOST STATUSES: IGNORE', $entity_status_display_html=false, $entity_status_long_desc="THIS LOST STATUS WAS ADDED BY THE PHPUnit TEST SYSTEM, SHOULD BE IGNORED, AND SHOULD HAVE BEEN AUTOMATICALLY DELETED.", $sort_order=3, $status_open_indicator='l') {
+        $ret=$this->test_add_entity_status($entity_type, $entity_type_id, $entity_status_short_name, $entity_status_pretty_name, $entity_status_pretty_plural, $entity_status_display_html, $entity_status_long_desc, $sort_order, $status_open_indicator);
+        return $ret;
+    }
+
+    function test_delete_entity_status_closed_lost($entity_type='opportunity', $entity_type_id=NULL, $entity_status_short_name='TESTLOST') {
+        $ret=$this->test_find_entity_status($entity_type, $entity_type_id, $entity_status_short_name);
+        if (!$ret) { $this->fail("Failed to delete closed resolved entity status $entity_status_short_name"); return false; }
+        else { 
+            $status_data=current($ret); 
+            $status_id=$status_data["{$entity_type}_status_id"];
+            return $this->test_delete_entity_status($entity_type, $status_id);
+        }
+    }
 
     function test_delete_entity_type($entity_type='case', $entity_type_id=NULL, $delete_from_database=true) {
         if ($entity_type_id===NULL) { 
@@ -379,6 +408,11 @@ Class XRMSTypeStatusTest extends XRMS_TestCase {
 
 /**
  * $Log: type_status_class.php,v $
+ * Revision 1.6  2006/04/29 01:52:05  vanmer
+ * - added tests for statuses for opportunities to reflect won/lost closed code
+ * - updated opportunities test to use appropriate won/lost tests from statuses tests
+ * - updated main test class to include proper file for workflow tests
+ *
  * Revision 1.5  2006/04/28 23:08:47  vanmer
  * - added log to type/status class
  *

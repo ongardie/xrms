@@ -6,12 +6,13 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_test_class.php,v 1.2 2006/04/05 00:46:37 vanmer Exp $
+ * $Id: xrms_test_class.php,v 1.3 2006/04/29 01:52:05 vanmer Exp $
  */
 require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-workflow.php');
 require_once($include_directory . 'utils-preferences.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
@@ -186,6 +187,11 @@ Class XRMSTest extends XRMS_TestCase {
 }
 /*
  * $Log: xrms_test_class.php,v $
+ * Revision 1.3  2006/04/29 01:52:05  vanmer
+ * - added tests for statuses for opportunities to reflect won/lost closed code
+ * - updated opportunities test to use appropriate won/lost tests from statuses tests
+ * - updated main test class to include proper file for workflow tests
+ *
  * Revision 1.2  2006/04/05 00:46:37  vanmer
  * - added user_id parameter for workflow history
  *
