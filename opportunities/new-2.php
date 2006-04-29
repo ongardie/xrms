@@ -2,7 +2,7 @@
 /**
  * Insert a new opportunity into the database
  *
- * $Id: new-2.php,v 1.12 2006/04/22 08:38:49 jnhayart Exp $
+ * $Id: new-2.php,v 1.13 2006/04/29 01:48:25 vanmer Exp $
  */
 
 //include common files
@@ -11,6 +11,7 @@ require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-opportunities.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
@@ -50,26 +51,8 @@ $rec['size'] = $size;
 $rec['probability'] = $probability;
 //should modify opportunities/cases/etc to use a 'date' type for these fields.
 $rec['close_at'] = strtotime("+23 hours 59 minutes",strtotime($close_at));
-$rec['entered_at'] = time();
-$rec['entered_by'] = $session_user_id;
-$rec['last_modified_at'] = time();
-$rec['last_modified_by'] = $session_user_id;
 
-$tbl = 'opportunities';
-$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-$con->execute($ins);
-
-$opportunity_id = $con->insert_id();
-
-add_audit_item($con, $session_user_id, 'created', 'opportunities', $opportunity_id, 1);
-
-$on_what_table = "opportunities";
-$on_what_id = $opportunity_id;
-//generate activities for the new opportunity
-$on_what_table_template = "opportunity_statuses";
-$on_what_id_template = $opportunity_status_id;
-require_once("../activities/workflow-activities.php");
-
+$opportunity_id=add_opportunity($con, $rec,get_magic_quotes_gpc());
 
 $con->close();
 
@@ -77,6 +60,11 @@ header("Location: one.php?msg=opportunity_added&opportunity_id=$opportunity_id")
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.13  2006/04/29 01:48:25  vanmer
+ * - replaced opportunites edit, new and delete pages to use opportunities API
+ * - altered opportunities API to reflect correct codes for won/lost statuses
+ * - moved workflow into opportunities API
+ *
  * Revision 1.12  2006/04/22 08:38:49  jnhayart
  * add tracability on opportinites
  *

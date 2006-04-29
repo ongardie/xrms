@@ -17,19 +17,15 @@ $session_user_id = session_check('', 'Delete');
 
 $con = get_xrms_dbconnection();
 
-$sql = "SELECT opportunity_record_status FROM opportunities WHERE opportunity_id = $opportunity_id";
-$rst = $con->execute($sql);
-
-$rec = array();
-$rec['opportunity_record_status'] = 'd';
-
-$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-$con->execute($upd);
-
-add_audit_item($con, $session_user_id, 'deleted', 'opportunities', $opportunity_id, 1);
+$ret = delete_opportunity($con, $opportunity_id);
+if ($ret) {
+    header("Location: some.php?msg=opportunity_deleted");
+} else {
+    $msg=urlencode(_("Failed to delete opportunity"));
+    header("Location: one.php?opportunity_id=$opportunity_id&msg=$msg");
+}
 
 $con->close();
 
-header("Location: some.php?msg=opportunity_deleted");
 
 ?>

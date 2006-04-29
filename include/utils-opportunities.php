@@ -8,11 +8,12 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-opportunities.php,v 1.1 2006/04/28 04:29:36 vanmer Exp $
+ * $Id: utils-opportunities.php,v 1.2 2006/04/29 01:48:25 vanmer Exp $
  *
  */
 
 require_once('utils-typestatus.php');
+require_once('utils-workflow.php');
 /**********************************************************************/
 /**
  *
@@ -143,7 +144,9 @@ function add_update_opportunity($con, $opportunity_info, $_return_data = false, 
         do_hook_function('opportunity_edit_2', $param);
 
         if ($opportunity_data['opportunity_status_id'] != $found_opportunity_data['opportunity_status_id']) {
-            add_workflow_history($con, 'opportunities', $opportunity_id, $found_opportunity_data['opportunity_status_id'], $opportunity_data['opportunity_status_id']);
+            $add_workflow_activities=true;
+
+             add_workflow_history($con, 'opportunities', $opportunity_id, $found_opportunity_data['opportunity_status_id'], $opportunity_data['opportunity_status_id']);
         }
 
         $audit_type = 'updated';
@@ -169,6 +172,9 @@ function add_update_opportunity($con, $opportunity_info, $_return_data = false, 
             $_retVal = $opportunity_id;
 
             if ($opportunity_id) {
+                //be sure to add the activities associated with this new record
+                $add_workflow_activities=true;
+
                 //add to recently viewed list
                 update_recent_items($con, $session_user_id, $_table_name, $opportunity_id);
     
@@ -179,7 +185,11 @@ function add_update_opportunity($con, $opportunity_info, $_return_data = false, 
             }
         }
     }
-
+    if ($add_workflow_activities) {
+        $on_what_id_template = $opportunity_data['opportunity_status_id'];
+        $on_what_table_template = "opportunity_statuses";
+        add_workflow_activities($con, $on_what_table_template, $on_what_id_template, 'opportunities',$opportunity_id, $opportunity_data['company_id'], $opportunity_data['contact_id']);
+    }
     // Set audit trail
     add_audit_item($con, $session_user_id, $audit_type, $_table_name, $opportunity_id, 1);
 
@@ -338,8 +348,8 @@ function set_opportunity_open_closed_by_status($con, $rec=false, $status_id=fals
             $rec['closed_at']=NULL;
             $rec['closed_by']=0;
         break;
-        case 'u':
-        case 'r':
+        case 'w':
+        case 'l':
             $rec['closed_at']=time();
             $rec['closed_by']=$session_user_id;
         break;
@@ -388,6 +398,11 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-opportunities.php,v $
+ * Revision 1.2  2006/04/29 01:48:25  vanmer
+ * - replaced opportunites edit, new and delete pages to use opportunities API
+ * - altered opportunities API to reflect correct codes for won/lost statuses
+ * - moved workflow into opportunities API
+ *
  * Revision 1.1  2006/04/28 04:29:36  vanmer
  * - Initial revision of the opportunities API and complete test suite
  * - still TODO is to update the PHPDoc for opportunities (still refects cases origins)
