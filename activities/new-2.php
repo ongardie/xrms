@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.47 2006/04/29 01:46:52 vanmer Exp $
+ * $Id: new-2.php,v 1.48 2006/04/29 11:38:09 braverock Exp $
  */
 
 //where do we include from
@@ -51,7 +51,6 @@ $arr_vars = array ( // local var name       // session variable name
                    'followup'         => array ( 'followup' , arr_vars_REQUEST_SESSION ),
                    'followup_from_id' => array ( 'followup_from_id' , arr_vars_REQUEST_SESSION ),
                    'thread_id'        => array ( 'thread_id' , arr_vars_REQUEST_SESSION ),
-                   'opportunity_status_id'  => array ( 'opportunity_status_id' , arr_vars_REQUEST_SESSION ),
                    'address_id'  => array ( 'address_id' , arr_vars_REQUEST_SESSION ),
                    );
 
@@ -85,7 +84,7 @@ if ($scheduled_at > $ends_at) {
 }
 
 //make our database connection
-$con = get_xrms_dbconnection(); 
+$con = get_xrms_dbconnection();
 //$con->debug = 1;
 
 //check to see if we need to associate with an opportunity or case
@@ -154,52 +153,38 @@ if ($associate_activities == true ) {
     } //end empty on_what_table check
 } // end associate code
 
-//save to database
-
+//set up the data record
 $rec['user_id']          = (strlen($user_id) > 0) ? $user_id : $session_user_id;
 $rec['company_id']       = ($company_id > 0) ? $company_id : 0;
 $rec['contact_id']       = ($contact_id > 0) ? $contact_id : 0;
-$rec['entered_at']       = time();
-$rec['entered_by']       = $session_user_id;
-$rec['ends_at']          = $ends_at;
-$rec['opportunity_status_id'] = $opportunity_status_id;
+$rec['activity_type_id'] = ($activity_type_id > 0) ? $activity_type_id : 0;
+$rec['activity_priority_id'] = ($activity_priority_id > 0) ? $activity_priority_id : 0;
+$rec['activity_resolution_type_id'] = ($activity_resolution_type_id > 0) ? $activity_resolution_type_id : 0;
+$rec['resolution_description'] = ($resolution_description > 0) ? $resolution_description : 0;
+$rec['activity_status']  = (strlen($activity_status) > 0) ? $activity_status : "o";
+$rec['on_what_status']   = ($on_what_status > 0) ? $on_what_status : 0;
+$rec['activity_title']   = (strlen($activity_title) > 0) ? $activity_title : _("[none]");
+$rec['activity_description'] = (strlen($activity_description) > 0) ? $activity_description : "";
+$rec['on_what_table']    = (strlen($on_what_table) > 0) ? $on_what_table : '';
+$rec['on_what_id']       = ($on_what_id > 0) ? $on_what_id : 0;
+$rec['scheduled_at']     = $scheduled_at; //activity scheduled *start* time
+$rec['ends_at']          = $ends_at;      //activity anticipated *end* time
+
 if($thread_id) $rec['thread_id']         = $thread_id;
 if($followup_from_id) $rec['followup_from_id'] = $followup_from_id;
 if($address_id) $rec['address_id']         = $address_id;
 
-if(empty($opportunity_status_id)) {
-    $rec['activity_type_id'] = ($activity_type_id > 0) ? $activity_type_id : 0;
-    $rec['activity_priority_id'] = ($activity_priority_id > 0) ? $activity_priority_id : 0;
-    $rec['activity_resolution_type_id'] = ($activity_resolution_type_id > 0) ? $activity_resolution_type_id : 0;
-    $rec['resolution_description'] = ($resolution_description > 0) ? $resolution_description : 0;
-    $rec['activity_status']  = (strlen($activity_status) > 0) ? $activity_status : "o";
-    $rec['on_what_status']   = ($on_what_status > 0) ? $on_what_status : 0;
-    $rec['activity_title']   = (strlen($activity_title) > 0) ? $activity_title : _("[none]");
-    $rec['activity_description'] = (strlen($activity_description) > 0) ? $activity_description : "";
-    $rec['on_what_table']    = (strlen($on_what_table) > 0) ? $on_what_table : '';
-    $rec['on_what_id']       = ($on_what_id > 0) ? $on_what_id : 0;
-    $rec['scheduled_at']     = $scheduled_at;
-} else {
-    $rec['opportunity_status']  = "o";
-    $rec['opportunity_title'] = (strlen($activity_title) > 0) ? $activity_title : _("[none]");
-    $rec['close_at'] = $scheduled_at;
-}
-
 $magic_quotes=get_magic_quotes_gpc();
-if(empty($opportunity_status_id)) {
-    //add activity using API
-    $activity_id = add_activity($con, $rec, false, $magic_quotes);
-    if (!$activity_id) {
-        $msg=urlencode(_("Failed to add activity"));
-        header("Location: " . $http_site_root . $return_url."&msg=$msg");
-        exit();
-    }
-    $rec['activity_id']=$activity_id;
-    do_hook_function('activity_new_2', $rec);
-
-} else {
-    $opportunity_id=add_opportunity($con, $rec, $magic_quotes);
+//add activity using API
+$activity_id = add_activity($con, $rec, false, $magic_quotes);
+if (!$activity_id) {
+    $msg=urlencode(_("Failed to add activity"));
+    header("Location: " . $http_site_root . $return_url."&msg=$msg");
+    exit();
 }
+$rec['activity_id']=$activity_id;
+do_hook_function('activity_new_2', $rec);
+
 
 //if this is a mailto link, try to open the user's default mail application
 if ($email) {
@@ -211,21 +196,26 @@ $activities_default_behavior = get_system_parameter($con, 'Activities Default Be
 //close the connection
 $con->close();
 
-//now send them back where they came from
-if ($activity_status == 'c') {
+//set return location
+if ($activity_status == 'c') { //now send them back where they came from
     header("Location: " . $http_site_root . $return_url);
 } elseif ($activities_default_behavior == "Fast") {
+    //If Fast activities are the default, send them back where they came from
     header("Location: " . $http_site_root . $return_url);
-} elseif ($activities_default_behavior == "Long") {  //If Long activities are the default, send them to edit the activity
-    header("Location: " . $http_site_root . "/activities/one.php?return_url=" . $return_url . "&activity_id=" . $activity_id);
-} elseif(!empty($opportunity_status_id)) {
-    header("Location: " . $http_site_root . "/opportunities/one.php?return_url=" . $return_url . "&opportunity_id=" . $opportunity_id);
-} else {  //If Long activities are the default, send them to edit the activity
+} else {
+    //If Long activities are the default, send them to edit the activity
+    //like elseif ($activities_default_behavior == "Long")
     header("Location: " . $http_site_root . "/activities/one.php?return_url=" . $return_url . "&activity_id=" . $activity_id);
 }
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.48  2006/04/29 11:38:09  braverock
+ *- eliminate add opportunity code from new activity script
+ *  - plugins or custom code that need to create opportunities and activities together should
+ *    define workflow and use the add_opportunity function call, which will create both
+ *    the opportunity and initial activities
+ *
  *Revision 1.47  2006/04/29 01:46:52  vanmer
  *- changed to use opportunity API when adding new opportunity from activities/new-2.php
  *- altered else formatting
@@ -381,6 +371,5 @@ if ($activity_status == 'c') {
  *- modified to use getGlobalVar fn
  *- modified to allow for mailto $email link
  *- added phpdoc
- *
  */
 ?>
