@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.25 2006/01/02 23:29:27 vanmer Exp $
+ * $Id: edit.php,v 1.26 2006/04/29 01:49:20 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -132,7 +132,7 @@ $opportunity_type_menu = $rst->getmenu2('opportunity_type_id', $opportunity_type
 $rst->close();
 
 //opportunity status menu
-$sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status = 'a' order by sort_order";
+$sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_type_id=$opportunity_type_id AND opportunity_status_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql2);
 $opportunity_status_menu = $rst->getmenu2('opportunity_status_id', $opportunity_status_id, false);
 $rst->close();
@@ -315,6 +315,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.26  2006/04/29 01:49:20  vanmer
+ * - restrict opportunities statuses to only statuses associated with current opportunity type
+ * - added closed_by and closed_at fields and output to opportunities/one page
+ *
  * Revision 1.25  2006/01/02 23:29:27  vanmer
  * - changed to use centralized dbconnection function
  *

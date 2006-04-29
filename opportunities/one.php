@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.55 2006/04/22 08:38:49 jnhayart Exp $
+ * $Id: one.php,v 1.56 2006/04/29 01:49:20 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -38,7 +38,7 @@ d.division_name,
 cont.first_names, cont.last_name, cont.work_phone, cont.work_phone_ext, cont.email, cont.address_id,
 u1.username as entered_by_username, u2.username as last_modified_by_username,
 u3.username as opportunity_owner_username, u4.username as account_owner_username,
-as1.account_status_display_html, r.rating_display_html, crm_status_display_html,
+u5.username as closed_by_username, as1.account_status_display_html, r.rating_display_html, crm_status_display_html,
 os.opportunity_status_display_html, ot.opportunity_type_id, ot.opportunity_type_display_html, cam.campaign_title
 FROM
 companies AS c, contacts AS cont,
@@ -46,6 +46,7 @@ users AS u1, users AS u2, users AS u3, users AS u4,
 account_statuses AS as1, ratings AS r, crm_statuses AS crm, opportunity_types ot,opportunity_statuses AS os,
 opportunities AS o LEFT JOIN campaigns AS cam on o.campaign_id = cam.campaign_id
 LEFT JOIN company_division AS d on o.division_id=d.division_id
+LEFT OUTER JOIN users u5 ON u5.user_id=o.closed_by
 WHERE o.company_id = c.company_id
 and o.contact_id = cont.contact_id
 and o.entered_by = u1.user_id
@@ -102,6 +103,8 @@ if ($rst) {
     $last_modified_at = $con->userdate($rst->fields['last_modified_at']);
     $entered_by = $rst->fields['entered_by_username'];
     $last_modified_by = $rst->fields['last_modified_by_username'];
+    $closed_at = $con->userdate($rst->fields['closed_at']);
+    $closed_by = $rst->fields['closed_by_username'];
   } else {
     // no - there is no row
     $company_id = '';
@@ -132,6 +135,8 @@ if ($rst) {
     $last_modified_at = '';
     $entered_by = '';
     $last_modified_by = '';
+    $closed_by='';
+    $closed_at='';
   }
 
   $rst->close();
@@ -272,6 +277,12 @@ function markComplete() {
                                     <td class=sublabel><?php echo _("Last Modified"); ?></td>
                                     <td class=clear><?php  echo $last_modified_at; ?> (<?php  echo $last_modified_by; ?>)</td>
                                 </tr>
+<?php if ($closed_at AND $closed_by) { ?>
+                                <tr>
+                                    <td class=sublabel><?php echo _("Closed"); ?></td>
+                                    <td class=clear><?php  echo $closed_at; ?> (<?php  echo $closed_by; ?>)</td>
+                                </tr>
+<?php } ?>
                                 </table>
                             </td>
 
@@ -395,6 +406,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.56  2006/04/29 01:49:20  vanmer
+ * - restrict opportunities statuses to only statuses associated with current opportunity type
+ * - added closed_by and closed_at fields and output to opportunities/one page
+ *
  * Revision 1.55  2006/04/22 08:38:49  jnhayart
  * add tracability on opportinites
  *
