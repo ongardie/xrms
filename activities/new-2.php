@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.46 2006/04/05 00:53:11 vanmer Exp $
+ * $Id: new-2.php,v 1.47 2006/04/29 01:46:52 vanmer Exp $
  */
 
 //where do we include from
@@ -22,6 +22,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-activities.php');
+require_once($include_directory . 'utils-opportunities.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
@@ -178,11 +179,12 @@ if(empty($opportunity_status_id)) {
     $rec['on_what_table']    = (strlen($on_what_table) > 0) ? $on_what_table : '';
     $rec['on_what_id']       = ($on_what_id > 0) ? $on_what_id : 0;
     $rec['scheduled_at']     = $scheduled_at;
-}
-else {
+} else {
     $rec['opportunity_status']  = "o";
     $rec['opportunity_title'] = (strlen($activity_title) > 0) ? $activity_title : _("[none]");
+    $rec['close_at'] = $scheduled_at;
 }
+
 $magic_quotes=get_magic_quotes_gpc();
 if(empty($opportunity_status_id)) {
     //add activity using API
@@ -195,20 +197,8 @@ if(empty($opportunity_status_id)) {
     $rec['activity_id']=$activity_id;
     do_hook_function('activity_new_2', $rec);
 
-}
-else {
-    $tbl = 'opportunities';
-    $ins = $con->GetInsertSQL($tbl, $rec, $magic_quotes);
-    $con->execute($ins);
-
-    $opportunity_id = $con->insert_id();
-    add_audit_item($con, $session_user_id, 'created', 'opportunities', $opportunity_id, 1);
-
-    $on_what_table_template = "opportunity_statuses";
-    $on_what_id_template = $opportunity_status_id;
-    $on_what_table = "opportunities";
-    $on_what_id = $opportunity_id;
-    require $xrms_file_root . "/activities/workflow-activities.php";
+} else {
+    $opportunity_id=add_opportunity($con, $rec, $magic_quotes);
 }
 
 //if this is a mailto link, try to open the user's default mail application
@@ -236,6 +226,10 @@ if ($activity_status == 'c') {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.47  2006/04/29 01:46:52  vanmer
+ *- changed to use opportunity API when adding new opportunity from activities/new-2.php
+ *- altered else formatting
+ *
  *Revision 1.46  2006/04/05 00:53:11  vanmer
  *- pass magic quotes into activities API
  *
