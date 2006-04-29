@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.78 2006/04/05 00:53:10 vanmer Exp $
+ * $Id: edit-2.php,v 1.79 2006/04/29 01:45:17 vanmer Exp $
  */
 
 //include required files
@@ -16,6 +16,9 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-activities.php');
+require_once($include_directory . 'utils-workflow.php');
+require_once($include_directory . 'utils-cases.php');
+require_once($include_directory . 'utils-opportunities.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
@@ -377,8 +380,8 @@ if ($rst) {
             if ($template_sort_order <= $max_sort_id) {
                 $on_what_table_template = $table_name .  "_statuses";
                 $on_what_id_template = $table_status_id;
-                //include the workflow-activities.php page to actually make the update
-                require ("workflow-activities.php");
+                //run the add_workflow_activities  to actually make the update
+                add_workflow_activities($con, $on_what_table_template, $on_what_id_template, $on_what_table, $on_what_id, $company_id, $contact_id, $template_sort_order);
             }
         }
     }
@@ -466,30 +469,18 @@ if ($table_name !== "attached to") {
 
         //update if there are no open activities
         if (!$no_update) {
-            $sql = "SELECT * FROM " . $on_what_table . " WHERE " . $table_name . "_id = " . $on_what_id;
-            $rst = $con->execute($sql);
-
             $rec = array();
+            $rec["{$table_name}_id"]=$on_what_id;
             $rec[$table_name . "_status_id"] = $table_status_id;
-
-            $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-
-            if (strlen($upd)>0) {
-                //update the records
-                $sc_rst = $con->execute($upd);
-                add_workflow_history($con, $on_what_table, $on_what_id, $old_status, $table_status_id);
-                if (!$sc_rst) {
-                    db_error_handler($con, $upd);
-                } else {
-                    $sc_rst->close();
-                }
+//            print_r($rec);
+            switch ($table_name) {
+                case 'case':
+                    update_case($con, $rec, $on_what_id, false, get_magic_quotes_gpc());
+                break;
+                case 'opportunity':
+                    update_opportunity($con, $rec, $on_what_id, false, get_magic_quotes_gpc());
+                break;
             }
-            $on_what_table_template = $table_name .  "_statuses";
-            $on_what_id_template = $table_status_id;
-            $template_sort_order=1;
-
-            //include the workflow-activities.php page to actually make the update
-            require ("workflow-activities.php");
         }
     }
 
@@ -561,6 +552,11 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.79  2006/04/29 01:45:17  vanmer
+ * - changed to use workflow API to instantiate workflow activities
+ * - changed to use cases/opportunities API to change status on cases/opportunities when last workflow activity is closed (API then instantiates new workflow
+ * activities for new status)
+ *
  * Revision 1.78  2006/04/05 00:53:10  vanmer
  * - pass magic quotes into activities API
  *
