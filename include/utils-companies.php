@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-companies.php,v 1.12 2006/04/26 02:14:21 vanmer Exp $
+ * $Id: utils-companies.php,v 1.13 2006/05/01 17:31:07 braverock Exp $
  *
  */
 
@@ -253,21 +253,44 @@ function find_company($con, $company_data, $show_deleted = false, $return_record
  * @param integer $company_id with ID of the company to get details about
  * @param boolean $return_recordset indicating if adodb recordset object should be returned (defaults to false)
  *
- * @return array $results with either an array of company fields, or a recordset object (false on failure)
+ * @return mixed with either an array of company fields, or a recordset object (false on failure)
 */
 function get_company($con, $company_id, $return_rst=false)
 {
     if (!$company_id)
         return false;
 
-    $sql = "SELECT * FROM companies WHERE company_id=$company_id";
+    $sql = 'SELECT
+                cs.*, c.*, account_status_display_html, account_status_short_name
+                rating_short_name, rating_display_html,
+                company_source_display_html, i.industry_pretty_name, c.default_primary_address, ' .
+                $con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS owner_username," .
+                $con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS entered_by," .
+                $con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS last_modified_by " .
+           "FROM
+                users u1, users u2, users u3,
+                companies c
+                    left join crm_statuses cs ON c.crm_status_id = cs.crm_status_id
+                    left join account_statuses as1 ON c.account_status_id = as1.account_status_id
+                    left join ratings r ON c.rating_id = r.rating_id
+                    left join company_sources cs2 ON c.company_source_id = cs2.company_source_id
+                    left join industries i ON c.industry_id = i.industry_id
+            WHERE
+                    c.company_id = $company_id
+                and c.user_id = u1.user_id
+                and c.entered_by = u2.user_id
+                and c.last_modified_by = u3.user_id";
+
     $rst = $con->execute($sql);
     if (!$rst) {
         db_error_handler($con, $sql); return false;
     } else {
-        if ($return_rst) {
-            return $rst;
-       } else return $rst->fields;
+        // Make sure we have a company record
+        if ($rst->NumRows()) {
+            if ($return_rst) {
+                return $rst;
+            } else return $rst->fields;
+        } else return false;
     }
 
     //shouldn't ever get here
@@ -559,6 +582,10 @@ include_once $include_directory . 'utils-addresses.php';
 
  /**
  * $Log: utils-companies.php,v $
+ * Revision 1.13  2006/05/01 17:31:07  braverock
+ * - update get_company fn to be suitable for use in companies/one.php
+ * - change SQL construction to use left join for resiliency
+ *
  * Revision 1.12  2006/04/26 02:14:21  vanmer
  * - added sensible defaults to a new company, if not provided
  *
