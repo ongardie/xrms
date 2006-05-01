@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.134 2006/04/28 16:31:38 braverock Exp $
+ * $Id: one.php,v 1.135 2006/05/01 19:32:24 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -12,6 +12,7 @@ require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'utils-activities.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
@@ -43,13 +44,8 @@ $con = get_xrms_dbconnection();
 update_recent_items($con, $session_user_id, "activities", $activity_id);
 update_daylight_savings($con);
 
-$sql = "select a.*, c.company_id, c.company_name, cont.first_names, cont.last_name
-from activities a left join companies c on a.company_id=c.company_id
-left join contacts cont on a.contact_id = cont.contact_id
-where activity_id = $activity_id
-and activity_record_status='a'";
 
-$activity_rst = $con->execute($sql);
+$activity_rst = get_activity($con,$activity_id,$show_deleted=false, $return_rst=true);
 
 if ($activity_rst) {
     // Instantiating variables for each activity field, so that  fields
@@ -744,6 +740,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.135  2006/05/01 19:32:24  braverock
+ * - use get_activity API call
+ *
  * Revision 1.134  2006/04/28 16:31:38  braverock
  * - use get_activity API call
  *   - move created,modified,completed by processing into API
