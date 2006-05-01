@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.139 2006/05/01 17:20:36 braverock Exp $
+ * $Id: one.php,v 1.140 2006/05/01 17:22:26 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -57,28 +57,6 @@ if ( !isset($accounting_rows) ) {
 $accounting_rows = do_hook_function('company_accounting_inline_display', $accounting_rows);
 
 update_recent_items($con, $session_user_id, "companies", $company_id);
-
-/*
-$sql = 'select cs.*, c.*, account_status_display_html, account_status_short_name
-            rating_short_name, rating_display_html,
-            company_source_display_html, i.industry_pretty_name, c.default_primary_address, ' .
-            $con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS owner_username," .
-            $con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS entered_by," .
-            $con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS last_modified_by " .
-       "from crm_statuses cs, companies c, account_statuses as1, ratings r,
-            company_sources cs2, industries i, users u1, users u2, users u3
-        where c.account_status_id = as1.account_status_id
-            and c.industry_id = i.industry_id
-            and c.rating_id = r.rating_id
-            and c.company_source_id = cs2.company_source_id
-            and c.crm_status_id = cs.crm_status_id
-            and c.user_id = u1.user_id
-            and c.entered_by = u2.user_id
-            and c.last_modified_by = u3.user_id
-            and c.company_id = $company_id";
-
-$rst = $con->execute($sql);
-*/
 
 $rst = get_company($con, $company_id, $return_rst=true);
 
@@ -769,6 +747,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.140  2006/05/01 17:22:26  braverock
+ * - remove old embedded SQL comment
+ *
  * Revision 1.139  2006/05/01 17:20:36  braverock
  * - update to use get_company API function
  *
