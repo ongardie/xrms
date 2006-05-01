@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.138 2006/04/28 23:31:51 jnhayart Exp $
+ * $Id: one.php,v 1.139 2006/05/01 17:20:36 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -15,6 +15,7 @@ require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'utils-companies.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
@@ -22,7 +23,6 @@ require_once($include_directory . 'utils-accounting.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once('../activities/activities-widget.php');
-
 
 $company_id = $_GET['company_id'];
 if (isset($_GET['division_id'])) {
@@ -58,6 +58,7 @@ $accounting_rows = do_hook_function('company_accounting_inline_display', $accoun
 
 update_recent_items($con, $session_user_id, "companies", $company_id);
 
+/*
 $sql = 'select cs.*, c.*, account_status_display_html, account_status_short_name
             rating_short_name, rating_display_html,
             company_source_display_html, i.industry_pretty_name, c.default_primary_address, ' .
@@ -77,6 +78,10 @@ $sql = 'select cs.*, c.*, account_status_display_html, account_status_short_name
             and c.company_id = $company_id";
 
 $rst = $con->execute($sql);
+*/
+
+$rst = get_company($con, $company_id, $return_rst=true);
+
 
 if ($rst) {
   if ( !$rst->EOF ) {
@@ -305,7 +310,7 @@ if ($division_id) $new_contact_location.= "&division_id=$division_id";
         global $session_user_id;
         global $company_id;
         global $address_id;
-        
+
         // this is for the CTI dialing bit
         global $contact_id;
         $contact_id = $row['contact_id'];
@@ -764,6 +769,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.139  2006/05/01 17:20:36  braverock
+ * - update to use get_company API function
+ *
  * Revision 1.138  2006/04/28 23:31:51  jnhayart
  * fix display Work_phone with get_formatted_phone
  *
