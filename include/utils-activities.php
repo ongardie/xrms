@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-activities.php,v 1.25 2006/04/28 16:37:12 braverock Exp $
+ * $Id: utils-activities.php,v 1.26 2006/05/01 19:34:32 braverock Exp $
 
  */
 
@@ -159,6 +159,15 @@ function add_activity($con, $activity_data, $participants=false, $magic_quotes=f
  * @return array $activity_data with results of search or false if search finds no results/failed
  */
 function get_activity($con, $activity_data, $show_deleted=false, $return_recordset=false) {
+
+    if (!$activity_data) return false;
+    if (!is_array($activity_data)) {
+        //assume they just passed an activity_id, like the other API's
+        $activity_id= $activity_data ;
+        if (!$activity_id) return false;
+        $activity_data=array();
+        $activity_data['activity_id']=$activity_id;
+    }
 
     $sql = "SELECT
                 a.*, addr.*, c.company_id, c.company_name, cont.first_names, cont.last_name, " .
@@ -729,6 +738,9 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.26  2006/05/01 19:34:32  braverock
+  * - handle either an array or an integer as inputs
+  *
   * Revision 1.25  2006/04/28 16:37:12  braverock
   * - update get_activity() fn to retrieve all fields required by the UI
   * - add check in get_activity()  to make sure we have a record, and not just an empty result set
