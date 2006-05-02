@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-companies.php,v 1.13 2006/05/01 17:31:07 braverock Exp $
+ * $Id: utils-companies.php,v 1.14 2006/05/02 00:44:04 vanmer Exp $
  *
  */
 
@@ -255,31 +255,32 @@ function find_company($con, $company_data, $show_deleted = false, $return_record
  *
  * @return mixed with either an array of company fields, or a recordset object (false on failure)
 */
-function get_company($con, $company_id, $return_rst=false)
+function get_company($con, $company_id, $return_rst=false, $include_extras=true)
 {
     if (!$company_id)
         return false;
 
-    $sql = 'SELECT
-                cs.*, c.*, account_status_display_html, account_status_short_name
+    $sql = 'SELECT companies.*';
+    if ($include_extras) {
+        $sql .=', cs.*,  account_status_display_html, account_status_short_name
                 rating_short_name, rating_display_html,
-                company_source_display_html, i.industry_pretty_name, c.default_primary_address, ' .
+                company_source_display_html, i.industry_pretty_name, companies.default_primary_address, ' .
                 $con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS owner_username," .
                 $con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS entered_by," .
-                $con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS last_modified_by " .
-           "FROM
-                users u1, users u2, users u3,
-                companies c
-                    left join crm_statuses cs ON c.crm_status_id = cs.crm_status_id
-                    left join account_statuses as1 ON c.account_status_id = as1.account_status_id
-                    left join ratings r ON c.rating_id = r.rating_id
-                    left join company_sources cs2 ON c.company_source_id = cs2.company_source_id
-                    left join industries i ON c.industry_id = i.industry_id
-            WHERE
-                    c.company_id = $company_id
-                and c.user_id = u1.user_id
-                and c.entered_by = u2.user_id
-                and c.last_modified_by = u3.user_id";
+                $con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS last_modified_by ";
+    }
+    $sql .= " FROM companies";
+    if ($include_extras) {
+        $sql .=" left outer join users u1 ON companies.user_id = u1.user_id
+                    left outer join users u2 ON companies.entered_by = u2.user_id
+                    left outer join users u3 ON companies.last_modified_by = u3.user_id
+                    left outer join crm_statuses cs ON companies.crm_status_id = cs.crm_status_id
+                    left outer join account_statuses as1 ON companies.account_status_id = as1.account_status_id
+                    left outer join ratings r ON companies.rating_id = r.rating_id
+                    left outer join company_sources cs2 ON companies.company_source_id = cs2.company_source_id
+                    left outer join industries i ON companies.industry_id = i.industry_id";
+    }
+    $sql .=" WHERE companies.company_id = $company_id";
 
     $rst = $con->execute($sql);
     if (!$rst) {
@@ -319,7 +320,7 @@ function update_company($con, $company_data, $company_id=false, $company_rst=fal
 
     if (!$company_data) return false;
     if (!$company_rst) {
-        $company_rst=get_company($con, $company_id, true);
+        $company_rst=get_company($con, $company_id, true, false);
     }
     if (!$company_rst) return false;
 
@@ -517,6 +518,57 @@ function get_division_owner ( $company_id )
     return $_retVal;
 };
 
+/**********************************************************************/
+/**
+ *
+ * Gets a division based on the database identifer if that division exists
+ *
+ * @param adodbconnection $con with handle to the database
+ * @param integer $division_id with ID of the division to get details about
+ * @param boolean $return_recordset indicating if adodb recordset object should be returned (defaults to false)
+ *
+ * @return array $results with either an array of division fields, or a recordset object (false on failure)
+*/
+function get_division($con, $division_id, $return_rst = false)
+{
+   /**
+    * Default return value
+    *
+    * Returns division data or boolean upon failure
+    * Default value is set at FALSE
+    *
+    * @var mixed $_retVal Indicates if Object was created or not
+    * @access private
+    * @static
+    */
+    $_retVal = false;
+
+    // need something to work with
+    if ( $con && ($division_id > 0) )
+    {
+
+        $sql = "SELECT * FROM company_division
+                 WHERE division_id = $division_id";
+
+        if ( ! $rst = $con->execute($sql) )
+        {
+            db_error_handler($con, $sql);
+            return false;
+        }
+        else
+        {
+            // Does this need to send back the record set
+            if ($return_rst)
+                $_retVal = $rst;
+
+            else
+                $_retVal = $rst->fields;
+        }
+    }
+
+    // return what we have
+    return $_retVal;
+};
 
 /**********************************************************************/
 
@@ -582,6 +634,10 @@ include_once $include_directory . 'utils-addresses.php';
 
  /**
  * $Log: utils-companies.php,v $
+ * Revision 1.14  2006/05/02 00:44:04  vanmer
+ * - changed get function to do left outer joins on all non-critical tables
+ * - changed update function to request simplified select query recordset, for use in getUpdateSQL
+ *
  * Revision 1.13  2006/05/01 17:31:07  braverock
  * - update get_company fn to be suitable for use in companies/one.php
  * - change SQL construction to use left join for resiliency
