@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: cases_test_class.php,v 1.3 2006/04/28 02:47:59 vanmer Exp $
+ * $Id: cases_test_class.php,v 1.4 2006/05/02 00:46:54 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -189,13 +189,14 @@ Class XRMSCaseTest extends XRMS_TestCase {
         return $case_result;
     }
 
-    function test_case_strange_characters($case_data=NULL, $delete_from_database=false) {
+    function test_case_strange_characters($case_data=NULL, $delete_from_database=true) {
         if ($case_data===NULL) $case_data= array(
                    'case_title'   => 'Test Suite Case O\'doole & Tomlin: Ignore',
                    'case_description' =>'This case was added automatically by the test suite.  It shouldn\'t be visible, and can safely be ignored',
                     'due_at' => '1987-12-30 00:00:00',
                     'case_type_id'=>$this->test_type_id,
-                    'case_status_id'=>$this->test_status_id
+                    'case_status_id'=>$this->test_status_id,
+                    'company_id' => 1
             );
 
         $test_case_id=$this->test_add_case($case_data);
@@ -289,6 +290,10 @@ Class XRMSCaseTest extends XRMS_TestCase {
 
 /*
  * $Log: cases_test_class.php,v $
+ * Revision 1.4  2006/05/02 00:46:54  vanmer
+ * - added company_id to contact record for update of weird characters
+ * - changed to delete contact from the database after test
+ *
  * Revision 1.3  2006/04/28 02:47:59  vanmer
  * - added tests for status on a case matching case closed_by/closed_at fields
  * - update tests to reflect integration of cases API into UI
