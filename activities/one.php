@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.135 2006/05/01 19:32:24 braverock Exp $
+ * $Id: one.php,v 1.136 2006/05/02 00:40:16 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -48,6 +48,15 @@ update_daylight_savings($con);
 $activity_rst = get_activity($con,$activity_id,$show_deleted=false, $return_rst=true);
 
 if ($activity_rst) {
+    //set recurrance id
+    $recurrance_sql = "SELECT activity_recurrence_id FROM activities_recurrence where activity_id=$activity_id";
+    $recurrence_rst=$con->execute($recurrance_sql);
+    if (!$recurrence_rst) { db_error_handler($con, $recurrance_sql); }
+    if ($recurrence_rst->fields['activity_recurrence_id']) {
+        $activity_rst->fields['activity_recurrence_id'] = $recurrence_rst->fields['activity_recurrence_id'];
+    } //end recurrance processing
+
+
     // Instantiating variables for each activity field, so that  fields
     // are accessible to plugin code without an extra read from database.
     foreach ($activity_rst->fields as $activity_field => $activity_field_value ) {
@@ -740,6 +749,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.136  2006/05/02 00:40:16  vanmer
+ * - moved recurrence check back into activities/one.php
+ *
  * Revision 1.135  2006/05/01 19:32:24  braverock
  * - use get_activity API call
  *
