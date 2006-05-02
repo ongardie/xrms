@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.23 2006/04/28 15:24:53 braverock Exp $
+ * $Id: utils-contacts.php,v 1.24 2006/05/02 00:45:02 vanmer Exp $
  *
  */
 
@@ -351,37 +351,40 @@ function find_contact($con, $contact_data, $show_deleted = false, $return_record
  *
  * @return array $results with either an array of contact fields, or a recordset object (false on failure)
  */
-function get_contact($con, $contact_id, $return_rst = false) {
+function get_contact($con, $contact_id, $return_rst = false, $include_extras=true) {
     if (!$contact_id) return false;
-    $sql = "SELECT
-                cont.*,c.company_id, company_name, company_code, " .
-                $con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS entered_by_username, " .
-                $con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS last_modified_by_username, " .
-                $con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS account_owner " . "
-            FROM
-                contacts cont, companies c, users u1, users u2, users u3
-            WHERE
-                cont.company_id = c.company_id
-                and cont.entered_by = u1.user_id
-                and cont.last_modified_by = u2.user_id
-                and c.user_id = u3.user_id
-                and contact_id = $contact_id";
-
+    $sql = "SELECT contacts.*"; 
+    if ($include_extras) { 
+        $sql.=",c.company_id, company_name, company_code, " .
+        $con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS entered_by_username, " .
+        $con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS last_modified_by_username, " .
+        $con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS account_owner ";
+    }
+    $sql  .= " FROM contacts"; 
+    if ($include_extras) {
+        $sql .=" left outer join companies c ON contacts.company_id = c.company_id
+                    left outer join users u1 ON contacts.entered_by = u1.user_id
+                    left outer join users u2 ON contacts.last_modified_by = u2.user_id
+                    left outer join users u3 ON c.user_id = u3.user_id";
+    }
+    $sql .=" WHERE contact_id = $contact_id";
     $rst = $con->execute($sql);
     if (!$rst) { db_error_handler($con, $sql); return false; }
     else { //OK, we have a result set.
         // Make sure we have a contact
         if ($rst->NumRows()) {
             //now get the statuses account_status_display_html, crm_status_display_html
-            $account_status_fields = get_entity_status($con, 'account', $rst->fields['account_status_id']);
-            if ($account_status_fields) {
-                $rst->fields['account_status_pretty_name']  = $account_status_fields['account_status_pretty_name'];
-                $rst->fields['account_status_display_html'] = $account_status_fields['account_status_display_html'];
-            }
-            $crm_status_fields = get_entity_status($con, 'crm', $rst->fields['crm_status_id']);
-            if ($crm_status_fields) {
-                $rst->fields['crm_status_pretty_name']      = $crm_status_fields['crm_status_pretty_name'];
-                $rst->fields['crm_status_display_html']     = $crm_status_fields['crm_status_display_html'];
+            if ($include_extras) {
+                $account_status_fields = get_entity_status($con, 'account', $rst->fields['account_status_id']);
+                if ($account_status_fields) {
+                    $rst->fields['account_status_pretty_name']  = $account_status_fields['account_status_pretty_name'];
+                    $rst->fields['account_status_display_html'] = $account_status_fields['account_status_display_html'];
+                }
+                $crm_status_fields = get_entity_status($con, 'crm', $rst->fields['crm_status_id']);
+                if ($crm_status_fields) {
+                    $rst->fields['crm_status_pretty_name']      = $crm_status_fields['crm_status_pretty_name'];
+                    $rst->fields['crm_status_display_html']     = $crm_status_fields['crm_status_display_html'];
+                }
             }
             if ($return_rst) {
                 return $rst;
@@ -414,7 +417,7 @@ function update_contact($con, $contact, $contact_id = false, $contact_rst = fals
 
     if (!$contact) return false;
     if (!$contact_rst) {
-        $contact_rst=get_contact($con, $contact_id, true);
+        $contact_rst=get_contact($con, $contact_id, true, false);
     }
     if (!$contact_rst) return false;
 
@@ -536,6 +539,11 @@ include_once $include_directory . 'utils-misc.php';
 /**********************************************************************/
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.24  2006/05/02 00:45:02  vanmer
+ * - changed get_contact function to left outer join all non-critical table
+ * - allow contact sql to be simplified (no joins)
+ * - changed update_contact to use simplified contact sql for passing recordset into getUpdateSQL
+ *
  * Revision 1.23  2006/04/28 15:24:53  braverock
  * - update get_contact() fn to retrieve all fields required by the UI
  *   - use types and statuses API to retrieve account_status and crm_status information
