@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-activities.php,v 1.26 2006/05/01 19:34:32 braverock Exp $
+ * $Id: utils-activities.php,v 1.27 2006/05/02 00:41:18 vanmer Exp $
 
  */
 
@@ -175,11 +175,13 @@ function get_activity($con, $activity_data, $show_deleted=false, $return_records
                 $con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS last_modified_by_username, " .
                 $con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS completed_by_username " . "
             FROM
-                users u1, users u2, users u3,
                 activities a
-                    left join contacts cont on a.contact_id = cont.contact_id
+                left outer join users u1 ON a.entered_by = u1.user_id
+                left outer join users u2 ON a.last_modified_by = u2.user_id
+                left outer join users u3 ON a.completed_by = u3.user_id
+                    left outer join contacts cont on a.contact_id = cont.contact_id
                     join companies c ON c.company_id = a.company_id
-                    left join addresses addr ON addr.address_id = c.default_primary_address";
+                    left outer join addresses addr ON addr.address_id = c.default_primary_address";
 
     $where=array();
     if (!$show_deleted) $activity_data['activity_record_status']='a';
@@ -197,9 +199,6 @@ function get_activity($con, $activity_data, $show_deleted=false, $return_records
                 break;
             }
         }
-        $extra_where[]= "a.entered_by = u1.user_id";
-        $extra_where[]= "a.last_modified_by = u2.user_id";
-        $extra_where[]= "a.completed_by = u3.user_id";
         if (count($extra_where)==0) $extra_where=false;
         $wherestr=make_where_string($con, $activity_data, $tablename, $extra_where);
     }
@@ -212,14 +211,6 @@ function get_activity($con, $activity_data, $show_deleted=false, $return_records
     } elseif ($rst->EOF) { //no record returned
         return false;
     } else { //we got a record
-        //set recurrance id
-        $recurrance_sql = "SELECT activity_recurrence_id FROM activities_recurrence where activity_id=$activity_id";
-        $recurrence_rst=$con->execute($recurrance_sql);
-        if (!$recurrence_rst) { db_error_handler($con, $recurrance_sql); }
-        if ($recurrence_rst->fields['activity_recurrence_id']) {
-            $rst->fields['activity_recurrence_id'] = $recurrence_rst->fields['activity_recurrence_id'];
-        } //end recurrance processing
-
         //now process our return options
         if ($return_recordset) return $rst;
         while (!$rst->EOF) {
@@ -738,6 +729,10 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.27  2006/05/02 00:41:18  vanmer
+  * - moved recurrence lookup back into activities/one.php
+  * - changed get_ call for activities to do outer joins on all non-critical tables
+  *
   * Revision 1.26  2006/05/01 19:34:32  braverock
   * - handle either an array or an integer as inputs
   *
