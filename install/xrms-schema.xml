@@ -679,6 +679,9 @@
     <index name="address_record_status">
       <col>address_record_status</col>
     </index>
+    <data>
+      <row><f>1</f><f>0</f><f>218</f><f>Unknown Address</f><f>This company or contact has an unknown address. Please Update</f><f>Unknown Address</f><f></f><f>Unknown Address</f><f>AA</f><f></f><f>unknown</f><f>t</f><f></f><f></f><f>a</f></row>
+    </data>
   </table>
   <table name="audit_items">
     <field name="audit_item_id" type="I" size="11">

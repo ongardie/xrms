@@ -6,7 +6,7 @@
  * when evaluating xrms.
  *
  * @author Beth Macknik
- * $Id: sample.php,v 1.4 2006/01/02 23:23:09 vanmer Exp $
+ * $Id: sample.php,v 1.5 2006/05/02 00:22:32 vanmer Exp $
  */
 
 /**
@@ -45,7 +45,8 @@ if (confirm_no_records($con, 'companies')) {
 
 // addresses
 if (confirm_no_records($con, 'addresses')) {
-    $sql ="insert into addresses (address_id, company_id, address_name, address_body, address_record_status, country_id, line1, line2, city, province, postal_code, address_type, use_pretty_address, offset, daylight_savings_id) VALUES (1, 0, 'Unknown Address', 'This company or contact has an unknown address. Please Update', 'a', 218, 'Unknown Address', '', 'Unknown Address', 'AA', '', 'unknown', 't', NULL, NULL)";
+//deprecated Unknown Address record, now part of default install
+//    $sql ="insert into addresses (address_id, company_id, address_name, address_body, address_record_status, country_id, line1, line2, city, province, postal_code, address_type, use_pretty_address, offset, daylight_savings_id) VALUES (1, 0, 'Unknown Address', 'This company or contact has an unknown address. Please Update', 'a', 218, 'Unknown Address', '', 'Unknown Address', 'AA', '', 'unknown', 't', NULL, NULL)";
     $sql ="insert into addresses (company_id, country_id, address_name, line1, line2, city, province, postal_code, address_body) values (1, 1, 'Address 1', '3201 West Rolling Hills Circle', '', 'Ft. Lauderdale', 'FL', '33328', '3201 West Rolling Hills Circle\nFt. Lauderdale, FL 33328\nUSA')";
     $rst = $con->execute($sql);
     $sql ="insert into addresses (company_id, country_id, address_name, line1, line2, city, province, postal_code, address_body) values (2, 1, 'Address 2', '11 Platinum Drive', '', 'Los Angeles', 'CA', '90001', '11 Platinum Drive\nLos Angeles, CA 90001\nUSA')";
@@ -99,6 +100,10 @@ end_page();
 
 /**
  * $Log: sample.php,v $
+ * Revision 1.5  2006/05/02 00:22:32  vanmer
+ * - moved default address from sample data into base install
+ * - removed default address from sample data
+ *
  * Revision 1.4  2006/01/02 23:23:09  vanmer
  * - changed to use centralized dbconnection function
  *
