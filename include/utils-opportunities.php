@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-opportunities.php,v 1.2 2006/04/29 01:48:25 vanmer Exp $
+ * $Id: utils-opportunities.php,v 1.3 2006/05/02 01:27:39 vanmer Exp $
  *
  */
 
@@ -287,7 +287,28 @@ function find_opportunity($con, $opportunity_data, $show_deleted = false, $retur
 */
 function get_opportunity($con, $opportunity_id, $return_rst = false) {
     if (!$opportunity_id) return false;
-    $sql = "SELECT * FROM opportunities WHERE opportunity_id=$opportunity_id";
+
+$sql = "SELECT
+opportunities.*,
+u1.username as entered_by_username, u2.username as last_modified_by_username,
+u3.username as opportunity_owner_username,
+u4.username as closed_by_username, 
+os.opportunity_status_display_html, ot.opportunity_type_id, ot.opportunity_type_display_html, cam.campaign_title 
+FROM
+opportunities
+LEFT OUTER JOIN campaigns cam on opportunities.campaign_id = cam.campaign_id
+LEFT OUTER JOIN users u1 ON opportunities.entered_by = u1.user_id
+LEFT OUTER JOIN users u2 ON opportunities.last_modified_by = u2.user_id
+LEFT OUTER JOIN users u3 ON opportunities.user_id = u3.user_id
+LEFT OUTER JOIN users u4 ON u4.user_id=opportunities.closed_by
+LEFT OUTER JOIN opportunity_types ot ON ot.opportunity_type_id=opportunities.opportunity_type_id
+LEFT OUTER JOIN opportunity_statuses os ON os.opportunity_status_id=opportunities.opportunity_status_id 
+WHERE opportunity_id = $opportunity_id";
+
+
+//    $sql = "SELECT * FROM opportunities WHERE opportunity_id=$opportunity_id";
+
+
     $rst = $con->execute($sql);
     if (!$rst) { db_error_handler($con, $sql); return false; }
     else {
@@ -398,6 +419,10 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-opportunities.php,v $
+ * Revision 1.3  2006/05/02 01:27:39  vanmer
+ * - changed opportunities one.php to use get_opportunities and other get_ functions from the API
+ * - updated get_opportunities function to do joins on related tables
+ *
  * Revision 1.2  2006/04/29 01:48:25  vanmer
  * - replaced opportunites edit, new and delete pages to use opportunities API
  * - altered opportunities API to reflect correct codes for won/lost statuses

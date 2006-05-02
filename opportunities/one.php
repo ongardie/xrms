@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.56 2006/04/29 01:49:20 vanmer Exp $
+ * $Id: one.php,v 1.57 2006/05/02 01:27:39 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -10,6 +10,9 @@ require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-opportunities.php');
+require_once($include_directory . 'utils-companies.php');
+require_once($include_directory . 'utils-contacts.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
@@ -29,83 +32,66 @@ $con = get_xrms_dbconnection();
 
 $form_name = 'One_Opportunity';
 
-update_recent_items($con, $session_user_id, "opportunities", $opportunity_id);
+$opportunity_data=get_opportunity($con, $opportunity_id);
 
-$sql = "SELECT
-o.*,
-c.company_id, c.company_name, c.company_code,
-d.division_name,
-cont.first_names, cont.last_name, cont.work_phone, cont.work_phone_ext, cont.email, cont.address_id,
-u1.username as entered_by_username, u2.username as last_modified_by_username,
-u3.username as opportunity_owner_username, u4.username as account_owner_username,
-u5.username as closed_by_username, as1.account_status_display_html, r.rating_display_html, crm_status_display_html,
-os.opportunity_status_display_html, ot.opportunity_type_id, ot.opportunity_type_display_html, cam.campaign_title
-FROM
-companies AS c, contacts AS cont,
-users AS u1, users AS u2, users AS u3, users AS u4,
-account_statuses AS as1, ratings AS r, crm_statuses AS crm, opportunity_types ot,opportunity_statuses AS os,
-opportunities AS o LEFT JOIN campaigns AS cam on o.campaign_id = cam.campaign_id
-LEFT JOIN company_division AS d on o.division_id=d.division_id
-LEFT OUTER JOIN users u5 ON u5.user_id=o.closed_by
-WHERE o.company_id = c.company_id
-and o.contact_id = cont.contact_id
-and o.entered_by = u1.user_id
-and o.last_modified_by = u2.user_id
-and o.user_id = u3.user_id
-and c.user_id = u4.user_id
-and c.account_status_id = as1.account_status_id
-and c.rating_id = r.rating_id
-and c.crm_status_id = crm.crm_status_id
-and o.opportunity_type_id = ot.opportunity_type_id
-and o.opportunity_status_id = os.opportunity_status_id
-and opportunity_id = $opportunity_id";
+//is there data available?
+if ( $opportunity_data ) {
+    update_recent_items($con, $session_user_id, "opportunities", $opportunity_id);
 
-// execute
-$rst = $con->execute($sql);
+    //pull company data
+    $company_id = $opportunity_data['company_id'];
 
-// was there a database error ???
-if ($rst) {
-  // no
-  // was there a row ???
-  if ( !$rst->EOF ) {
-    // yes - there is a row
-    $company_id = $rst->fields['company_id'];
-    $division_id = $rst->fields['division_id'];
-    $division_name=$rst->fields['division_name'];
-    $company_name = $rst->fields['company_name'];
-    $company_code = $rst->fields['company_code'];
-    $contact_id = $rst->fields['contact_id'];
-    $first_names = $rst->fields['first_names'];
-    $last_name = $rst->fields['last_name'];
-    $work_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']);
-    $work_phone_ext = $rst->fields['work_phone_ext'];
+    $company_data=get_company($con, $company_id);
+    $company_name = $company_data['company_name'];
+    $company_code = $company_data['company_code'];
+    $crm_status_display_html = $company_data['crm_status_display_html'];
+    $account_status_display_html = $company_data['account_status_display_html'];
+    $rating_display_html = $company_data['rating_display_html'];
+    $account_owner_username = $company_data['owner_username'];
+
+    //pull division data
+    $division_id = $opportunity_data['division_id'];
+    if ($division_id) {
+        $division_data=get_division($con, $division_id);
+        $division_name=$division_data['division_name'];
+    } else $division_name='';
+
+    //pull contact data
+    $contact_id = $opportunity_data['contact_id'];
+
+    $contact_data=get_contact($con, $contact_id);
+    $first_names = $contact_data['first_names'];
+    $last_name = $contact_data['last_name'];
+    $work_phone = get_formatted_phone($con, $contact_data['address_id'], $contact_data['work_phone']);
+    $work_phone_ext = $contact_data['work_phone_ext'];
     if (trim($work_phone_ext)) {
             $work_phone = $work_phone . '&nbsp;' . _("x") . $work_phone_ext;
     }
-    $email = $rst->fields['email'];
-    $crm_status_display_html = $rst->fields['crm_status_display_html'];
-    $account_status_display_html = $rst->fields['account_status_display_html'];
-    $rating_display_html = $rst->fields['rating_display_html'];
-    $contact_id = $rst->fields['contact_id'];
-    $campaign_id = $rst->fields['campaign_id'];
-    $campaign_title = $rst->fields['campaign_title'];
-    $opportunity_status_display_html = $rst->fields['opportunity_status_display_html'];
-    $opportunity_owner_username = $rst->fields['opportunity_owner_username'];
-    $account_owner_username = $rst->fields['account_owner_username'];
-    $opportunity_title = htmlspecialchars($rst->fields['opportunity_title']);
-    $opportunity_description = $rst->fields['opportunity_description'];
-    $opportunity_type_id = $rst->fields['opportunity_type_id'];
-    $opportunity_type_display_html = $rst->fields['opportunity_type_display_html'];
-    $size = $rst->fields['size'];
-    $probability = $rst->fields['probability'];
-    $close_at = $con->userdate($rst->fields['close_at']);
-    $entered_at = $con->userdate($rst->fields['entered_at']);
-    $last_modified_at = $con->userdate($rst->fields['last_modified_at']);
-    $entered_by = $rst->fields['entered_by_username'];
-    $last_modified_by = $rst->fields['last_modified_by_username'];
-    $closed_at = $con->userdate($rst->fields['closed_at']);
-    $closed_by = $rst->fields['closed_by_username'];
-  } else {
+    $email = $contact_data['email'];
+
+    //pull campaign data
+    $campaign_id = $opportunity_data['campaign_id'];
+    $campaign_title = $opportunity_data['campaign_title'];
+
+    //pull status and type data
+    $opportunity_status_display_html = $opportunity_data['opportunity_status_display_html'];
+    $opportunity_type_id = $opportunity_data['opportunity_type_id'];
+    $opportunity_type_display_html = $opportunity_data['opportunity_type_display_html'];
+
+    //pull opportunity data
+    $opportunity_title = htmlspecialchars($opportunity_data['opportunity_title']);
+    $opportunity_description = $opportunity_data['opportunity_description'];
+    $opportunity_owner_username = $opportunity_data['opportunity_owner_username'];
+    $size = $opportunity_data['size'];
+    $probability = $opportunity_data['probability'];
+    $close_at = $con->userdate($opportunity_data['close_at']);
+    $entered_at = $con->userdate($opportunity_data['entered_at']);
+    $last_modified_at = $con->userdate($opportunity_data['last_modified_at']);
+    $entered_by = $opportunity_data['entered_by_username'];
+    $last_modified_by = $opportunity_data['last_modified_by_username'];
+    $closed_at = $con->userdate($opportunity_data['closed_at']);
+    $closed_by = $opportunity_data['closed_by_username'];
+} else {
     // no - there is no row
     $company_id = '';
     $division_id = '';
@@ -137,13 +123,6 @@ if ($rst) {
     $last_modified_by = '';
     $closed_by='';
     $closed_at='';
-  }
-
-  $rst->close();
-
-} else {
-  // yes
-  db_error_handler ($con, $sql);
 }
 
 // New Activities Widget
@@ -406,6 +385,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.57  2006/05/02 01:27:39  vanmer
+ * - changed opportunities one.php to use get_opportunities and other get_ functions from the API
+ * - updated get_opportunities function to do joins on related tables
+ *
  * Revision 1.56  2006/04/29 01:49:20  vanmer
  * - restrict opportunities statuses to only statuses associated with current opportunity type
  * - added closed_by and closed_at fields and output to opportunities/one page
