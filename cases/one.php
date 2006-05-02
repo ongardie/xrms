@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.48 2006/04/28 02:52:51 vanmer Exp $
+ * $Id: one.php,v 1.49 2006/05/02 00:51:25 vanmer Exp $
  */
 
 //include required files
@@ -11,6 +11,9 @@ require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-cases.php');
+require_once($include_directory . 'utils-contacts.php');
+require_once($include_directory . 'utils-companies.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
@@ -31,68 +34,55 @@ $form_name = 'One_Case';
 update_recent_items($con, $session_user_id, "cases", $case_id);
 
 //get case details
-$sql = "SELECT
-        ca.*, c.company_id, c.company_name, c.company_code,
-        d.division_name, cont.first_names, cont.last_name, cont.work_phone, cont.email,
-        cas.case_status_display_html, cap.case_priority_display_html, cat.case_type_id, cat.case_type_display_html,
-        u1.username as entered_by_username, u2.username as last_modified_by_username,
-        u3.username as case_owner_username, u4.username as account_owner_username,
-        u5.username as closed_by_username, as1.account_status_display_html, r.rating_display_html, crm_status_display_html
-        FROM
-        case_statuses cas, case_priorities cap, case_types cat, companies c, contacts cont,
-        users u1, users u2, users u3, users u4, account_statuses as1, ratings r, crm_statuses crm,
-        cases ca LEFT OUTER JOIN company_division d on ca.division_id=d.division_id
-        LEFT OUTER JOIN users u5 ON u5.user_id=ca.closed_by
-        WHERE
-        ca.company_id = c.company_id
-        and ca.case_status_id = cas.case_status_id
-        and ca.case_priority_id = cap.case_priority_id
-        and ca.case_type_id = cat.case_type_id
-        and ca.contact_id = cont.contact_id
-        and ca.entered_by = u1.user_id
-        and ca.last_modified_by = u2.user_id
-        and ca.user_id = u3.user_id
-        and c.user_id = u4.user_id
-        and c.account_status_id = as1.account_status_id
-        and c.rating_id = r.rating_id
-        and c.crm_status_id = crm.crm_status_id
-        and case_id = $case_id";
 
-$rst = $con->execute($sql);
+$case_data=get_case($con, $case_id);
+//print_r($case_data);
 
-if ($rst) {
-    $company_id = $rst->fields['company_id'];
-    $division_id = $rst->fields['division_id'];
-    $division_name = $rst->fields['division_name'];
-    $company_name = $rst->fields['company_name'];
-    $company_code = $rst->fields['company_code'];
-    $contact_id = $rst->fields['contact_id'];
-    $first_names = $rst->fields['first_names'];
-    $last_name = $rst->fields['last_name'];
-    $work_phone = $rst->fields['work_phone'];
-    $email = $rst->fields['email'];
-    $crm_status_display_html = $rst->fields['crm_status_display_html'];
-    $account_status_display_html = $rst->fields['account_status_display_html'];
-    $rating_display_html = $rst->fields['rating_display_html'];
-    $contact_id = $rst->fields['contact_id'];
-    $case_status_display_html = $rst->fields['case_status_display_html'];
-    $case_priority_display_html = $rst->fields['case_priority_display_html'];
-    $case_priority_id = $rst->fields['case_priority_id'];
-    $case_type_id = $rst->fields['case_type_id'];
-    $case_type_display_html = $rst->fields['case_type_display_html'];
-    $account_owner_username = $rst->fields['account_owner_username'];
-    $case_title = $rst->fields['case_title'];
-    $case_description = nl2br($rst->fields['case_description']);
-    $case_owner_username = $rst->fields['case_owner_username'];
-    $entered_at = $con->userdate($rst->fields['entered_at']);
-    $last_modified_at = $con->userdate($rst->fields['last_modified_at']);
-    $entered_by = $rst->fields['entered_by_username'];
-    $last_modified_by = $rst->fields['last_modified_by_username'];
-    $closed_at = $con->userdate($rst->fields['closed_at']);
-    $closed_by = $rst->fields['closed_by_username'];
-    $rst->close();
-} else {
-    db_error_handler ($con, $sql);
+if ($case_data) {
+    $company_id = $case_data['company_id'];
+    $contact_id = $case_data['contact_id'];
+    $division_id = $case_data['division_id'];
+
+    //get division details
+    if ($division_id) {
+        $division_data=get_division($con, $division_id);
+        $division_name = $division_data['division_name'];
+    }
+
+
+    //get company details
+    $company_data=get_company($con, $company_id);
+    $company_name = $company_data['company_name'];
+    $company_code = $company_data['company_code'];
+    $crm_status_display_html = $company_data['crm_status_display_html'];
+    $account_status_display_html = $company_data['account_status_display_html'];
+    $rating_display_html = $company_data['rating_display_html'];
+    $account_owner_username = $company_data['owner_username'];
+
+    //get contact details
+    $contact_data=get_contact($con, $contact_id);
+    $first_names = $contact_data['first_names'];
+    $last_name = $contact_data['last_name'];
+    $work_phone = $contact_data['work_phone'];
+    $email = $contact_data['email'];
+
+    //pull status, priority and type details
+    $case_status_display_html = $case_data['case_status_display_html'];
+    $case_priority_display_html = $case_data['case_priority_display_html'];
+    $case_priority_id = $case_data['case_priority_id'];
+    $case_type_id = $case_data['case_type_id'];
+    $case_type_display_html = $case_data['case_type_display_html'];
+
+    //pull case details
+    $case_title = $case_data['case_title'];
+    $case_description = nl2br($case_data['case_description']);
+    $case_owner_username = $case_data['case_owner_username'];
+    $entered_at = $con->userdate($case_data['entered_at']);
+    $last_modified_at = $con->userdate($case_data['last_modified_at']);
+    $entered_by = $case_data['entered_by_username'];
+    $last_modified_by = $case_data['last_modified_by_username'];
+    $closed_at = $con->userdate($case_data['closed_at']);
+    $closed_by = $case_data['closed_by_username'];
 }
 
 // get the new activities widget
@@ -306,6 +296,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.49  2006/05/02 00:51:25  vanmer
+ * - changed to use APIs to fetch details about case
+ *
  * Revision 1.48  2006/04/28 02:52:51  vanmer
  * - added join on optional closed_by field for cases
  * - added display of closed_by and closed_on user/date
