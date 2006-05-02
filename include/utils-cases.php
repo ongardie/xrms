@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-cases.php,v 1.4 2006/04/29 01:46:12 vanmer Exp $
+ * $Id: utils-cases.php,v 1.5 2006/05/02 00:49:14 vanmer Exp $
  *
  */
 
@@ -288,7 +288,24 @@ function find_case($con, $case_data, $show_deleted = false, $return_recordset = 
 */
 function get_case($con, $case_id, $return_rst = false) {
     if (!$case_id) return false;
-    $sql = "SELECT * FROM cases WHERE case_id=$case_id";
+
+$sql = "SELECT
+        ca.*,
+        cas.case_status_display_html, cap.case_priority_display_html, cat.case_type_id, cat.case_type_display_html,
+        u1.username as entered_by_username, u2.username as last_modified_by_username,
+        u3.username as case_owner_username,
+        u4.username as closed_by_username
+        FROM
+        cases ca
+        LEFT OUTER JOIN case_statuses cas ON ca.case_status_id = cas.case_status_id
+        LEFT OUTER JOIN case_priorities cap ON ca.case_priority_id = cap.case_priority_id
+        LEFT OUTER JOIN case_types cat ON ca.case_type_id = cat.case_type_id
+        LEFT OUTER JOIN users u1 ON ca.entered_by = u1.user_id
+        LEFT OUTER JOIN users u2 ON ca.last_modified_by = u2.user_id
+        LEFT OUTER JOIN users u3 ON ca.user_id = u3.user_id
+        LEFT OUTER JOIN users u4 ON u4.user_id=ca.closed_by
+        WHERE case_id = $case_id";
+
     $rst = $con->execute($sql);
     if (!$rst) { db_error_handler($con, $sql); return false; }
     else {
@@ -399,6 +416,9 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-cases.php,v $
+ * Revision 1.5  2006/05/02 00:49:14  vanmer
+ * - added joins to related case data, for use in cases one page
+ *
  * Revision 1.4  2006/04/29 01:46:12  vanmer
  * - moved workflow activity instantiation into cases API and out of edit-2.php and new-2.php
  *
