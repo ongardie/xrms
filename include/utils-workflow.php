@@ -6,7 +6,7 @@
  * @author Brad Marshall
  * @author Brian Peterson
  *
- * $Id: utils-workflow.php,v 1.1 2006/04/29 01:44:02 vanmer Exp $
+ * $Id: utils-workflow.php,v 1.2 2006/05/03 20:37:28 vanmer Exp $
  *
  * @todo To extend and internationalize activity template substitution,
  *       we would need to add a table to the database that would hold
@@ -172,6 +172,47 @@ function add_workflow_activities($con, $on_what_table_template, $on_what_id_temp
     }
 }
 
+
+//function to load old status, compare to new status and return any activities which match the old status, and are linked to this particular entity
+function get_open_workflow_activities_on_status_change($con, $on_what_table, $on_what_id, $new_status_id, $company_id, $contact_id, $old_status_id=false) {
+    if (!$con OR !$on_what_table OR !$on_what_id OR !$new_status_id) return false;
+
+    $table=$on_what_table;
+    $entity=make_singular($on_what_table);
+    
+    if (!$old_status_id) {
+        switch ($table) {
+            case 'cases':
+                $data=get_case($con, $on_what_id);
+            break;
+            case 'opportunities':
+                $data=get_opportunity($con, $on_what_id);
+            break;
+        }
+        if ($data) {
+            $old_status=$data["{$entity}_status_id"];
+        } else return false;
+    } else { $old_status=$old_status_id; }
+    
+    if ($old_status != $new_status_id) {
+    
+        /* ADD CHECK TO SEE IF THERE ARE STILL OPEN ACTIVITIES FROM
+            THE PREVIOUS STATUS, THEN GIVE THEM OPTIONS  */
+        $activity_data=array();
+        $activity_data['on_what_status']=$old_status;
+        $activity_data['on_what_table'] = $on_what_table;
+        $activity_data['on_what_id']=$on_what_id;
+        $activity_data['contact_id']= $contact_id;
+        $activity_data['company_id']=$company_id;
+        $activity_data['activity_status']='o';
+    
+        $open_activities=get_activity($con, $activity_data);
+        return $open_activities;
+    } else return false;
+}
+
+
+
 /**
  * Function to add to workflow history, used to track status changes in entities that have workflow
  *
@@ -315,6 +356,10 @@ function add_process_entity($con, $entity, $entity_type, $title, $description, $
 /**
  *
  * $Log: utils-workflow.php,v $
+ * Revision 1.2  2006/05/03 20:37:28  vanmer
+ * - moved function to search for open workflow activities into utils-workflow functions
+ * - changed cases and opportunities edit pages to use centralized open_workflow_activities function
+ *
  * Revision 1.1  2006/04/29 01:44:02  vanmer
  * - added new file for workflow related functions (utils-workflow.php)
  * - moved workflow related functions out of utils-misc into utils-workflow.php

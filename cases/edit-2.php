@@ -33,31 +33,15 @@ $con = get_xrms_dbconnection();
 $no_update = false;
 
 //check to see if the status was changed (for workflow)
-$sql = "select case_status_id from cases where case_id=$case_id";
-$rst = $con->execute($sql);
-
-$old_status = $rst->fields['case_status_id'];
-if ($old_status != $case_status_id) {
-
-    /* ADD CHECK TO SEE IF THERE ARE STILL OPEN ACTIVITIES FROM
-        THE PREVIOUS STATUS, THEN GIVE THEM OPTIONS  */
-    $activity_data=array();
-    $activity_data['on_what_status']=$old_status;
-    $activity_data['on_what_table'] = 'cases';
-    $activity_data['on_what_id']=$case_id;
-    $activity_data['contact_id']= $contact_id;
-    $activity_data['company_id']=$company_id;
-    $activity_data['activity_status']='o';
-
-    $open_activities=get_activity($con, $activity_data);
-    if ($open_activities){
-        $first_activity=current($open_activities);
-        $activity_id=$first_activity['activity_id'];
-        header("Location: ../activities/one.php?msg=no_change&activity_id=$activity_id");
-        $no_update = true;
-    }
-
+$open_activities=get_open_workflow_activities_on_status_change($con, 'cases', $case_id, $case_status_id, $company_id, $contact_id);
+if ($open_activities){
+    $first_activity=current($open_activities);
+    $activity_id=$first_activity['activity_id'];
+    $return_url=urlencode($return_url);
+    header("Location: ../activities/one.php?msg=no_change&activity_id=$activity_id&return_url=$return_url");
+    $no_update = true;
 }
+
 
 if ( ! $no_update ) {
     //update the information from edit.php

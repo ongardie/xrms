@@ -14,6 +14,9 @@ $opportunity_id = $_POST['opportunity_id'];
 $on_what_id=$opportunity_id;
 $session_user_id = session_check('','Update');
 
+getGlobalVar($return_url, 'return_url');
+
+
 $opportunity_status_id = $_POST['opportunity_status_id'];
 $opportunity_type_id = $_POST['opportunity_type_id'];
 $contact_id = $_POST['contact_id'];
@@ -30,36 +33,26 @@ $on_what_table = $_POST['on_what_table'];
 
 $campaign_id = ($campaign_id > 0) ? $campaign_id : 0;
 
+
+if (!$return_url) $return_url="/opportunities/one.php?opportunity_id=$opportunity_id";
+
 $con = get_xrms_dbconnection();
 // $con->debug = 1;
 
 $no_update = false;
 
-//check to see if the status was changed (for workflow)
-$sql = "select opportunity_status_id from opportunities where opportunity_id=$opportunity_id";
-$rst = $con->execute($sql);
 
 
-$old_status = $rst->fields['opportunity_status_id'];
-if ($old_status != $opportunity_status_id) {
-
-    $activity_data=array();
-    $activity_data['on_what_status']=$old_status;
-    $activity_data['on_what_table'] = 'opportunities';
-    $activity_data['on_what_id']=$opportunity_id;
-    $activity_data['contact_id']= $contact_id;
-    $activity_data['company_id']=$company_id;
-    $activity_data['activity_status']='o';
-
-    $open_activities=get_activity($con, $activity_data);
+    //check to see if the status was changed (for workflow)
+    $open_activities=get_open_workflow_activities_on_status_change($con, 'opportunities', $opportunity_id, $opportunity_status_id, $company_id, $contact_id);
     if ($open_activities){
 //        print_r($open_activities);
         $first_activity=current($open_activities);
         $activity_id=$first_activity['activity_id'];
-        header("Location: ../activities/one.php?msg=no_change&activity_id=$activity_id");
+        $return_url=urlencode($return_url);
+        header("Location: ../activities/one.php?msg=no_change&activity_id=$activity_id&return_url=$return_url");
         $no_update=true;
     }
-}
 
 if (!$no_update) {
     $rec = array();
