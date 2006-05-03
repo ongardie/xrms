@@ -219,7 +219,7 @@
         if (!$con) return false;
         if (!$entity_type) return false;
         if (!$entity_type_id) return false;
-        if (!$entity_status_short_name AND !$entity_status_pretty_name) return false;
+        if (!$entity_status_short_name AND !$entity_status_pretty_name AND !$sort_order) return false;
 
         $table=$entity_type."_statuses";
         $where=array();
