@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-opportunities.php,v 1.3 2006/05/02 01:27:39 vanmer Exp $
+ * $Id: utils-opportunities.php,v 1.4 2006/05/03 00:01:47 vanmer Exp $
  *
  */
 
@@ -72,9 +72,9 @@ function add_update_opportunity($con, $opportunity_info, $_return_data = false, 
 
     global $session_user_id;
 
-    // If there is not a 'company_id', one needs to be located or created
+    // If there is not a 'company_id', one needs to be located or created unless opportunity already exists
 
-    if ( (! $opportunity_info['company_id']) || ( $opportunity_info['company_id']) == 0 )
+    if ( ((! $opportunity_info['company_id']) || ( $opportunity_info['company_id']) == 0) AND (!$opportunity_info['opportunity_id']) )
     {
             $opportunity_info['company_id'] = 1;
     }
@@ -124,6 +124,12 @@ function add_update_opportunity($con, $opportunity_info, $_return_data = false, 
 
         if (strlen($opportunity_data['company_id']) == 0)
                 $opportunity_data['company_id']  = $found_opportunity_data['company_id'];
+
+        if (strlen($opportunity_data['contact_id']) == 0)
+                $opportunity_data['contact_id']  = $found_opportunity_data['contact_id'];
+
+        if (strlen($opportunity_data['opportunity_status_id']) == 0)
+            $opportunity_data['opportunity_status_id']  = $found_opportunity_data['opportunity_status_id'];
 
         if ($opportunity_data['opportunity_status_id']) {
             if ($opportunity_data['opportunity_status_id']!=$found_opportunity_data['opportunity_status_id']) {
@@ -419,6 +425,10 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-opportunities.php,v $
+ * Revision 1.4  2006/05/03 00:01:47  vanmer
+ * - added check to ensure company_id isn't reset to 1 if opportunity or case already exists
+ * - added lookup of assumed data in the record on update
+ *
  * Revision 1.3  2006/05/02 01:27:39  vanmer
  * - changed opportunities one.php to use get_opportunities and other get_ functions from the API
  * - updated get_opportunities function to do joins on related tables

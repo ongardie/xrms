@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-cases.php,v 1.5 2006/05/02 00:49:14 vanmer Exp $
+ * $Id: utils-cases.php,v 1.6 2006/05/03 00:01:47 vanmer Exp $
  *
  */
 
@@ -72,9 +72,8 @@ function add_update_case($con, $case_info, $_return_data = false, $_magic_quotes
 
     global $session_user_id;
 
-    // If there is not a 'company_id', one needs to be located or created
-
-    if ( (! $case_info['company_id']) || ( $case_info['company_id']) == 0 )
+    // If there is not a 'company_id', one needs to be located or created (unless this is an existing case)
+    if ( ((! $case_info['company_id']) || ( $case_info['company_id']) == 0) AND (!$case_info['case_id']))
     {
             $case_info['company_id'] = 1;
     }
@@ -124,6 +123,12 @@ function add_update_case($con, $case_info, $_return_data = false, $_magic_quotes
 
         if (strlen($case_data['company_id']) == 0)
                 $case_data['company_id']  = $found_case_data['company_id'];
+
+        if (strlen($case_data['contact_id']) == 0)
+                $case_data['contact_id']  = $found_case_data['contact_id'];
+
+        if (strlen($case_data['case_status_id']) == 0)
+                $case_data['case_status_id']  = $found_case_data['case_status_id'];
 
         if ($case_data['case_status_id']) {
             if ($case_data['case_status_id']!=$found_case_data['case_status_id']) {
@@ -416,6 +421,10 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-cases.php,v $
+ * Revision 1.6  2006/05/03 00:01:47  vanmer
+ * - added check to ensure company_id isn't reset to 1 if opportunity or case already exists
+ * - added lookup of assumed data in the record on update
+ *
  * Revision 1.5  2006/05/02 00:49:14  vanmer
  * - added joins to related case data, for use in cases one page
  *
