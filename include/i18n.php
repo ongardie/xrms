@@ -19,7 +19,7 @@
  * Internally the output character set is used. Other characters are
  * encoded using Unicode entities according to HTML 4.0.
  *
- * @version $Id: i18n.php,v 1.10 2005/05/25 05:42:37 alanbach Exp $
+ * @version $Id: i18n.php,v 1.11 2006/05/03 20:45:35 vanmer Exp $
  * @package xrms
  * @subpackage i18n
  */
@@ -229,7 +229,7 @@ function set_up_language($xrms_language_param, $do_search = false, $default = fa
             putenv( "LANG=$longlocale" );
             putenv( "LANGUAGE=$longlocale" );
         }
-        setlocale(LC_ALL, $longlocale);
+        setlocale(LC_MESSAGES, $longlocale);
 
         // Set text direction/alignment variables
         if (isset($languages[$xrms_notAlias]['DIR']) &&
@@ -1011,6 +1011,9 @@ function tag_remove($s)
 
 /**
  * $Log: i18n.php,v $
+ * Revision 1.11  2006/05/03 20:45:35  vanmer
+ * - change LC_ALL to LC_MESSAGES when setting locale, in order to only change messages, to avoid issues translating database calls
+ *
  * Revision 1.10  2005/05/25 05:42:37  alanbach
  * Automatic RTL/LTR patch
  *
