@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.48 2006/04/29 11:38:09 braverock Exp $
+ * $Id: new-2.php,v 1.49 2006/05/06 09:31:43 vanmer Exp $
  */
 
 //where do we include from
@@ -182,9 +182,6 @@ if (!$activity_id) {
     header("Location: " . $http_site_root . $return_url."&msg=$msg");
     exit();
 }
-$rec['activity_id']=$activity_id;
-do_hook_function('activity_new_2', $rec);
-
 
 //if this is a mailto link, try to open the user's default mail application
 if ($email) {
@@ -210,6 +207,9 @@ if ($activity_status == 'c') { //now send them back where they came from
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.49  2006/05/06 09:31:43  vanmer
+ *- removed hook function call (moved to utils-activities.php)
+ *
  *Revision 1.48  2006/04/29 11:38:09  braverock
  *- eliminate add opportunity code from new activity script
  *  - plugins or custom code that need to create opportunities and activities together should
