@@ -6,7 +6,7 @@
  * @author Brad Marshall
  * @author Brian Peterson
  *
- * $Id: workflow-activities.php,v 1.15 2005/09/29 14:51:52 vanmer Exp $
+ * $Id: workflow-activities.php,v 1.16 2006/05/06 09:33:03 vanmer Exp $
  *
  * @todo To extend and internationalize activity template substitution,
  *       we would need to add a table to the database that would hold
@@ -18,141 +18,19 @@
  */
 
  require_once($include_directory.'utils-activities.php');
+ require_once($include_directory.'utils-workflow.php');
 
- if (!$template_sort_order) { $template_sort_order=1; }
-  
-$sql = "select * from activity_templates
-    where on_what_table='$on_what_table_template'
-    and on_what_id=$on_what_id_template";
+//this page is now deprecated, and should not be used.  This function call is here to allow backward compability
 
-if ($template_sort_order) $sql.=" and sort_order=$template_sort_order";
+add_workflow_activities($con, $on_what_table_template, $on_what_id_template, $on_what_table, $on_what_id, $company_id, $contact_id, $template_sort_order);
 
-$sql .=" and activity_template_record_status='a' order by sort_order";
-
-$rst = $con->execute($sql);
-
-//generates insert statement to add activities to the current list
-$cnt = 0;
-if(empty($activity_record_status)) {
-    $activity_record_status = 'a';
-}
-if ($rst) {
-    while (!$rst->EOF) {
-    
-        //get the field values from the next record in the query
-        $template_info=$rst->fields;
-        $activity_template_id = $rst->fields['activity_template_id'];
-        $activity_type_id = $rst->fields['activity_type_id'];
-        $activity_title = $rst->fields['activity_title'];
-        $default_text = $rst->fields['default_text'];
-        $activity_description = $rst->fields['activity_description'];
-        $duration = $rst->fields['duration'];
-        $activity_template_role_id = $rst->fields['role_id'];
-        
-        
-        //calculate ends_at, based on duration and current date
-        if ( is_numeric("$duration") ) {
-            $duration = $duration.' days';
-        }
-        $ends_at = date('Y-m-d',strtotime($duration));
-
-        /**
-         * Do variable substitution on the Activity Title in an Activity Template
-         *
-         * @todo Move variable substitutions for actvity templates into a user-definable table.
-         */
-        if (strpos($activity_title, 'company_name')) {
-            //get the company name for substitutions
-            $company_sql = "select company_name from companies where company_id=$company_id and company_record_status='a'";
-            $company_name = $con->GetOne($company_sql);
-            if ($company_name) {
-                $activity_title = str_replace('company_name',$company_name,$activity_title);
-            } else {
-                db_error_handler ($con, $company_sql);
-            }
-        }
-        if (strpos($activity_title, 'contact_name')) {
-            // get the contact name for variable substitution
-            $contact_sql = "
-            SELECT " . $con->Concat("first_names","' '","last_name") . " AS contact_name
-            FROM contacts
-            WHERE company_id = $company_id
-            AND contact_id = $contact_id
-            AND contact_record_status = 'a'
-            ";
-            $contact_name = $con->GetOne($contact_sql);
-            if ($contact_name) {
-                $activity_title = str_replace('contact_name',$contact_name,$activity_title);
-            } else {
-                db_error_handler ($con, $contact_sql);
-            }
-        }
-        
-        $activity_type_data=get_activity_type($con, false, false, $activity_type_id);
-        if ($activity_type_data) {
-            $activity_type_name=$activity_type_data['activity_type_short_name'];
-            switch ($activity_type_name) {
-                //handle internal activity type
-                case 'INT':
-                break;
-                
-                //handle process activity type (instantiate new entity)
-                case 'PRO':
-                    $entity=$rst->fields['workflow_entity'];
-                    $entity_type=$rst->fields['workflow_entity_type'];
-                    $ret=add_process_entity($con, $entity, $entity_type, $activity_title, $activity_description, $company_id, $contact_id, $on_what_table, $on_what_id);
-                break;
-                
-                //process system activities here
-                case 'SYS':
-                    $ret=do_hook_function('workflow_system', $template_info);
-                break;
-                
-                default:
-                break;
-            }
-        }
-
-        $user_id=get_least_busy_user_in_role($con, $activity_template_role_id, strtotime($ends_at));
-        if (!$user_id) $user_id=$session_user_id;
-        //save to database
-        $rec = array();
-        $rec['activity_type_id'] = $activity_type_id;
-        $rec['activity_description'] = addslashes($default_text);
-        $rec['ends_at'] = $ends_at;
-        $rec['user_id'] = $user_id;
-        $rec['activity_template_id']=$activity_template_id;
-        $rec['company_id'] = $company_id;
-        $rec['contact_id'] = $contact_id;
-        $rec['on_what_table'] = $on_what_table;
-        $rec['on_what_id'] = $on_what_id;
-        $rec['on_what_status'] = $on_what_id_template;
-        $rec['activity_title'] = addslashes($activity_title);
-        $rec['entered_at'] = time();
-        $rec['entered_by'] = $user_id;
-        $rec['last_modified_at'] = time();
-        $rec['last_modified_by'] = $user_id;
-        //$rec['scheduled_at'] = time();
-        $rec['activity_status'] = 'o';
-        $rec['activity_record_status'] = $activity_record_status;
-//    $con->debug=true;        
-        add_activity($con, $rec);
-/*
-        $tbl = 'activities';
-        $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-        $ins_rst=$con->execute($ins);
-        if (!$ins_rst) { db_error_handler($con, $sql); }
-//        echo "INSERTED ". $con->Insert_ID();
-*/        
-        do_hook_function('workflow_addition', $activity_template_id);
-
-        $rst->movenext();
-    }
-    $rst->close();
-}
 
 /**
  * $Log: workflow-activities.php,v $
+ * Revision 1.16  2006/05/06 09:33:03  vanmer
+ * - removed code from workflow-activities, now in utils-workflow.php
+ * - added function call to duplicate old workflow-activities functionality
+ *
  * Revision 1.15  2005/09/29 14:51:52  vanmer
  * - moved template-specific handling of activity types to below other processing of activity title and description
  * - added hook for system template activities
