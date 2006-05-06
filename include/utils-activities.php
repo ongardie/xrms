@@ -9,9 +9,11 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-activities.php,v 1.27 2006/05/02 00:41:18 vanmer Exp $
+ * $Id: utils-activities.php,v 1.28 2006/05/06 09:29:27 vanmer Exp $
 
  */
+
+require_once('utils-workflow.php');
 
 /**********************************************************************/
 
@@ -131,6 +133,9 @@ function add_activity($con, $activity_data, $participants=false, $magic_quotes=f
     if (!$rst) { db_error_handler($con, $ins); return false; }
     $activity_id = $con->insert_id();
 
+    $rec['activity_id']=$activity_id;
+    do_hook_function('activity_new_2', $rec);
+
     add_audit_item($con, $session_user_id, 'created', 'activities', $activity_id, 1);
 
     if (!$participants) {
@@ -237,7 +242,7 @@ function get_activity($con, $activity_data, $show_deleted=false, $return_records
  *
  * @return boolean specifying if update succeeded
  */
-function update_activity($con, $activity_data, $activity_id=false, $activity_rst=false, $update_default_participant=true, $magic_quotes=false) {
+function update_activity($con, $activity_data, $activity_id=false, $activity_rst=false, $update_default_participant=true, $magic_quotes=false, $return_url=false, $table_status_id=false, $old_status=false) {
     global $session_user_id;
     if (!$activity_id AND !$activity_rst) return false;
     if (!$activity_data) return false;
@@ -274,10 +279,13 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
         if (($activity_data['activity_status']=='c') AND ($activity_rst->fields['activity_status']!='c')) {
             $activity_data['completed_by']=$_SESSION['session_user_id'];
             $activity_data['completed_at']=time();
+            $completed_activity=true;
         }
+
         if (($activity_data['activity_status']!='c') AND ($activity_rst->fields['activity_status']=='c')) {
             $activity_data['completed_by']='NULL';
             $activity_data['completed_at']='NULL';
+            $completed_activity=false;
         }
 
     $update_sql = $con->getUpdateSQL($activity_rst, $activity_data, false, $magic_quotes);
@@ -287,10 +295,47 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
         if (!$update_rst) { db_error_handler($con, $update_sql); return false; }
         $updated_sql=true;
     }
+
+    $param = array($activity_rst, $activity_data);
+    do_hook_function('activity_edit_2', $param);
+    
+    // if it's closed but wasn't before, allow the computer to perform an action if it wants to
+    if($completed_activity) {
+            do_hook_function("run_on_completed", $activity_id);
+    }
+
+     //DO WORKFLOW STUFF HERE
+    $activity_template_id = $activity_rst->fields['activity_template_id'];
+    $company_id=$activity_data['company_id'];
+    $contact_id=$activity_data['contact_id'];
+    if (!$company_id) $company_id=$activity_rst->fields['company_id'];
+    if (!$contact_id) $contact_id=$activity_rst->fields['contact_id'];
+
+    $on_what_id=$activity_data['on_what_id'];
+    if (!$on_what_id) {
+        $on_what_id=$activity_rst->fields['on_what_id'];
+    }
+
+    $on_what_table=$activity_data['on_what_table'];
+    if (!$on_what_table) {
+        $on_what_table=$activity_rst->fields['on_what_table'];
+    }
+
+    if ($completed_activity && $activity_template_id) {
+        $ret=workflow_activity_completed($con, $on_what_table, $on_what_id, $activity_template_id, $company_id, $contact_id, $return_url);
+    } else {
+         //hack to allow related entity status change from activity controlled by workflow activity action
+        //defaults to allowing change unless underlying workflow actions have already happened, in which case do not allow manual status change
+         $ret['allow_status_change']=true; 
+    }
+
+
     if ($updated_sql OR $updated_participants) {
          add_audit_item($con, $session_user_id, 'updated', 'activities', $activity_id, 1);
      }
-     return true;
+
+    if (!$ret) $ret=true;
+    return $ret;
 }
 
 /**********************************************************************/
@@ -729,6 +774,10 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.28  2006/05/06 09:29:27  vanmer
+  * - added hook functions to activities API from new-2 and edit-2 activities pages
+  * - added call to run workflow activity completed code for workflow engine
+  *
   * Revision 1.27  2006/05/02 00:41:18  vanmer
   * - moved recurrence lookup back into activities/one.php
   * - changed get_ call for activities to do outer joins on all non-critical tables
