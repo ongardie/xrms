@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.136 2006/05/02 00:40:16 vanmer Exp $
+ * $Id: one.php,v 1.137 2006/05/06 09:32:18 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -448,6 +448,7 @@ function logTime() {
         <input type=hidden name=on_what_id value="<?php  echo $on_what_id; ?>">
         <input type=hidden name=table_name value="<?php echo $table_name ?>">
         <input type=hidden name=table_status_id value="<?php echo $table_status_id ?>">
+        <input type=hidden name=old_status value="<?php echo $table_status_id ?>">
         <input type=hidden name=thread_id value="<?php  echo $thread_id; ?>">
         <input type=hidden name=followup_from_id value="<?php  echo $followup_from_id; ?>">
 
@@ -749,6 +750,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.137  2006/05/06 09:32:18  vanmer
+ * - added passthrough for old status seperately from status in dropdown
+ *
  * Revision 1.136  2006/05/02 00:40:16  vanmer
  * - moved recurrence check back into activities/one.php
  *
