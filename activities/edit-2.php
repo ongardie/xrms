@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.79 2006/04/29 01:45:17 vanmer Exp $
+ * $Id: edit-2.php,v 1.80 2006/05/06 09:28:14 vanmer Exp $
  */
 
 //include required files
@@ -139,15 +139,13 @@ $con = get_xrms_dbconnection();
 //$con->debug = 1;
 
 //get the existing activity record for use later in the script
-$sql = "SELECT * FROM activities WHERE activity_id = " . $activity_id;
-$activity = $con->execute($sql);
-$activity_template_id = $activity->fields['activity_template_id'];
+$activity = get_activity($con, $activity_id);
 
 $new_contact_id = ($contact_id > 0) ? $contact_id : 0;
 
 if (!$contact_id OR $contact_id==0) {
     // set to the previous contact_id
-    $contact_id=$activity->fields['contact_id'];
+    $contact_id=$activity['contact_id'];
 }
 
 // if it's closed but wasn't before, update the closed_at timestamp
@@ -220,19 +218,6 @@ if ($associate_activities == true ) {
     } //end empty on_what_table check
 } // end associate code
 
-$sql = "SELECT contact_id
-        FROM contacts
-        WHERE contact_id=" . $contact_id;
-$rst = $con->execute($sql);
-if(!$rst) {
-    db_error_handler($con, $sql);
-}
-elseif($rst->rowcount()) {
-    if($company_id) {
-        update_recent_items($con, $session_user_id, "activities", $company_id, "sidebar_view");
-    }
-}
-
 $rec = array();
 $rec['activity_type_id']     = $activity_type_id;
 //use new contact ID here to update contact with newly set ID
@@ -263,70 +248,56 @@ $rec['activity_priority_id'] = $activity_priority_id;
 $rec['resolution_description'] = trim($resolution_description);
 $rec['activity_resolution_type_id'] = $activity_resolution_type_id;
 
+$magicq=get_magic_quotes_gpc();
+$upd=update_activity($con, $rec, $activity_id, false, true, $magicq, $return_url); //, $table_status_id, $old_status
+if ($upd['return_url']) $return_url=$upd['return_url'];
 
-$upd=update_activity($con, $rec, false, $activity, true, get_magic_quotes_gpc());
-
-$param = array($activity, $rec);
-do_hook_function('activity_edit_2', $param);
+if ($upd['allow_status_change']) {
+    getGlobalVar($old_status, 'old_status');
+    if ($old_status AND $table_status_id) {
+        if ($table_status_id != $old_status) {
+            //make sure no workflow activities exist before changing status, even here
+            $open_activities=get_open_workflow_activities_on_status_change($con, $on_what_table, $on_what_id, $table_status_id, $company_id, $contact_id);
+            if ($open_activities){
+                $first_activity=current($open_activities);
+                $open_activity_id=$first_activity['activity_id'];
+                $return_url="/activities/one.php?msg=no_change&activity_id=$open_activity_id&return_url=".urlencode($return_url);
+            } else {
+            //change case or opportunity status from activity edit, if workflow return allows it during update_activity
+                $rec = array();
+                $table_name=strtolower($table_name);
+                $rec["{$table_name}_id"]=$on_what_id;
+                $rec[$table_name . "_status_id"] = $table_status_id;
+    //            print_r($rec);
+                switch ($table_name) {
+                    case 'case':
+                        update_case($con, $rec, $on_what_id, false, $magicq);
+                    break;
+                    case 'opportunity':
+                        update_opportunity($con, $rec, $on_what_id, false, $magicq);
+                    break;
+                }
+            }
+        }
+    }
+}
 
 if($on_what_table == 'opportunities' and (strlen($opportunity_description)>0)) {
     //Update Opportunity Description
-    $sql = "SELECT * FROM opportunities WHERE opportunity_id = " . $on_what_id;
-    $rst = $con->execute($sql);
-
     $rec = array();
     $rec['opportunity_description'] = trim($opportunity_description);
+    $rec['opportunity_id']=$on_what_id;
+    update_opportunity($con, $rec, $on_what_id, false, $magicq);
 
-    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-    if (strlen($upd)>0) {
-        $desc_rst = $con->execute($upd);
-        if (!$desc_rst) {
-            db_error_handler ($con, $upd);
-        }
-    }
 }
 
 if($on_what_table == 'opportunities' and (strlen($probability)>0)) {
-    $opp_sql = "SELECT * FROM opportunities WHERE opportunity_id = $on_what_id";
-    $rst = $con->execute($opp_sql);
 
     $rec = array();
     $rec['probability'] = $probability;
+    $rec['opportunity_id']=$on_what_id;
+    update_opportunity($con, $rec, $on_what_id, false, $magicq);
 
-    $upd = $con->GetUpdateSQL($rst, $rec, false, $magicq=get_magic_quotes_gpc());
-    if (strlen($upd)>0) {
-        //update the probability
-        $prob_rst= $con->execute($upd);
-        if (!$prob_rst) {
-            db_error_handler ($con, $upd);
-        } else {
-            $prob_rst->close();
-        }
-    }
-}
-
-// if it's closed but wasn't before, allow the computer to perform an action if it wants to
-if($activity_status == 'c' && $current_activity_status != 'c') {
-    $completed_activity=true;
-    do_hook_function("run_on_completed", $activity_id);
-}
-
-//get sort_order field
-
-$sql = "select * from " . strtolower($table_name) . "_statuses where " . strtolower($table_name) ."_status_id=$table_status_id";
-$rst = $con->SelectLimit($sql, 1, 0);
-$rst = $con->execute($sql);
-if ($rst) {
-    $sort_order = $rst->fields['sort_order'];
-    switch (strtolower($table_name)) {
-        case 'case':
-            $type_id = $rst->fields[strtolower($table_name).'_type_id'];
-        break;
-        default:
-            $type_id=false;
-        break;
-    }
-    $rst->close();
 }
 
 //get current username
@@ -354,140 +325,6 @@ if ($rst) {
     $activity_type = $rst->fields['activity_type_pretty_name'];
     $rst->close();
 }
-    if ($completed_activity && $activity_template_id) {
-        $sql="SELECT * FROM activity_templates WHERE activity_template_id=$activity_template_id";
-        $template_rst= $con->execute($sql);
-        if (!$template_rst) { db_error_handler($con, $sql); }
-        $template_sort_order=$template_rst->fields['sort_order'];
-        if ($template_sort_order!==false) {
-            $sql = "SELECT * from activities JOIN activity_templates ON activities.activity_template_id = activity_templates.activity_template_id WHERE activity_templates.on_what_table=" . $con->qstr($table_name.'_statuses') . " AND activity_templates.on_what_id=$table_status_id AND  activity_templates.sort_order = $template_sort_order AND activities.activity_status='o' AND activities.activity_record_status='a'
-             and activities.on_what_status='$old_status'
-             and activities.on_what_table='$on_what_table'
-             and activities.on_what_id=$on_what_id";
-            $activity_sort_open=$con->execute($sql);
-            if (!$activity_sort_open) { db_error_handler($con, $sql); }
-            else {
-                if ($activity_sort_open->EOF) $next_activities_sort=true;
-            }
-        }
-        if ($next_activities_sort) {
-            if ($template_sort_order>0) { $template_sort_order+=1; }
-            $sql = "SELECT MAX(sort_order) as max_sort_order FROM activity_templates WHERE activity_templates.on_what_table=" . $con->qstr($table_name.'_statuses') . " AND activity_templates.on_what_id=$table_status_id";
-            $max_sort=$con->execute($sql);
-//            echo $sql;
-            if (!$max_sort) { db_error_handler($con, $sql); }
-            $max_sort_id=$max_sort->fields['max_sort_order'];
-            if ($template_sort_order <= $max_sort_id) {
-                $on_what_table_template = $table_name .  "_statuses";
-                $on_what_id_template = $table_status_id;
-                //run the add_workflow_activities  to actually make the update
-                add_workflow_activities($con, $on_what_table_template, $on_what_id_template, $on_what_table, $on_what_id, $company_id, $contact_id, $template_sort_order);
-            }
-        }
-    }
-
-// null out old_status
-$old_status = '';
-
-/* this saves case/opportunity status changes to the database when they are changed in one.php */
-$table_name = strtolower($table_name);
-if ($table_name !== "attached to") {
-    $sql = "select * from $on_what_table where ".$table_name."_id=$on_what_id";
-    $rst = $con->execute($sql);
-
-    $old_status = $rst->fields[$table_name . '_status_id'];
-
-
-    //check if there are open activities left
-    $where=array();
-    $where[]="on_what_status='$old_status'";
-    $where[]="on_what_table='$on_what_table'";
-    $where[]="on_what_id=$on_what_id";
-    $where[]="activity_status='o'";
-    $where[]="activity_record_status='a'";
-    if ($contact_id) { $where[]="contact_id=$contact_id"; }
-    if ($company_id) { $where[]="company_id=$company_id"; }
-
-    $wherestr=implode(" and ", $where);
-    $sql = "select * from activities where $wherestr";
-
-    $rst = $con->execute($sql);
-    if ($rst) {
-        $activity_return_id = $rst->fields['activity_id'];
-    } else {
-        db_error_handler ($con, $sql);
-    }
-
-    //check if there are open activities from this status
-    // if no more activities are open, advance status
-    $no_update = true;
-    if ($rst->rowcount() == 0) {
-        if ($old_status != $table_status_id) {
-            $no_update = false;
-        } else {
-            $sort_order++;
-            //$con->debug=1;
-            $sql = "select * from {$table_name}_statuses
-                where sort_order=$sort_order";
-            if ($type_id) {
-                $sql.=" and {$table_name}_type_id=$type_id ";
-            }
-            $sql.=" and {$table_name}_status_record_status='a'";
-            $status_rst = $con->execute($sql);
-            if (!$status_rst) db_error_handler($con, $sql);
-            if ($status_rst AND ($status_rst->numRows()>0)) {
-                $table_status_id = $status_rst->fields[$table_name . '_status_id'];
-
-                //look for activity_templates defined for the next status in the workflow
-                $sql = "select * from activity_templates where on_what_table=" . $con->qstr($table_name.'_statuses') . " AND on_what_id=$table_status_id";
-                $rst=$con->execute($sql);
-                if (!$rst) { db_error_handler($con,$sql); }
-
-                //if there are templates defined for the next status, find it
-                if ($rst->numRows()>0) {
-                    $no_update = false;
-                }
-            }
-        }
-    }
-
-    // check for status change
-    if ($old_status !== $table_status_id){
-        //if there is only one field, the result set is empty (no old activities)
-        //  otherwise prompt the user
-        if ($no_update) {
-            if ($activity_return_id)
-                $return_url = "/activities/one.php?msg=no_change&activity_id=$activity_return_id";
-            elseif ($return_url) {
-                if (strpos($return_url,'?')!==false) { $sep='&'; }
-                else { $sep='?'; }
-                $return_url.=$sep.'msg=no_change';
-             }
-             else
-                $return_url="/private/home.php?msg=no_change";
-        }
-
-        //update if there are no open activities
-        if (!$no_update) {
-            $rec = array();
-            $rec["{$table_name}_id"]=$on_what_id;
-            $rec[$table_name . "_status_id"] = $table_status_id;
-//            print_r($rec);
-            switch ($table_name) {
-                case 'case':
-                    update_case($con, $rec, $on_what_id, false, get_magic_quotes_gpc());
-                break;
-                case 'opportunity':
-                    update_opportunity($con, $rec, $on_what_id, false, get_magic_quotes_gpc());
-                break;
-            }
-        }
-    }
-
-
-
-}
-
 
 //get data for generated email
 $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name, work_phone FROM contacts WHERE contact_id = $contact_id";
@@ -552,6 +389,12 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.80  2006/05/06 09:28:14  vanmer
+ * - replaced direct sql in edit-2 to function calls where appropriate
+ * - added functionality to change status on an entity when changed from activities/one.php, where appropriate
+ * - pulled out all workflow-specific code into utils-workflow.php
+ * - moved edit2 hook into update_activity API in utils-activities.php
+ *
  * Revision 1.79  2006/04/29 01:45:17  vanmer
  * - changed to use workflow API to instantiate workflow activities
  * - changed to use cases/opportunities API to change status on cases/opportunities when last workflow activity is closed (API then instantiates new workflow
