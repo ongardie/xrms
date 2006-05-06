@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.26 2006/04/29 01:49:20 vanmer Exp $
+ * $Id: edit.php,v 1.27 2006/05/06 09:34:27 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -25,6 +25,8 @@ $contact_id = (array_key_exists('contact_id',$_GET) ? $_GET['contact_id'] : '' )
 $opportunity_type_id = (array_key_exists('opportunity_type_id',$_GET) ? $_GET['opportunity_type_id'] : '' );
 $opportunity_title = (array_key_exists('opportunity_title',$_GET) ? $_GET['opportunity_title'] : '' );
 
+getGlobalVar($return_url, 'return_url');
+if (!$return_url) { $return_url="/opportunities/one.php?opportunity_id=$opportunity_id"; }
 $con = get_xrms_dbconnection();
 // $con->debug = 1;
 
@@ -168,6 +170,7 @@ confGoTo_includes();
         <input type=hidden name=opportunity_id value=<?php  echo $opportunity_id; ?>>
         <input type=hidden name=company_id value=<?php echo $company_id; ?>>
         <input type=hidden name=on_what_table value=<?php echo "opportunities"; ?>>
+        <input type=hidden name=return_url value="<?php echo $return_url; ?>">
 
         <table class=widget cellspacing=1>
             <tr>
@@ -315,6 +318,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.27  2006/05/06 09:34:27  vanmer
+ * - added return_url to opportunities edit page
+ *
  * Revision 1.26  2006/04/29 01:49:20  vanmer
  * - restrict opportunities statuses to only statuses associated with current opportunity type
  * - added closed_by and closed_at fields and output to opportunities/one page
