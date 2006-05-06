@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.103 2006/04/27 11:26:46 braverock Exp $
+ * $Id: utils-interface.php,v 1.104 2006/05/06 09:31:21 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -87,6 +87,8 @@ function status_msg($msg) {
       return _("Changes saved.");
     case 'no_change':
       return _("Status not changed.") . ' ' . _("This activity is still open.");
+    case 'no_auto_change':
+      return _("Status not automatically changed.") . ' ' . _("Status should be changed by hand to reflect resolution.");
     case 'division_added':
       return _("Division Added.");
 
@@ -1055,6 +1057,9 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.104  2006/05/06 09:31:21  vanmer
+ * - added case for message about not changing the status of the an entity automatically
+ *
  * Revision 1.103  2006/04/27 11:26:46  braverock
  * - add Charset encoding Header to start_page() for i18n
  *
