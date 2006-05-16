@@ -8,7 +8,7 @@
 // | Email         walter@torres.ws                                         |
 // | Web           http://web.php-yacs.org                                  |
 // | Mirror        http://php-yacs.sourceforge.net/                         |
-// | $Id: csvParser.php,v 1.4 2006/01/31 20:42:01 jswalter Exp $             |
+// | $Id: csvParser.php,v 1.5 2006/05/16 02:10:13 jswalter Exp $             |
 // +------------------------------------------------------------------------+
 // | This source file is subject to version 3.00 of the PHP License,        |
 // | that is available at http://www.php.net/license/3_0.txt.               |
@@ -42,8 +42,8 @@
  * @author      Walter Torres <walter@torres.ws>
  * @contributor Aaron Van Meerten
  *
- * @version   $Id: csvParser.php,v 1.4 2006/01/31 20:42:01 jswalter Exp $
- * @date      $Date: 2006/01/31 20:42:01 $
+ * @version   $Id: csvParser.php,v 1.5 2006/05/16 02:10:13 jswalter Exp $
+ * @date      $Date: 2006/05/16 02:10:13 $
  *
  * @copyright (c) 2004 Walter Torres
  * @license   Licensed under the GNU GPL. For full terms see the file COPYING.
@@ -262,7 +262,7 @@
  *
  * @extends File
  *
- * @date  $Date: 2006/01/31 20:42:01 $
+ * @date  $Date: 2006/05/16 02:10:13 $
  *
  * @todo Have this class extend FILE to utilize common File operations
  *
@@ -477,6 +477,20 @@ class csvParser //extends File
     * @since 2.20
     */
     var $_TfileSize = null;
+
+   /**
+    * Property private string $_preprocess
+    *
+    * Name of Preprocess Callback Function
+    *
+    * @name $_preprocess
+    * @var boostringl
+    * @property private string Preprocess Callback Function name
+    *
+    * @access private
+    * @since 1.5
+    */
+	var $_preprocess = null;
 
    /**
     * Property private int $_errCode
@@ -796,6 +810,13 @@ class csvParser //extends File
                     else
                         $_recIdnet = $recID;
 
+					// Add a callback method here to custom process the inbound record before
+					// it is handed off to the Class
+					if (function_exists($this->_preprocess))
+					{
+						$_aryRecord = call_user_func($this->_preprocess, $_aryRecord );
+					}
+
                     // Store current Record data in Class Object
                     $this->_cvsRecords[$_recIdnet] = $_aryRecord;
 
@@ -1019,7 +1040,7 @@ class csvParser //extends File
    /**
     * Method public mixed setHeaders( array $myHeaders )
     *
-    * general description
+    * Insert external defined header for data
     *
     * @name setHeaders())
     * @access public
@@ -2151,6 +2172,11 @@ class csvParser //extends File
 
 /**
   * $Log: csvParser.php,v $
+  * Revision 1.5  2006/05/16 02:10:13  jswalter
+  *  * Added Preprocess Callback Function.
+  *  * Added '$_preprocess; to store user defined callback
+  *  * Need to create get and setter methods for this new property
+  *
   * Revision 1.4  2006/01/31 20:42:01  jswalter
   * row count was unchanged if 'setRemoveBlankRecord()' was set. remove rows are no longer counted
   *
