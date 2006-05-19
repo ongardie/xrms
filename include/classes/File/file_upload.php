@@ -8,7 +8,7 @@
  *
  * $RCSfile: file_upload.php,v $
  * $Author: jswalter $
- * $Date: 2005/09/22 02:57:53 $
+ * $Date: 2006/05/19 19:45:13 $
  *
  * @package    File_Handling
  * @subpackage Processng
@@ -17,14 +17,14 @@
  * @author      Walter Torres <walter@torres.ws>
  * @contributor Aaron Van Meerten
  *
- * @version   $Revision: 1.2 $
+ * @version   $Revision: 1.3 $
  * @copyright (c) 2004 Walter Torres
  * @license   Licensed under the GNU GPL. For full terms see the file COPYING.
  *            OSI Certified Open Source Software
  *
  * @todo Complete phpDoc-ing this file
  *
- * @ID $Id: file_upload.php,v 1.2 2005/09/22 02:57:53 jswalter Exp $
+ * @ID $Id: file_upload.php,v 1.3 2006/05/19 19:45:13 jswalter Exp $
  */
 
 include_once(dirname(__FILE__) . '/files.php');
@@ -70,7 +70,7 @@ include_once(dirname(__FILE__) . '/files.php');
     $objUpFile->setFileName ( 'newName' );
 
     // If there is a file what that name already there, can we over write it?
-    $objUpFile->setOverwrite(true);
+    $objUpFile->setFileOverWrite(true);
 
     // What do you want to happen if the file exists?
     // PHP kills the temp file once the script is done,
@@ -137,7 +137,7 @@ include_once(dirname(__FILE__) . '/files.php');
     * @example url://path/to/example.php description
     *
     * @author Walter Torres <walter@torres.ws>
-    * @version $Revision: 1.2 $
+    * @version $Revision: 1.3 $
     *
     * @copyright copyright information
     * @license URL name of license
@@ -227,7 +227,7 @@ class file_upload extends File
             }   // if ( empty ($_POSTvarName) )
         }
 
-        // OK, so store the POST var for further pROcessing
+        // OK, so store the POST var for further processing
         $this->_postVar = $_POSTvarName;
 
         // Where we given a File Name to deal with?
@@ -321,10 +321,10 @@ class file_upload extends File
     // {{{ getFileSize
     function getFileSize ()
     {
-        if ( empty ( $this->_fileFileSize ) )
+        if ( empty ( $this->_fileSize ) )
             $this->_setFileSize ( $_FILES[$this->_postVar]['size'] );
 
-        return $this->_fileFileSize;
+        return $this->_fileSize;
     }
     // }}}
     // {{{ getMaxUploadSize
@@ -389,11 +389,15 @@ class file_upload extends File
 
 /**
  * $RCSfile: file_upload.php,v $
- * $Revision: 1.2 $
- * $Date: 2005/09/22 02:57:53 $
+ * $Revision: 1.3 $
+ * $Date: 2006/05/19 19:45:13 $
  * $Author: jswalter $
  *
  * $Log: file_upload.php,v $
+ * Revision 1.3  2006/05/19 19:45:13  jswalter
+ *  * $this->_fileFileSize was not a define property, changed to use FILE::_fileSize
+ *  *  Example at top used "setOverwrite(), this does not exist, corrected to "setFileOverWrite()"
+ *
  * Revision 1.2  2005/09/22 02:57:53  jswalter
  *  - modifed a few methods to reflect updates to File Class
  *
