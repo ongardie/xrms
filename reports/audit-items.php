@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: audit-items.php,v 1.11 2006/01/02 23:46:52 vanmer Exp $
+ * $Id: audit-items.php,v 1.12 2006/05/21 14:42:38 jnhayart Exp $
  */
 require_once('../include-locations.inc');
 
@@ -144,6 +144,13 @@ if ($user_id) {
                      ">" . substr($rst2->fields['note_description'], 0, 40) .
                      "</a>&nbsp;&nbsp;&nbsp;</td>\n";
             }
+            elseif ($rst->fields['on_what_table'] == "opportunities") {
+                $sql2 = "SELECT opportunity_title from opportunities where opportunity_id=" . $rst->fields['on_what_id'];
+                $rst2 = $con->execute($sql2);
+                echo "<td><a href=$http_site_root/opportunities/one.php?opportunity_id=" .
+                     $rst->fields['on_what_id'] .
+                     ">" . $rst2->fields['opportunity_title'] . "</a>&nbsp;&nbsp;&nbsp;</td>\n";
+            }
             else {
                 echo "<td>" . $rst->fields['on_what_id'] . "&nbsp;&nbsp;&nbsp;</td>\n";
             }
@@ -176,6 +183,9 @@ end_page();
 
 /**
  * $Log: audit-items.php,v $
+ * Revision 1.12  2006/05/21 14:42:38  jnhayart
+ * Add title and hyperlink when audit items are opportunities
+ *
  * Revision 1.11  2006/01/02 23:46:52  vanmer
  * - changed to use centralized dbconnection function
  *
