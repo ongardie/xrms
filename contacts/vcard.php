@@ -4,7 +4,7 @@
  *
  * This page allows for export vcard for a single contact.
  *
- * $Id: vcard.php,v 1.10 2006/01/02 23:00:00 vanmer Exp $
+ * $Id: vcard.php,v 1.11 2006/05/26 19:38:02 ongardie Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -70,7 +70,7 @@ N:".$last_name.";".$first_names."
 FN:".$first_names." ".$last_name."
 TITLE:".$title."
 ORG:".$company_name."
-ADR;WORK:;;".$line1." - ".$line2.";".$city.";;".$postal_code.";".$country."
+ADR;WORK:;;".$line1." - ".$line2.";".$city.";".$province.";".$postal_code.";".$country."
 TEL;WORK;VOICE:".$work_phone."
 TEL;FAX:".$fax."
 EMAIL:".$email."
@@ -88,6 +88,9 @@ exit;
 
 /**
  * $Log: vcard.php,v $
+ * Revision 1.11  2006/05/26 19:38:02  ongardie
+ * - Added provinces to vcard output.
+ *
  * Revision 1.10  2006/01/02 23:00:00  vanmer
  * - changed to use centralized dbconnection function
  *
