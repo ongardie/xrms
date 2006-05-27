@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-cases.php,v 1.6 2006/05/03 00:01:47 vanmer Exp $
+ * $Id: utils-cases.php,v 1.7 2006/05/27 20:06:00 ongardie Exp $
  *
  */
 
@@ -325,7 +325,7 @@ $sql = "SELECT
 /**********************************************************************/
 /**
  *
- * Updates an case in XRMS from an associative array
+ * Updates a case in XRMS from an associative array
  * Either an case_id must be explicitly set or an adodbrecordset for the record to be updated
  * must be passed in or the function will fail
  * Is a wrapper for add_update_case which can pull case_id from a recordset if provided
@@ -421,6 +421,9 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-cases.php,v $
+ * Revision 1.7  2006/05/27 20:06:00  ongardie
+ * - Typo in comment.
+ *
  * Revision 1.6  2006/05/03 00:01:47  vanmer
  * - added check to ensure company_id isn't reset to 1 if opportunity or case already exists
  * - added lookup of assumed data in the record on update
