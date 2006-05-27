@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.140 2006/05/01 17:22:26 braverock Exp $
+ * $Id: one.php,v 1.141 2006/05/27 19:48:58 ongardie Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -85,18 +85,18 @@ if ($rst) {
     if ((substr($url, 0, 4)!=='http') and (strlen(trim($url)) >0)) {
         $url = 'http://'.$url;
     }
-    if ( ! $rst->fields['account_status_short_name'] = "N/A" ) {
+    if ( $rst->fields['account_status_short_name'] != 'N/A' ) {
         $account_status = $rst->fields['account_status_display_html'];
-    };
+    }
     if ($rst->fields['credit_limit'] > 0 ) {
         $credit_limit = number_format($rst->fields['credit_limit'], 2);
         $current_credit_limit = fetch_current_customer_credit_limit($extref1);
     } else {
         $credit_limit = '';
     }
-    if ( ! $rst->fields['rating_short_name'] = "N/A" ) {
+    if ( $rst->fields['rating_short_name'] != 'N/A' ) {
         $rating = $rst->fields['rating_display_html'];
-    };
+    }
     $terms = $rst->fields['terms'];
     $profile = $rst->fields['profile'];
     $profile = str_replace ("\n","<br>\n",htmlspecialchars($profile));
@@ -747,6 +747,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.141  2006/05/27 19:48:58  ongardie
+ * - if( ! $var = 'value') will always evaluate to false when 'value' can be stored in $var.
+ *
  * Revision 1.140  2006/05/01 17:22:26  braverock
  * - remove old embedded SQL comment
  *
