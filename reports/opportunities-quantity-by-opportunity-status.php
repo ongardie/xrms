@@ -3,7 +3,7 @@
  *
  * Opportunities quanity by opportunity status report.
  *
- * $Id: opportunities-quantity-by-opportunity-status.php,v 1.13 2006/01/02 23:46:52 vanmer Exp $
+ * $Id: opportunities-quantity-by-opportunity-status.php,v 1.14 2006/05/28 17:14:53 jnhayart Exp $
  */
 
 require_once('../include-locations.inc');
@@ -22,6 +22,11 @@ $msg = $_GET['msg'];
 $user_id = $_GET['user_id'];
 $all_users = $_GET['all_users'];
 $hide_closed_opps = $_GET['hide_closed_opps'];
+
+if ($all_users=="on")
+{
+   unset ($user_id);   
+}
 
 if(!$user_id)
 {
@@ -207,6 +212,9 @@ function GetOpportunitiesQuantityByOpportunityStatusGraph($con, $user_id, $all_u
 
 /**
  * $Log: opportunities-quantity-by-opportunity-status.php,v $
+ * Revision 1.14  2006/05/28 17:14:53  jnhayart
+ * correct display when on user is selected and all users also
+ *
  * Revision 1.13  2006/01/02 23:46:52  vanmer
  * - changed to use centralized dbconnection function
  *
