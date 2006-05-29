@@ -5,7 +5,7 @@
  *
  * @author Brad Marshall
  *
- * $Id: sort.php,v 1.7 2006/01/02 22:38:16 vanmer Exp $
+ * $Id: sort.php,v 1.8 2006/05/29 06:16:58 ongardie Exp $
  */
 
 
@@ -27,16 +27,10 @@ $on_what_id = $_GET['on_what_id'];
 $return_url = $_GET['return_url'];
 $activity_template = $_GET['activity_template'];
 $allowMultiple=$_GET['allowMultiple'];
+$short_fields=$_GET['short_fields']; //allows un-prefixed database columns
 
 $con = get_xrms_dbconnection();
 //$con->debug=1;
-
-//handle incoming data
-if ($direction == 'down') {
-    $swap = $sort_order + 1;
-} else if ($direction == 'up') {
-    $swap = $sort_order - 1;
-}
 
 //if it's sorting activity template links, set the vars
 if ($activity_template == 1) {
@@ -53,46 +47,60 @@ if ($activity_template == 1) {
     $on_what_table = $table_name;
 }
 
-switch ($on_what_table) {
-    case 'case_status':
-        $type_name='case_type_id';
-        $type_id=$_GET['case_type_id'];
-    break;
-    default:
-        $type_id=false;
-    break;
+//handle incoming data
+if ($direction == 'down') {
+    $swap = $sort_order + 1;
+} else if ($direction == 'up') {
+    $swap = $sort_order - 1;
+}
+
+//refers to database columns
+$fields = array('id' => 'id', 'name' => 'name', 'record_status' => 'record_status');
+if(!$short_fields){
+	//add prefixes
+	foreach($fields as $key => $field_name)
+		$fields[$key] = $table_name.'_'.$field_name;
+}
+$fields['sort_order'] = 'sort_order'; //never pre-fixed
+
+//special cases for $fields
+if ($table_name == 'activity_resolution_type')
+    $fields['record_status'] = 'resolution_type_record_status';
+
+$type_id = false;
+if($on_what_table == 'case_status'){
+	$fields['type'] = 'case_type_id';
+	$type_id = $_GET['case_type_id'];
 }
 
 //retrieve the sort_order and id value in the two rows to be swapped
-$currentsql = "select sort_order, " . $table_name . "_id from $table_name_plural
-        where (sort_order=$sort_order)";
-if ($resort_id) {
-    $currentsql.=" AND {$table_name}_id=$resort_id ";
-}
-$swapsql = "select sort_order, {$table_name}_id from $table_name_plural WHERE (sort_order=$swap) ";
+$currentsql = 'SELECT '.$fields['sort_order'].', '.$fields['id'].
+		' FROM '.$table_name_plural.
+		' WHERE '.$fields['sort_order'].'='.$sort_order;
+if ($resort_id)
+    $currentsql .= ' AND '.$fields['id'].'='.$resort_id;
+
+$swapsql = 'SELECT '.$fields['sort_order'].', '.$fields['id'].
+		' FROM '.$table_name_plural.
+		' WHERE '.$fields['sort_order'].'='.$swap;
 
 $sql = '';
 if ($activity_template == 1) {
-        $sql .= "and on_what_table='$on_what_table' and on_what_id=$on_what_id ";
+        $sql .= ' AND on_what_table='.$con->qstr($on_what_table).' AND on_what_id='.$on_what_id;
 }
 if ($type_id) {
-    $sql .= "and ($type_name=$type_id) ";
+    $sql .= ' AND '.$fields['type'].'='.$type_id;
 }
 
-if ($table_name=='activity_resolution_type') {
-    $record_status_field='resolution_type_record_status';
-} else {
-    $record_status_field=$table_name."_record_status";
-}
-$sql .= "and ($record_status_field='a')";
+$sql .= ' AND '.$fields['record_status'].'="a"';
 
 //echo $sql;
 $rst = $con->execute($currentsql.$sql);
 if (!$rst) { db_error_handler($con, $currentsql); }
 
     //get field data for the first row
-    $source_id = $rst->fields[$table_name . '_id'];
-    $dest_sort_order = $rst->fields['sort_order'];
+    $source_id = $rst->fields[$fields['id']];
+    $dest_sort_order = $rst->fields[$fields['sort_order']];
 
 if (!$dest_sort_order) $dest_sort_order=$sort_order;
 
@@ -103,8 +111,8 @@ $rst = $con->execute($swapsql.$sql);;
 
 if ($rst->numRows()==1) {
     //get field data for the second row
-    $dest_id = $rst->fields[$table_name . '_id'];
-    $source_sort_order = $rst->fields['sort_order'];
+    $dest_id = $rst->fields[$fields['id']];
+    $source_sort_order = $rst->fields[$fields['sort_order']];
 }
 
 if (!$source_sort_order) { $source_sort_order=$swap; }
@@ -118,7 +126,7 @@ if ($allowMultiple) $dest_id=false;
 
 if ($source_id) {
     //swap sort_order and insert into the table
-    $sql = "SELECT * FROM " . $table_name_plural . " WHERE " . $table_name . "_id = $source_id";
+    $sql = 'SELECT * FROM ' . $table_name_plural . ' WHERE ' . $fields['id'] .' = '.$source_id;
     $rst = $con->execute($sql);
     $rec = array();
     $rec['sort_order'] = $source_sort_order;
@@ -128,7 +136,7 @@ if ($source_id) {
 }
 
 if ($dest_id) {
-    $sql = "SELECT * FROM " . $table_name_plural . " WHERE " . $table_name . "_id = $dest_id";
+    $sql = 'SELECT * FROM ' . $table_name_plural . ' WHERE ' . $fields['id']. ' = '.$dest_id;
     $rst = $con->execute($sql);
 
     $rec = array();
@@ -142,6 +150,9 @@ header ('Location: ' . $http_site_root . $return_url);
 
 /**
  *$Log: sort.php,v $
+ *Revision 1.8  2006/05/29 06:16:58  ongardie
+ *- Allows for non-prefixed database column names when given $_GET['short_fields'].
+ *
  *Revision 1.7  2006/01/02 22:38:16  vanmer
  *- changed to use centralized dbconnection function
  *
