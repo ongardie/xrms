@@ -35,10 +35,12 @@ var $_recordIdentifier = null;
 
 function SetRecordFormats($map_data) {
     $this->_recordFormats=$map_data;
+    $this->SetFieldFormat(current($map_data));
 }
 
 function SetFieldFormat($format_array) {
     $this->_fieldFormat=$format_array;
+    $headers=array();
     foreach ($format_array as $field_data) {
         $headers[]=$field_data['name'];
     }
@@ -47,6 +49,9 @@ function SetFieldFormat($format_array) {
 }
 
 function SetRecordIdentifier($record_identifier) {
+    if (!$record_identifier) return false;
+    $frec=current($record_identifier);
+    if (!is_array($frec)) $record_identifier=array($record_identifier);
     $this->_recordIdentifier=$record_identifier;
 }
    
@@ -92,6 +97,13 @@ function SetRecordIdentifier($record_identifier) {
         $str_pos=0;
         $fields=array();
         $field_format=$this->getFieldFormatForRecord($string);
+        if (!$field_format) { 
+            $this->_setErrorMsg("Failed to find field format for row, using single field for entire record\n");
+            $this->_parseSuccess = false;
+            $this->SetFieldFormat(array(array('name'=>'record')));
+            $fields[]=$string; 
+            return $fields;
+        }
         foreach ($field_format as $field_data) {
             if (array_key_exists('length',$field_data)) {
                 $length=$field_data['length'];
@@ -117,11 +129,16 @@ function SetRecordIdentifier($record_identifier) {
         if (!$this->_recordFormats OR !$this->_recordIdentifier)
             return $this->_fieldFormat;
         else {
-            $start=$this->_recordIdentifier['start'];
-            $end=$this->_recordIdentifier['end'];
-            $length=$end-$start+1;
-            $str_pos=$start-1;
-            $value=trim(substr($record, $str_pos, $length));
+            $value_arr=array();
+            foreach ($this->_recordIdentifier as $record_identifier) {
+                $start=$record_identifier['start'];
+                $end=$record_identifier['end'];
+    
+                $length=$end-$start+1;
+                $str_pos=$start-1;
+                $value_arr[]=trim(substr($record, $str_pos, $length));
+            }
+            $value=implode("|", $value_arr);
             if ($value)  $format=$this->_recordFormats[$value];
             if ($format) {
                 //set headers to current format
