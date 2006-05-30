@@ -1,6 +1,25 @@
 <?php
 //fixed width parser
 
+//
+// +------------------------------------------------------------------------+
+// | fixedWidthParser - Part of the PHP Yacs Library                        |
+// +------------------------------------------------------------------------+
+// | Copyright (c) 2004-2005 Walter Torres                                  |
+// | Email         walter@torres.ws                                         |
+// | Web           http://web.php-yacs.org                                  |
+// | Mirror        http://php-yacs.sourceforge.net/                         |
+// | $Id: fixedWidthParser.php,v 1.4 2006/05/30 20:22:55 vanmer Exp $    |
+// +------------------------------------------------------------------------+
+// | This source file is subject to version 3.00 of the PHP License,        |
+// | that is available at http://www.php.net/license/3_0.txt.               |
+// | If you did not receive a copy of the PHP license and are unable to     |
+// | obtain it through the world-wide-web, please send a note to            |
+// | license@php.net so we can mail you a copy immediately.                 |
+// +------------------------------------------------------------------------+
+//
+
+
 /**
    *
    * This parser mostly uses the CSV Parser.  It extends and only overrides the function that actual runs fgetcsv, and replaces it with a fixed width parser.
@@ -11,41 +30,86 @@ require_once('csvParser.php');
 
 class fixedWidthParser extends csvParser {
     
-/**
-* Property private array $_fieldFormat
-*
-* Array with format of array to define layout of fixed width file
-* Array of elements, each element defines a field
-* Each element is an associative array:
-* 'name' => Fieldname
-* 'start' => starting position for field
-* 'end' => ending position in string for file
-* OR
-* 'length' => length of the field
-*
-* @name $_unpackFormat
-* @var string
-* @property private string for use in unpacking fixed width files
-*
-* @access private
-*/
-var $_fieldFormat = null;
-var $_recordFormats = null;
-var $_recordIdentifier = null;
+   /**
+    * Property private array $_fieldFormat
+    *
+    * Array with format of array to define layout of fixed width file
+    * Array of elements, each element defines a field
+    * Each element is an associative array:
+    * 'name' => Fieldname
+    * 'start' => starting position for field
+    * 'end' => ending position in string for file
+    * OR
+    * 'length' => length of the field
+    *
+    * @name $_unpackFormat
+    * @var string
+    * @property private string for use in unpacking fixed width files
+    *
+    * @access private
+    */
+    var $_fieldFormat = null;
+    var $_recordFormats = null;
+    var $_recordIdentifier = null;
+
+   /**
+    * Property private array $_fixedLength
+    *
+    * Flag indicating that file definition is via LENGTH of field
+    * vs. START and END defintion
+    *
+    * DEfaults to FALSE, assuming START and END defintion
+    *
+    * @name $_fixedLength
+    * @var boolean
+    * @property bol $_fixedLength file definition is via LENGTH of field
+    *
+    * @access private
+    * @since 1.5
+    */
+    var $_fixedWidth = false;
+
 
 function SetRecordFormats($map_data) {
     $this->_recordFormats=$map_data;
     $this->SetFieldFormat(current($map_data));
 }
 
-function SetFieldFormat($format_array) {
-    $this->_fieldFormat=$format_array;
+function SetFieldFormat($format_array)
+{
+    $this->_fieldFormat = $format_array;
+
+    // Look into the first element of this defintion array and
+    // determine if this is a LENGTH defintion record
+    $this->_fixedWidth = (array_key_exists('length', current($format_array)));
+
+    // Since this is fixed width, we know how long each record is,
+    // this value will help improve file read performance
+    if ( $this->_fixedWidth )
+    {
+        $_length = 0;
+
+        foreach ($format_array as $field_data)
+        {
+            $length += $field_data['length'];
+        }
+    }
+    else
+    {
+        $_last  = end($format_array);
+        $_length = $_last['end'];
+    }
+
     $headers=array();
     foreach ($format_array as $field_data) {
-        $headers[]=$field_data['name'];
+    	$headers[]=$field_data['name'];
     }
-    $this->_myHeaders=$headers;
-    $this->_cvsHeaders=$headers;
+
+    $this->_fixedLength = $_length;
+
+    // Store the names of the files off
+    $this->_myHeaders  = array_keys($format_array);
+    $this->_cvsHeaders = $this->_myHeaders;
 }
 
 function SetRecordIdentifier($record_identifier) {
@@ -65,7 +129,7 @@ function SetRecordIdentifier($record_identifier) {
     *
     * @uses getFileSize()
     * @static
-    * @final .
+    * @final
     *
     * @param pointer $_filePointer File Handle to CSV File
     * @return mixed boolean on failure
@@ -75,7 +139,7 @@ function SetRecordIdentifier($record_identifier) {
     */
     function _getCSVrecord($_filePointer)
     {
-        $string=fgets($_filePointer, $this->getFileSize());
+        $string = fgets($_filePointer, $this->_fixedLength);
         // Try and pull a record out of the file
 //        echo $string;
         if ($data = $this->_extractFields($string))
@@ -105,7 +169,7 @@ function SetRecordIdentifier($record_identifier) {
             return $fields;
         }
         foreach ($field_format as $field_data) {
-            if (array_key_exists('length',$field_data)) {
+            if ($this->_fixedWidth) {
                 $length=$field_data['length'];
                 $start=$str_pos;
                 $end=$str_pos+$length;
@@ -113,14 +177,15 @@ function SetRecordIdentifier($record_identifier) {
                 $start=$field_data['start'];
                 $end=$field_data['end'];
                 //add one to get the total number of characters
-                $length=$end-$start+1;
+                $length  = $end-$start + 1;
                 //start one behind to ensure that initial character is included
-                $str_pos=$start-1;
+                $str_pos = $start - 1;
             }
 
             //remove whitespace on either side of substr
-            $fields[]=trim(substr($string, $str_pos, $length));
-            $str_pos=$end;
+            $fields[] = trim(substr($string, $str_pos, $length));
+
+            $str_pos = $end;
         }
         return $fields;
     }
@@ -148,5 +213,17 @@ function SetRecordIdentifier($record_identifier) {
         }
     }
 }
+
+// ========================================================================
+// ========================================================================
+// CS-RCS Version Control Info
+
+/**
+  * $Log: fixedWidthParser.php,v $
+  * Revision 1.4  2006/05/30 20:22:55  vanmer
+  * - fixes to speed fixed width parsing, from jsWalter
+  *
+  *
+  */
 
 ?>
