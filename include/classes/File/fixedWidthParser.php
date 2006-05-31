@@ -9,7 +9,7 @@
 // | Email         walter@torres.ws                                         |
 // | Web           http://web.php-yacs.org                                  |
 // | Mirror        http://php-yacs.sourceforge.net/                         |
-// | $Id: fixedWidthParser.php,v 1.4 2006/05/30 20:22:55 vanmer Exp $    |
+// | $Id: fixedWidthParser.php,v 1.5 2006/05/31 21:41:35 vanmer Exp $    |
 // +------------------------------------------------------------------------+
 // | This source file is subject to version 3.00 of the PHP License,        |
 // | that is available at http://www.php.net/license/3_0.txt.               |
@@ -108,7 +108,7 @@ function SetFieldFormat($format_array)
     $this->_fixedLength = $_length;
 
     // Store the names of the files off
-    $this->_myHeaders  = array_keys($format_array);
+    $this->_myHeaders  = $headers;
     $this->_cvsHeaders = $this->_myHeaders;
 }
 
@@ -139,9 +139,10 @@ function SetRecordIdentifier($record_identifier) {
     */
     function _getCSVrecord($_filePointer)
     {
-        $string = fgets($_filePointer, $this->_fixedLength);
+//        echo "CSV RECORD FETCH<br>";
+        $string = fgets($_filePointer, $this->getFileSize());//$this->_fixedLength);
         // Try and pull a record out of the file
-//        echo $string;
+//        echo "RESULT: $string<br>";
         if ($data = $this->_extractFields($string))
         {
             // Strip whitespace from each element
@@ -184,7 +185,6 @@ function SetRecordIdentifier($record_identifier) {
 
             //remove whitespace on either side of substr
             $fields[] = trim(substr($string, $str_pos, $length));
-
             $str_pos = $end;
         }
         return $fields;
@@ -220,6 +220,10 @@ function SetRecordIdentifier($record_identifier) {
 
 /**
   * $Log: fixedWidthParser.php,v $
+  * Revision 1.5  2006/05/31 21:41:35  vanmer
+  * - ensure that headers are properly set
+  * - added filesize for fgets instead of fixed width length
+  *
   * Revision 1.4  2006/05/30 20:22:55  vanmer
   * - fixes to speed fixed width parsing, from jsWalter
   *
