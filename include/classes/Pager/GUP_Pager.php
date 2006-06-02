@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.47 2006/01/27 13:46:57 vanmer Exp $
+ * $Id: GUP_Pager.php,v 1.48 2006/06/02 23:40:34 ongardie Exp $
  */
 
 
@@ -512,6 +512,7 @@ class GUP_Pager {
                         $rs->MoveNext();
                     } 
                 } else {
+                    $this->data = array();
                     while (!$rs->EOF) {
                         $this->data[] = $rs->fields;
                         $rs->MoveNext();
@@ -1244,6 +1245,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.48  2006/06/02 23:40:34  ongardie
+ * - If the callback isn't callable, $this->data needs to be an array anyway.
+ *
  * Revision 1.47  2006/01/27 13:46:57  vanmer
  * - changed is_array call to basic if for performance
  * - added parameter to callback for data for pager object
