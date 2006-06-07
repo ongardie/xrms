@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.33 2006/01/27 13:37:05 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.34 2006/06/07 22:05:05 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -221,7 +221,10 @@ class xrms_acl {
             } // end grouplist check
         } //end group check
 
-        if ($ControlledObject_id) {
+	//DISABLED GROUP OBJECT INHERITANCE THROUGH OBJECT RELATIONSHIPS
+	//TO ALLOW CHILD OBJECTS TO INHERIT PARENT GROUP, SET inherit_group_objects TO TRUE
+	$inherit_group_objects=false;
+        if ($ControlledObject_id AND $inherit_group_objects) {
             //now search in parent objects
             $Relationships = $this->get_controlled_object_relationship(false, $ControlledObject_id, false, true);
             if ($Relationships) {
@@ -2467,6 +2470,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.34  2006/06/07 22:05:05  vanmer
+ * - disabled path for child objects in an object relationship do not inherit group of parent object
+ *
  * Revision 1.33  2006/01/27 13:37:05  vanmer
  * - changed ACL to require array input for actions (permissions)
  * - removed check for array of permissions, now is always an array
