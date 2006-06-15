@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.46 2006/03/21 03:04:01 ongardie Exp $
+ * $Id: edit.php,v 1.47 2006/06/15 22:00:43 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -88,6 +88,7 @@ if ($rst) {
     $custom2 = $rst->fields['custom2'];
     $custom3 = $rst->fields['custom3'];
     $custom4 = $rst->fields['custom4'];
+    $user_id = $rst->fields['user_id'];
     $rst->close();
 }
 
@@ -126,6 +127,10 @@ if ($rst){
 } else {
     db_error_handler ($con, $sql);
 }
+
+$user_id = ($user_id > 0) ? $user_id : $session_user_id;
+
+$user_menu = get_user_menu($con, $user_id);
 
 $contact_custom_rows = do_hook_function('contact_custom_inline_edit_display', $contact_custom_rows);
 
@@ -249,6 +254,10 @@ confGoTo_includes();
                 <td class=widget_label_right><?php echo _("Tax ID"); ?></td>
                 <td class=widget_content_form_element><input type=text name=tax_id value="<?php echo $tax_id; ?>" size=32></td>
             </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Owner"); ?></td>
+                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
+            </tr>
 
             <?php echo $accounting_rows; ?>
 
@@ -320,6 +329,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.47  2006/06/15 22:00:43  vanmer
+ * - changes to allow contacts to have an owner
+ *
  * Revision 1.46  2006/03/21 03:04:01  ongardie
  * - Added contact_edit_form_top plugin hook.
  *
