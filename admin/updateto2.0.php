@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.12 2006/04/26 21:10:06 braverock Exp $
+ * $Id: updateto2.0.php,v 1.13 2006/06/15 21:35:45 vanmer Exp $
  */
 
 // where do we include from
@@ -4754,6 +4754,10 @@ $msg .= check_session_table($con, $table_list);
 //ensure that company_id 1 is Unknown Company
 $msg .= update_unknown_company($con);
 
+//add user_id to contactss
+$sql = "alter table contacts add user_id int NULL default 0";
+$rst = $con->execute($sql);
+
 
 //FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
 set_admin_preference($con, 'xrms_version', '1.99.1');
@@ -4782,6 +4786,9 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.13  2006/06/15 21:35:45  vanmer
+ * - added user_id field to contacts table
+ *
  * Revision 1.12  2006/04/26 21:10:06  braverock
  * - bump version to 1.99.1
  *
