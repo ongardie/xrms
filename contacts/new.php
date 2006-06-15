@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.42 2006/04/26 02:13:54 vanmer Exp $
+ * $Id: new.php,v 1.43 2006/06/15 21:32:59 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -150,6 +150,10 @@ $rst->close();
 $address_type='residential';
 $address_type_menu = build_address_type_menu($con, $address_type);
 
+$user_id = ($user_id > 0) ? $user_id : $session_user_id;
+
+$user_menu = get_user_menu($con, $user_id);
+
 $contact_custom_rows = do_hook_function('contact_custom_inline_new_display', $contact_custom_rows);
 
 $con->close();
@@ -255,6 +259,10 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php echo _("Tax ID"); ?></td>
                 <td class=widget_content_form_element><input type=text name=tax_id value="<?php echo $tax_id; ?>" size=32></td>
             </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Owner"); ?></td>
+                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
+            </tr>
 
             <?php echo $accounting_rows; ?>
 
@@ -356,6 +364,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.43  2006/06/15 21:32:59  vanmer
+ * - added owner to the UI for a contact
+ *
  * Revision 1.42  2006/04/26 02:13:54  vanmer
  * - removed deprecated use_self_contacts option, now uses system preference controlling behavior
  *

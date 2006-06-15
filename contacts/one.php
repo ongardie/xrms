@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.99 2006/04/28 15:20:49 braverock Exp $
+ * $Id: one.php,v 1.100 2006/06/15 21:32:59 vanmer Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -418,6 +418,12 @@ function openMsnSession(strIMAddress) {
                                     <td class=sublabel><?php echo _("Last Modified"); ?></td>
                                     <td class=clear><?php  echo $last_modified_at; ?> by <?php echo $last_modified_by_username; ?></td>
                                 </tr>
+                                <?php if ($owner_username) { ?>
+                                <tr>
+                                    <td class=sublabel><?php echo _("Account Owner"); ?></td>
+                                    <td class=clear><?php echo $owner_username; ?></td>
+                                </tr>
+				<?php }; ?>
                             </table>
 
                             </td>
@@ -502,6 +508,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.100  2006/06/15 21:32:59  vanmer
+ * - added owner to the UI for a contact
+ *
  * Revision 1.99  2006/04/28 15:20:49  braverock
  * - use get_contact API
  *

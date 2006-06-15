@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.35 2006/04/26 02:13:55 vanmer Exp $
+ * $Id: new-2.php,v 1.36 2006/06/15 21:32:59 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -37,6 +37,7 @@ $arr_vars = array ( // local var name             // session variable name, flag
            'cell_phone' => array ( 'cell_phone' , arr_vars_SESSION ),
            'home_phone' => array ( 'home_phone' , arr_vars_SESSION ),
            'fax' => array ( 'fax' , arr_vars_SESSION ),
+	   'user_id' => array ('user_id' , arr_vars_SESSION ),
            'interests' => array ( 'interests' , arr_vars_SESSION ),
            'profile' => array ( 'profile' , arr_vars_SESSION ),
            'edit_address' => array ( 'edit_address' , arr_vars_SESSION ),
@@ -120,6 +121,7 @@ $rec['work_phone_ext'] = $work_phone_ext;
 $rec['cell_phone'] = $cell_phone;
 $rec['home_phone'] = $home_phone;
 $rec['fax'] = $fax;
+$rec['user_id'] = $user_id;
 /*
 ignore IM fields, now done through plugin
 $rec['aol_name'] = $aol_name;
@@ -182,6 +184,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.36  2006/06/15 21:32:59  vanmer
+ * - added owner to the UI for a contact
+ *
  * Revision 1.35  2006/04/26 02:13:55  vanmer
  * - removed deprecated use_self_contacts option, now uses system preference controlling behavior
  *

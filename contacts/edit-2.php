@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.32 2006/04/05 00:48:31 vanmer Exp $
+ * $Id: edit-2.php,v 1.33 2006/06/15 21:32:59 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -39,6 +39,7 @@ $work_phone_ext = $_POST['work_phone_ext'];
 $cell_phone = $_POST['cell_phone'];
 $home_phone = $_POST['home_phone'];
 $fax = $_POST['fax'];
+$user_id = $_POST['user_id'];
 /*
 IM fields, now handled through plugin
 $aol_name = $_POST['aol_name'];
@@ -105,6 +106,7 @@ $rec['work_phone_ext'] =$work_phone_ext;
 $rec['cell_phone'] = $cell_phone;
 $rec['home_phone'] = $home_phone;
 $rec['fax'] = $fax;
+$rec['user_id'] = $user_id;
 /*
 IM fields, now handled through plugin
 $rec['aol_name'] = $aol_name;
@@ -141,6 +143,9 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.33  2006/06/15 21:32:59  vanmer
+ * - added owner to the UI for a contact
+ *
  * Revision 1.32  2006/04/05 00:48:31  vanmer
  * - pass magic quotes value into contacts API
  *
