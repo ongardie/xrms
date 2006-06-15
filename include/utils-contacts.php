@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.24 2006/05/02 00:45:02 vanmer Exp $
+ * $Id: utils-contacts.php,v 1.25 2006/06/15 21:33:46 vanmer Exp $
  *
  */
 
@@ -358,14 +358,14 @@ function get_contact($con, $contact_id, $return_rst = false, $include_extras=tru
         $sql.=",c.company_id, company_name, company_code, " .
         $con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS entered_by_username, " .
         $con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS last_modified_by_username, " .
-        $con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS account_owner ";
+        $con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS owner_username ";
     }
     $sql  .= " FROM contacts"; 
     if ($include_extras) {
         $sql .=" left outer join companies c ON contacts.company_id = c.company_id
                     left outer join users u1 ON contacts.entered_by = u1.user_id
                     left outer join users u2 ON contacts.last_modified_by = u2.user_id
-                    left outer join users u3 ON c.user_id = u3.user_id";
+                    left outer join users u3 ON contacts.user_id = u3.user_id";
     }
     $sql .=" WHERE contact_id = $contact_id";
     $rst = $con->execute($sql);
@@ -539,6 +539,10 @@ include_once $include_directory . 'utils-misc.php';
 /**********************************************************************/
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.25  2006/06/15 21:33:46  vanmer
+ * - changed link from company owner to contact owner
+ * - changed fieldname from account_owner to owner_username
+ *
  * Revision 1.24  2006/05/02 00:45:02  vanmer
  * - changed get_contact function to left outer join all non-critical table
  * - allow contact sql to be simplified (no joins)
