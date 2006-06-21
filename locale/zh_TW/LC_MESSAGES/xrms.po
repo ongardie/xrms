@@ -1,0 +1,6207 @@
+# Traditional Chinese Messages for xrms.
+# This file is distributed under the same license as the XRMS package.
+# Jun Bao Wu <aptc@public.qd.sd.cn>, 2004.
+# Yi Yang <yang_yi_cn@yahoo.com>, 2005, 06.
+# snaking <jawa560@ms5.hinet.net>, 2005.
+# Wei-Lun Chao <chaoweilun@pcmail.com.tw>, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xrms 1.99.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-04-26 16:07-0500\n"
+"PO-Revision-Date: 2006-05-12 14:14+0800\n"
+"Last-Translator: Wei-Lun Chao <chaoweilun@pcmail.com.tw>\n"
+"Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: reports/companies-by-company-source.php:155
+#: reports/companies-by-crm-status.php:150
+#: reports/companies-by-industry.php:154
+#: reports/opportunities-quantity-by-opportunity-status.php:161
+#: reports/opportunities-size-by-opportunity-status.php:173
+msgid " - "
+msgstr " - "
+
+#: activities/recurrence_sidebar.php:263
+msgid " business day of "
+msgstr " 工作日 "
+
+#: activities/recurrence_sidebar.php:240
+msgid " business day of the  month"
+msgstr " 該月的工作日 "
+
+#: activities/recurrence_sidebar.php:257
+msgid " day of "
+msgstr " 日 "
+
+#: activities/recurrence_sidebar.php:235
+msgid " day of the  month"
+msgstr " 該月的日"
+
+#: activities/recurrence_sidebar.php:276
+msgid " day of the  year"
+msgstr " 該年的日 "
+
+#: activities/recurrence_sidebar.php:208
+msgid " day(s)"
+msgstr "天"
+
+#: include/utils-misc.php:1959
+msgid " has been created.  To access it, you can use the link here:"
+msgstr " 已經建立了。要存取它，您可以使用這裡的連結："
+
+#: activities/recurrence_sidebar.php:230
+msgid " month(s)"
+msgstr "月"
+
+#: activities/recurrence_sidebar.php:287
+msgid " occurence(s)"
+msgstr "出現次數"
+
+#: activities/recurrence_sidebar.php:270
+msgid " of "
+msgstr " 的 "
+
+#: activities/recurrence_sidebar.php:247
+msgid " of the month"
+msgstr " 該月的 "
+
+#: activities/recurrence_sidebar.php:221
+msgid " week(s)"
+msgstr " 周 "
+
+#: activities/recurrence_sidebar.php:252
+msgid " year(s)"
+msgstr " 年 "
+
+#: companies/some.php:558 companies/some.php:566 companies/some.php:577
+#: companies/some.php:600 companies/some.php:608 companies/some.php:616
+#: companies/some.php:624 companies/some.php:648 companies/some.php:656
+#: companies/some.php:664 companies/some.php:677 companies/some.php:686
+#: companies/some.php:694 companies/some.php:702 companies/some.php:710
+#: companies/some.php:739 companies/some.php:748 companies/some.php:757
+#: companies/some.php:766 companies/some.php:775 companies/some.php:816
+#: companies/some.php:824 companies/some.php:836
+msgid "!"
+msgstr "！"
+
+#: opportunities/one.php:242
+msgid "$"
+msgstr "$"
+
+#: activities/one.php:548
+msgid "(%)"
+msgstr "(%)"
+
+#: admin/case-statuses/one.php:181 admin/opportunity-statuses/one.php:182
+msgid "(defaults to days)"
+msgstr "(預設天數)"
+
+#: admin/system-parameters/one.php:54
+msgid ".  Make sure you have run the administration update."
+msgstr "。 請確認您執行了系統管理的更新。"
+
+#: admin/system-parameters/one.php:48
+msgid ".  The data entry appears to be corrupted."
+msgstr "。 資料看起來已經損壞。"
+
+#: include/classes/QuickForm/ADOdb_QuickForm.php:385
+msgid ""
+"<h1>QuickForm Error: Form method GET will not work with File upload widget!</"
+"h1>"
+msgstr ""
+"<h1>QuickForm 錯誤: 表單方法 GET 將不適用於以 File 上傳的視窗元件！</h1>"
+
+#: include/utils-misc.php:1958
+msgid "A new workflow has been started"
+msgstr "一個新的工作流程已經開始了"
+
+#: include/utils-misc.php:1959
+msgid "A new workflow of type"
+msgstr "一個新的工作流程屬於類型"
+
+#: admin/index.php:107
+msgid "ACL"
+msgstr "ACL 存取控制清單"
+
+#: admin/acl/xrms_acl_nav.php:5
+msgid "ACL Administration"
+msgstr "ACL 系統管理"
+
+#: admin/acl/index.php:47
+msgid "ACL Management"
+msgstr "ACL 管理"
+
+#: admin/acl/acl_results.php:143
+msgid "ACL Result Test"
+msgstr "ACL 結果測試"
+
+#: admin/acl/acl_results.php:44
+msgid "ACL Results"
+msgstr "ACL 結果"
+
+#: plugins/cti/cdr.php:278
+msgid "AMA Flags"
+msgstr "AMA 標記"
+
+#: admin/import/import-companies-2.php:107
+#: admin/import/import-companies-3.php:148
+msgid "AOL"
+msgstr "AOL 美國線上"
+
+#: plugins/phone/contacts_one.php:406
+msgid "AOL IM"
+msgstr "AOL 即時通"
+
+#: admin/acl/Permission_list.php:46
+msgid "Abbreviation"
+msgstr "縮寫"
+
+#: activities/activities-widget.php:464 plugins/phone/companies_one.php:687
+#: plugins/phone/contacts_one.php:513
+msgid "About"
+msgstr "關於"
+
+#: activities/one.php:505
+msgid "About This Activity"
+msgstr "關於此作用"
+
+#: plugins/cti/cdr.php:265
+msgid "Account Code"
+msgstr "帳號編碼"
+
+#: admin/import/import-companies.php:121 cases/one.php:233
+#: companies/one.php:508 contacts/one.php:367 opportunities/one.php:308
+#: plugins/phone/companies_one.php:499 plugins/phone/contacts_one.php:426
+msgid "Account Owner"
+msgstr "帳號擁有者"
+
+#: admin/import/import-companies.php:141 cases/one.php:241
+#: companies/edit.php:170 companies/one.php:565
+#: companies/some-advanced.php:340 companies/some.php:901 contacts/one.php:375
+#: opportunities/one.php:316 plugins/phone/companies_one.php:547
+#: plugins/phone/contacts_one.php:438
+msgid "Account Status"
+msgstr "帳號狀態"
+
+#: admin/account-statuses/one.php:39
+msgid "Account Status Details"
+msgstr "帳號狀態詳情"
+
+#: admin/index.php:149 admin/account-statuses/some.php:46
+msgid "Account Statuses"
+msgstr "帳號狀態"
+
+#: locale/datastrings.php:12
+msgid "Acquired"
+msgstr "獲取了"
+
+#: locale/datastrings.php:13
+msgid "Acquired by"
+msgstr "由…獲取了"
+
+#: activities/associate-activities.php:31
+#: activities/participant_sidebar.php:60 admin/acl/GroupMember_list.php:48
+#: admin/acl/GroupUser_list.php:50 admin/acl/Groups_list.php:43
+#: admin/acl/Permission_list.php:44 admin/acl/RolePermission_list.php:68
+#: admin/acl/one_GroupMember.php:82 admin/users/user_roles_sidebar.php:71
+msgid "Action"
+msgstr "動作"
+
+#: admin/users/some.php:88
+msgid "Active Users"
+msgstr "活躍使用者"
+
+#: campaigns/one.php:91 cases/one.php:111 companies/one.php:262
+#: contacts/one.php:150 files/some.php:430 include/utils-interface.php:390
+#: opportunities/one.php:160 plugins/phone/companies_one.php:680
+#: plugins/phone/contacts_one.php:507 reports/completed-items.php:90
+#: reports/open-items.php:74 reports/overdue-items.php:88
+msgid "Activities"
+msgstr "事項"
+
+#: files/some.php:354 locale/datastrings.php:14 reports/activitytimes.php:75
+#: reports/completed-items.php:197 reports/open-items.php:185
+#: reports/overdue-email.php:74 reports/overdue-items.php:200
+msgid "Activity"
+msgstr "事項"
+
+#: include/utils-interface.php:68
+msgid "Activity Added."
+msgstr "事項已加入。"
+
+#: include/utils-interface.php:70
+msgid "Activity Deleted."
+msgstr "事項已刪除。"
+
+#: activities/one.php:445
+msgid "Activity Details"
+msgstr "事項詳情"
+
+#: activities/one.php:165
+msgid "Activity ID:"
+msgstr "事項 ID:"
+
+#: activities/one.php:573
+msgid "Activity Notes"
+msgstr "事項記事"
+
+#: activities/new_activity_participant.php:63
+msgid "Activity Participant"
+msgstr "事項參加者"
+
+#: activities/participant_sidebar.php:50
+msgid "Activity Participants"
+msgstr "事項參加者"
+
+#: activities/one.php:541
+msgid "Activity Priority"
+msgstr "事項優先等級"
+
+#: activities/recurrence_sidebar.php:313
+msgid "Activity Recurrence"
+msgstr "事項重複次數"
+
+#: reports/index.php:189
+msgid "Activity Report for"
+msgstr "關於…事項報告"
+
+#: admin/activity-resolution-types/one_activity_resolution_type.php:45
+msgid "Activity Resolution Type"
+msgstr "事項解決類型"
+
+#: admin/index.php:159 admin/activity-resolution-types/some.php:53
+msgid "Activity Resolution Types"
+msgstr "事項解決類型"
+
+#: reports/index.php:114 reports/user-activity.php:67
+#: reports/user-activity.php:79 reports/user-activity.php:82
+msgid "Activity Summary"
+msgstr "事項記要"
+
+#: reports/activity-summary.php:63
+msgid "Activity Summary Report"
+msgstr "事項記要報告"
+
+#: admin/activity-templates/edit.php:71
+msgid "Activity Template Details"
+msgstr "事項範本詳情"
+
+#: admin/index.php:112 admin/activity-templates/some.php:58
+msgid "Activity Templates"
+msgstr "事項範本"
+
+#: reports/index.php:128
+msgid "Activity Time Sheets"
+msgstr "事項時間表"
+
+#: activities/one.php:537
+msgid "Activity Type"
+msgstr "事項類型"
+
+#: admin/activity-types/one.php:42
+msgid "Activity Type Details"
+msgstr "事項類型細節"
+
+#: admin/index.php:154 admin/activity-types/some.php:53
+msgid "Activity Types"
+msgstr "事項類型"
+
+#: activities/activities-widget.php:673 admin/acl/one_GroupMember.php:104
+#: admin/account-statuses/some.php:81
+#: admin/activity-resolution-types/some.php:85
+#: admin/activity-types/some.php:93 admin/campaign-statuses/some.php:91
+#: admin/campaign-types/some.php:79 admin/case-priorities/some.php:85
+#: admin/case-statuses/one.php:197 admin/case-statuses/some.php:177
+#: admin/case-types/some.php:79 admin/categories/some.php:80
+#: admin/company-sources/some.php:87 admin/company-types/some.php:78
+#: admin/crm-statuses/some.php:107 admin/industries/some.php:78
+#: admin/opportunity-statuses/one.php:198
+#: admin/opportunity-statuses/some.php:173 admin/ratings/some.php:82
+#: admin/relationship-types/some.php:98 admin/salutations/some.php:73
+#: admin/users/some.php:158 email/email-2.php:256
+#: plugins/phone/companies_one.php:699 plugins/phone/contacts_one.php:524
+msgid "Add"
+msgstr "加入"
+
+#: include/strings.php:17 include/strings.php:22
+msgid "Add Company"
+msgstr "加入公司"
+
+#: contacts/new.php:295 include/strings.php:16 include/strings.php:21
+msgid "Add Contact"
+msgstr "加入連絡人"
+
+#: companies/former-names.php:92
+msgid "Add Former Name"
+msgstr "加入前用名"
+
+#: admin/acl/ControlledObjectRelationship_list.php:67
+#: admin/acl/ControlledObject_list.php:57 admin/acl/GroupGroup_list.php:82
+#: admin/acl/GroupMember_list.php:86 admin/acl/GroupUser_list.php:72
+#: admin/acl/Groups_list.php:60 admin/acl/Permission_list.php:63
+#: admin/acl/RolePermission_list.php:95 admin/acl/Role_list.php:54
+#: admin/acl/data_source_list.php:55
+msgid "Add New"
+msgstr "新增"
+
+#: admin/account-statuses/some.php:62
+msgid "Add New Account Status"
+msgstr "新增帳號狀態"
+
+#: admin/activity-types/some.php:70
+msgid "Add New Activity Type"
+msgstr "新增事項類型"
+
+#: companies/addresses.php:199 contacts/edit.php:198
+msgid "Add New Address"
+msgstr "新增地址"
+
+#: admin/crm-statuses/some.php:88
+msgid "Add New CRM Status"
+msgstr "新增客戶關係狀態"
+
+#: campaigns/some.php:326
+msgid "Add New Campaign"
+msgstr "加入新行銷事項"
+
+#: admin/campaign-statuses/some.php:62
+msgid "Add New Campaign Status"
+msgstr "加入新行銷狀態"
+
+#: admin/campaign-types/some.php:60
+msgid "Add New Campaign Type"
+msgstr "加入新行銷類型"
+
+#: admin/case-statuses/some.php:131
+msgid "Add New Case Status"
+msgstr "新增案例狀態"
+
+#: admin/case-types/some.php:60
+msgid "Add New Case Type"
+msgstr "加入新案例類型"
+
+#: admin/categories/some.php:61
+msgid "Add New Category"
+msgstr "加入新類別"
+
+#: admin/company-sources/some.php:64
+msgid "Add New Company Source"
+msgstr "加入新公司來源"
+
+#: admin/company-types/some.php:59
+msgid "Add New Company Type"
+msgstr "加入新公司類型"
+
+#: admin/industries/some.php:59
+msgid "Add New Industry"
+msgstr "加入新行業"
+
+#: admin/opportunity-statuses/some.php:140
+msgid "Add New Opportunity Status"
+msgstr "新增機會狀態"
+
+#: activities/participant_sidebar.php:81
+msgid "Add New Participant"
+msgstr "加入新的參與者"
+
+#: admin/case-priorities/some.php:62
+msgid "Add New Priority Type"
+msgstr "新增優先等級類型"
+
+#: admin/ratings/some.php:63
+msgid "Add New Rating"
+msgstr "加入新評價等級"
+
+#: activities/recurrence_sidebar.php:302
+msgid "Add New Recurring Activity"
+msgstr "加入新的週期性事項"
+
+#: admin/relationship-types/some.php:67
+msgid "Add New Role"
+msgstr "加入新角色"
+
+#: admin/salutations/some.php:62
+msgid "Add New Salutation"
+msgstr "加入新稱呼"
+
+#: admin/activity-resolution-types/some.php:73
+msgid "Add New Type"
+msgstr "加入新類型"
+
+#: admin/users/some.php:119
+msgid "Add New User"
+msgstr "新增使用者"
+
+#: companies/relationships.php:125 relationships/sidebar.php:313
+#: relationships/sidebar.php:319
+msgid "Add Relationship"
+msgstr "加入關係"
+
+#: relationships/new-relationship-2.php:165
+#: relationships/new-relationship.php:115
+msgid "Add Relationship for "
+msgstr "加入對…的關係"
+
+#: admin/users/user_roles_sidebar.php:60
+msgid "Add Role"
+msgstr "加入角色"
+
+#: activities/some.php:419 campaigns/some.php:262 cases/some.php:287
+#: companies/some.php:870 contacts/some.php:332 files/some.php:450
+#: opportunities/some.php:387
+msgid "Add to Everyone"
+msgstr "增加到每個人"
+
+#: companies/divisions.php:88
+msgid "Add/Edit Addresses"
+msgstr "新增/編輯地址"
+
+#: include/utils-interface.php:77
+msgid "Added"
+msgstr "已加入"
+
+#: admin/updateto2.0.php:4630
+msgid "Added New Countries."
+msgstr "新國家增加完成。"
+
+#: include/utils-database.php:268
+msgid "Added sessions table"
+msgstr "增加作業階段表"
+
+#: admin/acl/edit_GroupUser.php:61 admin/users/edit-2.php:61
+msgid "Added user to role in group successfully"
+msgstr "成功地將使用者加入群組"
+
+#: admin/import/import-companies-2.php:82
+#: admin/import/import-companies-3.php:122
+msgid "Additional Company Info"
+msgstr "額外的公司資訊"
+
+#: admin/import/import-companies-2.php:76
+#: admin/import/import-companies-3.php:116 companies/divisions.php:87
+#: companies/edit-division.php:93 companies/new.php:197 companies/one.php:542
+#: companies/some.php:346 companies/some.php:798
+#: plugins/phone/companies_one.php:529 plugins/phone/contacts_one.php:444
+#: reports/activity-summary.php:254 reports/companies-list.php:175
+msgid "Address"
+msgstr "地址"
+
+#: admin/import/import-companies-3.php:170
+msgid "Address 2 Name"
+msgstr "地址 2 名稱"
+
+#: include/utils-interface.php:55
+msgid "Address Added."
+msgstr "地址已加入。"
+
+#: admin/import/import-companies-2.php:125
+#: admin/import/import-companies-2.php:136
+#: admin/import/import-companies-3.php:166
+#: admin/import/import-companies-3.php:177 companies/edit-address.php:107
+#: contacts/edit-address.php:225 contacts/new.php:335
+msgid "Address Body"
+msgstr "地址內容"
+
+#: include/utils-interface.php:57
+msgid "Address Deleted."
+msgstr "地址刪除完成。"
+
+#: admin/country-address-format/index.php:44
+msgid "Address Format"
+msgstr "地址格式"
+
+#: admin/import/import-companies-2.php:118
+#: admin/import/import-companies-3.php:159 companies/addresses.php:67
+#: companies/edit-address.php:75 companies/new.php:200
+#: companies/one-address.php:76 companies/some.php:801
+#: contacts/edit-address.php:193 contacts/new.php:303
+msgid "Address Name"
+msgstr "地址名"
+
+#: companies/edit-address.php:103 companies/one-address.php:84
+#: companies/one-address.php:94 contacts/edit-address.php:221
+#: contacts/new.php:331
+msgid "Address Type"
+msgstr "地址類型"
+
+#: admin/index.php:164
+msgid "Address Types"
+msgstr "地址類型"
+
+#: companies/addresses.php:134 companies/addresses.php:160
+#: companies/one.php:672 plugins/phone/companies_one.php:632
+msgid "Addresses"
+msgstr "地址"
+
+#: plugins/phone/companies_one.php:627
+msgid "Admin"
+msgstr "管理"
+
+#: companies/one.php:222
+msgid "Administer Division"
+msgstr "系統管理部門"
+
+#: admin/index.php:33 include/utils-interface.php:399
+#: locale/datastrings.php:15
+msgid "Administration"
+msgstr "系統管理"
+
+#: locale/datastrings.php:16
+msgid "Administrator"
+msgstr "系統管理"
+
+#: admin/index.php:61
+msgid "Administrator Guide"
+msgstr "系統管理者指引"
+
+#: activities/some.php:433 companies/some.php:881
+msgid "Advanced Search"
+msgstr "進階搜尋"
+
+#: companies/some.php:643 companies/some.php:798
+msgid "Advanced Search Criteria"
+msgstr "進階搜尋條件"
+
+#: locale/datastrings.php:17
+msgid "Advertisement"
+msgstr "廣告"
+
+#: locale/datastrings.php:18
+msgid "Advertisements"
+msgstr "廣告"
+
+#: locale/datastrings.php:19
+msgid "Advertising"
+msgstr "廣告"
+
+#: activities/activities-widget.php:758 activities/some.php:319
+#: opportunities/some.php:368
+msgid "After"
+msgstr "之後"
+
+#: activities/some.php:330 reports/completed-items.php:83
+#: reports/open-items.php:67 reports/overdue-items.php:81
+msgid "All"
+msgstr "全部"
+
+#: activities/activities-widget.php:753 activities/some.php:315
+#: reports/audit-items.php:53
+msgid "All Dates"
+msgstr "全部日期"
+
+#: reports/companies-by-company-source.php:81
+#: reports/companies-by-company-source.php:177
+#: reports/companies-by-crm-status.php:77
+#: reports/companies-by-crm-status.php:172
+#: reports/companies-by-industry.php:83 reports/companies-by-industry.php:176
+#: reports/completed-items.php:138 reports/open-items.php:109
+#: reports/opportunities-quantity-by-opportunity-status.php:81
+#: reports/opportunities-quantity-by-opportunity-status.php:183
+#: reports/opportunities-size-by-opportunity-status.php:81
+#: reports/opportunities-size-by-opportunity-status.php:194
+#: reports/overdue-items.php:124
+msgid "All Users"
+msgstr "全部使用者"
+
+#: admin/import/import-companies-2.php:142
+#: admin/import/import-companies-3.php:183 companies/edit.php:148
+#: companies/new.php:136 companies/one.php:520 companies/some.php:716
+#: plugins/phone/companies_one.php:511
+msgid "Alt. Phone"
+msgstr "附加電話號碼"
+
+#: locale/datastrings.php:20
+msgid "Approved"
+msgstr "驗證通過"
+
+#: activities/recurrence_sidebar.php:170 include/utils-recurrence.php:32
+msgid "April"
+msgstr "四月"
+
+#: locale/datastrings.php:21
+msgid "Architecture"
+msgstr "建築設計"
+
+#: companies/edit.php:229
+msgid ""
+"Are you sure you want to remove this company (and all associated contacts, "
+"activities, opportunities, cases, etc.) from the system?"
+msgstr ""
+"您確定要從系統中刪除此公司(及所有相關的連絡人、事項、機會、案例等"
+"等)？"
+
+#: activities/associate-activities.php:27
+msgid "Associate Activities"
+msgstr "關聯事項"
+
+#: activities/associate-activities.php:146
+msgid "Associated"
+msgstr "相關的"
+
+#: include/strings.php:27
+msgid "Associated Companies"
+msgstr "相關的公司"
+
+#: include/strings.php:26
+msgid "Associated Contacts"
+msgstr "相關連絡人"
+
+#: admin/categories/one.php:141 campaigns/categories.php:98
+#: cases/categories.php:98 companies/categories.php:102
+#: contacts/categories.php:104 opportunities/categories.php:98
+msgid "Associated With"
+msgstr "關聯"
+
+#: files/edit-form.php:10
+msgid "Attach File"
+msgstr "附加檔案"
+
+#: notes/new.php:40
+msgid "Attach Note"
+msgstr "備註"
+
+#: email/email-4.php:281
+msgid "Attached Files"
+msgstr "額外檔案"
+
+#: activities/attachment_sidebar.php:46 activities/attachment_sidebar.php:52
+#: activities/one.php:525 files/edit-form.php:41 notes/sidebar.php:22
+msgid "Attached To"
+msgstr "附屬應用程式加入到"
+
+#: files/one.php:126
+msgid "Attached to"
+msgstr "附屬應用程式加入到"
+
+#: email/email-2.php:243
+msgid "Attachments"
+msgstr "附屬應用程式"
+
+#: reports/index.php:176
+msgid "Audit Items"
+msgstr "監查項目"
+
+#: reports/audit-items.php:29
+msgid "Audit Log"
+msgstr "監查日誌"
+
+#: activities/recurrence_sidebar.php:170 include/utils-recurrence.php:32
+msgid "August"
+msgstr "八月"
+
+#: include/classes/Pager/Pager_Columns.php:204
+msgid "Available Columns"
+msgstr "可用的表格列"
+
+#: include/utils-activities.php:642
+msgid "BCC"
+msgstr "暗送"
+
+#: plugins/info/one.php:205 plugins/radtest/radtest.php:48
+msgid "Back"
+msgstr "回傳"
+
+#: companies/addresses.php:138
+msgid "Back To Company"
+msgstr "回到公司"
+
+#: companies/relationships.php:126
+msgid "Back to"
+msgstr "回傳到"
+
+#: email/email-2.php:217 email/one-template.php:81
+msgid "Bcc"
+msgstr "暗送"
+
+#: activities/activities-widget.php:757 activities/some.php:318
+#: opportunities/some.php:367
+msgid "Before"
+msgstr "之前"
+
+#: contacts/edit-address.php:97
+msgid "Billing Address"
+msgstr "帳單地址"
+
+#: companies/addresses.php:72
+msgid "Billing Default"
+msgstr "預設帳單地址"
+
+#: install/data.php:2826
+msgid "Block Sourceforge Link"
+msgstr "阻擋 Sourceforge 連結"
+
+#: activities/activities-widget.php:489
+msgid "Browse"
+msgstr "瀏覽"
+
+#: locale/datastrings.php:22
+msgid "Bug"
+msgstr "程式錯誤"
+
+#: locale/datastrings.php:23
+msgid "Bug Report Closed"
+msgstr "程式錯誤報告完畢"
+
+#: locale/datastrings.php:24
+msgid "Bug Report In Progress"
+msgstr "程式錯誤報告處理中"
+
+#: locale/datastrings.php:25
+msgid "Bugs"
+msgstr "程式錯誤"
+
+#: cases/some.php:293 email/email.php:158 email/index.php:59
+msgid "Bulk E-Mail"
+msgstr "大批 E-Mail"
+
+#: companies/addresses.php:76 contacts/edit.php:179 contacts/new.php:196
+#: contacts/one.php:385
+msgid "Business Address"
+msgstr "商務地址"
+
+#: include/utils-activities.php:641
+msgid "CC"
+msgstr "副本"
+
+#: reports/completed-items.php:188
+msgid "COMPLETED ACTIVITIES for"
+msgstr "完成的事項"
+
+#: reports/completed-items.php:239
+msgid "COMPLETED CAMPAIGNS for"
+msgstr "完成的行銷"
+
+#: reports/completed-items.php:330
+msgid "COMPLETED CASES for"
+msgstr "完成的案例"
+
+#: reports/completed-items.php:281
+msgid "COMPLETED OPPORTUNITIES for"
+msgstr "完成的機會"
+
+#: admin/import/import-companies.php:125 cases/one.php:237
+#: companies/edit.php:128 companies/new.php:116 companies/one.php:502
+#: companies/some-advanced.php:339 companies/some.php:675
+#: companies/some.php:900 contacts/one.php:371 opportunities/one.php:312
+#: opportunities/some.php:429 plugins/phone/companies_one.php:493
+#: plugins/phone/contacts_one.php:432 reports/companies-list.php:102
+msgid "CRM Status"
+msgstr "客戶關係管理(CRM)狀態"
+
+#: admin/crm-statuses/one.php:37
+msgid "CRM Status Details"
+msgstr "客戶關係管理(CRM)狀態細節"
+
+#: admin/index.php:209
+msgid "CRM Statuses"
+msgstr "客戶關係管理(CRM)狀態"
+
+#: activities/activities-widget.php:486
+msgid "Calendar View"
+msgstr "行事曆檢視"
+
+#: plugins/cti/cdr.php:274
+msgid "Call Date"
+msgstr "通話日期"
+
+#: plugins/cti/cdr.php:298
+msgid "Call Detail Records"
+msgstr "通話細節記錄"
+
+#: plugins/cti/cdr.php:28
+msgid "Call Detail Report"
+msgstr "通話細節報告"
+
+#: plugins/cti/screen_pop_redirect.php:23
+msgid "Call From: "
+msgstr "通話呼叫入："
+
+#: plugins/cti/cdr.php:98
+msgid "Call ID"
+msgstr "呼叫 ID"
+
+#: plugins/cti/asteriskdial.php:140
+msgid "Call%20To%20"
+msgstr "呼叫%20到%20"
+
+#: include/utils-activities.php:638
+msgid "Caller"
+msgstr "呼叫方"
+
+#: plugins/cti/cdr.php:118 plugins/cti/cdr.php:269
+msgid "Caller ID"
+msgstr "呼叫方 ID"
+
+#: campaigns/some.php:279 campaigns/some.php:337 files/some.php:350
+#: locale/datastrings.php:26 opportunities/edit.php:193
+#: opportunities/new.php:128 opportunities/one.php:237
+#: reports/completed-items.php:246 reports/open-items.php:232
+#: reports/overdue-items.php:249
+msgid "Campaign"
+msgstr "行銷"
+
+#: include/utils-interface.php:60
+msgid "Campaign Added."
+msgstr "行銷已加入。"
+
+#: include/utils-interface.php:62
+msgid "Campaign Deleted."
+msgstr "行銷已刪除。"
+
+#: campaigns/edit.php:72 campaigns/new.php:65 campaigns/one.php:100
+#: campaigns/one.php:110
+msgid "Campaign Details"
+msgstr "行銷細節"
+
+#: campaigns/some.php:221
+msgid "Campaign Name"
+msgstr "行銷名稱"
+
+#: admin/campaign-statuses/one.php:40
+msgid "Campaign Status Details"
+msgstr "行銷狀態細節"
+
+#: admin/index.php:169 admin/campaign-statuses/some.php:46
+msgid "Campaign Statuses"
+msgstr "行銷狀態"
+
+#: campaigns/edit.php:75 campaigns/new.php:68
+msgid "Campaign Title"
+msgstr "行銷標題"
+
+#: admin/campaign-types/one.php:37
+msgid "Campaign Type Details"
+msgstr "行銷類型細節"
+
+#: admin/index.php:174 admin/campaign-types/some.php:44
+msgid "Campaign Types"
+msgstr "行銷類型"
+
+#: activities/activity-reconnect.php:35 activities/some.php:295
+#: campaigns/some.php:200 files/some.php:427 include/utils-interface.php:393
+#: opportunities/some.php:336 reports/completed-items.php:97
+#: reports/open-items.php:81 reports/overdue-items.php:95
+msgid "Campaigns"
+msgstr "行銷"
+
+#: activities/edit_activity_recurrence.php:65
+#: activities/new_activity_participant.php:29 admin/activity-types/one.php:83
+#: contacts/new_contact_company_select.php:67
+#: contacts/new_contact_company_select.php:76
+msgid "Cancel"
+msgstr "取消"
+
+#: locale/datastrings.php:27
+msgid "Cancelled"
+msgstr "已經取消"
+
+#: cases/sidebar.php:83 cases/some.php:321 cases/some.php:371
+#: files/some.php:352 locale/datastrings.php:28 reports/index.php:75
+#: reports/open-items.php:326 reports/overdue-items.php:343
+msgid "Case"
+msgstr "案例"
+
+#: cases/one.php:149
+msgid "Case #"
+msgstr "案例 #"
+
+#: include/utils-interface.php:72
+msgid "Case Added."
+msgstr "案例已加入。"
+
+#: include/utils-interface.php:74
+msgid "Case Deleted."
+msgstr "案例已刪除。"
+
+#: cases/edit.php:193 cases/new.php:122 cases/one.php:158
+msgid "Case Details"
+msgstr "案例細節"
+
+#: cases/some.php:254
+msgid "Case Name"
+msgstr "案例名稱"
+
+#: cases/some.php:255
+msgid "Case Number"
+msgstr "案例編號"
+
+#: admin/index.php:179 admin/case-priorities/some.php:46
+msgid "Case Priorities"
+msgstr "案例優先等級"
+
+#: admin/case-priorities/one.php:40
+msgid "Case Priority Details"
+msgstr "案例優先等級細節"
+
+#: admin/case-statuses/one.php:118
+msgid "Case Status Details"
+msgstr "案例狀態細節"
+
+#: admin/index.php:184 admin/case-statuses/some.php:109
+#: cases/case-status-view.php:51
+msgid "Case Statuses"
+msgstr "案例狀態"
+
+#: cases/edit.php:196 cases/new.php:125
+msgid "Case Title"
+msgstr "案例標題"
+
+#: admin/case-statuses/some.php:101
+msgid "Case Type"
+msgstr "案例類型"
+
+#: admin/case-types/one.php:39
+msgid "Case Type Details"
+msgstr "案例類型細節"
+
+#: admin/index.php:189 admin/case-types/some.php:44
+msgid "Case Types"
+msgstr "案例類型"
+
+#: activities/activity-reconnect.php:34 admin/activity-templates/edit.php:57
+#: cases/some.php:239 files/some.php:429 include/utils-interface.php:395
+#: reports/completed-items.php:111 reports/open-items.php:95
+#: reports/overdue-items.php:109
+msgid "Cases"
+msgstr "案例"
+
+#: reports/cases-by-case-status.php:22 reports/cases-by-case-status.php:42
+#: reports/index.php:78
+msgid "Cases by Status"
+msgstr "案例依據狀態"
+
+#: admin/index.php:194 admin/categories/some.php:45
+#: include/categories-sidebar.php:18 plugins/phone/companies_one.php:716
+#: plugins/phone/contacts_one.php:540 reports/companies-list.php:180
+msgid "Categories"
+msgstr "類別"
+
+#: admin/export/export-companies.php:142 admin/import/import-companies.php:133
+#: campaigns/some.php:235 cases/some.php:265 companies/some.php:549
+#: companies/some.php:670 contacts/some.php:304 opportunities/some.php:349
+#: reports/activity-summary.php:101 reports/companies-list.php:100
+msgid "Category"
+msgstr "類別"
+
+#: admin/categories/one.php:78
+msgid "Category Details"
+msgstr "類別細節"
+
+#: admin/categories/one.php:138
+msgid "Category Scopes"
+msgstr "類別範圍"
+
+#: admin/import/import-companies-2.php:98
+#: admin/import/import-companies-3.php:139 companies/new.php:265
+#: contacts/edit.php:214 contacts/new.php:215 contacts/one.php:325
+#: contacts/sidebar.php:175 contacts/some.php:126
+#: plugins/phone/contacts_one.php:373
+msgid "Cell Phone"
+msgstr "行動電話"
+
+#: admin/country-address-format/edit.php:62
+msgid "Change"
+msgstr "修改"
+
+#: admin/users/change-owner.php:87
+msgid "Change All"
+msgstr "修改全部"
+
+#: activities/attachment_sidebar.php:21
+msgid "Change Attachment"
+msgstr "修改附屬應用程式"
+
+#: files/one.php:150
+msgid "Change Date"
+msgstr "修改日期"
+
+#: files/one.php:157
+msgid "Change File"
+msgstr "修改檔案"
+
+#: reports/companies-by-company-source.php:68
+#: reports/companies-by-crm-status.php:66 reports/companies-by-industry.php:70
+#: reports/opportunities-quantity-by-opportunity-status.php:70
+#: reports/opportunities-size-by-opportunity-status.php:70
+msgid "Change Graph"
+msgstr "修改圖案"
+
+#: admin/users/change-password.php:30 admin/users/change-password.php:42
+#: admin/users/one.php:128 admin/users/self.php:92
+msgid "Change Password"
+msgstr "修改密碼"
+
+#: admin/index.php:122 admin/users/change-owner.php:34
+msgid "Change Record Owner"
+msgstr "修改記錄擁有人"
+
+#: admin/users/change-owner.php:88
+msgid "Change Selected"
+msgstr "修改已選取者"
+
+#: admin/users/change-owner.php:96
+msgid ""
+"Change Selected : This will change the owner of open companies, campaigns, "
+"opportunities and cases."
+msgstr "修改已選取者：這將會改變待處理事項、公司、行銷、機會和案例的擁有者。"
+
+#: admin/users/change-owner.php:94
+msgid ""
+"Change all : This will change the owner of open activities, companies, "
+"campaigns, opportunities and cases and remove the old user from these "
+"entities"
+msgstr "修改全部：這將會改變待處理事項、公司、行銷、機會和案例的擁有者，"
+"並且從這些條目中移除舊的使用者。"
+
+#: include/utils-interface.php:87
+msgid "Changes saved."
+msgstr "修改儲存完畢"
+
+#: admin/acl/acl_results.php:145
+msgid "Check Permission on an object for a user"
+msgstr "檢查使用者對該物件的權限"
+
+#: locale/datastrings.php:29
+msgid "Chemicals"
+msgstr "化工"
+
+#: admin/acl/ControlledObjectRelationship_list.php:50
+msgid "Child Field"
+msgstr "子欄位"
+
+#: admin/acl/GroupGroup_list.php:42
+msgid "Child Group"
+msgstr "子群組"
+
+#: admin/acl/ControlledObjectRelationship_list.php:48
+#: admin/acl/RolePermission_list.php:71
+msgid "Child Object"
+msgstr "子物件"
+
+#: admin/acl/RolePermission_list.php:76
+msgid "Child Object ID"
+msgstr "子物件 ID"
+
+#: contacts/edit.php:185
+msgid "Choose New Address"
+msgstr "選擇一個新地址"
+
+#: admin/import/import-companies-2.php:121
+#: admin/import/import-companies-2.php:132
+#: admin/import/import-companies-3.php:162
+#: admin/import/import-companies-3.php:173 admin/users/change-owner-2.php:140
+#: companies/addresses.php:174 companies/edit-address.php:87
+#: companies/new.php:212 companies/one-address.php:79 companies/some.php:589
+#: companies/some.php:814 companies/some.php:905 contacts/edit-address.php:205
+#: contacts/new.php:315 reports/companies-list.php:103
+#: reports/companies-list.php:177 reports/company-contacts-printout.php:125
+#: reports/company-contacts-printout.php:135
+msgid "City"
+msgstr "城市"
+
+#: activities/activities-widget.php:779
+msgid "Clear Filter"
+msgstr "清除搜尋條件"
+
+#: activities/some.php:430 campaigns/some.php:269 cases/some.php:293
+#: companies/some.php:878 contacts/some.php:340 files/some.php:458
+#: opportunities/some.php:393
+msgid "Clear Search"
+msgstr "清除搜尋"
+
+#: admin/account-statuses/one.php:87 admin/activity-templates/edit.php:145
+#: admin/activity-types/one.php:97 admin/campaign-statuses/one.php:94
+#: admin/campaign-types/one.php:81 admin/case-priorities/one.php:88
+#: admin/case-statuses/one.php:227 admin/case-types/one.php:87
+#: admin/categories/one.php:122 admin/company-sources/one.php:90
+#: admin/company-types/one.php:80 admin/crm-statuses/one.php:81
+#: admin/industries/one.php:80 admin/opportunity-statuses/one.php:229
+#: admin/ratings/one.php:80 admin/relationship-types/one.php:98
+#: admin/salutations/one.php:77 admin/users/one.php:145
+msgid "Click the button below to permanently remove this item."
+msgstr "點擊下面的按鈕永久刪除此項目。"
+
+#: companies/one.php:671 contacts/one.php:446
+#: plugins/phone/companies_one.php:628
+msgid "Clone"
+msgstr "仿製品"
+
+#: opportunities/edit.php:233 opportunities/new.php:167
+#: opportunities/sidebar.php:93 opportunities/some.php:350
+#: opportunities/some.php:438 opportunities/some.php:487
+msgid "Close Date"
+msgstr "完畢的日期"
+
+#: activities/activities-pager-functions.php:29
+#: admin/campaign-statuses/one.php:75 admin/campaign-statuses/some.php:86
+#: locale/datastrings.php:30
+msgid "Closed"
+msgstr "完畢"
+
+#: locale/datastrings.php:31
+msgid "Closed/Duplicate"
+msgstr "已完畢/重複"
+
+#: admin/opportunity-statuses/one.php:159
+#: admin/opportunity-statuses/some.php:168 locale/datastrings.php:32
+msgid "Closed/Lost"
+msgstr "完畢/失去"
+
+#: admin/case-statuses/one.php:158 locale/datastrings.php:33
+msgid "Closed/Resolved"
+msgstr "完畢/解決"
+
+#: admin/case-statuses/one.php:159 locale/datastrings.php:34
+msgid "Closed/Unresolved"
+msgstr "完畢/未解決"
+
+#: admin/opportunity-statuses/one.php:158
+#: admin/opportunity-statuses/some.php:167 locale/datastrings.php:35
+msgid "Closed/Won"
+msgstr "關閉/贏得"
+
+#: opportunities/one.php:260
+msgid "Closes"
+msgstr "結束"
+
+#: admin/import/import-companies-2.php:140
+#: admin/import/import-companies-3.php:181 companies/one.php:490
+#: contacts/some.php:372 plugins/phone/companies_one.php:481
+#: reports/companies-list.php:173
+msgid "Code"
+msgstr "編碼"
+
+#: include/utils-interface.php:974
+msgid "Collapse"
+msgstr "折疊"
+
+#: install/data.php:2816
+msgid "Color and Layout Theme for XRMS"
+msgstr "XRMS 主題、色彩和版面設置"
+
+#: plugins/info/edit-definitions.php:257
+msgid "Column"
+msgstr "欄"
+
+#: locale/datastrings.php:36
+msgid "Communications"
+msgstr "通訊"
+
+#: activities/activity-reconnect.php:31 files/some.php:426
+#: include/strings.php:31 include/utils-interface.php:391
+msgid "Companies"
+msgstr "公司"
+
+#: reports/companies-by-company-source.php:154
+#: reports/companies-by-crm-status.php:149
+#: reports/companies-by-industry.php:153
+msgid "Companies "
+msgstr "公司"
+
+#: reports/companies-list.php:66
+msgid "Companies List"
+msgstr "公司清單"
+
+#: reports/companies-by-crm-status.php:30
+#: reports/companies-by-crm-status.php:49 reports/index.php:42
+msgid "Companies by CRM Status"
+msgstr "公司依客戶關係狀態"
+
+#: reports/companies-by-industry.php:30 reports/companies-by-industry.php:49
+#: reports/index.php:46
+msgid "Companies by Industry"
+msgstr "公司依行業"
+
+#: reports/companies-by-company-source.php:36
+#: reports/companies-by-company-source.php:47 reports/index.php:50
+msgid "Companies by Source"
+msgstr "公司依來源"
+
+#: activities/activities-widget.php:461 activities/activities-widget.php:769
+#: activities/associate-activities.php:31 activities/one.php:508
+#: activities/some.php:270 admin/import/import-companies-2.php:70
+#: admin/import/import-companies-3.php:110 admin/users/change-owner-2.php:138
+#: cases/edit.php:200 cases/one.php:225 cases/sidebar.php:88
+#: cases/some.php:256 cases/some.php:322 cases/some.php:372
+#: companies/divisions.php:79 companies/edit-address.php:71
+#: companies/edit-division.php:85 companies/former-names.php:80
+#: companies/one-address.php:83 companies/relationships.php:114
+#: contacts/edit.php:171 contacts/new.php:188
+#: contacts/new_contact_company_select.php:63
+#: contacts/new_contact_company_select.php:72 contacts/one.php:181
+#: contacts/one.php:354 contacts/some.php:279 contacts/some.php:371
+#: contacts/some.php:440 email/email-3.php:130 files/some.php:353
+#: locale/datastrings.php:37 opportunities/edit.php:181
+#: opportunities/one.php:300 opportunities/sidebar.php:87
+#: opportunities/some.php:335 opportunities/some.php:428
+#: opportunities/some.php:485 plugins/phone/contacts_one.php:414
+#: reports/activitytimes.php:73 reports/company-contacts-printout.php:93
+#: reports/company-contacts-printout.php:283 reports/completed-items.php:195
+#: reports/completed-items.php:287 reports/index.php:39
+#: reports/open-items.php:183 reports/open-items.php:324
+#: reports/overdue-email.php:72 reports/overdue-items.php:198
+#: reports/overdue-items.php:293 reports/overdue-items.php:341
+msgid "Company"
+msgstr "公司"
+
+#: include/utils-interface.php:47
+msgid "Company Added."
+msgstr "公司已加入。"
+
+#: reports/company-contacts-printout.php:209
+msgid "Company Category"
+msgstr "公司類別"
+
+#: reports/company-contacts-printout.php:210
+msgid "Company City"
+msgstr "公司城市"
+
+#: companies/edit.php:124 companies/new.php:112
+#: companies/some-advanced.php:336 companies/some.php:662
+#: companies/some.php:897
+msgid "Company Code"
+msgstr "公司編碼"
+
+#: include/utils-interface.php:49
+msgid "Company Deleted."
+msgstr "公司已刪除"
+
+#: companies/one.php:445 companies/one.php:468
+#: plugins/phone/companies_one.php:434 plugins/phone/companies_one.php:461
+msgid "Company Details"
+msgstr "公司細節"
+
+#: activities/some.php:284 admin/import/import-companies-2.php:88
+#: admin/import/import-companies-3.php:129
+msgid "Company ID"
+msgstr "公司 ID"
+
+#: companies/one.php:228
+msgid "Company ID:"
+msgstr "公司 ID："
+
+#: companies/new.php:101 companies/some.php:643
+msgid "Company Information"
+msgstr "公司資訊"
+
+#: reports/index.php:98
+msgid "Company List"
+msgstr "公司清單"
+
+#: admin/import/import-companies-2.php:89
+#: admin/import/import-companies-3.php:130 companies/edit.php:116
+#: companies/new.php:104 companies/one.php:478 companies/some-advanced.php:335
+#: companies/some-advanced.php:395 companies/some.php:543
+#: companies/some.php:646 companies/some.php:896 companies/some.php:966
+#: plugins/phone/companies_one.php:467 reports/companies-list.php:98
+#: reports/companies-list.php:174 reports/company-contacts-printout.php:207
+#: reports/company-contacts-printout.php:240
+msgid "Company Name"
+msgstr "公司名稱"
+
+#: companies/some-advanced.php:382 companies/some.php:952
+msgid "Company Options"
+msgstr "公司選項"
+
+#: reports/index.php:93
+msgid "Company Reports"
+msgstr "公司報告"
+
+#: install/data.php:2846
+msgid "Company Search Type"
+msgstr "公司搜尋類型"
+
+#: admin/import/import-companies.php:129 companies/edit.php:136
+#: companies/new.php:120 companies/one.php:601 companies/some.php:684
+#: plugins/phone/companies_one.php:577
+msgid "Company Source"
+msgstr "公司來源"
+
+#: admin/company-sources/one.php:42
+msgid "Company Source Details"
+msgstr "公司來源細節"
+
+#: admin/index.php:199 admin/company-sources/some.php:48
+msgid "Company Sources"
+msgstr "公司來源"
+
+#: reports/company-contacts-printout.php:211
+msgid "Company State"
+msgstr "公司狀態"
+
+#: admin/company-types/one.php:36
+msgid "Company Type Details"
+msgstr "公司類型細節"
+
+#: admin/index.php:204 admin/company-types/some.php:43
+msgid "Company Types"
+msgstr "公司類型"
+
+#: reports/company-contacts-printout.php:208
+msgid "Company User"
+msgstr "公司使用者"
+
+#: reports/activity-summary.php:252
+msgid "Company name"
+msgstr "公司名稱"
+
+#: locale/datastrings.php:38
+msgid "Competitor"
+msgstr "競爭者"
+
+#: locale/datastrings.php:39
+msgid "Competitors"
+msgstr "競爭者"
+
+#: plugins/cti/update-company-phone-numbers.php:73
+#: plugins/cti/update-contact-phone-numbers.php:59
+msgid "Complete"
+msgstr "完成"
+
+#: activities/some.php:305 activities/some.php:332 locale/datastrings.php:40
+msgid "Completed"
+msgstr "完成"
+
+#: reports/completed-items.php:44 reports/index.php:152
+msgid "Completed Items"
+msgstr "完成的項目"
+
+#: activities/one.php:645
+msgid "Completed?"
+msgstr "已完成？"
+
+#: locale/datastrings.php:41
+msgid "Computers"
+msgstr "電腦"
+
+#: admin/plugin/plugin-admin.php:287
+msgid "Config file can't be opened. Please check vars.php."
+msgstr "無法開啟設定檔案，請檢查 vars.php"
+
+#: admin/plugin/plugin-admin.php:285
+msgid "Config written successfully."
+msgstr "設定成功寫入"
+
+#: admin/users/change-password.php:49
+msgid "Confirm New Password"
+msgstr "確認新的密碼"
+
+#: email/email-3.php:115 email/email-3.php:126
+msgid "Confirm Recipients"
+msgstr "確認收信人"
+
+#: admin/users/change-owner-2.php:134
+msgid "Confirm company"
+msgstr "確認公司"
+
+#: reports/audit-items.php:55
+msgid "Connection Details"
+msgstr "洽詢細節"
+
+#: locale/datastrings.php:42
+msgid "Construction"
+msgstr "建造施工"
+
+#: locale/datastrings.php:43
+msgid "Consultant for"
+msgstr "顧問於"
+
+#: locale/datastrings.php:44
+msgid "Consulting"
+msgstr "諮詢顧問"
+
+#: activities/activities-widget.php:455 activities/activities-widget.php:662
+#: activities/activities-widget.php:743 activities/one.php:514
+#: activities/some.php:269 admin/import/import-companies-3.php:317
+#: admin/users/one.php:96 cases/edit.php:208 cases/new.php:133
+#: cases/one.php:209 contacts/edit-address.php:189 contacts/some.php:439
+#: email/email-3.php:132 files/some.php:349 locale/datastrings.php:45
+#: opportunities/edit.php:189 opportunities/new.php:124
+#: opportunities/one.php:282 plugins/phone/companies_one.php:641
+#: plugins/phone/companies_one.php:686 reports/activitytimes.php:74
+#: reports/completed-items.php:196 reports/completed-items.php:288
+#: reports/open-items.php:184 reports/open-items.php:325
+#: reports/overdue-email.php:73 reports/overdue-items.php:199
+#: reports/overdue-items.php:294 reports/overdue-items.php:342
+msgid "Contact"
+msgstr "連絡人"
+
+#: include/utils-interface.php:51
+msgid "Contact Added."
+msgstr "連絡人已加入。"
+
+#: reports/company-contacts-printout.php:177
+msgid "Contact Call List"
+msgstr "連絡人電話記錄"
+
+#: include/utils-interface.php:53
+msgid "Contact Deleted."
+msgstr "連絡人已刪除。"
+
+#: contacts/one.php:242 contacts/one.php:264
+#: plugins/phone/contacts_one.php:282 plugins/phone/contacts_one.php:309
+msgid "Contact Details"
+msgstr "連絡人詳情"
+
+#: activities/some.php:283 admin/import/import-companies-2.php:93
+#: admin/import/import-companies-3.php:134
+msgid "Contact ID"
+msgstr "連絡人 ID"
+
+#: contacts/one.php:169
+msgid "Contact ID:"
+msgstr "連絡人 ID："
+
+#: admin/import/import-companies-2.php:73
+#: admin/import/import-companies-3.php:113
+msgid "Contact Info"
+msgstr "連絡人資訊"
+
+#: companies/new.php:238 contacts/edit.php:151 contacts/new.php:169
+#: contacts/sidebar.php:100
+msgid "Contact Information"
+msgstr "連絡人資訊"
+
+#: contacts/some.php:423
+msgid "Contact Options"
+msgstr "連絡人選項"
+
+#: activities/activity-reconnect.php:33 companies/one.php:319
+#: companies/some-advanced.php:342 contacts/some.php:230 files/some.php:424
+#: include/strings.php:30 include/utils-interface.php:392
+#: plugins/phone/companies_one.php:641
+#: reports/company-contacts-printout.php:241
+msgid "Contacts"
+msgstr "連絡人"
+
+#: reports/index.php:106
+msgid "Contacts at Companies"
+msgstr "公司的連絡人"
+
+#: reports/company-contacts-printout.php:237
+msgid "Contacts for Companies"
+msgstr "公司的連絡人"
+
+#: files/some.php:425
+msgid "Contacts of Companies"
+msgstr "按公司排列的連絡人"
+
+#: activities/activity-reconnect.php:44
+msgid "Containing"
+msgstr "包括"
+
+#: admin/users/change-owner-2.php:145 email/email-2.php:296
+#: email/email-3.php:138 email/email.php:177 email/index.php:78
+msgid "Continue"
+msgstr "繼續"
+
+#: admin/acl/GroupMember_list.php:49
+msgid "Controlled Object"
+msgstr "已控制的物件"
+
+#: admin/acl/GroupMember_list.php:55
+msgid "Controlled Object ID"
+msgstr "已控制的物件 ID"
+
+#: admin/acl/ControlledObjectRelationship_list.php:72
+msgid "Controlled Object Relationships"
+msgstr "已控物件關係"
+
+#: admin/acl/ControlledObject_list.php:62
+msgid "Controlled Objects"
+msgstr "已控制的物件"
+
+#: install/data.php:2872
+msgid ""
+"Controls where the PHP session data is stored (files or database).  Changing "
+"this parameter will cause all currently logged in users to be logged out."
+msgstr ""
+"控制 PHP 作業階段資料存放在哪裡(檔案或資料庫)。變更這個參數會導致所有現在登入"
+"的使用者登出"
+
+#: campaigns/edit.php:105 campaigns/new.php:98 campaigns/one.php:132
+msgid "Cost"
+msgstr "費用"
+
+#: include/utils-files.php:112
+msgid "Could not locate Uploaded File"
+msgstr "找不到上傳的檔案"
+
+#: include/utils-files.php:135
+msgid "Could not process upload file"
+msgstr "無法上傳檔案"
+
+#: include/utils-files.php:124
+msgid "Could not set Upload Directory"
+msgstr "無法設定上傳目錄"
+
+#: admin/country-address-format/edit.php:42
+#: admin/country-address-format/index.php:42
+#: admin/import/import-companies-2.php:124
+#: admin/import/import-companies-2.php:135
+#: admin/import/import-companies-3.php:165
+#: admin/import/import-companies-3.php:176 companies/addresses.php:176
+#: companies/edit-address.php:99 companies/new.php:224
+#: companies/one-address.php:82 companies/one-address.php:93
+#: companies/some.php:385 companies/some.php:594 companies/some.php:835
+#: contacts/edit-address.php:217 contacts/new.php:327
+#: reports/companies-list.php:105 reports/companies-list.php:178
+msgid "Country"
+msgstr "國家"
+
+#: admin/index.php:127 admin/country-address-format/index.php:31
+msgid "Country Localization Formats"
+msgstr "本地格式"
+
+#: admin/import/import-companies-3.php:542
+#: admin/import/import-companies-3.php:664
+msgid "Country not specified. Using default country"
+msgstr "國家未指定，使用預設的國家"
+
+#: include/classes/QuickForm/ADOdb_QuickForm.php:114 locale/datastrings.php:46
+#: plugins/cti/setup.php:122
+msgid "Create"
+msgstr "建立"
+
+#: contacts/some.php:360
+msgid "Create Contact without a Company"
+msgstr "建立無公司的連絡人"
+
+#: plugins/cti/setup.php:23 plugins/cti/setup.php:24 plugins/cti/setup.php:25
+msgid "Create New"
+msgstr "新增"
+
+#: contacts/edit-address.php:173
+msgid "Create New Address?"
+msgstr "新增地址？"
+
+#: activities/one.php:684
+msgid "Create Recurrence"
+msgstr "建立重複事件"
+
+#: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:191
+msgid "Create Successful"
+msgstr "建立成功"
+
+#: contacts/edit-address.php:180
+msgid "Create a New Address?"
+msgstr "建立一個新地址？"
+
+#: campaigns/one.php:148 cases/one.php:195 companies/one.php:651
+#: contacts/one.php:426 opportunities/one.php:268
+#: plugins/phone/companies_one.php:535 plugins/phone/contacts_one.php:474
+msgid "Created"
+msgstr "完成"
+
+#: admin/import/import-companies-3.php:337
+msgid "Created company "
+msgstr "新增公司"
+
+#: companies/add-address.php:60 contacts/edit-address-2.php:114
+msgid "Creating Address Failed"
+msgstr "新增地址失敗"
+
+#: admin/import/import-companies-3.php:319
+msgid "Creating default contact"
+msgstr "產生預設連絡人"
+
+#: admin/import/import-companies-2.php:156
+#: admin/import/import-companies-3.php:197 companies/edit.php:178
+#: companies/one.php:577 plugins/phone/companies_one.php:559
+msgid "Credit Limit"
+msgstr "信用額度"
+
+#: admin/acl/GroupMember_list.php:53
+msgid "Criteria Result Field"
+msgstr "條件結果欄位"
+
+#: admin/acl/GroupMember_list.php:52
+msgid "Criteria Table"
+msgstr "條件表"
+
+#: locale/datastrings.php:47
+msgid "Critical"
+msgstr "重要"
+
+#: admin/users/change-owner-2.php:139
+msgid "CrmStatus"
+msgstr "CRM 狀態"
+
+#: admin/acl/ControlledObjectRelationship_list.php:52
+msgid "Cross Table"
+msgstr "交叉表格"
+
+#: admin/users/change-owner.php:47
+msgid "Current Owner"
+msgstr "目前擁有人"
+
+#: admin/import/import-companies-2.php:111
+#: admin/import/import-companies-2.php:150
+#: admin/import/import-companies-3.php:152
+#: admin/import/import-companies-3.php:191 companies/some.php:299
+msgid "Custom 1"
+msgstr "自訂 1"
+
+#: admin/import/import-companies-2.php:112
+#: admin/import/import-companies-2.php:151
+#: admin/import/import-companies-3.php:153
+#: admin/import/import-companies-3.php:192 companies/some.php:309
+msgid "Custom 2"
+msgstr "自訂 2"
+
+#: admin/import/import-companies-2.php:113
+#: admin/import/import-companies-2.php:152
+#: admin/import/import-companies-3.php:154
+#: admin/import/import-companies-3.php:193 companies/some.php:319
+msgid "Custom 3"
+msgstr "自訂 3"
+
+#: admin/import/import-companies-2.php:114
+#: admin/import/import-companies-2.php:153
+#: admin/import/import-companies-3.php:155
+#: admin/import/import-companies-3.php:194 companies/some.php:329
+msgid "Custom 4"
+msgstr "自訂 4"
+
+#: reports/index.php:197
+msgid "Custom Reports"
+msgstr "自訂報告"
+
+#: locale/datastrings.php:48
+msgid "Customer"
+msgstr "顧客"
+
+#: companies/edit.php:190
+msgid "Customer Key"
+msgstr "顧客鑰匙"
+
+#: locale/datastrings.php:49
+msgid "Customers"
+msgstr "顧客"
+
+#: plugins/dunfinder/setup.php:21
+msgid "DUN Finder"
+msgstr "DUN 搜尋器"
+
+#: activities/recurrence_sidebar.php:207
+msgid "Daily"
+msgstr "每日"
+
+#: admin/acl/index.php:54
+msgid "Dashboard"
+msgstr "面板"
+
+#: admin/index.php:52
+msgid "Data Cleanup"
+msgstr "清除資料"
+
+#: admin/acl/ControlledObject_list.php:43
+msgid "Data Source"
+msgstr "資料來源"
+
+#: admin/acl/data_source_list.php:41
+msgid "Data Source Name"
+msgstr "資料來源名稱"
+
+#: admin/acl/data_source_list.php:60
+msgid "Data Sources"
+msgstr "資料來源"
+
+#: install/data.php:2875
+msgid "Database (ADOdb)"
+msgstr "資料庫(ADOdb)"
+
+#: install/data.php:2874
+msgid "Database (XRMS)"
+msgstr "資料庫(XRMS)"
+
+#: admin/data_clean.php:331
+msgid "Database Cleanup Complete"
+msgstr "資料庫清除完成"
+
+#: admin/index.php:49
+msgid "Database Structure Update"
+msgstr "資料庫結構更新"
+
+#: companies/relationships.php:115 contacts/one.php:182 files/sidebar.php:93
+#: files/some.php:346 files/some.php:417 files/some.php:482
+#: notes/sidebar.php:25
+msgid "Date"
+msgstr "日期"
+
+#: admin/import/import-companies-2.php:103
+#: admin/import/import-companies-3.php:144 contacts/edit.php:245
+#: contacts/new.php:251 contacts/one.php:296
+#: plugins/phone/contacts_one.php:346
+msgid "Date of Birth"
+msgstr "生日"
+
+#: activities/recurrence_sidebar.php:170 include/utils-recurrence.php:32
+msgid "December"
+msgstr "十二月"
+
+#: admin/import/import-companies-3.php:318
+msgid "Default"
+msgstr "預設"
+
+#: admin/activity-templates/edit.php:116
+msgid "Default Text"
+msgstr "預設文字"
+
+#: plugins/info/edit-definitions.php:259
+msgid "Default Value"
+msgstr "預設值"
+
+#: activities/one.php:694 activities/some.php:238
+#: admin/acl/GroupGroup_list.php:36 admin/acl/GroupUser_list.php:36
+#: admin/acl/one_GroupMember.php:90 admin/account-statuses/one.php:93
+#: admin/activity-templates/edit.php:150 admin/activity-types/one.php:101
+#: admin/campaign-statuses/one.php:96 admin/campaign-types/one.php:83
+#: admin/case-priorities/one.php:90 admin/case-statuses/one.php:229
+#: admin/case-types/one.php:89 admin/categories/one.php:124
+#: admin/company-sources/one.php:92 admin/company-types/one.php:82
+#: admin/country-address-format/edit.php:57 admin/crm-statuses/one.php:83
+#: admin/industries/one.php:82 admin/opportunity-statuses/one.php:231
+#: admin/ratings/one.php:82 admin/relationship-types/one.php:101
+#: admin/salutations/one.php:83 admin/users/one.php:147
+#: admin/users/user_roles_sidebar.php:53 campaigns/edit.php:116
+#: campaigns/some.php:135 cases/edit.php:248 cases/some.php:148
+#: companies/some.php:455 contacts/edit.php:294 contacts/some.php:250
+#: files/some.php:281 include/classes/Pager/Pager_Columns.php:208
+#: include/classes/QuickForm/ADOdb_QuickForm.php:116 locale/datastrings.php:50
+#: notes/edit.php:40 opportunities/edit.php:250 opportunities/some.php:213
+#: plugins/info/one.php:201
+msgid "Delete"
+msgstr "刪除"
+
+#: admin/account-statuses/one.php:82
+msgid "Delete Account Status"
+msgstr "刪除帳號狀態"
+
+#: admin/account-statuses/one.php:79
+msgid "Delete Account Status?"
+msgstr "刪除帳號狀態？"
+
+#: admin/activity-templates/edit.php:141
+msgid "Delete Activity Template"
+msgstr "刪除事項範本"
+
+#: admin/activity-templates/edit.php:135
+msgid "Delete Activity Template?"
+msgstr "刪除事項範本？"
+
+#: admin/activity-types/one.php:93
+msgid "Delete Activity Type"
+msgstr "刪除事項類型"
+
+#: admin/activity-types/one.php:89
+msgid "Delete Activity Type?"
+msgstr "刪除事項類型？"
+
+#: companies/edit-address.php:116 contacts/edit-address.php:233
+msgid "Delete Address"
+msgstr "刪除地址"
+
+#: companies/edit-address.php:115 contacts/edit-address.php:232
+msgid "Delete Address?"
+msgstr "刪除地址？"
+
+#: admin/crm-statuses/one.php:77
+msgid "Delete CRM Status"
+msgstr "刪除客戶關係管理(CRM)狀態？"
+
+#: admin/crm-statuses/one.php:73
+msgid "Delete CRM Status?"
+msgstr "刪除客戶關係管理(CRM)狀態？"
+
+#: admin/campaign-statuses/one.php:90
+msgid "Delete Campaign Status"
+msgstr "刪除行銷狀態"
+
+#: admin/campaign-statuses/one.php:86
+msgid "Delete Campaign Status?"
+msgstr "刪除行銷狀態？"
+
+#: admin/campaign-types/one.php:77
+msgid "Delete Campaign Type"
+msgstr "刪除行銷類型"
+
+#: admin/campaign-types/one.php:73
+msgid "Delete Campaign Type?"
+msgstr "刪除行銷類型？"
+
+#: campaigns/edit.php:115
+msgid "Delete Campaign?"
+msgstr "刪除行銷？"
+
+#: admin/case-statuses/one.php:223
+msgid "Delete Case Status"
+msgstr "刪除案例狀態"
+
+#: admin/case-statuses/one.php:219
+msgid "Delete Case Status?"
+msgstr "刪除案例狀態？"
+
+#: admin/case-types/one.php:83
+msgid "Delete Case Type"
+msgstr "刪除案例類型"
+
+#: admin/case-types/one.php:79
+msgid "Delete Case Type?"
+msgstr "刪除案例類型？"
+
+#: cases/edit.php:247
+msgid "Delete Case?"
+msgstr "刪除案例？"
+
+#: admin/categories/one.php:118
+msgid "Delete Category"
+msgstr "刪除分類別"
+
+#: admin/categories/one.php:114
+msgid "Delete Category?"
+msgstr "刪除分類別？"
+
+#: companies/edit.php:230
+msgid "Delete Company"
+msgstr "刪除公司"
+
+#: admin/company-sources/one.php:86
+msgid "Delete Company Source"
+msgstr "刪除公司來源"
+
+#: admin/company-sources/one.php:82
+msgid "Delete Company Source?"
+msgstr "刪除公司來源？"
+
+#: admin/company-types/one.php:76
+msgid "Delete Company Type"
+msgstr "刪除公司類型"
+
+#: admin/company-types/one.php:72
+msgid "Delete Company Type?"
+msgstr "刪除公司類型？"
+
+#: contacts/edit.php:293
+msgid "Delete Contact?"
+msgstr "刪除連絡人？"
+
+#: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:219
+msgid "Delete Failed"
+msgstr "刪除失敗"
+
+#: admin/industries/one.php:76
+msgid "Delete Industry"
+msgstr "刪除行業"
+
+#: admin/industries/one.php:72
+msgid "Delete Industry?"
+msgstr "刪除行業？"
+
+#: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:204
+msgid "Delete Not Allowed"
+msgstr "不允許刪除"
+
+#: admin/opportunity-statuses/one.php:225
+msgid "Delete Opportunity Status"
+msgstr "刪除機會狀態"
+
+#: admin/opportunity-statuses/one.php:221
+msgid "Delete Opportunity Status?"
+msgstr "刪除機會狀態？"
+
+#: opportunities/edit.php:249
+msgid "Delete Opportunity?"
+msgstr "刪除機會？"
+
+#: admin/case-priorities/one.php:84
+msgid "Delete Priority Type"
+msgstr "刪除優先等級類型"
+
+#: admin/case-priorities/one.php:80
+msgid "Delete Priority Type?"
+msgstr "刪除優先等級類型？"
+
+#: admin/ratings/one.php:76
+msgid "Delete Rating"
+msgstr "刪除評價"
+
+#: admin/ratings/one.php:72
+msgid "Delete Rating?"
+msgstr "刪除評價？"
+
+#: admin/relationship-types/one.php:90
+msgid "Delete Relationship Type?"
+msgstr "刪除關係類型？"
+
+#: admin/relationship-types/one.php:94
+msgid "Delete Role"
+msgstr "刪除角色"
+
+#: admin/salutations/one.php:72
+msgid "Delete Salutation"
+msgstr "刪除稱呼"
+
+#: admin/salutations/one.php:69
+msgid "Delete Salutation?"
+msgstr "刪除稱呼？"
+
+#: email/email-2.php:276
+msgid "Delete Selected"
+msgstr "刪除選取的"
+
+#: admin/acl/one_GroupMember.php:43
+#: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:217
+msgid "Delete Successful"
+msgstr "已刪除"
+
+#: admin/users/one.php:141
+msgid "Delete User"
+msgstr "刪除使用者"
+
+#: admin/users/one.php:137
+msgid "Delete User?"
+msgstr "刪除此使用者？"
+
+#: include/utils-interface.php:79
+msgid "Deleted"
+msgstr "已刪除"
+
+#: plugins/demo/setup.php:37
+msgid "Demo"
+msgstr "展示"
+
+#: activities/activities-widget.php:457 admin/activity-templates/edit.php:112
+#: admin/case-statuses/some.php:114 admin/case-statuses/some.php:168
+#: admin/import/import-companies-2.php:106
+#: admin/import/import-companies-3.php:147
+#: admin/opportunity-statuses/some.php:124
+#: admin/opportunity-statuses/some.php:159 campaigns/edit.php:109
+#: campaigns/new.php:102 cases/case-status-view.php:56 cases/edit.php:241
+#: cases/new.php:163 companies/divisions.php:107
+#: companies/edit-division.php:97 companies/one.php:282 contacts/edit.php:230
+#: contacts/new.php:232 contacts/one.php:291 contacts/some.php:302
+#: contacts/some.php:374 files/edit-form.php:63 files/one.php:145
+#: files/sidebar.php:92 files/some.php:347 opportunities/edit.php:241
+#: opportunities/new.php:174 opportunities/opportunity-view.php:54
+#: plugins/phone/contacts_one.php:340
+msgid "Description"
+msgstr "描述"
+
+#: plugins/cti/cdr.php:267
+msgid "Dest"
+msgstr "目的"
+
+#: plugins/cti/cdr.php:131 plugins/cti/cdr.php:271
+msgid "Dest Channel"
+msgstr "目的頻道"
+
+#: plugins/cti/cdr.php:268
+msgid "Dest Context"
+msgstr "目的背景"
+
+#: plugins/cti/cdr.php:110
+msgid "Destination"
+msgstr "目的地"
+
+#: activities/attachment_sidebar.php:29
+msgid "Detach"
+msgstr "取消洽詢"
+
+#: plugins/info/one.php:178
+msgid "Details"
+msgstr "細節"
+
+#: locale/datastrings.php:51
+msgid "Developed"
+msgstr "已開發"
+
+#: plugins/cti/setup.php:80
+msgid "Dial"
+msgstr "撥號"
+
+#: plugins/cti/asteriskdial.php:76
+msgid "Dialing Phone Number: "
+msgstr "撥電話號碼："
+
+#: admin/index.php:46
+msgid "Digital Dashboard"
+msgstr "數字彙總板"
+
+#: locale/datastrings.php:52
+msgid "Direct Mail"
+msgstr "直接郵寄"
+
+#: admin/users/some.php:100
+msgid "Disabled Users"
+msgstr "已停用的使用者"
+
+#: install/data.php:2827
+msgid ""
+"Disables the SourceForge image and link which appears at the bottom of every "
+"page"
+msgstr "停用在每頁底部出現的 SourceForge 圖像和連結"
+
+#: locale/datastrings.php:53
+msgid "Discussion"
+msgstr "討論"
+
+#: admin/account-statuses/one.php:69 admin/account-statuses/some.php:77
+#: admin/activity-types/one.php:71 admin/activity-types/some.php:85
+#: admin/campaign-statuses/one.php:67 admin/campaign-statuses/some.php:77
+#: admin/campaign-types/one.php:64 admin/campaign-types/some.php:75
+#: admin/case-priorities/one.php:67 admin/case-priorities/some.php:77
+#: admin/case-statuses/one.php:146 admin/case-statuses/some.php:160
+#: admin/case-types/one.php:66 admin/case-types/some.php:75
+#: admin/categories/one.php:105 admin/categories/some.php:76
+#: admin/company-sources/one.php:69 admin/company-sources/some.php:79
+#: admin/company-types/one.php:63 admin/company-types/some.php:74
+#: admin/crm-statuses/one.php:64 admin/crm-statuses/some.php:103
+#: admin/industries/one.php:63 admin/industries/some.php:74
+#: admin/opportunity-statuses/one.php:146
+#: admin/opportunity-statuses/some.php:155 admin/ratings/one.php:63
+#: admin/ratings/some.php:78
+msgid "Display HTML"
+msgstr "顯示 HTML"
+
+#: plugins/info/edit-definitions.php:261
+msgid "Display in Sidebar"
+msgstr "在側欄顯示"
+
+#: reports/activity-summary.php:128
+msgid "Display on screen"
+msgstr "顯示於螢幕"
+
+#: include/classes/Pager/Pager_Columns.php:203
+msgid "Displayed Columns"
+msgstr "顯示表格列"
+
+#: locale/datastrings.php:54
+msgid "Distribution"
+msgstr "銷售分布"
+
+#: admin/import/import-companies-2.php:101
+#: admin/import/import-companies-3.php:142 cases/edit.php:204
+#: cases/new.php:129 cases/one.php:229 contacts/edit.php:175
+#: contacts/new.php:192 contacts/one.php:359 locale/datastrings.php:55
+#: opportunities/edit.php:185 opportunities/new.php:120
+#: opportunities/one.php:304 plugins/info/sidebar.php:135
+#: plugins/phone/contacts_one.php:420
+msgid "Division"
+msgstr "部門"
+
+#: include/utils-interface.php:91
+msgid "Division Added."
+msgstr "部門已加入。"
+
+#: companies/divisions.php:91
+msgid "Division Description"
+msgstr "部門描述"
+
+#: admin/import/import-companies-2.php:90
+#: admin/import/import-companies-3.php:131 companies/divisions.php:83
+#: companies/edit-division.php:89
+msgid "Division Name"
+msgstr "部門名稱"
+
+#: activities/activity-reconnect.php:36 companies/divisions.php:64
+#: companies/divisions.php:103 companies/one.php:677
+#: plugins/phone/companies_one.php:633
+msgid "Divisions"
+msgstr "部門"
+
+#: admin/index.php:58 private/home.php:198
+msgid "Documentation"
+msgstr "檔案"
+
+#: activities/activities-widget.php:674 plugins/phone/companies_one.php:700
+#: plugins/phone/contacts_one.php:525
+msgid "Done"
+msgstr "結束"
+
+#: cases/sidebar.php:87 cases/some.php:327 cases/some.php:374
+#: reports/open-items.php:323 reports/overdue-items.php:340
+msgid "Due"
+msgstr "到期"
+
+#: cases/edit.php:234
+msgid "Due At"
+msgstr "到期時間"
+
+#: cases/edit.php:231 cases/new.php:156
+msgid "Due By"
+msgstr "到期時間"
+
+#: admin/import/import-companies-3.php:508
+#: admin/import/import-companies-3.php:630
+msgid "Duplicate address. Using address id: "
+msgstr "重複的地址。使用地址ID："
+
+#: admin/activity-templates/edit.php:90 admin/case-statuses/one.php:181
+#: admin/opportunity-statuses/one.php:182 plugins/cti/cdr.php:139
+#: plugins/cti/cdr.php:275 plugins/cti/cdr.php:277
+#: reports/activitytimes.php:71
+msgid "Duration"
+msgstr "期間長度"
+
+#: admin/users/one.php:115 admin/users/self.php:80 admin/users/some.php:92
+#: admin/users/some.php:104 admin/users/some.php:142 cases/one.php:217
+#: companies/new.php:253 companies/one.php:285 contacts/edit.php:205
+#: contacts/new.php:206 contacts/one.php:309 email/email-3.php:133
+#: locale/datastrings.php:56 opportunities/one.php:290
+#: plugins/phone/contacts_one.php:352
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: email/email.php:169 email/index.php:70 email/templates.php:52
+#: email/templates.php:62
+msgid "E-Mail Templates"
+msgstr "Email 範本"
+
+#: admin/acl/ControlledObjectRelationship_list.php:46
+#: admin/acl/ControlledObject_list.php:38 admin/acl/GroupGroup_list.php:36
+#: admin/acl/GroupGroup_list.php:39 admin/acl/GroupUser_list.php:36
+#: admin/acl/Role_list.php:37 admin/acl/data_source_list.php:39
+#: admin/acl/one_GroupMember.php:71 admin/country-address-format/index.php:62
+#: plugins/info/one.php:199 plugins/phone/companies_one.php:626
+#: plugins/phone/contacts_one.php:493 relationships/sidebar.php:177
+msgid "Edit"
+msgstr "編輯"
+
+#: admin/account-statuses/one.php:52
+msgid "Edit Account Status Information"
+msgstr "編輯帳號狀態資訊"
+
+#: admin/activity-templates/edit.php:83
+msgid "Edit Activity Template Information"
+msgstr "編輯事項範本資訊"
+
+#: admin/activity-types/one.php:56
+msgid "Edit Activity Type Information"
+msgstr "編輯事項類型資訊"
+
+#: companies/edit-address.php:52 companies/edit-address.php:68
+#: contacts/edit-address.php:148 contacts/edit-address.php:186
+#: contacts/edit.php:187 contacts/edit.php:200
+msgid "Edit Address"
+msgstr "編輯地址"
+
+#: admin/country-address-format/edit.php:29
+msgid "Edit Address Country Format"
+msgstr "編輯地址格式"
+
+#: relationships/edit.php:32
+msgid "Edit Association"
+msgstr "編輯相關"
+
+#: companies/one-address.php:44
+msgid "Edit Business Address"
+msgstr "編輯商務地址"
+
+#: campaigns/edit.php:57
+msgid "Edit Campaign"
+msgstr "編輯行銷"
+
+#: admin/campaign-statuses/one.php:52
+msgid "Edit Campaign Status Information"
+msgstr "編輯行銷狀態資訊"
+
+#: admin/campaign-types/one.php:49
+msgid "Edit Campaign Type Information"
+msgstr "編輯行銷類型資訊"
+
+#: cases/edit.php:163
+msgid "Edit Case #"
+msgstr "編輯案例 #"
+
+#: admin/case-statuses/one.php:131
+msgid "Edit Case Status Information"
+msgstr "編輯案例狀態資訊"
+
+#: admin/case-types/one.php:51
+msgid "Edit Case Type Information"
+msgstr "編輯案例類型資訊"
+
+#: admin/categories/one.php:90
+msgid "Edit Category Information"
+msgstr "編輯分類別資訊"
+
+#: admin/company-sources/one.php:54
+msgid "Edit Company Source Information"
+msgstr "編輯公司來源資訊"
+
+#: admin/company-types/one.php:48
+msgid "Edit Company Type Information"
+msgstr "編輯公司類型資訊"
+
+#: companies/edit-division.php:69 companies/edit-division.php:82
+msgid "Edit Division"
+msgstr "編輯部門"
+
+#: plugins/info/edit-definitions.php:238
+msgid "Edit Element Definitions"
+msgstr "編輯基本定義"
+
+#: companies/edit.php:226
+msgid "Edit Former Names"
+msgstr "編輯曾用名"
+
+#: companies/one-address.php:57
+msgid "Edit Home Address"
+msgstr "編輯家庭地址"
+
+#: admin/industries/one.php:48
+msgid "Edit Industry Information"
+msgstr "編輯行業資訊"
+
+#: email/email-2.php:156 email/email-2.php:194 email/one-template.php:43
+#: email/one-template.php:70
+msgid "Edit Message"
+msgstr "編輯訊息"
+
+#: notes/edit.php:35 notes/edit.php:41
+msgid "Edit Note"
+msgstr "編輯備註"
+
+#: admin/opportunity-statuses/one.php:131
+msgid "Edit Opportunity Status Information"
+msgstr "編輯機會狀態資訊"
+
+#: admin/case-priorities/one.php:52
+msgid "Edit Priority Type Information"
+msgstr "編輯優先類型資訊"
+
+#: companies/edit.php:98 companies/edit.php:113
+msgid "Edit Profile"
+msgstr "編輯簡介"
+
+#: admin/crm-statuses/one.php:49 admin/ratings/one.php:48
+msgid "Edit Rating Information"
+msgstr "編輯評價資訊"
+
+#: activities/one.php:682
+msgid "Edit Recurrence"
+msgstr "編輯重複時間"
+
+#: admin/relationship-types/one.php:54
+msgid "Edit Role Information"
+msgstr "編輯角色資訊"
+
+#: admin/salutations/one.php:50
+msgid "Edit Salutation"
+msgstr "編輯稱呼"
+
+#: admin/system-parameters/one.php:116
+msgid "Edit System Parameter"
+msgstr "編輯系統參數"
+
+#: admin/users/one.php:90 admin/users/self.php:65
+msgid "Edit User Information"
+msgstr "編輯使用者資訊"
+
+#: activities/one.php:688
+msgid "Edit View"
+msgstr "編輯檢視"
+
+#: contacts/edit-address.php:178
+msgid ""
+"Editing/Deleting this record will change the address for all companies and "
+"contacts listed above."
+msgstr "編輯/刪除此記錄將會改變上述所有公司和連絡人的地址。"
+
+#: locale/datastrings.php:57
+msgid "Education"
+msgstr "教育"
+
+#: plugins/info/edit-definitions.php:252
+msgid "Element Definitions"
+msgstr "基本定義"
+
+#: admin/import/import-companies-2.php:96
+#: admin/import/import-companies-3.php:137 contacts/some.php:280
+#: contacts/some.php:376
+msgid "Email"
+msgstr "電子郵件"
+
+#: locale/datastrings.php:58
+msgid "Email Template"
+msgstr "E-Mail 範本"
+
+#: admin/index.php:117
+msgid "Email Templates"
+msgstr "E-Mail 範本"
+
+#: activities/one.php:641
+msgid "Email This To"
+msgstr "把這個 Email 給"
+
+#: companies/edit.php:160 companies/new.php:148 companies/one.php:607
+#: companies/some.php:728 plugins/phone/companies_one.php:583
+#: reports/activity-summary.php:274
+msgid "Employees"
+msgstr "員工"
+
+#: admin/users/one.php:123 admin/users/some.php:154
+msgid "Enabled"
+msgstr "啟用"
+
+#: plugins/info/edit-definitions.php:262
+msgid "Enabled<"
+msgstr "啟用<"
+
+#: reports/activity-summary.php:99 reports/activitytimes.php:49
+#: reports/activitytimes.php:70 reports/audit-items.php:41
+#: reports/completed-items.php:66 reports/completed-items.php:193
+#: reports/completed-items.php:244 reports/open-items.php:181
+#: reports/open-items.php:230 reports/overdue-email.php:70
+#: reports/overdue-items.php:196 reports/overdue-items.php:247
+msgid "End"
+msgstr "結束"
+
+#: activities/recurrence_sidebar.php:286
+msgid "End After "
+msgstr "結束晚於"
+
+#: plugins/cti/cdr.php:152
+msgid "End Date"
+msgstr "結束/到期時間"
+
+#: activities/recurrence_sidebar.php:293
+msgid "End on "
+msgstr "結束在"
+
+#: activities/recurrence_sidebar.php:284 campaigns/one.php:140
+#: campaigns/some.php:284
+msgid "Ends"
+msgstr "結束"
+
+#: campaigns/edit.php:98 campaigns/new.php:91
+msgid "Ends On"
+msgstr "結束在"
+
+#: admin/users/some.php:147
+msgid "English"
+msgstr "英語"
+
+#: contacts/sidebar.php:181
+msgid "Enter Cell"
+msgstr "輸入手機"
+
+#: contacts/sidebar.php:180
+msgid "Enter Cell Phone"
+msgstr "輸入手機"
+
+#: contacts/sidebar.php:154
+msgid "Enter Email Address"
+msgstr "輸入 Email 地址"
+
+#: contacts/sidebar.php:190 contacts/sidebar.php:191
+msgid "Enter Home Phone"
+msgstr "輸入家庭電話"
+
+#: admin/country-address-format/edit.php:64
+msgid "Enter New format"
+msgstr "輸入新格式"
+
+#: contacts/new.php:200
+msgid "Enter New or Edit Existing Address"
+msgstr "輸入新的或是編輯已經存在的地址"
+
+#: contacts/sidebar.php:170 contacts/sidebar.php:171
+msgid "Enter Work Phone"
+msgstr "輸入工作電話"
+
+#: reports/completed-items.php:285 reports/open-items.php:322
+#: reports/overdue-items.php:291 reports/overdue-items.php:339
+msgid "Entered"
+msgstr "輸入成功"
+
+#: activities/one.php:616
+msgid "Entered By"
+msgstr "輸入者"
+
+#: admin/country-address-format/edit.php:72
+msgid "Error. No Data."
+msgstr "錯誤。沒有資料。"
+
+#: activities/one.php:34 activities/recurrence_sidebar.php:38
+msgid "Error: No Activity ID Specified"
+msgstr "錯誤：未指定事項 ID "
+
+#: include/utils-recurrence.php:182
+msgid "Error: No period selected for recurring activity."
+msgstr "錯誤：沒有為重複事項選擇週期。"
+
+#: admin/users/change-owner-2.php:36
+msgid "Error: No user selected"
+msgstr "錯誤：沒有使用者被選取"
+
+#: plugins/info/edit-definitions.php:78
+msgid "Error: Unreconised Element Type"
+msgstr "錯誤：無法分辨的基本類型"
+
+#: locale/datastrings.php:59
+msgid "Event"
+msgstr "事件"
+
+#: activities/recurrence_sidebar.php:208 activities/recurrence_sidebar.php:221
+#: activities/recurrence_sidebar.php:230 activities/recurrence_sidebar.php:252
+msgid "Every "
+msgstr "每 "
+
+#: reports/opportunities-quantity-by-opportunity-status.php:86
+#: reports/opportunities-size-by-opportunity-status.php:86
+msgid "Exclude Closed Opportunities"
+msgstr "排除已經結束的機會"
+
+#: admin/crm-statuses/some.php:71
+msgid "Existing CRM Statuses"
+msgstr "顧客關係狀態"
+
+#: include/utils-interface.php:973
+msgid "Expand"
+msgstr "展開"
+
+#: locale/datastrings.php:60 plugins/cti/cdr.php:295
+msgid "Export"
+msgstr "匯出"
+
+#: admin/index.php:95
+msgid "Export Companies with address and phone info"
+msgstr "匯出包含地址和電話資訊的公司清單"
+
+#: admin/index.php:85
+msgid "Export Companies/Contacts"
+msgstr "匯出公司/連絡人清單"
+
+#: admin/index.php:90
+msgid "Export Companies/Contacts as LDAP/LDIF"
+msgstr "把公司/連絡人清單匯出為 LDAP/LDIF 格式"
+
+#: companies/one.php:284 plugins/cti/setup.php:103
+msgid "Extension"
+msgstr "擴充"
+
+#: plugins/cti/update-company-phone-numbers.php:54
+msgid "Extension2: "
+msgstr "擴充二："
+
+#: plugins/cti/update-company-phone-numbers.php:43
+msgid "Extension: "
+msgstr "擴充："
+
+#: admin/import/import-companies-2.php:147
+#: admin/import/import-companies-3.php:188
+msgid "External Ref 1"
+msgstr "外部參考1"
+
+#: admin/import/import-companies-2.php:148
+#: admin/import/import-companies-3.php:189
+msgid "External Ref 2"
+msgstr "外部參考2"
+
+#: admin/import/import-companies-2.php:149
+#: admin/import/import-companies-3.php:190
+msgid "External Ref 3"
+msgstr "外部參考3"
+
+#: activities/new-2.php:191
+msgid "Failed to add activity"
+msgstr "加入事項失敗"
+
+#: contacts/new-2.php:160
+msgid "Failed to add contact"
+msgstr "加入連絡人失敗"
+
+#: admin/activity-types/one_activity_participant_position.php:35
+#: admin/activity-types/one_activity_participant_position.php:44
+msgid "Failed to add participant position"
+msgstr "加入參與人位置失敗"
+
+#: admin/users/edit-2.php:84 admin/users/edit-2.php:86
+msgid "Failed to add user to group."
+msgstr "把使用者加入到組失敗"
+
+#: admin/acl/edit_GroupUser.php:59 admin/users/edit-2.php:59
+msgid "Failed to add user to role in group."
+msgstr "把使用者加入到組角色失敗"
+
+#: admin/activity-types/one_activity_participant_position.php:54
+msgid "Failed to edit position, no position id specified"
+msgstr "編輯位置失敗，沒有指定位置 ID"
+
+#: activities/edit_activity_recurrence.php:78
+#: activities/new_activity_participant.php:46
+msgid "Failed to find activity"
+msgstr "搜尋事項失敗"
+
+#: admin/import/import-companies-3.php:537
+#: admin/import/import-companies-3.php:659
+msgid "Failed to get country. Using default country"
+msgstr "獲取國家失敗"
+
+#: companies/one.php:38
+msgid "Failed to provide a company identifier, failing"
+msgstr "無法提供公司 ID，失敗"
+
+#: admin/system-parameters/admin-prefs.php:50 admin/users/user_prefs.php:48
+msgid "Failed to set preference value for preference"
+msgstr "設定偏好設定值失敗"
+
+#: include/utils-companies.php:391 include/utils-companies.php:400
+msgid "Failed to upgrade company entry for unknown company."
+msgstr "失敗，無法升級不明公司條目。"
+
+#: admin/system-parameters/one.php:48 admin/system-parameters/one.php:54
+msgid "Failure to get system parameter "
+msgstr "獲取系統參數失敗"
+
+#: locale/datastrings.php:61
+msgid "Fair"
+msgstr "普通"
+
+#: admin/import/import-companies-2.php:100
+#: admin/import/import-companies-2.php:143
+#: admin/import/import-companies-3.php:141
+#: admin/import/import-companies-3.php:184 companies/edit.php:152
+#: companies/new.php:140 companies/one.php:526 companies/sidebar.php:61
+#: companies/some.php:249 companies/some.php:252 companies/some.php:720
+#: contacts/edit.php:222 contacts/new.php:223 contacts/one.php:330
+#: plugins/phone/companies_one.php:517 plugins/phone/contacts_one.php:379
+msgid "Fax"
+msgstr "傳真"
+
+#: locale/datastrings.php:62
+msgid "Feature Request"
+msgstr "功能要求"
+
+#: locale/datastrings.php:63
+msgid "Feature Request Closed"
+msgstr "功能要求關閉"
+
+#: locale/datastrings.php:64
+msgid "Feature Request In Progress"
+msgstr "功能要求處理中"
+
+#: locale/datastrings.php:65
+msgid "Feature Requests"
+msgstr "功能要求"
+
+#: activities/recurrence_sidebar.php:170 include/utils-recurrence.php:32
+msgid "February"
+msgstr "二月"
+
+#: contacts/edit.php:240 contacts/new.php:246 contacts/one.php:100
+#: plugins/phone/contacts_one.php:90
+msgid "Female"
+msgstr "女性"
+
+#: admin/acl/one_GroupMember.php:82
+msgid "Field"
+msgstr "使用者欄位"
+
+#: admin/import/import-companies.php:85
+msgid "Field Delimiter"
+msgstr "欄位定義符號"
+
+#: admin/import/import-companies.php:81 locale/datastrings.php:66
+msgid "File"
+msgstr "檔案"
+
+#: files/some.php:405
+msgid "File Description"
+msgstr "檔案描述"
+
+#: files/one.php:98
+msgid "File Details"
+msgstr "檔案細節"
+
+#: admin/import/import-companies.php:93
+msgid "File Format"
+msgstr "檔案格式"
+
+#: files/some.php:403 files/some.php:483
+msgid "File ID"
+msgstr "檔案 ID"
+
+#: files/edit-form.php:35 files/one.php:113
+msgid "File Information"
+msgstr "檔案資訊"
+
+#: files/some.php:406
+msgid "File Name"
+msgstr "檔案名稱"
+
+#: files/some.php:404
+msgid "File Summary"
+msgstr "檔案摘要"
+
+#: files/new.php:108
+msgid "File added successfully"
+msgstr "檔案已加入"
+
+#: files/edit-2.php:78 files/edit-2.php:109
+msgid "File was updated successfully."
+msgstr "檔案升級成功。"
+
+#: files/one.php:120
+msgid "Filename"
+msgstr "檔案名稱"
+
+#: files/sidebar.php:61 files/some.php:386 include/utils-interface.php:396
+msgid "Files"
+msgstr "檔案"
+
+#: activities/activities-widget.php:80 activities/activities-widget.php:739
+#: activities/activities-widget.php:778
+msgid "Filter Activities"
+msgstr "過濾事項"
+
+#: locale/datastrings.php:67
+msgid "Finance"
+msgstr "金融"
+
+#: campaigns/categories.php:106 cases/categories.php:106
+#: companies/categories.php:110 contacts/categories.php:112
+#: locale/datastrings.php:68 opportunities/categories.php:106
+msgid "Finished"
+msgstr "結束"
+
+#: admin/import/import-companies-2.php:94
+#: admin/import/import-companies-3.php:135 admin/users/one.php:107
+#: admin/users/self.php:72 admin/users/some.php:130 companies/new.php:241
+#: contacts/edit.php:159 contacts/new.php:176 contacts/some.php:278
+msgid "First Names"
+msgstr "名"
+
+#: activities/edit-2.php:551
+msgid "Follow-up"
+msgstr "後續行動"
+
+#: include/utils-misc.php:1969
+msgid "Forked from old workflow"
+msgstr "從舊工作流程分支"
+
+#: include/utils-misc.php:1963
+msgid "Forked workflow process"
+msgstr "分出來的工作流程處理序"
+
+#: reports/company-contacts-printout.php:226
+msgid "Format for Printer"
+msgstr "印表機格式"
+
+#: companies/addresses.php:69
+msgid "Formatted Address"
+msgstr "格式化的地址"
+
+#: admin/relationship-types/some.php:54
+msgid "Formatting"
+msgstr "格式"
+
+#: contacts/one.php:178
+msgid "Former Companies"
+msgstr "前公司"
+
+#: companies/former-names.php:88 companies/one.php:342
+#: plugins/phone/companies_one.php:267
+msgid "Former Name"
+msgstr "曾用名"
+
+#: companies/former-names.php:64 companies/former-names.php:77
+#: companies/former-names.php:84
+msgid "Former Names"
+msgstr "曾用名"
+
+#: activities/recurrence_sidebar.php:134
+msgid "Fri"
+msgstr "週五"
+
+#: activities/recurrence_sidebar.php:156 include/utils-recurrence.php:28
+msgid "Friday"
+msgstr "星期五"
+
+#: email/email-2.php:199 email/one-template.php:73
+#: include/utils-activities.php:640
+msgid "From"
+msgstr "來源於"
+
+#: admin/relationship-types/one.php:69 admin/relationship-types/some.php:82
+msgid "From Text"
+msgstr "來源於文字"
+
+#: admin/relationship-types/one.php:61 admin/relationship-types/some.php:74
+msgid "From What Table"
+msgstr "從哪個表格來"
+
+#: admin/export/export-companies.php:26
+msgid "Full Export"
+msgstr "完整匯出"
+
+#: admin/account-statuses/one.php:61 admin/account-statuses/some.php:69
+#: admin/activity-resolution-types/some.php:80 admin/activity-types/one.php:63
+#: admin/activity-types/some.php:77 admin/campaign-statuses/one.php:59
+#: admin/campaign-statuses/some.php:69 admin/campaign-types/one.php:56
+#: admin/campaign-types/some.php:67 admin/case-priorities/one.php:59
+#: admin/case-priorities/some.php:69 admin/case-statuses/one.php:138
+#: admin/case-statuses/some.php:144 admin/case-types/one.php:58
+#: admin/case-types/some.php:67 admin/categories/one.php:97
+#: admin/categories/some.php:68 admin/company-sources/one.php:61
+#: admin/company-sources/some.php:71 admin/company-types/one.php:55
+#: admin/company-types/some.php:66 admin/crm-statuses/one.php:56
+#: admin/crm-statuses/some.php:95 admin/industries/one.php:55
+#: admin/industries/some.php:66 admin/opportunity-statuses/one.php:138
+#: admin/opportunity-statuses/some.php:147 admin/ratings/one.php:55
+#: admin/ratings/some.php:70 admin/users/some.php:91 admin/users/some.php:103
+msgid "Full Name"
+msgstr "全名"
+
+#: admin/account-statuses/one.php:65 admin/activity-types/one.php:67
+#: admin/campaign-statuses/one.php:63 admin/campaign-types/one.php:60
+#: admin/case-priorities/one.php:63 admin/case-statuses/one.php:142
+#: admin/case-types/one.php:62 admin/categories/one.php:101
+#: admin/company-sources/one.php:65 admin/company-types/one.php:59
+#: admin/crm-statuses/one.php:60 admin/industries/one.php:59
+#: admin/opportunity-statuses/one.php:142 admin/ratings/one.php:59
+msgid "Full Plural"
+msgstr "複數全稱"
+
+#: admin/account-statuses/some.php:73 admin/activity-types/some.php:81
+#: admin/campaign-statuses/some.php:73 admin/campaign-types/some.php:71
+#: admin/case-priorities/some.php:73 admin/case-statuses/some.php:152
+#: admin/case-types/some.php:71 admin/categories/some.php:72
+#: admin/company-sources/some.php:75 admin/company-types/some.php:70
+#: admin/crm-statuses/some.php:99 admin/industries/some.php:70
+#: admin/opportunity-statuses/some.php:151 admin/ratings/some.php:74
+msgid "Full Plural Name"
+msgstr "複數的全名"
+
+#: admin/users/one.php:119 admin/users/self.php:86 admin/users/some.php:150
+msgid "GMT Offset"
+msgstr "時區偏移"
+
+#: contacts/edit.php:235 contacts/new.php:241 contacts/one.php:279
+#: plugins/phone/contacts_one.php:322
+msgid "Gender"
+msgstr "性別"
+
+#: admin/export/export-companies.php:152 reports/activity-summary.php:131
+msgid "Generate a CSV file"
+msgstr "產生一個 CSV 檔案"
+
+#: admin/acl/acl_results.php:146
+msgid "Get list of objects for a user"
+msgstr "獲取一個使用者的物件清單"
+
+#: reports/activitytimes.php:58 reports/audit-items.php:57
+#: reports/companies-list.php:119 reports/completed-items.php:114
+#: reports/index.php:191 reports/open-items.php:98
+#: reports/overdue-items.php:113
+msgid "Go"
+msgstr "執行"
+
+#: locale/datastrings.php:69
+msgid "Good"
+msgstr "好"
+
+#: locale/datastrings.php:70
+msgid "Government"
+msgstr "政府"
+
+#: reports/index.php:36
+msgid "Graphs"
+msgstr "圖表"
+
+#: admin/acl/GroupGroup_list.php:41 admin/acl/GroupMember_list.php:50
+#: admin/acl/GroupUser_list.php:52 admin/users/user_roles_sidebar.php:70
+msgid "Group"
+msgstr "群組"
+
+#: admin/acl/GroupGroup_list.php:61
+msgid "Group Groups"
+msgstr "群組歸組"
+
+#: admin/acl/GroupMember_list.php:56 admin/acl/GroupUser_list.php:55
+msgid "Group ID"
+msgstr "群組 ID"
+
+#: admin/acl/one_GroupMember.php:81
+msgid "Group Member Criteria"
+msgstr "群組成員標準"
+
+#: admin/acl/GroupMember_list.php:54
+msgid "Group Member ID"
+msgstr "群組成員 ID"
+
+#: admin/acl/GroupMember_list.php:68
+msgid "Group Members"
+msgstr "群組成員"
+
+#: admin/acl/one_GroupMember.php:52
+msgid "Group Name"
+msgstr "群組名稱"
+
+#: admin/acl/GroupUser_list.php:76
+msgid "Group Users"
+msgstr "群組使用者"
+
+#: admin/acl/Groups_list.php:58
+msgid "Groups"
+msgstr "群組"
+
+#: contacts/sidebar.php:70 files/sidebar.php:10
+#: include/categories-sidebar.php:10 include/utils-misc.php:28
+#: include/utils-relationships.php:5 notes/sidebar.php:9
+#: relationships/sidebar.php:5
+msgid "Hacking attempt"
+msgstr "駭客嘗試"
+
+#: locale/datastrings.php:71
+msgid "Healthcare"
+msgstr "醫療"
+
+#: locale/datastrings.php:72
+msgid "Help Item"
+msgstr "輔助項"
+
+#: locale/datastrings.php:73
+msgid "Help Items"
+msgstr "輔助項"
+
+#: include/classes/Pager/GUP_Pager.php:147
+#: include/classes/Pager/Pager_Columns.php:207
+msgid "Hide"
+msgstr "隱藏"
+
+#: opportunities/some.php:361
+msgid "Hide Closed"
+msgstr "隱藏完畢"
+
+#: install/data.php:2825
+msgid "Hide Sourceforge Image"
+msgstr "隱藏 Sourceforge 圖像"
+
+#: install/data.php:2828
+msgid "Hides the SourceForge Image which appears at the bottom of every page"
+msgstr "隱藏每頁底部出現的 SourceForge 圖像"
+
+#: locale/datastrings.php:74
+msgid "High"
+msgstr "高"
+
+#: locale/datastrings.php:75
+msgid "Hold"
+msgstr "延期"
+
+#: include/utils-interface.php:389 private/home.php:171
+msgid "Home"
+msgstr "首頁"
+
+#: contacts/edit.php:193 contacts/new.php:301 contacts/one.php:389
+msgid "Home Address"
+msgstr "首頁地址"
+
+#: admin/import/import-companies-2.php:99
+#: admin/import/import-companies-3.php:140 companies/new.php:261
+#: contacts/edit.php:218 contacts/new.php:219 contacts/one.php:321
+#: contacts/sidebar.php:185 contacts/some.php:126
+#: plugins/phone/contacts_one.php:367
+msgid "Home Phone"
+msgstr "住家電話"
+
+#: reports/index.php:79
+msgid "How many cases are in each stage of the case resolution process?"
+msgstr "在每個案例決議程序階段中各有多少個案例?"
+
+#: reports/index.php:47
+msgid "How many companies are in each industry?"
+msgstr "每個行業裡有多少公司？"
+
+#: reports/index.php:51
+msgid "How many of your accounts come from each source?"
+msgstr "從每個來源，您各得到了多少帳號？"
+
+#: reports/index.php:60
+msgid "How many opportunities are in each stage of the sales closing process?"
+msgstr "在每個銷售階段，各有多少個機會？"
+
+#: reports/index.php:68
+msgid "How many opportunities are tied to companies in each industry?"
+msgstr "每個行業裡，有多少機會和該行業的公司繫結了？"
+
+#: reports/index.php:64
+msgid ""
+"How much potential revenue is in each stage of the sales closing process?"
+msgstr "在每個銷售階段，各有多少潛在收益？"
+
+#: reports/index.php:72
+msgid "How much potential revenue is tied to companies in each industry?"
+msgstr "多少潛在收益和各行業的公司相關？"
+
+#: admin/import/import-companies-3.php:444 include/utils-misc.php:654
+msgid "I tried to execute:"
+msgstr "我試著執行了："
+
+#: activities/one.php:197 admin/acl/ControlledObjectRelationship_list.php:47
+#: admin/acl/ControlledObject_list.php:39 admin/acl/GroupGroup_list.php:40
+#: admin/acl/Groups_list.php:45 admin/acl/Permission_list.php:47
+#: admin/acl/Role_list.php:39 admin/acl/data_source_list.php:40
+#: files/one.php:116 files/sidebar.php:94 files/some.php:345
+msgid "ID"
+msgstr "ID"
+
+#: plugins/idphoto/setup.php:28 plugins/idphoto/setup.php:33
+msgid "ID Photo"
+msgstr "ID 照片"
+
+#: calendar/Calendar_View.php:148
+msgid "Iconic View "
+msgstr "圖示檢視"
+
+#: admin/acl/ControlledObject_list.php:42
+msgid "Identifying Field"
+msgstr "辨認欄位中"
+
+#: admin/import/import-companies-2.php:334
+#: admin/import/import-companies.php:28 admin/import/import-companies.php:149
+msgid "Import"
+msgstr "匯入"
+
+#: admin/import/import-companies.php:78
+msgid "Import Companies"
+msgstr "匯入公司"
+
+#: admin/index.php:80
+msgid "Import Companies/Contacts"
+msgstr "匯入公司/連絡人"
+
+#: admin/import/import-companies-3.php:95
+msgid "Import Data"
+msgstr "匯入資料"
+
+#: admin/index.php:76
+msgid "Import/Export"
+msgstr "匯入/匯出"
+
+#: admin/import/import-companies-3.php:105
+msgid "Imported Data"
+msgstr "匯入資料"
+
+#: locale/datastrings.php:76
+msgid "In Progress"
+msgstr "處理中"
+
+#: reports/activity-summary.php:116
+msgid "Include company profile"
+msgstr "包含公司簡介"
+
+#: reports/activity-summary.php:120
+msgid "Include number of employees"
+msgstr "包含員工人數"
+
+#: reports/activity-summary.php:124
+msgid "Include revenue"
+msgstr "包含營收"
+
+#: admin/index.php:214 admin/industries/some.php:43
+msgid "Industries"
+msgstr "行業"
+
+#: admin/import/import-companies.php:137 companies/edit.php:140
+#: companies/new.php:124 companies/one.php:496 companies/some-advanced.php:338
+#: companies/some.php:552 companies/some.php:692 companies/some.php:899
+#: plugins/phone/companies_one.php:487
+msgid "Industry"
+msgstr "行業"
+
+#: admin/industries/one.php:36
+msgid "Industry Details"
+msgstr "行業詳情"
+
+#: admin/acl/RolePermission_list.php:75
+msgid "Inheritable"
+msgstr "可繼承"
+
+#: admin/acl/one_RolePermission.php:67
+msgid "Inheritable Flag"
+msgstr "可繼承標記"
+
+#: activities/one.php:590
+msgid "Insert Log"
+msgstr "插入日誌"
+
+#: install/data.php:2893
+msgid "Insert method used when no Company is defined for a new Contact"
+msgstr "沒有給新連絡人定義公司時所使用的插入方法"
+
+#: private/home.php:49
+msgid ""
+"Installation of database tables must be completed before using XRMS.  Please "
+"read the README and then run install/install.php."
+msgstr ""
+"在使用 XRMS 之前，必須完成資料庫表格安裝。請閱讀 README 檔案然後執行 install/"
+"install.php"
+
+#: locale/datastrings.php:77
+msgid "Insurance"
+msgstr "保險"
+
+#: admin/import/import-companies-2.php:110
+#: admin/import/import-companies-3.php:151 contacts/edit.php:256
+#: contacts/new.php:236 contacts/new.php:262 contacts/one.php:338
+#: plugins/phone/contacts_one.php:385
+msgid "Interests"
+msgstr "興趣愛好"
+
+#: activities/recurrence_sidebar.php:170 include/utils-recurrence.php:32
+msgid "January"
+msgstr "一月"
+
+#: activities/recurrence_sidebar.php:170 include/utils-recurrence.php:32
+msgid "July"
+msgstr "七月"
+
+#: activities/recurrence_sidebar.php:170 include/utils-recurrence.php:32
+msgid "June"
+msgstr "六月"
+
+#: plugins/info/edit-definitions.php:255
+msgid "Label"
+msgstr "標籤"
+
+#: admin/users/some.php:146 install/data.php:2814
+msgid "Language"
+msgstr "語言"
+
+#: plugins/cti/cdr.php:272
+msgid "Last App"
+msgstr "最後的應用程式"
+
+#: plugins/cti/cdr.php:273
+msgid "Last Data"
+msgstr "最後的資料"
+
+#: campaigns/one.php:152 cases/one.php:199 companies/one.php:655
+#: contacts/one.php:430 opportunities/one.php:272
+#: plugins/phone/companies_one.php:541 plugins/phone/contacts_one.php:480
+msgid "Last Modified"
+msgstr "最後修改"
+
+#: activities/one.php:621
+msgid "Last Modified By"
+msgstr "最後修改人是"
+
+#: admin/import/import-companies-2.php:95
+#: admin/import/import-companies-3.php:136 admin/users/one.php:103
+#: admin/users/self.php:68 admin/users/some.php:126 companies/new.php:245
+#: contacts/edit.php:163 contacts/new.php:180 contacts/some.php:277
+msgid "Last Name"
+msgstr "姓"
+
+#: activities/one.php:201
+msgid "Last modified by"
+msgstr "最後修改人是"
+
+#: locale/datastrings.php:78
+msgid "Lead"
+msgstr "提示"
+
+#: locale/datastrings.php:79
+msgid "Leads"
+msgstr "提示"
+
+#: locale/datastrings.php:80
+msgid "Legal"
+msgstr "法律事務"
+
+#: admin/import/import-companies-2.php:145
+#: admin/import/import-companies-3.php:186 companies/edit.php:120
+#: companies/new.php:108 companies/one.php:483 companies/some.php:218
+#: companies/some.php:654 plugins/phone/companies_one.php:473
+msgid "Legal Name"
+msgstr "法定正式名稱"
+
+#: calendar/Calendar_View.php:514
+msgid "Legend"
+msgstr "圖例"
+
+#: reports/audit-items.php:90
+msgid "Line"
+msgstr "線"
+
+#: admin/import/import-companies-2.php:119
+#: admin/import/import-companies-2.php:130
+#: admin/import/import-companies-3.php:160
+#: admin/import/import-companies-3.php:171 companies/edit-address.php:79
+#: companies/new.php:204 companies/one-address.php:77 companies/some.php:353
+#: companies/some.php:806 contacts/edit-address.php:197 contacts/new.php:307
+msgid "Line 1"
+msgstr "第 1 列"
+
+#: admin/import/import-companies-2.php:120
+#: admin/import/import-companies-2.php:131
+#: admin/import/import-companies-3.php:161
+#: admin/import/import-companies-3.php:172 companies/edit-address.php:83
+#: companies/new.php:208 companies/one-address.php:78 companies/some.php:360
+#: companies/some.php:810 contacts/edit-address.php:201 contacts/new.php:311
+msgid "Line 2"
+msgstr "第 2 列"
+
+#: admin/case-statuses/one.php:177
+msgid "Link Workflow Activity To Case Status"
+msgstr "把工作流程事項連到案例狀態"
+
+#: admin/opportunity-statuses/one.php:178
+msgid "Link Workflow Activity To Opportunity Status"
+msgstr "把工作流程事項連到機會狀態"
+
+#: relationships/sidebar.php:107
+msgid "Linked Relationships"
+msgstr "繫結的關係"
+
+#: admin/activity-templates/some.php:63
+msgid "Linked Table"
+msgstr "繫結的表格"
+
+#: reports/index.php:131
+msgid ""
+"List Activiites by Start, End, and User (also shows Duration, Company and "
+"Contact)"
+msgstr "按照開始、結束和使用者列出事項 (同時顯示時期、公司和連絡人)"
+
+#: reports/index.php:179
+msgid "List Audit Items by Date and User"
+msgstr "按照日期和使用者排列監查項目"
+
+#: reports/index.php:155
+msgid "List Completed Items by Date Range, User and Type"
+msgstr "按照日期範圍、使用者和類型列出完成的項目"
+
+#: reports/index.php:147
+msgid "List Open Items by User and Type"
+msgstr "按照使用者和類型列出待處理的項目"
+
+#: reports/index.php:139
+msgid "List Overdue Items by User and Type"
+msgstr "按照使用者和類型列出逾期的項目"
+
+#: calendar/Calendar_View.php:143
+msgid "List View "
+msgstr "清單檢視"
+
+#: reports/index.php:101
+msgid "List of companies, addresses and phone numbers"
+msgstr "公司、地址、和電話號碼清單清單"
+
+#: include/classes/Pager/Pager_Columns.php:206
+msgid "Load"
+msgstr "載入"
+
+#: activities/one.php:606
+msgid "Local Time"
+msgstr "本地時間"
+
+#: activities/some.php:338
+msgid "Local Time Between"
+msgstr "本地時間介於"
+
+#: activities/one.php:597
+msgid "Location"
+msgstr "位置"
+
+#: include/utils-interface.php:347
+msgid "Logged in as"
+msgstr "登入為"
+
+#: include/utils-interface.php:348
+msgid "Logout"
+msgstr "登出"
+
+#: admin/case-statuses/one.php:150 admin/opportunity-statuses/one.php:150
+msgid "Long Description"
+msgstr "長段描述"
+
+#: locale/datastrings.php:81
+msgid "Low"
+msgstr "慢"
+
+#: plugins/cti/setup.php:109
+msgid "MAC Address"
+msgstr "MAC 地址"
+
+#: plugins/mrtg/setup.php:36
+msgid "MRTG"
+msgstr "MRTG"
+
+#: admin/import/import-companies-2.php:109
+#: admin/import/import-companies-3.php:150
+msgid "MSN"
+msgstr "MSN"
+
+#: plugins/phone/contacts_one.php:399
+msgid "MSN IM"
+msgstr "MSN 即時通訊"
+
+#: locale/datastrings.php:82
+msgid "Magazine"
+msgstr "雜誌"
+
+#: locale/datastrings.php:83
+msgid "Mail"
+msgstr "郵件"
+
+#: activities/activities-widget.php:488 activities/participant_sidebar.php:84
+#: campaigns/some.php:306 cases/some.php:350 companies/one.php:323
+#: companies/some-advanced.php:365 companies/some.php:931
+#: contacts/edit.php:290 contacts/some.php:398 opportunities/some.php:464
+#: plugins/phone/companies_one.php:629 relationships/sidebar.php:336
+#: relationships/sidebar.php:338
+msgid "Mail Merge"
+msgstr "合併郵件"
+
+#: include/utils-addresses.php:157 include/utils-addresses.php:166
+msgid "Main"
+msgstr "主要"
+
+#: contacts/edit.php:239 contacts/new.php:245 contacts/one.php:103
+#: plugins/phone/contacts_one.php:93
+msgid "Male"
+msgstr "男性"
+
+#: admin/index.php:103 include/categories-sidebar.php:61
+#: plugins/phone/companies_one.php:722 plugins/phone/contacts_one.php:546
+msgid "Manage"
+msgstr "管理"
+
+#: admin/account-statuses/some.php:36
+msgid "Manage Account Statuses"
+msgstr "管理帳號狀態"
+
+#: admin/activity-resolution-types/some.php:43
+msgid "Manage Activity Resolution Types"
+msgstr "管理事項解決方案類型"
+
+#: admin/activity-templates/some.php:48
+msgid "Manage Activity Templates"
+msgstr "事項範本管理"
+
+#: admin/activity-types/some.php:43
+msgid "Manage Activity Types"
+msgstr "事項類型管理"
+
+#: admin/crm-statuses/some.php:61
+msgid "Manage CRM Statuses"
+msgstr "客戶關係狀態管理"
+
+#: admin/campaign-statuses/some.php:36
+msgid "Manage Campaign Statuses"
+msgstr "行銷狀態管理"
+
+#: admin/campaign-types/some.php:34
+msgid "Manage Campaign Types"
+msgstr "行銷類型管理"
+
+#: admin/case-priorities/some.php:36
+msgid "Manage Case Priorities"
+msgstr "案例優先等級管理"
+
+#: admin/case-statuses/some.php:84
+msgid "Manage Case Statuses"
+msgstr "案例狀態管理"
+
+#: admin/case-types/some.php:34
+msgid "Manage Case Types"
+msgstr "案例類型管理"
+
+#: admin/categories/some.php:35 campaigns/categories.php:85
+#: campaigns/categories.php:95 cases/categories.php:85 cases/categories.php:95
+#: companies/categories.php:89 companies/categories.php:99
+#: contacts/categories.php:91 contacts/categories.php:101
+#: opportunities/categories.php:85 opportunities/categories.php:95
+msgid "Manage Categories"
+msgstr "類別管理"
+
+#: admin/company-sources/some.php:38
+msgid "Manage Company Sources"
+msgstr "公司來源管理"
+
+#: admin/company-types/some.php:33
+msgid "Manage Company Types"
+msgstr "公司類型管理"
+
+#: admin/acl/ControlledObjectRelationship_list.php:30
+#: admin/acl/xrms_acl_nav.php:8
+msgid "Manage Controlled Object Relationships"
+msgstr "管理可控物件關係"
+
+#: admin/acl/ControlledObject_list.php:31 admin/acl/xrms_acl_nav.php:7
+msgid "Manage Controlled Objects"
+msgstr "管理可控制的物件"
+
+#: admin/acl/data_source_list.php:31 admin/acl/xrms_acl_nav.php:16
+msgid "Manage Data Sources"
+msgstr "管理資料來源"
+
+#: admin/acl/GroupGroup_list.php:31 admin/acl/xrms_acl_nav.php:11
+msgid "Manage Group Groups"
+msgstr "群組管理"
+
+#: admin/acl/GroupMember_list.php:32 admin/acl/xrms_acl_nav.php:12
+msgid "Manage Group Members"
+msgstr "管理群組成員"
+
+#: admin/acl/GroupUser_list.php:31 admin/acl/xrms_acl_nav.php:10
+msgid "Manage Group Users"
+msgstr "管理群組使用者"
+
+#: admin/acl/Groups_list.php:29 admin/acl/xrms_acl_nav.php:9
+msgid "Manage Groups"
+msgstr "管理群組"
+
+#: admin/industries/some.php:33
+msgid "Manage Industries"
+msgstr "行業管理"
+
+#: admin/opportunity-statuses/some.php:92
+msgid "Manage Opportunity Statuses"
+msgstr "管理機會狀態"
+
+#: admin/acl/Permission_list.php:30
+msgid "Manage Permission"
+msgstr "權限管理"
+
+#: admin/acl/xrms_acl_nav.php:13
+msgid "Manage Permissions"
+msgstr "權限管理"
+
+#: admin/acl/role_permission_grid.php:37
+msgid "Manage Permissions for Role"
+msgstr "按角色管理權限"
+
+#: admin/ratings/some.php:37
+msgid "Manage Ratings"
+msgstr "評價管理"
+
+#: admin/relationship-types/some.php:38
+msgid "Manage Relationship Types"
+msgstr "關係類型管理"
+
+#: admin/acl/RolePermission_list.php:30 admin/acl/xrms_acl_nav.php:14
+msgid "Manage Role Permissions"
+msgstr "角色權限管理"
+
+#: admin/acl/xrms_acl_nav.php:15
+msgid "Manage Role Permissions in Grid"
+msgstr "以網格方式管理角色權限"
+
+#: admin/acl/Role_list.php:31 admin/acl/xrms_acl_nav.php:6
+msgid "Manage Roles"
+msgstr "角色管理"
+
+#: admin/salutations/some.php:36
+msgid "Manage Salutations"
+msgstr "稱呼管理"
+
+#: admin/system-parameters/some.php:36
+msgid "Manage System Parameters"
+msgstr "系統參數管理"
+
+#: admin/users/some.php:78
+msgid "Manage Users"
+msgstr "使用者管理"
+
+#: admin/acl/index.php:59
+msgid "Manage XRMS ACL"
+msgstr "管理 XRMS ACL 存取控制清單 "
+
+#: locale/datastrings.php:84
+msgid "Managed By"
+msgstr "管理人是"
+
+#: locale/datastrings.php:85
+msgid "Manages"
+msgstr "管理"
+
+#: locale/datastrings.php:86
+msgid "Manufactures for"
+msgstr "為…製造"
+
+#: locale/datastrings.php:87
+msgid "Manufacturing"
+msgstr "製造業"
+
+#: activities/recurrence_sidebar.php:170 include/utils-recurrence.php:32
+msgid "March"
+msgstr "三月"
+
+#: activities/recurrence_sidebar.php:170 include/utils-recurrence.php:32
+msgid "May"
+msgstr "五月"
+
+#: reports/index.php:184
+msgid "Measure performance of users over a selectable timeframe"
+msgstr "根據選取的時間段評價使用者的表現"
+
+#: campaigns/some.php:236
+msgid "Media"
+msgstr "媒介"
+
+#: locale/datastrings.php:88
+msgid "Medium"
+msgstr "中等"
+
+#: email/email-4.php:254 email/email-4.php:264
+msgid "Messages Sent"
+msgstr "已傳送訊息"
+
+#: activities/recurrence_sidebar.php:134
+msgid "Mon"
+msgstr "週一"
+
+#: activities/recurrence_sidebar.php:156 include/utils-recurrence.php:28
+msgid "Monday"
+msgstr "星期一"
+
+#: plugins/dunfinder/dunfinder.php:60
+msgid "Monitor"
+msgstr "監視"
+
+#: calendar/Calendar_View.php:145
+msgid "Month View "
+msgstr "月檢視"
+
+#: activities/recurrence_sidebar.php:229
+msgid "Monthly"
+msgstr "每月"
+
+#: relationships/new-relationship-2.php:135
+msgid "More Info"
+msgstr "更多資訊"
+
+#: admin/activity-resolution-types/some.php:57
+#: admin/activity-types/some.php:57 admin/case-statuses/some.php:115
+#: admin/crm-statuses/some.php:75 admin/opportunity-statuses/some.php:125
+msgid "Move"
+msgstr "移動"
+
+#: plugins/mrtg/mrtg.php:19
+msgid "Multi Router Traffic Grapher"
+msgstr "MRTG 多路徑流量圖示"
+
+#: activities/activities-pager-functions.php:56 locale/datastrings.php:89
+#: plugins/phone/contacts_one.php:160
+msgid "N/A"
+msgstr "不適用"
+
+#: reports/completed-items.php:224
+msgid "NO COMPLETED ACTIVITIES for"
+msgstr "沒有已完成的事項"
+
+#: reports/completed-items.php:266
+msgid "NO COMPLETED CAMPAIGNS for"
+msgstr "沒有已完成的行銷"
+
+#: reports/completed-items.php:361
+msgid "NO COMPLETED CASES for"
+msgstr "沒有已完成的案例"
+
+#: reports/completed-items.php:315
+msgid "NO COMPLETED OPPORTUNITIES for"
+msgstr "沒有已完成的機會"
+
+#: reports/open-items.php:212
+msgid "NO OPEN ACTIVITIES for"
+msgstr "沒有待處理的事項"
+
+#: reports/open-items.php:254
+msgid "NO OPEN CAMPAIGNS for"
+msgstr "沒有待處理的行銷"
+
+#: reports/open-items.php:351
+msgid "NO OPEN CASES for"
+msgstr "沒有待處理的案例"
+
+#: reports/open-items.php:303
+msgid "NO OPEN OPPORTUNITIES for"
+msgstr "沒有待處理的機會"
+
+#: reports/overdue-items.php:228
+msgid "NO OVERDUE ACTIVITIES for"
+msgstr "沒有逾期的事項"
+
+#: reports/overdue-items.php:270
+msgid "NO OVERDUE CAMPAIGNS for"
+msgstr "沒有逾期的行銷"
+
+#: reports/overdue-items.php:367
+msgid "NO OVERDUE CASES for"
+msgstr "沒有逾期的案例"
+
+#: reports/overdue-items.php:319
+msgid "NO OVERDUE OPPORTUNITIES for"
+msgstr "沒有逾期的機會"
+
+#: activities/participant_sidebar.php:60 admin/acl/Groups_list.php:44
+#: admin/acl/Permission_list.php:45 admin/acl/Role_list.php:38
+#: admin/account-statuses/some.php:49
+#: admin/activity-resolution-types/some.php:56
+#: admin/activity-templates/some.php:61 admin/activity-types/some.php:56
+#: admin/campaign-statuses/some.php:49 admin/campaign-types/some.php:47
+#: admin/case-priorities/some.php:49 admin/case-statuses/some.php:113
+#: admin/case-types/some.php:47 admin/categories/some.php:48
+#: admin/company-sources/some.php:51 admin/company-types/some.php:46
+#: admin/crm-statuses/some.php:74 admin/industries/some.php:46
+#: admin/opportunity-statuses/some.php:123 admin/ratings/some.php:50
+#: admin/relationship-types/some.php:51 admin/salutations/some.php:49
+#: companies/divisions.php:106 companies/one.php:279 contacts/one.php:275
+#: contacts/some.php:370 email/templates.php:65
+#: opportunities/opportunity-view.php:53
+#: plugins/info/edit-definitions-2.php:81 plugins/phone/companies_one.php:644
+#: plugins/phone/contacts_one.php:316 relationships/edit.php:58
+#: reports/audit-items.php:95
+msgid "Name"
+msgstr "名稱"
+
+#: install/data.php:2848
+msgid "Name Contains"
+msgstr "名稱包括"
+
+#: install/data.php:2850
+msgid "Name Ends With"
+msgstr "名稱結尾是"
+
+#: install/data.php:2851
+msgid "Name Exactly Matches"
+msgstr "名稱完全匹配"
+
+#: install/data.php:2849
+msgid "Name Starts With"
+msgstr "名稱開始為"
+
+#: contacts/transfer.php:48
+msgid "Name or ID"
+msgstr "名稱或 ID "
+
+#: locale/datastrings.php:90
+msgid "Negotiation"
+msgstr "談判"
+
+#: admin/country-address-format/edit.php:68 locale/datastrings.php:91
+#: notes/sidebar.php:200 plugins/info/one.php:203 plugins/info/sidebar.php:187
+#: plugins/phone/companies_one.php:651
+msgid "New"
+msgstr "新增"
+
+#: activities/activities-widget.php:656
+msgid "New Activity"
+msgstr "新增事項"
+
+#: companies/addresses.php:202
+msgid "New Address"
+msgstr "新增地址"
+
+#: locale/datastrings.php:92
+msgid "New Bug Report"
+msgstr "新增錯誤報告"
+
+#: companies/one-address.php:38
+msgid "New Business Address"
+msgstr "新增商務地址"
+
+#: campaigns/new.php:47
+msgid "New Campaign"
+msgstr "新增行銷事項"
+
+#: cases/new.php:95
+msgid "New Case"
+msgstr "新增案例"
+
+#: companies/new.php:88 companies/some-advanced.php:385 companies/some.php:955
+#: contacts/new_contact_company_select.php:53
+#: contacts/new_contact_company_select.php:79
+msgid "New Company"
+msgstr "新增公司"
+
+#: install/data.php:2895
+msgid "New Company uses Contact Name"
+msgstr "新公司使用連絡人名稱"
+
+#: contacts/some.php:427
+msgid "New Contact"
+msgstr "新增連絡人"
+
+#: contacts/new.php:157
+msgid "New Contact for"
+msgstr "新增連絡人於"
+
+#: companies/divisions.php:76
+msgid "New Division"
+msgstr "新增部門"
+
+#: locale/datastrings.php:93
+msgid "New Feature Request"
+msgstr "新增功能要求"
+
+#: companies/one-address.php:53
+msgid "New Home Address"
+msgstr "新增家庭地址"
+
+#: opportunities/new.php:87
+msgid "New Opportunity"
+msgstr "新增機會"
+
+#: admin/users/change-owner.php:50
+msgid "New Owner"
+msgstr "新增擁有人"
+
+#: admin/users/change-password.php:45
+msgid "New Password"
+msgstr "新增密碼"
+
+#: relationships/sidebar.php:330
+msgid "New Relationship"
+msgstr "新增關係"
+
+#: include/utils-companies.php:391
+msgid "New contacts with no company will be attach to Company:"
+msgstr "沒有公司的新連絡人會被加入此公司："
+
+#: include/utils-misc.php:1953
+msgid "New workflow process"
+msgstr "新增工作流程程序"
+
+#: plugins/phone/companies_one.php:630
+msgid "News"
+msgstr "新聞"
+
+#: admin/acl/RolePermission_list.php:35 admin/acl/one_RolePermission.php:66
+msgid "No"
+msgstr "不"
+
+#: plugins/phone/companies_one.php:415
+msgid "No Activities"
+msgstr "無事項"
+
+#: reports/audit-items.php:168
+msgid "No Activity."
+msgstr "無事項"
+
+#: include/utils-interface.php:44
+msgid "No Case To Delete."
+msgstr "沒有可刪除的案例"
+
+#: contacts/sidebar.php:202
+msgid "No Contact Selected."
+msgstr "沒有選擇到連絡人"
+
+#: plugins/phone/companies_one.php:419
+msgid "No Contacts"
+msgstr "無連絡人"
+
+#: admin/acl/one_GroupMember.php:95
+msgid "No Criteria Defined"
+msgstr "沒有定義規則"
+
+#: include/utils-files.php:143
+msgid "No File Upload information Given"
+msgstr "沒有檔案上傳的資訊"
+
+#: activities/participant_sidebar.php:57
+msgid "No Participants"
+msgstr "沒有參與者"
+
+#: activities/some.php:413 campaigns/some.php:256 cases/some.php:281
+#: companies/some.php:864 contacts/some.php:326 files/some.php:444
+#: opportunities/some.php:381
+msgid "No Saved Searches"
+msgstr "沒有已儲存的搜尋"
+
+#: plugins/phone/companies_one.php:431
+msgid "No associated categories"
+msgstr "沒有關聯的類別"
+
+#: include/strings.php:33
+msgid "No attached companies"
+msgstr "沒有額外公司"
+
+#: include/strings.php:32
+msgid "No attached contacts"
+msgstr "沒有額外連絡人"
+
+#: notes/sidebar.php:170
+msgid "No attached notes"
+msgstr "沒有額外備註"
+
+#: include/categories-sidebar.php:53 plugins/phone/contacts_one.php:279
+msgid "No categories"
+msgstr "沒有類別"
+
+#: contacts/transfer-2.php:70
+msgid "No companies found"
+msgstr "沒有找到公司"
+
+#: email/email.php:152 email/index.php:55 email/templates.php:49
+msgid "No e-mail templates"
+msgstr "沒有 e-mail 範本"
+
+#: admin/case-statuses/one.php:205 admin/opportunity-statuses/one.php:206
+msgid "No linked activities"
+msgstr "沒有相關的事項"
+
+#: include/classes/Pager/Pager_Renderer.php:192
+msgid "No matches"
+msgstr "沒有符合的結果"
+
+#: include/classes/Pager/Pager_Renderer_Table.php:136
+msgid "No news items found."
+msgstr "沒有找到新聞條目。"
+
+#: private/home.php:168
+msgid "No open activities"
+msgstr "無進行的事項"
+
+#: private/home.php:163
+msgid "No open files"
+msgstr "無開啟檔案"
+
+#: campaigns/some.php:170
+msgid "No recently viewed campaigns"
+msgstr "沒有最近檢視過的行銷"
+
+#: cases/some.php:185
+msgid "No recently viewed cases"
+msgstr "沒有最近檢視過的案例"
+
+#: companies/some-advanced.php:309 companies/some.php:434
+msgid "No recently viewed companies"
+msgstr "沒有最近檢視過的公司"
+
+#: contacts/some.php:210 plugins/phone/index.php:232
+msgid "No recently viewed contacts"
+msgstr "沒有最近檢視過的連絡人"
+
+#: files/some.php:316
+msgid "No recently viewed file"
+msgstr "沒有最近檢視過的檔案"
+
+#: opportunities/some.php:274
+msgid "No recently viewed opportunities"
+msgstr "沒有最近檢視過的機會"
+
+#: admin/activity-types/one_activity_participant_position.php:35
+msgid "No role specified"
+msgstr "沒有指定的角色"
+
+#: contacts/new_contact_company_select.php:59
+msgid "No search results, please try a less restrictive search"
+msgstr "沒有搜尋到結果，請試試看較少限制條件的搜尋"
+
+#: admin/case-statuses/some.php:78
+msgid "No statuses defined for specified case type"
+msgstr "對於指定的案例，沒有定義過狀態"
+
+#: admin/opportunity-statuses/some.php:84
+msgid "No statuses defined for specified opportunity type"
+msgstr "對於指定的機會類型，沒有定義過狀態"
+
+#: include/utils-users.php:28
+msgid "No username specified"
+msgstr "沒有制定使用者名稱"
+
+#: admin/import/import-companies-2.php:154
+#: admin/import/import-companies-3.php:195
+msgid "No. Employees"
+msgstr "員工編號"
+
+#: activities/some.php:331
+msgid "Non-Completed"
+msgstr "尚未完成"
+
+#: locale/datastrings.php:94
+msgid "Non-Profit"
+msgstr "沒有盈利"
+
+#: companies/one-address.php:85
+msgid "Non-Standard Address"
+msgstr "非標準地址"
+
+#: calendar/Calendar_View.php:150
+msgid "Normal View "
+msgstr "普通檢視"
+
+#: admin/categories/one.php:142 campaigns/categories.php:99
+#: cases/categories.php:99 companies/categories.php:103
+#: contacts/categories.php:105 opportunities/categories.php:99
+msgid "Not Associated With"
+msgstr "與…不相關"
+
+#: plugins/cti/screen_pop_redirect.php:47
+#: plugins/cti/screen_pop_redirect.php:52
+msgid "Not in Database"
+msgstr "不在資料庫中"
+
+#: notes/edit.php:42 notes/new.php:43
+msgid "Note Body"
+msgstr "備註內容"
+
+#: admin/account-statuses/one.php:89 admin/activity-templates/edit.php:147
+#: admin/activity-types/one.php:99 admin/campaign-statuses/one.php:95
+#: admin/campaign-types/one.php:82 admin/case-priorities/one.php:89
+#: admin/case-statuses/one.php:228 admin/case-types/one.php:88
+#: admin/categories/one.php:123 admin/company-sources/one.php:91
+#: admin/company-types/one.php:81 admin/crm-statuses/one.php:82
+#: admin/industries/one.php:81 admin/opportunity-statuses/one.php:230
+#: admin/ratings/one.php:81 admin/relationship-types/one.php:100
+#: admin/salutations/one.php:79 admin/users/one.php:146
+msgid "Note: This action CANNOT be undone!"
+msgstr "注意：此動作 [無法] 撤銷 ！"
+
+#: notes/sidebar.php:17 reports/companies-list.php:182
+msgid "Notes"
+msgstr "備註"
+
+#: activities/recurrence_sidebar.php:170 include/utils-recurrence.php:32
+msgid "November"
+msgstr "十一月"
+
+#: reports/open-items.php:176
+msgid "OPEN ACTIVITIES"
+msgstr "待處理事項"
+
+#: reports/open-items.php:225
+msgid "OPEN CAMPAIGNS for"
+msgstr "對於…待處理行銷"
+
+#: reports/open-items.php:318
+msgid "OPEN CASES for"
+msgstr "對於…待處理案例"
+
+#: admin/country-address-format/edit.php:64 contacts/edit.php:186
+#: contacts/edit.php:199
+msgid "OR"
+msgstr "或"
+
+#: reports/overdue-items.php:191
+msgid "OVERDUE ACTIVITIES for"
+msgstr "對於…逾期事項"
+
+#: reports/overdue-email.php:66
+msgid "OVERDUE ACTIVITY for"
+msgstr "對於…逾期事項"
+
+#: reports/overdue-items.php:242
+msgid "OVERDUE CAMPAIGNS for"
+msgstr "對於…逾期行銷"
+
+#: reports/overdue-items.php:335
+msgid "OVERDUE CASES for"
+msgstr "對於…逾期案例"
+
+#: reports/overdue-items.php:287
+msgid "OVERDUE OPPORTUNITIES for"
+msgstr "對於…逾期機會"
+
+#: admin/acl/GroupMember_list.php:51 admin/acl/one_GroupMember.php:52
+msgid "Object ID"
+msgstr "物件 ID"
+
+#: admin/acl/ControlledObject_list.php:40
+msgid "Object Name"
+msgstr "物件名稱"
+
+#: admin/acl/one_ControlledObjectRelationship.php:49
+msgid "Object/Child Object combination fails recursion check."
+msgstr "物件/子物件 組合遞迴檢查失敗"
+
+#: locale/datastrings.php:95
+msgid "Obsolete/Out of Date"
+msgstr "廢棄/過期"
+
+#: activities/recurrence_sidebar.php:170 include/utils-recurrence.php:32
+msgid "October"
+msgstr "十月"
+
+#: activities/activities-widget.php:759 activities/some.php:320
+#: opportunities/some.php:369 plugins/phone/contacts_one.php:514
+msgid "On"
+msgstr "在"
+
+#: files/some.php:415
+msgid "On What"
+msgstr "基於姓名"
+
+#: files/some.php:416
+msgid "On what Name"
+msgstr "基於姓名"
+
+#: admin/users/self.php:48
+msgid "One User"
+msgstr "一個使用者"
+
+#: reports/activity-summary.php:112 reports/activitytimes.php:57
+msgid "Only show completed activities"
+msgstr "僅顯示完成的事項"
+
+#: activities/activities-pager-functions.php:24
+#: admin/campaign-statuses/one.php:74 admin/campaign-statuses/some.php:85
+#: admin/case-statuses/one.php:157 admin/opportunity-statuses/one.php:157
+#: admin/opportunity-statuses/some.php:166 locale/datastrings.php:96
+msgid "Open"
+msgstr "待處理"
+
+#: activities/some.php:249
+msgid "Open Activities"
+msgstr "待處理事項"
+
+#: cases/sidebar.php:32
+msgid "Open Cases"
+msgstr "待處理案例"
+
+#: reports/index.php:144 reports/open-items.php:32
+msgid "Open Items"
+msgstr "待處理項目"
+
+#: admin/campaign-statuses/one.php:71 admin/campaign-statuses/some.php:82
+#: admin/case-statuses/one.php:154 admin/opportunity-statuses/one.php:154
+#: admin/opportunity-statuses/some.php:163
+msgid "Open Status"
+msgstr "待處理狀態"
+
+#: admin/acl/one_GroupMember.php:82
+msgid "Operator"
+msgstr "操作者"
+
+#: activities/activity-reconnect.php:32 admin/activity-templates/edit.php:57
+#: files/some.php:428 include/utils-interface.php:394
+#: opportunities/sidebar.php:26 opportunities/some.php:312
+#: reports/completed-items.php:104 reports/open-items.php:88
+#: reports/opportunities-quantity-by-opportunity-status.php:160
+#: reports/opportunities-size-by-opportunity-status.php:172
+#: reports/overdue-items.php:102
+msgid "Opportunities"
+msgstr "機會"
+
+#: reports/opportunities-size-by-industry.php:25
+#: reports/opportunities-size-by-industry.php:40
+msgid "Opportunities (Size) by Industry"
+msgstr "機會(大小)依行業分"
+
+#: reports/opportunities-size-by-opportunity-status.php:41
+msgid "Opportunities (Size) by Status"
+msgstr "機會(大小)依狀態"
+
+#: reports/opportunities-by-industry.php:59
+#: reports/opportunities-by-industry.php:71
+#: reports/opportunities-quantity-by-industry.php:24
+#: reports/opportunities-quantity-by-industry.php:37
+msgid "Opportunities by Industry"
+msgstr "機會依行業分"
+
+#: reports/opportunities-by-opportunity-status.php:58
+#: reports/opportunities-by-opportunity-status.php:70
+#: reports/opportunities-quantity-by-opportunity-status.php:41
+#: reports/opportunities-quantity-by-opportunity-status.php:53
+#: reports/opportunities-size-by-opportunity-status.php:53
+msgid "Opportunities by Status"
+msgstr "機會依狀態分"
+
+#: files/some.php:351 locale/datastrings.php:97 opportunities/edit.php:142
+#: opportunities/sidebar.php:86 opportunities/some.php:427
+#: opportunities/some.php:484 reports/completed-items.php:289
+#: reports/index.php:54 reports/overdue-items.php:295
+msgid "Opportunity"
+msgstr "機會"
+
+#: include/utils-interface.php:64
+msgid "Opportunity Added."
+msgstr "機會已加入。"
+
+#: include/utils-interface.php:66
+msgid "Opportunity Deleted."
+msgstr "機會已刪除。"
+
+#: opportunities/edit.php:174 opportunities/new.php:113
+#: opportunities/one.php:195 opportunities/one.php:215
+msgid "Opportunity Details"
+msgstr "機會詳情"
+
+#: opportunities/some.php:334
+msgid "Opportunity Name"
+msgstr "機會名稱"
+
+#: activities/one.php:587
+msgid "Opportunity Notes"
+msgstr "機會備註"
+
+#: opportunities/sidebar.php:89 opportunities/some.php:431
+msgid "Opportunity Size"
+msgstr "機會大小"
+
+#: activities/some.php:339
+msgid "Opportunity Status"
+msgstr "機會狀態"
+
+#: admin/opportunity-statuses/one.php:119
+msgid "Opportunity Status Details"
+msgstr "機會狀態詳情"
+
+#: admin/index.php:219 admin/opportunity-statuses/some.php:120
+#: opportunities/opportunity-view.php:50
+msgid "Opportunity Statuses"
+msgstr "機會狀態"
+
+#: opportunities/edit.php:177 opportunities/new.php:116
+msgid "Opportunity Title"
+msgstr "機會標題"
+
+#: admin/opportunity-statuses/some.php:110
+msgid "Opportunity Type"
+msgstr "機會類型"
+
+#: admin/index.php:224
+msgid "Opportunity Types"
+msgstr "機會類型"
+
+#: campaigns/some.php:323
+msgid "Options"
+msgstr "選項"
+
+#: plugins/info/edit-definitions.php:258
+msgid "Order"
+msgstr "訂單"
+
+#: include/utils-activities.php:643
+msgid "Organizer"
+msgstr "組織者"
+
+#: locale/datastrings.php:98
+msgid "Other"
+msgstr "其它"
+
+#: include/strings.php:29
+msgid "Other Companies"
+msgstr "其它公司"
+
+#: include/strings.php:28
+msgid "Other Contacts"
+msgstr "其它連絡人"
+
+#: activities/activities-pager-functions.php:20
+#: activities/activities-widget.php:453 opportunities/some.php:425
+msgid "Overdue"
+msgstr "逾期"
+
+#: reports/index.php:136 reports/overdue-items.php:51
+msgid "Overdue Items"
+msgstr "逾期項目"
+
+#: reports/overdue-email.php:25
+msgid "Overdue Items to Email"
+msgstr "要 Email 的逾期項目"
+
+#: companies/new.php:228 companies/some.php:844
+msgid "Override Address"
+msgstr "覆寫地址"
+
+#: files/some.php:329
+msgid "Owl File Management"
+msgstr "Owl 檔案管理"
+
+#: locale/datastrings.php:99
+msgid "Owned By"
+msgstr "擁有者是"
+
+#: activities/activities-widget.php:462 activities/activities-widget.php:768
+#: activities/one.php:569 activities/some.php:302 campaigns/edit.php:87
+#: campaigns/new.php:80 campaigns/some.php:223 campaigns/some.php:282
+#: cases/edit.php:227 cases/new.php:152 cases/one.php:176 cases/sidebar.php:89
+#: cases/some.php:264 cases/some.php:323 companies/edit.php:132
+#: companies/new.php:128 companies/some.php:546 companies/some.php:700
+#: contacts/some.php:303 contacts/some.php:375 email/email-3.php:131
+#: files/sidebar.php:91 files/some.php:344 files/some.php:418
+#: notes/sidebar.php:28 opportunities/edit.php:207 opportunities/new.php:141
+#: opportunities/one.php:233 opportunities/sidebar.php:88
+#: opportunities/some.php:347 opportunities/some.php:430
+#: reports/companies-list.php:99
+msgid "Owner"
+msgstr "擁有者"
+
+#: locale/datastrings.php:100
+msgid "Owns"
+msgstr "擁有"
+
+#: reports/companies-list.php:121
+msgid "PDF"
+msgstr "PDF"
+
+#: include/classes/Pager/GUP_Pager.php:152
+#: include/classes/Pager/Pager_Renderer.php:96
+#: include/classes/Pager/Pager_Renderer_Table.php:84
+msgid "Page"
+msgstr "呼叫器"
+
+#: include/classes/Pager/Pager_Columns.php:65
+msgid "Pager Columns Display Settings"
+msgstr "呼叫器欄顯示設定"
+
+#: admin/system-parameters/some.php:49
+msgid "Parameter"
+msgstr "參數"
+
+#: locale/datastrings.php:101
+msgid "Parent Company of"
+msgstr "母公司之於"
+
+#: admin/acl/ControlledObjectRelationship_list.php:51
+msgid "Parent Field"
+msgstr "母公司欄位"
+
+#: admin/acl/ControlledObjectRelationship_list.php:49
+#: admin/acl/RolePermission_list.php:72
+msgid "Parent Object"
+msgstr "父物件"
+
+#: admin/acl/RolePermission_list.php:77
+msgid "Parent Object ID"
+msgstr "父物件 ID"
+
+#: activities/new_activity_participant.php:56
+msgid "Participant"
+msgstr "參與者"
+
+#: locale/datastrings.php:102
+msgid "Partner"
+msgstr "搭檔"
+
+#: locale/datastrings.php:103
+msgid "Partners"
+msgstr "搭檔"
+
+#: admin/users/some.php:138
+msgid "Password"
+msgstr "密碼"
+
+#: include/utils-interface.php:81
+msgid "Password Does Not Match."
+msgstr "密碼不符。"
+
+#: contacts/edit-address.php:107
+msgid "Payment Address"
+msgstr "付款地址"
+
+#: companies/addresses.php:74
+msgid "Payment Default"
+msgstr "付款預設地址"
+
+#: admin/acl/RolePermission_list.php:73
+msgid "Permission"
+msgstr "權限"
+
+#: admin/acl/RolePermission_list.php:78
+msgid "Permission ID"
+msgstr "權限作業階段 ID"
+
+#: admin/acl/Permission_list.php:60
+msgid "Permissions"
+msgstr "權限"
+
+#: admin/acl/role_permission_grid.php:84
+msgid "Permissions Assigned"
+msgstr "權限指定完畢"
+
+#: admin/import/import-companies-2.php:141
+#: admin/import/import-companies-3.php:182 companies/edit.php:144
+#: companies/new.php:132 companies/one.php:283 companies/one.php:514
+#: companies/sidebar.php:55 companies/some.php:231 companies/some.php:252
+#: companies/some.php:586 companies/some.php:708 contacts/some.php:281
+#: locale/datastrings.php:104 plugins/phone/companies_one.php:505
+#: plugins/phone/companies_one.php:647
+msgid "Phone"
+msgstr "電話"
+
+#: companies/some.php:240 companies/some.php:252
+msgid "Phone 2"
+msgstr "電話 2"
+
+#: admin/country-address-format/index.php:43
+msgid "Phone Format"
+msgstr "電話格式"
+
+#: admin/import/import-companies-3.php:441 include/utils-misc.php:332
+#: include/utils-misc.php:646
+msgid "Please correct this error."
+msgstr "請更正這個錯誤。"
+
+#: private/home.php:18
+msgid ""
+"Please read the README file and configure your include-locations.inc file, "
+"in directory"
+msgstr "請檢視 README 檔案並且配置您的 include-locations.inc 檔案於目錄"
+
+#: admin/acl/one_ControlledObjectRelationship.php:44
+msgid "Please select a Parent/Child controlled object combination"
+msgstr "請選擇一個 父/子 控制物件組合"
+
+#: admin/acl/one_GroupUser.php:45
+msgid "Please select a User/Group/Role combination"
+msgstr "請選擇一個 使用者/群組/角色 組合"
+
+#: contacts/new_contact_company_select.php:45
+msgid "Please select a company to continue"
+msgstr "請選擇一個公司以繼續"
+
+#: admin/acl/index.php:57
+msgid "Please select a section to manage from the sidebar"
+msgstr "請從側欄選擇一個部分進行管理"
+
+#: admin/activity-templates/new.php:78
+msgid ""
+"Please select a workflow entity and workflow entity type for the new "
+"activity template"
+msgstr "請為新事項範本選擇一個工作流程實體和工作流程實體類型"
+
+#: admin/acl/acl_results.php:144
+msgid "Please select an action:"
+msgstr "請選擇一個動作："
+
+#: include/utils-interface.php:83
+msgid "Please try again."
+msgstr "請重試一次。"
+
+#: admin/index.php:251
+msgid "Plugin Activation"
+msgstr "外掛程式活化"
+
+#: admin/plugin/plugin-admin.php:170
+msgid "Plugin Administration"
+msgstr "外掛程式管理"
+
+#: admin/plugin/plugin-admin.php:247
+msgid "Plugin directory could not be found: "
+msgstr "外掛程式目錄找不到"
+
+#: admin/index.php:247 admin/plugin/plugin-admin.php:188
+msgid "Plugins"
+msgstr "外掛程式"
+
+#: locale/datastrings.php:105
+msgid "Poor"
+msgstr "差"
+
+#: activities/participant_sidebar.php:60
+msgid "Position"
+msgstr "位置"
+
+#: plugins/info/edit-definitions.php:260
+msgid "Possible Values"
+msgstr "可能的值"
+
+#: admin/relationship-types/one.php:81
+msgid "Post Formatting"
+msgstr "後期格式化"
+
+#: admin/relationship-types/some.php:94
+msgid "Post-Text Formatting"
+msgstr "文字後期格式化"
+
+#: admin/import/import-companies-2.php:123
+#: admin/import/import-companies-2.php:134
+#: admin/import/import-companies-3.php:164
+#: admin/import/import-companies-3.php:175 companies/edit-address.php:95
+#: companies/new.php:220 companies/one-address.php:81 companies/some.php:374
+#: companies/some.php:830 contacts/edit-address.php:213 contacts/new.php:323
+#: reports/companies-list.php:176
+msgid "Postal Code"
+msgstr "郵遞區號"
+
+#: companies/addresses.php:174
+msgid "Postcode"
+msgstr "郵遞區號"
+
+#: admin/relationship-types/one.php:77
+msgid "Pre Formatting"
+msgstr "前期格式化"
+
+#: admin/relationship-types/some.php:90
+msgid "Pre-Text Formatting"
+msgstr "文字前期格式化"
+
+#: include/utils-interface.php:400
+msgid "Preferences"
+msgstr "偏好設定"
+
+#: admin/system-parameters/admin-prefs.php:55 admin/users/user_prefs.php:53
+msgid "Preferences successfully saved"
+msgstr "偏好設定已成功儲存"
+
+#: locale/datastrings.php:106
+msgid "Preliminaries"
+msgstr "預備"
+
+#: admin/activity-resolution-types/one_activity_resolution_type.php:40
+msgid "Pretty Name"
+msgstr "暱稱"
+
+#: admin/import/import-companies-2.php:45
+#: admin/import/import-companies-2.php:65
+msgid "Preview Data"
+msgstr "預覽資料"
+
+#: companies/some.php:903 contacts/edit-address.php:92
+#: reports/company-contacts-printout.php:242
+msgid "Primary Address"
+msgstr "主要地址"
+
+#: companies/addresses.php:71
+msgid "Primary Default"
+msgstr "主要地址預設值"
+
+#: activities/one.php:690
+msgid "Print View"
+msgstr "列印用檢視"
+
+#: reports/index.php:109
+msgid "Printable contact summary information for Companies in search Results."
+msgstr "搜尋結果中公司連絡人彙總資訊，可列印版本"
+
+#: reports/completed-items.php:147 reports/open-items.php:118
+#: reports/overdue-items.php:133
+msgid "Printer Friendly"
+msgstr "印表機適用"
+
+#: activities/activities-widget.php:458 cases/edit.php:223 cases/new.php:148
+#: cases/one.php:187 cases/sidebar.php:84 cases/some.php:326
+msgid "Priority"
+msgstr "優先等級"
+
+#: activities/one.php:548 opportunities/new.php:149 opportunities/one.php:245
+#: opportunities/some.php:432
+msgid "Probability"
+msgstr "機率"
+
+#: opportunities/edit.php:215
+msgid "Probability (%)"
+msgstr "機率(%)"
+
+#: admin/import/import-companies-2.php:115
+#: admin/import/import-companies-3.php:156 companies/edit.php:220
+#: companies/new.php:178 companies/new.php:269 companies/some.php:339
+#: companies/some.php:773 contacts/edit.php:284 contacts/new.php:291
+#: reports/activity-summary.php:270
+msgid "Profile"
+msgstr "簡介"
+
+#: admin/import/import-companies-2.php:158
+#: admin/import/import-companies-3.php:199
+msgid "Profile/Notes"
+msgstr "簡介/備註"
+
+#: locale/datastrings.php:107
+msgid "Prospect"
+msgstr "希望"
+
+#: locale/datastrings.php:108
+msgid "Prospects"
+msgstr "希望"
+
+#: companies/some.php:367
+msgid "Province"
+msgstr "省份"
+
+#: plugins/cti/setup.php:99
+msgid "Provision Cisco Phone"
+msgstr "思科電話供給 PCP"
+
+#: locale/datastrings.php:109
+msgid "Qualified"
+msgstr "合格"
+
+#: reports/index.php:67
+msgid "Quantity by Industry"
+msgstr "數量依行業分"
+
+#: reports/index.php:58
+msgid "Quantity by Status"
+msgstr "數量依狀態分"
+
+#: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:184
+msgid "QuickForm Create Failed for "
+msgstr "快速表單建立失敗於 "
+
+#: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:152
+msgid "QuickForm Re-Read Failed for "
+msgstr "快速表單重新讀取失敗於 "
+
+#: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:101
+#: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:120
+#: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:136
+#: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:187
+msgid "QuickForm Read Failed for "
+msgstr "快速表單讀取失敗於 "
+
+#: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:148
+msgid "QuickForm Write Failed for "
+msgstr "快速表單寫失敗於 "
+
+#: locale/datastrings.php:110
+msgid "Radio"
+msgstr "電台"
+
+#: plugins/radtest/radtest.php:38 plugins/radtest/setup.php:26
+msgid "Radius Test"
+msgstr "輻射範圍測試"
+
+#: admin/import/import-companies.php:145 companies/edit.php:182
+#: companies/one.php:583 companies/some-advanced.php:341
+#: companies/some.php:902 plugins/phone/companies_one.php:565
+msgid "Rating"
+msgstr "評價"
+
+#: admin/ratings/one.php:36
+msgid "Rating Details"
+msgstr "評價細節"
+
+#: admin/index.php:229 admin/ratings/some.php:47
+msgid "Ratings"
+msgstr "評價"
+
+#: locale/datastrings.php:111
+msgid "Read"
+msgstr "讀"
+
+#: locale/datastrings.php:112
+msgid "Real Estate"
+msgstr "房地產"
+
+#: campaigns/some.php:334 cases/some.php:368 companies/some-advanced.php:392
+#: companies/some.php:963 contacts/some.php:436 files/some.php:477
+#: opportunities/some.php:481
+msgid "Recently Viewed"
+msgstr "最近檢視過的"
+
+#: plugins/cti/cdr.php:263
+msgid "Record #"
+msgstr "記錄編號"
+
+#: admin/users/change-owner-2.php:84 admin/users/change-owner-3.php:85
+msgid "Record Owners Changed"
+msgstr "記錄擁有人變更完畢"
+
+#: activities/recurrence_sidebar.php:235 activities/recurrence_sidebar.php:240
+#: activities/recurrence_sidebar.php:246 activities/recurrence_sidebar.php:257
+#: activities/recurrence_sidebar.php:263 activities/recurrence_sidebar.php:270
+#: activities/recurrence_sidebar.php:276
+msgid "Recur on the "
+msgstr "重複依據"
+
+#: activities/recurrence_sidebar.php:280
+msgid "Recurrence Range"
+msgstr "重複範圍"
+
+#: activities/edit_activity_recurrence.php:232
+msgid "Recurring Activities successfully added"
+msgstr "週期事項已加入"
+
+#: activities/edit_activity_recurrence.php:225
+msgid "Recurring Activities successfully updated"
+msgstr "週期事項更新成功"
+
+#: install/data.php:2896
+msgid "Reject Contact"
+msgstr "拒絕連絡人"
+
+#: activities/one.php:387
+msgid "Related Activities"
+msgstr "相關事項"
+
+#: admin/acl/RolePermission_list.php:70 admin/relationship-types/some.php:53
+#: companies/relationships.php:113
+msgid "Relationship"
+msgstr "關係"
+
+#: admin/acl/RolePermission_list.php:79
+msgid "Relationship ID"
+msgstr "關係 ID"
+
+#: admin/relationship-types/one.php:57 admin/relationship-types/some.php:70
+msgid "Relationship Name"
+msgstr "關係名稱"
+
+#: admin/relationship-types/one.php:42
+msgid "Relationship Type Details"
+msgstr "關係類型詳情"
+
+#: admin/index.php:234 admin/relationship-types/some.php:48
+msgid "Relationship Types"
+msgstr "關係類型"
+
+#: companies/relationships.php:99 companies/relationships.php:110
+#: plugins/phone/companies_one.php:631
+msgid "Relationships"
+msgstr "關係"
+
+#: relationships/sidebar.php:78
+msgid "Relationships for"
+msgstr "關係於"
+
+#: reports/audit-items.php:100
+msgid "Remote Addr"
+msgstr "遠端地址"
+
+#: reports/audit-items.php:101
+msgid "Remote Port"
+msgstr "遠端連接埠"
+
+#: activities/participant_sidebar.php:68
+msgid "Remove"
+msgstr "移除"
+
+#: admin/updateto2.0.php:4748
+msgid ""
+"Removed deprecated Owl preference, now entirely controlled by Owl Plugin"
+msgstr "刪除了沒有用處的Owl 偏好設定，現在全部由 Owl 外掛程式控制"
+
+#: email/email-2.php:213 email/one-template.php:77
+msgid "Reply to"
+msgstr "回復給"
+
+#: include/utils-interface.php:398 locale/datastrings.php:113
+#: reports/index.php:25 reports/index.php:88
+msgid "Reports"
+msgstr "報告"
+
+#: activities/activities-widget.php:465
+msgid "Resolution"
+msgstr "解決"
+
+#: activities/one.php:657
+msgid "Resolution Description"
+msgstr "解決描述"
+
+#: activities/one.php:651
+msgid "Resolution Type"
+msgstr "解決類型"
+
+#: locale/datastrings.php:114
+msgid "Restaurant"
+msgstr "飯店"
+
+#: companies/one.php:552
+msgid "Restrict by Division"
+msgstr "以部門為限"
+
+#: admin/acl/one_GroupMember.php:52
+msgid "Result Field"
+msgstr "結果欄位"
+
+#: activities/some.php:425
+msgid "Results View"
+msgstr "結果檢視"
+
+#: locale/datastrings.php:115
+msgid "Retail"
+msgstr "零售"
+
+#: locale/datastrings.php:116
+msgid "Retains Consultant"
+msgstr "獲得顧問"
+
+#: admin/import/import-companies-2.php:155
+#: admin/import/import-companies-3.php:196 companies/edit.php:164
+#: companies/new.php:152 companies/one.php:613 companies/some.php:289
+#: companies/some.php:732 plugins/phone/companies_one.php:589
+#: reports/activity-summary.php:278
+msgid "Revenue"
+msgstr "利潤"
+
+#: admin/acl/GroupUser_list.php:53 admin/acl/RolePermission_list.php:69
+#: admin/activity-templates/edit.php:108 admin/case-statuses/one.php:183
+#: admin/opportunity-statuses/one.php:184 admin/users/some.php:122
+#: admin/users/user_roles_sidebar.php:70
+msgid "Role"
+msgstr "角色"
+
+#: admin/acl/GroupUser_list.php:56 admin/acl/RolePermission_list.php:80
+msgid "Role ID"
+msgstr "角色 ID"
+
+#: admin/acl/RolePermission_list.php:99
+msgid "Role Permissions"
+msgstr "角色權限"
+
+#: admin/acl/Role_list.php:51
+msgid "Roles"
+msgstr "角色"
+
+#: admin/import/import-companies-2.php:85
+#: admin/import/import-companies-3.php:126
+msgid "Row Number"
+msgstr "列號"
+
+#: admin/import/import-companies-3.php:1035
+msgid "Run Data Cleanup"
+msgstr "執行數據清除"
+
+#: reports/index.php:183
+msgid "Sales Force Automation"
+msgstr "銷售能力自動化"
+
+#: admin/import/import-companies-2.php:102
+#: admin/import/import-companies-3.php:143 admin/salutations/one.php:53
+#: admin/salutations/some.php:65 contacts/edit.php:155 contacts/new.php:172
+msgid "Salutation"
+msgstr "稱呼"
+
+#: admin/salutations/one.php:37
+msgid "Salutation Details"
+msgstr "稱呼細節"
+
+#: admin/salutations/one.php:59
+msgid "Salutation Sort Value"
+msgstr "稱呼排序值"
+
+#: admin/index.php:239 admin/salutations/some.php:46
+msgid "Salutations"
+msgstr "稱呼"
+
+#: activities/recurrence_sidebar.php:134
+msgid "Sat"
+msgstr "週六"
+
+#: activities/recurrence_sidebar.php:156 include/utils-recurrence.php:28
+msgid "Saturday"
+msgstr "星期六"
+
+#: contacts/edit.php:289 contacts/transfer-2.php:75
+#: include/classes/Pager/Pager_Columns.php:205
+msgid "Save"
+msgstr "儲存"
+
+#: activities/one.php:672 admin/account-statuses/one.php:73
+#: admin/activity-templates/edit.php:124 admin/activity-types/one.php:81
+#: admin/campaign-statuses/one.php:81 admin/campaign-types/one.php:68
+#: admin/case-priorities/one.php:75 admin/case-statuses/one.php:164
+#: admin/case-types/one.php:70 admin/categories/one.php:109
+#: admin/company-sources/one.php:77 admin/company-types/one.php:67
+#: admin/crm-statuses/one.php:68 admin/industries/one.php:67
+#: admin/opportunity-statuses/one.php:165 admin/ratings/one.php:67
+#: admin/relationship-types/one.php:85 admin/salutations/one.php:63
+#: admin/system-parameters/one.php:126 admin/users/change-password.php:53
+#: admin/users/one.php:127 admin/users/self.php:91 campaigns/edit.php:113
+#: campaigns/new.php:106 cases/edit.php:245 cases/new.php:167
+#: companies/edit-address.php:113 companies/edit.php:224 companies/new.php:182
+#: contacts/edit-address.php:230 notes/edit.php:39 notes/new.php:49
+#: opportunities/edit.php:246 opportunities/new.php:178
+msgid "Save Changes"
+msgstr "儲存修改"
+
+#: companies/addresses.php:138
+msgid "Save Defaults"
+msgstr "儲存預設值"
+
+#: include/utils-preferences.php:779
+msgid "Save Preferences"
+msgstr "儲存偏好設定"
+
+#: activities/one.php:675
+msgid "Save and Next"
+msgstr "儲存並繼續"
+
+#: contacts/transfer-2.php:76
+msgid "Save and Update All Records"
+msgstr "儲存並更新所有記錄"
+
+#: email/email-2.php:306 email/one-template.php:94
+msgid "Save as New Template"
+msgstr "另存為新的範本"
+
+#: activities/some.php:408 campaigns/some.php:251 cases/some.php:276
+#: companies/some.php:859 contacts/some.php:321 files/some.php:439
+#: opportunities/some.php:376
+msgid "Saved Searches"
+msgstr "已儲存的搜尋"
+
+#: activities/one.php:679
+msgid "Schedule Followup"
+msgstr "接續計劃"
+
+#: activities/activities-widget.php:460 activities/activities-widget.php:663
+#: activities/activities-widget.php:751 activities/one.php:634
+#: activities/some.php:313
+msgid "Scheduled End"
+msgstr "計劃結束"
+
+#: activities/activities-widget.php:459 activities/activities-widget.php:752
+#: activities/one.php:626 activities/some.php:314
+msgid "Scheduled Start"
+msgstr "計劃開始"
+
+#: admin/acl/RolePermission_list.php:74
+msgid "Scope"
+msgstr "範圍"
+
+#: admin/activity-types/one.php:75 admin/activity-types/some.php:89
+#: admin/case-priorities/one.php:71 admin/case-priorities/some.php:81
+#: admin/company-sources/one.php:73 admin/company-sources/some.php:83
+msgid "Score Adjustment"
+msgstr "分數調整"
+
+#: activities/activity-reconnect.php:41 activities/some.php:429
+#: campaigns/some.php:268 cases/sidebar.php:125 cases/sidebar.php:133
+#: cases/some.php:293 companies/some.php:877
+#: contacts/new_contact_company_select.php:75 contacts/some.php:339
+#: contacts/transfer.php:55 files/some.php:457 opportunities/sidebar.php:129
+#: opportunities/sidebar.php:137 opportunities/some.php:393
+#: plugins/cti/cdr.php:161 relationships/new-relationship.php:142
+#: reports/company-contacts-printout.php:223
+msgid "Search"
+msgstr "搜尋"
+
+#: companies/addresses.php:172 companies/addresses.php:177
+msgid "Search Addresses"
+msgstr "搜尋地址"
+
+#: activities/activities-widget.php:744 activities/some.php:303
+msgid "Search By Date"
+msgstr "按日期搜尋"
+
+#: companies/some-advanced.php:316 companies/some.php:508
+msgid "Search Companies"
+msgstr "公司搜尋"
+
+#: activities/some.php:265 campaigns/some.php:218 cases/some.php:251
+#: companies/some.php:532 contacts/some.php:274 files/some.php:400
+#: opportunities/some.php:331 plugins/cti/cdr.php:93
+#: reports/company-contacts-printout.php:204
+msgid "Search Criteria"
+msgstr "搜尋標準"
+
+#: locale/datastrings.php:117
+msgid "Search Engine"
+msgstr "搜尋引擎"
+
+#: locale/datastrings.php:118
+msgid "Search Engines"
+msgstr "搜尋引擎"
+
+#: activities/activity-reconnect.php:42
+msgid "Search Entities"
+msgstr "搜尋實體"
+
+#: activities/activity-reconnect.php:43
+msgid "Search For"
+msgstr "搜尋"
+
+#: activities/some.php:466 campaigns/some.php:301 cases/some.php:344
+#: companies/some-advanced.php:360 companies/some.php:926
+#: contacts/some.php:393 files/some.php:364
+#: include/adodb/adodb-pager.inc.php:288 opportunities/some.php:459
+#: private/home.php:156
+msgid "Search Results"
+msgstr "搜尋結果"
+
+#: activities/some.php:409 campaigns/some.php:252 cases/some.php:277
+#: companies/some.php:860 contacts/some.php:322 files/some.php:440
+#: opportunities/some.php:377
+msgid "Search Title"
+msgstr "搜尋標題"
+
+#: contacts/new_contact_company_select.php:71 contacts/transfer.php:45
+#: include/strings.php:19
+msgid "Search for Company"
+msgstr "搜尋公司"
+
+#: include/strings.php:18
+msgid "Search for Contact"
+msgstr "搜尋連絡人"
+
+#: install/data.php:2847
+msgid "Search method used when searching company names"
+msgstr "當檢索公司名的時候使用的搜尋方式"
+
+#: admin/import/import-companies-2.php:79
+#: admin/import/import-companies-3.php:119
+msgid "Secondary Address"
+msgstr "第二地址"
+
+#: admin/import/import-companies-2.php:129
+msgid "Secondary Address Name"
+msgstr "第二地址名"
+
+#: plugins/cti/cdr.php:276
+msgid "Seconds Billed"
+msgstr "記錄的秒數"
+
+#: contacts/new_contact_company_select.php:66
+msgid "Select"
+msgstr "選擇"
+
+#: include/classes/Pager/Pager_Columns.php:158
+msgid "Select Column Layouts"
+msgstr "選擇表格版面設置"
+
+#: include/classes/Pager/Pager_Columns.php:202
+msgid "Select Columns for Display"
+msgstr "選擇表格版面設置以顯示"
+
+#: admin/case-statuses/some.php:81
+msgid "Select a case type"
+msgstr "選擇一個案例類型"
+
+#: contacts/new_contact_company_select.php:53
+msgid "Select a company or create a"
+msgstr "選擇一個公司或建立一個"
+
+#: admin/opportunity-statuses/some.php:87
+msgid "Select a opportunity type"
+msgstr "選擇一個機會類型"
+
+#: admin/users/change-owner-2.php:120
+msgid "Select company to move"
+msgstr "選擇公司以移動"
+
+#: locale/datastrings.php:119
+msgid "Seminar"
+msgstr "研討會"
+
+#: locale/datastrings.php:120
+msgid "Seminars"
+msgstr "研討會"
+
+#: reports/completed-items.php:126 reports/open-items.php:132
+#: reports/overdue-items.php:147
+msgid "Send Email To"
+msgstr "發電子郵件給"
+
+#: activities/recurrence_sidebar.php:170 include/utils-recurrence.php:32
+msgid "September"
+msgstr "九月"
+
+#: install/data.php:2871
+msgid "Session Data Storage Type"
+msgstr "作業階段資料儲存類型"
+
+#: reports/audit-items.php:102
+msgid "Session Id"
+msgstr "作業階段 ID"
+
+#: contacts/edit-address.php:102
+msgid "Shipping Address"
+msgstr "送貨地址"
+
+#: companies/addresses.php:73
+msgid "Shipping Default"
+msgstr "預設送貨地址"
+
+#: admin/account-statuses/one.php:55 admin/account-statuses/some.php:65
+#: admin/activity-resolution-types/one_activity_resolution_type.php:39
+#: admin/activity-resolution-types/some.php:76 admin/activity-types/one.php:59
+#: admin/activity-types/some.php:73 admin/campaign-statuses/one.php:55
+#: admin/campaign-statuses/some.php:65 admin/campaign-types/one.php:52
+#: admin/campaign-types/some.php:63 admin/case-priorities/one.php:55
+#: admin/case-priorities/some.php:65 admin/case-statuses/one.php:134
+#: admin/case-statuses/some.php:136 admin/case-types/one.php:54
+#: admin/case-types/some.php:63 admin/categories/one.php:93
+#: admin/categories/some.php:64 admin/company-sources/one.php:57
+#: admin/company-sources/some.php:67 admin/company-types/one.php:51
+#: admin/company-types/some.php:62 admin/crm-statuses/one.php:52
+#: admin/crm-statuses/some.php:91 admin/industries/one.php:51
+#: admin/industries/some.php:62 admin/opportunity-statuses/one.php:134
+#: admin/opportunity-statuses/some.php:143 admin/ratings/one.php:51
+#: admin/ratings/some.php:66
+msgid "Short Name"
+msgstr "短名"
+
+#: include/classes/Pager/GUP_Pager.php:146
+msgid "Show"
+msgstr "顯示"
+
+#: admin/acl/ControlledObjectRelationship_list.php:53
+msgid "Singular?"
+msgstr "單獨？"
+
+#: files/one.php:141 files/sidebar.php:90 files/some.php:343
+#: files/some.php:481 opportunities/one.php:241
+msgid "Size"
+msgstr "大小"
+
+#: opportunities/edit.php:211 opportunities/new.php:145
+msgid "Size (in dollars)"
+msgstr "大小(按金額)"
+
+#: reports/index.php:71
+msgid "Size by Industry"
+msgstr "大小(按行業)"
+
+#: reports/index.php:63
+msgid "Size by Status"
+msgstr "大小(按狀態)"
+
+#: companies/some.php:932 contacts/some.php:399
+msgid "Snail Mail Merge"
+msgstr "一般郵件合併"
+
+#: admin/activity-resolution-types/one_activity_resolution_type.php:41
+#: admin/activity-templates/edit.php:120 admin/case-statuses/one.php:184
+#: admin/opportunity-statuses/one.php:185 companies/one-address.php:87
+msgid "Sort Order"
+msgstr "排列順序"
+
+#: admin/salutations/some.php:69
+msgid "Sort Value"
+msgstr "排序值"
+
+#: plugins/cti/cdr.php:104 reports/companies-list.php:101
+msgid "Source"
+msgstr "來源"
+
+#: admin/acl/ControlledObject_list.php:41
+msgid "Source Table"
+msgstr "來源表"
+
+#: locale/datastrings.php:121
+msgid "Special"
+msgstr "特殊"
+
+#: plugins/cti/cdr.php:266
+msgid "Src"
+msgstr "來源"
+
+#: plugins/cti/cdr.php:124 plugins/cti/cdr.php:270
+msgid "Src Channel"
+msgstr "來源頻道"
+
+#: reports/index.php:168 reports/stale-crm-status.php:184
+msgid "Stale Companies"
+msgstr "失去時效的公司"
+
+#: reports/index.php:171
+msgid "Stale Companies - by Crms Status, Last Activity Date and User"
+msgstr "失去時效的公司 - 依照 CRMS 狀態、最後事項日期和使用者"
+
+#: reports/index.php:160
+msgid "Stale Opportunities"
+msgstr "失去時效的機會"
+
+#: reports/index.php:163
+msgid "Stale opportunities by Last Activity Date and User"
+msgstr "失去時效的機會 - 依照最後事項日期和使用者"
+
+#: install/data.php:2873
+msgid "Standard"
+msgstr "標準"
+
+#: reports/activity-summary.php:98 reports/activitytimes.php:48
+#: reports/activitytimes.php:69 reports/audit-items.php:40
+#: reports/completed-items.php:65 reports/completed-items.php:192
+#: reports/completed-items.php:243 reports/open-items.php:180
+#: reports/open-items.php:229 reports/overdue-email.php:69
+#: reports/overdue-items.php:195 reports/overdue-items.php:246
+msgid "Start"
+msgstr "開始"
+
+#: plugins/cti/cdr.php:145
+msgid "Start Date"
+msgstr "開始日期"
+
+#: campaigns/one.php:136 campaigns/some.php:283
+#: plugins/phone/companies_one.php:688
+msgid "Starts"
+msgstr "開始"
+
+#: campaigns/edit.php:91 campaigns/new.php:84
+msgid "Starts On"
+msgstr "開始在"
+
+#: admin/import/import-companies-2.php:122
+#: admin/import/import-companies-2.php:133
+#: admin/import/import-companies-3.php:163
+#: admin/import/import-companies-3.php:174 companies/some.php:592
+#: companies/some.php:906 reports/companies-list.php:104
+#: reports/company-contacts-printout.php:127
+#: reports/company-contacts-printout.php:137
+msgid "State"
+msgstr "州"
+
+#: companies/addresses.php:175 companies/edit-address.php:91
+#: companies/new.php:216 companies/one-address.php:80 companies/some.php:822
+#: contacts/edit-address.php:209 contacts/new.php:319
+msgid "State/Province"
+msgstr "州/省"
+
+#: activities/one.php:530 admin/activity-templates/some.php:62
+#: campaigns/edit.php:83 campaigns/new.php:76 campaigns/one.php:128
+#: campaigns/some.php:237 campaigns/some.php:281 campaigns/some.php:339
+#: cases/case-status-view.php:55 cases/edit.php:216 cases/new.php:141
+#: cases/one.php:180 cases/sidebar.php:86 cases/some.php:267
+#: cases/some.php:325 cases/some.php:373 opportunities/edit.php:201
+#: opportunities/new.php:136 opportunities/one.php:253
+#: opportunities/sidebar.php:92 opportunities/some.php:348
+#: opportunities/some.php:435 opportunities/some.php:486
+#: reports/overdue-items.php:292
+msgid "Status"
+msgstr "狀態"
+
+#: cases/edit.php:219 cases/new.php:144 cases/one.php:183
+#: opportunities/edit.php:204 opportunities/new.php:138
+#: opportunities/one.php:256
+msgid "Status Definitions"
+msgstr "狀態定義"
+
+#: include/utils-interface.php:89
+msgid "Status not changed."
+msgstr "狀態未變更"
+
+#: companies/addresses.php:173
+msgid "Street"
+msgstr "街"
+
+#: email/email-2.php:224 email/one-template.php:87
+msgid "Subject"
+msgstr "主題"
+
+#: admin/plugin/plugin-admin.php:244
+msgid "Submit"
+msgstr "提交"
+
+#: locale/datastrings.php:122
+msgid "Subsidiary of"
+msgstr "子公司之於"
+
+#: include/classes/Pager/Pager_Renderer.php:196
+msgid "Subtotals this page:"
+msgstr "本頁小計："
+
+#: admin/updateto2.0.php:4427
+msgid "Successfully added activity resolution types table."
+msgstr "事項解決類型表已加入"
+
+#: admin/updateto2.0.php:4596
+msgid ""
+"Successfully added activity resolution types to activity resolution types "
+"table."
+msgstr "事項解決類型加入到事項解決類型表成功。"
+
+#: admin/acl/edit_GroupMemberCriteria.php:42
+msgid "Successfully added criteria"
+msgstr "條件已加入"
+
+#: admin/updateto2.0.php:4459 install/database.php:887
+msgid "Successfully added default opportunity type record."
+msgstr "預設機會類型紀錄已加入了。"
+
+#: admin/updateto2.0.php:4353
+msgid "Successfully added email_template_type table."
+msgstr "Email 範本類型表已加入了。"
+
+#: admin/updateto2.0.php:4467 install/database.php:895
+msgid "Successfully added opportunity type to opportunity status table."
+msgstr "機會狀態表已加入了。"
+
+#: admin/updateto2.0.php:4478
+msgid "Successfully added opportunity type to opportunity table."
+msgstr "機會類型加入到機會表成功。"
+
+#: admin/updateto2.0.php:4446
+msgid "Successfully added opportunity types table."
+msgstr "機會類型表已加入。"
+
+#: admin/activity-types/one_activity_participant_position.php:43
+msgid "Successfully added participant position"
+msgstr "參與者位置已加入"
+
+#: activities/edit-2.php:95
+msgid "Successfully detached activity"
+msgstr "事項洽詢取消成功"
+
+#: admin/acl/edit_GroupMemberCriteria.php:47
+msgid "Successfully removed criteria"
+msgstr "成功刪除條件"
+
+#: admin/updateto2.0.php:4313
+msgid ""
+"Successfully updated overly long activity participant record status field"
+msgstr "超長事項參與者記錄狀態欄位更新成功"
+
+#: reports/index.php:117
+msgid ""
+"Summarizes the count of activities by type, for companies.  Can be "
+"restricted by user, category and\n"
+" dates"
+msgstr ""
+"對於公司依照型態來製作事項數量的摘要。\n"
+"可以利用使用者、類別和日期來限制"
+
+#: activities/activities-widget.php:456 activities/activities-widget.php:659
+#: activities/activities-widget.php:742 activities/one.php:563
+#: activities/some.php:268 admin/import/import-companies-2.php:104
+#: admin/import/import-companies-3.php:145 companies/one.php:280
+#: contacts/edit.php:226 contacts/new.php:228 contacts/one.php:283
+#: files/edit-form.php:50 files/one.php:133 files/sidebar.php:89
+#: files/some.php:342 files/some.php:480 plugins/phone/contacts_one.php:328
+msgid "Summary"
+msgstr "摘要"
+
+#: activities/recurrence_sidebar.php:134
+msgid "Sun"
+msgstr "週日"
+
+#: activities/recurrence_sidebar.php:156 include/utils-recurrence.php:28
+msgid "Sunday"
+msgstr "星期日"
+
+#: locale/datastrings.php:123
+msgid "Supplier for"
+msgstr "提供者"
+
+#: admin/index.php:43
+msgid "System Administration"
+msgstr "系統管理"
+
+#: admin/system-parameters/one.php:104
+msgid "System Parameter"
+msgstr "系統參數"
+
+#: admin/system-parameters/some.php:46
+msgid "System Parameters"
+msgstr "系統參數"
+
+#: admin/index.php:132 admin/system-parameters/admin-prefs.php:31
+#: include/utils-preferences.php:743
+msgid "System Preferences"
+msgstr "系統設定選項"
+
+#: admin/acl/RolePermission_list.php:36
+msgid "TOP"
+msgstr "頂"
+
+#: reports/activitytimes.php:118
+msgid "TOTAL"
+msgstr "總共"
+
+#: admin/acl/one_GroupMember.php:52 reports/audit-items.php:94
+msgid "Table"
+msgstr "表格"
+
+#: admin/relationship-types/some.php:52
+msgid "Tables"
+msgstr "表格"
+
+#: admin/import/import-companies-2.php:146
+#: admin/import/import-companies-3.php:187 companies/edit.php:174
+#: companies/one.php:571 contacts/edit.php:249 contacts/new.php:255
+#: contacts/one.php:304 plugins/phone/companies_one.php:553
+msgid "Tax ID"
+msgstr "個人稅號"
+
+#: reports/companies-list.php:179
+msgid "Tel"
+msgstr "電話"
+
+#: locale/datastrings.php:124
+msgid "Telemarketing"
+msgstr "電話銷售"
+
+#: locale/datastrings.php:125
+msgid "Telemarketings"
+msgstr "電話銷售"
+
+#: locale/datastrings.php:126
+msgid "Television"
+msgstr "電視"
+
+#: email/email.php:173 email/index.php:74 email/update-template.php:19
+msgid "Template"
+msgstr "範本"
+
+#: activities/some.php:282
+msgid "Template Titles"
+msgstr "範本標題"
+
+#: admin/import/import-companies-2.php:157
+#: admin/import/import-companies-3.php:198 companies/edit.php:186
+#: companies/one.php:589 plugins/phone/companies_one.php:571
+msgid "Terms"
+msgstr "使用者"
+
+#: admin/acl/xrms_acl_nav.php:17
+msgid "Test ACL Results"
+msgstr "測試 ACL 結果"
+
+#: email/email-4.php:269
+msgid "The bulk e-mail sub-system has sent"
+msgstr "大批電子郵件子系統已傳送"
+
+#: install/data.php:2815
+msgid "Theme"
+msgstr "主題"
+
+#: include/classes/Pager/pager-export.php:92
+msgid "There is no column_info!"
+msgstr "沒有欄位資訊！"
+
+#: include/strings.php:24
+msgid "There is no company by that name"
+msgstr "沒有這個名稱的公司"
+
+#: include/strings.php:23
+msgid "There is no contact by that name"
+msgstr "沒有叫這個名稱的連絡人"
+
+#: include/classes/Pager/pager-export.php:89
+msgid "There is no data to export!"
+msgstr "沒有資料可以匯出！"
+
+#: admin/users/change-password-2.php:59
+msgid "There was a problem with the user ID. Password not Changed."
+msgstr "使用者 ID 有問題，密碼沒有變更。"
+
+#: activities/export.php:108 include/classes/Pager/pager-export.php:86
+msgid "There was a problem with your export"
+msgstr "匯出程序中有錯誤"
+
+#: contacts/edit-address.php:165
+msgid "This Address Is Also Used By"
+msgstr "這個地址被使用中，使用者是"
+
+#: include/utils-interface.php:89
+msgid "This activity is still open."
+msgstr "這個事項仍待處理。"
+
+#: email/email-4.php:250
+msgid "This email message has already been sent"
+msgstr "這個電子郵件已經傳送了"
+
+#: admin/acl/index.php:57
+msgid "This is the Access Control List system for datasource:"
+msgstr "這是資料來源的存取控制清單系統。"
+
+#: include/utils-misc.php:1970
+msgid "This process was forked from a previous workflow of type:"
+msgstr "本處理序是由之前這個類型的工作流程分支出來的："
+
+#: activities/recurrence_sidebar.php:134
+msgid "Thu"
+msgstr "週四"
+
+#: activities/recurrence_sidebar.php:156 include/utils-recurrence.php:28
+msgid "Thursday"
+msgstr "星期四"
+
+#: reports/audit-items.php:91
+msgid "Time"
+msgstr "時間"
+
+#: reports/overdue-items.php:68
+msgid "Time Window"
+msgstr "時間視窗"
+
+#: reports/activitytimes.php:36
+msgid "Timesheets"
+msgstr "時間表"
+
+#: admin/activity-templates/edit.php:86 admin/case-statuses/one.php:180
+#: admin/import/import-companies-2.php:105
+#: admin/import/import-companies-3.php:146
+#: admin/opportunity-statuses/one.php:181 campaigns/one.php:120
+#: cases/one.php:168 companies/new.php:249 companies/one.php:281
+#: contacts/edit.php:167 contacts/new.php:184 contacts/one.php:287
+#: contacts/some.php:301 contacts/some.php:373 opportunities/one.php:225
+#: plugins/phone/companies_one.php:683 plugins/phone/contacts_one.php:334
+#: plugins/phone/contacts_one.php:510
+msgid "Title"
+msgstr "頭銜"
+
+#: include/utils-activities.php:639
+msgid "To"
+msgstr "到"
+
+#: admin/relationship-types/one.php:73 admin/relationship-types/some.php:86
+msgid "To Text"
+msgstr "到文字"
+
+#: admin/relationship-types/one.php:65 admin/relationship-types/some.php:78
+msgid "To What Table"
+msgstr "到哪個表格去"
+
+#: include/utils-misc.php:1970
+msgid "To access it, you can use the link here:"
+msgstr "要存取它，您可以使用這裡的連結："
+
+#: reports/companies-list.php:276
+msgid "Total records"
+msgstr "總紀錄數"
+
+#: include/classes/Pager/Pager_Renderer.php:197
+msgid "Totals:"
+msgstr "總計："
+
+#: locale/datastrings.php:127
+msgid "Trade Show"
+msgstr "商業會展"
+
+#: locale/datastrings.php:128
+msgid "Trade Shows"
+msgstr "商業會展"
+
+#: contacts/edit.php:299
+msgid "Transfer"
+msgstr "移動"
+
+#: contacts/transfer-2.php:51 contacts/transfer-2.php:67
+#: contacts/transfer.php:33
+msgid "Transfer to Another Company"
+msgstr "移動到另一家公司"
+
+#: activities/recurrence_sidebar.php:134
+msgid "Tue"
+msgstr "週二"
+
+#: activities/recurrence_sidebar.php:156 include/utils-recurrence.php:28
+msgid "Tuesday"
+msgstr "星期二"
+
+#: activities/activities-widget.php:454 activities/activities-widget.php:661
+#: activities/activities-widget.php:767 activities/some.php:304
+#: admin/activity-templates/edit.php:94 admin/case-statuses/one.php:182
+#: admin/case-statuses/some.php:112 admin/opportunity-statuses/one.php:183
+#: campaigns/edit.php:79 campaigns/new.php:72 campaigns/one.php:124
+#: campaigns/some.php:222 campaigns/some.php:280 campaigns/some.php:338
+#: cases/case-status-view.php:54 cases/edit.php:212 cases/new.php:137
+#: cases/one.php:172 cases/sidebar.php:85 cases/some.php:266
+#: cases/some.php:324 opportunities/edit.php:197 opportunities/new.php:132
+#: opportunities/one.php:229 opportunities/sidebar.php:91
+#: opportunities/some.php:337 plugins/info/edit-definitions.php:256
+#: plugins/phone/companies_one.php:685 plugins/phone/contacts_one.php:512
+#: reports/audit-items.php:93 reports/completed-items.php:68
+#: reports/completed-items.php:194 reports/completed-items.php:245
+#: reports/completed-items.php:286 reports/open-items.php:54
+#: reports/open-items.php:182 reports/open-items.php:231
+#: reports/overdue-email.php:71 reports/overdue-items.php:67
+#: reports/overdue-items.php:197 reports/overdue-items.php:248
+msgid "Type"
+msgstr "類型"
+
+#: admin/index.php:145
+msgid "Types and Statuses"
+msgstr "類型和狀態"
+
+#: companies/edit.php:156 companies/new.php:144 companies/one.php:532
+#: companies/some.php:275 companies/some.php:724
+#: plugins/phone/companies_one.php:523
+msgid "URL"
+msgstr "網址 URL"
+
+#: admin/export/export-companies-ldap.php:150
+#: admin/export/export-companies.php:132
+#: admin/export/export-company-address.php:53 reports/activity-summary.php:173
+msgid "Unable to Open file for writing."
+msgstr "無法開啟要寫入的檔案"
+
+#: activities/associate-activities.php:153
+msgid ""
+"Unable to associate Activities because there are multiple Cases or "
+"Opportunities"
+msgstr "有多個案例和機會，無法與事項關聯"
+
+#: activities/associate-activities.php:160
+msgid ""
+"Unable to associate Activities because there is no open Case or Opportunity"
+msgstr "沒有開放的案例或機會，無法與事項關聯"
+
+#: activities/export.php:110
+msgid "Unable to create file"
+msgstr "無法建立檔案"
+
+#: include/utils-misc.php:645
+msgid "Unable to execute your query."
+msgstr "無法執行您的查詢"
+
+#: admin/users/some.php:47 admin/users/some.php:66
+msgid "Unable to get data from database"
+msgstr "無法從資料庫獲得資料"
+
+#: admin/import/import-companies-3.php:440
+msgid "Unable to insert/update Company"
+msgstr "無法插入/更新公司"
+
+#: include/utils-misc.php:331
+msgid "Unable to open file"
+msgstr "無法開啟檔案"
+
+#: relationships/edit.php:66
+msgid "Unassociate"
+msgstr "中斷洽詢"
+
+#: install/data.php:2892
+msgid "Undefined Company Method"
+msgstr "未定義公司方法"
+
+#: include/classes/Pager/GUP_Pager.php:336
+msgid "Ungroup"
+msgstr "中斷群組"
+
+#: contacts/edit.php:238 contacts/new.php:244 contacts/one.php:106
+#: contacts/one.php:109 plugins/phone/contacts_one.php:96
+#: plugins/phone/contacts_one.php:99
+msgid "Unknown"
+msgstr "不明"
+
+#: admin/country-address-format/index.php:59
+#: include/classes/QuickForm/ADOdb_QuickForm.php:115
+#: locale/datastrings.php:129
+msgid "Update"
+msgstr "更新"
+
+#: admin/update.php:159 admin/updateto2.0.php:4766
+msgid "Update Complete"
+msgstr "更新完畢"
+
+#: companies/addresses.php:142
+msgid "Update Contact"
+msgstr "更新連絡人"
+
+#: activities/recurrence_sidebar.php:301
+msgid "Update Recurring Activity"
+msgstr "更新重複的事項"
+
+#: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:157
+msgid "Update Successful"
+msgstr "升級成功"
+
+#: email/email-2.php:301 email/one-template.php:94
+msgid "Update Template"
+msgstr "更新範本"
+
+#: admin/import/import-companies-3.php:341
+msgid "Updated company "
+msgstr "公司更新完畢"
+
+#: companies/delete-address.php:33 companies/edit-address-2.php:53
+msgid "Updating Address Failed"
+msgstr "更新地址失敗"
+
+#: include/utils-companies.php:398
+msgid ""
+"Upgraded company entry for Unknown Company.  New contacts will be attached "
+"here if no company is specified."
+msgstr "為不明的公司升級公司條目。如果沒有指定公司，新的連絡人將被加到這裡。"
+
+#: files/edit-form.php:72 files/edit-form.php:81
+msgid "Upload"
+msgstr "上傳"
+
+#: include/utils-files.php:98
+msgid "Upload File Not Selected"
+msgstr "沒有選擇要上傳的檔案"
+
+#: files/one.php:137
+msgid "Uploaded"
+msgstr "上傳成功"
+
+#: companies/edit-address.php:109 companies/new.php:230
+#: contacts/edit-address.php:226 contacts/new.php:336
+msgid "Use"
+msgstr "使用"
+
+#: contacts/edit-address.php:169
+msgid "Use Alternate Address"
+msgstr "使用備用地址"
+
+#: companies/one-address.php:86
+msgid "Use Non-Standard Address"
+msgstr "使用非標準地址"
+
+#: admin/import/import-companies-2.php:126
+#: admin/import/import-companies-2.php:137
+#: admin/import/import-companies-3.php:167
+#: admin/import/import-companies-3.php:178
+msgid "Use Pretty Address"
+msgstr "使用美化的地址"
+
+#: install/data.php:2894
+msgid "Use Unknown Company"
+msgstr "使用不明的公司"
+
+#: companies/addresses.php:68
+msgid "Used By Contacts"
+msgstr "被連絡人使用"
+
+#: activities/activities-widget.php:660 admin/acl/GroupUser_list.php:51
+#: admin/export/export-companies.php:141 companies/some-advanced.php:337
+#: companies/some.php:898 include/utils-users.php:30
+#: locale/datastrings.php:130 plugins/phone/companies_one.php:684
+#: plugins/phone/contacts_one.php:511 reports/activity-summary.php:100
+#: reports/activitytimes.php:50 reports/activitytimes.php:72
+#: reports/audit-items.php:42 reports/audit-items.php:92
+#: reports/companies-by-company-source.php:60
+#: reports/companies-by-crm-status.php:60 reports/companies-by-industry.php:62
+#: reports/companies-list.php:181 reports/completed-items.php:67
+#: reports/open-items.php:53
+#: reports/opportunities-quantity-by-opportunity-status.php:64
+#: reports/opportunities-size-by-opportunity-status.php:64
+#: reports/overdue-items.php:66
+msgid "User"
+msgstr "使用者"
+
+#: admin/users/one.php:73
+msgid "User Details"
+msgstr "使用者細節"
+
+#: plugins/cti/cdr.php:264
+msgid "User Field"
+msgstr "使用者欄位"
+
+#: admin/acl/GroupUser_list.php:54
+msgid "User ID"
+msgstr "使用者ID"
+
+#: private/home.php:201
+msgid "User Manual"
+msgstr "使用者手冊"
+
+#: include/utils-preferences.php:745
+msgid "User Preferences"
+msgstr "使用者選項"
+
+#: reports/index.php:123
+msgid "User Reports"
+msgstr "使用者報告"
+
+#: admin/users/user_roles_sidebar.php:69
+msgid "User Roles"
+msgstr "使用者角色"
+
+#: admin/users/one.php:111 admin/users/self.php:76 admin/users/some.php:93
+#: admin/users/some.php:105 admin/users/some.php:134
+msgid "Username"
+msgstr "使用者名稱"
+
+#: admin/index.php:137
+msgid "Users"
+msgstr "使用者"
+
+#: locale/datastrings.php:131
+msgid "Uses Manufacturer"
+msgstr "使用製造者"
+
+#: locale/datastrings.php:132
+msgid "Uses Supplier"
+msgstr "使用提供者"
+
+#: plugins/cti/setup.php:115
+msgid "VM Password"
+msgstr "VM 密碼"
+
+#: admin/acl/one_GroupMember.php:82
+msgid "Value"
+msgstr "值"
+
+#: plugins/vcard/setup.php:18
+msgid "Vcard"
+msgstr "Vcard"
+
+#: locale/datastrings.php:133
+msgid "Vendor"
+msgstr "賣主"
+
+#: companies/edit.php:194
+msgid "Vendor Key"
+msgstr "賣主金鑰"
+
+#: locale/datastrings.php:134
+msgid "Vendors"
+msgstr "賣主"
+
+#: plugins/info/sidebar.php:191
+msgid "View"
+msgstr "檢視"
+
+#: companies/one-address.php:47
+msgid "View Business Address"
+msgstr "檢視商業地址"
+
+#: cases/case-status-view.php:41
+msgid "View Case Statuses"
+msgstr "檢視案例狀態"
+
+#: companies/one-address.php:60
+msgid "View Home Address"
+msgstr "檢視家庭地址"
+
+#: include/classes/Pager/Pager_Columns.php:223
+msgid "View Name"
+msgstr "察看名稱"
+
+#: opportunities/opportunity-view.php:40
+msgid "View Opportunity Statuses"
+msgstr "檢視機會狀態"
+
+#: notes/sidebar.php:147
+msgid "View/Edit"
+msgstr "檢視/編輯"
+
+#: plugins/cti/setup.php:85
+msgid "Voice Mail"
+msgstr "語音郵件"
+
+#: email/email-3.php:81 email/email-4.php:80
+msgid "WARNING: No array of contacts!"
+msgstr "警告：沒有連絡人的陣列！"
+
+#: admin/users/change-owner-3.php:41
+msgid "WARNING: No companies provided!"
+msgstr "警告：沒有提供公司！"
+
+#: include/classes/Pager/GUP_Pager.php:137
+msgid "Warning: GUP_Pager must be passed either an SQL query or a data array"
+msgstr "警告：GUP_Pager必須透過一個 SQL 查詢或是陣列傳遞"
+
+#: include/utils-interface.php:83
+msgid "We could not authenticate you."
+msgstr "無法確定您的權限。"
+
+#: companies/sidebar.php:74 locale/datastrings.php:135
+msgid "Web Site"
+msgstr "網站"
+
+#: locale/datastrings.php:136
+msgid "Web Sites"
+msgstr "網站"
+
+#: admin/import/import-companies-2.php:144
+#: admin/import/import-companies-3.php:185
+msgid "Website"
+msgstr "網站"
+
+#: activities/recurrence_sidebar.php:134
+msgid "Wed"
+msgstr "週三"
+
+#: activities/recurrence_sidebar.php:156 include/utils-recurrence.php:28
+msgid "Wednesday"
+msgstr "星期三"
+
+#: calendar/Calendar_View.php:144
+msgid "Week View "
+msgstr "周檢視"
+
+#: activities/recurrence_sidebar.php:220
+msgid "Weekly"
+msgstr "每周"
+
+#: opportunities/one.php:249 opportunities/sidebar.php:90
+#: opportunities/some.php:433
+msgid "Weighted Size"
+msgstr "加權的大小"
+
+#: locale/datastrings.php:137
+msgid "Word of Mouth"
+msgstr "口耳相傳"
+
+#: admin/import/import-companies-2.php:97
+#: admin/import/import-companies-3.php:138 cases/one.php:213
+#: companies/new.php:257 contacts/edit.php:209 contacts/new.php:210
+#: contacts/one.php:317 contacts/sidebar.php:160 contacts/some.php:126
+#: contacts/some.php:441 opportunities/one.php:286
+#: plugins/phone/contacts_one.php:361
+msgid "Work Phone"
+msgstr "工作電話"
+
+#: contacts/some.php:126
+msgid "Work Phone Ext"
+msgstr "工作電話分機"
+
+#: admin/activity-templates/edit.php:98
+msgid "Workflow Entity"
+msgstr "工作流程實體"
+
+#: admin/activity-templates/edit.php:103
+msgid "Workflow Entity Type"
+msgstr "工作流程實體類型"
+
+#: include/utils-interface.php:449 include/utils-interface.php:458
+msgid "XRMS SourceForge Project Page"
+msgstr "XRMS SourceForge 項目開發首頁"
+
+#: install/data.php:2863
+msgid "XRMS Version"
+msgstr "XRMS 版本"
+
+#: install/data.php:2864
+msgid "XRMS Version (read-only)"
+msgstr "XRMS 版本(唯讀)"
+
+#: reports/open-items.php:366
+msgid "XRMS: Open Items"
+msgstr "XRMS：待處理項目"
+
+#: reports/overdue-items.php:383
+msgid "XRMS: Overdue Items"
+msgstr "XRMS：逾期項目"
+
+#: reports/overdue-email.php:79
+msgid "XRMS: Overdue Items for "
+msgstr "XRMS：逾期項目之於"
+
+#: admin/import/import-companies-2.php:108
+#: admin/import/import-companies-3.php:149
+msgid "Yahoo"
+msgstr "Yahoo雅虎"
+
+#: plugins/phone/contacts_one.php:391
+msgid "Yahoo! IM"
+msgstr "Yahoo! 雅虎通"
+
+#: activities/recurrence_sidebar.php:251
+msgid "Yearly"
+msgstr "每年"
+
+#: activities/activities-pager-functions.php:19
+#: activities/activities-widget.php:132 admin/acl/RolePermission_list.php:35
+#: admin/acl/one_RolePermission.php:65
+#: opportunities/opportunities-pager-functions.php:24
+#: plugins/info/edit-definitions.php:139
+msgid "Yes"
+msgstr "是"
+
+#: include/utils-interface.php:85
+msgid "You are not authorized to perform this function."
+msgstr "您無權執行這個功能。"
+
+#: plugins/cti/cdr.php:364
+msgid "You do not have permission to access this report."
+msgstr "您沒有權限存取這個報告。"
+
+#: include/utils-misc.php:649
+msgid "You may need to update your database structure."
+msgstr "您可能需要升級您的資料庫結構。"
+
+#: private/home.php:39
+msgid ""
+"You must configure your database connection in vars.php before using XRMS."
+msgstr "您必須在使用 XRMS 之前於 vars.php 中設定您的資料庫連線。"
+
+#: campaigns/edit.php:147 campaigns/new.php:136
+msgid "You must enter a campaign title."
+msgstr "您必須輸入行銷事項標題。"
+
+#: cases/edit.php:281 cases/new.php:196
+msgid "You must enter a case title."
+msgstr "您必須輸入案例標題。"
+
+#: companies/edit.php:260 companies/new.php:293
+msgid "You must enter a company name."
+msgstr "您必須輸入公司名稱。"
+
+#: include/utils-users.php:32
+msgid "You must enter a last name"
+msgstr "您必須輸入姓氏"
+
+#: admin/users/some.php:181
+msgid "You must enter a last name."
+msgstr "您必須輸入姓氏。"
+
+#: email/email-2.php:339 email/one-template.php:135
+msgid "You must enter a name to let the recipient know who the email is from."
+msgstr "您必須輸入一個名稱以便收信人知道這條訊息來自何人。"
+
+#: include/utils-users.php:31
+msgid "You must enter a password"
+msgstr "您必須輸入密碼"
+
+#: admin/users/some.php:186
+msgid "You must enter a password."
+msgstr "您必須輸入密碼。"
+
+#: admin/users/some.php:176
+msgid "You must enter a username."
+msgstr "您必須輸入使用者名稱。"
+
+#: opportunities/edit.php:286 opportunities/new.php:207
+msgid "You must enter an opportunity title."
+msgstr "您必須輸入機會標題。"
+
+#: email/email-2.php:345 email/one-template.php:140
+msgid ""
+"You must enter an reply address so the recipient can reply to the message."
+msgstr "您必須輸入一個回覆地址以便收信人回覆這條訊息。"
+
+#: admin/relationship-types/one.php:99
+msgid ""
+"You should NOT delete the last element of a relationship type, or a used "
+"relationship type."
+msgstr "您不應該刪除關係型態的最後元素，或是一個用過的關係型態。"
+
+#: admin/data_clean.php:338
+msgid "Your database has been cleaned."
+msgstr "您的資料庫已經清空。"
+
+#: admin/update.php:166 admin/updateto2.0.php:4773
+msgid "Your database has been updated."
+msgstr "您的資料庫已經更新。"
+
+#: reports/index.php:43
+msgid ""
+"Your sales funnel - how many of your accounts are in each stage of the "
+"customer development process?"
+msgstr "您的銷售瓶頸 - 您的帳戶有多少是在客戶開發程序的各個階段。"
+
+#: companies/new-2.php:189 include/utils-contacts.php:227
+msgid "[first names]"
+msgstr "[名]"
+
+#: companies/new-2.php:188 include/utils-contacts.php:226
+msgid "[last name]"
+msgstr "[姓]"
+
+#: activities/new-2.php:176 activities/new-2.php:184
+#: companies/add-division.php:22 companies/divisions.php:43
+#: companies/new-2.php:49 include/utils-activities.php:105
+msgid "[none]"
+msgstr "[無]"
+
+#: admin/account-statuses/some.php:27
+msgid "account_status_pretty_name"
+msgstr "帳號狀態暱稱"
+
+#: activities/associate-activities.php:146 locale/datastrings.php:138
+msgid "activities"
+msgstr "事項"
+
+#: locale/datastrings.php:139
+msgid "activity_id"
+msgstr "事項 ID"
+
+#: activities/recurrence_sidebar.php:212
+msgid "all days of week"
+msgstr "一周的每一天"
+
+#: include/utils-users.php:30
+msgid "already exists in the system, please choose a different username"
+msgstr "已經在系統裡存在,請選擇一個不同的使用者名稱"
+
+#: activities/some.php:372
+msgid "and"
+msgstr "和"
+
+#: activities/one.php:199 activities/one.php:202
+msgid "at"
+msgstr "在"
+
+#: activities/recurrence_sidebar.php:216
+msgid "business days only"
+msgstr "僅工作日"
+
+#: activities/one.php:647 companies/one.php:652 companies/one.php:656
+msgid "by"
+msgstr "按"
+
+#: include/utils-companies.php:391
+msgid "by default"
+msgstr "按預設"
+
+#: locale/datastrings.php:140
+msgid "call from"
+msgstr "電話來自"
+
+#: locale/datastrings.php:141
+msgid "call to"
+msgstr "打電話給"
+
+#: locale/datastrings.php:142
+msgid "calls from"
+msgstr "電話來自"
+
+#: locale/datastrings.php:143
+msgid "calls to"
+msgstr "打電話給"
+
+#: locale/datastrings.php:144
+msgid "campaign_id"
+msgstr "行銷 ID"
+
+#: admin/campaign-statuses/some.php:27
+msgid "campaign_status_pretty_name"
+msgstr "行銷狀態暱稱"
+
+#: admin/campaign-types/some.php:25
+msgid "campaign_type_pretty_name"
+msgstr "行銷類型暱稱"
+
+#: locale/datastrings.php:145
+msgid "campaigns"
+msgstr "行銷"
+
+#: locale/datastrings.php:146
+msgid "case_id"
+msgstr "案例 ID"
+
+#: admin/case-priorities/some.php:27
+msgid "case_priority_pretty_name"
+msgstr "案例優先等級暱稱"
+
+#: admin/case-statuses/some.php:52
+msgid "case_status_pretty_name"
+msgstr "案例狀態暱稱"
+
+#: locale/datastrings.php:147
+msgid "cases"
+msgstr "案例"
+
+#: admin/categories/one.php:51 admin/categories/one.php:70
+msgid "category_scope_pretty_plural"
+msgstr "類別範圍複數暱稱"
+
+#: admin/import/import-companies.php:87
+msgid "comma"
+msgstr "逗號分割"
+
+#: locale/datastrings.php:148
+msgid "companies"
+msgstr "公司"
+
+#: include/strings.php:34
+msgid "companies/contacts"
+msgstr "公司/連絡人"
+
+#: locale/datastrings.php:149
+msgid "company link"
+msgstr "公司連結"
+
+#: locale/datastrings.php:150
+msgid "company relationships"
+msgstr "公司關係"
+
+#: locale/datastrings.php:151
+msgid "company_division"
+msgstr "公司部門"
+
+#: locale/datastrings.php:152
+msgid "company_id"
+msgstr "公司 ID"
+
+#: admin/company-sources/some.php:29
+msgid "company_source_pretty_name"
+msgstr "公司來源暱稱"
+
+#: admin/company-types/some.php:26
+msgid "company_type_pretty_name"
+msgstr "公司類型暱稱"
+
+#: locale/datastrings.php:153
+msgid "contact_id"
+msgstr "連絡人 ID"
+
+#: locale/datastrings.php:154
+msgid "contacts"
+msgstr "連絡人"
+
+#: admin/crm-statuses/some.php:30
+msgid "crm_status_display_html"
+msgstr "客戶關係管理顯示 HTML"
+
+#: admin/crm-statuses/some.php:32
+msgid "crm_status_pretty_name"
+msgstr "客戶關係管理狀態暱稱"
+
+#: companies/one.php:590 plugins/phone/companies_one.php:574
+msgid "days"
+msgstr "天數"
+
+#: locale/datastrings.php:155
+msgid "division_id"
+msgstr "部門 ID"
+
+#: admin/activity-resolution-types/some.php:34
+#: admin/activity-types/some.php:34 admin/case-statuses/some.php:70
+#: admin/crm-statuses/some.php:49 admin/opportunity-statuses/some.php:76
+msgid "down"
+msgstr "向下"
+
+#: locale/datastrings.php:156
+msgid "e-mail from"
+msgstr "電子郵件來自"
+
+#: locale/datastrings.php:157
+msgid "e-mail to"
+msgstr "電子郵件寄到"
+
+#: locale/datastrings.php:158
+msgid "e-mails from"
+msgstr "電子郵件來自"
+
+#: locale/datastrings.php:159
+msgid "e-mails to"
+msgstr "電子郵件寄到"
+
+#: locale/datastrings.php:160
+msgid "email_template_id"
+msgstr "e-mail 範本 ID"
+
+#: locale/datastrings.php:161
+msgid "email_templates"
+msgstr "e-mail 範本"
+
+#: companies/some.php:282
+msgid "employees"
+msgstr "員工"
+
+#: activities/one.php:198
+msgid "entered by"
+msgstr "輸入者"
+
+#: locale/datastrings.php:162
+msgid "fax from"
+msgstr "傳真來自"
+
+#: locale/datastrings.php:163
+msgid "fax to"
+msgstr "傳真送到"
+
+#: locale/datastrings.php:164
+msgid "faxes from"
+msgstr "傳真來自"
+
+#: locale/datastrings.php:165
+msgid "faxes to"
+msgstr "傳真送到"
+
+#: locale/datastrings.php:166
+msgid "file_id"
+msgstr "檔案 ID"
+
+#: locale/datastrings.php:167
+msgid "files"
+msgstr "檔案"
+
+#: admin/industries/some.php:26
+msgid "industry_pretty_name"
+msgstr "行業暱稱"
+
+#: locale/datastrings.php:168
+msgid "internal"
+msgstr "內部"
+
+#: locale/datastrings.php:169
+msgid "letter from"
+msgstr "信件來自"
+
+#: locale/datastrings.php:170
+msgid "letter to"
+msgstr "信件寫給"
+
+#: activities/one.php:617 activities/one.php:622 activities/one.php:647
+msgid "on"
+msgstr "在"
+
+#: locale/datastrings.php:171
+msgid "opportunities"
+msgstr "機會"
+
+#: locale/datastrings.php:172
+msgid "opportunity_id"
+msgstr "機會 ID"
+
+#: admin/opportunity-statuses/some.php:58
+msgid "opportunity_status_pretty_name"
+msgstr "機會狀態暱稱"
+
+#: contacts/new_contact_company_select.php:78
+msgid "or create a"
+msgstr "或是建立一個"
+
+#: admin/system-parameters/some.php:25
+msgid "param_id"
+msgstr "參數 ID"
+
+#: activities/new_activity_participant.php:59
+#: activities/participant_sidebar.php:67
+msgid "participant_position_name"
+msgstr "參加者的位置名稱"
+
+#: admin/import/import-companies.php:89
+msgid "pipe"
+msgstr "管道"
+
+#: locale/datastrings.php:173
+msgid "process"
+msgstr "處理"
+
+#: include/classes/Pager/Pager_Renderer.php:99
+#: include/classes/Pager/Pager_Renderer_Table.php:87
+msgid "records found"
+msgstr "記錄找到"
+
+#: admin/salutations/some.php:27
+msgid "salutation"
+msgstr "稱呼"
+
+#: reports/activitytimes.php:118
+msgid "seconds"
+msgstr "秒"
+
+#: admin/import/import-companies.php:90
+msgid "semi-colon"
+msgstr "分號間隔"
+
+#: locale/datastrings.php:174
+msgid "system"
+msgstr "系統"
+
+#: admin/import/import-companies.php:88
+msgid "tab"
+msgstr "tab 間隔"
+
+#: admin/activity-resolution-types/some.php:30
+#: admin/activity-types/some.php:30 admin/case-statuses/some.php:65
+#: admin/crm-statuses/some.php:43 admin/opportunity-statuses/some.php:71
+msgid "up"
+msgstr "向上"
+
+#: locale/datastrings.php:175
+msgid "user_id"
+msgstr "使用者 ID"
+
+#: include/utils-preferences.php:758
+msgid "user_preference_description"
+msgstr "使用者偏好設定描述"
+
+#: include/utils-preferences.php:761
+msgid "user_preference_name"
+msgstr "使用者偏好設定名稱"
+
+#: include/utils-preferences.php:760
+msgid "user_preference_pretty_name"
+msgstr "使用者偏好設定暱稱"
+
+#: locale/datastrings.php:176
+msgid "users"
+msgstr "使用者"
+
+#: contacts/edit.php:211 contacts/new.php:212 contacts/one.php:84
+#: contacts/sidebar.php:165 opportunities/one.php:82
+msgid "x"
+msgstr "x"
+
+#~ msgid "Create Contact for 'Self'"
+#~ msgstr "給自己建立洽詢方式"
+
+#~ msgid "Current User"
+#~ msgstr "目前使用者"
+
+#~ msgid "Delete Company?"
+#~ msgstr "刪除公司？"
+
+#~ msgid "Edit Account Information"
+#~ msgstr "編輯帳號資訊"
+
+#~ msgid "Not Set"
+#~ msgstr "未設定"
+
+#~ msgid "Search for a company"
+#~ msgstr "搜尋公司"
