@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.137 2006/05/06 09:32:18 vanmer Exp $
+ * $Id: one.php,v 1.138 2006/06/21 15:51:25 jswalter Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -207,7 +207,7 @@ if ($company_id) {
     }
 
     //get activity location menu
-    $location_menu=get_company_address_select($con, $company_id, $address_id);
+    $location_menu=get_company_address_select($con, $company_id, $activity_address_id);
 }
 
 add_audit_item($con, $session_user_id, 'viewed', 'activities', $activity_id, 3);
@@ -750,6 +750,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.138  2006/06/21 15:51:25  jswalter
+ *  - LOCATION list does not default to address selected for a given activity. This was corrected.
+ *
  * Revision 1.137  2006/05/06 09:32:18  vanmer
  * - added passthrough for old status seperately from status in dropdown
  *
