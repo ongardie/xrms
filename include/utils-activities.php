@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-activities.php,v 1.28 2006/05/06 09:29:27 vanmer Exp $
+ * $Id: utils-activities.php,v 1.29 2006/06/21 15:46:59 jswalter Exp $
 
  */
 
@@ -175,7 +175,7 @@ function get_activity($con, $activity_data, $show_deleted=false, $return_records
     }
 
     $sql = "SELECT
-                a.*, addr.*, c.company_id, c.company_name, cont.first_names, cont.last_name, " .
+                a.*, addr.*, a.address_id AS activity_address_id, c.company_id, c.company_name, cont.first_names, cont.last_name, " .
                 $con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS entered_by_username, " .
                 $con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS last_modified_by_username, " .
                 $con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS completed_by_username " . "
@@ -191,6 +191,7 @@ function get_activity($con, $activity_data, $show_deleted=false, $return_records
     $where=array();
     if (!$show_deleted) $activity_data['activity_record_status']='a';
     $tablename='a';
+
     if (array_key_exists('activity_id',$activity_data) AND trim($activity_data['activity_id'])) {
         $where['activity_id'] = $activity_data['activity_id'];
         $wherestr=make_where_string($con, $where, $tablename);
@@ -774,6 +775,9 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.29  2006/06/21 15:46:59  jswalter
+  *  - address_id was being defined twice (from activitivies and company tables) in 'get_activity()' SQL, therfore the later value was used. address_id from the activities table is now defined as 'activities_address_id'
+  *
   * Revision 1.28  2006/05/06 09:29:27  vanmer
   * - added hook functions to activities API from new-2 and edit-2 activities pages
   * - added call to run workflow activity completed code for workflow engine
