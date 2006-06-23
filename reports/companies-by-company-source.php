@@ -3,7 +3,7 @@
  *
  * Companies by company source report.
  *
- * $Id: companies-by-company-source.php,v 1.13 2006/01/02 23:46:52 vanmer Exp $
+ * $Id: companies-by-company-source.php,v 1.14 2006/06/23 21:45:43 ongardie Exp $
  */
 
 require_once('../include-locations.inc');
@@ -191,7 +191,7 @@ function GetCompaniesByCompanySourceGraph($con, $user_id, $all_users) {
 	
 	$graph = new BarGraph($graph_info);
 	
-	$basename = 'companies-by-crm-status';
+	$basename = 'companies-by-company-source';
     $filename = "$basename-$session_user_id.jpg";
 
 	
@@ -203,6 +203,9 @@ function GetCompaniesByCompanySourceGraph($con, $user_id, $all_users) {
 
 /**
  * $Log: companies-by-company-source.php,v $
+ * Revision 1.14  2006/06/23 21:45:43  ongardie
+ *  * Corrected basename to avoid conflicting filenames.
+ *
  * Revision 1.13  2006/01/02 23:46:52  vanmer
  * - changed to use centralized dbconnection function
  *
