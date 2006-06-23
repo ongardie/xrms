@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a contact
  *
- * $Id: edit-address-2.php,v 1.16 2006/04/21 22:16:51 braverock Exp $
+ * $Id: edit-address-2.php,v 1.17 2006/06/23 22:02:24 ongardie Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -10,6 +10,7 @@ require_once('include-locations-location.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-addresses.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
@@ -160,6 +161,9 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.17  2006/06/23 22:02:24  ongardie
+ * Needed the require of utils-addresses for add_address() to work.
+ *
  * Revision 1.16  2006/04/21 22:16:51  braverock
  * - changed to use centralized API functions add_address() and update_address();
  *
@@ -207,7 +211,7 @@ header("Location: $return_url");
  * - added processing for "Use Alternate Address" section
  *
  * Revision 1.2  2004/06/09 17:36:09  gpowers
- * - added $Id: edit-address-2.php,v 1.16 2006/04/21 22:16:51 braverock Exp $Log: tags.
+ * - added $Id: edit-address-2.php,v 1.17 2006/06/23 22:02:24 ongardie Exp $Log: tags.
  *
  * Revision 1.1  2004/06/09 16:52:14  gpowers
  * - Contact Address Editing
