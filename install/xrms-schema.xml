@@ -587,6 +587,7 @@
       <row><f>9</f><f>INT</f><f>internal</f><f>internal</f><f>internal</f><f>0</f><f>a</f><f>9</f><f>0</f></row>
       <row><f>10</f><f>PRO</f><f>process</f><f>process</f><f>process</f><f>0</f><f>a</f><f>10</f><f>0</f></row>
       <row><f>11</f><f>SYS</f><f>system</f><f>system</f><f>system</f><f>0</f><f>a</f><f>11</f><f>0</f></row>
+      <row><f>12</f><f>MTG</f><f>meeting</f><f>meetings</f><f>meeting</f><f>0</f><f>a</f><f>7</f><f>0</f></row>
     </data>
   </table>
   <table name="address_format_strings">
