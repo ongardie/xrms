@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.138 2006/06/21 15:51:25 jswalter Exp $
+ * $Id: one.php,v 1.139 2006/06/29 15:53:46 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -609,9 +609,7 @@ function logTime() {
             <tr id='resolution_reason' >
                 <td class=widget_label_right><?php echo _("Resolution Description"); ?></td>
                 <td class=widget_content_form_element>
-                    <textarea rows=10 cols=70 id=resolution_description name=resolution_description>
-                        <?php echo htmlspecialchars(trim($resolution_description)); ?>
-                    </textarea>
+                    <textarea rows=10 cols=70 id=resolution_description name=resolution_description><?php echo htmlspecialchars(trim($resolution_description)); ?></textarea>
                 </td>
             </tr>
             <?php
@@ -750,6 +748,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.139  2006/06/29 15:53:46  braverock
+ * - remove extra whitespace from resolution_description field.
+ *   - patch by Frederik Jervfors
+ *
  * Revision 1.138  2006/06/21 15:51:25  jswalter
  *  - LOCATION list does not default to address selected for a given activity. This was corrected.
  *
