@@ -1,14 +1,14 @@
 XRMS CRM Installation
 
 Original Author: Beth Macknik (maulani)
-$Id: INSTALL,v 1.9 2006/04/09 04:09:39 braverock Exp $
+$Id: INSTALL,v 1.10 2006/06/29 13:10:54 braverock Exp $
 
 INSTALLATION
 ============
 
 To install XRMS, you need to place the main installation directory in a
 location where your web server can access it.  For greater security, you
-can move the include directory to another location that is not accessible
+may move the include directory to another location that is not accessible
 by your web server.
 
 You must also have access to a database for your data.  We believe that
@@ -26,7 +26,7 @@ Example:
    create database xrms;
    grant all privileges on xrms.* to xrms@localhost identified by 'yourpasswordhere';
 
-The include_locations.inc file is located at the top level of your
+The include-locations.inc file is located at the top level of your
 XRMS directory.  This file records where the include folder is located.
 You should open this file with a text editor and follow
 the instructions in the file.
@@ -55,7 +55,7 @@ Administration -> Data Cleanup
 to avoid possible errors when using features.
 
 If you wish to have a more secure installation, you should consider changing the
-xrms database user to have only INSERT and UPDATE privileges.  If you want to
+xrms database user to have only SELECT, INSERT and UPDATE privileges.  If you want to
 continue to use the upgrade scripts without problems, you will also need ALTER TABLE
 privileges.  The xrms database user should not need DROP or DELETE privileges, as
 these SQL commands are not used in the XRMS code.
@@ -135,6 +135,9 @@ several pages of information about your php installation.
 /**
  * Change Log for INSTALL file
  * $Log: INSTALL,v $
+ * Revision 1.10  2006/06/29 13:10:54  braverock
+ * - text DB permissions update suggested by Fredrik Jervfors
+ *
  * Revision 1.9  2006/04/09 04:09:39  braverock
  * - update to include more information on other supported databases
  *
