@@ -164,13 +164,13 @@ if ($error_msg) {
 }
 $page_title = _("Add Relationship for ". $display_name_singular);
 start_page($page_title, true, $msg);
-
+$what_url=table_one_url($what_table, '');
 ?>
 
 <div id="Main">
     <div id="Content">
 
-        <form action="<?php echo $http_site_root . "/" . $what_table . "/one.php"; ?>" method=get target="_blank">
+        <form action="<?php echo $http_site_root . $what_url ?>" method=get target="_blank">
         <input type="hidden" name="<?php echo $what_table_singular; ?>_id">
         </form>
         <form action=new-relationship-3.php method=post <?php if($working_direction == "both") { ?>onsubmit="document.forms[1].working_direction.value = (document.forms[1].relationship_type_id.selectedIndex < (document.forms[1].relationship_type_id.length / 2)) ? 'from' : 'to'; return true;"<?php } ?>>
@@ -213,6 +213,9 @@ end_page();
 
 /**
  * $Log: new-relationship-2.php,v $
+ * Revision 1.27  2006/06/30 02:05:56  vanmer
+ * - changed More Info link to work for all pages, by using table_one_url function to generate target to hit
+ *
  * Revision 1.26  2006/01/02 23:31:01  vanmer
  * - changed to use centralized dbconnection function
  *
