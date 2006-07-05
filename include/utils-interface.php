@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.104 2006/05/06 09:31:21 vanmer Exp $
+ * $Id: utils-interface.php,v 1.105 2006/07/05 13:13:59 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -201,11 +201,14 @@ function get_css_themes() {
     }
     $css_themes=array();
     $cssroot = $http_site_root.'/css';
+    if (!is_dir($xrms_file_root)) {
+        echo '"'.$xrms_file_root.'" '._("is not a directory, please check your configuration.")."\n";
+    }
     $cssdir = $xrms_file_root.'/css/';
-   if (!is_dir($cssdir)) {
-       $cssdir=realpath('css');
-   }
-   if (is_dir($cssdir)) {
+    if (!is_dir($cssdir)) {
+        $cssdir=realpath('css');
+    }
+    if (is_dir($cssdir)) {
         if ($dh = opendir($cssdir)) {
             while (($file = readdir($dh)) !== false) {
                 if ($file!='..' AND $file!='.' AND $file!='CVS') {
@@ -219,9 +222,11 @@ function get_css_themes() {
             }
             closedir($dh);
         }
-   }
-   $_SESSION['xrms_css_themes']=$css_themes;
-   return $css_themes;
+    } else {
+        echo '"'.$cssdir.'" '._("is not a directory, please check your configuration.")."\n";
+    }
+    $_SESSION['xrms_css_themes']=$css_themes;
+    return $css_themes;
 }
 
 /**
@@ -245,7 +250,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '', $show_topn
 
     $user_id=$_SESSION['session_user_id'];
     $msg = status_msg($msg);
-    
+
     if ($xcon->_connectionID) {
     ob_start();
     if ($user_id) {
@@ -746,11 +751,11 @@ function render_create_button($text='Create', $type='submit', $onclick=false, $n
 }
 
 /**
- * Function to render action buttons wrapper with an ACL permission check.  
- * This function can be used directly or the wrapper functions for each basic type of button (create, read, update, delete and export).  
+ * Function to render action buttons wrapper with an ACL permission check.
+ * This function can be used directly or the wrapper functions for each basic type of button (create, read, update, delete and export).
  * Will return either a string with the button if permission is granted, or a blank string if not permission is given
- * 
- * @param string $action with string describing the action ('Create', 'Read', 'Update', 'Delete', 'Export') the button will have 
+ *
+ * @param string $action with string describing the action ('Create', 'Read', 'Update', 'Delete', 'Export') the button will have
  * @param string $text with text to display on the button
  * @param string $type with type of HTML input this button will be, defaults to 'submit'
  * @param string $onclick with string for onclick handler for the button
@@ -1057,6 +1062,10 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.105  2006/07/05 13:13:59  braverock
+ * - add tests once per session for existence of $cssdir and $xrms_file_root as real directories
+ *   - tests suggested by user queuetue (Scott in Toronto) after he had missing theme list
+ *
  * Revision 1.104  2006/05/06 09:31:21  vanmer
  * - added case for message about not changing the status of the an entity automatically
  *
