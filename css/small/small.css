@@ -41,6 +41,9 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 10px;
 }
+#header_logo {
+   top: 4px;  /* Pushes the logo down to the margin */
+}
 /** ----------
  * FOREGROUND COLORS - black by default (body)
  */
