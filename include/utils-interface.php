@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.105 2006/07/05 13:13:59 braverock Exp $
+ * $Id: utils-interface.php,v 1.106 2006/07/07 01:45:02 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -125,7 +125,7 @@ function css_link($url, $name = null, $alt = true, $mtype = 'screen') {
     if ( empty($url) )
         return '';
     // set to lower case to avoid errors
-    $navigator_user_agent = strtolower( $_SERVER['HTTP_USER_AGENT'] );
+    $browser_user_agent = strtolower( $_SERVER['HTTP_USER_AGENT'] );
 
     if (stristr($browser_user_agent, "msie 4"))
     {
@@ -1062,6 +1062,9 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.106  2006/07/07 01:45:02  vanmer
+ * - updated variable to allow proper check for browser for CSS links
+ *
  * Revision 1.105  2006/07/05 13:13:59  braverock
  * - add tests once per session for existence of $cssdir and $xrms_file_root as real directories
  *   - tests suggested by user queuetue (Scott in Toronto) after he had missing theme list
