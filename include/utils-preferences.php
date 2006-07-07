@@ -19,7 +19,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-preferences.php,v 1.17 2006/04/26 13:13:53 braverock Exp $
+ * $Id: utils-preferences.php,v 1.18 2006/07/07 20:03:44 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -550,7 +550,7 @@ function delete_preference_option($con, $user_preference_type_id, $option_value,
 function get_user_preference_type($con, $type_name=false, $type_id=false, $return_all=false) {
     if (!$type_name AND !$type_id AND !$return_all) return false;
     $func_name='get_user_preference_type';
-    $params = func_get_args();
+    $params=array($type_name,$type_id,$return_all);
     if (!$return_all) {
         if (function_cache_bool($func_name, $params)) {
             return function_cache_get($func_name, $params);
@@ -852,6 +852,9 @@ function move_system_parameters($con, $fields) {
 
 /**
  * $Log: utils-preferences.php,v $
+ * Revision 1.18  2006/07/07 20:03:44  vanmer
+ * - altered params when caching user_preference_type
+ *
  * Revision 1.17  2006/04/26 13:13:53  braverock
  * - order preference display by user_preference_pretty_name
  *
