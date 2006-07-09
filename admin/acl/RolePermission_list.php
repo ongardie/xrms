@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: RolePermission_list.php,v 1.6 2005/07/28 19:55:48 vanmer Exp $
+ * $Id: RolePermission_list.php,v 1.7 2006/07/09 05:04:03 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -20,7 +20,7 @@ require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 global $http_site_root;
 
-$session_user_id = session_check();
+$session_user_id = session_check('Admin');
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
@@ -119,6 +119,9 @@ end_page();
 
 /**
  * $Log: RolePermission_list.php,v $
+ * Revision 1.7  2006/07/09 05:04:03  vanmer
+ * - patched ACL interface to check for admin access
+ *
  * Revision 1.6  2005/07/28 19:55:48  vanmer
  * - changed to use new GUP_Pager for role permission list
  * - added grouping functionality on all applicable fields

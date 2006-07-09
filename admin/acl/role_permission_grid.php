@@ -2,7 +2,7 @@
 /**
  * Administration interface for managing permissions for one role
  *
- * $Id: role_permission_grid.php,v 1.10 2006/04/17 19:40:15 vanmer Exp $
+ * $Id: role_permission_grid.php,v 1.11 2006/07/09 05:04:03 vanmer Exp $
  *
  */
 
@@ -16,7 +16,7 @@ require_once($include_directory . 'adodb/adodb-pager.inc.php');
 
 global $http_site_root;
 
-$session_user_id = session_check();
+$session_user_id = session_check('Admin');
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 

@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Aaron van Meerten
- * $Id: one_GroupUser.php,v 1.8 2006/04/05 01:10:45 vanmer Exp $
+ * $Id: one_GroupUser.php,v 1.9 2006/07/09 05:04:03 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -16,7 +16,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check('Admin');
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
@@ -100,6 +100,9 @@ end_page();
 
 /**
  * $Log: one_GroupUser.php,v $
+ * Revision 1.9  2006/07/09 05:04:03  vanmer
+ * - patched ACL interface to check for admin access
+ *
  * Revision 1.8  2006/04/05 01:10:45  vanmer
  * - added global var retrieval for key value
  *

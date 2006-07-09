@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Justin Cooper
- * $Id: one_ControlledObjectRelationship.php,v 1.6 2006/01/02 22:27:11 vanmer Exp $
+ * $Id: one_ControlledObjectRelationship.php,v 1.7 2006/07/09 05:04:03 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -16,7 +16,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check('Admin');
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
   require_once($include_directory ."classes/QuickForm/ADOdb_QuickForm.php");
@@ -99,6 +99,9 @@ end_page();
 
 /**
  * $Log: one_ControlledObjectRelationship.php,v $
+ * Revision 1.7  2006/07/09 05:04:03  vanmer
+ * - patched ACL interface to check for admin access
+ *
  * Revision 1.6  2006/01/02 22:27:11  vanmer
  * - removed force of css theme for ACL interface
  * - changed to use centralized dbconnection function

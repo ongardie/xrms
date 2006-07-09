@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: Role_list.php,v 1.7 2005/12/12 21:31:28 vanmer Exp $
+ * $Id: Role_list.php,v 1.8 2006/07/09 05:04:03 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -20,7 +20,7 @@ require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 global $http_site_root;
 
-$session_user_id = session_check();
+$session_user_id = session_check('Admin');
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
@@ -73,6 +73,9 @@ end_page();
 
 /**
  * $Log: Role_list.php,v $
+ * Revision 1.8  2006/07/09 05:04:03  vanmer
+ * - patched ACL interface to check for admin access
+ *
  * Revision 1.7  2005/12/12 21:31:28  vanmer
  * - changed to use GUP_Pager instead of adodb pager
  *

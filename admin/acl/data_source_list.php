@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: data_source_list.php,v 1.5 2005/12/12 21:17:43 vanmer Exp $
+ * $Id: data_source_list.php,v 1.6 2006/07/09 05:04:03 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -20,7 +20,7 @@ require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 global $http_site_root;
 
-$session_user_id = session_check();
+$session_user_id = session_check('Admin');
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
@@ -84,6 +84,9 @@ end_page();
 
 /**
  * $Log: data_source_list.php,v $
+ * Revision 1.6  2006/07/09 05:04:03  vanmer
+ * - patched ACL interface to check for admin access
+ *
  * Revision 1.5  2005/12/12 21:17:43  vanmer
  * - changed to use GUP pager instead of adodb pager
  *

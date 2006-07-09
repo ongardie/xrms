@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupMember_list.php,v 1.5 2005/08/11 22:54:29 vanmer Exp $
+ * $Id: GroupMember_list.php,v 1.6 2006/07/09 05:04:03 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -22,7 +22,7 @@ global $http_site_root;
 
 getGlobalVar($msg, 'msg');
 
-$session_user_id = session_check();
+$session_user_id = session_check('Admin');
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
@@ -97,6 +97,9 @@ end_page();
 
 /**
  * $Log: GroupMember_list.php,v $
+ * Revision 1.6  2006/07/09 05:04:03  vanmer
+ * - patched ACL interface to check for admin access
+ *
  * Revision 1.5  2005/08/11 22:54:29  vanmer
  * - added msg output to Group Member list
  *

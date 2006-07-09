@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: acl_results.php,v 1.14 2006/01/24 21:57:44 vanmer Exp $
+ * $Id: acl_results.php,v 1.15 2006/07/09 05:04:03 vanmer Exp $
  *
  * @author Aaron van Meerten
  */
@@ -18,7 +18,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check('Admin');
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
@@ -192,6 +192,9 @@ function display_object_list($acl, $object, $ids=false, $extrafield=false, $con,
 }
  /*
   * $Log: acl_results.php,v $
+  * Revision 1.15  2006/07/09 05:04:03  vanmer
+  * - patched ACL interface to check for admin access
+  *
   * Revision 1.14  2006/01/24 21:57:44  vanmer
   * - changed to allow results page to use database connection specific to the controlled object in
   * question

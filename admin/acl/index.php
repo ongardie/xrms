@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: index.php,v 1.5 2006/01/02 22:27:11 vanmer Exp $
+ * $Id: index.php,v 1.6 2006/07/09 05:04:03 vanmer Exp $
  *
  * @todo write dashboard
  */
@@ -20,7 +20,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 
 //set target and see if we are logged in
 $this_page = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check();
+$session_user_id = session_check('Admin');
 
 $msg = $_GET['msg'];
 
@@ -69,6 +69,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.6  2006/07/09 05:04:03  vanmer
+ * - patched ACL interface to check for admin access
+ *
  * Revision 1.5  2006/01/02 22:27:11  vanmer
  * - removed force of css theme for ACL interface
  * - changed to use centralized dbconnection function
