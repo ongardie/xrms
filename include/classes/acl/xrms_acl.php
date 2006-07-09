@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.34 2006/06/07 22:05:05 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.35 2006/07/09 05:40:34 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -1390,7 +1390,7 @@ class xrms_acl {
             }
             if ($Permission_id) { $where[]="Permission_id=$Permission_id"; }
             
-            if ($inheritable) { $where[]="Inheritable_flag=1"; }  else if ($inheritable===NULL) { $where[]='inheritable_flag=0'; }
+            if ($inheritable) { $where[]="Inheritable_flag=1"; }  else if ($inheritable===NULL) { $where[]='Inheritable_flag=0'; }
             
             if ($Scopes) { 
                 if (!is_array($Scopes)) $Scopes=array($Scopes);
@@ -1456,6 +1456,8 @@ class xrms_acl {
         $RolePermissionRow['Permission_id']=$Permission_id;
         if ($inheritable) {
             $RolePermissionRow['Inheritable_flag']=1;
+        } else {
+            $RolePermissionRow['Inheritable_flag']=0;
         }
         
         //Create insert statement
@@ -2470,6 +2472,10 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.35  2006/07/09 05:40:34  vanmer
+ * - fixed mixed caps on Inheritable_flag=0 clause
+ * - added clause to set inheritable flag to 0 when not set to true on a RolePermission
+ *
  * Revision 1.34  2006/06/07 22:05:05  vanmer
  * - disabled path for child objects in an object relationship do not inherit group of parent object
  *
