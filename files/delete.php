@@ -1,5 +1,9 @@
 <?php
-
+/**
+* Logically Delete File information in the database
+*
+* $Id: delete.php,v 1.10 2006/07/10 13:19:10 braverock Exp $
+*/
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -41,4 +45,12 @@ $con->close();
 
 header("Location: {$http_site_root}{$return_url}");
 
+/**
+* $Log: delete.php,v $
+* Revision 1.10  2006/07/10 13:19:10  braverock
+* - clean indentation
+* - remove trailing whitespace
+* - add phpdoc
+*
+*/
 ?>
