@@ -11,33 +11,37 @@ $con=get_xrms_dbconnection();
 
 $data_filenames= array($xrms_file_root.'/install/data.php', $xrms_file_root.'/include/classes/acl/acl_install.php');
 $output_filename = $xrms_file_root.'/locale/datastrings.php';
+$strings = array();
 
 // Add more table names to $tables_to_extract if they contain strings
 // and translation is required.
 
-$tables_to_extract = array("account_statuses",
-                           "activity_types",
-			   "activity_resolution_types",
-                           "campaign_types",
-                           "case_priorities",
-                           "case_statuses",
-                           "case_types",
-                           "crm_statuses",
-                           "company_types",
-                           "system_parameters",
-                           "company_sources",
-                           "opportunity_statuses",
-                           "industries",
-                           "ratings",
-                           "relationship_types",
-                           "system_parameters",
-                           "ControlledObject",
-                           "Permission",
-                           "Role",
-                           );
-    $strings = array();
+$tables_to_extract = array();
+$tables_to_extract[] = 'account_statuses';
+$tables_to_extract[] = 'activity_types';
+$tables_to_extract[] = 'activity_resolution_types';
+$tables_to_extract[] = 'campaign_types';
+$tables_to_extract[] = 'campaign_statuses';
+$tables_to_extract[] = 'case_priorities';
+$tables_to_extract[] = 'case_statuses';
+$tables_to_extract[] = 'case_types';
+$tables_to_extract[] = 'crm_statuses';
+$tables_to_extract[] = 'company_types';
+$tables_to_extract[] = 'company_sources';
+$tables_to_extract[] = 'industries';
+$tables_to_extract[] = 'opportunity_types';
+$tables_to_extract[] = 'opportunity_statuses';
+$tables_to_extract[] = 'ratings';
+$tables_to_extract[] = 'relationship_types';
+$tables_to_extract[] = 'user_preference_types';
+$tables_to_extract[] = 'user_preference_type_options';
+$tables_to_extract[] = 'ControlledObject';
+$tables_to_extract[] = 'Permission';
+$tables_to_extract[] = 'Role';
+
     //loop on each table
     foreach ($tables_to_extract as $t) {
+	echo "Extracting localized strings from Table: $t \n";
     	//get column info for table
 	$col_info=$con->MetaColumns($t);
 	$str_cols=array();
@@ -94,7 +98,7 @@ fwrite($fp, '/**
  * php ./getdatastrings.php
  * from the locale directory
  *
- * $Id: getdatastrings.php,v 1.7 2005/11/30 00:36:02 vanmer Exp $
+ * $Id: getdatastrings.php,v 1.8 2006/07/10 14:40:53 braverock Exp $
  */'."\n");
 foreach ($output_strings as $s)
 {
