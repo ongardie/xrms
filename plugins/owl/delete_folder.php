@@ -1,9 +1,9 @@
 <?php
 /**
- * owl/new_folder-2.php - This file adds new folders to the system
- *
- * $Id: delete_folder.php,v 1.3 2006/07/10 12:47:41 braverock Exp $
- */
+* owl/new_folder-2.php - This file adds new folders to the system
+*
+* $Id: delete_folder.php,v 1.4 2006/07/10 13:20:19 braverock Exp $
+*/
 
 require_once('../../include-locations.inc');
 
@@ -53,7 +53,7 @@ if(count($folders)) {
             $rst = $con->execute($file_sql);
             if(!$rst) {
                 db_error_handler($con, $file_sql);
-	            $msg .= _('Error deleting files in XRMS.');
+                $msg .= _('Error deleting files in XRMS.');
                 $error = true;
             }
 
@@ -65,7 +65,7 @@ if(count($folders)) {
             $rst = $con->execute($folder_sql);
             if(!$rst) {
                 db_error_handler($con, $folder_sql);
-	            $msg .= _('Error deleting files in XRMS.');
+                $msg .= _('Error deleting files in XRMS.');
                 $error = true;
             }
         }
@@ -81,7 +81,7 @@ if(count($folders)) {
 
 
 } else {
-	$msg .= _('Folder not found in XRMS.');
+    $msg .= _('Folder not found in XRMS.');
     $error = true;
 }
 
@@ -89,6 +89,10 @@ header("Location: " . $http_site_root . $return_url . $sep . $owl_parent_url . "
 
 /**
  * $Log: delete_folder.php,v $
+ * Revision 1.4  2006/07/10 13:20:19  braverock
+ * - clean indentation
+ * - remove trailing whitespace
+ *
  * Revision 1.3  2006/07/10 12:47:41  braverock
  * - remove call time pass by reference in do_hook_function (reference in function def)
  *
@@ -106,6 +110,5 @@ header("Location: " . $http_site_root . $return_url . $sep . $owl_parent_url . "
  *
  * Revision 1.1  2005/04/28 15:47:10  daturaarutad
  * new files
- *
  */
 ?>

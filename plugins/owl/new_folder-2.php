@@ -1,9 +1,9 @@
 <?php
 /**
- * owl/new_folder-2.php - This file adds new folders to the system
- *
- * $Id: new_folder-2.php,v 1.7 2006/07/10 12:47:41 braverock Exp $
- */
+* owl/new_folder-2.php - This file adds new folders to the system
+*
+* $Id: new_folder-2.php,v 1.8 2006/07/10 13:20:19 braverock Exp $
+*/
 
 require_once('../../include-locations.inc');
 
@@ -31,9 +31,9 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->debug = 1;
 
 if ($entered_at == "")
-  { $entered_at = time(); }
+{ $entered_at = time(); }
 else
-  { $entered_at = strtotime($file_entered_at); }
+{ $entered_at = strtotime($file_entered_at); }
 
 
 //save to database
@@ -59,28 +59,32 @@ $sep = get_url_seperator($return_url);
 if($folder_plugin_params['error_status']) {
     $error = true;
     $msg = $folder_plugin_params['error_text'];
-	header("Location: " . $http_site_root . $return_url . $sep . "msg=" . htmlentities($msg));
+    header("Location: " . $http_site_root . $return_url . $sep . "msg=" . htmlentities($msg));
 } else {
 
-	$tbl = 'folders';
+    $tbl = 'folders';
 
-	$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc(), false);
-	//echo $ins;
-	$rst = $con->execute($ins);
-	if(!$rst) {
-		db_error_handler($con, $ins);
-	}
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc(), false);
+    //echo $ins;
+    $rst = $con->execute($ins);
+    if(!$rst) {
+        db_error_handler($con, $ins);
+    }
 
-	$folder_id = $con->insert_id();
+    $folder_id = $con->insert_id();
 
 
-	$con->close();
+    $con->close();
 
-	header("Location: " . $http_site_root . $return_url . $sep . "msg=" . _('Folder Created Successfully'));
+    header("Location: " . $http_site_root . $return_url . $sep . "msg=" . _('Folder Created Successfully'));
 }
 
 /**
  * $Log: new_folder-2.php,v $
+ * Revision 1.8  2006/07/10 13:20:19  braverock
+ * - clean indentation
+ * - remove trailing whitespace
+ *
  * Revision 1.7  2006/07/10 12:47:41  braverock
  * - remove call time pass by reference in do_hook_function (reference in function def)
  *
@@ -101,6 +105,5 @@ if($folder_plugin_params['error_status']) {
  *
  * Revision 1.1  2005/04/28 15:47:10  daturaarutad
  * new files
- *
  */
 ?>

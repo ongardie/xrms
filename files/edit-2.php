@@ -2,7 +2,7 @@
 /**
 * Insert Updated File information into the database
 *
-* $Id: edit-2.php,v 1.11 2006/07/10 12:45:38 braverock Exp $
+* $Id: edit-2.php,v 1.12 2006/07/10 13:18:38 braverock Exp $
 */
 
 //include required files
@@ -128,37 +128,40 @@ if($error) {
 }
 
 /**
-* $Log: edit-2.php,v $
-* Revision 1.11  2006/07/10 12:45:38  braverock
-* - remove call time pass by reference in do_hook_function (reference in function def)
-*
-* Revision 1.10  2006/01/02 23:03:52  vanmer
-* - changed to use centralized dbconnection function
-*
-* Revision 1.9  2005/12/14 05:03:29  daturaarutad
-* use get_url_seperator() function
-*
-* Revision 1.8  2005/11/29 20:04:19  daturaarutad
-* check for ? in return_url
-*
-* Revision 1.7  2005/11/09 22:36:24  daturaarutad
-* add hooks for files plugin
-*
-* Revision 1.6  2005/07/22 15:55:37  ycreddy
-* Added missing  for return url
-*
-* Revision 1.5  2005/06/30 22:12:52  vanmer
-* - changed to allow saved files to return to passed in return URL instead of always back to files/one.php
-*
-* Revision 1.4  2005/01/13 18:51:23  vanmer
-* - Basic ACL changes to allow create/delete/update functionality to be restricted
-*
-* Revision 1.3  2004/06/12 07:20:40  introspectshun
-* - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
-*
-* Revision 1.2  2004/03/24 12:26:34  braverock
-* - allow editing of more file proprerties
-* - updated code provided by Olivier Colonna of Fontaine Consulting
-*
-*/
+ * $Log: edit-2.php,v $
+ * Revision 1.12  2006/07/10 13:18:38  braverock
+ * - clean indentation
+ * - remove trailing whitespace
+ *
+ * Revision 1.11  2006/07/10 12:45:38  braverock
+ * - remove call time pass by reference in do_hook_function (reference in function def)
+ *
+ * Revision 1.10  2006/01/02 23:03:52  vanmer
+ * - changed to use centralized dbconnection function
+ *
+ * Revision 1.9  2005/12/14 05:03:29  daturaarutad
+ * use get_url_seperator() function
+ *
+ * Revision 1.8  2005/11/29 20:04:19  daturaarutad
+ * check for ? in return_url
+ *
+ * Revision 1.7  2005/11/09 22:36:24  daturaarutad
+ * add hooks for files plugin
+ *
+ * Revision 1.6  2005/07/22 15:55:37  ycreddy
+ * Added missing  for return url
+ *
+ * Revision 1.5  2005/06/30 22:12:52  vanmer
+ * - changed to allow saved files to return to passed in return URL instead of always back to files/one.php
+ *
+ * Revision 1.4  2005/01/13 18:51:23  vanmer
+ * - Basic ACL changes to allow create/delete/update functionality to be restricted
+ *
+ * Revision 1.3  2004/06/12 07:20:40  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ *
+ * Revision 1.2  2004/03/24 12:26:34  braverock
+ * - allow editing of more file proprerties
+ * - updated code provided by Olivier Colonna of Fontaine Consulting
+ */
 ?>
