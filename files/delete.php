@@ -30,7 +30,7 @@ $con->execute($upd);
 
 
 $file_plugin_params = array('file_info', $file_info);
-do_hook_function('file_delete_file', &$file_plugin_params);
+do_hook_function('file_delete_file', $file_plugin_params);
 
 
 // uncomment the following line to remove files from the filesystem

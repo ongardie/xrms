@@ -2,7 +2,7 @@
 /**
  * owl/new_folder-2.php - This file adds new folders to the system
  *
- * $Id: delete_folder.php,v 1.2 2005/12/14 04:27:52 daturaarutad Exp $
+ * $Id: delete_folder.php,v 1.3 2006/07/10 12:47:41 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -35,9 +35,9 @@ $folders = GetFolders(null, null, "external_id = $folder_id");
 if(count($folders)) {
 
     $folder_plugin_params = array('folder_info' => $folders[0]);
-    do_hook_function('file_delete_folder', &$folder_plugin_params);
-    
-    
+    do_hook_function('file_delete_folder', $folder_plugin_params);
+
+
     if($folder_plugin_params['error_status']) {
         $msg = $folder_plugin_params['error_text'];
         $error = true;
@@ -76,7 +76,7 @@ if(count($folders)) {
 
         }
 
-        
+
     }
 
 
@@ -89,6 +89,9 @@ header("Location: " . $http_site_root . $return_url . $sep . $owl_parent_url . "
 
 /**
  * $Log: delete_folder.php,v $
+ * Revision 1.3  2006/07/10 12:47:41  braverock
+ * - remove call time pass by reference in do_hook_function (reference in function def)
+ *
  * Revision 1.2  2005/12/14 04:27:52  daturaarutad
  * fix $msg
  *
