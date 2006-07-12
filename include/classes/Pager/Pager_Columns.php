@@ -10,20 +10,24 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.22 2006/07/12 01:01:03 vanmer Exp $
+ * $Id: Pager_Columns.php,v 1.23 2006/07/12 03:48:36 vanmer Exp $
  */
 
 class Pager_Columns {
 
     var $pager_name;
     var $pager_columns;
-    var $prefs_columns;
+    var $pager_views;
+    var $full_prefs;
     var $default_columns;
     var $form_id;
     var $visible_column_size;
     var $con;
     var $user_id;
     var $view_name;
+    var $debug;
+    var $action;
+    var $view_criteria;
 
     /**
     * @param string pager name/identifier
@@ -32,7 +36,7 @@ class Pager_Columns {
     * @param string needed for JS to modify form
     * @param integer vertical height of multi-select widget
     */
-    function Pager_Columns($pager_name, $pager_columns, $default_columns, $form_id, $visible_column_size=6, $con=false, $view_criteria=false) {
+    function Pager_Columns($pager_name, $pager_columns, $default_columns, $form_id, $visible_column_size=6, $con=false, $view_criteria=false, $debug=true) {
 
         global $session_user_id;
         $this->user_id=$session_user_id;
@@ -40,8 +44,15 @@ class Pager_Columns {
         if (!$con) $this->con = get_xrms_dbconnection();
         else $this->con = $con;
 
+        if ($debug) $this->debug=true;
 
-        getGlobalVar($this->view_name, $pager_name . '_view_name');
+        if ($view_criteria) $this->view_criteria=$view_criteria;
+
+
+        $this->pager_name = $pager_name;
+
+        getGlobalVar($view_name, $pager_name . '_view_name');
+        $this->view_name=$view_name;
 
         $columns = array();
 
@@ -65,7 +76,6 @@ class Pager_Columns {
             $default_columns = array_keys($pager_columns);
         }
 
-        $this->pager_name = $pager_name;
         $this->pager_columns = $pager_columns;
         $this->default_columns = $default_columns;
         $this->form_id = $form_id;
@@ -74,12 +84,17 @@ class Pager_Columns {
 
         $this->init_views();
  
+        $this->_SetViewName($view_name);
+
         $this->handleFormActions();
 
 
-        // store view name in the session
-        $_SESSION[$pager_name . '_columns_view'] = $this->view_name;
+    }
 
+    function _SetViewName($view_name) {
+        $this->view_name=$view_name;
+        // store view name in the session
+        $_SESSION[$this->pager_name . '_columns_view'] = $this->view_name;
     }
 
     function init_views() {
@@ -87,52 +102,126 @@ class Pager_Columns {
         add_user_preference_type($this->con, 'pager_columns', "Pager Columns Display Settings",false,false,false,false,false,true);
 
         // read this user's pager_columns preference 
-        $this->prefs_columns = unserialize(get_user_preference($this->con, $this->user_id, 'pager_columns', false, false, false));
 
+        $this->readViews();
+
+    }
+
+    function readViews() {
+        $views= unserialize(get_user_preference($this->con, $this->user_id, 'pager_columns', false, false, false));
+        $this->full_prefs=$views;
+
+        $this->pager_views = $views[$this->pager_name];
+
+        $this->checkDefaultViews();
+    }
+
+    function checkDefaultViews() {
         // look for this pager in the preferences array, initialize one (default view) and write if it does not exist.
-        if(!isset($this->prefs_columns[$this->pager_name]) || !is_array($this->prefs_columns[$this->pager_name])) {
+        if(!isset($this->pager_views) || !is_array($this->pager_views) || !isset($this->pager_views['default'])) {
 
-            $this->prefs_columns[$this->pager_name]['default'] = $this->default_columns;
-
-            set_user_preference($this->con, $this->user_id, 'pager_columns', serialize($this->prefs_columns), false, true);
+            $this->pager_views['default'] = $this->default_columns;
+            $this->writeViews();
         }
+    }
 
+    function writeViews() {
+        $views=$this->full_prefs;
+        $views[$this->pager_name]=$this->pager_views;
 
+        set_user_preference($this->con, $this->user_id, 'pager_columns', serialize($views), false, true);
     }
 
     function handleFormActions() {
 
         getGlobalVar($pager_columns_action, $this->pager_name . '_pager_columns_action');
-        getGlobalVar($view_name_new, $this->pager_name . '_view_name_new');
 
         // if we are saving user's prefs..
         if('save' == $pager_columns_action) {
-
-            // use new name first or selected name
-            $view_name = $view_name_new ? $view_name_new : $this->view_name;
-
-            // getGlobalVar for the user_columns, as array
-            getGlobalVar($user_columns, $this->pager_name . '_pager_columns');
-            // set this view-name's columns list
-            $this->prefs_columns[$this->pager_name][$view_name] = $user_columns;
-            // write
-            set_user_preference($this->con, $this->user_id, 'pager_columns', serialize($this->prefs_columns), false, true);
+            $this->SaveView();
 
         } elseif ('delete' == $pager_columns_action) {
-            // remove from array 
-            unset($this->prefs_columns[$this->pager_name][$this->view_name]);
-            // write
-            set_user_preference($this->con, $this->user_id, 'pager_columns', serialize($this->prefs_columns), false, true);
-            // default always exists (see above)
-            $this->view_name = 'default';
+            $this->DeleteView();
+        } elseif ('load' == $pager_columns_action) {
+            $this->LoadView();
         }
 
+        $this->action=$pager_columns_action;
+
+    }
+
+    function LoadView() {
+        //stub function to run when form action is load
+    }
+
+    function GetPagerParams() {
+        $options=array();
+        $param_names=array("sort_order"=>"current_sort_order","sort_column"=>"current_sort_column","group_mode"=>"last_group_mode","group_id"=>"group_id");
+        foreach ($param_names as $pkey=>$param) {
+            getGlobalVar($pval,"{$this->pager_name}_$param");
+            if ($pval OR $pval===0 OR $pval==='0') { 
+                $options[$pkey]=$pval;
+                $options[$param]=$pval;
+//                if (!$options[$pkey]) $options[$pkey]="''";
+//                if (!$options[$param]) $options[$param]="''";
+                $this->PrintDebug("SAVING PAGER {$this->pager_name} PARAM $pkey:$param {$options[$pkey]}");
+            }
+        }
+        if (count($options)>0) {
+            $options['resort']='false';
+            $options['next_page']=1;
+            return $options;
+        }
+        return false;
+    }
+
+    function PrepareViewData() {
+        $view=array();
+        // getGlobalVar for the user_columns, as array
+        getGlobalVar($user_columns, $this->pager_name . '_pager_columns');
+        $view['pager_options']=$this->GetPagerParams();
+//        $view=$user_columns;
+        $view['columns']=$user_columns;
+        if ($this->view_criteria) $view['criteria']=$this->view_criteria;
+        return $view;
+    }
+
+    function SaveView() {
+        getGlobalVar($view_name_new, $this->pager_name . '_view_name_new');
+        // use new name first or selected name
+        $view_name = $view_name_new ? $view_name_new : $this->view_name;
+
+        $view_data=$this->PrepareViewData();
+
+        // set this view-name's columns list
+        $this->PrintDebug("Saving view $view_name");
+        $this->pager_views[$view_name] = $view_data;
+
+        // write
+        $this->writeViews();
+
+        //set view to current view
+        $this->_SetViewName($view_name);
+    }
+
+    function DeleteView() {
+        // remove from array 
+        unset($this->pager_views[$this->view_name]);
+
+        // write
+        $this->writeViews();
+
+        //ensure that if default was removed that it gets replaced
+        $this->checkDefaultViews();
+
+        // default always exists (see above)
+        $this->_SetViewName('default');
     }
 
     function RenderViewOptions() {
         // create <option> tags for views list
         $view_options='';
-        foreach(array_keys($this->prefs_columns[$this->pager_name]) as $option_view_name ) {
+        foreach(array_keys($this->pager_views) as $option_view_name ) {
             $view_options .= "<option value=\"$option_view_name\"" . ($this->view_name == $option_view_name ? ' selected="selected"' : '') . ">$option_view_name</option>\n";
         }
         return $view_options;
@@ -146,20 +235,51 @@ class Pager_Columns {
     function GetUserColumnNames() {
 
         // User Columns will come from the session or default list passed in
-        $view_name = isset($_SESSION[$this->pager_name . '_columns_view']) ? $_SESSION[$this->pager_name . '_columns_view'] : 'default';
-            
-        $columns =  $this->prefs_columns[$this->pager_name][$view_name];
+        $view_name = $this->GetCurrentViewName();
+
+        $columns =  $this->pager_views[$view_name];
+        if ($columns['columns']) $columns=$columns['columns'];
 
         return $columns;
     }
 
+    function GetCurrentViewName() {
+        $view_name=isset($_SESSION[$this->pager_name . '_columns_view']) ? $_SESSION[$this->pager_name . '_columns_view'] : 'default';
+        $this->PrintDebug("CURRENT PAGER {$this->pager_name} VIEW NAME IS $view_name");
+        return $view_name;
+    }
+
+    function GetViewData($view_name=false) {
+        if (!$view_name) $view_name = $this->GetCurrentViewName();
+
+        $view_data=$this->pager_views[$view_name];
+
+        if ($view_data['pager_options'] AND $this->action=='load') {
+            $this->PrintDebug("Loading Pager Options For Pager {$this->pager_name}");
+//            print_r($view_data['pager_options']);
+            $view_data['options']=$view_data['pager_options'];
+        }
+//        print_r($view_data);
+
+        return $view_data;
+    }
+
+    function GetUserView() {
+        $view_data=$this->GetViewData();
+        $view_data['columns']=$this->GetUserPagerColumns();
+        return $view_data;
+    }
+
+    function GetUserColumns() {
+        return $this->GetUserView();
+    }
 
     /**
     * Returns the sub-array of the initial pager_columns array to be used with the pager
     *
     * @return array pager_columns 
     */
-    function GetUserColumns() {
+    function GetUserPagerColumns() {
 
         $return_pager_columns = array();
         $user_columns = $this->GetUserColumnNames();
@@ -321,9 +441,22 @@ END;
         return $s;
     }
 
+    function PrintDebug($string) {
+        if ($this->debug) echo "$string<br/>\n";
+    }
+
+    function SetDebug($debug=true) {
+        $this->debug=$debug;
+    }
+
+
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.23  2006/07/12 03:48:36  vanmer
+ * -Initial revision of saving views including pager parameters
+ * -Expanded view functions to fetch and set pager options
+ *
  * Revision 1.22  2006/07/12 01:01:03  vanmer
  * - cleaned up constructor, moved relevant code to new functions
  * - changed render of view options to happen when actually rendering the rest of the columns widget
