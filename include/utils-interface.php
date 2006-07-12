@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.106 2006/07/07 01:45:02 vanmer Exp $
+ * $Id: utils-interface.php,v 1.107 2006/07/12 01:02:29 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -122,10 +122,13 @@ function http_root_href($url, $text, $title = NULL) {
 function css_link($url, $name = null, $alt = true, $mtype = 'screen') {
     global $http_site_root;
 
+    $is_IE=false;
+
     if ( empty($url) )
         return '';
     // set to lower case to avoid errors
     $browser_user_agent = strtolower( $_SERVER['HTTP_USER_AGENT'] );
+
 
     if (stristr($browser_user_agent, "msie 4"))
     {
@@ -139,6 +142,7 @@ function css_link($url, $name = null, $alt = true, $mtype = 'screen') {
         $dom_browser = true;
         $is_IE = true;
     }
+
 
     if ((strpos($url, '-ie')!== false) and !$is_IE) {
         //not IE, so don't render this sheet
@@ -242,9 +246,10 @@ function start_page($page_title = '', $show_navbar = true, $msg = '', $show_topn
     global $http_site_root;
     global $app_title;
     global $css_theme;
+    global $xrms_notAlias;
 
     //get the database connection
-    if (!$xcon) {
+    if (!isset($xcon) OR !$xcon) {
         $xcon=@get_xrms_dbconnection();
     }
 
@@ -436,7 +441,7 @@ function end_page($use_hook = true) {
     if (!$session_user_id) { $user_id=0; }
     else { $user_id=$session_user_id; }
     global $con;
-    if (!$econ) @$econ=get_xrms_dbconnection();
+    if (!isset($econ)) @$econ=get_xrms_dbconnection();
 
     echo "\n".'<div id="footer">'."\n";
 
@@ -772,7 +777,8 @@ function render_ACL_button($action, $text='Create', $type='submit', $onclick=fal
     if ($_table) $table=$_table;
     else $table=$on_what_table;
     if ($_id) $cid=$_id;
-    else { if (!$_table) $cid=$on_what_id; }
+    else { if (!$_table) $cid=$on_what_id; else $cid=false;}
+
 
     if (!$cid) {
         if (!check_object_permission_bool($session_user_id, false, $action, $table))
@@ -1062,6 +1068,9 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.107  2006/07/12 01:02:29  vanmer
+ * - added needed code to avoid notices
+ *
  * Revision 1.106  2006/07/07 01:45:02  vanmer
  * - updated variable to allow proper check for browser for CSS links
  *
