@@ -37,7 +37,7 @@ require_once('../calendar/Calendar_View.php');
 *
 * @return string The pager widget.  must be placed inside a form to be active!
 */
-function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session_user_id, $return_url, $extra_where='', $end_rows='', $default_columns = null, $show_mini_search = true, $default_sort = null) {
+function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session_user_id, $return_url, $extra_where='', $end_rows='', $default_columns = null, $show_mini_search = true, $default_sort = null, $instance='') {
 
 global $http_site_root;
 // acl filtering
@@ -465,7 +465,8 @@ if('list' != $activities_widget_type) {
     $columns[] = array('name' => _("Resolution"), 'index_sql' => 'resolution_short_name', 'sql_sort_column'=>'a.activity_resolution_type_id', 'group_query_list'=>$resolution_query_list, 'group_query_select'=>$resolution_query_select);
 
     // selects the columns this user is interested in
-    $pager_columns = new Pager_Columns('ActivitiesPager'.$form_name, $columns, $default_columns, $form_name);
+    $pager_id='ActivitiesPager'.$form_name.$instance;
+    $pager_columns = new Pager_Columns($pager_id, $columns, $default_columns, $form_name);
     $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
     $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 
@@ -478,7 +479,7 @@ if('list' != $activities_widget_type) {
     $sql_session_var = $form_name . '_activities_sql';
     $_SESSION[$sql_session_var] = $activity_sql;
 
-    $pager = new GUP_Pager($con, $activity_sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true, true);
+    $pager = new GUP_Pager($con, $activity_sql, 'GetActivitiesPagerData', $caption, $form_name, $pager_id, $columns, false, true, true);
 
     $endrows = $end_rows .
                 "<tr><td class=widget_content_form_element colspan=20>
@@ -811,6 +812,10 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.42  2006/07/12 03:50:45  vanmer
+* - added instance parameter to activities widget, allows multiple activities widgets on a page
+* - changed pager_id to be consistent between Pager_Columns and GUP_Pager
+*
 * Revision 1.41  2006/04/17 19:19:15  vanmer
 * - added ACL checks to the beginning of the activities widget, so widget does not render if no ACL permission is allowed
 * - added ACL checks to new activities widget, checks Create permission on activities before rendering new activity line
