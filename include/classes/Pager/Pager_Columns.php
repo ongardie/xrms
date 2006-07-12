@@ -10,7 +10,7 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.21 2006/03/17 00:11:40 vanmer Exp $
+ * $Id: Pager_Columns.php,v 1.22 2006/07/12 01:01:03 vanmer Exp $
  */
 
 class Pager_Columns {
@@ -21,6 +21,9 @@ class Pager_Columns {
     var $default_columns;
     var $form_id;
     var $visible_column_size;
+    var $con;
+    var $user_id;
+    var $view_name;
 
     /**
     * @param string pager name/identifier
@@ -29,14 +32,16 @@ class Pager_Columns {
     * @param string needed for JS to modify form
     * @param integer vertical height of multi-select widget
     */
-    function Pager_Columns($pager_name, $pager_columns, $default_columns, $form_id, $visible_column_size=6) {
+    function Pager_Columns($pager_name, $pager_columns, $default_columns, $form_id, $visible_column_size=6, $con=false, $view_criteria=false) {
 
         global $session_user_id;
-        $con = get_xrms_dbconnection();
+        $this->user_id=$session_user_id;
 
-        getGlobalVar($pager_columns_action, $pager_name . '_pager_columns_action');
-        getGlobalVar($view_name, $pager_name . '_view_name');
-        getGlobalVar($view_name_new, $pager_name . '_view_name_new');
+        if (!$con) $this->con = get_xrms_dbconnection();
+        else $this->con = $con;
+
+
+        getGlobalVar($this->view_name, $pager_name . '_view_name');
 
         $columns = array();
 
@@ -60,59 +65,77 @@ class Pager_Columns {
             $default_columns = array_keys($pager_columns);
         }
 
+        $this->pager_name = $pager_name;
+        $this->pager_columns = $pager_columns;
+        $this->default_columns = $default_columns;
+        $this->form_id = $form_id;
+	$this->visible_column_size=$visible_column_size;
 
+
+        $this->init_views();
+ 
+        $this->handleFormActions();
+
+
+        // store view name in the session
+        $_SESSION[$pager_name . '_columns_view'] = $this->view_name;
+
+    }
+
+    function init_views() {
         // this function checks for existance first and creates if it does not exist, setting skip system edit to true
-        add_user_preference_type($con, 'pager_columns', _("Pager Columns Display Settings"),false,false,false,false,false,true);
-
+        add_user_preference_type($this->con, 'pager_columns', "Pager Columns Display Settings",false,false,false,false,false,true);
 
         // read this user's pager_columns preference 
-        $this->prefs_columns = unserialize(get_user_preference($con, $session_user_id, 'pager_columns', false, false, false));
+        $this->prefs_columns = unserialize(get_user_preference($this->con, $this->user_id, 'pager_columns', false, false, false));
 
         // look for this pager in the preferences array, initialize one (default view) and write if it does not exist.
-        if(!isset($this->prefs_columns[$pager_name]) || !is_array($this->prefs_columns[$pager_name])) {
+        if(!isset($this->prefs_columns[$this->pager_name]) || !is_array($this->prefs_columns[$this->pager_name])) {
 
-            $this->prefs_columns[$pager_name]['default'] = $default_columns;
+            $this->prefs_columns[$this->pager_name]['default'] = $this->default_columns;
 
-            set_user_preference($con, $session_user_id, 'pager_columns', serialize($this->prefs_columns), false, true);
+            set_user_preference($this->con, $this->user_id, 'pager_columns', serialize($this->prefs_columns), false, true);
         }
- 
+
+
+    }
+
+    function handleFormActions() {
+
+        getGlobalVar($pager_columns_action, $this->pager_name . '_pager_columns_action');
+        getGlobalVar($view_name_new, $this->pager_name . '_view_name_new');
 
         // if we are saving user's prefs..
         if('save' == $pager_columns_action) {
 
             // use new name first or selected name
-            $view_name = $view_name_new ? $view_name_new : $view_name;
+            $view_name = $view_name_new ? $view_name_new : $this->view_name;
 
             // getGlobalVar for the user_columns, as array
-            getGlobalVar($user_columns, $pager_name . '_pager_columns');
+            getGlobalVar($user_columns, $this->pager_name . '_pager_columns');
             // set this view-name's columns list
-            $this->prefs_columns[$pager_name][$view_name] = $user_columns;
+            $this->prefs_columns[$this->pager_name][$view_name] = $user_columns;
             // write
-            set_user_preference($con, $session_user_id, 'pager_columns', serialize($this->prefs_columns), false, true);
+            set_user_preference($this->con, $this->user_id, 'pager_columns', serialize($this->prefs_columns), false, true);
 
         } elseif ('delete' == $pager_columns_action) {
             // remove from array 
-            unset($this->prefs_columns[$pager_name][$view_name]);
+            unset($this->prefs_columns[$this->pager_name][$this->view_name]);
             // write
-            set_user_preference($con, $session_user_id, 'pager_columns', serialize($this->prefs_columns), false, true);
+            set_user_preference($this->con, $this->user_id, 'pager_columns', serialize($this->prefs_columns), false, true);
             // default always exists (see above)
-            $view_name = 'default';
+            $this->view_name = 'default';
         }
 
-        // store view name in the session
-        $_SESSION[$pager_name . '_columns_view'] = $view_name;
+    }
 
+    function RenderViewOptions() {
         // create <option> tags for views list
-        foreach(array_keys($this->prefs_columns[$pager_name]) as $option_view_name ) {
-            $this->view_options .= "<option value=\"$option_view_name\"" . ($view_name == $option_view_name ? ' selected="selected"' : '') . ">$option_view_name</option>\n";
+        $view_options='';
+        foreach(array_keys($this->prefs_columns[$this->pager_name]) as $option_view_name ) {
+            $view_options .= "<option value=\"$option_view_name\"" . ($this->view_name == $option_view_name ? ' selected="selected"' : '') . ">$option_view_name</option>\n";
         }
-
-
-        $this->pager_name = $pager_name;
-        $this->pager_columns = $pager_columns;
-        $this->default_columns = $default_columns;
-        $this->form_id = $form_id;
-	    $this->visible_column_size=$visible_column_size;
+        return $view_options;
     }
 
     /**
@@ -199,13 +222,14 @@ class Pager_Columns {
         // This determines which items appear in the "Displayed Columns" side
         $form->setConstants(array($select_name => $user_columns));
 
-        $widget_caption = _('Select Columns for Display');
-        $displayed_text = _('Displayed Columns');
-        $avail_text = _('Available Columns');
+        $widget_caption = _("Select Columns for Display");
+        $displayed_text = _("Displayed Columns");
+        $avail_text = _("Available Columns");
         $text_save_columns = _("Save");
         $text_load_columns = _("Load");
         $text_cancel_columns = _("Hide");
         $text_delete_columns = _("Delete");
+        $view_options=$this->RenderViewOptions();
 
         $ams->setButtonAttributes('add'     , 'class=button');
         $ams->setButtonAttributes('remove'  , 'class=button');
@@ -223,7 +247,7 @@ class Pager_Columns {
                         "._('View Name')."<br/>
                         <input type=text size=10 name={$this->pager_name}_view_name_new><br/>
                         <select name={$this->pager_name}_view_name>
-                            {$this->view_options}
+                            {$view_options}
                         </select>
                     </td>
                 </tr>
@@ -300,6 +324,11 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.22  2006/07/12 01:01:03  vanmer
+ * - cleaned up constructor, moved relevant code to new functions
+ * - changed render of view options to happen when actually rendering the rest of the columns widget
+ * - intial steps towards altering how pager columns outputs views
+ *
  * Revision 1.21  2006/03/17 00:11:40  vanmer
  * - added extra parameters when creating user preference type, to hide option from system preferences menu
  *
