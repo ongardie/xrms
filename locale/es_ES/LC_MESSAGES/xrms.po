@@ -1,21 +1,26 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# translation of xrms.po to Spanish
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
+# David Gaya <david.gaya@gmail.com>, 2006.
+# Daniel Rodriguez <dgrodriguez@cantv.net>, 2006.
+# Daniel Rodriguez <dgrodriguez@cantv.net>, 2005.
+# David Gaya <david.gaya@gmail.com>, 2005.
+# Eduardo Jaramillo R. <nejarami@cable.net.co>, 2004.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: xrms_es_ES\n"
+"Project-Id-Version: xrms_cvs20060712\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-05-06 12:00-0500\n"
-"PO-Revision-Date: 2006-07-10 15:11-0400\n"
-"Last-Translator: DanielR <webmaster@tecnosoluciones.com>\n"
-"Language-Team: Español Venezuela <webmaster@tecnosoluciones.com>\n"
+"PO-Revision-Date: 2006-07-12 19:46+0200\n"
+"Last-Translator: david\n"
+"Language-Team: Spanish <webmaster@tecnosoluciones.com>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: VENEZUELA\n"
+"X-Generator: KBabel 1.9.1\n"
 
 #: reports/companies-by-company-source.php:155
 #: reports/companies-by-crm-status.php:150
@@ -405,7 +410,7 @@ msgstr "Agregar Contacto"
 
 #: companies/former-names.php:92
 msgid "Add Former Name"
-msgstr "Agregar Razón Social"
+msgstr "Agregar nombre anterior"
 
 #: admin/acl/ControlledObjectRelationship_list.php:67
 #: admin/acl/ControlledObject_list.php:57
@@ -741,7 +746,7 @@ msgstr "Arquitectura"
 
 #: companies/edit.php:229
 msgid "Are you sure you want to remove this company (and all associated contacts, activities, opportunities, cases, etc.) from the system?"
-msgstr "Seguro que desea eliminar esta compañía (y todos los contactos, actividades, oportunidades, casos, entre otros, asociados) del sistema?."
+msgstr "¿Seguro que desea eliminar esta compañía (y todos los contactos, actividades, oportunidades, casos, entre otros, asociados) del sistema?."
 
 #: activities/associate-activities.php:27
 msgid "Associate Activities"
@@ -1232,15 +1237,15 @@ msgstr "Cambiar Propietario de la Cuenta"
 
 #: admin/users/change-owner.php:88
 msgid "Change Selected"
-msgstr "Cambio Seleccionado"
+msgstr "Cambiar Seleccionado"
 
 #: admin/users/change-owner.php:96
 msgid "Change Selected : This will change the owner of open companies, campaigns, opportunities and cases."
-msgstr "Cambio Seleccionado: Esto cambiará el responsable de las compañías, campañas, oportunidades y casos abiertos."
+msgstr "Cambiar Seleccionado: Esto cambiará el responsable de las compañías, campañas, oportunidades y casos abiertos."
 
 #: admin/users/change-owner.php:94
 msgid "Change all : This will change the owner of open activities, companies, campaigns, opportunities and cases and remove the old user from these entities"
-msgstr "Cambiar Todo: Cambio Seleccionado: Esto cambiará el responsable de las compañías, campañas, oportunidades y casos abiertos y eliminará al usuario anterior de estas entidades."
+msgstr "Cambiar Todo: Esto cambiará el responsable de todas las compañías, campañas, oportunidades y casos abiertos y eliminará al usuario anterior de estas entidades."
 
 #: include/utils-interface.php:87
 msgid "Changes saved."
@@ -1652,7 +1657,7 @@ msgstr "Items Completados"
 
 #: activities/one.php:598
 msgid "Completed?"
-msgstr "Completado?"
+msgstr "¿Completado?"
 
 #: locale/datastrings.php:48
 msgid "Computers"
@@ -1900,7 +1905,7 @@ msgstr "Crear Nuevo"
 
 #: contacts/edit-address.php:173
 msgid "Create New Address?"
-msgstr "Crear Nueva Dirección?"
+msgstr "¿Crear Nueva Dirección?"
 
 #: activities/one.php:635
 msgid "Create Recurrence"
@@ -1912,7 +1917,7 @@ msgstr "Creación Exitosa"
 
 #: contacts/edit-address.php:180
 msgid "Create a New Address?"
-msgstr "Crear una Nueva Dirección?"
+msgstr "¿Crear una Nueva Dirección?"
 
 #: campaigns/one.php:152
 #: cases/one.php:188
@@ -2158,7 +2163,7 @@ msgstr "Eliminar Estados de Cuenta"
 
 #: admin/account-statuses/one.php:79
 msgid "Delete Account Status?"
-msgstr "Eliminar Estados de Cuenta?"
+msgstr "¿Eliminar Estados de Cuenta?"
 
 #: admin/activity-templates/edit.php:141
 msgid "Delete Activity Template"
@@ -2166,7 +2171,7 @@ msgstr "Elminar Plantilla de Actividades"
 
 #: admin/activity-templates/edit.php:135
 msgid "Delete Activity Template?"
-msgstr "Elminar Plantilla de Actividades?"
+msgstr "¿Elminar Plantilla de Actividades?"
 
 #: admin/activity-types/one.php:93
 msgid "Delete Activity Type"
@@ -2174,7 +2179,7 @@ msgstr "Eliminar Tipo de Actividad"
 
 #: admin/activity-types/one.php:89
 msgid "Delete Activity Type?"
-msgstr "Eliminar Tipo de Actividad?"
+msgstr "¿Eliminar Tipo de Actividad?"
 
 #: companies/edit-address.php:116
 #: contacts/edit-address.php:233
@@ -2184,7 +2189,7 @@ msgstr "Eliminar Dirección"
 #: companies/edit-address.php:115
 #: contacts/edit-address.php:232
 msgid "Delete Address?"
-msgstr "Eliminar Dirección?"
+msgstr "¿Eliminar Dirección?"
 
 #: admin/crm-statuses/one.php:77
 msgid "Delete CRM Status"
@@ -2192,7 +2197,7 @@ msgstr "Eliminar Estado CRM"
 
 #: admin/crm-statuses/one.php:73
 msgid "Delete CRM Status?"
-msgstr "Eliminar Estado CRM?"
+msgstr "¿Eliminar Estado CRM?"
 
 #: admin/campaign-statuses/one.php:90
 msgid "Delete Campaign Status"
@@ -2200,7 +2205,7 @@ msgstr "Eliminar Estado de Campaña"
 
 #: admin/campaign-statuses/one.php:86
 msgid "Delete Campaign Status?"
-msgstr "Eliminar Estado de Campaña?"
+msgstr "¿Eliminar Estado de Campaña?"
 
 #: admin/campaign-types/one.php:77
 msgid "Delete Campaign Type"
@@ -2208,11 +2213,11 @@ msgstr "Eliminar Tipo de Campaña"
 
 #: admin/campaign-types/one.php:73
 msgid "Delete Campaign Type?"
-msgstr "Eliminar Tipo de Campaña?"
+msgstr "¿Eliminar Tipo de Campaña?"
 
 #: campaigns/edit.php:115
 msgid "Delete Campaign?"
-msgstr "Eliminar Campaña?"
+msgstr "¿Eliminar Campaña?"
 
 #: admin/case-statuses/one.php:223
 msgid "Delete Case Status"
@@ -2220,7 +2225,7 @@ msgstr "Eliminar Estado de Caso"
 
 #: admin/case-statuses/one.php:219
 msgid "Delete Case Status?"
-msgstr "Eliminar Estado de Caso?"
+msgstr "¿Eliminar Estado de Caso?"
 
 #: admin/case-types/one.php:83
 msgid "Delete Case Type"
@@ -2228,11 +2233,11 @@ msgstr "Eliminar Tipo de Caso"
 
 #: admin/case-types/one.php:79
 msgid "Delete Case Type?"
-msgstr "Eliminar Tipo de Caso?"
+msgstr "¿Eliminar Tipo de Caso?"
 
 #: cases/edit.php:247
 msgid "Delete Case?"
-msgstr "Eliminar Caso?"
+msgstr "¿Eliminar Caso?"
 
 #: admin/categories/one.php:118
 msgid "Delete Category"
@@ -2240,7 +2245,7 @@ msgstr "Eliminar Categoría"
 
 #: admin/categories/one.php:114
 msgid "Delete Category?"
-msgstr "Eliminar Categoría?"
+msgstr "¿Eliminar Categoría?"
 
 #: companies/admin.php:110
 #: companies/admin.php:115
@@ -2254,7 +2259,7 @@ msgstr "Eliminar Fuente de Compañía"
 
 #: admin/company-sources/one.php:82
 msgid "Delete Company Source?"
-msgstr "Eliminar Fuente de Compañía?"
+msgstr "¿Eliminar Fuente de Compañía?"
 
 #: admin/company-types/one.php:76
 msgid "Delete Company Type"
@@ -2262,11 +2267,11 @@ msgstr "Eliminar Tipo de Compañía"
 
 #: admin/company-types/one.php:72
 msgid "Delete Company Type?"
-msgstr "Eliminar Tipo de Compañía?"
+msgstr "¿Eliminar Tipo de Compañía?"
 
 #: companies/admin.php:106
 msgid "Delete Company?"
-msgstr "Eliminar Compañía?"
+msgstr "¿Eliminar Compañía?"
 
 #: contacts/edit.php:302
 msgid "Delete Contact?"
@@ -2282,7 +2287,7 @@ msgstr "Eliminar Industria"
 
 #: admin/industries/one.php:72
 msgid "Delete Industry?"
-msgstr "Eliminar Industria?"
+msgstr "¿Eliminar Industria?"
 
 #: include/classes/QuickForm/ADOdb_QuickForm_Controller.php:204
 msgid "Delete Not Allowed"
@@ -2294,11 +2299,11 @@ msgstr "Eliminar Estado de Oportunidad"
 
 #: admin/opportunity-statuses/one.php:221
 msgid "Delete Opportunity Status?"
-msgstr "Eliminar Estado de Oportunidad?"
+msgstr "¿Eliminar Estado de Oportunidad?"
 
 #: opportunities/edit.php:252
 msgid "Delete Opportunity?"
-msgstr "Eliminar Oportunidad?"
+msgstr "¿Eliminar Oportunidad?"
 
 #: admin/case-priorities/one.php:84
 msgid "Delete Priority Type"
@@ -2306,7 +2311,7 @@ msgstr "Eliminar Tipo de Prioridad"
 
 #: admin/case-priorities/one.php:80
 msgid "Delete Priority Type?"
-msgstr "Eliminar Tipo de Prioridad?"
+msgstr "¿Eliminar Tipo de Prioridad?"
 
 #: admin/ratings/one.php:76
 msgid "Delete Rating"
@@ -2314,11 +2319,11 @@ msgstr "Eliminar Evaluación"
 
 #: admin/ratings/one.php:72
 msgid "Delete Rating?"
-msgstr "Eliminar Evaluación?"
+msgstr "¿Eliminar Evaluación?"
 
 #: admin/relationship-types/one.php:90
 msgid "Delete Relationship Type?"
-msgstr "Eliminar Tipo de Relación?"
+msgstr "¿Eliminar Tipo de Relación?"
 
 #: admin/relationship-types/one.php:94
 msgid "Delete Role"
@@ -2330,7 +2335,7 @@ msgstr "Eliminar Saludo"
 
 #: admin/salutations/one.php:69
 msgid "Delete Salutation?"
-msgstr "Eliminar Saludo?"
+msgstr "¿Eliminar Saludo?"
 
 #: email/email-2.php:276
 msgid "Delete Selected"
@@ -2347,7 +2352,7 @@ msgstr "Eliminar Usuario"
 
 #: admin/users/one.php:137
 msgid "Delete User?"
-msgstr "Eliminar Usuario?"
+msgstr "¿Eliminar Usuario?"
 
 #: include/utils-interface.php:79
 msgid "Deleted"
@@ -2706,7 +2711,7 @@ msgstr "Editar Definiciones de Elementos"
 
 #: companies/edit.php:226
 msgid "Edit Former Names"
-msgstr "Editar Razones Sociales"
+msgstr "Editar nombres anteriores"
 
 #: companies/one-address.php:57
 msgid "Edit Home Address"
@@ -2800,7 +2805,7 @@ msgstr "Plantillas de Email"
 
 #: activities/one.php:594
 msgid "Email This To"
-msgstr "Enviar Email de esto para"
+msgstr "Enviar Email de esto a"
 
 #: locale/datastrings.php:74
 msgid "Email address to use as the sender address when sending reports via email."
@@ -3243,19 +3248,19 @@ msgstr "Formateando"
 
 #: contacts/one.php:166
 msgid "Former Companies"
-msgstr "Compañías Formales"
+msgstr "Compañías anteriores"
 
 #: companies/former-names.php:88
 #: companies/one.php:326
 #: plugins/phone/companies_one.php:267
 msgid "Former Name"
-msgstr "Razón Social"
+msgstr "Nombre anterior"
 
 #: companies/former-names.php:64
 #: companies/former-names.php:77
 #: companies/former-names.php:84
 msgid "Former Names"
-msgstr "Razones Sociales"
+msgstr "Nombres anteriores"
 
 #: activities/recurrence_sidebar.php:134
 msgid "Fri"
@@ -3488,7 +3493,7 @@ msgstr "Alta"
 
 #: locale/datastrings.php:95
 msgid "Hold"
-msgstr "Congelar"
+msgstr "Congelado"
 
 #: include/utils-interface.php:396
 #: private/home.php:171
@@ -3515,31 +3520,31 @@ msgstr "Tlf Hogar"
 
 #: reports/index.php:79
 msgid "How many cases are in each stage of the case resolution process?"
-msgstr "Cuantos casos estan en cada etapa del proceso de resolución de casos?"
+msgstr "¿Cuantos casos estan en cada etapa del proceso de resolución de casos?"
 
 #: reports/index.php:47
 msgid "How many companies are in each industry?"
-msgstr "Cuantas compañías hay en cada industria?"
+msgstr "¿Cuantas compañías hay en cada industria?"
 
 #: reports/index.php:51
 msgid "How many of your accounts come from each source?"
-msgstr "Cuantas de sus cuentas vienen de cada fuente?"
+msgstr "¿Cuantas de sus cuentas vienen de cada fuente?"
 
 #: reports/index.php:60
 msgid "How many opportunities are in each stage of the sales closing process?"
-msgstr "Cuantas oportunidades existen en cada etapa del proceso de cierre deventas?"
+msgstr "¿Cuantas oportunidades existen en cada etapa del proceso de cierre deventas?"
 
 #: reports/index.php:68
 msgid "How many opportunities are tied to companies in each industry?"
-msgstr "Cuantas oportunidades estan enlazadas a compañías en cada industria?"
+msgstr "¿Cuantas oportunidades estan enlazadas a compañías en cada industria?"
 
 #: reports/index.php:64
 msgid "How much potential revenue is in each stage of the sales closing process?"
-msgstr "Cuantos ingresos potenciales estan en cada etapa del proceso de cierre de ventas?"
+msgstr "¿Cuantos ingresos potenciales estan en cada etapa del proceso de cierre de ventas?"
 
 #: reports/index.php:72
 msgid "How much potential revenue is tied to companies in each industry?"
-msgstr "Cuanto ingreso potencial esta enlazado a las compañías en cada industria?"
+msgstr "¿Cuanto ingreso potencial esta enlazado a las compañías en cada industria?"
 
 #: locale/datastrings.php:96
 msgid "How will activities behave.  Options are Fast or Long.  Fast will keep user within current screen while Long will move to the activites/one screen for detailed description entry."
@@ -3720,11 +3725,11 @@ msgstr "Últimos Datos"
 #: plugins/phone/companies_one.php:541
 #: plugins/phone/contacts_one.php:480
 msgid "Last Modified"
-msgstr "Última Modificación en"
+msgstr "Última modificación en"
 
 #: activities/one.php:574
 msgid "Last Modified By"
-msgstr "Últimos Modificados Por"
+msgstr "Última modificación por"
 
 #: admin/import/import-companies-2.php:95
 #: admin/import/import-companies-3.php:136
@@ -4163,7 +4168,7 @@ msgstr "Monitor"
 
 #: calendar/Calendar_View.php:145
 msgid "Month View "
-msgstr "Ver Mes"
+msgstr "Vista Mensual"
 
 #: activities/recurrence_sidebar.php:229
 msgid "Monthly"
@@ -5635,7 +5640,7 @@ msgstr "Búsquedas Guardadas"
 
 #: activities/one.php:630
 msgid "Schedule Followup"
-msgstr "Seguimiento de Plan"
+msgstr "Crear seguimiento"
 
 #: activities/activities-widget.php:460
 #: activities/activities-widget.php:663
@@ -5894,7 +5899,7 @@ msgstr "Mostrar texto para items sin resultado en los reportes."
 
 #: admin/acl/ControlledObjectRelationship_list.php:53
 msgid "Singular?"
-msgstr "Singular?"
+msgstr "¿Singular?"
 
 #: files/one.php:141
 #: files/sidebar.php:90
@@ -5958,20 +5963,24 @@ msgstr "Canal Fuente"
 
 #: reports/index.php:168
 #: reports/stale-crm-status.php:184
+#stale=anquilosada sé que no es una palabra muy corriente pero creo que es más precisa que vieja o antigua.
 msgid "Stale Companies"
-msgstr "Compañías Aniguas"
+msgstr "Compañías anquilosadas"
 
 #: reports/index.php:171
+#stale=anquilosada sé que no es una palabra muy corriente pero creo que es más precisa que vieja o antigua.
 msgid "Stale Companies - by Crms Status, Last Activity Date and User"
-msgstr "Compañías Antiguas - por Estado del CRM, Fecha de Última Actividad y Usuario"
+msgstr "Compañías anquilosadas - por Estado del CRM, Fecha de Última Actividad y Usuario"
 
 #: reports/index.php:160
+#stale=anquilosada sé que no es una palabra muy corriente pero creo que es más precisa que vieja o antigua.
 msgid "Stale Opportunities"
-msgstr "Oportunidades Viejas"
+msgstr "Oportunidades anquilosadas"
 
 #: reports/index.php:163
+#stale=anquilosada sé que no es una palabra muy corriente pero creo que es más precisa que vieja o antigua.
 msgid "Stale opportunities by Last Activity Date and User"
-msgstr "Oportunidades Antiguas por Fecha de Última Actividad y Usuario"
+msgstr "Oportunidades anquilosadas por Fecha de Última Actividad y Usuario"
 
 #: install/data.php:2873
 #: locale/datastrings.php:168
@@ -7003,7 +7012,7 @@ msgstr "Su Base de Datos ha sido actualizada."
 
 #: reports/index.php:43
 msgid "Your sales funnel - how many of your accounts are in each stage of the customer development process?"
-msgstr "Su embudo de ventas - cuantas de sus cuentas estan en cada estado del proceso de desarrollo del cliente?"
+msgstr "Su embudo de ventas - ¿cuantas de sus cuentas estan en cada estado del proceso de desarrollo del cliente?"
 
 #: companies/new-2.php:189
 #: include/utils-contacts.php:229
