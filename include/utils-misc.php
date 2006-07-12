@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.174 2006/04/29 01:44:02 vanmer Exp $
+ * $Id: utils-misc.php,v 1.175 2006/07/12 01:03:22 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -102,6 +102,7 @@ function session_check($c_role='', $action='Read', $check_user_permission=false)
     global $xrms_system_id;
     global $on_what_table;
     global $on_what_id;
+    global $xrms_default_language;
     global $xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname, $xrms_db_dbtype;
 
     // get our eventual target
@@ -1939,6 +1940,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.175  2006/07/12 01:03:22  vanmer
+ * - added missing global statement for default language
+ *
  * Revision 1.174  2006/04/29 01:44:02  vanmer
  * - added new file for workflow related functions (utils-workflow.php)
  * - moved workflow related functions out of utils-misc into utils-workflow.php
