@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-activities.php,v 1.29 2006/06/21 15:46:59 jswalter Exp $
+ * $Id: utils-activities.php,v 1.30 2006/07/12 03:38:26 vanmer Exp $
 
  */
 
@@ -247,6 +247,7 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
     global $session_user_id;
     if (!$activity_id AND !$activity_rst) return false;
     if (!$activity_data) return false;
+    $ret=array();
     if (!$activity_rst) {
         $sql = "SELECT * FROM activities WHERE activity_id=$activity_id";
         $activity_rst=$con->execute($sql);
@@ -265,7 +266,7 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
                         //get existing default participant, mark it as removed
                         $participant_data=current($activity_participant);
                         $activity_participant_id=$participant_data['activity_participant_id'];
-                        $ret=delete_activity_participant($con, $activity_participant_id);
+                        $dret=delete_activity_participant($con, $activity_participant_id);
                         $updated_participant=true;
                     }
                 }
@@ -775,6 +776,9 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.30  2006/07/12 03:38:26  vanmer
+  * - ensure that delete of participant doesn't remove final $ret value
+  *
   * Revision 1.29  2006/06/21 15:46:59  jswalter
   *  - address_id was being defined twice (from activitivies and company tables) in 'get_activity()' SQL, therfore the later value was used. address_id from the activities table is now defined as 'activities_address_id'
   *
