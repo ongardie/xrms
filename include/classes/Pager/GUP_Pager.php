@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.48 2006/06/02 23:40:34 ongardie Exp $
+ * $Id: GUP_Pager.php,v 1.49 2006/07/12 00:33:41 vanmer Exp $
  */
 
 
@@ -129,13 +129,23 @@ class GUP_Pager {
     *   total = true will total all columns 
     *
     */
-    function GUP_Pager(&$db, $sql, $data, $caption, $form_id, $pager_id='gup_pager', $column_info, $use_cached = true, $buffer_output = false, $group_mode_paging = false)
+    function GUP_Pager(&$db, $sql, $data, $caption, $form_id, $pager_id='gup_pager', $view_info, $use_cached = true, $buffer_output = false, $group_mode_paging = false, $debug=false)
     {
         global $http_site_root;
 
+        if ($debug) $this->debug=true;
         if(empty($sql) && !isset($data)) {
-            echo _('Warning: GUP_Pager must be passed either an SQL query or a data array');
+            echo _("Warning: GUP_Pager must be passed either an SQL query or a data array");
             return false;
+        }
+
+        //if columns element is not defined, then assume entire view is column data
+        if (!$view_info['columns']) { 
+            $column_info=$view_info;
+            $incoming_options=false;
+        } else {
+            $column_info = $view_info['columns'];
+            $incoming_options = $view_info['options'];
         }
 
 
@@ -152,6 +162,7 @@ class GUP_Pager {
          $this->page            = _('Page');
         $this->buffer_output=$buffer_output;
         $this->group_mode_paging=$group_mode_paging;
+
 
         // get CGI vars
         getGlobalVar($this->sort_column, $pager_id . '_sort_column');
@@ -170,18 +181,29 @@ class GUP_Pager {
         getGlobalVar($refresh, $this->pager_id . '_refresh');
         getGlobalVar($this->do_export, $this->pager_id . '_export');
 
+        //process incoming options, if available and set
+        if ($incoming_options) {
+            foreach ($incoming_options as $okey=>$oval) {
+                $this->PrintDebug("SETTING INTERNAL OPTION $okey TO $oval FROM VIEW");
+                $eval_str="\$this->{$okey} = $oval;";
+                $this->PrintDebug("EVALING: $eval_str");
+                eval($eval_str);
+            }
+        }
+
+
         if($refresh) { 
-            if($this->debug) echo "CGI refresh, not using cache<br>\n";
+            $this->PrintDebug("CGI refresh, not using cache");
             $this->use_cached    = false; 
         }
         // don't use the cache if we are in sql-only mode (no data or callbacks)
         if(!isset($data)) { 
-            if($this->debug) echo "SQL-only mode (no data or callbacks), not using cache<br>\n";
+            $this->PrintDebug("SQL-only mode (no data or callbacks), not using cache");
             $this->use_cached    = false; 
         }
         // don't use the cache if there is no sql and the data is not
         if(isset($data) && !function_exists($data)) { 
-            if($this->debug) echo "Data-only mode (no SQL or callbacks), not using cache<br>\n";
+            $this->PrintDebug("Data-only mode (no SQL or callbacks), not using cache");
             $this->use_cached    = false; 
         }
 
@@ -257,7 +279,7 @@ class GUP_Pager {
                 $this->SetUpSQLOrderByClause();
             }
     
-            //echo $this->sql;
+            $this->PrintDebug("Current SQL: {$this->sql}");
     
             // store current page in session
             if (isset($this->next_page)) {
@@ -416,16 +438,16 @@ class GUP_Pager {
                 if($this->column_info[$this->group_mode]['group_query_count']) {
                     //$this->count_sql = $this->column_info[$this->group_mode]['group_query_count'];
                     $this->count_sql = str_replace('XXX-value-XXX', $this->group_id, $this->column_info[$this->group_mode]['group_query_count']); 
-                    if($this->debug) echo "setting custom count_sql for group mode:<br>{$this->count_sql}<br>";
+                    $this->PrintDebug("setting custom count_sql for group mode:<br>{$this->count_sql}");
                 } else {
                     $this->count_sql = '';
-                    if($this->debug) echo "disabling count_sql for group mode<br>";
+                    $this->PrintDebug("disabling count_sql for group mode");
                 }
 
                 $old_fetch_mode = $this->db->fetchMode;
                 $this->db->SetFetchMode(ADODB_FETCH_NUM);
 
-                if($this->debug) echo "executing group query: {$this->column_info[$this->group_mode]['group_query_list']}<br>";
+                $this->PrintDebug("executing group query: {$this->column_info[$this->group_mode]['group_query_list']}");
                 $group_values = $this->db->execute($this->column_info[$this->group_mode]['group_query_list']);
 
                 $this->db->SetFetchMode($old_fetch_mode); 
@@ -453,22 +475,22 @@ class GUP_Pager {
         }
 
         if($_SESSION[$cache_name] && $this->use_cached) {
-            if($this->debug) echo "Getting Data From Cache<br>";
+            $this->PrintDebug("Getting Data From Cache");
 
             $this->data = $_SESSION[$cache_name];
             $this->using_cache = true;
 
         } else {
-            if($this->debug) echo "Not Using Cache $cache_name<br>";
+            $this->PrintDebug("Not Using Cache $cache_name");
 
             // clear the cache
             $_SESSION[$cache_name] = null;
 
             if($this->sql) {
-                //echo htmlentities($this->sql) . '<br/>';
+                $this->PrintDebug("Current SQL: ". htmlentities($this->sql));
     
                 if($this->get_only_visible) {
-                    if($this->debug) echo "Running SQL query for a page of the data<br>";
+                    $this->PrintDebug("Running SQL query for a page of the data");
 
                     global $ADODB_COUNTRECS;
 
@@ -487,7 +509,7 @@ class GUP_Pager {
 
     
                 } else {
-                    if($this->debug) echo "Running SQL query for all data<br>";
+                    $this->PrintDebug("Running SQL query for all data");
                     $rs = &$this->db->Execute($this->sql);
                 }
 
@@ -500,7 +522,7 @@ class GUP_Pager {
                    }
         
                 if(function_exists($this->data)) {
-                    if($this->debug) echo "Running callback for calculated data<br>";
+                    $this->PrintDebug("Running callback for calculated data");
 
                     $user_data_fn = $this->data;
                     $this->data = array();
@@ -559,14 +581,14 @@ class GUP_Pager {
             $this->AtFirstPage     = (1 == $this->curr_page);
             $this->AtLastPage     = ($this->LastPageNo <= 1);
 
-            //echo "clause A<br>";
+            $this->PrintDebug("clause A");
             $this->start_data_row = ($this->curr_page -1) * $this->rows;
             $this->end_data_row = min($this->start_data_row + $this->rows, count($this->data));
 			//echo $this->AbsolutePage . ':' . $this->LastPageNo .':'. $this->start_data_row .':'. $this->end_data_row;
 
         } else {
             if($this->rs) { 
-                //echo "clause B<br>";
+                $this->PrintDebug("clause B");
                 $this->AbsolutePage = $rs->AbsolutePage();
                 $this->LastPageNo = $rs->LastPageNo();
                 $this->AtFirstPage = $rs->AtFirstPage();
@@ -575,7 +597,7 @@ class GUP_Pager {
                 $this->start_data_row = 0;
                 $this->end_data_row = count($this->data);
             } else {
-                //echo "clause C<br>";
+                $this->PrintDebug("clause C");
                 $this->AbsolutePage = $this->curr_page;
                 $this->LastPageNo     = (int)((count($this->data) + $this->rows - 1) / $this->rows);
                 $this->AtFirstPage     = (1 == $this->curr_page);
@@ -592,7 +614,7 @@ class GUP_Pager {
         $render_data['at_last_page'] = $this->AtLastPage;
 
         
-        //echo "rows from {$this->start_data_row} to {$this->end_data_row}<br/>";
+        $this->PrintDebug("rows from {$this->start_data_row} to {$this->end_data_row}");
 
 
         // this builds the group select for a calc'd column
@@ -611,7 +633,7 @@ class GUP_Pager {
             foreach($unique_ids as $id => $v) {
 
                 if(!isset($this->group_id)) {
-                    //echo "setting manually to $id";
+                    $this->PrintDebug("setting manually to $id");
                     $this->group_id = $id;
                 }
 
@@ -1239,12 +1261,21 @@ END;
     function GetColumns() { 
         return $this->column_info; 
     }
+    function PrintDebug($string) {
+        if ($this->debug) echo $string.'<br>';
+    }
 
 
 }
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.49  2006/07/12 00:33:41  vanmer
+ * - added debug parameter to constructor, to allow debug output during object init
+ * - wrapped all debug output in PrintDebug function
+ * - added code to allow column info to be passed in as part of a view, in element 'columns'
+ * - added code to process incoming object options from view, in element 'options'
+ *
  * Revision 1.48  2006/06/02 23:40:34  ongardie
  * - If the callback isn't callable, $this->data needs to be an array anyway.
  *
