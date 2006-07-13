@@ -2,7 +2,7 @@
 /**
  * Administration interface for managing permissions for one role
  *
- * $Id: role_permission_grid.php,v 1.11 2006/07/09 05:04:03 vanmer Exp $
+ * $Id: role_permission_grid.php,v 1.12 2006/07/13 00:47:20 vanmer Exp $
  *
  */
 
@@ -68,6 +68,7 @@ if ($gridrole_id) {
                     $rolePerm=$acl->get_role_permission($gridrole_id, $cor, $scope, $perm, false, false);
                     if ($rolePerm) {
                         $rolePerm=current($rolePerm);
+//                        print_r($rolePerm);
                         if ($rolePerm['Inheritable_flag']) {
                             $current_permissions[$scope][$cor][$perm]=2;
                         } else {
@@ -95,7 +96,7 @@ switch ($grid_action) {
         foreach ($current_permissions as $scope =>$scopedata) {
             foreach ($scopedata as $cor=>$permdata) {
                 foreach ($permdata as $perm=>$value) {
-//                 echo "PROCESSING $scope $cor $perm<br>";
+//                 echo "PROCESSING $scope $cor $perm $value<br>";
                     if (array_key_exists("$scope,$cor,$perm",$_POST)) {
                         if ($current_permissions[$scope][$cor][$perm]!=$_POST["$scope,$cor,$perm"]) {
 //                            echo "CHANGING PERMISSION FROM {$current_permissions[$scope][$cor][$perm]} TO {$_POST["$scope,$cor,$perm"]}<br>";

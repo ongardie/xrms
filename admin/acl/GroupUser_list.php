@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupUser_list.php,v 1.13 2006/07/09 05:04:03 vanmer Exp $
+ * $Id: GroupUser_list.php,v 1.14 2006/07/13 00:47:20 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -73,7 +73,7 @@ $role_select=$sql . " AND GroupUser.Role_id= XXX-value-XXX";
 		</td>
             </tr>";
    
-    $pager = new GUP_Pager($con, $sql,false, _("Group Users"), $form_name, 'GroupUsers', $columns);
+    $pager = new GUP_Pager($con, $sql,false, _("Group Users"), $form_name, 'GroupUserPager', $columns);
 
     $pager->AddEndRows($endrows);
 
@@ -101,6 +101,9 @@ end_page();
 
 /**
  * $Log: GroupUser_list.php,v $
+ * Revision 1.14  2006/07/13 00:47:20  vanmer
+ * - changed all columns/pager combinations to reference the same pager name, to allow saved views to operate properly
+ *
  * Revision 1.13  2006/07/09 05:04:03  vanmer
  * - patched ACL interface to check for admin access
  *

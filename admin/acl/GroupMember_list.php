@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupMember_list.php,v 1.6 2006/07/09 05:04:03 vanmer Exp $
+ * $Id: GroupMember_list.php,v 1.7 2006/07/13 00:47:20 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -65,7 +65,7 @@ $columns = $pager_columns->GetUserColumns('default');
 $colspan=count($columns);
 
 
-$pager = new GUP_Pager($con, $sql, null,_("Group Members"), $form_id, 'GroupMembers', $columns, false);
+$pager = new GUP_Pager($con, $sql, null,_("Group Members"), $form_id, 'GroupMembersPager', $columns, false);
 
 start_page($page_title, true, $msg);
 ?>
@@ -97,6 +97,9 @@ end_page();
 
 /**
  * $Log: GroupMember_list.php,v $
+ * Revision 1.7  2006/07/13 00:47:20  vanmer
+ * - changed all columns/pager combinations to reference the same pager name, to allow saved views to operate properly
+ *
  * Revision 1.6  2006/07/09 05:04:03  vanmer
  * - patched ACL interface to check for admin access
  *

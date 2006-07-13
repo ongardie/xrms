@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: RolePermission_list.php,v 1.7 2006/07/09 05:04:03 vanmer Exp $
+ * $Id: RolePermission_list.php,v 1.8 2006/07/13 00:47:20 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -96,7 +96,7 @@ $inherit_select=$sql . " WHERE Inheritable_flag = XXX-value-XXX";
                 </td>
             </tr>";
 
-   $pager = new GUP_Pager($con, $sql,null, _("Role Permissions"), $form_name, 'RolePermission', $columns, false);
+   $pager = new GUP_Pager($con, $sql,null, _("Role Permissions"), $form_name, 'RolePermissionPager', $columns, false);
 
     $pager->AddEndRows($endrows);
 
@@ -119,6 +119,9 @@ end_page();
 
 /**
  * $Log: RolePermission_list.php,v $
+ * Revision 1.8  2006/07/13 00:47:20  vanmer
+ * - changed all columns/pager combinations to reference the same pager name, to allow saved views to operate properly
+ *
  * Revision 1.7  2006/07/09 05:04:03  vanmer
  * - patched ACL interface to check for admin access
  *

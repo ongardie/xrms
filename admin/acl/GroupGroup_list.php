@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupGroup_list.php,v 1.4 2006/07/09 05:04:03 vanmer Exp $
+ * $Id: GroupGroup_list.php,v 1.5 2006/07/13 00:47:20 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -58,7 +58,7 @@ $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Ed
                 </td>
             </tr>";
 
-   $pager = new GUP_Pager($con, $sql,false, _("Group Groups"), $form_name, 'GroupGroups', $columns);
+   $pager = new GUP_Pager($con, $sql,false, _("Group Groups"), $form_name, 'GroupGroupPager', $columns);
 
     $pager->AddEndRows($endrows);
 
@@ -87,6 +87,9 @@ end_page();
 
 /**
  * $Log: GroupGroup_list.php,v $
+ * Revision 1.5  2006/07/13 00:47:20  vanmer
+ * - changed all columns/pager combinations to reference the same pager name, to allow saved views to operate properly
+ *
  * Revision 1.4  2006/07/09 05:04:03  vanmer
  * - patched ACL interface to check for admin access
  *

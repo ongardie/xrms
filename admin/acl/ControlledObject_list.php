@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: ControlledObject_list.php,v 1.8 2006/07/09 05:04:03 vanmer Exp $
+ * $Id: ControlledObject_list.php,v 1.9 2006/07/13 00:47:20 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -59,7 +59,7 @@ $form_id="ControlledObjectsForm";
                 </td>
             </tr>";
 
-   $pager = new GUP_Pager($con, $sql,false, _("Controlled Objects"), $form_id, 'ControlledObjects', $columns);
+   $pager = new GUP_Pager($con, $sql,false, _("Controlled Objects"), $form_id, 'ControlledObjectsPager', $columns);
 
     $pager->AddEndRows($endrows);
 
@@ -85,6 +85,9 @@ end_page();
 
 /**
  * $Log: ControlledObject_list.php,v $
+ * Revision 1.9  2006/07/13 00:47:20  vanmer
+ * - changed all columns/pager combinations to reference the same pager name, to allow saved views to operate properly
+ *
  * Revision 1.8  2006/07/09 05:04:03  vanmer
  * - patched ACL interface to check for admin access
  *
