@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.13 2006/06/15 21:35:45 vanmer Exp $
+ * $Id: updateto2.0.php,v 1.14 2006/07/13 00:26:23 vanmer Exp $
  */
 
 // where do we include from
@@ -4758,6 +4758,32 @@ $msg .= update_unknown_company($con);
 $sql = "alter table contacts add user_id int NULL default 0";
 $rst = $con->execute($sql);
 
+$pager_view_pref=get_user_preference_type($con,"pager_columns");
+if ($pager_view_pref) {
+    require_once($include_directory."classes/Pager/view_functions.php");
+    initViews($con);
+    $view_pref_id=$pager_view_pref['user_preference_type_id'];
+
+    $sql = "SELECT * FROM user_preferences WHERE user_preference_type_id=$view_pref_id";
+    $rst = $con->execute($sql);
+    while (!$rst->EOF) {
+        $pref_data=unserialize($rst->fields['user_preference_value']);
+        $pref_user_id=$rst->fields['user_id'];
+        foreach ($pref_data as $pager_name=>$views) {
+//            echo "USER $pref_user_id PAGER $pager_name<pre>\n"; print_r($views); echo "</pre>";
+            writeViews($con, $pager_name, $pref_user_id, $views);
+        }
+        $rst->movenext();
+    }
+
+    $sql = "DELETE FROM user_preferences WHERE user_preference_type_id=$view_pref_id";
+    $rst = $con->execute($sql);
+
+    $sql = "DELETE FROM user_preference_types WHERE user_preference_type_id=$view_pref_id";
+    $rst = $con->execute($sql);
+
+    $msg .= _("Removed Pager Columns out of user preferences, now in a new table") . '<br>';
+}
 
 //FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
 set_admin_preference($con, 'xrms_version', '1.99.1');
@@ -4786,6 +4812,9 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.14  2006/07/13 00:26:23  vanmer
+ * - added upgrade to move all existing pager columns user preferences into new saved view pager table
+ *
  * Revision 1.13  2006/06/15 21:35:45  vanmer
  * - added user_id field to contacts table
  *
