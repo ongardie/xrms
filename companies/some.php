@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.81 2006/01/02 22:56:27 vanmer Exp $
+ * $Id: some.php,v 1.82 2006/07/13 00:37:48 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -435,6 +435,7 @@ if (strlen($recently_viewed_table_rows) == 0) {
 }
 
 /******* SAVED SEARCH BEGINS *****/
+    if (!isset($day_diff)) $day_diff=0;
     $saved_data = $_POST;
     $saved_data["sql"] = $sql;
     $saved_data["day_diff"] = $day_diff;
@@ -914,16 +915,17 @@ $default_columns = array('name','code','user','industry','crm_status','account_s
 $default_columns=array_merge($default_columns, $extra_defaults);
 
 // $default_columns =  array("name","code","user","industry","crm_status","account_status","rating");
-
-$pager_columns = new Pager_Columns('CompanyPager', $columns, $default_columns, 'CompanyForm');
+$pager_id='CompanyPager';
+$form_id='CompanyForm';
+$pager_columns = new Pager_Columns($pager_id, $columns, $default_columns, $form_id);
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
 $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 
-$columns = $pager_columns->GetUserColumns('default');
+$columns = $pager_columns->GetUserColumns();
 
 echo $pager_columns_selects;
 
-$pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'CompanyForm', 'CompanyPager', $columns);
+$pager = new GUP_Pager($con, $sql, null, _('Search Results'), $form_id, $pager_id, $columns);
 
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
@@ -1033,6 +1035,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.82  2006/07/13 00:37:48  vanmer
+ * - changed to ensure that company pager name matches columns name
+ *
  * Revision 1.81  2006/01/02 22:56:27  vanmer
  * - changed to use centralized dbconnection function
  *
