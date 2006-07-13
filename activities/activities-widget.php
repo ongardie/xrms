@@ -69,10 +69,23 @@ getGlobalVar($search_date, 'search_date');
 getGlobalVar($start_end, 'start_end');
 
 
+// selects the columns this user is interested in
+$pager_id='ActivitiesPager'.$form_name.$instance;
+
+//set columns to false, will set them later
+$columns=false;
+$pager_columns = new Pager_Columns($pager_id, $columns, $default_columns, $form_name, 6, $con, $search_terms);
+
+$view_criteria=$pager_columns->GetViewCriteria();
+if ($view_criteria) { $show_mini_search=true; $show_search_terms=true; }
+
+/**** MINI SEARCH ****/
 $mini_search_widget_name = 'activities_widget_mini_search';
 
 if($show_mini_search) {
-    getGlobalVar($search_enabled, $mini_search_widget_name.'_status');
+    if (!$show_search_terms) {
+        getGlobalVar($search_enabled, $mini_search_widget_name.'_status');
+    } else $search_enabled="enable";
 
     if('enable' == $search_enabled) {
         $search_terms = GetMiniSearchTerms($mini_search_widget_name, $search_terms);
@@ -80,9 +93,18 @@ if($show_mini_search) {
         $caption .= ' &nbsp;<input type="button" class="button" onclick="document.getElementById(\'' . $mini_search_widget_name . '\').style.display=\'block\';" value="' . _('Filter Activities') . '">';
     }
 
+    $pager_columns->SetCurrentViewCriteria($search_terms);
+//    echo "SEARCH PRE-PAGER COLUMNS:<pre>\n"; print_r($search_terms); echo "</pre>\n";
+    if ($view_criteria) $search_terms=$view_criteria;
+//    echo "SEARCH POST-PAGER COLUMNS:<pre>\n"; print_r($search_terms); echo "</pre>\n";
+
+
     $mini_search_widget = GetMiniSearchWidget($mini_search_widget_name, $search_terms, $search_enabled, $form_name, $con);
 
 }
+
+/**** END MINI SEARCH ***/
+
 
 
 if('list' != $activities_widget_type) {
@@ -417,7 +439,9 @@ if('list' != $activities_widget_type) {
 } else {
     global $system_rows_per_page;
 
-    $thread_query_list = "select activity_title, activity_id from activities where thread_id is not null group by thread_id order by activity_id";
+ 
+    /** DEFINE COLUMN INFORMATION **/
+   $thread_query_list = "select activity_title, activity_id from activities where thread_id is not null group by thread_id order by activity_id";
 
     $thread_query_select = "$select FROM $from_list $joins $where " . ' AND thread_id = XXX-value-XXX ' . $group_by;
 
@@ -464,14 +488,16 @@ if('list' != $activities_widget_type) {
     $columns[] = array('name' => _("About"), 'index_calc' => 'activity_about');
     $columns[] = array('name' => _("Resolution"), 'index_sql' => 'resolution_short_name', 'sql_sort_column'=>'a.activity_resolution_type_id', 'group_query_list'=>$resolution_query_list, 'group_query_select'=>$resolution_query_select);
 
-    // selects the columns this user is interested in
-    $pager_id='ActivitiesPager'.$form_name.$instance;
-    $pager_columns = new Pager_Columns($pager_id, $columns, $default_columns, $form_name);
+    $pager_columns->SetPagerColumns($columns);
+    $columns = $pager_columns->GetUserColumns();
+
+/*** END DEFINITION OF PAGER COLUMNS **/
+
     $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
     $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 
-    $columns = $pager_columns->GetUserColumns('default');
 
+//    print_r($columns);
     global $activity_column_names;
     $activity_column_names = $pager_columns->GetUserColumnNames();
 
@@ -812,6 +838,10 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.43  2006/07/13 00:14:37  vanmer
+* - moved definition of pager columns object to top of function, to allow load of views
+* - added calls to grab view criteria if view has just been loaded
+*
 * Revision 1.42  2006/07/12 03:50:45  vanmer
 * - added instance parameter to activities widget, allows multiple activities widgets on a page
 * - changed pager_id to be consistent between Pager_Columns and GUP_Pager
