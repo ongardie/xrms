@@ -5,7 +5,7 @@
  * This file contains a set of utility functions for saving and retrieving views for a GUP_Pager and
  * Pager_Columns object.
  *
- * $Id: view_functions.php,v 1.1 2006/07/13 00:12:13 vanmer Exp $
+ * $Id: view_functions.php,v 1.2 2006/07/13 00:24:26 vanmer Exp $
  */
 
 function initViews($con) {
@@ -67,13 +67,16 @@ function writeViews($con, $pager_name, $user_id, $views) {
 }
 
 function checkViewAdmin($con, $user_id) {
-    return true;
+    return check_user_role(false, $user_id, 'Administrator');
 }
 
 
 
 /**
  * $Log: view_functions.php,v $
+ * Revision 1.2  2006/07/13 00:24:26  vanmer
+ * - added user role check instead of always allowing admin access
+ *
  * Revision 1.1  2006/07/13 00:12:13  vanmer
  * - Initial revision of a set of functions to save and retrieve views for pagers, by user
  *
