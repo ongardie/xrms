@@ -10,7 +10,7 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.25 2006/07/14 03:17:19 vanmer Exp $
+ * $Id: Pager_Columns.php,v 1.26 2006/07/14 03:45:36 vanmer Exp $
  */
 require_once('view_functions.php');
 
@@ -251,7 +251,7 @@ class Pager_Columns {
 
         //ensure that the user has a default set to work with
         if(!isset($this->pager_views) || !is_array($this->pager_views) || !isset($this->pager_views['user']['default'])) {
-            $this->pager_views['user']['default'] = $this->default_columns;
+            $this->pager_views['user']['default'] = $this->pager_views['global']['default'];
             $this->writeViews();
         }
 
@@ -736,6 +736,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.26  2006/07/14 03:45:36  vanmer
+ * - patch to ensure that user columns inherit from global defaults
+ *
  * Revision 1.25  2006/07/14 03:17:19  vanmer
  * - commented initViews functions, now run when XRMS is upgraded
  * - added phpdoc to new Pager_Columns functionality
