@@ -10,16 +10,19 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.24 2006/07/13 00:13:39 vanmer Exp $
+ * $Id: Pager_Columns.php,v 1.25 2006/07/14 03:17:19 vanmer Exp $
  */
 require_once('view_functions.php');
 
 class Pager_Columns {
 
+/**
+ * 
+**/
     var $pager_name;
     var $pager_columns;
     var $pager_views;
-    var $full_prefs;
+
     var $default_columns;
     var $form_id;
     var $visible_column_size;
@@ -31,24 +34,33 @@ class Pager_Columns {
     var $view_criteria;
 
     /**
+    * Constructor for the Pager_Columns class.  
+    *
+    * Requires at least a pager_name and form_id to operate properly
+    * Default columns will be taken as all columns from pager_columns, if not provided explicitly
+    *
     * @param string pager name/identifier
     * @param array pager columns to modify
     * @param array column names to use as 'default' view
     * @param string needed for JS to modify form
     * @param integer vertical height of multi-select widget
+    * @param adodbconnection optionally providing a database connection to use for saved views
+    * @param array optionally providing an extra "criteria" array to associate with a view when it is saved (can be retrieved when view is loaded using GetViewCriteria
+    * @param boolean indicating if debug output should be displayed
     */
     function Pager_Columns($pager_name, $pager_columns, $default_columns, $form_id, $visible_column_size=6, $con=false, $view_criteria=false, $debug=false) {
 
+        //set user from global $session_user_id variable
         global $session_user_id;
         $this->user_id=$session_user_id;
 
+        //get dbconnection if not provided
         if (!$con) $this->con = get_xrms_dbconnection();
         else $this->con = $con;
 
         if ($debug) $this->debug=true;
 
         $this->SetViewCriteria($view_criteria);
-
 
         $this->pager_name = $pager_name;
 
@@ -57,26 +69,44 @@ class Pager_Columns {
         $this->SetViewName($view_name);
 
 
+        //set pager columns based on incoming array
         $this->SetPagerColumns($pager_columns);
+
         $this->default_columns = $default_columns;
         $this->form_id = $form_id;
 	$this->visible_column_size=$visible_column_size;
 
 
+        //initialize all view-related data
         $this->init_views();
  
         //ensure view name is set in session
-        $this->_SetViewName($view_name);
+        $this->StoreViewName($view_name);
 
+        //process and handle any actions from GET/POST
         $this->handleFormActions();
 
 
     }
 
+    /**
+    * Sets the internal variable storing the data which will be stored along with a view
+    *
+    * @param array of data to be stored and retrieved along with the view
+    *
+    **/
     function SetViewCriteria($view_criteria) {
         $this->view_criteria=$view_criteria;
     }
 
+    /**
+    * Function to store the passed criteria directly into the view if the view has been saved
+    * This function should be run when setting view criteria after the constructor returns
+    * This will allow the new criteria to be saved along with the view, if the view is set to be saved
+    *
+    * @param array of data to be stored and retrieved along with the view
+    *
+    **/
     function SetCurrentViewCriteria($view_criteria) {
         $this->SetViewCriteria($view_criteria);
         if ($this->action=='save') {
@@ -85,6 +115,16 @@ class Pager_Columns {
         }
     }
 
+    /**
+    * Function to set the pager columns array, the complete set of pager columns
+    * which to restrict based on columns from the view.
+    * Should be run when setting the pager columns data, as it sets up the columns indexed by key
+    * Also sets the default columns if they are not already set
+    *
+    * @param array of pager columns data to be restricted and passed back when retrieving the view
+    *
+    *
+    **/
     function SetPagerColumns($pager_columns) {
         if (!$pager_columns) return false;
         $columns = array();
@@ -113,6 +153,12 @@ class Pager_Columns {
 
     }
 
+    /**
+    * Function to set the internal variables for view name and key based on a single string
+    *
+    * @param string with the view name, in format {view_key}_{view_name} (replacing {view_key} and {view_name} with their respective values
+    *
+    **/
     function SetViewName($view_name) {
         $view_arr=explode("_",$view_name);
         $this->view_key=array_shift($view_arr);
@@ -120,40 +166,55 @@ class Pager_Columns {
         $this->view_name=$view_name;
     }
 
-    function _SetViewName($view_name) {
+    /**
+    * Function to store the current view name in the session, as well as in internal variables
+    *
+    * @param string with the view name, in format {view_key}_{view_name} (replacing {view_key} and {view_name} with their respective values
+    *
+    **/
+    function StoreViewName($view_name) {
         $this->SetViewName($view_name);
         // store view name in the session
         $_SESSION[$this->pager_name . '_columns_view'] = $view_name;
     }
 
+    /**
+    * Function to initialize views, called by the constructor
+    *
+    **/
     function init_views() {
         //initialize view table
-        initViews($this->con);
+        //commented, probably not required here if user runs the upgrade script
+       //initViews($this->con);
 
-        /*
-        // this function checks for existance first and creates if it does not exist, setting skip system edit to true
-                add_user_preference_type($this->con, 'pager_columns', "Pager Columns Display Settings",false,false,false,false,false,true);
-        */
-        // read this user's pager_columns preference 
+        // read the views from the views API
         $this->readViews();
 
     }
 
+    /**
+    * Function to write the view data to the views API
+    *
+    **/
     function writeViews() {
+        //retrieve view based on current view key
         $views=$this->pager_views[$this->view_key];
+
+        //store global views in user_id 0
         if ($this->view_key=="global") $user_id=0;
         else $user_id=$this->user_id;
+
+        //write views for this pager to the views API
         writeViews($this->con, $this->pager_name, $user_id, $views);
 
-/*
-        $views=$this->full_prefs;
-        $views[$this->pager_name]=$this->pager_views;
-
-        set_user_preference($this->con, $this->user_id, 'pager_columns', serialize($views), false, true);
-*/
     }
 
+    /**
+    * Function to read the view data from the views API
+    *
+    **/
     function readViews() {
+        /** read global views **/
         $views=readViews($this->con, $this->pager_name, 0);
         $this->pager_views['global']=$views;
 
@@ -162,95 +223,158 @@ class Pager_Columns {
         $this->pager_views['user'] = $views;
 
 
-        /*
-                $views= unserialize(get_user_preference($this->con, $this->user_id, 'pager_columns', false, false, false));
-                $this->full_prefs=$views;
-        
-                $this->pager_views = $views[$this->pager_name];
-        */
+        /** ensure that default values are properly set **/
         $this->checkDefaultViews();
     }
 
+    /**
+    * Function wrapper for administrator check in views API, 
+    * run to ensure that user is an administrator with permission to alter global views
+    *
+    **/
     function checkAdmin() {
+        //run API admin check for the current user
         return checkViewAdmin($this->con, $this->user_id);
     }
 
+    /**
+    * Function to ensure that default values are set in the pager views
+    * run after views are loaded so user always has at least a default view
+    *
+    **/
     function checkDefaultViews() {
         // look for this pager in the preferences array, initialize one (default view) and write if it does not exist.
         if(!isset($this->pager_views) || !is_array($this->pager_views) || !isset($this->pager_views['global']['default'])) {
 
             $this->pager_views['global']['default'] = $this->default_columns;
         }
+
+        //ensure that the user has a default set to work with
         if(!isset($this->pager_views) || !is_array($this->pager_views) || !isset($this->pager_views['user']['default'])) {
             $this->pager_views['user']['default'] = $this->default_columns;
             $this->writeViews();
         }
 
+        //always add an option for the system default, as passed in
         $this->pager_views['system']['default']=$this->default_columns;
     }
 
+    /**
+    * Function to process any form actions, and run the appropriate method
+    * run in the constructor so that every page load can have form actions processed
+    *
+    **/
     function handleFormActions() {
 
+        //retrieve GET/POST action variable
         getGlobalVar($pager_columns_action, $this->pager_name . '_pager_columns_action');
 
-        // if we are saving user's prefs..
+        // if we are saving the view
         if('save' == $pager_columns_action) {
             $this->SaveView();
 
+        // if we are deleting the view
         } elseif ('delete' == $pager_columns_action) {
             $this->DeleteView();
+
+        // if we are loading the view
         } elseif ('load' == $pager_columns_action) {
             $this->LoadView();
         }
 
+        //set the action internally
         $this->action=$pager_columns_action;
 
     }
 
+    /**
+    * Function to run when loading a view (currently does nothing)
+    *
+    **/
     function LoadView() {
         //stub function to run when form action is load
     }
 
+
+    /**
+    * Function to retrieve any parameters for the associated pager from GET/POST
+    * Used to save these parameters when storing the view
+    *
+    * @return array of variables to be set internally in the GUP_Pager
+    *
+    **/
     function GetPagerParams() {
         $options=array();
+        /**
+          * collection of pager parameters to store
+          * These parameters are stored keyed by associated parameter.  The value is used to retrieve 
+          * the form variable in question, and this value is stored in the pager parameters, keyed for 
+          * both the key and the value
+        **/
         $param_names=array("sort_order"=>"current_sort_order","sort_column"=>"current_sort_column","group_mode"=>"last_group_mode","group_id"=>"group_id");
+
+        //loop on available parameters
         foreach ($param_names as $pkey=>$param) {
             getGlobalVar($pval,"{$this->pager_name}_$param");
             if ($pval OR $pval===0 OR $pval==='0') { 
+                //set value for both key and value of available parameters
                 $options[$pkey]=$pval;
                 $options[$param]=$pval;
-//                if (!$options[$pkey]) $options[$pkey]="''";
-//                if (!$options[$param]) $options[$param]="''";
                 $this->PrintDebug("SAVING PAGER {$this->pager_name} PARAM $pkey:$param {$options[$pkey]}");
             }
         }
+
+        //if any parameters were available, then ensure that resort is set to false and next page is set to 1
         if (count($options)>0) {
             $options['resort']='false';
             $options['next_page']=1;
             return $options;
         }
+
+        //by default return false
         return false;
     }
 
+
+
+    /**
+    * Function to create the view data structure that will be saved using the saved views API
+    *
+    * @return array of view data with keys 'pager_options', 'columns' and optionally 'view_criteria'
+    **/
     function PrepareViewData() {
         $view=array();
         // getGlobalVar for the user_columns, as array
         getGlobalVar($user_columns, $this->pager_name . '_pager_columns');
+
+        //retrieve pager options from the form variables
         $view['pager_options']=$this->GetPagerParams();
-//        $view=$user_columns;
+
+        //set columns based on selected user columns
         $view['columns']=$user_columns;
+
+        //if view criteria has been provided, add it to the view data being saved
         if ($this->view_criteria) $view['view_criteria']=$this->view_criteria;
+
         return $view;
     }
 
+    /**
+    * Function to run in order to save the current view
+    *
+    **/
     function SaveView() {
+        //retrieve form variables for new view name and global flag
         getGlobalVar($view_name_new, $this->pager_name . '_view_name_new');
         getGlobalVar($view_global, $this->pager_name . '_view_new_global');
+
         // use new name first or selected name
         $view_name = $view_name_new ? $view_name_new : $this->view_name;
 
+        //make view data to store
         $view_data=$this->PrepareViewData();
 
+        //if the global flag is set, assume view key is global
         if ($view_global) $this->view_key="global";
 
         // ensure that user can only write to a global view if admin check is run
@@ -263,15 +387,20 @@ class Pager_Columns {
 
         $this->PrintDebug("Saving {$this->view_key} view $view_name");
 
+        //set the view into the internal collection of views for the current pager
         $this->pager_views[$this->view_key][$view_name] = $view_data;
 
-        // write
+        // write the views for this view key
         $this->writeViews();
 
-        //set view to current view
-        $this->_SetViewName("{$this->view_key}_$view_name");
+        //set view to saved key/view
+        $this->StoreViewName("{$this->view_key}_$view_name");
     }
 
+    /**
+    * Function to run when deleting the current view
+    *
+    **/
     function DeleteView() {
        //ensure user is admin before allowing removal of global 
        if ($this->view_key=="global" AND !$this->checkAdmin()) return false;
@@ -279,26 +408,37 @@ class Pager_Columns {
         // remove from array 
         unset($this->pager_views[$this->view_key][$this->view_name]);
 
-        // write
+        // write out views
         $this->writeViews();
 
         //ensure that if default was removed that it gets replaced
         $this->checkDefaultViews();
 
         // default always exists (see above)
-        $this->_SetViewName('user_default');
+        $this->StoreViewName('user_default');
     }
 
+    /**
+    * Function to turn available views into an HTML string for use in a select dropdown
+    *
+    * @return string with <option> tags
+    **/
     function RenderViewOptions() {
-        // create <option> tags for views list
         $view_options='';
         foreach ($this->pager_views as $vkey=>$views) {
+
+            //add an optgroup around each type of view key
             $group_label=strtoupper($vkey);
             $view_options.="<optgroup LABEL=\"$group_label\">";
+
             foreach(array_keys($views) as $option_view_name ) {
+                //set string for view key/view name
                 $value="{$vkey}_$option_view_name";
-                $view_options .= "<option value=\"$value\"" . (($value=="{$this->view_key}_{$this->view_name}") ? ' selected="selected"' : '') . ">$option_view_name</option>\n";
+                $current_view="{$this->view_key}_{$this->view_name}";
+                // create <option> tag for view
+               $view_options .= "<option value=\"$value\"" . (($value==$current_view) ? ' selected="selected"' : '') . ">$option_view_name</option>\n";
             }
+            //end optgroup for this view key
             $view_options.="</optgroup>";
         }
         return $view_options;
@@ -321,6 +461,12 @@ class Pager_Columns {
         return $columns;
     }
 
+    /**
+    * Returns the current view name from the session (if stored there)
+    * Also sets the internal variables for view_name and view_key
+    *
+    * @return string with current view name (not including key)
+    */
     function GetCurrentViewName() {
         $view_name=isset($_SESSION[$this->pager_name . '_columns_view']) ? $_SESSION[$this->pager_name . '_columns_view'] : 'user_default';
         $this->SetViewName($view_name);
@@ -328,6 +474,13 @@ class Pager_Columns {
         return $this->view_name;
     }
 
+    /**
+    * Gets view data for a view (or the current view if not provided)
+    * Used as the base data when passing back the view to the user
+    * Only sets 'options' and 'criteria' when view is being loaded
+    *
+    * @return array with view data, including possible keys 'pager_options' 'columns' 'view_criteria'
+    */
     function GetViewData($view_name=false) {
         if (!$view_name) $view_name = $this->GetCurrentViewName();
 
@@ -350,16 +503,36 @@ class Pager_Columns {
         return $view_data;
     }
 
+    /**
+    * Function to call when retrieving a view for use with a GUP_Pager
+    * Retrieves the current view data, and sets columns as needed by the GUP_Pager
+    *
+    * @return array with view data, including possible keys 'columns' 'options' 'criteria'
+    */
     function GetUserView() {
         $view_data=$this->GetViewData();
         $view_data['columns']=$this->GetUserPagerColumns();
         return $view_data;
     }
 
+    /**
+    * Deprecated function wrapper for GetUserView
+    * Was previous used to retrieve and return columns for use in a GUP_Pager
+    *
+    * @return array with view data, including possible keys 'columns' 'options' 'criteria'
+    */
     function GetUserColumns() {
         return $this->GetUserView();
     }
 
+    /**
+    * Function to call when retrieving the criteria set on a view
+    * Retrieves the current view data criteria if no view name is provided
+    * Only returns the criteria if it is provided in the view data
+    * This means criteria is only returned when the view is being loaded (load button clicked)
+    *
+    * @return array with view criteria, as passed in/saved with the view
+    */
     function GetViewCriteria($view_name=false) {
         $view_data=$this->GetViewData($view_name);
         if (array_key_exists('criteria',$view_data)) {
@@ -540,10 +713,21 @@ END;
         return $s;
     }
 
+
+    /**
+    * Function to trap debug output
+    * Outputs only when debug is set internally
+    *
+    */
     function PrintDebug($string) {
         if ($this->debug) echo "$string<br/>\n";
     }
 
+    /**
+    * Function to set the internal debug variable
+    * Defaults to turning debug on
+    *
+    */
     function SetDebug($debug=true) {
         $this->debug=$debug;
     }
@@ -552,6 +736,10 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.25  2006/07/14 03:17:19  vanmer
+ * - commented initViews functions, now run when XRMS is upgraded
+ * - added phpdoc to new Pager_Columns functionality
+ *
  * Revision 1.24  2006/07/13 00:13:39  vanmer
  * - Added functionality for global, user and system options for pagers
  * - Changed to save/retrieve pager views using new external view functions
