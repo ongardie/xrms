@@ -80,7 +80,7 @@ $view_criteria=$pager_columns->GetViewCriteria();
 if ($view_criteria) { $show_mini_search=true; $show_search_terms=true; }
 
 /**** MINI SEARCH ****/
-$mini_search_widget_name = 'activities_widget_mini_search';
+$mini_search_widget_name = 'activities_mini_search'.$form_name.$instance;
 
 if($show_mini_search) {
     if (!$show_search_terms) {
@@ -753,8 +753,12 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
     }
     if (!$con) $con=get_xrms_dbconnection();
+
+    $hideCaption=_("Hide");
+
     $activity_type_menu=get_activity_type_menu($con, $type, $widget_name.'_activity_type',true);
     $activity_owner_menu = get_user_menu($con, $owner, true, $widget_name.'_activity_owner');
+    $showhide_link="<a href=\"#\" id=\"{$widget_name}_showhideLink\" onclick=\"javascript:{$widget_name}_Hide();\">{$hideCaption}</a>";
 
     $ret =
     "<div id=$widget_name>
@@ -763,7 +767,14 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=3>". _("Filter Activities") . "</td>
+                <td class=widget_header colspan=3>
+
+                    <table width=\"100%\" cellspacing=0 cellpadding=0 border=0>
+                    <tr><td class=widget_header align=left>
+                    ". _("Filter Activities") . "</td>
+                    <td class=widget_header align=right>
+                    $showhide_link
+                    </td></tr></table>
             </tr>
             <tr>
                 <td class=widget_label>" . _("Summary") . "</td>
@@ -803,7 +814,7 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
             <tr>
                 <td class=widget_content_form_element colspan=3>
                     <input type=button class=button onclick=\"document.$form_name.{$widget_name}_status.value='enable'; document.$form_name.submit();\" value=\"" . _('Filter Activities') . "\">
-                    <input type=button class=button onclick=\"ClearActivitiesFilter()\" value=\"" . _('Clear Filter') . "\">
+                    <input type=button class=button onclick=\"{$widget_name}_ClearActivitiesFilter()\" value=\"" . _('Clear Filter') . "\">
                 </td>
             </tr>
         </table>
@@ -815,9 +826,12 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
         // hide the widget to start with
         document.getElementById('{$widget_name}').style.display = \"" . ('enable' == $search_enabled ? 'block' : 'none') . "\";
 
-        function ClearActivitiesFilter() {
+        function {$widget_name}_ClearActivitiesFilter() {
             document.$form_name.{$widget_name}_status.value='disable';
             document.$form_name.submit();
+        }
+        function {$widget_name}_Hide() {
+            document.getElementById('{$widget_name}').style.display = \"none\";
         }
 
         Calendar.setup({
@@ -838,6 +852,10 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.44  2006/07/14 04:12:04  vanmer
+* - added variables to minisearch widget to ensure unique behavior
+* - added Hide link to activities filters display
+*
 * Revision 1.43  2006/07/13 00:14:37  vanmer
 * - moved definition of pager columns object to top of function, to allow load of views
 * - added calls to grab view criteria if view has just been loaded
