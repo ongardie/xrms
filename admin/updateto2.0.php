@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.14 2006/07/13 00:26:23 vanmer Exp $
+ * $Id: updateto2.0.php,v 1.15 2006/07/14 19:20:33 vanmer Exp $
  */
 
 // where do we include from
@@ -4769,10 +4769,12 @@ if ($pager_view_pref) {
     while (!$rst->EOF) {
         $pref_data=unserialize($rst->fields['user_preference_value']);
         $pref_user_id=$rst->fields['user_id'];
+	if ($pref_data) {
         foreach ($pref_data as $pager_name=>$views) {
 //            echo "USER $pref_user_id PAGER $pager_name<pre>\n"; print_r($views); echo "</pre>";
             writeViews($con, $pager_name, $pref_user_id, $views);
         }
+	}
         $rst->movenext();
     }
 
@@ -4812,6 +4814,9 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.15  2006/07/14 19:20:33  vanmer
+ * - ensure that pref data is set before running update of user views
+ *
  * Revision 1.14  2006/07/13 00:26:23  vanmer
  * - added upgrade to move all existing pager columns user preferences into new saved view pager table
  *
