@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.141 2006/05/27 19:48:58 ongardie Exp $
+ * $Id: one.php,v 1.142 2006/07/14 03:51:50 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -402,6 +402,16 @@ if ($division_id) {
     $bottom_rows .= do_hook_function('company_division_bottom', $bottom_rows);
 }
 
+
+// make sure $activity_rows is defined
+if ( !isset($activity_rows) ) {
+  $activity_rows = '';
+}
+//call the hook
+do_hook_function('company_activities', $activity_rows);
+
+
+
 // make sure $company_buttons is defined
 if ( !isset($company_buttons) ) {
   $company_button = '';
@@ -694,6 +704,7 @@ function markComplete() {
                 echo $activities_widget['sidebar'];
                 echo $activities_widget['js'];
             ?>
+            <?php echo $activity_rows; ?>
         </form>
 
 
@@ -747,6 +758,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.142  2006/07/14 03:51:50  vanmer
+ * - added hook for output within the companies activities form
+ *
  * Revision 1.141  2006/05/27 19:48:58  ongardie
  * - if( ! $var = 'value') will always evaluate to false when 'value' can be stored in $var.
  *
