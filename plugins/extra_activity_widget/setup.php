@@ -4,7 +4,7 @@
  *
  * This example adds an activities widget to the companies/one.php page, directly after the existing activities widget (and in fact using the same form)
  * 
- * $Id: setup.php,v 1.1 2006/07/14 03:52:28 vanmer Exp $
+ * $Id: setup.php,v 1.2 2006/07/14 04:12:41 vanmer Exp $
 **/
 
 require_once($include_directory.'../activities/activities-widget.php');
@@ -15,7 +15,7 @@ require_once($include_directory.'../activities/activities-widget.php');
 **/
 function xrms_plugin_init_extra_activity_widget() {
     global $xrms_plugin_hooks;
-    $xrms_plugin_hooks['company_activities']['extra_activity_widget']='extra_activity_widget_company';
+    $xrms_plugin_hooks['company_content_bottom']['extra_activity_widget']='extra_activity_widget_company';
 }
 
 
@@ -27,7 +27,6 @@ function extra_activity_widget_company(&$string) {
     global $return_url;
     global $company_id;
     global $division_id;
-    global $activities_form_name;
     global $con;
 
     //set up which columns to display as system default
@@ -56,19 +55,25 @@ function extra_activity_widget_company(&$string) {
     $instance='Plugin';
 
     $caption=_("Closed Activities");
-
+    $form_name="company_one_extra_activity";
     //retrieve activities widget
-    $activities_widget =  GetActivitiesWidget($con, $search_terms, $activities_form_name, $caption, $session_user_id, $return_url, $extra_where, $end_rows, $default_columns, $show_mini_search, $default_sort, $instance);
+    $activities_widget =  GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session_user_id, $return_url, $extra_where, $end_rows, $default_columns, $show_mini_search, $default_sort, $instance);
 
     //assign output to string
+    $string.="<form name=$form_name action=\"one.php\"><input type=hidden name=company_id value=$company_id><input type=hidden name=division_id value=$division_id>";
     $string.= $activities_widget['content'];
     $string.= $activities_widget['sidebar'];
     $string.= $activities_widget['js'];
+    $string.="</form>";
 
+    return $string;
 }
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.2  2006/07/14 04:12:41  vanmer
+ * - altered extra plugin to use _bottom hook (and define own form)
+ *
  * Revision 1.1  2006/07/14 03:52:28  vanmer
  * - Initial revision of the example plugin for an activities widget on the companies/one.php page
  *
