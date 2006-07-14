@@ -384,6 +384,9 @@
     <index name="act_contact_idx">
       <col>contact_id</col>
     </index>
+    <data>
+      <row><f>1</f><f>1</f><f>1</f><f>1</f><f>0</f><f></f><f></f><f>0</f><f>0</f><f>0</f><f>Test Activity</f><f></f><f>2006-01-01 13:13:45</f><f>1</f><f>2006-01-01 13:14:50</f><f>1</f><f>1</f><f>0</f><f>2006-01-01 13:13:45</f><f>2006-01-01 13:14:50</f><f>2006-01-01 13:14:50</f><f>1</f><f>c</f><f>d</f><f>0</f><f></f><f></f><f></f></row>
+    </data>
   </table>
   <table name="activities_recurrence">
     <field name="activity_recurrence_id" type="I" size="11">
@@ -1885,6 +1888,18 @@
       <row><f>1</f><f>sale</f><f>Sales Opportunity</f><f>Sales Opportunity</f><f>Sales Opportunity</f><f>a</f></row>
     </data>
   </table>
+  <table name="pager_saved_view">
+    <field name="pager_saved_view_id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="user_id" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="pager_name" type="C" size="255"/>
+    <field name="view_data" type="X"/>
+  </table>
   <table name="ratings">
     <field name="rating_id" type="I" size="11">
       <KEY/>
@@ -3123,7 +3138,6 @@
       <row><f>18</f><f>Show Logo</f><f>Show Logo</f><f>Controls custom logo display in the head of every page in XRMS.</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
       <row><f>20</f><f>xrms_version</f><f>XRMS Version</f><f>XRMS Version (read-only)</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>text</f><f>1</f><f>0</f></row>
       <row><f>21</f><f>session_storage_type</f><f>Session Data Storage Type</f><f>Controls where the PHP session data is stored (files or database).  Changing this parameter will cause all currently logged in users to be logged out.</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
-      <row><f>22</f><f>pager_columns</f><f>Pager Columns Display Settings</f><f></f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>text</f><f>0</f><f>1</f></row>
       <row><f>23</f><f>undefined_company_method</f><f>Undefined Company Method</f><f>Insert method used when no Company is defined for a new Contact</f><f>0</f><f>0</f><f>a</f><f></f><f></f><f>select</f><f>0</f><f>0</f></row>
     </data>
   </table>
