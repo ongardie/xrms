@@ -154,7 +154,7 @@ $is_overdue_field="(CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con-
 $is_overdue_text_field="(CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->DBTimeStamp(time()) . ") THEN ".$con->qstr(_("Yes"))." ELSE " . $con->qstr("")." END)";
 $select = "SELECT $is_overdue_field AS is_overdue, "
   ." at.activity_type_pretty_name AS type, "
-  . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, "
+  . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"$http_site_root/contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, "
 
   . "'$return_url' as return_url, "
   . $con->substr."(activity_description, 1, $description_substring_length)"."AS description_brief, "
@@ -165,7 +165,7 @@ $select = "SELECT $is_overdue_field AS is_overdue, "
   . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, cp.case_priority_pretty_name, rt.resolution_short_name ";
 
 
-$select .= ', ' . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, c.company_name ";
+$select .= ', ' . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"$http_site_root/companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, c.company_name ";
 
 $from = array('activities a');
 
@@ -852,6 +852,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.45  2006/07/17 05:39:00  vanmer
+* - changed link to companies and contacts to work regardless of path to page being displayed
+*
 * Revision 1.44  2006/07/14 04:12:04  vanmer
 * - added variables to minisearch widget to ensure unique behavior
 * - added Hide link to activities filters display
