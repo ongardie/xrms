@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.142 2006/07/14 03:51:50 vanmer Exp $
+ * $Id: one.php,v 1.143 2006/07/17 06:25:24 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -304,8 +304,7 @@ $pager = new GUP_Pager($con, $sql, 'getContactDetails', _('Contacts'), $contacts
 $contacts_export_button=$pager->GetAndUseExportButton();
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button $contacts_export_button
-            <input class=button type=button value=\"" .  _('Mail Merge') . "\" onclick=\"javascript: location.href='../email/email.php?scope=company&company_id=$comp
-any_id'\">" .
+            <input class=button type=button value=\"" .  _('Mail Merge') . "\" onclick=\"javascript: location.href='../email/email.php?scope=company&company_id=$company_id'\">" .
             render_create_button("New",'button',"location.href='$new_contact_location';") .  "</td></tr>";
 
 $pager->AddEndRows($endrows);
@@ -758,6 +757,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.143  2006/07/17 06:25:24  vanmer
+ * *** empty log message ***
+ *
  * Revision 1.142  2006/07/14 03:51:50  vanmer
  * - added hook for output within the companies activities form
  *
