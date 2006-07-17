@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.26 2006/04/16 17:49:52 johnfawcett Exp $
+ * $Id: one.php,v 1.27 2006/07/17 06:10:53 vanmer Exp $
  */
 
 //include required files
@@ -58,7 +58,7 @@ if($my_company_id) {
 $current_return_url=$return_url;
 require_once('user_roles_sidebar.php');
 $return_url=$current_return_url;
-$user_preferences_table=get_user_preferences_table($con);
+$user_preferences_table=get_user_preferences_table($con, $edit_user_id);
 
 // make sure $sidebar_rows is defined
 if ( !isset($sidebar_rows) ) {
@@ -131,6 +131,7 @@ start_page($page_title, true, $msg);
         </table>
         </form>
          <form action='user_prefs.php' method=POST>
+	  <input type=hidden name=return_url value="one.php?edit_user_id=<?php echo $edit_user_id; ?>">
           <?php echo $user_preferences_table; ?>
         </form>
 
@@ -166,6 +167,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.27  2006/07/17 06:10:53  vanmer
+ * - altered to allow admin to change user preferences from one.php page
+ * - added parameters for user_id and return_url for user_prefs control page
+ *
  * Revision 1.26  2006/04/16 17:49:52  johnfawcett
  * removed hardcoded language
  * added user preferences display / modification

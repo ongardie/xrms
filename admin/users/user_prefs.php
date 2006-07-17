@@ -5,7 +5,7 @@
  * Administration screen for managing user preferences
  *
  *
- * $Id: user_prefs.php,v 1.4 2006/01/02 22:09:39 vanmer Exp $
+ * $Id: user_prefs.php,v 1.5 2006/07/17 06:10:53 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -19,10 +19,17 @@ $session_user_id = session_check();
 
 getGlobalVar($msg, 'msg');
 getGlobalVar($preference_action,'preference_action');
+getGlobalVar($preference_user_id,'edit_user_id');
+getGlobalVar($return_url, 'return_url');
 if (!$preference_action) $preference_action='redirect';
 
-$user_id=$session_user_id;
-
+//only allow admin users to edit other users preferences
+if ($preference_user_id AND check_user_role(false, $_SESSION['session_user_id'], 'Administrator')) {
+    $user_id=$preference_user_id;
+} else {
+    //edit current users preferences
+    $user_id=$session_user_id;
+}
 $page_title="User Preferences";
 
 $con = get_xrms_dbconnection();
@@ -53,7 +60,8 @@ else {
             if (!$msg) $msg=_("Preferences successfully saved");
 //            $msg=urlencode($msg);
         case 'redirect':
-            Header("Location: self.php?msg=$msg");
+	    if (!$return_url) $return_url="self.php?msg=$msg";
+            Header("Location: $return_url&msg=$msg");
         break;
         default:
         case 'displayPrefs':
