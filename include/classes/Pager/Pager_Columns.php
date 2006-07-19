@@ -10,7 +10,7 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.27 2006/07/19 01:38:04 vanmer Exp $
+ * $Id: Pager_Columns.php,v 1.28 2006/07/19 01:46:55 vanmer Exp $
  */
 require_once('view_functions.php');
 
@@ -75,10 +75,12 @@ class Pager_Columns {
             $this->SetViewName($view_name);
         }
 
+        //set default columns incoming
+        $this->default_columns = $default_columns;
+
         //set pager columns based on incoming array
         $this->SetPagerColumns($pager_columns);
 
-        $this->default_columns = $default_columns;
         $this->form_id = $form_id;
 	$this->visible_column_size=$visible_column_size;
 
@@ -437,11 +439,18 @@ class Pager_Columns {
         $view_options='';
         foreach ($this->pager_views as $vkey=>$views) {
 
+            //add strings for opt groups, to be internationalized
+            $s=_("GLOBAL");
+            $s=_("USER");
+            $s=_("SYSTEM");
             //add an optgroup around each type of view key
-            $group_label=strtoupper($vkey);
+            $group_label=_(strtoupper($vkey));
             $view_options.="<optgroup LABEL=\"$group_label\">";
 
             foreach(array_keys($views) as $option_view_name ) {
+                //ensure that "default" named option is internationalized
+                if ($option_view_name=='default') $option_view_name=_("default");
+
                 //set string for view key/view name
                 $value="{$vkey}_$option_view_name";
                 $current_view="{$this->view_key}_{$this->view_name}";
@@ -746,6 +755,10 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.28  2006/07/19 01:46:55  vanmer
+ * - changed to ensure that programmatic default is set if not provided at constructor level
+ * - added translation of optgroup names and "default" entries
+ *
  * Revision 1.27  2006/07/19 01:38:04  vanmer
  * - added code to always load last view when returning to a page
  * - added code to set view to be loaded if no view is specified when visiting the page
