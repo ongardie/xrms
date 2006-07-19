@@ -79,6 +79,8 @@ $pager_columns = new Pager_Columns($pager_id, $columns, $default_columns, $form_
 $view_criteria=$pager_columns->GetViewCriteria();
 if ($view_criteria) { $show_mini_search=true; $show_search_terms=true; }
 
+$initial_search_terms=$search_terms;
+
 /**** MINI SEARCH ****/
 $mini_search_widget_name = 'activities_mini_search'.$form_name.$instance;
 
@@ -92,10 +94,19 @@ if($show_mini_search) {
     } else {
         $caption .= ' &nbsp;<input type="button" class="button" onclick="document.getElementById(\'' . $mini_search_widget_name . '\').style.display=\'block\';" value="' . _('Filter Activities') . '">';
     }
+    if ($search_enabled!='enable') {
+        $search_terms=$initial_search_terms;
+        //search is disabled, so set criteria to be disabled as well, and save itself if view is being saved
+        $pager_columns->SetCurrentViewCriteria(false);
+    } else {
+        //set current view criteria to include newly found search terms
+        $pager_columns->SetCurrentViewCriteria($search_terms);
+    }
 
-    $pager_columns->SetCurrentViewCriteria($search_terms);
-//    echo "SEARCH PRE-PAGER COLUMNS:<pre>\n"; print_r($search_terms); echo "</pre>\n";
+    //if view criteria was loaded, use it
     if ($view_criteria) $search_terms=$view_criteria;
+
+//    echo "SEARCH PRE-PAGER COLUMNS:<pre>\n"; print_r($search_terms); echo "</pre>\n";
 //    echo "SEARCH POST-PAGER COLUMNS:<pre>\n"; print_r($search_terms); echo "</pre>\n";
 
 
@@ -852,6 +863,10 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.46  2006/07/19 01:39:25  vanmer
+* - added ability to clear view criteria when saving a view that has no criteria
+* - added code to ensure that if a view is saved with no criteria that the mini search widget does not appear when loading this view
+*
 * Revision 1.45  2006/07/17 05:39:00  vanmer
 * - changed link to companies and contacts to work regardless of path to page being displayed
 *
