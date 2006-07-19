@@ -10,7 +10,7 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.26 2006/07/14 03:45:36 vanmer Exp $
+ * $Id: Pager_Columns.php,v 1.27 2006/07/19 01:38:04 vanmer Exp $
  */
 require_once('view_functions.php');
 
@@ -66,8 +66,14 @@ class Pager_Columns {
 
         getGlobalVar($view_name, $pager_name . '_view_name');
         //ensure view_name and view_key are populated
-        $this->SetViewName($view_name);
-
+        if (!$view_name) {
+            //if no view is specified, set action to load
+            $this->action='load';
+            $view_name=$this->GetCurrentViewName();
+            $view_name="{$this->view_key}_$view_name";
+        } else {
+            $this->SetViewName($view_name);
+        }
 
         //set pager columns based on incoming array
         $this->SetPagerColumns($pager_columns);
@@ -269,21 +275,25 @@ class Pager_Columns {
         //retrieve GET/POST action variable
         getGlobalVar($pager_columns_action, $this->pager_name . '_pager_columns_action');
 
+
+        if ($pager_columns_action) {
+            //set the action internally
+            $this->action=$pager_columns_action;
+        }
+
         // if we are saving the view
-        if('save' == $pager_columns_action) {
+        if('save' == $this->action) {
             $this->SaveView();
 
         // if we are deleting the view
-        } elseif ('delete' == $pager_columns_action) {
+        } elseif ('delete' == $this->action) {
             $this->DeleteView();
 
         // if we are loading the view
-        } elseif ('load' == $pager_columns_action) {
+        } elseif ('load' == $this->action) {
             $this->LoadView();
         }
 
-        //set the action internally
-        $this->action=$pager_columns_action;
 
     }
 
@@ -736,6 +746,10 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.27  2006/07/19 01:38:04  vanmer
+ * - added code to always load last view when returning to a page
+ * - added code to set view to be loaded if no view is specified when visiting the page
+ *
  * Revision 1.26  2006/07/14 03:45:36  vanmer
  * - patch to ensure that user columns inherit from global defaults
  *
