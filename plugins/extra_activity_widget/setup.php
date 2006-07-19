@@ -4,10 +4,8 @@
  *
  * This example adds an activities widget to the companies/one.php page, directly after the existing activities widget (and in fact using the same form)
  * 
- * $Id: setup.php,v 1.2 2006/07/14 04:12:41 vanmer Exp $
+ * $Id: setup.php,v 1.3 2006/07/19 01:36:53 vanmer Exp $
 **/
-
-require_once($include_directory.'../activities/activities-widget.php');
 
 /**
   * Plugin Initialization function.  Intended to register all needed hooks into XRMS
@@ -23,11 +21,13 @@ function xrms_plugin_init_extra_activity_widget() {
  * Plugin hook function to display activities widget
 **/
 function extra_activity_widget_company(&$string) {
+    global $include_directory;
     global $session_user_id;
     global $return_url;
     global $company_id;
     global $division_id;
     global $con;
+    require_once($include_directory.'../activities/activities-widget.php');
 
     //set up which columns to display as system default
     $default_columns = array('title', 'owner', 'type', 'contact', 'activity_about', 'scheduled', 'due');
@@ -71,6 +71,9 @@ function extra_activity_widget_company(&$string) {
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.3  2006/07/19 01:36:53  vanmer
+ * - only require activities widget when running plugin
+ *
  * Revision 1.2  2006/07/14 04:12:41  vanmer
  * - altered extra plugin to use _bottom hook (and define own form)
  *
