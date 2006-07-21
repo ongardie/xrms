@@ -76,7 +76,7 @@ foreach ($directions as $direction) {
     $sql="SELECT *
     FROM relationship_types
     WHERE {$direction}_what_table = " . $con->qstr($relationship_entity_table)
-  . " ORDER BY {$direction}_what_table";
+  . " and  relationship_status='a' ORDER BY {$direction}_what_table";
     $rst = $con->execute($sql);
     if ($direction=='from') { $opposite='to'; } else { $opposite='from'; }
     if (!$rst) { db_error_handler($con, $sql); }
@@ -145,6 +145,9 @@ function restrictByEntity() {
 <?php
 /*
  * $Log: new-relationship.php,v $
+ * Revision 1.18  2006/07/21 16:25:56  jnhayart
+ * modify query for don't show delete relation
+ *
  * Revision 1.17  2006/01/02 23:31:01  vanmer
  * - changed to use centralized dbconnection function
  *
