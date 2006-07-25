@@ -1,7 +1,7 @@
 XRMS CRM - README
 
 =============================================================
-/** $Id: README,v 1.24 2006/04/26 21:16:34 braverock Exp $ **/
+/** $Id: README,v 1.25 2006/07/25 20:34:27 braverock Exp $ **/
 
 ========================
 SUMMARY
@@ -25,40 +25,52 @@ are using XRMS contribute money and developer time to improve the system.
 ========================
 VERSION
 
-1.99.1 (v2.0rc2) 2006-04-26
+1.99.2 (v2.0rc3) 2006-07-25
 
-We released XRMS v1.99.0 two weeks ago on 2006-04-11.
+We released XRMS v1.99.1 (v2.0rc2) three months ago on 2006-04-26.
 The response from the community has been outstanding.
 We recommend that all users upgrade to the newest version.
-This version makes a number of minor enhancements and bug fixes over version 1.99.0.
-One fairly narrow bug bug has been corrected in v1.99.0 in the Contacts API layer
-could have resulted in overwriting an existing contact with new data in a limited
-set of circumstances. v1.99.1 also implements full new and edit support for the
-centralized API functions in Contacts, Companies, and Addresses.
+This version makes a number of enhancements and bug fixes over version 1.99.1.
+We have added extra 'Saved Views' capabilities to all of the data pagers in
+XRMS, allowing system and user level saved views to save sort, columns, and
+search criteria on pagers.
+The speed of execution of Activities, Opportunities, Cases, and Workflow
+has been improved by the implementation of standardized API functions,
+which are more efficient than the old non-API code in most cases.
+The continuing API work should result in more stable and predictable code for
+developers integrating to XRMS.
 A number of XRMS's dedicated translators have helped us find unlocalized strings
-and get those resolved in current code.
-We have also made a number of user interface usability improvements in Companies
-and Contacts. The speed of execution of Companies and Contacts has been improved
-by the implementation of the API functions, which are more efficient than the old
-non-API code in most cases.
-This should result in more stable and predictable code for developers integrating to XRMS.
+and get those resolved in current code. Many of XRMS's translations have been
+reviewed and updated by their translation teams since the last release.
+A small bug in the ACL 'Manage role Permissions in Grid' interface has been
+fixed that should make ACL administration easier.  The Administrator Guide ACL
+documentation has also been extensively updated based on user feedback.
 
-As always, we recommend that if more than a week or two has passed since the date on a stable release
-tarball that you consider downloading and installing a development snapshot
-instead.  These are normally quite stable, as the development team is probably
+Full update details are available in the CHANGELOG.
+
+As always, we recommend that if more than a week or two has passed since the date
+on a stable release tarball that you consider downloading and installing
+a development snapshot instead.
+These are normally quite stable, as the development team is probably
 using that code in production at their respective companies.
 
+We've also made a major update to the XRMS CRM project website.
+Thanks to everyone who contributed content, especially Peter Carl.
 
+
+
+========================
 COPYRIGHTS
 
 Copyright (c) 2003-2006 XRMS Development Team http://xrms.sourceforge.net/ http://xrms.org/
 Copyright (c) 2000-2003 Chris Woofter <chris_at_brokerstream_dot_com>
 
+
 ========================
 REQUIREMENTS
 
 PHP v4.3.0 or higher with database extensions for your database.
-PHP v4.2 or higher with the PEAR PHP_Compat package should also work.
+PHP v4.2 or higher with the PEAR PHP_Compat package may also work.
 
 A web server that supports PHP.
 XRMS has been extensively deployed on Apache and IIS.
@@ -99,100 +111,6 @@ INSTALLATION
 See the file INSTALL in the install/ directory.
 
 ========================
-IMPORTING YOUR DATA
-
-To import companies, export a .csv file of companies and contacts.
-We've included templates for many common CRM/SFA applications, such as
-Microsoft Outlook, Act!, SalesForce.com, Goldmine, Intuit Quickbooks,
-and a 'default' import template.
-
-Then visit Administration -> Import Companies/Contacts, select the appropriate
-default values, and upload the file.  You will be able to preview the upload before
-you actually commit to loading everything into the database.
-
-We've tried to make the import 'safe'.
-The import scripts run multiple checks on each record and attempts to not overwrite
-existing data, or create duplicate records.  We make broad allowances for missing
-data fields: as long as you have a Company Name (and a City for addresses),
-things should work.
-
-The default template includes the following fields:
-    //company info
-    company_name
-    legal_name
-    division_name
-    website
-    tax_id
-    extref1
-    extref2
-    extref3
-    company_custom1
-    company_custom2
-    company_custom3
-    company_custom4
-    employees
-    revenue
-    credit_limit
-    terms
-    company_profile
-    company_code
-    phone
-    phone2
-    fax
-
-    //contact info
-    first_name
-    last_name
-    email
-    work_phone
-    home_phone
-    fax
-    division
-    salutation
-    date_of_birth
-    summary
-    title
-    description
-    cell_phone
-    aol
-    yahoo
-    msn
-    interests
-    contact_custom1
-    contact_custom2
-    contact_custom3
-    contact_custom4
-    contact_profile
-    gender
-
-    //address info
-    address_name
-    line1
-    line2
-    city
-    state
-    postal_code
-    country
-    address_body
-    use_pretty_address
-
-If you wish to use the default template, name the columns in your .csv
-file as the columns are named above.  Don't worry if your file doesn't
-have all the columns, or if the columns are in a different order.
-The import routine uses the column names to determine which fields to
-map things to, but it doesn't assume 'perfect data'.  Company name
-is required.  If you want to import an address, City is required.
-All other data will be handled safely if it is missing (we think).
-
-You may also create your own templates, and submit them for
-inclusion with XRMS.
-
-If you create an import template for a third party CRM or contact
-management application, or if you need help creating a template,
-please contact the development team so that we may assist you and
-so that we may include the new template in the next release.
-
-========================
 LICENSE
 
 Licensed under the Open Software License version 2.0
@@ -228,7 +146,7 @@ XRMS makes extensive use of code from Squirrelmail for the plugin architecture,
 i18n/translation/localization, and a variety of utility functions.
 http://www.squirrelmail.org/
 
-The calendar widget is the excellent Dynarch DTML Calendar jscalendar-0.9.6
+The calendar widget is the excellent Dynarch HTML Calendar jscalendar-0.9.6
 http://dynarch.com/mishoo/calendar.epl
 
 We also currently use Aditus Consulting's JPGraph classes in some reports.
@@ -287,7 +205,7 @@ Change as required for your installation.
 Update your installation from CVS using the following command from the
 directory above your working directory:
 
-cvs -q -z3 -d :pserver:anonymous@cvs.sf.net:/cvsroot/xrms update -d xrms
+cvs -q -z3 -d :pserver:anonymous@xrms.cvs.sourceforge.net:/cvsroot/xrms update -d xrms
 
 You will see cvs 'P' - Patch, 'U' Update, and 'M' Merge your files
 (vars.php, plugin-cfg.php, and include-locations.inc will most likely 'M' merge)
@@ -312,6 +230,8 @@ Once you've made your changes and are happy with the result, create a
 patch file for each file you changed using the following command:
 
 diff -u3 origfile changedfile >> filename.patch
+or:
+cvs diff -u3 changedfile >> filename.patch
 
 the -u3 parameter to diff is very important, because it creates a 'unified'
 diff with several lines of context.  This allows the patch program to find
@@ -428,6 +348,10 @@ please let us know.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.25  2006/07/25 20:34:27  braverock
+ * - bump version to 1.99.2
+ * - last text changes
+ *
  * Revision 1.24  2006/04/26 21:16:34  braverock
  * - bump version to 1.99.1
  * - last text changes
