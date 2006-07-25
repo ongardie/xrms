@@ -74,6 +74,12 @@ $pager_id='ActivitiesPager'.$form_name.$instance;
 
 //set columns to false, will set them later
 $columns=false;
+
+//set default columns if not provided
+if (!$default_columns) {
+    $default_columns=array('is_overdue','title','type','contact','scheduled','due','company','owner','case_priority_pretty_name','activity_about');
+}
+
 $pager_columns = new Pager_Columns($pager_id, $columns, $default_columns, $form_name, 6, $con, $search_terms);
 
 $view_criteria=$pager_columns->GetViewCriteria();
@@ -863,6 +869,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.47  2006/07/25 19:48:44  vanmer
+* - added default column definition if not provided from the calling page
+*
 * Revision 1.46  2006/07/19 01:39:25  vanmer
 * - added ability to clear view criteria when saving a view that has no criteria
 * - added code to ensure that if a view is saved with no criteria that the mini search widget does not appear when loading this view
