@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.15 2006/07/14 19:20:33 vanmer Exp $
+ * $Id: updateto2.0.php,v 1.16 2006/07/25 14:46:36 braverock Exp $
  */
 
 // where do we include from
@@ -4758,10 +4758,12 @@ $msg .= update_unknown_company($con);
 $sql = "alter table contacts add user_id int NULL default 0";
 $rst = $con->execute($sql);
 
+//update the pager saved view preferences to use the new structure
+require_once($include_directory."classes/Pager/view_functions.php");
+initViews($con);
+
 $pager_view_pref=get_user_preference_type($con,"pager_columns");
 if ($pager_view_pref) {
-    require_once($include_directory."classes/Pager/view_functions.php");
-    initViews($con);
     $view_pref_id=$pager_view_pref['user_preference_type_id'];
 
     $sql = "SELECT * FROM user_preferences WHERE user_preference_type_id=$view_pref_id";
@@ -4785,10 +4787,10 @@ if ($pager_view_pref) {
     $rst = $con->execute($sql);
 
     $msg .= _("Removed Pager Columns out of user preferences, now in a new table") . '<br>';
-}
+} // end pager view update
 
 //FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
-set_admin_preference($con, 'xrms_version', '1.99.1');
+set_admin_preference($con, 'xrms_version', '1.99.2');
 
 do_hook_function('xrms_update', $con);
 
@@ -4814,6 +4816,11 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.16  2006/07/25 14:46:36  braverock
+ * - move initViews function to outside the preference check:
+ *    it should get run regardless to create the new table for saved views
+ * - update version to 1.99.2
+ *
  * Revision 1.15  2006/07/14 19:20:33  vanmer
  * - ensure that pref data is set before running update of user views
  *
