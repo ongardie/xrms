@@ -1,3 +1,1022 @@
+2006-07-25 15:39  vanmer
+
+	* include/classes/acl/tests/xrms_acl_test.php:
+
+	- ensure ACL tests succeed on default install
+
+2006-07-25 15:34  braverock
+
+	* README:
+
+	- bump version to 1.99.2
+	- last text changes
+
+2006-07-25 15:25  vanmer
+
+	* admin/users/user_roles_sidebar.php:
+
+	- ensure that group membership information is available before attempting to render it
+
+2006-07-25 15:25  braverock
+
+	* install/INSTALL:
+
+	- move the data import language here from README
+
+2006-07-25 14:56  vanmer
+
+	* install/install.php:
+
+	- changed to use full path to XML file for install
+
+2006-07-25 14:53  vanmer
+
+	* include/classes/Pager/Pager_Columns.php:
+
+	- added informative debug output
+
+2006-07-25 14:51  vanmer
+
+	* contacts/some.php:
+
+	- ensure new contact button only appears when proper permissions exist
+
+2006-07-25 14:48  vanmer
+
+	* activities/activities-widget.php:
+
+	- added default column definition if not provided from the calling page
+
+2006-07-25 14:44  vanmer
+
+	* include/utils-preferences.php:
+
+	- ensure that user preferences table passed on user_id, to allow admin edit of alternate user info
+
+2006-07-25 14:36  braverock
+
+	* admin/updateto2.0.php:
+
+	- extra check for clean updates of pager pref functions
+
+2006-07-25 09:46  braverock
+
+	* admin/updateto2.0.php:
+
+	- move initViews function to outside the preference check:
+	   it should get run regardless to create the new table for saved views
+	- update version to 1.99.2
+
+2006-07-21 11:25  jnhayart
+
+	* relationships/new-relationship.php:
+
+	modify query for don't show delete relation
+
+2006-07-18 20:46  vanmer
+
+	* include/classes/Pager/Pager_Columns.php:
+
+	- changed to ensure that programmatic default is set if not provided at constructor level
+	- added translation of optgroup names and "default" entries
+
+2006-07-18 20:39  vanmer
+
+	* activities/activities-widget.php:
+
+	- added ability to clear view criteria when saving a view that has no criteria
+	- added code to ensure that if a view is saved with no criteria that the mini search widget does not appear when loading this view
+
+2006-07-18 20:38  vanmer
+
+	* include/classes/Pager/Pager_Columns.php:
+
+	- added code to always load last view when returning to a page
+	- added code to set view to be loaded if no view is specified when visiting the page
+
+2006-07-18 20:36  vanmer
+
+	* plugins/extra_activity_widget/setup.php:
+
+	- only require activities widget when running plugin
+
+2006-07-17 09:59  vanmer
+
+	* locale/fr_FR/LC_MESSAGES/xrms.mo:
+
+	- ensure correct file exists in CVS
+
+2006-07-17 01:10  vanmer
+
+	* admin/users/: one.php, user_prefs.php:
+
+	- altered to allow admin to change user preferences from one.php page
+	- added parameters for user_id and return_url for user_prefs control page
+
+2006-07-17 00:39  vanmer
+
+	* activities/activities-widget.php:
+
+	- changed link to companies and contacts to work regardless of path to page being displayed
+
+2006-07-14 14:20  vanmer
+
+	* admin/updateto2.0.php:
+
+	- ensure that pref data is set before running update of user views
+
+2006-07-13 23:12  vanmer
+
+	* plugins/extra_activity_widget/setup.php:
+
+	- altered extra plugin to use _bottom hook (and define own form)
+
+2006-07-13 23:12  vanmer
+
+	* activities/activities-widget.php:
+
+	- added variables to minisearch widget to ensure unique behavior
+	- added Hide link to activities filters display
+
+2006-07-13 22:52  vanmer
+
+	* plugins/extra_activity_widget/setup.php:
+
+	- Initial revision of the example plugin for an activities widget on the companies/one.php page
+
+2006-07-13 22:51  vanmer
+
+	* companies/one.php:
+
+	- added hook for output within the companies activities form
+
+2006-07-13 22:45  vanmer
+
+	* include/classes/Pager/Pager_Columns.php:
+
+	- patch to ensure that user columns inherit from global defaults
+
+2006-07-13 22:17  vanmer
+
+	* include/classes/Pager/Pager_Columns.php:
+
+	- commented initViews functions, now run when XRMS is upgraded
+	- added phpdoc to new Pager_Columns functionality
+
+2006-07-13 21:38  vanmer
+
+	* install/xrms-schema.xml:
+
+	- added table for pager saved views to default install
+	- removed pager columns user preference from default install
+	- added activity to default install to allow ACL test suite to operate properly
+
+2006-07-13 21:09  vanmer
+
+	* include/classes/Pager/view_functions.php:
+
+	- added phpdoc comments for all view functions
+	- changed init function to return results of create table, if run
+
+2006-07-12 19:47  vanmer
+
+	* admin/acl/: ControlledObjectRelationship_list.php,
+	  ControlledObject_list.php, GroupGroup_list.php,
+	  GroupMember_list.php, GroupUser_list.php,
+	  RolePermission_list.php, data_source_list.php,
+	  role_permission_grid.php:
+
+	- changed all columns/pager combinations to reference the same pager name, to allow saved views to operate properly
+
+2006-07-12 19:37  vanmer
+
+	* companies/some.php:
+
+	- changed to ensure that company pager name matches columns name
+
+2006-07-12 19:26  vanmer
+
+	* admin/updateto2.0.php:
+
+	- added upgrade to move all existing pager columns user preferences into new saved view pager table
+
+2006-07-12 19:24  vanmer
+
+	* include/classes/Pager/view_functions.php:
+
+	- added user role check instead of always allowing admin access
+
+2006-07-12 19:14  vanmer
+
+	* activities/activities-widget.php:
+
+	- moved definition of pager columns object to top of function, to allow load of views
+	- added calls to grab view criteria if view has just been loaded
+
+2006-07-12 19:13  vanmer
+
+	* include/classes/Pager/Pager_Columns.php:
+
+	- Added functionality for global, user and system options for pagers
+	- Changed to save/retrieve pager views using new external view functions
+	- Added checks to ensure only administrative users can save global views
+
+2006-07-12 19:12  vanmer
+
+	* include/classes/Pager/view_functions.php:
+
+	- Initial revision of a set of functions to save and retrieve views for pagers, by user
+
+2006-07-12 15:55  braverock
+
+	* locale/es_ES/LC_MESSAGES/: xrms.mo, xrms.po:
+
+	- updated Spanish translations by David Gaya (myelocyte)
+
+2006-07-11 22:50  vanmer
+
+	* activities/activities-widget.php:
+
+	- added instance parameter to activities widget, allows multiple activities widgets on a page
+	- changed pager_id to be consistent between Pager_Columns and GUP_Pager
+
+2006-07-11 22:48  vanmer
+
+	* include/classes/Pager/Pager_Columns.php:
+
+	-Initial revision of saving views including pager parameters
+	-Expanded view functions to fetch and set pager options
+
+2006-07-11 22:38  vanmer
+
+	* include/utils-activities.php:
+
+	- ensure that delete of participant doesn't remove final $ret value
+
+2006-07-11 20:03  vanmer
+
+	* include/utils-misc.php:
+
+	- added missing global statement for default language
+
+2006-07-11 20:02  vanmer
+
+	* include/utils-interface.php:
+
+	- added needed code to avoid notices
+
+2006-07-11 20:01  vanmer
+
+	* include/classes/Pager/Pager_Columns.php:
+
+	- cleaned up constructor, moved relevant code to new functions
+	- changed render of view options to happen when actually rendering the rest of the columns widget
+	- intial steps towards altering how pager columns outputs views
+
+2006-07-11 19:33  vanmer
+
+	* include/classes/Pager/GUP_Pager.php:
+
+	- added debug parameter to constructor, to allow debug output during object init
+	- wrapped all debug output in PrintDebug function
+	- added code to allow column info to be passed in as part of a view, in element 'columns'
+	- added code to process incoming object options from view, in element 'options'
+
+2006-07-10 23:31  braverock
+
+	* login.php:
+
+	- fix login box display in IE
+	  - patch by Daniel Rodriguez
+
+2006-07-10 15:26  braverock
+
+	* locale/es_ES/LC_MESSAGES/: xrms.mo, xrms.po:
+
+	- Spanish language updates from Daniel Rodriguez to add strings from current CVS
+
+2006-07-10 14:03  jnhayart
+
+	* locale/fr_FR/LC_MESSAGES/: xrms.mo, xrms.po:
+
+	reflect last change of language file
+
+2006-07-10 09:46  braverock
+
+	* locale/: datastrings.php, xrms.pot:
+
+	- updated extracted strings to reflect additional tables and strings from recent commits`
+
+2006-07-10 09:40  braverock
+
+	* locale/getdatastrings.php:
+
+	- add additional tables, and remove obsolete system_parameters table
+
+2006-07-10 08:19  braverock
+
+	* files/delete.php:
+
+	- clean indentation
+	- remove trailing whitespace
+	- add phpdoc
+
+2006-07-10 08:18  braverock
+
+	* files/edit-2.php, plugins/owl/delete_folder.php,
+	  plugins/owl/new_folder-2.php:
+
+	- clean indentation
+	- remove trailing whitespace
+
+2006-07-10 07:45  braverock
+
+	* files/delete.php, files/edit-2.php,
+	  plugins/owl/delete_folder.php, plugins/owl/new_folder-2.php:
+
+	- remove call time pass by reference in do_hook_function (reference in function def)
+
+2006-07-09 16:00  braverock
+
+	* locale/xrms.pot:
+
+	- updated to reflect newest translatable strings
+
+2006-07-09 15:58  braverock
+
+	* locale/es_ES/LC_MESSAGES/: xrms.mo, xrms.po:
+
+	- updated Spanish translation from Daniel Rodriguez
+
+2006-07-09 00:40  vanmer
+
+	* include/classes/acl/xrms_acl.php:
+
+	- fixed mixed caps on Inheritable_flag=0 clause
+	- added clause to set inheritable flag to 0 when not set to true on a RolePermission
+
+2006-07-09 00:04  vanmer
+
+	* admin/acl/: ControlledObjectRelationship_list.php,
+	  ControlledObject_list.php, GroupGroup_list.php,
+	  GroupMember_list.php, GroupUser_list.php, Groups_list.php,
+	  Permission_list.php, RolePermission_list.php, Role_list.php,
+	  acl_results.php, data_source_list.php, index.php,
+	  one_ControlledObject.php, one_ControlledObjectRelationship.php,
+	  one_GroupGroup.php, one_GroupUser.php, one_Groups.php,
+	  one_Permission.php, one_Role.php, one_RolePermission.php,
+	  one_data_source.php, role_permission_grid.php:
+
+	- patched ACL interface to check for admin access
+
+2006-07-07 18:57  vanmer
+
+	* css/small/small.css:
+
+	- push logo further down when using small.css
+
+2006-07-07 15:03  vanmer
+
+	* include/utils-preferences.php:
+
+	- altered params when caching user_preference_type
+
+2006-07-06 20:45  vanmer
+
+	* include/utils-interface.php:
+
+	- updated variable to allow proper check for browser for CSS links
+
+2006-07-05 08:13  braverock
+
+	* include/utils-interface.php:
+
+	- add tests once per session for existence of $cssdir and $xrms_file_root as real directories
+	  - tests suggested by user queuetue (Scott in Toronto) after he had missing theme list
+
+2006-06-29 21:05  vanmer
+
+	* relationships/new-relationship-2.php:
+
+	- changed More Info link to work for all pages, by using table_one_url function to generate target to hit
+
+2006-06-29 10:53  braverock
+
+	* activities/one.php:
+
+	- remove extra whitespace from resolution_description field.
+	  - patch by Frederik Jervfors
+
+2006-06-29 08:10  braverock
+
+	* install/INSTALL:
+
+	- text DB permissions update suggested by Fredrik Jervfors
+
+2006-06-27 16:14  vanmer
+
+	* install/xrms-schema.xml:
+
+	- added meeting type to default install for activity types
+
+2006-06-23 17:02  ongardie
+
+	* contacts/edit-address-2.php:
+
+	Needed the require of utils-addresses for add_address() to work.
+
+2006-06-23 16:45  ongardie
+
+	* reports/companies-by-company-source.php:
+
+	 * Corrected basename to avoid conflicting filenames.
+
+2006-06-22 14:55  braverock
+
+	* css/small/small.css:
+
+	- theme for small screens contributed by Jean-Noel Hayart
+	  doesn't overlap sidebars on small screens
+
+2006-06-21 10:51  jswalter
+
+	* activities/one.php:
+
+	 - LOCATION list does not default to address selected for a given activity. This was corrected.
+
+2006-06-21 10:46  jswalter
+
+	* include/utils-activities.php:
+
+	 - address_id was being defined twice (from activitivies and company tables) in 'get_activity()' SQL, therfore the later value was used. address_id from the activities table is now defined as 'activities_address_id'
+
+2006-06-21 08:11  braverock
+
+	* locale/zh_TW/LC_MESSAGES/: xrms.mo, xrms.po:
+
+	- Traditional Chinese translation contributed by Wei-Lun Chao <chaoweilun[at]pcmail[dot]com[dot]tw>
+
+2006-06-15 17:00  vanmer
+
+	* contacts/edit.php:
+
+	- changes to allow contacts to have an owner
+
+2006-06-15 16:35  vanmer
+
+	* admin/updateto2.0.php:
+
+	- added user_id field to contacts table
+
+2006-06-15 16:33  vanmer
+
+	* include/utils-contacts.php:
+
+	- changed link from company owner to contact owner
+	- changed fieldname from account_owner to owner_username
+
+2006-06-15 16:32  vanmer
+
+	* contacts/: edit-2.php, new-2.php, new.php, one.php:
+
+	- added owner to the UI for a contact
+
+2006-06-07 17:05  vanmer
+
+	* include/classes/acl/xrms_acl.php:
+
+	- disabled path for child objects in an object relationship do not inherit group of parent object
+
+2006-06-02 18:40  ongardie
+
+	* include/classes/Pager/GUP_Pager.php:
+
+	- If the callback isn't callable, $this->data needs to be an array anyway.
+
+2006-05-31 16:41  vanmer
+
+	* include/classes/File/fixedWidthParser.php:
+
+	- ensure that headers are properly set
+	- added filesize for fgets instead of fixed width length
+
+2006-05-30 15:22  vanmer
+
+	* include/classes/File/fixedWidthParser.php:
+
+	- fixes to speed fixed width parsing, from jsWalter
+
+2006-05-30 14:56  vanmer
+
+	* include/classes/File/fixedWidthParser.php:
+
+	- ensure multi-format parsing works correctly
+
+2006-05-29 01:16  ongardie
+
+	* admin/sort.php:
+
+	- Allows for non-prefixed database column names when given $_GET['short_fields'].
+
+2006-05-28 12:14  jnhayart
+
+	* reports/opportunities-quantity-by-opportunity-status.php:
+
+	correct display when on user is selected and all users also
+
+2006-05-27 15:06  ongardie
+
+	* include/utils-cases.php:
+
+	- Typo in comment.
+
+2006-05-27 14:48  ongardie
+
+	* companies/one.php:
+
+	- if( ! $var = 'value') will always evaluate to false when 'value' can be stored in $var.
+
+2006-05-26 14:38  ongardie
+
+	* contacts/vcard.php:
+
+	- Added provinces to vcard output.
+
+2006-05-21 09:42  jnhayart
+
+	* reports/audit-items.php:
+
+	Add title and hyperlink when audit items are opportunities
+
+2006-05-19 14:45  jswalter
+
+	* include/classes/File/file_upload.php:
+
+	 * $this->_fileFileSize was not a define property, changed to use FILE::_fileSize
+	 *  Example at top used "setOverwrite(), this does not exist, corrected to "setFileOverWrite()"
+
+2006-05-15 21:10  jswalter
+
+	* include/classes/File/csvParser.php:
+
+	 * Added Preprocess Callback Function.
+	 * Added '$_preprocess; to store user defined callback
+	 * Need to create get and setter methods for this new property
+
+2006-05-06 04:34  vanmer
+
+	* opportunities/edit.php:
+
+	- added return_url to opportunities edit page
+
+2006-05-06 04:33  vanmer
+
+	* activities/workflow-activities.php:
+
+	- removed code from workflow-activities, now in utils-workflow.php
+	- added function call to duplicate old workflow-activities functionality
+
+2006-05-06 04:32  vanmer
+
+	* activities/one.php:
+
+	- added passthrough for old status seperately from status in dropdown
+
+2006-05-06 04:31  vanmer
+
+	* activities/new-2.php:
+
+	- removed hook function call (moved to utils-activities.php)
+
+2006-05-06 04:31  vanmer
+
+	* include/utils-interface.php:
+
+	- added case for message about not changing the status of the an entity automatically
+
+2006-05-06 04:30  vanmer
+
+	* include/utils-workflow.php:
+
+	- moved workflow functionality on a completed template activity into seperate function, from activities/edit-2.php
+
+2006-05-06 04:29  vanmer
+
+	* include/utils-activities.php:
+
+	- added hook functions to activities API from new-2 and edit-2 activities pages
+	- added call to run workflow activity completed code for workflow engine
+
+2006-05-06 04:28  vanmer
+
+	* activities/edit-2.php:
+
+	- replaced direct sql in edit-2 to function calls where appropriate
+	- added functionality to change status on an entity when changed from activities/one.php, where appropriate
+	- pulled out all workflow-specific code into utils-workflow.php
+	- moved edit2 hook into update_activity API in utils-activities.php
+
+2006-05-03 15:45  vanmer
+
+	* include/i18n.php:
+
+	- change LC_ALL to LC_MESSAGES when setting locale, in order to only change messages, to avoid issues translating database calls
+
+2006-05-03 15:37  vanmer
+
+	* cases/edit-2.php, include/utils-workflow.php,
+	  opportunities/edit-2.php:
+
+	- moved function to search for open workflow activities into utils-workflow functions
+	- changed cases and opportunities edit pages to use centralized open_workflow_activities function
+
+2006-05-03 06:44  braverock
+
+	* locale/nl_NL/LC_MESSAGES/: xrms.mo, xrms.po:
+
+	- updated Dutch translation by Bert-Jan van Rein
+
+2006-05-02 19:05  vanmer
+
+	* include/utils-typestatus.php:
+
+	- ensure that sort_order is a valid search item if type is already defined (don't require name)
+
+2006-05-02 19:01  vanmer
+
+	* include/: utils-cases.php, utils-opportunities.php:
+
+	- added check to ensure company_id isn't reset to 1 if opportunity or case already exists
+	- added lookup of assumed data in the record on update
+
+2006-05-01 20:27  vanmer
+
+	* include/utils-opportunities.php, opportunities/one.php:
+
+	- changed opportunities one.php to use get_opportunities and other get_ functions from the API
+	- updated get_opportunities function to do joins on related tables
+
+2006-05-01 19:51  vanmer
+
+	* cases/one.php:
+
+	- changed to use APIs to fetch details about case
+
+2006-05-01 19:49  vanmer
+
+	* include/utils-cases.php:
+
+	- added joins to related case data, for use in cases one page
+
+2006-05-01 19:46  vanmer
+
+	* tests/cases_test_class.php:
+
+	- added company_id to contact record for update of weird characters
+	- changed to delete contact from the database after test
+
+2006-05-01 19:45  vanmer
+
+	* include/utils-contacts.php:
+
+	- changed get_contact function to left outer join all non-critical table
+	- allow contact sql to be simplified (no joins)
+	- changed update_contact to use simplified contact sql for passing recordset into getUpdateSQL
+
+2006-05-01 19:44  vanmer
+
+	* include/utils-companies.php:
+
+	- changed get function to do left outer joins on all non-critical tables
+	- changed update function to request simplified select query recordset, for use in getUpdateSQL
+
+2006-05-01 19:41  vanmer
+
+	* include/utils-activities.php:
+
+	- moved recurrence lookup back into activities/one.php
+	- changed get_ call for activities to do outer joins on all non-critical tables
+
+2006-05-01 19:40  vanmer
+
+	* activities/one.php:
+
+	- moved recurrence check back into activities/one.php
+
+2006-05-01 19:22  vanmer
+
+	* install/: sample.php, xrms-schema.xml:
+
+	- moved default address from sample data into base install
+	- removed default address from sample data
+
+2006-05-01 17:55  braverock
+
+	* locale/de_DE/LC_MESSAGES/: xrms.mo, xrms.po:
+
+	- updated German translation by Holger Hahn
+
+2006-05-01 14:34  braverock
+
+	* include/utils-activities.php:
+
+	- handle either an array or an integer as inputs
+
+2006-05-01 14:32  braverock
+
+	* activities/one.php:
+
+	- use get_activity API call
+
+2006-05-01 12:31  braverock
+
+	* include/utils-companies.php:
+
+	- update get_company fn to be suitable for use in companies/one.php
+	- change SQL construction to use left join for resiliency
+
+2006-05-01 12:22  braverock
+
+	* companies/one.php:
+
+	- remove old embedded SQL comment
+
+2006-05-01 12:20  braverock
+
+	* companies/one.php:
+
+	- update to use get_company API function
+
+2006-04-29 14:37  braverock
+
+	* doc/users/: XRMS_Administrator_Guide.odt,
+	  XRMS_Administrator_Guide.pdf:
+
+	- re-arrange ACL sections in order likely to be used
+	- add more detail on sections that Administrators should leave alone
+	- rearrange sections for better accessibility
+	- add section on data integrity
+	- update index, toc, figures
+	- bump version to 1.99.1
+
+2006-04-29 06:38  braverock
+
+	* activities/new-2.php:
+
+	- eliminate add opportunity code from new activity script
+	  - plugins or custom code that need to create opportunities and activities together should
+	    define workflow and use the add_opportunity function call, which will create both
+	    the opportunity and initial activities
+
+2006-04-28 20:52  vanmer
+
+	* tests/: opportunities_test_class.php, type_status_class.php,
+	  xrms_test_class.php:
+
+	- added tests for statuses for opportunities to reflect won/lost closed code
+	- updated opportunities test to use appropriate won/lost tests from statuses tests
+	- updated main test class to include proper file for workflow tests
+
+2006-04-28 20:49  vanmer
+
+	* campaigns/edit-2.php:
+
+	- updated to include appropriate files for workflow
+
+2006-04-28 20:49  vanmer
+
+	* opportunities/: edit.php, one.php:
+
+	- restrict opportunities statuses to only statuses associated with current opportunity type
+	- added closed_by and closed_at fields and output to opportunities/one page
+
+2006-04-28 20:48  vanmer
+
+	* include/utils-opportunities.php, opportunities/delete.php,
+	  opportunities/edit-2.php, opportunities/new-2.php:
+
+	- replaced opportunites edit, new and delete pages to use opportunities API
+	- altered opportunities API to reflect correct codes for won/lost statuses
+	- moved workflow into opportunities API
+
+2006-04-28 20:46  vanmer
+
+	* activities/new-2.php:
+
+	- changed to use opportunity API when adding new opportunity from activities/new-2.php
+	- altered else formatting
+
+2006-04-28 20:46  vanmer
+
+	* cases/edit-2.php, cases/new-2.php, include/utils-cases.php:
+
+	- moved workflow activity instantiation into cases API and out of edit-2.php and new-2.php
+
+2006-04-28 20:45  vanmer
+
+	* activities/edit-2.php:
+
+	- changed to use workflow API to instantiate workflow activities
+	- changed to use cases/opportunities API to change status on cases/opportunities when last workflow activity is closed (API then instantiates new workflow
+	activities for new status)
+
+2006-04-28 20:44  vanmer
+
+	* include/: utils-misc.php, utils-workflow.php:
+
+	- added new file for workflow related functions (utils-workflow.php)
+	- moved workflow related functions out of utils-misc into utils-workflow.php
+
+2006-04-28 18:33  jnhayart
+
+	* campaigns/one.php:
+
+	Add in sidebar display of all opportunties in campaign
+
+2006-04-28 18:31  jnhayart
+
+	* companies/one.php:
+
+	fix display Work_phone with get_formatted_phone
+
+2006-04-28 18:29  jnhayart
+
+	* locale/fr_FR/LC_MESSAGES/: xrms.mo, xrms.po:
+
+	apply last update
+
+2006-04-28 18:08  vanmer
+
+	* tests/type_status_class.php:
+
+	- added log to type/status class
+
+2006-04-28 11:48  braverock
+
+	* activities/participant_sidebar.php:
+
+	- fix colspan
+
+2006-04-28 11:37  braverock
+
+	* include/utils-activities.php:
+
+	- update get_activity() fn to retrieve all fields required by the UI
+	- add check in get_activity()  to make sure we have a record, and not just an empty result set
+	- add standardized processing of entered,modified,completed fields and usernames to get_activity()
+	- add lookup for activity recurrence in get_activity()
+
+2006-04-28 11:31  braverock
+
+	* activities/one.php:
+
+	- use get_activity API call
+	  - move created,modified,completed by processing into API
+	  - standardize how variables are assigned from the result set
+	  - limit processing in this file to UI-directed items
+
+2006-04-28 10:24  braverock
+
+	* include/utils-contacts.php:
+
+	- update get_contact() fn to retrieve all fields required by the UI
+	  - use types and statuses API to retrieve account_status and crm_status information
+	- add check in get_contact()  to make sure we have a record, and not just an empty result set
+
+2006-04-28 10:20  braverock
+
+	* contacts/one.php:
+
+	- use get_contact API
+
+2006-04-27 23:30  vanmer
+
+	* tests/xrms_test.php:
+
+	- added opportunities test suite to main tests
+
+2006-04-27 23:29  vanmer
+
+	* include/utils-opportunities.php,
+	  tests/opportunities_test_class.php:
+
+	- Initial revision of the opportunities API and complete test suite
+	- still TODO is to update the PHPDoc for opportunities (still refects cases origins)
+
+2006-04-27 23:09  vanmer
+
+	* tests/type_status_class.php:
+
+	- added complete basic tests for priorities API
+
+2006-04-27 23:08  vanmer
+
+	* include/utils-typestatus.php:
+
+	- added priorities API, currently only implemented for cases, with complete phpdoc
+
+2006-04-27 22:46  vanmer
+
+	* include/utils-typestatus.php:
+
+	- added PHPDoc for types and statuses API
+
+2006-04-27 22:25  vanmer
+
+	* include/utils-cases.php:
+
+	- updated case API with proper PHPDoc
+	- removed commented and unused code
+
+2006-04-27 21:56  vanmer
+
+	* cases/: delete.php, edit-2.php, new-2.php:
+
+	- updated cases UI to use the new cases API functions
+	- altered workflow functions to use activities API
+
+2006-04-27 21:52  vanmer
+
+	* cases/one.php:
+
+	- added join on optional closed_by field for cases
+	- added display of closed_by and closed_on user/date
+	- altered display of mailto: href link so as not to confuse the HTML parser in quanta
+
+2006-04-27 21:47  vanmer
+
+	* tests/cases_test_class.php:
+
+	- added tests for status on a case matching case closed_by/closed_at fields
+	- update tests to reflect integration of cases API into UI
+
+2006-04-27 21:47  vanmer
+
+	* tests/type_status_class.php:
+
+	- added tests for adding closed statuses, in both resolved and unresolved codes
+
+2006-04-27 21:45  vanmer
+
+	* include/utils-cases.php:
+
+	- added status check to see if case should be open or closed
+	- added types and status API include
+
+2006-04-27 21:44  vanmer
+
+	* include/utils-database.php:
+
+	- added parameter in getUpdateSQL to fix bug where updates were forced where fields were not defined when magic_quotes is enabled, fix passes magic quotes in the right parameter order
+
+2006-04-27 21:42  vanmer
+
+	* include/utils-addresses.php:
+
+	- added country to address API, corrected address table in select
+
+2006-04-27 06:26  braverock
+
+	* include/utils-interface.php:
+
+	- add Charset encoding Header to start_page() for i18n
+
+2006-04-26 22:24  vanmer
+
+	* include/utils-cases.php:
+
+	- Initial revision of a cases API, implements basic add/update/get/find/delete
+	- still needs to be updated with phpdoc and advanced functionality
+
+2006-04-26 22:23  vanmer
+
+	* tests/cases_test_class.php:
+
+	- updated cases tests to use auto-generated types/statuses from types/statuses API
+
+2006-04-26 20:26  vanmer
+
+	* include/utils-typestatus.php, tests/type_status_class.php:
+
+	- Initial revision of the types and statuses API implementation, with updates to the test classes.  This is a complete implementation of the
+	add/get/find/update/delete API for types and statuses
+
+2006-04-26 16:50  tag xrms_2006-04-26_v1_99_1
+
+2006-04-26 16:50  vanmer
+
+	* notes/: edit.php, new.php:
+
+	- resized textarea to be 25 rows tall
+	- added cancel button to redirect to return_url
+	- changed all _GET and _POST references to getGlobalVar function calls
+
+2006-04-26 16:24  braverock
+
+	* CHANGELOG:
+
+	- update for v1.99.1
+
 2006-04-26 16:16  braverock
 
 	* README:
@@ -22,13 +1041,6 @@
 	* locale/xrms.pot:
 
 	- last text changes for v1.99.1
-
-2006-04-26 15:09  braverock
-
-	* companies/: admin-2.php, admin.php:
-
-	- move accounting and credit fields from companies/admin* pages to companies/edit*
-	- move Delete button to companies/edit.php and properly ACL wrap
 
 2006-04-26 15:07  braverock
 
@@ -25054,7 +26066,7 @@
 
 	* contacts/edit-address-2.php:
 
-	- added $Id: CHANGELOG,v 1.5 2006/04/26 21:24:17 braverock Exp $Log: tags.
+	- added $Id: CHANGELOG,v 1.6 2006/07/25 20:49:02 braverock Exp $Log: tags.
 
 2004-06-09 11:53  gpowers
 
