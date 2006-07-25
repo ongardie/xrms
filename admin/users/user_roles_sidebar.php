@@ -2,7 +2,7 @@
 /**
  * Roles sidebar, used to display/edit roles for a user
  *
- * $Id: user_roles_sidebar.php,v 1.8 2006/04/25 18:13:10 jnhayart Exp $
+ * $Id: user_roles_sidebar.php,v 1.9 2006/07/25 20:25:54 vanmer Exp $
 **/
 if (!$edit_user_id) {
     $edit_user_id=$session_user_id;
@@ -46,13 +46,15 @@ if ($user_roles) {
     foreach ($user_roles as $gkey=>$user_role_array) {
         foreach ($user_role_array as $guser_id=>$user_role) {
             $group_user_info=get_group_user($acl, $guser_id);
-            $group_user_info=current($group_user_info);
-            $group_info=$group_user_info['Group_name'];
-            $role_rows.="<tr><td>$group_info</td><td>$user_role</td>";
-            if ($action=='edit') {
-                $role_rows.="<td><input type=button class=button onclick=\"deleteRole($guser_id);\" value=\""._("Delete") . "\"></td>";
-            }
-            $role_rows.="</tr>";
+            if ($group_user_info) {
+                $group_user_info=current($group_user_info);
+                $group_info=$group_user_info['group_name'];
+                $role_rows.="<tr><td>$group_info</td><td>$user_role</td>";
+                if ($action=='edit') {
+                    $role_rows.="<td><input type=button class=button onclick=\"deleteRole($guser_id);\" value=\""._("Delete") . "\"></td>";
+                }
+                $role_rows.="</tr>";
+            } else { $role_rows.="<tr><td colspan=2>"._("No Group Membership Info")."</td></tr>"; }
         }
     }
 }
@@ -78,6 +80,9 @@ $user_role_sidebar.="
 /*************************************************************************/
 /**
  * $Log: user_roles_sidebar.php,v $
+ * Revision 1.9  2006/07/25 20:25:54  vanmer
+ * - ensure that group membership information is available before attempting to render it
+ *
  * Revision 1.8  2006/04/25 18:13:10  jnhayart
  * Syntax error after remove Tillend
  *
