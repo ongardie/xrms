@@ -10,7 +10,7 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.28 2006/07/19 01:46:55 vanmer Exp $
+ * $Id: Pager_Columns.php,v 1.29 2006/07/25 19:53:44 vanmer Exp $
  */
 require_once('view_functions.php');
 
@@ -154,6 +154,7 @@ class Pager_Columns {
         $pager_columns = $columns;
 
         if(!$this->default_columns) {
+            $this->printDebug("No default columns provided.  Settings default columns based on provided pager columns");
             $this->default_columns = array_keys($pager_columns);
         }
 
@@ -755,6 +756,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.29  2006/07/25 19:53:44  vanmer
+ * - added informative debug output
+ *
  * Revision 1.28  2006/07/19 01:46:55  vanmer
  * - changed to ensure that programmatic default is set if not provided at constructor level
  * - added translation of optgroup names and "default" entries
