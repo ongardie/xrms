@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_acl_test.php,v 1.13 2006/01/27 13:37:06 vanmer Exp $
+ * $Id: xrms_acl_test.php,v 1.14 2006/07/25 20:39:22 vanmer Exp $
  */
 
 if (!$include_directory) require_once('../../../../include-locations.inc');
@@ -612,7 +612,7 @@ Class ACLTest extends PHPUnit_TestCase {
         return $result;
         
     }
-    //NOTE THAT THIS FUNCTION ASSUMES THAT ACTIVITY #3 IS ATTACHED TO COMPANY #2.  IF THIS IS NOT TRUE IN YOUR SYSTEM, THIS TEST WILL FAIL
+    //NOTE THAT THIS FUNCTION ASSUMES THAT ACTIVITY #1 IS ATTACHED TO COMPANY #1.  IF THIS IS NOT TRUE IN YOUR SYSTEM, THIS TEST WILL FAIL
     function test_get_object_groups_object_inherit() {
         $Group1 = $this->groupName."object1";
         $Group2 = $this->groupName."object2";
@@ -994,7 +994,7 @@ Class ACLTest extends PHPUnit_TestCase {
         return $ret;
     }
         
-    //NOTE THAT THIS FUNCTION ASSUMES THAT ACTIVITY #3 EXISTS IN THE SYSTEM.  IF THIS IS NOT TRUE IN YOUR SYSTEM, THIS TEST WILL FAIL
+    //NOTE THAT THIS FUNCTION ASSUMES THAT ACTIVITY #1 EXISTS IN THE SYSTEM.  IF THIS IS NOT TRUE IN YOUR SYSTEM, THIS TEST WILL FAIL
     function test_get_object_relationship_parent($_ParentControlledObject=false, $_ControlledObject=false, $on_what_id=false, $_ControlledObjectRelationship=false, $_ChildField=false) {
         if (!$_ParentControlledObject) { 
             $ParentControlledObject=$this->controlled_objectName."Company"; 
@@ -1004,7 +1004,7 @@ Class ACLTest extends PHPUnit_TestCase {
             $ParentControlledObjectData = $this->test_get_controlled_object($ParentControlledObject);
             $ParentControlledObject_id=$ParentControlledObjectData['ControlledObject_id']; 
         }
-        if (!$on_what_id) { $on_what_id=3; }
+        if (!$on_what_id) { $on_what_id=1; }
         if (!$_ControlledObject) { 
             $ControlledObject=$this->controlled_objectName."Activity";
             $ControlledObject_id=$this->test_add_controlled_object($ControlledObject,"activities","activity_id",false, 1); 
@@ -1264,6 +1264,9 @@ $display->show();
  */
 /*
  * $Log: xrms_acl_test.php,v $
+ * Revision 1.14  2006/07/25 20:39:22  vanmer
+ * - ensure ACL tests succeed on default install
+ *
  * Revision 1.13  2006/01/27 13:37:06  vanmer
  * - changed ACL to require array input for actions (permissions)
  * - removed check for array of permissions, now is always an array
