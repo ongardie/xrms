@@ -19,7 +19,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-preferences.php,v 1.18 2006/07/07 20:03:44 vanmer Exp $
+ * $Id: utils-preferences.php,v 1.19 2006/07/25 19:44:44 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -748,7 +748,10 @@ function get_user_preferences_table($con, $user_id=false) {
     $types=get_user_preference_type($con, false, false, true);
     if (!$types) { $msg="Failed to load an user preference types, no user preferences available"; $user_preferences_table='';}
     else {
-        $user_preferences_table="<table class=widget>";
+        if ($user_id!=$session_user_id) { $user_preferences_table="<input type=hidden name=edit_user_id value=$user_id>"; }
+	else $user_preferences_table='';
+
+        $user_preferences_table.="<table class=widget>";
         $user_preferences_table.="<tr><td colspan=2 class=widget_header>$table_title</td></tr>";
         foreach ($types as $type_info) {
             if ((!$type_info['allow_user_edit_flag']) AND (!$admin)) continue;
@@ -852,6 +855,9 @@ function move_system_parameters($con, $fields) {
 
 /**
  * $Log: utils-preferences.php,v $
+ * Revision 1.19  2006/07/25 19:44:44  vanmer
+ * - ensure that user preferences table passed on user_id, to allow admin edit of alternate user info
+ *
  * Revision 1.18  2006/07/07 20:03:44  vanmer
  * - altered params when caching user_preference_type
  *
