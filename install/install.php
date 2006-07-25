@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.22 2006/01/10 23:00:41 vanmer Exp $
+ * $Id: install.php,v 1.23 2006/07/25 19:56:16 vanmer Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -276,7 +276,8 @@ require_once($include_directory . 'adodb/adodb-xmlschema.inc.php' );
 $schemaFile='xrms-schema.xml';
 $schema = new adoSchema($con);
 $schema->seperateDataSQL=true;
-$schema->ParseSchemaFile( $schemaFile );
+$schemaPath=$xrms_file_root."/install/$schemaFile";
+$schema->ParseSchemaFile( $schemaPath );
 $structure_sql=$schema->sqlArray;
 $data_sql=$schema->getDataSQL();
 
@@ -325,6 +326,9 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.23  2006/07/25 19:56:16  vanmer
+ *- changed to use full path to XML file for install
+ *
  *Revision 1.22  2006/01/10 23:00:41  vanmer
  *- added flag to allow only structure to be installed, no data
  *
