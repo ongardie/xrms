@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.16 2006/07/25 14:46:36 braverock Exp $
+ * $Id: updateto2.0.php,v 1.17 2006/07/25 19:36:52 braverock Exp $
  */
 
 // where do we include from
@@ -4760,33 +4760,36 @@ $rst = $con->execute($sql);
 
 //update the pager saved view preferences to use the new structure
 require_once($include_directory."classes/Pager/view_functions.php");
+//create the table for views if we need it
 initViews($con);
 
 $pager_view_pref=get_user_preference_type($con,"pager_columns");
 if ($pager_view_pref) {
+    // make sure we have a preference type to upgrade
     $view_pref_id=$pager_view_pref['user_preference_type_id'];
-
-    $sql = "SELECT * FROM user_preferences WHERE user_preference_type_id=$view_pref_id";
-    $rst = $con->execute($sql);
-    while (!$rst->EOF) {
-        $pref_data=unserialize($rst->fields['user_preference_value']);
-        $pref_user_id=$rst->fields['user_id'];
-	if ($pref_data) {
-        foreach ($pref_data as $pager_name=>$views) {
-//            echo "USER $pref_user_id PAGER $pager_name<pre>\n"; print_r($views); echo "</pre>";
-            writeViews($con, $pager_name, $pref_user_id, $views);
+    if ($view_pref_id) {
+        $sql = "SELECT * FROM user_preferences WHERE user_preference_type_id=$view_pref_id";
+        $rst = $con->execute($sql);
+        while (!$rst->EOF) {
+            $pref_data=unserialize($rst->fields['user_preference_value']);
+            $pref_user_id=$rst->fields['user_id'];
+        if ($pref_data) {
+            foreach ($pref_data as $pager_name=>$views) {
+                // echo "USER $pref_user_id PAGER $pager_name<pre>\n"; print_r($views); echo "</pre>";
+                writeViews($con, $pager_name, $pref_user_id, $views);
+            }
         }
-	}
-        $rst->movenext();
-    }
+            $rst->movenext();
+        }
 
-    $sql = "DELETE FROM user_preferences WHERE user_preference_type_id=$view_pref_id";
-    $rst = $con->execute($sql);
+        $sql = "DELETE FROM user_preferences WHERE user_preference_type_id=$view_pref_id";
+        $rst = $con->execute($sql);
 
-    $sql = "DELETE FROM user_preference_types WHERE user_preference_type_id=$view_pref_id";
-    $rst = $con->execute($sql);
+        $sql = "DELETE FROM user_preference_types WHERE user_preference_type_id=$view_pref_id";
+        $rst = $con->execute($sql);
 
-    $msg .= _("Removed Pager Columns out of user preferences, now in a new table") . '<br>';
+        $msg .= _("Removed Pager Columns out of user preferences, now in a new table") . '<br>';
+    } //end if $view_pref_id
 } // end pager view update
 
 //FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
@@ -4816,6 +4819,9 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.17  2006/07/25 19:36:52  braverock
+ * - extra check for clean updates of pager pref functions
+ *
  * Revision 1.16  2006/07/25 14:46:36  braverock
  * - move initViews function to outside the preference check:
  *    it should get run regardless to create the new table for saved views
