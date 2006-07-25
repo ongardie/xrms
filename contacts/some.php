@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.68 2006/04/26 13:15:59 braverock Exp $
+ * $Id: some.php,v 1.69 2006/07/25 19:51:44 vanmer Exp $
  */
 
 //include the standard files
@@ -408,6 +408,7 @@ $pager->Render($system_rows_per_page);
 
 $con->close();
 
+$new_contact_button=render_create_button(_("New Contact"), 'submit', false, false, false, 'contacts');
 ?>
 
     </form>
@@ -418,18 +419,20 @@ $con->close();
         <form action="new_contact_company_select.php" method=POST onSubmit="return setNewContact_company_name()" name=newContact>
             <input type=hidden name=company_name id='newContact_company_name'>
             <input type=hidden name=return_url value="<?php echo $newContact_return_url; ?>">
+<?php if ($new_contact_button) { ?>
         <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header><?php echo _("Contact Options"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element>
-                    <input type=submit class=button name=btnewContact value="<?php echo _("New Contact"); ?>">
+		   <?php echo $new_contact_button; ?>
                 </td>
             </tr>
             <?php echo $self_contacts; ?>
         </table>
         </form>
+<?php } ?>
         <!-- recently viewed support items //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
@@ -494,6 +497,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.69  2006/07/25 19:51:44  vanmer
+ * - ensure new contact button only appears when proper permissions exist
+ *
  * Revision 1.68  2006/04/26 13:15:59  braverock
  * - don't close the table twice
  *
