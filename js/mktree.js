@@ -1,32 +1,22 @@
-// ===================================================================
-// Author: Matt Kruse <matt@mattkruse.com>
-// WWW: http://www.mattkruse.com/
-//
-// NOTICE: You may use this code for any purpose, commercial or
-// private, without any further permission from the author. You may
-// remove this notice from your final code if you wish, however it is
-// appreciated by the author if at least my web site address is kept.
-//
-// You may *NOT* re-distribute this code in any way except through its
-// use. That means, you can include it in your product, or your web
-// site, or any other form where the code is actually being used. You
-// may not put the plain javascript up on your site for download or
-// include it in your javascript libraries for download. 
-// If you wish to share this code with others, please just point them
-// to the URL instead.
-// Please DO NOT link directly to my .js files from your site. Copy
-// the files to your server and use them there. Thank you.
-// ===================================================================
+/*===================================================================
+ Author: Matt Kruse
+ 
+ View documentation, examples, and source code at:
+     http://www.JavascriptToolbox.com/
 
-// HISTORY
-// ------------------------------------------------------------------
-// December 9, 2003: Added script to the Javascript Toolbox
-// December 10, 2003: Added the preProcessTrees variable to allow user
-//      to turn off automatic conversion of UL's onLoad
-// March 1, 2004: Changed it so if a <li> has a class already attached
-//      to it, that class won't be erased when initialized. This allows
-//      you to set the state of the tree when painting the page simply
-//      by setting some <li>'s class name as being "liOpen" (see example)
+ NOTICE: You may use this code for any purpose, commercial or
+ private, without any further permission from the author. You may
+ remove this notice from your final code if you wish, however it is
+ appreciated by the author if at least the web site address is kept.
+
+ This code may NOT be distributed for download from script sites, 
+ open source CDs or sites, or any other distribution method. If you
+ wish you share this code with others, please direct them to the 
+ web site above.
+ 
+ Pleae do not link directly to the .js files on the server above. Copy
+ the files to your own server for use with your site or webapp.
+ ===================================================================*/
 /*
 This code is inspired by and extended from Stuart Langridge's aqlist code:
 		http://www.kryogenix.org/code/browser/aqlists/
@@ -41,7 +31,7 @@ addEvent(window,"load",convertTrees);
 
 // Utility function to add an event listener
 function addEvent(o,e,f){
-	if (o.addEventListener){ o.addEventListener(e,f,true); return true; }
+	if (o.addEventListener){ o.addEventListener(e,f,false); return true; }
 	else if (o.attachEvent){ return o.attachEvent("on"+e,f); }
 	else { return false; }
 }
