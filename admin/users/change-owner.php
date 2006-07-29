@@ -5,7 +5,7 @@
  * Form to enter a new password for a user
  * @todo - add javascript validation on the save.
  *
- * $Id: change-owner.php,v 1.5 2006/04/11 01:42:45 vanmer Exp $
+ * $Id: change-owner.php,v 1.6 2006/07/29 19:48:27 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -34,6 +34,9 @@ getGlobalVar($msg, 'msg');
 $page_title = _("Change Record Owner");
 start_page($page_title, true, $msg);
 
+$current_user_menu = get_user_menu($con, '', false, 'current_user_id');
+$new_user_id = get_user_menu($con, '', false, 'new_user_id');
+
 ?>
 
 <div id="Main">
@@ -53,39 +56,13 @@ start_page($page_title, true, $msg);
                     </td>
                 <tr>
                     <td>     
-                                	<?php 
-        $sql3 = "SELECT  username, user_id as current_user_id
-        FROM users
-        WHERE user_record_status = 'a'
-        ORDER BY username";
-
-		$rst3 = $con->execute($sql3);
-if ($rst3) {
-    echo $rst3->getmenu2('current_user_id', '', true, false, 0, 'style="font-size: x-small; border: outset; width: 80px;"');
-    $rst3->close();
-} else {
-    db_error_handler ($con, $sql);
-}
-
-echo "</td><td>";
-
-        $sql3 = "SELECT username, user_id as new_user_id
-        FROM users
-        WHERE user_record_status = 'a'
-        ORDER BY username";
-
-		$rst3 = $con->execute($sql3);
-if ($rst3) {
-    echo $rst3->getmenu2('new_user_id', '', true, false, 0, 'style="font-size: x-small; border: outset; width: 80px;"');
-    $rst3->close();
-} else {
-    db_error_handler ($con, $sql);
-}
-
-?>
+                   	<?php echo $current_user_menu ;
+					echo "</td><td>";
+					echo $new_user_id; ?>
                     <td>
-                        <input type=submit name="Change" value="<?php echo _("Change All"); ?>">
-                        <input type=submit name="Change" value="<?php echo _("Change Selected"); ?>">        
+                        <input type=submit name="Change" value="<?php echo _("Change All"); ?>"><BR>
+                        <input type=submit name="Change" value="<?php echo _("Change Selected (all)"); ?>"><BR>
+                        <input type=submit name="Change" value="<?php echo _("Change Selected (none)"); ?>">        
                     </td>
                 </tr>
             </table>
@@ -94,6 +71,11 @@ if ($rst3) {
         	echo _("Change all : This will change the owner of open activities, companies, campaigns, opportunities and cases and remove the old user from these entities");
 			echo "<BR>"; 
         	echo _("Change Selected : This will change the owner of open companies, campaigns, opportunities and cases.");
+			echo "<BR>"; 
+        	echo _("                  All -> All companies are checked.");
+			echo "<BR>"; 
+        	echo _("                  None -> No companie is cheched.");
+			echo "<BR>"; 
          ?>
     </div>
 
@@ -111,6 +93,11 @@ end_page();
 
 /**
  *$Log: change-owner.php,v $
+ *Revision 1.6  2006/07/29 19:48:27  jnhayart
+ *Release with capabilitie to select all or none on new screen
+ *need add  "Change Selected (all)" and "Change Selected (none)" to langage file
+ *change order of company list ( Crm_Statut then Company_Name )
+ *
  *Revision 1.5  2006/04/11 01:42:45  vanmer
  *- changed the change owner application to use ACL administrator check instead of SESSION variable check
  *- added ability to selectively change ownership by company

@@ -1,11 +1,11 @@
 <?php
 /**
- * admin/users/change-password-2.php - Save new password
+ * admin/users/change-owner-2.php - 
  *
- * Check that new password entries are identical
- * Then save in the database.
+ * 
+ * 
  *
- * $Id: change-owner-2.php,v 1.4 2006/04/11 01:42:45 vanmer Exp $
+ * $Id: change-owner-2.php,v 1.5 2006/07/29 19:48:27 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -30,6 +30,7 @@ if ( check_user_role(false, $_SESSION['session_user_id'], 'Administrator') ) {
 
 getGlobalVar($current_user_id,'current_user_id');
 getGlobalVar($new_user_id, 'new_user_id');
+getGlobalVar($Change_Type, 'Change');
 
 if ( !$current_user_id or !$new_user_id ) {
 
@@ -38,13 +39,12 @@ if ( !$current_user_id or !$new_user_id ) {
     exit;	
 }
 
-getGlobalVar($Change_Type, 'Change');
 
 $con = get_xrms_dbconnection();
 
 //uncomment the debug line to see what's going on with the query
 // $con->debug = 1;
-if ($Change_Type == "Change All") {
+if ($Change_Type == _("Change All")) {
 	
 $tables = array('companies', 'activities', 'campaigns', 'opportunities', 'cases');
 
@@ -89,9 +89,9 @@ else
 {
 $company_rows = "";
 
-      $sql = "select c.company_id as company_id, stat.crm_status_pretty_name as CrmStatus, c.company_name as company_name, addr.city as company_city "
+      $sql = "select c.company_id as company_id, stat.crm_status_pretty_name as CrmStatus, c.company_name as company_name, addr.city as company_city, stat.sort_order as ordre "
            . "from companies c, addresses addr, users u, crm_statuses as stat "
-           . "where c.user_id = " . $current_user_id . " and c.default_primary_address = addr.address_id and c.crm_status_id = stat.crm_status_id and c.company_record_status = 'a' group by company_id order by company_name";
+           . "where c.user_id = " . $current_user_id . " and c.default_primary_address = addr.address_id and c.crm_status_id = stat.crm_status_id and c.company_record_status = 'a' group by company_id order by ordre ASC, company_name ASC";
 
 $rst = $con->execute($sql);
 if ($rst) {
@@ -99,13 +99,17 @@ if ($rst) {
     	//no companies found, so redirect
 	$user=get_xrms_user($con, false, $current_user_id);
 	$username=$user['username'];
-	$msg=urlencode(_("No companies owned by $username."));
+	$msg=urlencode(_("No companies owned by ") . $username . "." );
 	Header("Location: change-owner.php?msg=$msg");
 	exit;
     }
     while (!$rst->EOF) {
         $company_rows .= "<tr>";
-        $company_rows .= "<td class=widget_content_form_element><input type=checkbox name=array_of_company[]] value=" . $rst->fields['company_id'] . " checked></td>";
+        $company_rows .= "<td class=widget_content_form_element><input type=checkbox name=array_of_company[]] value=" . $rst->fields['company_id'];
+        if ($Change_Type == _("Change Selected (all)")){
+            $company_rows .= " checked";
+           }
+        $company_rows .=    "></td>";
         $company_rows .= "<td class=widget_content>" . $rst->fields['company_name'] . "</td>";
         $company_rows .= "<td class=widget_content>" . $rst->fields['CrmStatus'] . "</td>";
         $company_rows .= "<td class=widget_content>" . $rst->fields['company_city'] . "</td>";
@@ -155,6 +159,11 @@ end_page();
 
 /**
  *$Log: change-owner-2.php,v $
+ *Revision 1.5  2006/07/29 19:48:27  jnhayart
+ *Release with capabilitie to select all or none on new screen
+ *need add  "Change Selected (all)" and "Change Selected (none)" to langage file
+ *change order of company list ( Crm_Statut then Company_Name )
+ *
  *Revision 1.4  2006/04/11 01:42:45  vanmer
  *- changed the change owner application to use ACL administrator check instead of SESSION variable check
  *- added ability to selectively change ownership by company
