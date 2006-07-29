@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.21 2006/04/11 01:15:31 vanmer Exp $
+ * $Id: some.php,v 1.22 2006/07/29 09:27:18 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -38,6 +38,26 @@ if ($rst) {
         $table_rows_a .= '<td class=widget_content>' . $rst->fields['last_name'] . ', ' . $rst->fields['first_names'] . '</td>';
         $table_rows_a .= '<td class=widget_content>' . $rst->fields['email'] . '</td>';
         $table_rows_a .= '<td class=widget_content><a href="one.php?edit_user_id=' . $rst->fields['user_id'] . '">' . $rst->fields['username'] . '</a></td>';
+
+		//delete or comment the following block in order to hide groups and roles
+    	$user_roles = get_user_roles_with_groups(false, $rst->fields['user_id']);
+        if ($user_roles) 
+		{
+		 $group_info=$user_role=$group_role="";
+   		 foreach ($user_roles as $gkey=>$user_role_array) 
+    	 {
+       		 foreach ($user_role_array as $guser_id=>$user_role) 
+       		 {
+           		 $group_user_info=get_group_user(false, $guser_id);
+            	 $group_user_info=current($group_user_info);
+            	 $group_info = $group_user_info['Group_name'];
+            	 $group_role .= $group_info . ' / ' . $user_role . '<br>' ;
+        	 }
+   		 }
+	    }
+	    $table_rows_a .= '<td class=widget_content>'. $group_role .'</td>';
+	    //end of block
+
         $table_rows_a .= '</tr>';
         $rst->movenext();
     }
@@ -91,6 +111,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_label><?php echo _("Full Name"); ?></td>
                 <td class=widget_label><?php echo _("E-Mail"); ?></td>
                 <td class=widget_label><?php echo _("Username"); ?></td>
+				<td class=widget_label><?php echo _("Group/Role"); ?></td>
             </tr>
             <?php echo $table_rows_a; ?>
         </table>
@@ -203,6 +224,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.22  2006/07/29 09:27:18  jnhayart
+ * add display for each active user of Group/Roles assigned
+ * code can be simplified with new function on acl wrapper
+ *
  * Revision 1.21  2006/04/11 01:15:31  vanmer
  * - applied patch to split users tables into Active and Disabled
  * - thanks to Jean-Noël HAYART for the patch
