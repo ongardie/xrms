@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.22 2006/07/29 09:27:18 jnhayart Exp $
+ * $Id: some.php,v 1.23 2006/07/29 09:36:29 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -32,6 +32,9 @@ $sql = "select * from users where user_record_status ='a' order by last_name, fi
 
 $rst = $con->execute($sql);
 
+//get the ACL object
+$local_acl=get_acl_object();
+
 if ($rst) {
     while (!$rst->EOF) {
         $table_rows_a .= '<tr>';
@@ -40,7 +43,7 @@ if ($rst) {
         $table_rows_a .= '<td class=widget_content><a href="one.php?edit_user_id=' . $rst->fields['user_id'] . '">' . $rst->fields['username'] . '</a></td>';
 
 		//delete or comment the following block in order to hide groups and roles
-    	$user_roles = get_user_roles_with_groups(false, $rst->fields['user_id']);
+    	$user_roles = get_user_roles_with_groups($local_acl, $rst->fields['user_id']);
         if ($user_roles) 
 		{
 		 $group_info=$user_role=$group_role="";
@@ -48,7 +51,7 @@ if ($rst) {
     	 {
        		 foreach ($user_role_array as $guser_id=>$user_role) 
        		 {
-           		 $group_user_info=get_group_user(false, $guser_id);
+           		 $group_user_info=get_group_user($local_acl, $guser_id);
             	 $group_user_info=current($group_user_info);
             	 $group_info = $group_user_info['Group_name'];
             	 $group_role .= $group_info . ' / ' . $user_role . '<br>' ;
@@ -224,6 +227,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.23  2006/07/29 09:36:29  jnhayart
+ * Limit number of ACL object created and SQL connection
+ *
  * Revision 1.22  2006/07/29 09:27:18  jnhayart
  * add display for each active user of Group/Roles assigned
  * code can be simplified with new function on acl wrapper
