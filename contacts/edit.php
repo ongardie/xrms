@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.47 2006/06/15 22:00:43 vanmer Exp $
+ * $Id: edit.php,v 1.48 2006/07/29 20:05:23 jnhayart Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -89,6 +89,7 @@ if ($rst) {
     $custom3 = $rst->fields['custom3'];
     $custom4 = $rst->fields['custom4'];
     $user_id = $rst->fields['user_id'];
+    $email_status = $rst->fields['email_status'];
     $rst->close();
 }
 
@@ -208,8 +209,12 @@ confGoTo_includes();
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("E-Mail"); ?></td>
-                <td class=widget_content_form_element><input type=text name=email value='<?php echo $email; ?>' size=30></td>
-            </tr>
+                <td class=widget_content_form_element><input type=text name=email value='<?php echo $email; ?>' size=30>
+            		<INPUT type="radio" name="email_status" value="a" <?php if ($email_status=='a') echo 'checked' ?>><?php echo _("Active"); ?>
+            		<INPUT type="radio" name="email_status" value="b" <?php if ($email_status=='b') echo 'checked' ?>><?php echo _("Bounced"); ?>
+					<INPUT type="radio" name="email_status" value="o" <?php if ($email_status=='o') echo 'checked' ?>><?php echo _("Opt-Out"); ?>
+            </td>
+            
             <tr>
                 <td class=widget_label_right><?php echo _("Work Phone"); ?></td>
                 <td class=widget_content_form_element><input type=text name=work_phone value='<?php echo $work_phone; ?>' size=30>&nbsp;
@@ -329,6 +334,11 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.48  2006/07/29 20:05:23  jnhayart
+ * add fields email_status for store state of email a : active, b : bounced ,o : opt-out,
+ * need to change requete from select email of contact be shure to add email_status='a'
+ * to do on one.php and other screen, if email_status <> 'a' desactivate <EMAILTO>
+ *
  * Revision 1.47  2006/06/15 22:00:43  vanmer
  * - changes to allow contacts to have an owner
  *

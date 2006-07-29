@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.33 2006/06/15 21:32:59 vanmer Exp $
+ * $Id: edit-2.php,v 1.34 2006/07/29 20:05:23 jnhayart Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -40,6 +40,9 @@ $cell_phone = $_POST['cell_phone'];
 $home_phone = $_POST['home_phone'];
 $fax = $_POST['fax'];
 $user_id = $_POST['user_id'];
+$email_status = $_POST['email_status'];
+if (!$email_status) { $email_status='a'; };
+
 /*
 IM fields, now handled through plugin
 $aol_name = $_POST['aol_name'];
@@ -107,6 +110,8 @@ $rec['cell_phone'] = $cell_phone;
 $rec['home_phone'] = $home_phone;
 $rec['fax'] = $fax;
 $rec['user_id'] = $user_id;
+$rec['email_status'] = $email_status;
+
 /*
 IM fields, now handled through plugin
 $rec['aol_name'] = $aol_name;
@@ -143,6 +148,11 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.34  2006/07/29 20:05:23  jnhayart
+ * add fields email_status for store state of email a : active, b : bounced ,o : opt-out,
+ * need to change requete from select email of contact be shure to add email_status='a'
+ * to do on one.php and other screen, if email_status <> 'a' desactivate <EMAILTO>
+ *
  * Revision 1.33  2006/06/15 21:32:59  vanmer
  * - added owner to the UI for a contact
  *
