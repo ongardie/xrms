@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.40 2006/04/11 13:26:31 braverock Exp $
+ * $Id: index.php,v 1.41 2006/07/30 11:09:09 jnhayart Exp $
  */
 
 //include required stuff
@@ -78,6 +78,11 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_content>
                     <a href="import/import-companies.php"><?php echo _("Import Companies/Contacts"); ?></a>
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content>
+                    <a href="import/import-activities.php"><?php echo _("Import Activities"); ?></a>
                 </td>
             </tr>
             <tr>
@@ -264,6 +269,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.41  2006/07/30 11:09:09  jnhayart
+ * Add Import activities in admin Import/Export
+ *
  * Revision 1.40  2006/04/11 13:26:31  braverock
  * - change from do_hook_function to do_hook for admin_docs hook,
  *   as no return is expected, just direct output
