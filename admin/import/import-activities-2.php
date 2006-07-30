@@ -3,7 +3,7 @@
  * import-Activites-2.php - File importer for XRMS
  *
  *
- * $Id: import-activities-2.php,v 1.1 2006/07/30 11:11:14 jnhayart Exp $
+ * $Id: import-activities-2.php,v 1.2 2006/07/30 11:13:16 jnhayart Exp $
  */
  
 require_once('../../include-locations.inc');
@@ -98,8 +98,7 @@ switch ($delimiter) {
 }
 
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 //$con->debug=1;
 
 $row_number = 1;
@@ -214,6 +213,9 @@ end_page();
 
 /**
  * $Log: import-activities-2.php,v $
+ * Revision 1.2  2006/07/30 11:13:16  jnhayart
+ * use centralized get_xrms_dbconnection();
+ *
  * Revision 1.1  2006/07/30 11:11:14  jnhayart
  * Add files for import activities
  * First release based on import-companies

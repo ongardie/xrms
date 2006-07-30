@@ -7,7 +7,7 @@
  *
  * @author Jean Noel HAYART, from original import-companies
  *
- * $Id: import-activities.php,v 1.1 2006/07/30 11:11:14 jnhayart Exp $
+ * $Id: import-activities.php,v 1.2 2006/07/30 11:13:17 jnhayart Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -23,8 +23,7 @@ $session_user_id = session_check( 'Admin' );
 $page_title = _("Import Activities");
 if (!isset($msg)) { $msg=''; };
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con = get_xrms_dbconnection();
 
 $user_menu = get_user_menu($con, $session_user_id);
 
