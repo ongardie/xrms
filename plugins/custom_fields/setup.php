@@ -4,12 +4,18 @@
  *
  * Copyright (c) 2004 The XRMS Project Team
  *
- * $Id: setup.php,v 1.6 2006/02/21 14:34:55 braverock Exp $
+ * $Id: setup.php,v 1.7 2006/07/30 09:19:29 jnhayart Exp $
  */
 
 
 function xrms_plugin_init_custom_fields () {
     global $xrms_plugin_hooks;
+    $xrms_plugin_hooks['opportunity_inline_display']['custom_fields']
+      = 'cf_opportunity_inline_display';
+    $xrms_plugin_hooks['opportunity_inline_edit']['custom_fields']
+      = 'cf_opportunity_inline_edit';
+    $xrms_plugin_hooks['opportunity_inline_edit_2']['custom_fields']
+      = 'cf_opportunity_inline_edit_2';
     $xrms_plugin_hooks['company_accounting_inline_display']['custom_fields']
       = 'cf_company_accounting_inline_display';
     $xrms_plugin_hooks['company_accounting_inline_edit']['custom_fields']
@@ -165,8 +171,38 @@ function cf_private_sidebar_bottom () {
             $return_url);
 }
 
+function cf_opportunity_inline_display () {
+    global $xrms_file_root, $opportunity_id;
+    include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
+    return get_display("opportunity_accounting", $opportunity_id, "");
+}
+
+function cf_opportunity_inline_edit () {
+    global $xrms_file_root, $opportunity_id;
+    include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
+    return get_inline_edit("opportunity_accounting", $opportunity_id, "");
+}
+
+function cf_opportunity_inline_edit_2 () {
+    global $xrms_file_root, $opportunity_id;
+    include_once("$xrms_file_root/plugins/custom_fields/display_functions.php");
+    do_inline_edit_save("opportunity_accounting", $opportunity_id, "");
+}
+
 /**
  * $Log: setup.php,v $
+ * Revision 1.7  2006/07/30 09:19:29  jnhayart
+ * Modif plugin for add customs fields in oppotunities inline
+ * add new hook in setup for this purpose
+ * opportunity_inline_display,
+ * opportunity_inline_edit,
+ * opportunity_inline_edit_2
+ * and add 2 lines in SQL scripte
+ * INSERT INTO `cf_objects` VALUES (3, 'Opportunity Accounting', 'opportunity_accounting', 0, 'a');
+ * INSERT INTO `cf_types` VALUES (8, 'a', 'opportunity_accounting', 'inline');
+ * perhaps need to be corrected inside plugin for thoses names.
+ * Question : no function in case of delete XRMS source object ?
+ *
  * Revision 1.6  2006/02/21 14:34:55  braverock
  * - fix typo in fn name
  *

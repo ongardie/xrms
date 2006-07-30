@@ -98,3 +98,9 @@ INSERT INTO `cf_types` VALUES (5, 'a', 'private_sidebar_bottom', 'sidebar');
 INSERT INTO `cf_types` VALUES (6, 'a', 'company_accounting', 'inline');
 INSERT INTO `cf_types` VALUES (7, 'a', 'contact_accounting', 'inline');
         
+--
+-- need add thoses value for add capabilities in opportunties inline custom fields
+--
+
+INSERT INTO `cf_objects` VALUES (3, 'Opportunity Accounting', 'opportunity_accounting', 0, 'a');
+INSERT INTO `cf_types` VALUES (8, 'a', 'opportunity_accounting', 'inline');
