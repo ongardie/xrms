@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.57 2006/05/02 01:27:39 vanmer Exp $
+ * $Id: one.php,v 1.58 2006/07/30 09:26:02 jnhayart Exp $
  */
 
 require_once('../include-locations.inc');
@@ -31,6 +31,20 @@ $con = get_xrms_dbconnection();
 //$con->debug = 1;
 
 $form_name = 'One_Opportunity';
+
+// Add for custom fields
+if ( !isset($customs_fields_rows) ) {
+  $customs_fields_rows = '';
+}
+//call the accounting hook
+$customs_fields_rows = do_hook_function('opportunity_inline_display', $customs_fields_rows);
+if ($customs_fields_rows <> "") {
+
+$customs_fields_rows_display = "<tr><td class=widget_header>" . _("Opportunity custom information") ."</td>";
+$customs_fields_rows_display .= "</tr><tr><td class=widget_content align=left valign=top><table border=0 cellpadding=0 cellspacing=0 width=50% align=left>";
+$customs_fields_rows_display .= "<!-- customfields plugin -->" . $customs_fields_rows;
+$customs_fields_rows_display .= "</table></td></tr>";
+}
 
 $opportunity_data=get_opportunity($con, $opportunity_id);
 
@@ -322,6 +336,7 @@ function markComplete() {
 
                 </td>
             </tr>
+			<?php echo $customs_fields_rows_display; ?>
             <tr>
                 <td class=widget_content_form_element>
                     <?php echo render_edit_button("Edit", 'button', "javascript: location.href='edit.php?opportunity_id=$opportunity_id';"); ?>
@@ -385,6 +400,14 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.58  2006/07/30 09:26:02  jnhayart
+ * new hooks for add capability using custom fileds INLINE
+ * use of 3 new hook :
+ * opportunity_inline_display,opportunity_inline_edit,opportunity_inline_edit_2
+ * (for documentation)
+ * i test a new style of integration with separation between Core data and Customs
+ * THINK to update Custom Fileds plugin database (look in SQL Scripte)
+ *
  * Revision 1.57  2006/05/02 01:27:39  vanmer
  * - changed opportunities one.php to use get_opportunities and other get_ functions from the API
  * - updated get_opportunities function to do joins on related tables

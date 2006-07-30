@@ -2,7 +2,7 @@
 /**
  * Insert a new opportunity into the database
  *
- * $Id: new-2.php,v 1.13 2006/04/29 01:48:25 vanmer Exp $
+ * $Id: new-2.php,v 1.14 2006/07/30 09:26:02 jnhayart Exp $
  */
 
 //include common files
@@ -54,12 +54,22 @@ $rec['close_at'] = strtotime("+23 hours 59 minutes",strtotime($close_at));
 
 $opportunity_id=add_opportunity($con, $rec,get_magic_quotes_gpc());
 
+$customs_fields_rows = do_hook_function('opportunity_inline_edit_2', $customs_fields_rows);
+
 $con->close();
 
 header("Location: one.php?msg=opportunity_added&opportunity_id=$opportunity_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.14  2006/07/30 09:26:02  jnhayart
+ * new hooks for add capability using custom fileds INLINE
+ * use of 3 new hook :
+ * opportunity_inline_display,opportunity_inline_edit,opportunity_inline_edit_2
+ * (for documentation)
+ * i test a new style of integration with separation between Core data and Customs
+ * THINK to update Custom Fileds plugin database (look in SQL Scripte)
+ *
  * Revision 1.13  2006/04/29 01:48:25  vanmer
  * - replaced opportunites edit, new and delete pages to use opportunities API
  * - altered opportunities API to reflect correct codes for won/lost statuses

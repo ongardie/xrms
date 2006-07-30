@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.27 2006/05/06 09:34:27 vanmer Exp $
+ * $Id: edit.php,v 1.28 2006/07/30 09:26:02 jnhayart Exp $
  */
 
 require_once('../include-locations.inc');
@@ -139,6 +139,16 @@ $rst = $con->execute($sql2);
 $opportunity_status_menu = $rst->getmenu2('opportunity_status_id', $opportunity_status_id, false);
 $rst->close();
 
+// custom fields PlugIns
+$customs_fields_rows = do_hook_function('opportunity_inline_edit', $customs_fields_rows);
+if ($customs_fields_rows <> "") {
+
+$customs_fields_rows_display = "<tr><td colspan=2 class=widget_header>" . _("Opportunity custom information") ."</td>";
+$customs_fields_rows_display .= "</tr><tr>";
+$customs_fields_rows_display .= "<!-- customfields plugin -->" . $customs_fields_rows;
+$customs_fields_rows_display .= "</tr>";
+}
+
 $con->close();
 
 $page_title = _("Opportunity") . " : " . $opportunity_title;
@@ -244,6 +254,8 @@ confGoTo_includes();
                 <td class=widget_label_right><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea></td>
             </tr>
+            <!-- accounting plugin -->
+            <?php echo $customs_fields_rows_display; ?>
             <tr>
                 <td class=widget_content_form_element colspan=2>
                 <input class=button type=submit value="<?php echo _("Save Changes"); ?>">
@@ -318,6 +330,14 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.28  2006/07/30 09:26:02  jnhayart
+ * new hooks for add capability using custom fileds INLINE
+ * use of 3 new hook :
+ * opportunity_inline_display,opportunity_inline_edit,opportunity_inline_edit_2
+ * (for documentation)
+ * i test a new style of integration with separation between Core data and Customs
+ * THINK to update Custom Fileds plugin database (look in SQL Scripte)
+ *
  * Revision 1.27  2006/05/06 09:34:27  vanmer
  * - added return_url to opportunities edit page
  *

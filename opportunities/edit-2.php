@@ -70,6 +70,8 @@ if (!$no_update) {
 
     update_opportunity($con, $rec, $opportunity_id, false,  get_magic_quotes_gpc());
 
+	$customs_fields_rows = do_hook_function('opportunity_inline_edit_2', $customs_fields_rows);
+
     header("Location: one.php?msg=saved&opportunity_id=$opportunity_id");
 }
 
