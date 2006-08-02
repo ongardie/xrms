@@ -2,7 +2,7 @@
 /**
  * Administration interface for managing permissions for one role
  *
- * $Id: role_permission_grid.php,v 1.12 2006/07/13 00:47:20 vanmer Exp $
+ * $Id: role_permission_grid.php,v 1.13 2006/08/02 20:52:40 vanmer Exp $
  *
  */
 
@@ -101,11 +101,15 @@ switch ($grid_action) {
                         if ($current_permissions[$scope][$cor][$perm]!=$_POST["$scope,$cor,$perm"]) {
 //                            echo "CHANGING PERMISSION FROM {$current_permissions[$scope][$cor][$perm]} TO {$_POST["$scope,$cor,$perm"]}<br>";
                             if ($current_permissions[$scope][$cor][$perm] OR !$_POST["$scope,$cor,$perm"]) {
+			    	if ($current_permissions[$scope][$cor][$perm]==1) $inheritable=NULL;
+				if ($current_permissions[$scope][$cor][$perm]==2) $inheritable=true;
 //                                echo "DELETING PERMISSION {$current_permissions[$scope][$cor][$perm]} FOR $scope,$cor,$perm<br>";
-                                $ret=$acl->get_role_permission($gridrole_id,$cor,$scope,$perm);
-                                $ret=current($ret);
-                                $role_permission_id=$ret['RolePermission_id'];
-                                $delret=$acl->delete_role_permission($role_permission_id);
+                                $ret=$acl->get_role_permission($gridrole_id,$cor,$scope,$perm,false,$inheritable);
+				if ($ret) {
+	                                $ret=current($ret);
+	                                $role_permission_id=$ret['RolePermission_id'];
+	                                $delret=$acl->delete_role_permission($role_permission_id);
+				}
                             }
                             if ($_POST["$scope,$cor,$perm"]) {
                                 if ($_POST["$scope,$cor,$perm"]==1) $inheritable=false;
