@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.43 2006/06/15 21:32:59 vanmer Exp $
+ * $Id: new.php,v 1.44 2006/08/02 22:31:16 ongardie Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -190,7 +190,15 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Company"); ?></td>
-                <td class=widget_content_form_element><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php echo $company_name; ?></a></td>
+                <td class=widget_content_form_element><?php
+		if(!empty($company_id) && !empty($company_name)){
+			?>
+			<a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php echo $company_name; ?></a>
+			<?php
+		}elseif(!empty($company_name)){
+			echo $company_name;
+		}
+		?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Division"); ?></td>
@@ -364,6 +372,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.44  2006/08/02 22:31:16  ongardie
+ * Don't create a broken/empty link to company.
+ *
  * Revision 1.43  2006/06/15 21:32:59  vanmer
  * - added owner to the UI for a contact
  *
