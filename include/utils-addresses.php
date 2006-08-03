@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @author Brian Peterson
  *
- * $Id: utils-addresses.php,v 1.9 2006/04/28 02:42:52 vanmer Exp $
+ * $Id: utils-addresses.php,v 1.10 2006/08/03 01:46:57 ongardie Exp $
  *
  */
 
@@ -388,6 +388,7 @@ function pull_address_fields ( $array_data )
                               'use_pretty_address'   => '',
                               'offset'               => '',
                               'daylight_savings_id'  => '',
+			      'country'              => ''
                             );
 
 
@@ -399,6 +400,9 @@ function pull_address_fields ( $array_data )
 /**********************************************************************/
  /**
  * $Log: utils-addresses.php,v $
+ * Revision 1.10  2006/08/03 01:46:57  ongardie
+ * - add_update_address() wasn't able to use country strings because pull_address_fields() dropped it.
+ *
  * Revision 1.9  2006/04/28 02:42:52  vanmer
  * - added country to address API, corrected address table in select
  *
