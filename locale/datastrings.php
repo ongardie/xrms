@@ -7,7 +7,7 @@
  * php ./getdatastrings.php
  * from the locale directory
  *
- * $Id: datastrings.php,v 1.9 2006/07/10 14:46:04 braverock Exp $
+ * $Id: datastrings.php,v 1.10 2006/08/03 01:55:37 ongardie Exp $
  */
 $s=_("Acquired");
 $s=_("Acquired by");
@@ -121,6 +121,7 @@ $s=_("Name Starts With");
 $s=_("Negotiation");
 $s=_("New");
 $s=_("New Bug Report");
+$s=_("New Company uses Contact Last Name + Household");
 $s=_("New Company uses Contact Name");
 $s=_("New Feature Request");
 $s=_("No");

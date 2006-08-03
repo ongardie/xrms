@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.69 2006/07/25 19:51:44 vanmer Exp $
+ * $Id: some.php,v 1.70 2006/08/03 01:55:36 ongardie Exp $
  */
 
 //include the standard files
@@ -344,17 +344,7 @@ if(!isset($contacts_next_page)) {
 
 <?php
       $undefined_company_method=get_user_preference($con, $session_user_id, 'undefined_company_method');
-      switch ($undefined_company_method) {
-        case 'reject':
-            $use_self_contacts=false;
-        break;
-        case 'unknown':
-        case 'contact_name':
-        default:
-            $use_self_contacts=true;
-        break;
-      }
-      if ( $use_self_contacts ) {
+      if ( $undefined_company_method != 'reject') {
         $self_contacts = "\n\t".'<tr>
                       <td class=widget_content_form_element colspan=4>
                        <input class=button type=button onclick="javascript: createContact();" value="' . _("Create Contact without a Company") . '">
@@ -497,6 +487,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.70  2006/08/03 01:55:36  ongardie
+ * - Added "household" unknown company method.
+ * - Allow admin/update.php to redirect to admin/updateto2.0.php for v1.99.2.
+ *
  * Revision 1.69  2006/07/25 19:51:44  vanmer
  * - ensure new contact button only appears when proper permissions exist
  *

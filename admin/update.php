@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: update.php,v 1.111 2006/04/26 02:39:00 vanmer Exp $
+ * $Id: update.php,v 1.112 2006/08/03 01:55:37 ongardie Exp $
  */
 
 // where do we include from
@@ -53,7 +53,7 @@ $dict = NewDataDictionary( $con );
 //CHECK FOR VERSION HERE, REDIRECT TO OLD UPDATE IF VERSION IS NOT CORRECT
 $ret=get_admin_preference($con, 'xrms_version');
 $allow_old_upgrade=true;
-if ((!$ret OR $ret=='1.0' OR $ret=='1.99' OR $ret=='1.99.1') AND $allow_old_upgrade) {
+if ((!$ret OR $ret=='1.0' OR $ret=='1.99' OR $ret=='1.99.1' OR $ret=='1.99.2') AND $allow_old_upgrade) {
     $con->close();
     Header('Location: updateto2.0.php');
     exit();
@@ -175,6 +175,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.112  2006/08/03 01:55:37  ongardie
+ * - Added "household" unknown company method.
+ * - Allow admin/update.php to redirect to admin/updateto2.0.php for v1.99.2.
+ *
  * Revision 1.111  2006/04/26 02:39:00  vanmer
  * - ensure that 1.99.1 release also runs updateto2.0.php
  *

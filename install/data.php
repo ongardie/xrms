@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.42 2006/04/26 02:15:23 vanmer Exp $
+ * $Id: data.php,v 1.43 2006/08/03 01:55:37 ongardie Exp $
  */
 
 /**
@@ -2894,11 +2894,13 @@ function user_preferences_db_data($con) {
     $s=_("Use Unknown Company");
     $s=_("New Company uses Contact Name");
     $s=_("Reject Contact");
+    $s=_("New Company uses Contact Last Name + Household");
 
     $undefined_company_method=add_user_preference_type($con, 'undefined_company_method', "Undefined Company Method", "Insert method used when no Company is defined for a new Contact", false, false, 'select');
     add_preference_option($con, $undefined_company_method, 'unknown', 'Use Unknown Company');
     add_preference_option($con, $undefined_company_method, 'contact_name', 'New Company uses Contact Name');
     add_preference_option($con, $undefined_company_method, 'reject', 'Reject Contact');
+    add_preference_option($con, $undefined_company_method, 'household', 'New Company uses Contact Last Name + Household');
     $ret=get_admin_preference($con, $undefined_company_method);
     if (!$ret) {
         set_admin_preference($con, $undefined_company_method, 'unknown');
@@ -2926,6 +2928,10 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.43  2006/08/03 01:55:37  ongardie
+ * - Added "household" unknown company method.
+ * - Allow admin/update.php to redirect to admin/updateto2.0.php for v1.99.2.
+ *
  * Revision 1.42  2006/04/26 02:15:23  vanmer
  * - added system preference to control behavior of contacts API when adding a new contact with no company specified
  *

@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.25 2006/06/15 21:33:46 vanmer Exp $
+ * $Id: utils-contacts.php,v 1.26 2006/08/03 01:55:37 ongardie Exp $
  *
  */
 
@@ -110,6 +110,20 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
                     // There needs to be a company name
                     if ( ! $contact_info['company_name'] ) {
                         $contact_info['company_name'] = $contact_info['first_names'] . ' ' . $contact_info['last_name'];
+                    }
+
+                    // Retrieve company id
+                    $_company_data = add_update_company ( $con, $contact_info );
+
+                    // Pull out company_id
+                    $contact_info['company_id'] = $_company_data['company_id'];
+                    $contact_info['address_id'] = $_company_data['address_id'];
+                break;
+                
+		case 'household':
+                    // There needs to be a company name
+                    if ( ! $contact_info['company_name'] ) {
+                        $contact_info['company_name'] = $contact_info['last_name'] . ' Household';
                     }
 
                     // Retrieve company id
@@ -539,6 +553,10 @@ include_once $include_directory . 'utils-misc.php';
 /**********************************************************************/
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.26  2006/08/03 01:55:37  ongardie
+ * - Added "household" unknown company method.
+ * - Allow admin/update.php to redirect to admin/updateto2.0.php for v1.99.2.
+ *
  * Revision 1.25  2006/06/15 21:33:46  vanmer
  * - changed link from company owner to contact owner
  * - changed fieldname from account_owner to owner_username

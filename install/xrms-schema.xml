@@ -3081,6 +3081,7 @@
       <row><f>34</f><f>23</f><f>unknown</f><f>1</f><f>a</f><f>Use Unknown Company</f></row>
       <row><f>35</f><f>23</f><f>contact_name</f><f>1</f><f>a</f><f>New Company uses Contact Name</f></row>
       <row><f>36</f><f>23</f><f>reject</f><f>1</f><f>a</f><f>Reject Contact</f></row>
+      <row><f>37</f><f>23</f><f>household</f><f>1</f><f>a</f><f>New Company uses Contact Last Name + Household</f></row>
     </data>
   </table>
   <table name="user_preference_types">
