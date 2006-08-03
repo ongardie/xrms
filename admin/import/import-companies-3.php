@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.36 2006/04/05 01:12:03 vanmer Exp $
+ * $Id: import-companies-3.php,v 1.37 2006/08/03 15:59:50 ongardie Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -529,7 +529,7 @@ foreach ($filearray as $row) {
                         debugSql($country_sql);
                         $addrrst = $con->execute($country_sql);
                         if ($addrrst){
-                            $address_country = $addrrst->fields('country_id');
+                            $address_country = $addrrst->fields['country_id'];
                             $addrrst->close();
                             importMessage("Country found: ".$address_country);
                         } else {
@@ -651,7 +651,7 @@ foreach ($filearray as $row) {
                         debugSql($country_sql);
                         $addrrst = $con->execute($country_sql);
                         if ($addrrst){
-                            $address2_country = $addrrst->fields('country_id');
+                            $address2_country = $addrrst->fields['country_id'];
                             $addrrst->close();
                             importMessage("Country found: ".$address2_country);
                         } else {
@@ -1040,6 +1040,9 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.37  2006/08/03 15:59:50  ongardie
+ * $rst->fields['key'], not $rst->field('key')
+ *
  * Revision 1.36  2006/04/05 01:12:03  vanmer
  * - fixed basic logic issues when importing companies
  *
