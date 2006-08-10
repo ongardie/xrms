@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.58 2006/07/30 09:26:02 jnhayart Exp $
+ * $Id: one.php,v 1.59 2006/08/10 17:47:03 jnhayart Exp $
  */
 
 require_once('../include-locations.inc');
@@ -245,7 +245,7 @@ function markComplete() {
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Weighted Size"); ?></td>
-                                    <td class=clear>$<?php  echo number_format($size * $probability/100, 2); ?></td>
+                                    <td class=clear><?php  echo _("$").' '.number_format($size * $probability/100, 2); ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Status"); ?></td>
@@ -400,6 +400,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.59  2006/08/10 17:47:03  jnhayart
+ * Take "$" in locale ressource with _("$")
+ *
  * Revision 1.58  2006/07/30 09:26:02  jnhayart
  * new hooks for add capability using custom fileds INLINE
  * use of 3 new hook :
