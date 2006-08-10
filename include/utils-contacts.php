@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.26 2006/08/03 01:55:37 ongardie Exp $
+ * $Id: utils-contacts.php,v 1.27 2006/08/10 17:41:13 jnhayart Exp $
  *
  */
 
@@ -439,8 +439,8 @@ function update_contact($con, $contact, $contact_id = false, $contact_rst = fals
     $contact_phone_fields=array('work_phone','cell_phone','home_phone','fax');
     $phone_clean_count=clean_phone_fields($contact, $contact_phone_fields);
 
-    $rec['last_modified_at'] = time();
-    $rec['last_modified_by'] = $session_user_id;
+    $contact['last_modified_at'] = time();
+    $contact['last_modified_by'] = $session_user_id;
 
 
     $upd = $con->GetUpdateSQL($contact_rst, $contact, false, $magic_quotes);
@@ -553,6 +553,9 @@ include_once $include_directory . 'utils-misc.php';
 /**********************************************************************/
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.27  2006/08/10 17:41:13  jnhayart
+ * Bug on save Date and User when Update
+ *
  * Revision 1.26  2006/08/03 01:55:37  ongardie
  * - Added "household" unknown company method.
  * - Allow admin/update.php to redirect to admin/updateto2.0.php for v1.99.2.
