@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-companies.php,v 1.14 2006/05/02 00:44:04 vanmer Exp $
+ * $Id: utils-companies.php,v 1.15 2006/08/10 17:44:58 jnhayart Exp $
  *
  */
 
@@ -328,8 +328,8 @@ function update_company($con, $company_data, $company_id=false, $company_rst=fal
     $company_phone_fields=array('work_phone','cell_phone','home_phone','fax');
     $phone_clean_count=clean_phone_fields($company_data, $company_phone_fields);
 
-    $rec['last_modified_at'] = time();
-    $rec['last_modified_by'] = $session_user_id;
+    $company_data['last_modified_at'] = time();
+    $company_data['last_modified_by'] = $session_user_id;
 
 
     $upd = $con->GetUpdateSQL($company_rst, $company_data, false, $magic_quotes);
@@ -634,6 +634,9 @@ include_once $include_directory . 'utils-addresses.php';
 
  /**
  * $Log: utils-companies.php,v $
+ * Revision 1.15  2006/08/10 17:44:58  jnhayart
+ * Correct Bug on save Date and User when update
+ *
  * Revision 1.14  2006/05/02 00:44:04  vanmer
  * - changed get function to do left outer joins on all non-critical tables
  * - changed update function to request simplified select query recordset, for use in getUpdateSQL
