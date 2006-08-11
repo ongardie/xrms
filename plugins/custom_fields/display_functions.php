@@ -139,9 +139,11 @@ function get_column ($object_id, $instance_id, $sidebar_only, $mode, $col=0) {
     # Add additional information if we are editing
     # (specifically required for inline fields)
     if ($editing) {
+    	if ($html<>""){
         $html .= "
             <input type=hidden name=instance_id value=$instance_id>
         ";
+     }
     }
     return $html;
 }
