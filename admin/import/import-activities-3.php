@@ -3,7 +3,7 @@
  * import-activities-3.php - File importer for XRMS
  *
  *
- * $Id: import-activities-3.php,v 1.2 2006/07/30 11:13:17 jnhayart Exp $
+ * $Id: import-activities-3.php,v 1.3 2006/08/12 19:02:02 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -309,7 +309,7 @@ $con->close();
         </td>
     </tr>
 </table>
-<form action=../../../admin/data_clean.php method=get>
+<form action=../admin/data_clean.php method=get>
     <input class=button type=submit value="<?php echo _("Run Data Cleanup"); ?>">
 </form>
 
@@ -318,6 +318,10 @@ end_page();
 
 /**
  * $Log: import-activities-3.php,v $
+ * Revision 1.3  2006/08/12 19:02:02  jnhayart
+ * correct link to page data_clean.php after move this page
+ * from my plugin to xrms admin inport pages
+ *
  * Revision 1.2  2006/07/30 11:13:17  jnhayart
  * use centralized get_xrms_dbconnection();
  *
