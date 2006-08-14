@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.34 2006/01/02 22:41:51 vanmer Exp $
+ * $Id: some.php,v 1.35 2006/08/14 20:40:38 jnhayart Exp $
  */
 
 require_once('../include-locations.inc');
@@ -232,9 +232,9 @@ start_page($page_title, true, $msg);
             </td>
         </tr>
         <tr>
-            <td class=widget_content_form_element><?php echo _("Category"); ?></td>
-            <td class=widget_content_form_element><?php echo _("Media"); ?></td>
-            <td class=widget_content_form_element><?php echo _("Status"); ?></td>
+            <td class=widget_label><?php echo _("Category"); ?></td>
+            <td class=widget_label><?php echo _("Media"); ?></td>
+            <td class=widget_label><?php echo _("Status"); ?></td>
         </tr>
         <tr>
             <td width="33%" class=widget_content_form_element>
@@ -383,6 +383,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.35  2006/08/14 20:40:38  jnhayart
+ * display header swith correct css style
+ *
  * Revision 1.34  2006/01/02 22:41:51  vanmer
  * - changed to use centralized database connection function
  *
