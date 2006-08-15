@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @todo: Active companies should always have active addresses
  *
- * $Id: data_clean.php,v 1.14 2006/01/02 22:38:16 vanmer Exp $
+ * $Id: data_clean.php,v 1.15 2006/08/15 08:58:22 jnhayart Exp $
  */
 
 // where do we include from
@@ -69,7 +69,7 @@ $sql .= "WHERE contacts.company_id IS NULL";
 $rst = $con->execute($sql);
 $companies_to_fix = $rst->RecordCount();
 if ($companies_to_fix > 0) {
-    $msg .= "Need to create contacts for $companies_to_fix companies<BR><BR>";
+    $msg .= _("Need to create contacts for") . " " . $companies_to_fix . " " .  _("companies"). "<BR><BR>";
     while (!$rst->EOF) {
         $company_id = $rst->fields['company_id'];
         $company_record_status = $rst->fields['company_record_status'];
@@ -104,7 +104,7 @@ $sql .= "AND companies.company_record_status = 'a' ";
 $rst = $con->execute($sql);
 $companies_to_fix = $rst->RecordCount();
 if ($companies_to_fix > 0) {
-    $msg .= "Need to create active contacts for $companies_to_fix active companies<BR><BR>";
+    $msg .= _("Need to create active contacts for") . " " . $companies_to_fix . " " .  _("companies"). "<BR><BR>";
     while (!$rst->EOF) {
         $company_id = $rst->fields['company_id'];
 
@@ -135,7 +135,7 @@ $sql .= "WHERE addresses.company_id IS NULL";
 $rst = $con->execute($sql);
 $companies_to_fix = $rst->RecordCount();
 if ($companies_to_fix > 0) {
-    $msg .= "Need to create addresses for $companies_to_fix companies<BR><BR>";
+    $msg .= _("Need to create addresses contacts for") . " " . $companies_to_fix . " " .  _("companies"). "<BR><BR>";
     while (!$rst->EOF) {
         $company_id = $rst->fields['company_id'];
         $company_record_status = $rst->fields['company_record_status'];
@@ -166,7 +166,7 @@ $sql .= "AND companies.company_record_status = 'a' ";
 $rst = $con->execute($sql);
 $companies_to_fix = $rst->RecordCount();
 if ($companies_to_fix > 0) {
-    $msg .= "Need to create active addresses for $companies_to_fix active companies<BR><BR>";
+    $msg .= _("Need to create active addresses for") . " " . $companies_to_fix . " " .  _("companies"). "<BR><BR>";
     while (!$rst->EOF) {
         $company_id = $rst->fields['company_id'];
 
@@ -194,7 +194,7 @@ $sql .= "WHERE addresses.address_id IS NULL ";
 $rst = $con->execute($sql);
 $companies_to_fix = $rst->RecordCount();
 if ($companies_to_fix > 0) {
-    $msg .= "Need to assign default_primary_address for $companies_to_fix companies<BR><BR>";
+    $msg .= _("Need to assign default_primary_address for") . " " . $companies_to_fix . " " .  _("companies"). "<BR><BR>";
     while (!$rst->EOF) {
         $company_id = $rst->fields['company_id'];
         $company_record_status = $rst->fields['company_record_status'];
@@ -229,7 +229,7 @@ $sql .= "WHERE addresses.address_id IS NULL ";
 $rst = $con->execute($sql);
 $companies_to_fix = $rst->RecordCount();
 if ($companies_to_fix > 0) {
-    $msg .= "Need to assign default_billing_address for $companies_to_fix companies<BR><BR>";
+    $msg .= _("Need to assign default_billing_address for") . " " . $companies_to_fix . " " .  _("companies"). "<BR><BR>";
     while (!$rst->EOF) {
         $company_id = $rst->fields['company_id'];
         $company_record_status = $rst->fields['company_record_status'];
@@ -264,7 +264,7 @@ $sql .= "WHERE addresses.address_id IS NULL ";
 $rst = $con->execute($sql);
 $companies_to_fix = $rst->RecordCount();
 if ($companies_to_fix > 0) {
-    $msg .= "Need to assign default_shipping_address for $companies_to_fix companies<BR><BR>";
+    $msg .= _("Need to assign default_shipping_address for") . " " . $companies_to_fix . " " .  _("companies"). "<BR><BR>";
     while (!$rst->EOF) {
         $company_id = $rst->fields['company_id'];
         $company_record_status = $rst->fields['company_record_status'];
@@ -299,7 +299,7 @@ $sql .= "WHERE addresses.address_id IS NULL ";
 $rst = $con->execute($sql);
 $companies_to_fix = $rst->RecordCount();
 if ($companies_to_fix > 0) {
-    $msg .= "Need to assign default_payment_address for $companies_to_fix companies<BR><BR>";
+    $msg .= _("Need to assign default_payment_address for") . " " . $companies_to_fix . " " .  _("companies"). "<BR><BR>";
     while (!$rst->EOF) {
         $company_id = $rst->fields['company_id'];
         $company_record_status = $rst->fields['company_record_status'];
@@ -325,13 +325,41 @@ if ($companies_to_fix > 0) {
     }
 }
 
+// Make sure that all activities have a name (only active)
+$sql = "SELECT * FROM activities WHERE activity_title = '' and activity_record_status ='a' ";
+$rst = $con->execute($sql);
+$activities_to_fix = $rst->RecordCount();
+if ($activities_to_fix > 0) {
+    $msg .= _("Need to assign a default title for") . " " . $activities_to_fix . " " .  _("activities"). "<BR><BR>";
+
+	$rec = array();
+	$rec['activity_title'] = _("(No Name)");
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$rst = $con->execute($upd);
+}
+
+// Make sure that all opportunity have a name (only active)
+$sql = "SELECT * FROM opportunities WHERE opportunity_title = '' and opportunity_record_status ='a' ";
+$rst = $con->execute($sql);
+$opportunities_to_fix = $rst->RecordCount();
+if ($opportunities_to_fix > 0) {
+    $msg .= _("Need to assign a default title for") . " " . $opportunities_to_fix . " " .  _("opportunities"). "<BR><BR>";
+
+	$rec = array();
+	$rec['opportunity_title'] = _("(No Name)");
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$rst = $con->execute($upd);
+}
+
 //close the database connection, because we don't need it anymore
 $con->close();
 
 $page_title = _("Database Cleanup Complete");
 start_page($page_title, true, $msg);
 
-echo $msg;
+// echo $msg;
 ?>
 
 <BR>
@@ -345,6 +373,10 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.15  2006/08/15 08:58:22  jnhayart
+ * add cleaning of activities and opportunities with no name
+ * add code for localisation of string
+ *
  * Revision 1.14  2006/01/02 22:38:16  vanmer
  * - changed to use centralized dbconnection function
  *
