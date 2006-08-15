@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.28 2006/07/30 09:26:02 jnhayart Exp $
+ * $Id: edit.php,v 1.29 2006/08/15 09:51:41 jnhayart Exp $
  */
 
 require_once('../include-locations.inc');
@@ -171,6 +171,24 @@ confGoTo_includes();
             location.href = 'new.php?company_id=<?php echo $company_id; ?>&opportunity_title='+ opportunity_title.value +'&division_id='+division.value + '&contact_id=' + contact.value + '&opportunity_type_id=' + select.value;
         }
      //-->
+function logTime() {
+    var date = new Date();
+    var d = date.getDate();
+    var day = (d < 10) ? '0' + d : d;
+    var m = date.getMonth() + 1;
+    var month = (m < 10) ? '0' + m : m;
+    var yy = date.getYear();
+    var year = (yy < 1000) ? yy + 1900 : yy;
+
+    var h = date.getHours();
+    var hour = (h < 10) ? '0' + h : h;
+    var mm = date.getMinutes();
+    var minute = (mm < 10) ? '0' + mm : mm;
+    var s = date.getSeconds();
+    var second = (s < 10) ? '0' + s : s;
+
+    return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+}
     </script>
 
 <div id="Main">
@@ -253,6 +271,13 @@ confGoTo_includes();
             <tr>
                 <td class=widget_label_right><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea></td>
+            <tr>
+            <td></td>
+            	<td>
+            	<input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="var new_message = prompt('<?php echo addslashes(_("Enter Note")); ?>', ''); document.forms[0].opportunity_description.value =
+                        logTime() + ' by <?php echo $_SESSION['username']; ?>: ' + new_message + '\n' + document.forms[0].opportunity_description.value;">
+                 
+            	</td>
             </tr>
             <!-- accounting plugin -->
             <?php echo $customs_fields_rows_display; ?>
@@ -298,7 +323,7 @@ function validate() {
 
     if (document.forms[0].opportunity_title.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\n<?php echo _("You must enter an opportunity title."); ?>';
+        msgToDisplay += '\n<?php echo addslashes(_("You must enter an opportunity title.")); ?>';
     }
 
     if (numberOfErrors > 0) {
@@ -330,6 +355,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.29  2006/08/15 09:51:41  jnhayart
+ * Add encode of JavaString, prevent empty opportunity_title
+ *
  * Revision 1.28  2006/07/30 09:26:02  jnhayart
  * new hooks for add capability using custom fileds INLINE
  * use of 3 new hook :
