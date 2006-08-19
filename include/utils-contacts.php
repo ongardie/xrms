@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.27 2006/08/10 17:41:13 jnhayart Exp $
+ * $Id: utils-contacts.php,v 1.28 2006/08/19 09:29:44 jnhayart Exp $
  *
  */
 
@@ -31,6 +31,7 @@ require_once($include_directory.'utils-typestatus.php');
  * - last_name               - Last Name
  * - first_names             - First Name
  * - email                   - Contacts eMail Address
+ * - email_status			 - Status Email (a,b,o)
  *
  * These fields are optional, some may be derived from other fields if not defined.
  * - user_id                 - "Account Owner" of contact data, Defaults to who created the record
@@ -510,6 +511,7 @@ function pull_contact_fields ( $array_data )
                               'last_name'            => '',
                               'first_names'          => '',
                               'email'                => '',
+                              'email_status'         => '',
                               'salutation'           => '',
                               'gender'               => '',
                               'date_of_birth'        => '',
@@ -553,6 +555,9 @@ include_once $include_directory . 'utils-misc.php';
 /**********************************************************************/
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.28  2006/08/19 09:29:44  jnhayart
+ * Add email_status in contact fields
+ *
  * Revision 1.27  2006/08/10 17:41:13  jnhayart
  * Bug on save Date and User when Update
  *
