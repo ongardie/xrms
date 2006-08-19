@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.36 2006/06/15 21:32:59 vanmer Exp $
+ * $Id: new-2.php,v 1.37 2006/08/19 09:33:25 jnhayart Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -31,6 +31,7 @@ $arr_vars = array ( // local var name             // session variable name, flag
            'title' => array ( 'title' , arr_vars_SESSION ),
            'description' => array ( 'description' , arr_vars_SESSION ),
            'email' => array ( 'email' , arr_vars_SESSION ),
+           'email_status' => array ( 'email_status' , arr_vars_SESSION ),
            'email2' => array ( 'email2' , arr_vars_SESSION ),
            'work_phone' => array ( 'work_phone' , arr_vars_SESSION ),
            'work_phone_ext' => array ( 'work_phone_ext' , arr_vars_SESSION ),
@@ -116,6 +117,7 @@ $rec['summary'] = $summary;
 $rec['title'] = $title;
 $rec['description'] = $description;
 $rec['email'] = $email;
+$rec['email_status']=$email_status;
 $rec['work_phone'] = $work_phone;
 $rec['work_phone_ext'] = $work_phone_ext;
 $rec['cell_phone'] = $cell_phone;
@@ -184,6 +186,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.37  2006/08/19 09:33:25  jnhayart
+ * add button for set a mail to opt-out directly during creation
+ *
  * Revision 1.36  2006/06/15 21:32:59  vanmer
  * - added owner to the UI for a contact
  *

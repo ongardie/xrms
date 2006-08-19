@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.44 2006/08/02 22:31:16 ongardie Exp $
+ * $Id: new.php,v 1.45 2006/08/19 09:33:25 jnhayart Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -216,7 +216,10 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("E-Mail"); ?></td>
-                <td class=widget_content_form_element><input type=text name=email value='<?php echo $email; ?>' size=30></td>
+                <td class=widget_content_form_element><input type=text name=email value='<?php echo $email; ?>' size=30>
+               		<INPUT type="radio" name="email_status" value="a" 'checked'><?php echo _("Active"); ?>
+					<INPUT type="radio" name="email_status" value="o" ><?php echo _("Opt-Out"); ?>
+			</td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Work Phone"); ?></td>
@@ -372,6 +375,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.45  2006/08/19 09:33:25  jnhayart
+ * add button for set a mail to opt-out directly during creation
+ *
  * Revision 1.44  2006/08/02 22:31:16  ongardie
  * Don't create a broken/empty link to company.
  *
