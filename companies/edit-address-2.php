@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a company
  *
- * $Id: edit-address-2.php,v 1.13 2006/04/21 22:05:02 braverock Exp $
+ * $Id: edit-address-2.php,v 1.14 2006/08/20 17:17:24 braverock Exp $
  */
 
 
@@ -11,6 +11,7 @@ require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-addresses.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
@@ -63,6 +64,10 @@ header("Location: addresses.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.14  2006/08/20 17:17:24  braverock
+ * fixes https://sourceforge.net/tracker/index.php?func=detail&aid=1484776&group_id=88850&atid=588128
+ * credit Toby Hart Dyke - thartdyke
+ *
  * Revision 1.13  2006/04/21 22:05:02  braverock
  * - update to use update_address fn
  *
