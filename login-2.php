@@ -2,13 +2,14 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.28 2006/03/16 00:49:30 vanmer Exp $
+ * $Id: login-2.php,v 1.29 2006/08/20 17:13:41 braverock Exp $
  */
 require_once('include-locations.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-users.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
@@ -159,6 +160,10 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.29  2006/08/20 17:13:41  braverock
+ * fixed https://sourceforge.net/tracker/index.php?func=detail&aid=1507233&group_id=88850&atid=588128
+ * credit Olivier Macchioni
+ *
  * Revision 1.28  2006/03/16 00:49:30  vanmer
  * - added redirect and better error message in case the database is not properly installed when login occurs
  *
