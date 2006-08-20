@@ -2,7 +2,7 @@
 /**
  * Add an address
  *
- * $Id: add-address.php,v 1.19 2006/04/21 22:09:58 braverock Exp $
+ * $Id: add-address.php,v 1.20 2006/08/20 20:04:10 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -33,7 +33,7 @@ $arr_vars = array ( // local var name       // session variable name
 // get all POST'ed variables, null out any not sent over
 arr_vars_get_all ( $arr_vars, true );
 
-$address_name = (strlen($address_name) > 0) ? $address_name : '[address]';
+// $address_name = (strlen($address_name) > 0) ? $address_name : '[address]';
 $use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
 
 $con = get_xrms_dbconnection();
@@ -43,7 +43,7 @@ $con = get_xrms_dbconnection();
 $rec = array();
 $rec['company_id'] = $company_id;
 $rec['country_id'] = $country_id;
-$rec['address_name'] = $address_name;
+if (strlen(trim($address_name)>0) { $rec['address_name'] = $address_name; }
 $rec['line1'] = $line1;
 $rec['line2'] = $line2;
 $rec['city'] = $city;
@@ -90,6 +90,9 @@ header("Location: addresses.php?msg=address_added&company_id=$company_id");
 
 /**
  * $Log: add-address.php,v $
+ * Revision 1.20  2006/08/20 20:04:10  braverock
+ * - add trim of address_name to try to keep from creating blank names
+ *
  * Revision 1.19  2006/04/21 22:09:58  braverock
  * - update to handle integer return from add_address()
  *
