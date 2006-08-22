@@ -1265,6 +1265,10 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
+    <field name="user_id" type="I" size="11">
+        <NOTNULL/>
+        <DEFAULT value="0"/>
+    </field>
     <field name="address_id" type="I" size="11">
       <NOTNULL/>
       <DEFAULT value="1"/>
