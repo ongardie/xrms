@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @author Brian Peterson
  *
- * $Id: utils-addresses.php,v 1.10 2006/08/03 01:46:57 ongardie Exp $
+ * $Id: utils-addresses.php,v 1.11 2006/08/23 21:02:58 braverock Exp $
  *
  */
 
@@ -159,7 +159,13 @@ function add_update_address($con, $address_data, $return_recordset = false, $_ma
             $address_info['address_name'] = '';
             //NOTE: this is still messy, and needs cleaning up
         }
-        if ( ( ! strlen($address_info['address_name']) ) && ( ! strlen($found_data['address_name']) ) ) {
+        if ( $found_data['address_name'] = _("Main") ) {
+            //clear the 'Main' address... bad convention
+            $found_data['address_name'] = '';
+            //NOTE: this is still messy, and needs cleaning up
+        }
+
+        if ( ( ! strlen(trim($address_info['address_name']))>0 ) && ( ! strlen(trim($found_data['address_name']))>0 ) ) {
             if (strlen($address_info['city'])) {
                 $address_info['address_name'] = $address_info['city']." - ".$address_info['line1'];
             } else {
@@ -388,7 +394,7 @@ function pull_address_fields ( $array_data )
                               'use_pretty_address'   => '',
                               'offset'               => '',
                               'daylight_savings_id'  => '',
-			      'country'              => ''
+                              'country'              => ''
                             );
 
 
@@ -400,6 +406,11 @@ function pull_address_fields ( $array_data )
 /**********************************************************************/
  /**
  * $Log: utils-addresses.php,v $
+ * Revision 1.11  2006/08/23 21:02:58  braverock
+ * - trim address_name to avoid spaces being mistaken for a name
+ * - check for bad convention on address record
+ * - improve check before setting rational default
+ *
  * Revision 1.10  2006/08/03 01:46:57  ongardie
  * - add_update_address() wasn't able to use country strings because pull_address_fields() dropped it.
  *
