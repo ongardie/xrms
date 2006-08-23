@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.29 2006/08/15 09:51:41 jnhayart Exp $
+ * $Id: edit.php,v 1.30 2006/08/23 21:23:42 jnhayart Exp $
  */
 
 require_once('../include-locations.inc');
@@ -275,7 +275,7 @@ function logTime() {
             <td></td>
             	<td>
             	<input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="var new_message = prompt('<?php echo addslashes(_("Enter Note")); ?>', ''); document.forms[0].opportunity_description.value =
-                        logTime() + ' by <?php echo $_SESSION['username']; ?>: ' + new_message + '\n' + document.forms[0].opportunity_description.value;">
+                        logTime() + '<?php echo " " . _("By") . " " . $_SESSION['username']; ?>: ' + new_message + '\n' + document.forms[0].opportunity_description.value;">
                  
             	</td>
             </tr>
@@ -355,6 +355,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.30  2006/08/23 21:23:42  jnhayart
+ * change java display for localisation
+ *
  * Revision 1.29  2006/08/15 09:51:41  jnhayart
  * Add encode of JavaString, prevent empty opportunity_title
  *
