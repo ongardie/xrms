@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.139 2006/06/29 15:53:46 braverock Exp $
+ * $Id: one.php,v 1.140 2006/08/23 21:17:17 jnhayart Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -540,8 +540,8 @@ function logTime() {
                 <td class=widget_label_right><?php echo _("Opportunity Notes"); ?></td>
                 <td class=widget_content_form_element>
                     <textarea rows=10 cols=70 name=opportunity_description><?php  echo htmlspecialchars(trim($opportunity_description)); ?></textarea><br>
-                    <input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="var new_message = prompt('Enter note', ''); document.forms[0].opportunity_description.value =
-                        logTime() + ' by <?php echo $_SESSION['username']; ?>: ' + new_message + '\n' + document.forms[0].opportunity_description.value; document.forms[0].return_url.value = '<?php echo current_page() . '&fill_user'; ?>'; document.forms[0].submit();">
+                    <input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="var new_message = prompt('<?php echo addslashes(_("Enter Note")); ?>', ''); document.forms[0].opportunity_description.value =
+                        logTime() + '<?php echo " " . _("By") . " " . $_SESSION['username']; ?>: ' + new_message + '\n' + document.forms[0].opportunity_description.value; document.forms[0].return_url.value = '<?php echo current_page() . '&fill_user'; ?>'; document.forms[0].submit();">
                     <?php do_hook('opportunity_notes_buttons'); ?>
                 </td>
             </tr>
@@ -748,6 +748,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.140  2006/08/23 21:17:17  jnhayart
+ * prevent error in javascrip if localisation need use quote
+ * and syntax for localisation of java display
+ *
  * Revision 1.139  2006/06/29 15:53:46  braverock
  * - remove extra whitespace from resolution_description field.
  *   - patch by Frederik Jervfors
