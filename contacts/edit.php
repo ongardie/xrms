@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.48 2006/07/29 20:05:23 jnhayart Exp $
+ * $Id: edit.php,v 1.49 2006/08/24 17:30:43 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -214,7 +214,7 @@ confGoTo_includes();
             		<INPUT type="radio" name="email_status" value="b" <?php if ($email_status=='b') echo 'checked' ?>><?php echo _("Bounced"); ?>
 					<INPUT type="radio" name="email_status" value="o" <?php if ($email_status=='o') echo 'checked' ?>><?php echo _("Opt-Out"); ?>
             </td>
-            
+
             <tr>
                 <td class=widget_label_right><?php echo _("Work Phone"); ?></td>
                 <td class=widget_content_form_element><input type=text name=work_phone value='<?php echo $work_phone; ?>' size=30>&nbsp;
@@ -301,7 +301,6 @@ confGoTo_includes();
             <tr>
                 <td class=widget_content_form_element colspan=2>
                     <input class=button type=submit value="<?php echo _("Save"); ?>">
-                    <input class=button type=button value="<?php echo _("Mail Merge"); ?>" onclick="javascript: location.href='../email/email.php?scope=contact&contact_id=<?php echo $contact_id; ?>';">
 <?php
         if ( $contact_count > 1 ) {
           $quest = _("Delete Contact?");
@@ -334,6 +333,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.49  2006/08/24 17:30:43  braverock
+ * - remove Mail Merge button from edit page
+ *
  * Revision 1.48  2006/07/29 20:05:23  jnhayart
  * add fields email_status for store state of email a : active, b : bounced ,o : opt-out,
  * need to change requete from select email of contact be shure to add email_status='a'
