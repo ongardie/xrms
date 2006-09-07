@@ -1,7 +1,7 @@
 XRMS CRM Installation
 
 Original Author: Beth Macknik (maulani)
-$Id: INSTALL,v 1.11 2006/07/25 20:25:11 braverock Exp $
+$Id: INSTALL,v 1.12 2006/09/07 11:24:38 braverock Exp $
 
 
 INSTALLATION
@@ -224,7 +224,22 @@ so that we may include the new template in the next release.
 =================
 MISC
 
-If you suspect that php is not running corectly on your server,
+max_execution_time
+PHP ships by default with max_execution_time of 30 seconds.  While this
+should be enough time for most scripts in XRMS, the database installation
+may take longer.  Several users have reported success by temporarily
+raising the max_execution_time parameter in php.ini and restarting the
+web server.  The exact time needed for database installation will vary,
+but you may wish to set a high number for the installation, and then
+settle back to a more reasonable 30 or 60 seconds. Some PHP installations
+will display an error on the screen that max_execution_time has been
+exceeded,while other PHP installs may fail silently or log to the
+webserver logs.Post-install symptoms that this problem may have affected
+you are errors about missing tables on your first login to XRMS.
+If this happens to you, drop all tables, raise max_execution_time in
+php.ini, restart the webserver, and run the installation script again.
+
+If you suspect that php is not running correctly on your server,
 try pointing your web browser at install/phpinfo.php. It should produce
 several pages of information about your php installation.
 
@@ -232,6 +247,9 @@ several pages of information about your php installation.
 /**
  * Change Log for INSTALL file
  * $Log: INSTALL,v $
+ * Revision 1.12  2006/09/07 11:24:38  braverock
+ * - add troubleshooting information about max_execution_time
+ *
  * Revision 1.11  2006/07/25 20:25:11  braverock
  * - move the data import language here from README
  *
