@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.21 2006/04/17 19:03:43 vanmer Exp $
+ * $Id: sidebar.php,v 1.22 2006/09/22 21:19:43 jnhayart Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -21,6 +21,8 @@ else { if ($opList!==true) { $opList=implode(",",$opList); $opportunity_limit_sq
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
+require_once('opportunities-pager-functions.php');
+
 
 $opp_sidebar_form_id='SidebarOpportunities';
 $opp_sidebar_header=_("Opportunities");
@@ -36,9 +38,11 @@ if (!$opportunity_sidebar_rows_per_page) {
     $opportunity_sidebar_rows_per_page=5;
 }
 
+$is_overdue_field="(CASE WHEN (os.status_open_indicator='o') AND (close_at < " . $con->DBTimeStamp(time()) . ") THEN 1 ELSE 0 END)";
+
 //build the cases sql query
 $close_at = $con->SQLDate('Y-m-D', 'close_at');
-$opportunity_sql_select = "select "
+$opportunity_sql_select = "SELECT $is_overdue_field AS is_overdue,"
 . $con->Concat("'<a id=\"'", "opportunities.opportunity_title",  "'\" href=\"$http_site_root/opportunities/one.php?opportunity_id='", "opportunities.opportunity_id", "'\">'", "opportunities.opportunity_title","'</a>'")
 . " AS opportunity" . ",
   c.company_name AS company, u.username AS owner " . ",
@@ -92,7 +96,7 @@ $columns[] = array('name' => _('Type'), 'index_sql' => 'type', 'group_query_list
 $columns[] = array('name' => _('Status'), 'index_sql' => 'status', 'group_query_list' => $status_query_list, 'group_query_select' => $status_query_select);
 $columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date', 'sql_sort_column' => 'close_at');
 
-if (!$opportunity_sidebar_default_columns) $opportunity_sidebar_default_columns = array('opportunity', 'type','status', 'close_date');
+if (!$opportunity_sidebar_default_columns) $opportunity_sidebar_default_columns = array('opportunity', 'status', 'close_date');
 
 $opp_pager_columns = new Pager_Columns('OpportunitiesSidebarPager', $columns, $opportunity_sidebar_default_columns, $opp_sidebar_form_id);
 $opp_pager_columns_button = $opp_pager_columns->GetSelectableColumnsButton();
@@ -105,7 +109,7 @@ $colspan = count($columns);
 $opportunity_rows.= $opp_pager_columns_selects;
 
 // caching is disabled for this pager (since it's all sql)
-$pager = new GUP_Pager($con, $opportunity_sql, null,$opp_sidebar_header, $opp_sidebar_form_id, 'OpportunitiesSidebarPager', $columns, false, true);
+$pager = new GUP_Pager($con, $opportunity_sql, 'GetOpportunityPagerData', $opp_sidebar_header, $opp_sidebar_form_id, 'OpportunitiesSidebarPager', $columns, false, true);
 
 //put in the new and search buttons
 if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) && (strlen($contact_id) > 0)) ) {
@@ -149,6 +153,9 @@ $opportunity_rows .= "</form></div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.22  2006/09/22 21:19:43  jnhayart
+ * Add color on Overdue Opportunity
+ *
  * Revision 1.21  2006/04/17 19:03:43  vanmer
  * - added proper ACL restriction to sidebar output
  *
