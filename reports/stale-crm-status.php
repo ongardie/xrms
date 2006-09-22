@@ -4,7 +4,7 @@
 *
 * @author Glenn Powers
 *
-* $Id: stale-crm-status.php,v 1.2 2006/01/30 17:48:01 niclowe Exp $
+* $Id: stale-crm-status.php,v 1.3 2006/09/22 17:14:00 niclowe Exp $
 */
 require_once('../include-locations.inc');
 
@@ -150,7 +150,7 @@ if ($userArray) {
 						}
 			}
 			$sql="select CONCAT('<a href=../companies/one.php?company_id=',c.company_id, '>', c.company_name,'</a>') as company_name,
-			a.last_modified_at
+			MAX(a.last_modified_at) as last_modified_at
 			FROM companies c LEFT JOIN activities a ON a.company_id=c.company_id
 			WHERE
 			c.crm_status_id='".$crm_status_id."'
@@ -160,13 +160,14 @@ if ($userArray) {
 			c.company_record_status='a'
 			AND
 			(
-			(a.activity_record_status='a' AND
-			a.last_modified_at<".$con->qstr($user_ending, get_magic_quotes_gpc())."
+			(a.activity_record_status='a' 
 			)
 			OR
 			ISNULL(a.last_modified_at)
 			)
-			group by c.company_name";
+			group by c.company_name
+			HAVING 
+			MAX(a.last_modified_at)<".$con->qstr($user_ending, get_magic_quotes_gpc())."";
 
 			$columns = array();
 			$columns[] = array('name' => 'Company', 'index_sql' => 'company_name');
@@ -195,6 +196,9 @@ if (($display) || (!$friendly)) {
 
 /**
 * $Log: stale-crm-status.php,v $
+* Revision 1.3  2006/09/22 17:14:00  niclowe
+* fixed minor bug that meant not all stale crm status companies were shown.
+*
 * Revision 1.2  2006/01/30 17:48:01  niclowe
 * fixed bug in userlist for all users.
 *
