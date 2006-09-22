@@ -1,0 +1,29 @@
+/**
+ * Basic XRMS theme
+ *
+ * This style sheet overlays the default XRMS sheets:
+ *    rmsstyle.css, rmsstyle-ie.css (if IE), and rmsstyle-screen.css
+ *
+ * It is used with screen media only.
+ */
+
+/** Include the Calendar widget CSS **/
+@import url(../../js/jscalendar/calendar-blue.css);
+@import url(../small/small.css);
+/**
+ * Change margin/width for sidebar on the left
+ */
+#Main #Content {
+    /** Match sidebar width for right (by default) margin */
+    margin: 0em 1px 0em 25.2%;
+    width: auto;
+}
+#Main #Sidebar {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    margin: 0px;
+    /** Width needs to match right margin in #Main #Content */
+    width: 25%;
+}
+
