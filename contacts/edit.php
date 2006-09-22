@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.49 2006/08/24 17:30:43 braverock Exp $
+ * $Id: edit.php,v 1.50 2006/09/22 17:37:13 niclowe Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -82,7 +82,11 @@ if ($rst) {
     $cell_phone = $rst->fields['cell_phone'];
     $home_phone = $rst->fields['home_phone'];
     $profile = $rst->fields['profile'];
-    $fax = get_formatted_phone($con, $rst->fields['address_id'],$rst->fields['fax']);
+		//this line was corrupting the record when you used it with the skype plugin. I am not sure of its purpose.
+		//I think it is only intended for displaying, not editing records.
+		//so, i removed it. 
+    //$fax = get_formatted_phone($con, $rst->fields['address_id'],$rst->fields['fax']);
+		$fax = $rst->fields['fax'];
     $interests = $rst->fields['interests'];
     $custom1 = $rst->fields['custom1'];
     $custom2 = $rst->fields['custom2'];
@@ -333,6 +337,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.50  2006/09/22 17:37:13  niclowe
+ * fixed incorrect display of fax number reciord due to wrapping with formatting information.
+ *
  * Revision 1.49  2006/08/24 17:30:43  braverock
  * - remove Mail Merge button from edit page
  *
