@@ -38,9 +38,9 @@ $con = get_xrms_dbconnection();
 if ($activity_id) {
     $activity_info=get_activity($con, array('activity_id'=>$activity_id));
     if($activity_info){
-        $activity=current($activity_info);
-        $activity_type_id=$activity['activity_type_id'];
-        $activity_name=$activity['activity_title'];
+    $activity=current($activity_info);
+    $activity_type_id=$activity['activity_type_id'];
+    $activity_name=$activity['activity_title'];
     }
 } else if ($activity_participant_action!='deleteActivityParticipant') {
     $msg=urlencode(_("Failed to find activity"));
@@ -59,7 +59,7 @@ switch($activity_participant_action) {
                 $position_array[$position_id]=_($position_data['participant_position_name']);
             }
          }
-        $position_menu=create_select_from_array($position_array, 'participant_position_id', $participant_position_id); //, '', $show_blank_first=true) 
+        $position_menu=create_select_from_array($position_array, 'participant_position_id', $participant_position_id); //, '', $show_blank_first=true)
         $header_text=_("Activity Participant");
         $body_content=<<<TILLEND
         <form method=POST action=new_activity_participant.php>
@@ -74,36 +74,44 @@ TILLEND;
         $body_content .= "<td class=widget_content>$activity_name</td></tr>";
         $body_content .= "<tr><td colspan=3 class=widget_content_form_element><input type=submit name=btAddContact value=\""._("Search for contact") . "\" class=button><input type=submit name=btCancel value=\""._("Cancel") . "\" class=button></td></tr></table>";
     break;
-    
-    /* This case gets the list of contacts matching the results searched for on the previous, and displays the selected participant position */    
+
+    /* This case gets the list of contacts matching the results searched for on the previous, and displays the selected participant position */
     case 'selectContactParticipant':
         getGlobalVar($search_text, 'search_text');
         $positions=get_activity_participant_positions($con, false, false, $participant_position_id);
         $position=current($positions);
         $position_name=_($position['participant_position_name']);
         if ($search_text) { $search_text=$con->qstr("%$search_text%",get_magic_quotes_gpc()); }
-        $name_concat = $con->Concat(implode(", ' ', ", table_name('contacts'))) . ' as name';
+        $name_array  = table_name('contacts');
+        $name_array[] .= "'-'";
+        $name_array[] .= 'company_name' ;
+        $name_concat = $con->Concat(implode(", ' ', ", $name_array)) . ' as name';
         $search_name = 'last_name';
-        $sql = "select $name_concat, contact_id FROM contacts WHERE contact_record_status=".$con->qstr('a',get_magic_quotes_gpc());
+        $sql = "SELECT $name_concat, contact_id
+                FROM contacts, companies
+                WHERE
+                    contact_record_status=".$con->qstr('a',get_magic_quotes_gpc())."
+                    AND contacts.company_id = companies.company_id";
+
         if ($search_text) {
             $sql.= " AND ((first_names LIKE $search_text) OR ( last_name LIKE $search_text)) ";
         }
         $sql.= " ORDER BY $search_name";
-        
+
         //search for contacts based on first or last name containing the search string
         $contact_rst=$con->execute($sql);
         if (!$contact_rst) { db_error_handler($con, $sql); return false; }
-        
+
         //search returned no results, pass back to last page with msg recommend less letters
         if ($contact_rst->EOF) {
             $msg=urlencode(_("Failed to find any search results, perhaps try again with a less restrictive search."));
             Header("Location: new_activity_participant.php?msg=$msg&activity_id=$activity_id&participant_position_id=$participant_position_id&activity_participant_action=newParticipant&return_url=".urlencode($return_url));
             exit;
         }
-        
+
         //get select list of contacts
         $contact_list=$contact_rst->getmenu2('contact_id','',false);
-        
+
         $header_text=_("Activity Participant Contact");
         $body_content=<<<TILLEND
         <form method=POST action=new_activity_participant.php>
@@ -114,15 +122,15 @@ TILLEND;
         <table class=widget><tr><td class=widget_label>
 TILLEND;
         $body_content.= "\n"._("Contact Search")."</td><td class=widget_label>"._("Position")."</td><td class=widget_label>"._("Activity")."</td></tr>";
-        
-        
+
+
         $body_content .= "<tr><td class=widget_content_form_element>$contact_list</td>";
         $body_content .= "<td class=widget_content>$position_name</td>";
         $body_content .= "<td class=widget_content>$activity_name</td></tr>";
         $body_content .= "<tr><td colspan=3 class=widget_content_form_element><input type=submit name=btAddContact value=\""._("Add contact to activity") . "\" class=button><input type=submit name=btCancel value=\""._("Cancel") . "\" class=button></td></tr></table>";
-                
+
     break;
-    
+
     /* This case is the function call and return for adding an activity participant.  This could be called directly with a return_url set for automated participant addition from anywhere.
      @todo string return_url of msg string before returning with an error instead of automatically returning to activities/one.php
      */
@@ -139,7 +147,7 @@ TILLEND;
         Header("Location: {$http_site_root}{$return_url}");
         exit;
     break;
-    
+
     /* This case handles the automatic marking of an activity participant as deleted. */
     case 'deleteActivityParticipant':
         getGlobalVar($activity_participant_id, 'activity_participant_id');
@@ -170,12 +178,16 @@ start_page($header_text, true, $msg);
                 </tr>
                 <tr><td class=widget_content>
                     $body_content
-                 </td></tr>                 
+                 </td></tr>
 TILLEND;
 end_page();
 
 /*
  * $Log: new_activity_participant.php,v $
+ * Revision 1.6  2006/09/30 18:33:41  braverock
+ *  - added code to display company name along with contact name
+ *    -- modified from 2006/07/31 dbaudone patch to be database independent
+ *
  * Revision 1.5  2006/03/16 06:31:35  ongardie
  * - Avoids a Warning when get_activity() returns false.
  *
