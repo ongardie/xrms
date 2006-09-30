@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.48 2006/09/30 18:02:55 braverock Exp $
+* $Id: activities-widget.php,v 1.49 2006/09/30 18:08:03 braverock Exp $
 */
 
 global $include_directory;
@@ -720,8 +720,9 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
                     ($contact_menu ? "<td class=widget_content_form_element>$contact_menu</td>" : "") ."
 
                     <td class=widget_content_form_element>
-                        <input type=text size=10 ID=\"f_date_new_activity\" name=ends_at value=\"" . date('Y-m-d') . "\">
-                        <img ID=\"f_trigger_new_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" . "</td>".
+                        <input type=text size=16 ID=\"f_date_new_activity\" name=ends_at value=\"" . date('Y-m-d') . "\">
+                        <img ID=\"f_trigger_new_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" . "</td>
+                    <td>\n".
                         render_create_button(_("Add")) .
                         render_create_button(_("Done"),'button',"javascript: markComplete();") . "
                     </td>
@@ -880,6 +881,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.49  2006/09/30 18:08:03  braverock
+* - clean up button formatting
+*
 * Revision 1.48  2006/09/30 18:02:55  braverock
 * - apply some patches form 2006/07/31 dbaudone
 *   -- default calendar view set to "week"
