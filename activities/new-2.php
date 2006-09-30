@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.49 2006/05/06 09:31:43 vanmer Exp $
+ * $Id: new-2.php,v 1.50 2006/09/30 18:13:52 braverock Exp $
  */
 
 //where do we include from
@@ -25,6 +25,7 @@ require_once($include_directory . 'utils-activities.php');
 require_once($include_directory . 'utils-opportunities.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+
 
 //check to make sure we are logged on
 $session_user_id = session_check('','Create');
@@ -60,9 +61,7 @@ arr_vars_get_request ( $arr_vars, true );
 //mark completed if it is an email
 if ($email) { $activity_status = 'c'; };
 
-if (!$scheduled_at) {
-    $scheduled_at = date('Y-m-d H:i:s');
-}
+// scheduled_at and ends_at are defaulted in the add_activity fn if not set
 
 if ($followup) {
     //set the time for the new activity if it isn't already set
@@ -207,6 +206,9 @@ if ($activity_status == 'c') { //now send them back where they came from
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.50  2006/09/30 18:13:52  braverock
+ *- remove default of scheduled/ends_at as these are done in activities api
+ *
  *Revision 1.49  2006/05/06 09:31:43  vanmer
  *- removed hook function call (moved to utils-activities.php)
  *
