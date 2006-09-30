@@ -23,6 +23,7 @@ GetGlobalVar($activity_id,'activity_id');
 getGlobalVar($on_what_table, 'on_what_table');
 GetGlobalVar($on_what_id, 'on_what_id');
 getGlobalVar($restrict_string, 'restrict_string');
+getGlobalVar($restrict_string1, 'restrict_string1');
 getGlobalVar($reconnect_action,'reconnect_action');
 
 
@@ -35,29 +36,33 @@ $possible_types=array( 'companies' => _("Companies"),
                                             'campaigns' => _("Campaigns"),
                                             'company_division' => _("Divisions")
                                            );
-        
+
         asort($possible_types);
-        
+
         $search_button=_("Search");
         $search_title=_("Search Entities");
         $for_label=_("Search For");
         $restrict_label=_("Containing");
+        $restrict_label1=_("Company");
+
         $on_what_table_select= create_select_from_array($possible_types, 'on_what_table', $on_what_table, '', true);
 
-        
-        
+
+
         $body_content=<<<TILLEND
             <form action="activity-reconnect.php" name=searchNewEntity method=POST>
             <table class=widget cellspacing=1><tr><td class=widget_header colspan=2>$search_title</tr><tr>
                 <tr><td class=widget_label>$for_label</td><td class=widget_content_form_element>$on_what_table_select</td></tr>
                 <tr><td class=widget_label>$restrict_label</td><td class=widget_content_form_element><input type=text name=restrict_string value=$restrict_string></td></tr>
+                <tr><td class=widget_label>$restrict_label1</td><td class=widget_content_form_element><input type=text name=restrict_string1 value=$restrict_string1></td></tr>
+
                 <tr><td class=widget_content_form_element colspan=2><input type=submit class=button name=btSearch value="$search_button">
             </table>
 TILLEND;
                 $body_content.="<input type=hidden name=reconnect_action value=showSelectEntity>";
                 $body_content.="<input type=hidden name=activity_id value=$activity_id>";
                 $body_content.="</form>";
-                
+
 switch ($reconnect_action) {
     case 'showTypeSearch':
     default:
@@ -76,24 +81,30 @@ switch ($reconnect_action) {
         $on_what_field = $entity_singular.'_id';
         $on_what_name_field=$con->Concat(implode(", ' ' , ", table_name($on_what_table)));
         $sql = "SELECT *, $on_what_name_field as on_what_name FROM $on_what_table WHERE $on_what_name_field LIKE ". $con->qstr("%$restrict_string%");
+
+        if (($restrict_string1)&&($on_what_table <> 'campaigns')) {
+           $sql .= " AND company_id IN (SELECT company_id FROM companies WHERE company_name LIKE ". $con->qstr("%$restrict_string1%") . ")";
+        }
+
         $columns=array();
         $columns[] = array('name' => _("Select"), 'index_sql' => 'on_what_id', 'sql_sort_column' => $on_what_field);
         $columns[] = array('name' => _("Name"), 'index_sql' => 'on_what_name');
-        
+
         $default_columns=array('on_what_id',$on_what_field);
-        
+
         $pager = new GUP_Pager($con, $sql, 'GetEntityPagerData', _("Reconnect To"). ' ' . ucfirst($entity_singular), 'EntityPagerForm', 'EntityPager', $columns, false, true);
     $endrows = "<tr><td class=widget_content_form_element colspan=10><input class=button type=button onclick=\"document.EntityPagerForm.reconnect_action.value='reconnectActivity'; document.EntityPagerForm.submit();\" value=\"" . _("Reconnect Activity") . "\"></td></tr>";
-    
+
         $pager->AddEndRows($endrows);
-        
-        global $system_rows_per_page;        
+
+        global $system_rows_per_page;
         $entity_pager = $pager->Render($system_rows_per_page);
         $body_content .=<<<TILLEND
         <p><form action="activity-reconnect.php" name=EntityPagerForm method=POST>
             <input type=hidden name=reconnect_action value=showSelectEntity>
             <input type=hidden name=on_what_table value="$on_what_table">
             <input type=hidden name=restrict_string value="$restrict_string">
+            <input type=hidden name=restrict_string1 value="$restrict_string1">
             <input type=hidden name=activity_id value=$activity_id>
             $entity_pager
         </form>
@@ -116,13 +127,13 @@ TILLEND;
             $msg=urlencode(_("Please select an entity"));
             $restrict_string=urlencode($restrict_string);
             $return_url="activity-reconnect.php?reconnect_action=showSelectEntity&restrict_string=$restrict_string&on_what_table=$on_what_table&activity_id=$activity_id&msg=$msg";
-        } 
+        }
         Header("Location: $return_url");
         exit;
     break;
 }
-                                           
-                                           
+
+
 start_page($page_title, true, $msg);
 ?>
 
@@ -135,7 +146,7 @@ start_page($page_title, true, $msg);
 </div>
 <?php
 end_page();
-                                           
+
 function GetEntityPagerData($row) {
     global $on_what_field;
     $row['on_what_id']="<input type=radio name=on_what_id value={$row[$on_what_field]}>";
@@ -144,18 +155,20 @@ function GetEntityPagerData($row) {
 }
 
 /**
-  * $Log: activity-reconnect.php,v $
-  * Revision 1.3  2006/01/02 21:23:18  vanmer
-  * - changed to use centralized database connection function
-  *
-  * Revision 1.2  2005/07/08 01:08:05  vanmer
-  * - added contacts as possibly type to connect to
-  * - sorting list alphabetically
-  * - added translations for types
-  *
-  * Revision 1.1  2005/07/08 00:51:41  vanmer
-  * -Initial revision of subapplication to reconnect activities to new entity
-  *
-  *
-**/                                                                  
+ * $Log: activity-reconnect.php,v $
+ * Revision 1.4  2006/09/30 18:12:09  braverock
+ * - patch 2006/07/31 from  dbaudone
+ *  -- added code to display company name along with contact name
+ *
+ * Revision 1.3  2006/01/02 21:23:18  vanmer
+ * - changed to use centralized database connection function
+ *
+ * Revision 1.2  2005/07/08 01:08:05  vanmer
+ * - added contacts as possibly type to connect to
+ * - sorting list alphabetically
+ * - added translations for types
+ *
+ * Revision 1.1  2005/07/08 00:51:41  vanmer
+ * -Initial revision of subapplication to reconnect activities to new entity
+ **/
 ?>
