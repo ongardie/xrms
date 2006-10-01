@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.108 2006/10/01 00:56:31 braverock Exp $
+ * $Id: utils-interface.php,v 1.109 2006/10/01 10:47:29 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -575,87 +575,6 @@ function build_company_type_menu(&$con, $company_type_id='', $blank_company_type
     return $crm_status_menu;
 } //end build_company_type_menu fn
 
-
-/**
- * Retrieve menu of Custom Fields
- *
- * @param  handle  $con database connection
- * @param  integer $custom to set the menu to
- * @param  boolean $blank_custom include a blank area
- * @return string  $custom_field_menu the html menu to display
- */
-function build_custom1_field_menu(&$con, $custom1='', $blank_custom=false) {
-
-    $sql = "select custom_field_value_pretty_name from custom_field_values where
-            custom_field_value_record_status = 'a' and custom_field = 1 order by sort_order";
-
-    $rst = $con->execute($sql);
-    if (!$rst) {
-        db_error_handler($con, $sql);
-    }
-    if ($rst->fields['custom_field_value_pretty_name'])
-       //$custom_field_menu = $rst->getmenu('custom1', $custom1, $blank_custom);
-       $custom_field_menu = $rst->getmenu2('custom1', $custom1, $blank_custom, false,0, 'style="font-size: x-small; width: 140px; height: 20px;"');
-    else
-       $custom_field_menu = NULL;
-    $rst->close();
-    return $custom_field_menu;
-}
-
-function build_custom2_field_menu(&$con, $custom2='', $blank_custom=false) {
-
-    $sql = "select custom_field_value_pretty_name from custom_field_values where
-            custom_field_value_record_status = 'a' and custom_field = 2 order by sort_order";
-
-    $rst = $con->execute($sql);
-    if (!$rst) {
-        db_error_handler($con, $sql);
-    }
-    if ($rst->fields['custom_field_value_pretty_name'])
-       //$custom_field_menu = $rst->getmenu('custom2', $custom2, $blank_custom);
-       $custom_field_menu = $rst->getmenu2('custom2', $custom2, $blank_custom, false,0, 'style="font-size: x-small; width: 140px; height: 20px;"');
-    else
-       $custom_field_menu = NULL;
-    $rst->close();
-    return $custom_field_menu;
-}
-
-function build_custom3_field_menu(&$con, $custom3='', $blank_custom=false) {
-
-    $sql = "select custom_field_value_pretty_name from custom_field_values where
-            custom_field_value_record_status = 'a' and custom_field = 3 order by sort_order";
-
-    $rst = $con->execute($sql);
-    if (!$rst) {
-        db_error_handler($con, $sql);
-    }
-    if ($rst->fields['custom_field_value_pretty_name'])
-       //$custom_field_menu = $rst->getmenu('custom3', $custom3, $blank_custom);
-       $custom_field_menu = $rst->getmenu2('custom3', $custom3, $blank_custom, false,0, 'style="font-size: x-small; width: 140px; height: 20px;"');
-
-    else
-       $custom_field_menu = NULL;
-    $rst->close();
-    return $custom_field_menu;
-}
-
-function build_custom4_field_menu(&$con, $custom4='', $blank_custom=false) {
-
-    $sql = "select custom_field_value_pretty_name from custom_field_values where
-            custom_field_value_record_status = 'a' and custom_field = 4 order by sort_order";
-
-    $rst = $con->execute($sql);
-    if (!$rst) {
-        db_error_handler($con, $sql);
-    }
-    if ($rst->fields['custom_field_value_pretty_name'])
-       //$custom_field_menu = $rst->getmenu('custom4', $custom4, $blank_custom);
-       $custom_field_menu = $rst->getmenu2('custom4', $custom4, $blank_custom, false,0, 'style="font-size: x-small; width: 140px; height: 20px;"');
-    else
-       $custom_field_menu = NULL;
-    $rst->close();
-    return $custom_field_menu;
-}
 /*****************************************************************************/
 /**
  * Function public string buildDataTable( array, [[array,] string] )
@@ -1208,6 +1127,10 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.109  2006/10/01 10:47:29  braverock
+ * - revert custom1-4 menu functions, company custom1-4 will stay simple strings
+ *   -- use custom_fields plugin if you want select lists
+ *
  * Revision 1.108  2006/10/01 00:56:31  braverock
  * - patchset from Danielle Baudone
  *   -- eliminated border outset style from menus
