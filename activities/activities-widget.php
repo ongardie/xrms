@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.51 2006/10/01 10:33:11 braverock Exp $
+* $Id: activities-widget.php,v 1.52 2006/10/01 12:51:42 braverock Exp $
 */
 
 global $include_directory;
@@ -427,7 +427,7 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
                 $activity_calendar_data[$i]['ends_at'] = $activity_calendar_rst->fields['ends_at'];
                 $activity_calendar_data[$i]['contact_id'] = $activity_calendar_rst->fields['contact_id'];
                 $activity_calendar_data[$i]['contact_link'] = $activity_calendar_rst->fields['contact'];
-                $activity_calendar_data[$i]['contact_name'] = $activity_calendar_rst->fields['first_names'].' '$activity_calendar_rst->fields['last_name'];
+                $activity_calendar_data[$i]['contact_name'] = $activity_calendar_rst->fields['first_names'].' '.$activity_calendar_rst->fields['last_name'];
                 $activity_calendar_data[$i]['company_name'] = $activity_calendar_rst->fields['company_name'];
                 $activity_calendar_data[$i]['company_link'] = $activity_calendar_rst->fields['company'];
                 $activity_calendar_data[$i]['activity_title'] = $activity_calendar_rst->fields['activity_title'];
@@ -884,6 +884,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.52  2006/10/01 12:51:42  braverock
+* - fix . on line 430
+*
 * Revision 1.51  2006/10/01 10:33:11  braverock
 * - add contact and company fields to the activity calendar data array used by the calendar view
 *
