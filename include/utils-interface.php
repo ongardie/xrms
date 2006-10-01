@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.107 2006/07/12 01:02:29 vanmer Exp $
+ * $Id: utils-interface.php,v 1.108 2006/10/01 00:56:31 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -554,6 +554,108 @@ function build_crm_status_menu(&$con, $crm_status_id='', $blank_crm_status=false
     return $crm_status_menu;
 } //end build_crm_status_menu fn
 
+/**
+ * Retrieve menu of Company Types
+ *
+ * @param  handle  $con database connection
+ * @param  integer $company_type_id to set the menu to (default)
+ * @param  boolean $blank_company_type include a blank area
+ * @return string  $company_type_menu the html menu to display
+ */
+function build_company_type_menu(&$con, $company_type_id='', $blank_company_type=false) {
+    $sql = "select company_type_pretty_name, company_type_id from company_types where
+            company_type_record_status = 'a'";
+    $rst = $con->execute($sql);
+    if (!$rst) {
+        db_error_handler($con, $sql);
+    }
+    $crm_status_menu = translate_menu($rst->getmenu2('company_type_id', $company_type_id, $blank_company_type));
+    $rst->close();
+
+    return $crm_status_menu;
+} //end build_company_type_menu fn
+
+
+/**
+ * Retrieve menu of Custom Fields
+ *
+ * @param  handle  $con database connection
+ * @param  integer $custom to set the menu to
+ * @param  boolean $blank_custom include a blank area
+ * @return string  $custom_field_menu the html menu to display
+ */
+function build_custom1_field_menu(&$con, $custom1='', $blank_custom=false) {
+
+    $sql = "select custom_field_value_pretty_name from custom_field_values where
+            custom_field_value_record_status = 'a' and custom_field = 1 order by sort_order";
+
+    $rst = $con->execute($sql);
+    if (!$rst) {
+        db_error_handler($con, $sql);
+    }
+    if ($rst->fields['custom_field_value_pretty_name'])
+       //$custom_field_menu = $rst->getmenu('custom1', $custom1, $blank_custom);
+       $custom_field_menu = $rst->getmenu2('custom1', $custom1, $blank_custom, false,0, 'style="font-size: x-small; width: 140px; height: 20px;"');
+    else
+       $custom_field_menu = NULL;
+    $rst->close();
+    return $custom_field_menu;
+}
+
+function build_custom2_field_menu(&$con, $custom2='', $blank_custom=false) {
+
+    $sql = "select custom_field_value_pretty_name from custom_field_values where
+            custom_field_value_record_status = 'a' and custom_field = 2 order by sort_order";
+
+    $rst = $con->execute($sql);
+    if (!$rst) {
+        db_error_handler($con, $sql);
+    }
+    if ($rst->fields['custom_field_value_pretty_name'])
+       //$custom_field_menu = $rst->getmenu('custom2', $custom2, $blank_custom);
+       $custom_field_menu = $rst->getmenu2('custom2', $custom2, $blank_custom, false,0, 'style="font-size: x-small; width: 140px; height: 20px;"');
+    else
+       $custom_field_menu = NULL;
+    $rst->close();
+    return $custom_field_menu;
+}
+
+function build_custom3_field_menu(&$con, $custom3='', $blank_custom=false) {
+
+    $sql = "select custom_field_value_pretty_name from custom_field_values where
+            custom_field_value_record_status = 'a' and custom_field = 3 order by sort_order";
+
+    $rst = $con->execute($sql);
+    if (!$rst) {
+        db_error_handler($con, $sql);
+    }
+    if ($rst->fields['custom_field_value_pretty_name'])
+       //$custom_field_menu = $rst->getmenu('custom3', $custom3, $blank_custom);
+       $custom_field_menu = $rst->getmenu2('custom3', $custom3, $blank_custom, false,0, 'style="font-size: x-small; width: 140px; height: 20px;"');
+
+    else
+       $custom_field_menu = NULL;
+    $rst->close();
+    return $custom_field_menu;
+}
+
+function build_custom4_field_menu(&$con, $custom4='', $blank_custom=false) {
+
+    $sql = "select custom_field_value_pretty_name from custom_field_values where
+            custom_field_value_record_status = 'a' and custom_field = 4 order by sort_order";
+
+    $rst = $con->execute($sql);
+    if (!$rst) {
+        db_error_handler($con, $sql);
+    }
+    if ($rst->fields['custom_field_value_pretty_name'])
+       //$custom_field_menu = $rst->getmenu('custom4', $custom4, $blank_custom);
+       $custom_field_menu = $rst->getmenu2('custom4', $custom4, $blank_custom, false,0, 'style="font-size: x-small; width: 140px; height: 20px;"');
+    else
+       $custom_field_menu = NULL;
+    $rst->close();
+    return $custom_field_menu;
+}
 /*****************************************************************************/
 /**
  * Function public string buildDataTable( array, [[array,] string] )
@@ -830,7 +932,8 @@ function get_activity_type_menu($con, $activity_type_id='', $fieldname='activity
             ORDER BY sort_order, activity_type_pretty_name";
     $rst = $con->execute($sql);
     if ($rst) {
-        $activity_type_menu = $rst->getmenu2($fieldname, $activity_type_id, $blank_type, false,0, 'style="font-size: x-small; border: outset; width: 80px;"');
+        //$activity_type_menu = $rst->getmenu2($fieldname, $activity_type_id, $blank_type, false,0, 'style="font-size: x-small; border: outset; width: 80px;"');
+        $activity_type_menu = $rst->getmenu2($fieldname, $activity_type_id, $blank_type, false,0, 'style="font-size: x-small; width: 80px; height: 20px;"');
         $rst->close();
     }
     return $activity_type_menu;
@@ -846,7 +949,7 @@ function get_activity_type_menu($con, $activity_type_id='', $fieldname='activity
  * @param boolean $truncate whether to force the drop-down to be narrow
  * @return string  $user_menu the html menu to display
  */
-function get_user_menu(&$con, $user_id='', $blank_user=false, $fieldname='user_id', $truncate=true) {
+function get_user_menu(&$con, $user_id='', $blank_user=false, $fieldname='user_id', $truncate=false) {
 
     $sql = '
     SELECT ' . $con->Concat("last_name","', '","first_names") . " AS name, user_id
@@ -863,11 +966,48 @@ function get_user_menu(&$con, $user_id='', $blank_user=false, $fieldname='user_i
     } else {
         $width_style = '';
     }
-    $user_menu = $rst->getmenu2($fieldname, $user_id, $blank_user, false, 0, 'style="font-size: x-small; border: outset;'.$width_style.'"');
+    //$user_menu = $rst->getmenu2($fieldname, $user_id, $blank_user, false, 0, 'style="font-size: x-small; border: outset;'.$width_style.'"');
+    $user_menu = $rst->getmenu2($fieldname, $user_id, $blank_user, false, 0, 'style="font-size: x-small; height: 20px;'.$width_style.'"');
+
     $rst->close();
 
     return $user_menu;
 }
+
+/**
+ * Retrieve menu of XRMS users email
+ *
+ * @param handle  $con database connection
+ * @param string $email to set the menu to
+ * @param boolean $blank_user include a blank area
+ * @param string  $fieldname to change the default html fieldname of 'user_id'
+ * @param boolean $truncate whether to force the drop-down to be narrow
+ * @return string  $user_menu the html menu to display
+ */
+function get_user_email_menu(&$con, $email='', $blank_user=true, $fieldname='email', $truncate=true) {
+
+    $sql = '
+    SELECT ' . $con->Concat("last_name","', '","first_names") . " AS name, email
+    FROM users
+    WHERE user_record_status = 'a'
+    ORDER BY last_name, first_names
+    ";
+    $rst = $con->execute($sql);
+    if (!$rst) {
+        db_error_handler($con, $sql);
+    }
+    if ($truncate) {
+        $width_style = ' width: 80px; ';
+    } else {
+        $width_style = '';
+    }
+    //$user_email_menu = $rst->getmenu($fieldname, $email, $blank_user, false, 0, 'style="font-size: x-small; border: outset;'.$width_style.'"');
+    $user_email_menu = $rst->getmenu($fieldname, $email, $blank_user, false, 0, 'style="font-size: x-small; height: 20px;'.$width_style.'"');
+    $rst->close();
+
+    return $user_email_menu;
+}
+
 /**
  * Creates an HTML form element based on parameters, and returns it as a string
  *
@@ -1068,6 +1208,19 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.108  2006/10/01 00:56:31  braverock
+ * - patchset from Danielle Baudone
+ *   -- eliminated border outset style from menus
+ *   -- added company types menu
+ *   -- added custom fields menus
+ *   -- added xrms users email menu
+ *
+ * Revision 1.108  2006/07/31 17:20:00 dbaudone
+ * - eliminated border outset style from menus
+ * - added company types menu
+ * - added custom fields menus
+ * - added xrms users email menu
+ *
  * Revision 1.107  2006/07/12 01:02:29  vanmer
  * - added needed code to avoid notices
  *
