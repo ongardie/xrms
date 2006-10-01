@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.50 2006/10/01 00:51:12 braverock Exp $
+* $Id: activities-widget.php,v 1.51 2006/10/01 10:33:11 braverock Exp $
 */
 
 global $include_directory;
@@ -170,16 +170,15 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
     $is_overdue_field="(CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->DBTimeStamp(time()) . ") THEN 1 ELSE 0 END)";
     $is_overdue_text_field="(CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->DBTimeStamp(time()) . ") THEN ".$con->qstr(_("Yes"))." ELSE " . $con->qstr("")." END)";
     $select = "SELECT $is_overdue_field AS is_overdue, "
-    ." at.activity_type_pretty_name AS type, "
-    . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"$http_site_root/contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, "
-
-    . "'$return_url' as return_url, "
-    . $con->substr."(activity_description, 1, $description_substring_length)"."AS description_brief, "
-    . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS scheduled, "
-    . $con->SQLDate('Y-m-d','a.ends_at') . " AS due, "
-    . "u.username AS owner, u.user_id, a.activity_id, activity_status, a.on_what_table, a.on_what_id, "
-    // these fields are pulled in to speed up the pager sorting (using sql_sort_column)
-    . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, cp.case_priority_pretty_name, rt.resolution_short_name ";
+        ." at.activity_type_pretty_name AS type, "
+        . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"$http_site_root/contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, cont.first_names, cont.last_name, "
+        . "'$return_url' as return_url, "
+        . $con->substr."(activity_description, 1, $description_substring_length)"."AS description_brief, "
+        . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS scheduled, "
+        . $con->SQLDate('Y-m-d','a.ends_at') . " AS due, "
+        . "u.username AS owner, u.user_id, a.activity_id, activity_status, a.on_what_table, a.on_what_id, "
+        // these fields are pulled in to speed up the pager sorting (using sql_sort_column)
+        . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, cp.case_priority_pretty_name, rt.resolution_short_name ";
 
     $select .= ', ' . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"$http_site_root/companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, c.company_name ";
 
@@ -427,6 +426,10 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
                 $activity_calendar_data[$i]['scheduled_at'] = $activity_calendar_rst->fields['scheduled_at'];
                 $activity_calendar_data[$i]['ends_at'] = $activity_calendar_rst->fields['ends_at'];
                 $activity_calendar_data[$i]['contact_id'] = $activity_calendar_rst->fields['contact_id'];
+                $activity_calendar_data[$i]['contact_link'] = $activity_calendar_rst->fields['contact'];
+                $activity_calendar_data[$i]['contact_name'] = $activity_calendar_rst->fields['first_names'].' '$activity_calendar_rst->fields['last_name'];
+                $activity_calendar_data[$i]['company_name'] = $activity_calendar_rst->fields['company_name'];
+                $activity_calendar_data[$i]['company_link'] = $activity_calendar_rst->fields['company'];
                 $activity_calendar_data[$i]['activity_title'] = $activity_calendar_rst->fields['activity_title'];
                 $activity_calendar_data[$i]['description_brief'] = $activity_calendar_rst->fields['description_brief'];
                 $activity_calendar_data[$i]['user_id'] = $activity_calendar_rst->fields['user_id'];
@@ -881,6 +884,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.51  2006/10/01 10:33:11  braverock
+* - add contact and company fields to the activity calendar data array used by the calendar view
+*
 * Revision 1.50  2006/10/01 00:51:12  braverock
 * - normalize use of truncate flag in get_user_menu
 *
