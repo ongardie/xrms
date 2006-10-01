@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.70 2006/08/03 01:55:36 ongardie Exp $
+ * $Id: some.php,v 1.71 2006/10/01 00:51:12 braverock Exp $
  */
 
 //include the standard files
@@ -210,7 +210,7 @@ if ( !$recently_viewed_table_rows ) {
     $recently_viewed_table_rows = '<tr><td class=widget_content colspan=3>' . _("No recently viewed contacts") . '</td></tr>';
 }
 
-$user_menu = get_user_menu($con, $user_id, true);
+$user_menu = get_user_menu($con, $user_id, $blank_user=true, $fieldname='user_id', $truncate=true);
 
 $sql_category = "select category_pretty_name, c.category_id
 from categories c, category_scopes cs, category_category_scope_map ccsm
@@ -487,6 +487,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.71  2006/10/01 00:51:12  braverock
+ * - normalize use of truncate flag in get_user_menu
+ *
  * Revision 1.70  2006/08/03 01:55:36  ongardie
  * - Added "household" unknown company method.
  * - Allow admin/update.php to redirect to admin/updateto2.0.php for v1.99.2.

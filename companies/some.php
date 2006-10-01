@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.82 2006/07/13 00:37:48 vanmer Exp $
+ * $Id: some.php,v 1.83 2006/10/01 00:51:12 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -32,7 +32,7 @@ getGlobalVar($saved_id, 'saved_id');
 getGlobalVar($saved_title, 'saved_title');
 getGlobalVar($group_item, 'group_item');
 getGlobalVar($delete_saved, 'delete_saved');
-    
+
 getGlobalVar($not_city, 'not_city');
 getGlobalVar($not_state, 'not_state');
 getGlobalVar($not_category, 'not_category');
@@ -50,7 +50,7 @@ getGlobalVar($not_custom2, 'not_custom2');
 getGlobalVar($not_custom3, 'not_custom3');
 getGlobalVar($not_custom4, 'not_custom4');
 getGlobalVar($not_profile, 'not_profile');
-    
+
 /*********** SAVED SEARCH BEGIN **********************/
 load_saved_search_vars($con, $on_what_table, $saved_id, $delete_saved);
 
@@ -135,7 +135,7 @@ $where .= "and c.user_id = u.user_id ";
 $where .= "and company_record_status = 'a' \n";
 
 if ($company_category_id > 0) {
-  
+
     $where .= " and ecm.on_what_table = 'companies' and ecm.on_what_id = c.company_id and ecm.category_id = $company_category_id ";
 }
 
@@ -165,16 +165,16 @@ if (strlen($company_code) > 0) {
 
 if (strlen($city) > 0) {
     $criteria_count++;
-  if ($not_city) 
+  if ($not_city)
     $where .= " and addr.city NOT LIKE " . $con->qstr($city . '%' , get_magic_quotes_gpc())." \n" ;
-  else 
+  else
     $where .= " and addr.city LIKE " . $con->qstr($city . '%' , get_magic_quotes_gpc())." \n" ;
     $extra_defaults[]='city';
 }
 
 if (strlen($state) > 0) {
     $criteria_count++;
- if ($not_state) 
+ if ($not_state)
     $where .= " and addr.province NOT LIKE " . $con->qstr($state, get_magic_quotes_gpc());
  else
     $where .= " and addr.province LIKE " . $con->qstr($state, get_magic_quotes_gpc());
@@ -191,7 +191,7 @@ if (strlen($crm_status_id) > 0) {
 
 if (strlen($industry_id) > 0) {
     $criteria_count++;
-  if ($not_industry)  
+  if ($not_industry)
     $where .= " and c.industry_id <> $industry_id \n";
   else
     $where .= " and c.industry_id = $industry_id \n";
@@ -225,7 +225,7 @@ if ( $phone ) {
     $sql .= ', c.phone ';
   if ($not_phone)
     $where .= " and c.phone not like " . $con->qstr('%'.$sql_phone.'%', get_magic_quotes_gpc())." \n";
-  else 
+  else
     $where .= " and c.phone like " . $con->qstr('%'.$sql_phone.'%', get_magic_quotes_gpc())." \n";
     $extra_defaults[]='phone';
     $advanced_search_columns[] = array('name' => _("Phone"), 'index_sql' => 'phone');
@@ -439,7 +439,7 @@ if (strlen($recently_viewed_table_rows) == 0) {
     $saved_data = $_POST;
     $saved_data["sql"] = $sql;
     $saved_data["day_diff"] = $day_diff;
-    
+
     if(!$saved_title) {
         $saved_title = "Current";
         $group_item = 0;
@@ -448,7 +448,7 @@ if (strlen($recently_viewed_table_rows) == 0) {
 //        echo "adding saved search";
         $saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);
 //        echo "$saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);";
-    }    
+    }
 
 //get saved searches
 $rst=get_saved_search_item($con, $on_what_table, $session_user_id, false,  false, true,'search', true);
@@ -460,9 +460,7 @@ if( $rst AND $rst->RowCount() ) {
 
 /********** SAVED SEARCH ENDS ****/
 
-
-
-$user_menu = get_user_menu($con, $user_id, true);
+$user_menu = get_user_menu($con, $user_id, $blank_user=true, $fieldname='user_id', $truncate=true);
 
 $sql2 = "select category_pretty_name, c.category_id
  from categories c, category_scopes cs, category_category_scope_map ccsm
@@ -557,7 +555,7 @@ if (!$advanced_search) {
             <td class=widget_content_form_element>
                 <?php if ($advanced_search) {
                     echo _("!"); echo ' <input type=checkbox name="not_name" value=1';
-                    if ($not_name) { echo ' checked'; } 
+                    if ($not_name) { echo ' checked'; }
                     echo '>';
                  } ?>
                 <input type=text name="company_name" size=15 value="<?php  echo $company_name; ?>">
@@ -565,7 +563,7 @@ if (!$advanced_search) {
             <td class=widget_content_form_element>
                 <?php if ($advanced_search) {
                     echo _("!"); echo ' <input type=checkbox name="not_user" value=1';
-                    if ($not_user) { echo ' checked'; } 
+                    if ($not_user) { echo ' checked'; }
                     echo '>';
                  } ?>
                 <?php  echo $user_menu; ?>
@@ -576,7 +574,7 @@ if (!$advanced_search) {
             <td class=widget_content_form_element>
                 <?php if ($advanced_search) {
                     echo _("!"); echo ' <input type=checkbox name="not_industry" value=1';
-                    if ($not_industry) { echo ' checked'; } 
+                    if ($not_industry) { echo ' checked'; }
                     echo '>';
                  } ?>
                 <?php  echo $industry_menu; ?>
@@ -593,13 +591,13 @@ if (!$advanced_search) {
             <?php  echo _("State"); ?>
           </td>
                 <td class=widget_label><?php echo _("Country"); ?></td>
-                
+
         </tr>
         <tr>
             <td class=widget_content_form_element>
                 <?php if ($advanced_search) {
                     echo _("!"); echo ' <input type=checkbox name="not_phone" value=1';
-                    if ($not_phone) { echo ' checked'; } 
+                    if ($not_phone) { echo ' checked'; }
                     echo '>';
                  } ?>
                 <input type=text name="phone_search" size=10 value="<?php  echo $phone_search; ?>">
@@ -607,7 +605,7 @@ if (!$advanced_search) {
             <td class=widget_content_form_element>
                 <?php if ($advanced_search) {
                     echo _("!"); echo ' <input type=checkbox name="not_city" value=1';
-                    if ($not_city) { echo ' checked'; } 
+                    if ($not_city) { echo ' checked'; }
                     echo '>';
                  } ?>
                 <input type=text name="city" size=10 value="<?php  echo $city; ?>">
@@ -615,7 +613,7 @@ if (!$advanced_search) {
             <td class=widget_content_form_element>
                 <?php if ($advanced_search) {
                     echo _("!"); echo ' <input type=checkbox name="not_state" value=1';
-                    if ($not_state) { echo ' checked'; } 
+                    if ($not_state) { echo ' checked'; }
                     echo '>';
                  } ?>
                 <input type=text name="state" size=5 value="<?php echo $state; ?>">
@@ -623,7 +621,7 @@ if (!$advanced_search) {
             <td class=widget_content_form_element>
                 <?php if ($advanced_search) {
                     echo _("!"); echo ' <input type=checkbox name="not_country" value=1';
-                    if ($not_country) { echo ' checked'; } 
+                    if ($not_country) { echo ' checked'; }
                     echo '>';
                  } ?>
                 <?php echo $country_menu ?>
@@ -647,7 +645,7 @@ if (!$advanced_search) {
                 <td class=widget_label_right><?php echo _("Company Name"); ?></td>
 		    <td class=widget_content_form_element>
                 <?php echo _("!")?>
-                <?php if ($not_name) { echo ' <input type=checkbox name="not_name" value=1 checked>'; } 
+                <?php if ($not_name) { echo ' <input type=checkbox name="not_name" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_name" value=1>';}?>
                 <input type=text size=50 name=company_name value="<?php echo $company_name; ?>"></td>
             </tr>
@@ -655,7 +653,7 @@ if (!$advanced_search) {
                 <td class=widget_label_right><?php echo _("Legal Name"); ?></td>
                 <td class=widget_content_form_element>
                 <?php echo _("!")?>
-                <?php if ($not_legal_name) { echo ' <input type=checkbox name="not_legal_name" value=1 checked>'; } 
+                <?php if ($not_legal_name) { echo ' <input type=checkbox name="not_legal_name" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_legal_name" value=1>';}?>
                 <input type=text size=50 name=legal_name value="<?php echo $legal_name; ?>"></td>
             </tr>
@@ -663,7 +661,7 @@ if (!$advanced_search) {
                 <td class=widget_label_right><?php echo _("Company Code"); ?></td>
                 <td class=widget_content_form_element>
                 <?php echo _("!")?>
-                <?php if ($not_code) { echo ' <input type=checkbox name="not_code" value=1 checked>'; } 
+                <?php if ($not_code) { echo ' <input type=checkbox name="not_code" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_code" value=1>';}?>
                 <input type=text size=10 name=company_code value ="<?php echo $company_code; ?>"></td>
             </tr>
@@ -676,7 +674,7 @@ if (!$advanced_search) {
                 <td class=widget_label_right><?php echo _("CRM Status"); ?></td>
                 <td class=widget_content_form_element>
                 <?php echo _("!")?>
-                <?php if ($not_crm) { echo ' <input type=checkbox name="not_crm" value=1 checked>'; } 
+                <?php if ($not_crm) { echo ' <input type=checkbox name="not_crm" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_crm" value=1>';}?>
                 <?php  echo $crm_status_menu; ?></td>
             </tr>
@@ -685,7 +683,7 @@ if (!$advanced_search) {
                 <?php echo _("Company Source"); ?></td>
           <td class=widget_content_form_element>
                 <?php echo _("!")?>
-                <?php if ($not_source) { echo ' <input type=checkbox name="not_source" value=1 checked>'; } 
+                <?php if ($not_source) { echo ' <input type=checkbox name="not_source" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_source" value=1>';}?>
                 <?php  echo $company_source_menu; ?> </td>
             </tr>
@@ -693,7 +691,7 @@ if (!$advanced_search) {
                 <td class=widget_label_right><?php echo _("Industry"); ?></td>
                 <td class=widget_content_form_element width=80%>
                 <?php echo _("!")?>
-                <?php if ($not_industry) { echo ' <input type=checkbox name="not_industry" value=1 checked>'; } 
+                <?php if ($not_industry) { echo ' <input type=checkbox name="not_industry" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_industry" value=1>';}?>
                 <?php  echo $industry_menu; ?> </td>
             </tr>
@@ -701,7 +699,7 @@ if (!$advanced_search) {
                 <td class=widget_label_right><?php echo _("Owner"); ?></td>
                 <td class=widget_content_form_element>
                 <?php echo _("!")?>
-                <?php if ($not_user) { echo ' <input type=checkbox name="not_user" value=1 checked>'; } 
+                <?php if ($not_user) { echo ' <input type=checkbox name="not_user" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_user" value=1>';}?>
                 <?php  echo $user_menu; ?></td>
             </tr>
@@ -709,7 +707,7 @@ if (!$advanced_search) {
                 <td class=widget_label_right><?php echo _("Phone"); ?></td>
                 <td class=widget_content_form_element>
                 <?php echo _("!")?>
-                <?php if ($not_phone) { echo ' <input type=checkbox name="not_phone" value=1 checked>'; } 
+                <?php if ($not_phone) { echo ' <input type=checkbox name="not_phone" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_phone" value=1>';}?>
                 <input type=text name=phone value="<?php echo $phone; ?>"></td>
             </tr>
@@ -738,7 +736,7 @@ if (!$advanced_search) {
                 <td class=widget_label_right><?php echo $company_custom1_label ?></td>
                 <td class=widget_content_form_element>
                 <?php echo _("!")?>
-                <?php if ($not_custom1) { echo ' <input type=checkbox name="not_custom1" value=1 checked>'; } 
+                <?php if ($not_custom1) { echo ' <input type=checkbox name="not_custom1" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_custom1" value=1>';}?>
                 <input type=text name=custom1 size=30 value="<?php echo $custom1; ?>"></td>
             </tr>
@@ -747,7 +745,7 @@ if (!$advanced_search) {
                 <td class=widget_label_right><?php echo $company_custom2_label ?></td>
                 <td class=widget_content_form_element>
                 <?php echo _("!")?>
-                <?php if ($not_custom2) { echo ' <input type=checkbox name="not_custom2" value=1 checked>'; } 
+                <?php if ($not_custom2) { echo ' <input type=checkbox name="not_custom2" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_custom2" value=1>';}?>
                 <input type=text name=custom2 size=30  value="<?php echo $custom2; ?>"></td>
             </tr>
@@ -756,7 +754,7 @@ if (!$advanced_search) {
                 <td class=widget_label_right><?php echo $company_custom3_label ?></td>
                 <td class=widget_content_form_element>
                 <?php echo _("!")?>
-                <?php if ($not_custom3) { echo ' <input type=checkbox name="not_custom3" value=1 checked>'; } 
+                <?php if ($not_custom3) { echo ' <input type=checkbox name="not_custom3" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_custom3" value=1>';}?>
                 <input type=text name=custom3 size=30  value="<?php echo $custom3; ?>"></td>
             </tr>
@@ -765,7 +763,7 @@ if (!$advanced_search) {
                 <td class=widget_label_right><?php echo $company_custom4_label ?></td>
                 <td class=widget_content_form_element>
                 <?php echo _("!")?>
-                <?php if ($not_custom4) { echo ' <input type=checkbox name="not_custom4" value=1 checked>'; } 
+                <?php if ($not_custom4) { echo ' <input type=checkbox name="not_custom4" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_custom4" value=1>';}?>
                 <input type=text name=custom4 size=30  value="<?php echo $custom4; ?>"></td>
             </tr>
@@ -774,13 +772,13 @@ if (!$advanced_search) {
                 <td class=widget_label_right><?php echo _("Profile"); ?></td>
                 <td class=widget_content_form_element>
                 <?php echo _("!")?>
-                <?php if ($not_profile) { echo ' <input type=checkbox name="not_profile" value=1 checked>'; } 
+                <?php if ($not_profile) { echo ' <input type=checkbox name="not_profile" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_profile" value=1>';}?>
                 <input type=text size=50 name=profile_name value="<?php echo $profile; ?>"></td>
-                
+
             </tr>
              <tr>
-                
+
           <td class=widget_content_form_element colspan=2>&nbsp;</td>
             </tr>
         </table>
@@ -788,7 +786,7 @@ if (!$advanced_search) {
         </td>
         <!-- gutter //-->
         <td class=gutter width="1%">&nbsp;
-        
+
         </td>
         <!-- right column //-->
         <td class=rcol width="44%" valign=top>
@@ -815,7 +813,7 @@ if (!$advanced_search) {
                 <td class=widget_label_right><?php echo _("City"); ?></td>
                 <td class=widget_content_form_element>
                 <?php echo _("!")?>
-                <?php if ($not_city) { echo ' <input type=checkbox name="not_city" value=1 checked>'; } 
+                <?php if ($not_city) { echo ' <input type=checkbox name="not_city" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_city" value=1>';}?>
                 <input type=text name=city size=30 value="<?php echo $city; ?>"></td>
             </tr>
@@ -823,7 +821,7 @@ if (!$advanced_search) {
                 <td class=widget_label_right><?php echo _("State/Province"); ?></td>
                 <td class=widget_content_form_element>
                 <?php echo _("!")?>
-                <?php if ($not_state) { echo ' <input type=checkbox name="not_state" value=1 checked>'; } 
+                <?php if ($not_state) { echo ' <input type=checkbox name="not_state" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_state" value=1>';}?>
                 <input type=text name=province size=20 value="<?php echo $province; ?>"></td>
             </tr>
@@ -835,7 +833,7 @@ if (!$advanced_search) {
                 <td class=widget_label_right>
                 <?php echo _("Country"); ?>
                 <?php echo _("!")?>
-                <?php if ($not_country) { echo ' <input type=checkbox name="not_country" value=1 checked>'; } 
+                <?php if ($not_country) { echo ' <input type=checkbox name="not_country" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_country" value=1>';}?>
           </td>
                 <td class=widget_content_form_element>
@@ -1035,6 +1033,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.83  2006/10/01 00:51:12  braverock
+ * - normalize use of truncate flag in get_user_menu
+ *
  * Revision 1.82  2006/07/13 00:37:48  vanmer
  * - changed to ensure that company pager name matches columns name
  *

@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.49 2006/09/30 18:08:03 braverock Exp $
+* $Id: activities-widget.php,v 1.50 2006/10/01 00:51:12 braverock Exp $
 */
 
 global $include_directory;
@@ -650,7 +650,7 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
 
 
     // create menu of users
-    $user_menu = get_user_menu($con, $session_user_id);
+    $user_menu = get_user_menu($con, $session_user_id, $blank_user=false, $fieldname='user_id', $truncate=true);
 
     $activity_type_menu=get_activity_type_menu($con);
 
@@ -786,7 +786,7 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
     $hideCaption=_("Hide");
 
     $activity_type_menu=get_activity_type_menu($con, $type, $widget_name.'_activity_type',true);
-    $activity_owner_menu = get_user_menu($con, $owner, true, $widget_name.'_activity_owner');
+    $activity_owner_menu = get_user_menu($con, $owner, true, $widget_name.'_activity_owner', $truncate=true);
     $showhide_link="<a href=\"#\" id=\"{$widget_name}_showhideLink\" onclick=\"javascript:{$widget_name}_Hide();\">{$hideCaption}</a>";
 
     $ret =
@@ -881,6 +881,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.50  2006/10/01 00:51:12  braverock
+* - normalize use of truncate flag in get_user_menu
+*
 * Revision 1.49  2006/09/30 18:08:03  braverock
 * - clean up button formatting
 *

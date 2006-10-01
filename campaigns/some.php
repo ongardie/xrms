@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.35 2006/08/14 20:40:38 jnhayart Exp $
+ * $Id: some.php,v 1.36 2006/10/01 00:51:12 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -170,7 +170,7 @@ if (strlen($recently_viewed_table_rows) == 0) {
     $recently_viewed_table_rows = '<tr><td class=widget_content colspan=3>' . _("No recently viewed campaigns") . '</td></tr>';
 }
 
-$user_menu = get_user_menu($con, $user_id, true);
+$user_menu = get_user_menu($con, $user_id, $blank_user=true, $fieldname='user_id', $truncate=true);
 
 $sql2 = "select campaign_type_pretty_name, campaign_type_id from campaign_types where campaign_type_record_status = 'a' order by campaign_type_pretty_name";
 $rst = $con->execute($sql2);
@@ -383,6 +383,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.36  2006/10/01 00:51:12  braverock
+ * - normalize use of truncate flag in get_user_menu
+ *
  * Revision 1.35  2006/08/14 20:40:38  jnhayart
  * display header swith correct css style
  *

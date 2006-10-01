@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.40 2006/01/02 22:47:25 vanmer Exp $
+ * $Id: some.php,v 1.41 2006/10/01 00:51:12 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -185,7 +185,7 @@ if (strlen($recently_viewed_table_rows) == 0) {
     $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>' . _("No recently viewed cases") . '</td></tr>';
 }
 
-$user_menu = get_user_menu($con, $user_id, true);
+$user_menu = get_user_menu($con, $user_id, $blank_user=true, $fieldname='user_id', $truncate=true);
 
 $sql2 = "select " . $con->concat('case_type_pretty_name',$con->qstr(' - '), 'case_status_pretty_name') .", case_status_id from case_statuses JOIN case_types ON case_statuses.case_type_id=case_types.case_type_id where case_status_record_status = 'a' order by case_statuses.case_type_id, sort_order";
 $rst = $con->execute($sql2);
@@ -411,6 +411,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.41  2006/10/01 00:51:12  braverock
+ * - normalize use of truncate flag in get_user_menu
+ *
  * Revision 1.40  2006/01/02 22:47:25  vanmer
  * - changed to use centralized dbconnection function
  *

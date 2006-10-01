@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.127 2006/04/17 17:56:40 jnhayart Exp $
+ * $Id: some.php,v 1.128 2006/10/01 00:51:12 braverock Exp $
  */
 
 // handle includes
@@ -35,7 +35,7 @@ getGlobalVar($saved_id, 'saved_id');
 getGlobalVar($saved_title, 'saved_title');
 getGlobalVar($group_item, 'group_item');
 getGlobalVar($delete_saved, 'delete_saved');
-    
+
 
 /*********** SAVED SEARCH BEGIN **********************/
 load_saved_search_vars($con, $on_what_table, $saved_id, $delete_saved);
@@ -180,19 +180,7 @@ if (!isset($user_id)) {
    $user_id=$session_user_id;
 }
 
-//get menu for users
-//$sql2 = "(SELECT " . $con->qstr(_("Current User"),get_magic_quotes_gpc()) . ", '-1')"
-//    . " UNION (select username, user_id from users where user_record_status = 'a')"
-//       . " UNION (SELECT " . $con->qstr(_("Not Set"),get_magic_quotes_gpc()) . ", '-2')  ORDER BY 1";
-//$rst = $con->execute($sql2);
-//if (!$rst) {
-//    db_error_handler($con, $sql2);
-//} elseif ($rst->rowcount()) {
-//    $user_menu = $rst->getmenu2('user_id', $user_id, true);
-//    $rst->close();
-//}
-
-$user_menu = get_user_menu($con, $user_id, true);
+$user_menu = get_user_menu($con, $user_id, $blank_user=true, $fieldname='user_id', $truncate=true);
 
 if($advanced_search) {
     //get menu for opportunity_statuses
@@ -221,7 +209,7 @@ $rst->close();
     $saved_data = $_POST;
     $saved_data["sql"] = $sql;
     $saved_data["day_diff"] = $day_diff;
-    
+
     if(!$saved_title) {
         $saved_title = "Current";
         $group_item = 0;
@@ -230,7 +218,7 @@ $rst->close();
 //        echo "adding saved search";
         $saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);
 //        echo "$saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);";
-    }    
+    }
 
 //get saved searches
 $rst=get_saved_search_item($con, $on_what_table, $session_user_id, false,  false, true,'search', true);
@@ -462,8 +450,8 @@ $_SESSION["search_sql"]=$sql;
 						);
 	$return_url = '/activities/some.php';
 
-	
-	$activities_widget =  GetActivitiesWidget($con, $search_terms, 'ActivitiesData', _('Search Results'), $session_user_id, $return_url, null, null, null, false);	
+
+	$activities_widget =  GetActivitiesWidget($con, $search_terms, 'ActivitiesData', _('Search Results'), $session_user_id, $return_url, null, null, null, false);
 
 	echo $activities_widget['content'];
 	echo $activities_widget['sidebar'];
@@ -473,7 +461,7 @@ $_SESSION["search_sql"]=$sql;
 
 $con->close();
 ?>
-    
+
     </form>
 
     </div>
@@ -537,6 +525,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.128  2006/10/01 00:51:12  braverock
+ * - normalize use of truncate flag in get_user_menu
+ *
  * Revision 1.127  2006/04/17 17:56:40  jnhayart
  * change way to populate list of user with centralized function
  * get_user_menu() from /include/utils-interface.php

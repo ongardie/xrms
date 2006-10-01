@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.56 2006/01/20 20:08:42 daturaarutad Exp $
+ * $Id: some.php,v 1.57 2006/10/01 00:52:36 braverock Exp $
  */
 
 //include required files
@@ -316,7 +316,7 @@ if (strlen($recently_viewed_table_rows) == 0) {
     $recently_viewed_table_rows = '<tr><td class=widget_content colspan=4>' . _("No recently viewed file") . '</td></tr>';
 }
 
-$user_menu = get_user_menu($con, $user_id, true);
+$user_menu = get_user_menu($con, $user_id, $blank_user=true, $fieldname='user_id', $truncate=true);
 
 if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'files', '', 4);
@@ -532,6 +532,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.57  2006/10/01 00:52:36  braverock
+ * - normalize use of truncate flag in get_user_menu
+ *
  * Revision 1.56  2006/01/20 20:08:42  daturaarutad
  * remove the export button once again
  *

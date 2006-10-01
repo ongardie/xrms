@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.67 2006/04/18 14:44:39 braverock Exp $
+ * $Id: some.php,v 1.68 2006/10/01 00:51:13 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -274,7 +274,7 @@ if (strlen($recently_viewed_table_rows) == 0) {
     $recently_viewed_table_rows = '<tr><td class=widget_content colspan=4>' . _("No recently viewed opportunities") . '</td></tr>';
 }
 
-$user_menu = get_user_menu($con, $user_id, true);
+$user_menu = get_user_menu($con, $user_id, $blank_user=true, $fieldname='user_id', $truncate=true);
 
 // Ajout JNH classement par le sort order
 $sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status = 'a' order by sort_order";
@@ -537,6 +537,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.68  2006/10/01 00:51:13  braverock
+ * - normalize use of truncate flag in get_user_menu
+ *
  * Revision 1.67  2006/04/18 14:44:39  braverock
  * - remove unnecessary admin check from 'hide closed' option
  *
