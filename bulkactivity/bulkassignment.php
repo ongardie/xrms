@@ -3,7 +3,7 @@
   *
   * bulkassignment.
   *
-  * $Id: bulkassignment.php,v 1.1 2006/10/01 00:15:06 braverock Exp $
+  * $Id: bulkassignment.php,v 1.2 2006/10/01 10:48:42 braverock Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -31,10 +31,7 @@
   //get the menus
   $crm_status_menu = build_crm_status_menu($con, $crm_status_id, true);
   $company_type_menu = build_company_type_menu($con, $company_type_id, true);
-  $custom1_menu = build_custom1_field_menu($con,$custom1,true);
-  $custom2_menu = build_custom2_field_menu($con,$custom2,true);
-  $custom3_menu = build_custom3_field_menu($con,$custom3,true);
-  $custom4_menu = build_custom4_field_menu($con,$custom4,true);
+
 
   $sql2 = "select company_source_pretty_name, company_source_id from company_sources where company_source_record_status = 'a' order by company_source_pretty_name";
   $rst = $con->execute($sql2);
@@ -261,26 +258,22 @@
         <tr>
             <?php if ($company_custom1_label!='(Custom 1)') { ?>
                 <td class=widget_label_right><?php echo $company_custom1_label ?></td><td>
-                <?php if ($custom1_menu) {echo ' <class=widget_content_form_element>'; echo $custom1_menu; }
-                      else  {echo ' <input type=text name=custom1 size=20 value=' . $custom1 . '>';} ?></td>
+                <?php echo ' <input type=text name=custom1 size=20 value=' . $custom1 . '>';} ?></td>
             <?php } else {echo '<td class=clear>'; echo '</td><td>';}  ?></td>
 
 	      <?php if ($company_custom2_label!='(Custom 2)') { ?>
                 <td class=widget_label_right><?php echo $company_custom2_label ?></td><td>
-                <?php if ($custom2_menu) {echo ' <class=widget_content_form_element>'; echo $custom2_menu; }
-                      else  {echo ' <input type=text name=custom2 size=20 value=' . $custom2 . '>';} ?></td>
+                <?php echo ' <input type=text name=custom2 size=20 value=' . $custom2 . '>';} ?></td>
             <?php } else {echo '<td class=clear>'; echo '</td><td>';}  ?></td>
 
             <?php  if ($company_custom3_label!='(Custom 3)') { ?>
                 <td class=widget_label_right><?php echo $company_custom3_label ?></td><td>
-                <?php if ($custom3_menu) {echo ' <class=widget_content_form_element>'; echo $custom3_menu; }
-                      else  {echo ' <input type=text name=custom3 size=20 value=' . $custom3 . '>';} ?></td>
+                <?php echo ' <input type=text name=custom3 size=20 value=' . $custom3 . '>';} ?></td>
             <?php } else {echo '<td class=clear>'; echo '</td><td>';}  ?></td>
 
             <?php  if ($company_custom4_label!='(Custom 4)') { ?>
                 <td class=widget_label_right><?php echo $company_custom4_label ?></td><td>
-                <?php if ($custom4_menu) {echo ' <class=widget_content_form_element>'; echo $custom4_menu; }
-                      else  {echo ' <input type=text name=custom4 size=20 value=' . $custom4 . '>';} ?></td>
+                <?php echo ' <input type=text name=custom4 size=20 value=' . $custom4 . '>';} ?></td>
             <?php } else {echo '<td class=clear>'; echo '</td><td>';}  ?></td>
 
         </tr>
@@ -330,6 +323,10 @@ end_page();
 
  /**
   * $Log: bulkassignment.php,v $
+  * Revision 1.2  2006/10/01 10:48:42  braverock
+  * - remove custom1-4 menu functions, company custom1-4 will stay simple strings
+  *   -- use custom_fields plugin if you want select lists
+  *
   * Revision 1.1  2006/10/01 00:15:06  braverock
   * - Initial Revision of Bulk Activity and Bulk Assignment contributed by Danielle Baudone
   *
