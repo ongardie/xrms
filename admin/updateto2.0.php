@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.17 2006/07/25 19:36:52 braverock Exp $
+ * $Id: updateto2.0.php,v 1.18 2006/10/01 00:27:06 braverock Exp $
  */
 
 // where do we include from
@@ -4482,15 +4482,26 @@ $con->execute($sql);
    if (!in_array('contact_former_companies',$table_list)) {
     $sql ="CREATE TABLE contact_former_companies (
     cfc_id INT unsigned NOT NULL auto_increment,
-    contact_id int(11) NOT NULL default '0',
+    contact_id int NOT NULL default '0',
     companychange_at datetime NOT NULL default '0000-00-00 00:00:00',
-    former_company_id int(11) NOT NULL,
+    former_company_id int NOT NULL,
     PRIMARY KEY cfc_id (cfc_id),
     KEY (contact_id),
     KEY (former_company_id)
     )";
     $rst=$con->execute($sql);
    }
+
+if (!in_array('company_campaign_map',$table_list)) {
+    $sql ="CREATE TABLE company_campaign_map (
+    `cc_map_id` int NOT NULL auto_increment,
+    `company_id` int NOT NULL default '0',
+    `campaign_id` int NOT NULL default '0',
+    PRIMARY KEY (`cc_map_id`),
+    KEY (campaign_id),
+    KEY (company_id)
+    )";
+}
 
 install_upgrade_acl($con);
 
@@ -4819,6 +4830,9 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.18  2006/10/01 00:27:06  braverock
+ * - add company_campaign_map table
+ *
  * Revision 1.17  2006/07/25 19:36:52  braverock
  * - extra check for clean updates of pager pref functions
  *
