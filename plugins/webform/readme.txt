@@ -1,4 +1,4 @@
-# $Id: readme.txt,v 1.1 2004/06/26 14:39:30 braverock Exp $
+# $Id: readme.txt,v 1.2 2006/10/05 11:23:22 braverock Exp $
 
 What this plugin does/can do
 
@@ -8,15 +8,17 @@ What this plugin does/can do
 
 How to modify what it does
 
-1. Examine the variables in new-form.php to get an idea of what you can customise on it.
-2. Change the hidden variables in the contact.php form to change the default values for
-        user_id
+1. Modify the contact.php form to be appropriate to your environment
+2. Set defaults in vars_webform.inc to match your environment
         crm_status_id
         industry_id
-        session_user_id
         last_modified_by
         country_id
         etc
+
+3. Examine the variables in new-form.php to get an idea of what you can customise on it.
+4. Make sure you create an automated support user and set $session_user_id in new-form.php
+5. Modify new-form.php to do things appropriate for your environment.
 
 Ta
 
@@ -24,6 +26,12 @@ Nic Lowe
 Www.newtowncarshare.info
 
 # $Log: readme.txt,v $
+# Revision 1.2  2006/10/05 11:23:22  braverock
+# - move all vars to vars_webform.inc
+# - make index a simple redirect to avoid header errors
+# - improve documentation and comments
+# - set $session_user_id directly to avoid potential security problem
+#
 # Revision 1.1  2004/06/26 14:39:30  braverock
 # - Initial Revision of WebForm Plugin by Nic Lowe
 #   - added phpdoc

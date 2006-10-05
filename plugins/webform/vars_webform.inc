@@ -1,8 +1,21 @@
-<?
-
-//this page contains the variables which are used by the web-form plugin for XRMS
+<?php
+/**
+ * This page contains the variables which are used by the web-form plugin for XRMS
+ *
+ * @author Nic Lowe
+ *
+ * $Id: vars_webform.inc,v 1.2 2006/10/05 11:23:22 braverock Exp $
+ */
 
 //VARIABLES
+
+//$session_user_id
+
+$crm_status_id = 0 ;
+
+$industry_id = 0 ;
+
+$country_id = 0 ;
 
 //If no company is provided by the form, do I add a new company with the name <First Name><Last Name>?
 //useful for website contacts with the public.
@@ -51,8 +64,5 @@ $add_opportunity_description="Membership";
 $add_opportunity_probability="20";
 
 $add_opportunity_size="225";
-
-
-
 
 ?>

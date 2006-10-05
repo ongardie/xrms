@@ -1,34 +1,25 @@
 <?php
-
 /**
-
  * WebForm Plugin - new-form.php
-
  *
-
  * @author Nic Lowe
-
  *
-
  * @todo add opportunity
-
  *
-
- * $Id: new-form.php,v 1.6 2006/01/16 16:00:37 niclowe Exp $
-
+ * $Id: new-form.php,v 1.7 2006/10/05 11:23:22 braverock Exp $
+ *
+ * NOTE: You need to set a session_user_id below.
+ *       You should probably create and XRMS user just for
+ *       automated support mechanisms like this, and use that user_id.
  */
 
 session_start();
-$_SESSION['session_user_id'] = $_POST['user_id'];
+$_SESSION['session_user_id'] = "set_me";
 
 include_once('vars_webform.inc');
 // receives POST's from your web site and imports the company into XRMS, then redirects back to your web site
 
-
-
 require_once('../../include-locations.inc');
-
-
 
 require_once($include_directory . 'vars.php');
 
@@ -60,7 +51,7 @@ $rst=$con->execute($sql);
 if($email_respond)mail($email,$rst->fields['email_template_title'],$rst->fields['email_template_body'],"From: $email_template_from");
 
 
-//RECEIVE THE POSTS INTO THE FORM 
+//RECEIVE THE POSTS INTO THE FORM
 $company_type_id = $_POST['company_type_id'];
 
 $crm_status_id = $_POST['crm_status_id'];
@@ -70,11 +61,9 @@ $industry_id = $_POST['industry_id'];
 $company_source_id = $_POST['company_source_id'];
 
 
-
 //stolen from new-2.php
 
 //simply post to this file, and you'll add a new company
-
 
 
 $company_name = $_POST['company_name'];
@@ -121,8 +110,6 @@ $rating_id = 1;
 
 $legal_name = (strlen($legal_name) > 0) ? $legal_name : $company_name;
 
-
-
 $country_id = $_POST['country_id'];
 
 $address_name = $_POST['address_name'];
@@ -161,7 +148,7 @@ $use_pretty_address = ($use_pretty_address == 'on') ? "'t'" : "'f'";
 
 //if the company exists, then skip inserting a new company
 
- 
+
 
 //if the contact exists, then skip inserting a new contact
 
@@ -169,14 +156,14 @@ $use_pretty_address = ($use_pretty_address == 'on') ? "'t'" : "'f'";
 
 
 
-$sql="SELECT company_id,default_primary_address FROM companies 
+$sql="SELECT company_id,default_primary_address FROM companies
 		WHERE
      company_name = '$company_name'
 		 and company_record_status <>'d';";
 
 //if the company field is set blank, use a slightly different sql so that you dont add a blank company by accident
 if(empty($company_name)){
-				$sql="SELECT company_id,default_primary_address FROM companies 
+				$sql="SELECT company_id,default_primary_address FROM companies
 				WHERE
         company_name = CONCAT('$first_names',' ','$last_name')
 				and company_record_status <>'d';";
@@ -190,7 +177,7 @@ $rst=$con->execute($sql);
 if(!$rst->RecordCount()){
 	//if you dont have a company name because its a completely
 	if($add_person_as_company&&empty($company_name))$company_name=$first_names.' '.$last_name;
-  
+
 	$sql = "insert into companies set
 
                       crm_status_id = $crm_status_id,
@@ -348,7 +335,7 @@ $rst=$con->execute($sql);
 
 
 if(!$rst->RecordCount()){
-//then you dont have a contact who works for this company 
+//then you dont have a contact who works for this company
 
 
   // insert a contact
@@ -448,14 +435,16 @@ if($email_to_admin)mail($email_admin_address,$subj,$form_input_data,"From: $emai
 $con->close();
 
 
-
 header("Location: $after_adding_new_companies_from_your_web_site_redirect_to_this_page");
 
-
-
 /**
-
  * $Log: new-form.php,v $
+ * Revision 1.7  2006/10/05 11:23:22  braverock
+ * - move all vars to vars_webform.inc
+ * - make index a simple redirect to avoid header errors
+ * - improve documentation and comments
+ * - set $session_user_id directly to avoid potential security problem
+ *
  * Revision 1.6  2006/01/16 16:00:37  niclowe
  * fixed errant bug commit
  *
@@ -474,7 +463,5 @@ header("Location: $after_adding_new_companies_from_your_web_site_redirect_to_thi
  *   - added phpdoc
  *   - standardized on long php tags
  *
-
  */
-
 ?>
