@@ -23,6 +23,9 @@
 <?php
 /**
  * $Log: index.php,v $
+ * Revision 1.3  2006/10/05 10:41:11  braverock
+ * - change to unix filetype and iso-8859-1 encoding
+ *
  * Revision 1.2  2004/07/22 11:12:56  maulani
  * - Change default characterset to UTF-8
  *
