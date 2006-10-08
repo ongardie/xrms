@@ -4,7 +4,7 @@
  *
  * Delete salutation
  *
- * $Id: delete.php,v 1.2 2006/01/02 22:11:29 vanmer Exp $
+ * $Id: delete.php,v 1.3 2006/10/08 19:53:14 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -20,7 +20,7 @@ $salutation_id = $_POST['salutation_id'];
 
 $con = get_xrms_dbconnection();
 
-$sql = "DELETE * FROM salutations WHERE salutation_id = $salutation_id";
+$sql = "DELETE  FROM salutations WHERE salutation_id = $salutation_id";
 $rst = $con->execute($sql);
 
 $con->close();
@@ -29,6 +29,9 @@ header("Location: some.php");
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.3  2006/10/08 19:53:14  jnhayart
+ * patch from dbaudone - changed delete salutation query: now it works
+ *
  * Revision 1.2  2006/01/02 22:11:29  vanmer
  * - changed to use centralized database connection function
  *
