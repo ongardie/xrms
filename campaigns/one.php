@@ -2,7 +2,7 @@
 /**
  * View Campaign Details
  *
- * $Id: one.php,v 1.22 2006/04/28 23:33:20 jnhayart Exp $
+ * $Id: one.php,v 1.23 2006/10/08 19:41:44 jnhayart Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -150,11 +150,11 @@ start_page($page_title, true, $msg);
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Created"); ?></td>
-                                    <td class=clear><?php echo $entered_at; ?> by <?php  echo $entered_by; ?></td>
+                                    <td class=clear><?php echo $entered_at . " " . _("by") . " " . $entered_by; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Last Modified"); ?></td>
-                                    <td class=clear><?php echo $last_modified_at; ?> by <?php  echo $last_modified_by; ?></td>
+                                    <td class=clear><?php echo $last_modified_at . " " . _("by") . " " . $last_modified_by; ?></td>
                                 </tr>
                                 </table>
                             </td>
@@ -214,6 +214,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.23  2006/10/08 19:41:44  jnhayart
+ * add localisation for 'by'
+ *
  * Revision 1.22  2006/04/28 23:33:20  jnhayart
  * Add in sidebar display of all opportunties in campaign
  *
