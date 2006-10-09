@@ -6,7 +6,7 @@
  *
  * @todo add opportunity
  *
- * $Id: new-form.php,v 1.7 2006/10/05 11:23:22 braverock Exp $
+ * $Id: new-form.php,v 1.8 2006/10/09 16:20:17 braverock Exp $
  *
  * NOTE: You need to set a session_user_id below.
  *       You should probably create and XRMS user just for
@@ -74,7 +74,7 @@ $company_code = $_POST['company_code'];
 
 $crm_status_id = $_POST['crm_status_id'];
 
-$user_id = $_POST['user_id'];
+$user_id = $_SESSION['session_user_id'];
 
 $company_source_id = $_POST['company_source_id'];
 
@@ -439,6 +439,9 @@ header("Location: $after_adding_new_companies_from_your_web_site_redirect_to_thi
 
 /**
  * $Log: new-form.php,v $
+ * Revision 1.8  2006/10/09 16:20:17  braverock
+ * use $_SESSION['session_user_id'] instead of $_POST for security
+ *
  * Revision 1.7  2006/10/05 11:23:22  braverock
  * - move all vars to vars_webform.inc
  * - make index a simple redirect to avoid header errors
@@ -462,6 +465,5 @@ header("Location: $after_adding_new_companies_from_your_web_site_redirect_to_thi
  * - Initial Revision of WebForm Plugin by Nic Lowe
  *   - added phpdoc
  *   - standardized on long php tags
- *
  */
 ?>
