@@ -1,7 +1,7 @@
 XRMS CRM Installation
 
 Original Author: Beth Macknik (maulani)
-$Id: INSTALL,v 1.12 2006/09/07 11:24:38 braverock Exp $
+$Id: INSTALL,v 1.13 2006/10/10 13:17:20 braverock Exp $
 
 
 INSTALLATION
@@ -169,7 +169,7 @@ The default template includes the following fields:
     fax
 
     //contact info
-    first_name
+    first_names
     last_name
     email
     work_phone
@@ -247,6 +247,11 @@ several pages of information about your php installation.
 /**
  * Change Log for INSTALL file
  * $Log: INSTALL,v $
+ * Revision 1.13  2006/10/10 13:17:20  braverock
+ *   - should be first_names (plural)
+ *   resolves SF bug
+ *   https://sourceforge.net/tracker/?func=detail&atid=588128&aid=1574505&group_id=88850
+ *
  * Revision 1.12  2006/09/07 11:24:38  braverock
  * - add troubleshooting information about max_execution_time
  *
