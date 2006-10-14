@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.45 2006/08/19 09:33:25 jnhayart Exp $
+ * $Id: new.php,v 1.46 2006/10/14 15:11:38 jnhayart Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -143,7 +143,7 @@ if ( !isset($gender) ) {
 $sql = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
 $rst = $con->execute($sql);
 if (!$country_id) {$country_id = $default_country_id;}
-$country_menu = $rst->getmenu2('address_country_id', $country_id, false, false, 0, 'style="font-size: x-small; border: outset; width: 175px;"');
+$country_menu = $rst->getmenu2('address_country_id', $country_id, false, false, 0, 'style="font-size: x-small; width: 175px;"'); 
 $rst->close();
 
 //set default of residential for address type
@@ -375,6 +375,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.46  2006/10/14 15:11:38  jnhayart
+ *  - eliminated outset style from country menu
+ * - patch from dbaudone
+ *
  * Revision 1.45  2006/08/19 09:33:25  jnhayart
  * add button for set a mail to opt-out directly during creation
  *
