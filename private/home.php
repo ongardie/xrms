@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.72 2006/04/09 14:22:24 braverock Exp $
+ * $Id: home.php,v 1.73 2006/10/14 14:32:12 jnhayart Exp $
  */
 
 // include the common files
@@ -175,7 +175,7 @@ start_page($page_title,true,$msg);
 
 <div id="Main">
     <div id="Content">
-        <? echo $front_splash;?>
+        <?php echo $front_splash;?>
         <!-- Display Type -->
         <form action="home.php" method="POST" name="<?php echo $form_name; ?>">
         <!-- List or Calendar View -->
@@ -227,6 +227,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.73  2006/10/14 14:32:12  jnhayart
+ * Restore front_splash hook display
+ *
  * Revision 1.72  2006/04/09 14:22:24  braverock
  * - make User Manual pdf link open a new window
  *
