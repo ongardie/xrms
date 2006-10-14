@@ -4,7 +4,7 @@
  *
  * Edit account-types
  *
- * $Id: one.php,v 1.12 2006/01/02 21:30:02 vanmer Exp $
+ * $Id: one.php,v 1.13 2006/10/14 14:44:52 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -79,7 +79,7 @@ require_once('participant_positions_sidebar.php');
                 <td class=widget_content_form_element colspan=2>
                 <?php if ($user_editable_flag) { ?>
                     <input class=button type=submit value="<?php echo _("Save Changes"); ?>">
-                <? } ?>
+                <?php } ?>
                     <input type=button class=button value="<?php echo _("Cancel"); ?>" onclick="javascript: location.href='some.php'">
                 </td>
             </tr>
@@ -121,6 +121,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.13  2006/10/14 14:44:52  braverock
+ * - fix short tags
+ *
  * Revision 1.12  2006/01/02 21:30:02  vanmer
  * - changed to use centralized dbconnection function
  *

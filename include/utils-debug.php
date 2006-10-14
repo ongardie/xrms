@@ -6,7 +6,7 @@ if ( !defined('IN_XRMS') )
   exit;
 }
 
-/* $Id: utils-debug.php,v 1.1 2004/07/21 14:50:12 cpsource Exp $ */
+/* $Id: utils-debug.php,v 1.2 2006/10/14 14:43:56 braverock Exp $ */
 
 //
 // utils-debug.php
@@ -105,8 +105,8 @@ function xrms_utils_debug()
   ?>
  <table width="558" height="116" border="1" cellpadding="0" cellspacing="0" bordercolor="#000000">
     <tr>
-    <td height="38" bgcolor="#D6D7FC"><font color="#000000">function <font color="#FF3300"><?
-    echo($debug_array[$tmp_counter]["function"]);?>(</font> <font color="#2020F0"><?
+    <td height="38" bgcolor="#D6D7FC"><font color="#000000">function <font color="#FF3300"><?php
+    echo($debug_array[$tmp_counter]["function"]);?>(</font> <font color="#2020F0"><?php
     //count how many args a there
     $args_counter = count($debug_array[$tmp_counter]["args"]);
     //print them
@@ -127,14 +127,14 @@ function xrms_utils_debug()
       </tr>
            <tr>
              <td bgcolor="#5F72FA"><font color="#FFFFFF">{</font><br>
-               <font color="#FFFFFF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file: <?
+               <font color="#FFFFFF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file: <?php
                echo($debug_array[$tmp_counter]["file"]);?></font><br>
-               <font color="#FFFFFF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line: <?
+               <font color="#FFFFFF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line: <?php
                echo($debug_array[$tmp_counter]["line"]);?></font><br>
                <font color="#FFFFFF">}</font></td>
            </tr>
          </table>
-         <?
+         <?php
 	 if(($tmp_counter + 1) != $counter)
          {
            echo("<br>was called by:<br>");
@@ -145,6 +145,9 @@ function xrms_utils_debug()
 
 /**
  * $Log: utils-debug.php,v $
+ * Revision 1.2  2006/10/14 14:43:56  braverock
+ * - fix short tags
+ *
  * Revision 1.1  2004/07/21 14:50:12  cpsource
  * - Define a couple of functions to generate stack
  *   traces useful for debugging.
