@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.83 2006/10/01 00:51:12 braverock Exp $
+ * $Id: some.php,v 1.84 2006/10/14 14:43:34 jnhayart Exp $
  */
 
 require_once('../include-locations.inc');
@@ -501,7 +501,11 @@ $country_menu = check_and_get($con,$sql2,'country_id',$country_id);
 
 
 if ($criteria_count > 0) {
-    add_audit_item($con, $session_user_id, 'searched', 'companies', '', 4);
+	if (strlen($company_name)>0){
+	    add_audit_item($con, $session_user_id, 'searched', 'companies', $company_name, 4);
+	}
+	else
+	    add_audit_item($con, $session_user_id, 'searched', 'companies', '', 4);
 }
 
 $page_title = _("Search Companies");
@@ -1033,6 +1037,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.84  2006/10/14 14:43:34  jnhayart
+ * Store name of company search in log
+ *
  * Revision 1.83  2006/10/01 00:51:12  braverock
  * - normalize use of truncate flag in get_user_menu
  *
