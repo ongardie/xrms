@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.71 2006/10/01 00:51:12 braverock Exp $
+ * $Id: some.php,v 1.72 2006/10/14 15:15:30 jnhayart Exp $
  */
 
 //include the standard files
@@ -64,7 +64,7 @@ arr_vars_session_set ( $arr_vars );
 $sql = "SELECT " .
     $con->Concat($con->qstr('<a href="one.php?contact_id='), "cont.contact_id", $con->qstr('">'), "cont.last_name", "', '", "cont.first_names", $con->qstr('</a>')) . " AS name," .
     $con->Concat($con->qstr('<a id="'), "c.company_name",  $con->qstr('" href="../companies/one.php?company_id='), "c.company_id", $con->qstr('">'), "c.company_name", $con->qstr('</a>')) . " AS company,".
-    "company_code, title, description, u.username, cont.email, cont.contact_id, cont.last_name, cont.first_names, c.company_name";
+    "company_code, title, description, u.username, cont.email, cont.work_phone, cont.cell_phone, cont.contact_id, cont.last_name, cont.first_names, c.company_name";
 
 $from = " from contacts cont, companies c, users u ";
 
@@ -364,13 +364,15 @@ $columns[] = array('name' => _("Title"), 'index_sql' => 'title');
 $columns[] = array('name' => _("Description"), 'index_sql' => 'description');
 $columns[] = array('name' => _("Owner"), 'index_sql' => 'username');
 $columns[] = array('name' => _("Email"), 'index_sql' => 'email');
+$columns[] = array('name' => _("Phone"), 'index_sql' => 'work_phone');
+$columns[] = array('name' => _("Cell Phone"), 'index_sql' => 'cell_phone');
 $columns=array_merge($columns, $advanced_search_columns);
 
 
 // selects the columns this user is interested in
 // no reason to set this if you don't want all by default
 $default_columns = null;
-$default_columns =  array('name','company','company_code','title','description','username');
+$default_columns =  array('name','company','title','work_phone','cell_phone','email');
 $default_columns=array_merge($default_columns, $extra_defaults);
 
 $pager_columns = new Pager_Columns('ContactPager', $columns, $default_columns, 'ContactForm');
@@ -379,8 +381,23 @@ $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 
 $columns = $pager_columns->GetUserColumns('default');
 
+// this is the callback function that the pager uses to fill in the calculated data.
+    function getContactDetails($row) {
+        global $con;
+        global $session_user_id;
+        global $company_id;
 
-$pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'ContactForm', 'ContactPager', $columns, false);
+        // this is for the CTI dialing bit
+        global $contact_id;
+        $contact_id = $row['contact_id'];
+
+        $row['work_phone'] = get_formatted_phone($con, $row['address_id'], $row['work_phone']);
+        $row['cell_phone'] = get_formatted_phone($con, $row['address_id'], $row['cell_phone']);
+        return $row;
+    }
+
+
+$pager = new GUP_Pager($con, $sql, 'getContactDetails', _('Search Results'), 'ContactForm', 'ContactPager', $columns, false);
 
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
@@ -487,6 +504,12 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.72  2006/10/14 15:15:30  jnhayart
+ * - added Phone and Cell Phone to selectable column layout
+ * - add call back for country display of phones numbers
+ * - changed default columns setting
+ * - PATCH from dbaudone
+ *
  * Revision 1.71  2006/10/01 00:51:12  braverock
  * - normalize use of truncate flag in get_user_menu
  *
