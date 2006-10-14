@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.143 2006/07/17 06:25:24 vanmer Exp $
+ * $Id: one.php,v 1.144 2006/10/14 15:00:26 jnhayart Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -247,7 +247,7 @@ $activities_widget =  GetActivitiesWidget($con, $search_terms, $activities_form_
 
 // contacts query
 $sql = "select " .
-        $con->Concat($con->qstr('<a id="'), 'last_name', $con->qstr(' '), 'first_names', $con->qstr('" href="' . $http_site_root . '/contacts/one.php?contact_id='), "contact_id", $con->qstr('&amp;return_url=/companies/one.php%3Fcompany_id=' . $company_id . '">'), "last_name", $con->qstr(', '), "first_names", $con->qstr('</a>')) . " AS name, summary, title, description, email, contact_id, first_names, last_name, address_id, work_phone, work_phone_ext
+        $con->Concat($con->qstr('<a id="'), 'last_name', $con->qstr(' '), 'first_names', $con->qstr('" href="' . $http_site_root . '/contacts/one.php?contact_id='), "contact_id", $con->qstr('&amp;return_url=/companies/one.php%3Fcompany_id=' . $company_id . '">'), "last_name", $con->qstr(', '), "first_names", $con->qstr('</a>')) . " AS name, summary, title, description, email, contact_id, first_names, last_name, address_id, cell_phone, work_phone, work_phone_ext
 from contacts where company_id = $company_id and contact_record_status = 'a'";
 
 
@@ -266,10 +266,11 @@ $columns[] = array('name' => _('Description'), 'index_sql' => 'description');
 $columns[] = array('name' => _('Phone'), 'index_calc' => 'work_phone');
 $columns[] = array('name' => _('Extension'), 'index_calc' => 'work_phone_ext');
 $columns[] = array('name' => _('E-Mail'), 'index_calc' => 'email', 'sql_sort_column' => 'email');
+$columns[] = array('name' => _('Cell Phone'), 'index_calc' => 'cell_phone', 'sql_sort_column' => 'cell_phone');
 
 // no reason to set this if you don't want all by default
 $default_columns = null;
-$default_columns = array('name','summary','title','description','work_phone','email');
+$default_columns = array('name','summary','title','work_phone','cell_phone','email');
 
 
 // selects the columns this user is interested in
@@ -294,6 +295,7 @@ if ($division_id) $new_contact_location.= "&division_id=$division_id";
         $contact_id = $row['contact_id'];
 
         $row['work_phone'] = get_formatted_phone($con, $address_id, $row['work_phone']);
+        $row['cell_phone'] = get_formatted_phone($con, $address_id, $row['cell_phone']);
         $row['email'] = "<a href='mailto:{$row['email']}' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&company_id=$company_id&contact_id={$row['contact_id']}&email=true&return_url=/companies/one.php%3Fcompany_id=$company_id&activity_title=email%20to%20{$row['first_names']}%20{$row['last_name']}'\" >" . htmlspecialchars($row['email']) . '</a>';
 
         return $row;
@@ -757,6 +759,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.144  2006/10/14 15:00:26  jnhayart
+ * add new column Cell_phone in contact display
+ * Patch from  dbaudone
+ *
  * Revision 1.143  2006/07/17 06:25:24  vanmer
  * *** empty log message ***
  *
