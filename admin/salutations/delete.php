@@ -4,7 +4,7 @@
  *
  * Delete salutation
  *
- * $Id: delete.php,v 1.3 2006/10/08 19:53:14 jnhayart Exp $
+ * $Id: delete.php,v 1.4 2006/10/17 21:56:47 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -20,7 +20,7 @@ $salutation_id = $_POST['salutation_id'];
 
 $con = get_xrms_dbconnection();
 
-$sql = "DELETE  FROM salutations WHERE salutation_id = $salutation_id";
+$sql = "DELETE FROM salutations WHERE salutation_id = $salutation_id";
 $rst = $con->execute($sql);
 
 $con->close();
@@ -29,6 +29,9 @@ header("Location: some.php");
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.4  2006/10/17 21:56:47  braverock
+ * - remove trainling whitespace
+ *
  * Revision 1.3  2006/10/08 19:53:14  jnhayart
  * patch from dbaudone - changed delete salutation query: now it works
  *
@@ -37,7 +40,5 @@ header("Location: some.php");
  *
  * Revision 1.1  2005/04/10 17:33:36  maulani
  * - Add administrative tool to modify salutations popup list
- *
- *
  */
 ?>
