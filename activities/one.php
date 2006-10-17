@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.140 2006/08/23 21:17:17 jnhayart Exp $
+ * $Id: one.php,v 1.141 2006/10/17 21:46:05 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -138,6 +138,7 @@ if ($rst) {
 
 $show_blank = (get_system_parameter($con, 'Allow Unassigned Activities') == "y" ? true : false);
 $user_menu = get_user_menu($con, $user_id, $show_blank, 'user_id', false);
+$user_email_menu = get_user_email_menu($con, $email_to, true, 'email_to', false);
 
 $activity_id_text = _("Activity ID:") . ' ' . $activity_id;
 
@@ -317,6 +318,11 @@ $activity_inline_rows    = do_hook_function('activity_inline_edit',$activity_rst
 $ra_extra_where = array();
 
 if($on_what_table && $on_what_id) {
+    // changed to correctly show only related activities belonging to the same company
+    if ($company_id)
+     $ra_extra_where[] = "(a.on_what_table = '$on_what_table' AND a.on_what_id = $on_what_id AND a.company_id = $company_id AND a.activity_id <> $activity_id)";
+    else
+     $ra_extra_where[] = "(a.on_what_table = '$on_what_table' AND a.on_what_id = $on_what_id AND a.activity_id <> $activity_id)";
     //don't do anything if this activity is on companies or contacts
     if (($on_what_table != 'companies') && ($on_what_table != 'contacts')){
         $ra_extra_where[] = "(a.on_what_table = '$on_what_table' AND a.on_what_id = $on_what_id)";
@@ -451,7 +457,7 @@ function logTime() {
         <input type=hidden name=old_status value="<?php echo $table_status_id ?>">
         <input type=hidden name=thread_id value="<?php  echo $thread_id; ?>">
         <input type=hidden name=followup_from_id value="<?php  echo $followup_from_id; ?>">
-
+        <input type=hidden name=email_to value="<?php  echo $email_to; ?>">
         <table class=widget cellspacing=1>
                 <?php echo $activity_content_top; ?>
             <tr>
@@ -592,7 +598,7 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Email This To"); ?></td>
-                <td class=widget_content_form_element><input type=text name=email_to></td>
+                 <td class=widget_content_form_element><?php  echo $user_email_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Completed?"); ?></td>
@@ -609,6 +615,7 @@ function logTime() {
             <tr id='resolution_reason' >
                 <td class=widget_label_right><?php echo _("Resolution Description"); ?></td>
                 <td class=widget_content_form_element>
+                <!-- db: begin  the following satement must to be written as single line to avoid bad display behaviour of the resolution description field content//-->
                     <textarea rows=10 cols=70 id=resolution_description name=resolution_description><?php echo htmlspecialchars(trim($resolution_description)); ?></textarea>
                 </td>
             </tr>
@@ -748,6 +755,12 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.141  2006/10/17 21:46:05  braverock
+ * - added user email menu
+ * - modified to correctly show only related activities belonging to the same company
+ * - avoided bad display behaviour of the resolution description field content
+ *    modified from 2006/07/31 patch by dbaudone
+ *
  * Revision 1.140  2006/08/23 21:17:17  jnhayart
  * prevent error in javascrip if localisation need use quote
  * and syntax for localisation of java display
