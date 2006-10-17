@@ -2,7 +2,7 @@
 /**
  * Manage Company Types
  *
- * $Id: some.php,v 1.10 2006/01/02 21:45:15 vanmer Exp $
+ * $Id: some.php,v 1.11 2006/10/17 21:50:57 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -17,7 +17,7 @@ $session_user_id = session_check( 'Admin' );
 
 $con = get_xrms_dbconnection();
 
-$sql = "select * from company_types where company_type_record_status = 'a' order by company_type_pretty_name";
+$sql = "select * from company_types where company_type_record_status = 'a' and company_type_id <>0 order by company_type_pretty_name";
 $rst = $con->execute($sql);
 
 if ($rst) {
@@ -89,6 +89,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.11  2006/10/17 21:50:57  braverock
+ * - changed company types query selection (patch from dbaudone)
+ *
  * Revision 1.10  2006/01/02 21:45:15  vanmer
  * - changed to use centralized database connection function
  *
