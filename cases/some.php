@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.41 2006/10/01 00:51:12 braverock Exp $
+ * $Id: some.php,v 1.42 2006/10/17 22:21:06 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -39,7 +39,6 @@ $arr_vars = array ( // local var name       // session variable name
          'case_title'          => array ( 'cases_case_title', arr_vars_SESSION ),
          'case_id'             => array ( 'cases_case_id', arr_vars_SESSION ),
          'company_name'        => array ( 'cases_company_name', arr_vars_GET_STRLEN_SESSION ),
-         // unused // 'company_type_id'     => array ( 'cases_company_type_id', arr_vars_SESSION ),
          'case_type_id'        => array ( 'case_type_id', arr_vars_SESSION ),
          'user_id'             => array ( 'cases_user_id', arr_vars_SESSION ),
          'case_status_id'      => array ( 'cases_case_status_id', arr_vars_GET_SESSION),
@@ -389,7 +388,7 @@ function initialize() {
 initialize();
 
 function bulkEmail() {
-    document.forms[0].action = "../email/email.php";
+    document.forms[0].action = "../email/email.php?return_url=/cases/some.php";
     document.forms[0].submit();
 }
 
@@ -411,6 +410,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.42  2006/10/17 22:21:06  braverock
+ * - add return_url for email (patch from dbaudone)
+ *
  * Revision 1.41  2006/10/01 00:51:12  braverock
  * - normalize use of truncate flag in get_user_menu
  *
