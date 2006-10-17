@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.80 2006/05/06 09:28:14 vanmer Exp $
+ * $Id: edit-2.php,v 1.81 2006/10/17 21:48:43 braverock Exp $
  */
 
 //include required files
@@ -127,6 +127,7 @@ if (!$scheduled_at) {
 if (!$ends_at) {
     $ends_at = date('Y-m-d H:i:s');
 }
+
 $ends_at = strtotime($ends_at);
 
 // make sure ends_at is later than scheduled at
@@ -134,6 +135,9 @@ if ($scheduled_at > $ends_at) {
    //set $ends_at to = $scheduled_at
    $ends_at = $scheduled_at;
 }
+
+$ends_at_string = date('Y-m-d H:i:s',$ends_at);
+
 
 $con = get_xrms_dbconnection();
 //$con->debug = 1;
@@ -242,7 +246,7 @@ $rec['on_what_table']        = $on_what_table;
 $rec['on_what_id']           = $on_what_id;
 $rec['completed_by']         = $completed_by;
 $rec['thread_id']            = $thread_id;
-$rec['address_id']            = $address_id;
+$rec['address_id']           = $address_id;
 $rec['followup_from_id']     = $followup_from_id;
 $rec['activity_priority_id'] = $activity_priority_id;
 $rec['resolution_description'] = trim($resolution_description);
@@ -268,7 +272,7 @@ if ($upd['allow_status_change']) {
                 $table_name=strtolower($table_name);
                 $rec["{$table_name}_id"]=$on_what_id;
                 $rec[$table_name . "_status_id"] = $table_status_id;
-    //            print_r($rec);
+                // print_r($rec);
                 switch ($table_name) {
                     case 'case':
                         update_case($con, $rec, $on_what_id, false, $magicq);
@@ -346,33 +350,32 @@ if ($company_id) {
     $email_return=urlencode('/activities/some.php');
 }
 
-$email_message="
-This is an UPDATED $app_title activity:
-
-$http_site_root/activities/one.php?return_url=$email_return&activity_id=$activity_id
-
-Title: $activity_title
-Description: $activity_description
-
-Contact: $contact_name
-Contact Phone: $contact_phone
-
-Company: $company_name
-Company Phone: $company_phone
-
-User: $username
-Type: $activity_type
-Status: $activity_status_long
-Scheduled At: $scheduled_at
-Ends At: $ends_at
-
-";
+if ($email_to) {
+    $sql1 = "SELECT email FROM users WHERE user_id = '$session_user_id'";
+    $rst1 = $con->execute($sql1);
+    if ($rst1) $from_email_address = $rst1->fields['email'];
+    if (!$from_email_address) $from_email_address = get_system_parameter($con, "Sender Email Address");
+    $mimeType = "html";
+    $output = _("Activity");
+    $output .= "<a href=\"" . $http_site_root . ": " . "/activities/one.php?activity_id=" . $activity_id . "\">" . htmlspecialchars($activity_title) . "</a>";
+    $output .= "\n<br>" . _("Activity Type") . ": " .  $activity_type;
+    $output .= "\n<br>" . _("Owner") . ": " .  $username;
+    $output .= "\n<br>" . _("Scheduled End") . ": " . $ends_at_string;
+    $output .= "\n<br>" . _("Company") . ": " . $company_name;
+    $output .= "\n<br>" . _("Contact") . ": " . $contact_name . "<br>\n";
+    $output .= "\n<br>" . _("Activity Notes") . ": <br>\n" .  htmlspecialchars($activity_description);
+    require_once ( $include_directory . 'classes/SMTPs/SMTPs.php' );
+    $objSMTP = new SMTPs ();
+    $objSMTP->setConfig( $xrms_file_root.'/include/classes/SMTPs/SMTPs.ini.php');
+    $objSMTP->setFrom ( $from_email_address  );
+    $objSMTP->setSubject ( _("Updated Activity") . " " . $activity_title );
+    $objSMTP->setTo ( $email_to );
+    $objSMTP->setBodyContent ( $output, $mimeType );
+    $objSMTP->sendMsg ();
+}
 
 $con->close();
 
-if ($email_to) {
-    mail($email_to, "$app_title: $activity_title", $email_message);
-}
 
 if ($followup) {
 
@@ -389,6 +392,10 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.81  2006/10/17 21:48:43  braverock
+ * - use SMTPs class to email activities
+ *   modified from patch by dbaudone
+ *
  * Revision 1.80  2006/05/06 09:28:14  vanmer
  * - replaced direct sql in edit-2 to function calls where appropriate
  * - added functionality to change status on an entity when changed from activities/one.php, where appropriate
