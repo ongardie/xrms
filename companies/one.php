@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.144 2006/10/14 15:00:26 jnhayart Exp $
+ * $Id: one.php,v 1.145 2006/10/17 22:30:34 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -60,6 +60,12 @@ update_recent_items($con, $session_user_id, "companies", $company_id);
 
 $rst = get_company($con, $company_id, $return_rst=true);
 
+$sql1 = 'select ct.*, c.* ' .
+       "from company_types ct, companies c
+        where c.company_type_id = ct.company_type_id
+        and c.company_id = $company_id";
+
+$rst1 = $con->execute($sql1);
 
 if ($rst) {
   if ( !$rst->EOF ) {
@@ -72,6 +78,10 @@ if ($rst) {
     $company_code = $rst->fields['company_code'];
     $industry_pretty_name = $rst->fields['industry_pretty_name'];
     $crm_status_pretty_name = $rst->fields['crm_status_pretty_name'];
+    if ($rst1)
+       $company_type_pretty_name = $rst1->fields['company_type_pretty_name'];
+    else
+       $company_type_pretty_name = '';
     $company_source = $rst->fields['company_source_display_html'];
     $industry_pretty_name = $rst->fields['industry_pretty_name'];
     $user_id = $rst->fields['user_id'];
@@ -121,6 +131,7 @@ if ($rst) {
     $company_code = '';
     $industry_pretty_name = '';
     $crm_status_pretty_name = '';
+    $company_type_pretty_name = '';
     $company_source = '';
     $industry_pretty_name = '';
     $user_id = '';
@@ -268,6 +279,7 @@ $columns[] = array('name' => _('Extension'), 'index_calc' => 'work_phone_ext');
 $columns[] = array('name' => _('E-Mail'), 'index_calc' => 'email', 'sql_sort_column' => 'email');
 $columns[] = array('name' => _('Cell Phone'), 'index_calc' => 'cell_phone', 'sql_sort_column' => 'cell_phone');
 
+$columns[] = array('name' => _('cell_phone'), 'index_calc' => 'cell_phone', 'sql_sort_column' => 'cell_phone');
 // no reason to set this if you don't want all by default
 $default_columns = null;
 $default_columns = array('name','summary','title','work_phone','cell_phone','email');
@@ -306,7 +318,7 @@ $pager = new GUP_Pager($con, $sql, 'getContactDetails', _('Contacts'), $contacts
 $contacts_export_button=$pager->GetAndUseExportButton();
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button $contacts_export_button
-            <input class=button type=button value=\"" .  _('Mail Merge') . "\" onclick=\"javascript: location.href='../email/email.php?scope=company&company_id=$company_id'\">" .
+            <input class=button type=button value=\"" .  _('Mail Merge') . "\" onclick=\"javascript: location.href='../email/email.php?scope=company&company_id=$company_id&return_url=$return_url'\">" .
             render_create_button("New",'button',"location.href='$new_contact_location';") .  "</td></tr>";
 
 $pager->AddEndRows($endrows);
@@ -496,6 +508,12 @@ function markComplete() {
                                 <tr>
                                     <td class=sublabel><?php echo _("CRM Status"); ?></td>
                                     <td class=clear><?php echo $crm_status_pretty_name; ?></td>
+                                </tr>
+                                <?php }; ?>
+                                <?php if ($company_type_pretty_name) { ?>
+                                <tr>
+                                    <td class=sublabel><?php echo _("Company Type"); ?></td>
+                                    <td class=clear><?php echo $company_type_pretty_name; ?></td>
                                 </tr>
                                 <?php }; ?>
                                 <?php if ($owner_username) { ?>
@@ -759,9 +777,20 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.145  2006/10/17 22:30:34  braverock
+ * patch  2006/08/06 from  dbaudone
+ * - added company_type
+ * - added cell phone display in contacts info
+ * - added return_url in mailmerge call
+ *
  * Revision 1.144  2006/10/14 15:00:26  jnhayart
  * add new column Cell_phone in contact display
  * Patch from  dbaudone
+ *
+ * Revision 1.144  2006/08/06 02:26:00  dbaudone
+ * - added company_type
+ * - added cell phone display in contacts info
+ * - added return_url in mailmerge call
  *
  * Revision 1.143  2006/07/17 06:25:24  vanmer
  * *** empty log message ***
