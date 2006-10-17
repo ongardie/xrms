@@ -5,7 +5,7 @@
  * Copyright (c) 2004-2006 XRMS Development Team
  *
  * @author Aaron van Meerten
- * $Id: one_email_template.php,v 1.6 2006/04/18 15:45:32 braverock Exp $
+ * $Id: one_email_template.php,v 1.7 2006/10/17 21:53:05 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -34,7 +34,7 @@ start_page($page_title);
   $model->ReadSchemaFromDB($con, 'email_templates');
 
         $model->SetDisplayNames(array('email_template_type_id' => _("Email Template Type"),
-                                      'email_template_title' => _("Title"),
+                                      'email_template_title' => _("Email Template Title"),
                                       'email_template_body' => _("Body")));
 
         $model->SetForeignKeyField('email_template_type_id', _("Email Template Type"), 'email_template_type', 'email_template_type_id', 'email_template_type_name');
@@ -84,6 +84,9 @@ if ($_GET['form_action']=='edit') {
 
 /**
  * $Log: one_email_template.php,v $
+ * Revision 1.7  2006/10/17 21:53:05  braverock
+ * - fix mail_template_title (patch from dbaudone)
+ *
  * Revision 1.6  2006/04/18 15:45:32  braverock
  * - localize missed i18n strings
  * - fix indentation for better legibility
