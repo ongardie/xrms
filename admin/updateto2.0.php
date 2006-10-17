@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.18 2006/10/01 00:27:06 braverock Exp $
+ * $Id: updateto2.0.php,v 1.19 2006/10/17 21:56:12 braverock Exp $
  */
 
 // where do we include from
@@ -4479,7 +4479,7 @@ $con->execute($sql);
     }
 
 
-   if (!in_array('contact_former_companies',$table_list)) {
+if (!in_array('contact_former_companies',$table_list)) {
     $sql ="CREATE TABLE contact_former_companies (
     cfc_id INT unsigned NOT NULL auto_increment,
     contact_id int NOT NULL default '0',
@@ -4490,7 +4490,11 @@ $con->execute($sql);
     KEY (former_company_id)
     )";
     $rst=$con->execute($sql);
-   }
+    if ($rst) {
+        $msg .= _("Successfully added contact_former_companies table.").'<BR><BR>';
+    }
+
+}
 
 if (!in_array('company_campaign_map',$table_list)) {
     $sql ="CREATE TABLE company_campaign_map (
@@ -4501,6 +4505,11 @@ if (!in_array('company_campaign_map',$table_list)) {
     KEY (campaign_id),
     KEY (company_id)
     )";
+    $rst=$con->execute($sql);
+    if ($rst) {
+        $msg .= _("Successfully added company_campaign_map table.").'<BR><BR>';
+    }
+
 }
 
 install_upgrade_acl($con);
@@ -4830,6 +4839,10 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.19  2006/10/17 21:56:12  braverock
+ * - add company_campaign_map table
+ * - add msg on contact_former_companies
+ *
  * Revision 1.18  2006/10/01 00:27:06  braverock
  * - add company_campaign_map table
  *
