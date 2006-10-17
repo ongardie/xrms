@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.49 2006/05/02 00:51:25 vanmer Exp $
+ * $Id: one.php,v 1.50 2006/10/17 22:19:27 braverock Exp $
  */
 
 //include required files
@@ -86,7 +86,7 @@ if ($case_data) {
 }
 
 // get the new activities widget
-$return_url = "/cases/one.php?case_id=$case_id"; 
+$return_url = "/cases/one.php?case_id=$case_id";
 
 $new_activity_widget = GetNewActivityWidget($con, $session_user_id, $return_url, 'cases', $case_id, $company_id, $contact_id);
 
@@ -109,7 +109,7 @@ $activities_widget = GetActivitiesWidget($con, $search_terms, $form_name, _('Act
 /*********************************/
 /*** Include the sidebar boxes ***/
 
-//set up our substitution variables for use in the siddebars
+//set up our substitution variables for use in the sidebars
 $on_what_table = 'cases';
 $on_what_id = $case_id;
 
@@ -192,18 +192,19 @@ start_page($page_title, true, $msg);
                                     <td class=sublabel><?php echo _("Last Modified"); ?></td>
                                     <td class=clear><?php  echo $last_modified_at; ?> (<?php  echo $last_modified_by; ?>)</td>
                                 </tr>
-<?php if ($closed_at AND $closed_by) { ?>
+                                <?php if ($closed_at AND $closed_by) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Closed"); ?></td>
                                     <td class=clear><?php  echo $closed_at; ?> (<?php  echo $closed_by; ?>)</td>
                                 </tr>
-<?php } ?>
+                                <?php } ?>
                                 </table>
                             </td>
 
                             <td width=50% class=clear align=left valign=top>
 
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
+                                <?php if (($contact_id)&&($contact_id <> 1)) { ?>
                                 <tr>
                                     <td width=1% class=sublabel><?php echo _("Contact"); ?></td>
                                     <td class=clear><a href="<?php  echo $http_site_root; ?>/contacts/one.php?contact_id=<?php  echo $contact_id; ?>"><?php  echo $first_names; ?> <?php  echo $last_name; ?></a></td>
@@ -220,6 +221,8 @@ start_page($page_title, true, $msg);
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
+                                <?php } ?>
+                                <?php if (($company_id)&&($company_id <> 1)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Company"); ?></td>
                                     <td class=clear><a href="<?php  echo $http_site_root; ?>/companies/one.php?company_id=<?php  echo $company_id; ?>"><?php  echo $company_name; ?></a> (<?php  echo $company_code; ?>)</td>
@@ -228,6 +231,7 @@ start_page($page_title, true, $msg);
                                     <td class=sublabel><?php echo _("Division"); ?></td>
                                     <td class=clear><a href="<?php  echo $http_site_root; ?>/companies/one.php?company_id=<?php  echo $company_id; ?>&division_id=<?php echo $division_id; ?>"><?php  echo $division_name; ?></a></td>
                                 </tr>
+                                <?php } ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Account Owner"); ?></td>
                                     <td class=clear><?php  echo $account_owner_username; ?></td>
@@ -296,6 +300,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.50  2006/10/17 22:19:27  braverock
+ * - don't show blocks of information for things that aren't set
+ *
  * Revision 1.49  2006/05/02 00:51:25  vanmer
  * - changed to use APIs to fetch details about case
  *
