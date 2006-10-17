@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of cases
  *
- * $Id: edit.php,v 1.22 2006/01/02 22:47:25 vanmer Exp $
+ * $Id: edit.php,v 1.23 2006/10/17 22:05:01 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -292,6 +292,8 @@ function validate() {
 
 initialize();
 
+</script>
+<script language="JavaScript" type="text/javascript">
 Calendar.setup({
         inputField     :    "f_date_c",      // id of the input field
         ifFormat       :    "%Y-%m-%d %H:%M:%S",       // format of the input field
@@ -310,6 +312,12 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.23  2006/10/17 22:05:01  braverock
+ * - modified calendar script to make it working with every language and system (patch from dbaudone)
+ *
+ * Revision 1.23  2006/08/02 01:41:00  dbaudone
+ * - modified calendar script to make it working with every language and system
+ *
  * Revision 1.22  2006/01/02 22:47:25  vanmer
  * - changed to use centralized dbconnection function
  *
