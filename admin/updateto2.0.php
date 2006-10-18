@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.19 2006/10/17 21:56:12 braverock Exp $
+ * $Id: updateto2.0.php,v 1.20 2006/10/18 18:14:58 braverock Exp $
  */
 
 // where do we include from
@@ -4246,6 +4246,7 @@ $con->execute($sql);
         if (!$rst) {
             db_error_handler ($con, $sql);
         }
+        if ($rst) $msg .= _("Successfully added user preference types table.").'<BR><BR>';
     }
 
     if (!in_array('user_preferences',$table_list)) {
@@ -4267,6 +4268,7 @@ $con->execute($sql);
         if (!$rst) {
             db_error_handler ($con, $sql);
         }
+        if ($rst) $msg .= _("Successfully added user preferences table.").'<BR><BR>';
     }
     if (!in_array('user_preference_type_options',$table_list)) {
         $sql = "CREATE TABLE `user_preference_type_options` (
@@ -4283,6 +4285,7 @@ $con->execute($sql);
         if (!$rst) {
             db_error_handler ($con, $sql);
         }
+        if ($rst) $msg .= _("Successfully added user preference type options table.").'<BR><BR>';
     }
 
     if (!in_array('activity_participants',$table_list)) {
@@ -4302,6 +4305,7 @@ $con->execute($sql);
         if (!$rst) {
             db_error_handler ($con, $sql);
         }
+        if ($rst) $msg .= _("Successfully added activity participants table.").'<BR><BR>';
     } else {
         $sql = "SELECT * FROM activity_participants";
         $rst = $con->SelectLimit($sql, 1);
@@ -4328,6 +4332,7 @@ $con->execute($sql);
         if (!$rst) {
             db_error_handler ($con, $sql);
         }
+        if ($rst) $msg .= _("Successfully added activity participant positions table.").'<BR><BR>';
        $sql = " INSERT INTO `activity_participant_positions` ( activity_type_id , participant_position_name , global_flag )
                     VALUES ( NULL , 'Participant', '1')";
         $rst = $con->execute($sql);
@@ -4388,6 +4393,7 @@ $con->execute($sql);
         if (!$rst) {
             db_error_handler ($con, $sql);
         }
+        if ($rst) $msg .= _("Successfully added workflow history table.").'<BR><BR>';
     }
 
     if (!in_array('activities_recurrence',$table_list)) {
@@ -4409,6 +4415,7 @@ $con->execute($sql);
         if (!$rst) {
             db_error_handler ($con, $sql);
         }
+        if ($rst) $msg .= _("Successfully added activity recurrance table.").'<BR><BR>';
     }
     if (!in_array('activity_resolution_types',$table_list)) {
             $sql = "CREATE TABLE `activity_resolution_types` (
@@ -4812,6 +4819,18 @@ if ($pager_view_pref) {
     } //end if $view_pref_id
 } // end pager view update
 
+//Upgrade to add company_type_id to thew companies table
+//this field add uses the DB independent ADOdb functions to make this happen
+    $table_name='companies';
+    $field_name='company_type_id';
+    $field_definition=array();
+    //add a boolean flag
+    $field_definition[]=array('NAME'=>$field_name,'TYPE'=>'I');
+
+    $table_opts='';
+    $ret_bool = add_field($con, $table_name, $field_definition, $table_opts, &$upgrade_msgs);
+    if ($ret_bool) $msg .= _("added column company_type_id to companies table");
+
 //FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
 set_admin_preference($con, 'xrms_version', '1.99.2');
 
@@ -4823,7 +4842,6 @@ $con->close();
 $page_title = _("Update Complete");
 start_page($page_title, true, $msg);
 
-echo $msg;
 ?>
 
 <BR>
@@ -4839,6 +4857,10 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.20  2006/10/18 18:14:58  braverock
+ * - add company_type_id to companies table
+ * - add $msg strings for creation of several other tables that didn't have notation
+ *
  * Revision 1.19  2006/10/17 21:56:12  braverock
  * - add company_campaign_map table
  * - add msg on contact_former_companies
