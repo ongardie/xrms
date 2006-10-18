@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: update.php,v 1.112 2006/08/03 01:55:37 ongardie Exp $
+ * $Id: update.php,v 1.113 2006/10/18 18:15:37 braverock Exp $
  */
 
 // where do we include from
@@ -40,7 +40,7 @@ require_once('../install/data.php');
  * 2) Use ADODB's functionality to create SQL statement to execute
  * 3) Comments above each upgrade line to indicate what purpose it serves
  * 4) A new INTERNATIONALIZED upgrade message appended to the upgrade message array, when successful update occurs
- * 
+ *
 **/
 
 
@@ -69,15 +69,15 @@ $upgrade_msgs=array();
 //get a list of tables currently existing in the system
 $table_list = list_db_tables($con);
 
-//RUN UPGRADES IN ORDER, 
+//RUN UPGRADES IN ORDER,
 
-/** 
+/**
  * Example 1:
  * Creating a table TEST with 3 fields, one of which is the primary key and auto-incremented
  *, another is a text field and the third is a float:
 **/
 /*
-    //Upgrade to add the TEST table, used to demonstrate CreateTableSQL call    
+    //Upgrade to add the TEST table, used to demonstrate CreateTableSQL call
     $table_name='TEST';
     $table_fields=array();
     $table_fields[]=array('NAME'=>'TEST_ID','TYPE'=>'I','SIZE'=>'','NOTNULL'=>'NOTNULL','KEY'=>'KEY','AUTOINCREMENT'=>'AUTOINCREMENT');
@@ -87,19 +87,19 @@ $table_list = list_db_tables($con);
     create_table($con, $table_name, $table_fields, $table_opts, $upgrade_msgs);
 */
 
-/** 
+/**
  * Example 2:
  * Rename a field that already exists in a table
 **/
 /*
-    //Upgrade to add the TEST table, used to demonstrate CreateTableSQL call    
+    //Upgrade to add the TEST table, used to demonstrate CreateTableSQL call
     $table_name='TEST';
     $old_field_name='TEST_NAME';
     $new_field_name='TEST_STRING';
     rename_fieldname($con, $table_name, $old_field_name, $new_field_name, $upgrade_msgs);
 */
 
-/** 
+/**
  * Example 3:
  * Adding a boolean field to a table
 **/
@@ -114,7 +114,7 @@ $table_list = list_db_tables($con);
     $table_opts='';
     add_field($con, $table_name, $field_definition, $table_opts, &$upgrade_msgs);
 */
-/** 
+/**
  * Example 4:
  * Inserting a row into a table, after ensuring row TEST does not exist
 **/
@@ -135,7 +135,7 @@ $table_list = list_db_tables($con);
         }
     }
 */
-/** 
+/**
  * Example 5:
  * Dropping the TEST table
 **/
@@ -159,7 +159,6 @@ $con->close();
 $page_title = _("Update Complete");
 start_page($page_title, true, $msg);
 
-echo $msg;
 ?>
 
 <BR>
@@ -175,6 +174,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.113  2006/10/18 18:15:37  braverock
+ * - remove double output of $msg
+ *
  * Revision 1.112  2006/08/03 01:55:37  ongardie
  * - Added "household" unknown company method.
  * - Allow admin/update.php to redirect to admin/updateto2.0.php for v1.99.2.
