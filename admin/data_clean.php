@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @todo: Active companies should always have active addresses
  *
- * $Id: data_clean.php,v 1.15 2006/08/15 08:58:22 jnhayart Exp $
+ * $Id: data_clean.php,v 1.16 2006/10/19 17:16:23 jnhayart Exp $
  */
 
 // where do we include from
@@ -353,6 +353,20 @@ if ($opportunities_to_fix > 0) {
 	$rst = $con->execute($upd);
 }
 
+// Make sure that all adress have a name
+$sql = "SELECT * FROM adresses WHERE adress_name = ''";
+$rst = $con->execute($sql);
+$adresses_to_fix = $rst->RecordCount();
+if ($adresses_to_fix > 0) {
+    $msg .= _("Need to assign a default name for") . " " . $adresses_to_fix . " " .  _("Adresses"). "<BR><BR>";
+
+	$rec = array();
+	$rec['adress_name'] = _("(No Name)");
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$rst = $con->execute($upd);
+}
+
 //close the database connection, because we don't need it anymore
 $con->close();
 
@@ -373,6 +387,9 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.16  2006/10/19 17:16:23  jnhayart
+ * Add new  data clean for "noname" adresses
+ *
  * Revision 1.15  2006/08/15 08:58:22  jnhayart
  * add cleaning of activities and opportunities with no name
  * add code for localisation of string
