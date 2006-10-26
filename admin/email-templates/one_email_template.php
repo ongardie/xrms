@@ -5,7 +5,7 @@
  * Copyright (c) 2004-2006 XRMS Development Team
  *
  * @author Aaron van Meerten
- * $Id: one_email_template.php,v 1.7 2006/10/17 21:53:05 braverock Exp $
+ * $Id: one_email_template.php,v 1.8 2006/10/26 22:08:32 niclowe Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -35,11 +35,13 @@ start_page($page_title);
 
         $model->SetDisplayNames(array('email_template_type_id' => _("Email Template Type"),
                                       'email_template_title' => _("Email Template Title"),
+																			'email_template_record_status' => _("Record Status"),
                                       'email_template_body' => _("Body")));
 
         $model->SetForeignKeyField('email_template_type_id', _("Email Template Type"), 'email_template_type', 'email_template_type_id', 'email_template_type_name');
-        $model->SetFieldType('email_template_record_status', 'db_only');
+        //$model->SetFieldType('email_template_record_status', 'db_only');
         $model->SetFieldType('email_template_body', 'textarea','cols=50 rows=10');
+				$model->SetFieldType('email_template_record_status', 'text','size=1');
 
   $view = new ADOdb_QuickForm_View($con, _("Email Template"));
   $view->SetReturnButton(_("Return to List"), $return_url);
@@ -84,6 +86,9 @@ if ($_GET['form_action']=='edit') {
 
 /**
  * $Log: one_email_template.php,v $
+ * Revision 1.8  2006/10/26 22:08:32  niclowe
+ * added record status for template deletion
+ *
  * Revision 1.7  2006/10/17 21:53:05  braverock
  * - fix mail_template_title (patch from dbaudone)
  *
