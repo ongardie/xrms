@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.30 2006/02/21 01:58:19 vanmer Exp $
+* $Id: email-4.php,v 1.31 2006/10/26 08:57:56 niclowe Exp $
 *
 * @todo use a more secure method than 'unlink' to delete files after sending them
 */
@@ -91,7 +91,13 @@ if ( $_SESSION['email_sent'] === false )
         $activity_type_id = get_activity_type($con, 'ETO');
         $activity_type_id = $activity_type_id['activity_type_id'];
 
-        $activity_participant_position_id = get_activity_participant_positions($con, 'To', $activity_type_id);
+        /*
+				Nic Lowe 
+				This code is very ugly - what does it do?
+				It generates an error - Warning: current(): Passed variable is not an array or object in /home/chamel/public_html/xrms/email/email-4.php on line 95
+				Why does it do this 3 times?
+				*/
+				$activity_participant_position_id = get_activity_participant_positions($con, 'To', $activity_type_id);
         $activity_participant_position_id = current ( $activity_participant_position_id );
         $activity_participant_position_id = $activity_participant_position_id['activity_participant_position_id'];
 
@@ -123,10 +129,16 @@ if ( $_SESSION['email_sent'] === false )
 
                 $_email_full = '<' . $_email_addr . '>';
             }
+						//here is where we do the mail merge of the variables
+						include_once "mail_merge_functions.inc";
+						$m=mail_merge_email($subject,$body,$contact_id="",$address_id="");
+						$email_template_title=$m[0];
+						$_email_full=$m[1];
 
             $objSMTP = new SMTPs ();
 
             $objSMTP->setConfig( $xrms_file_root.'/include/classes/SMTPs/SMTPs.ini.php');
+						
 
             $objSMTP->setFrom ( '<' . $sender_name . '>' );
             $objSMTP->setSubject ( stripslashes($email_template_title) );
@@ -148,8 +160,12 @@ if ( $_SESSION['email_sent'] === false )
             if (!$output) $output = ' ';
 
             $objSMTP->setBodyContent ( $output );
-
-            $objSMTP->sendMsg ();
+						
+						/* Nic Lowe
+						Shouldnt there been some validation here that the thing actually got sent?
+						Otherwise it seems to fail silently - or rather, it fails and it says it worked....
+						*/
+            $mail_result=$objSMTP->sendMsg ();
 
     /*
             if (!mail($rst->fields['email'], $title, $output, $headers)) {
@@ -158,7 +174,8 @@ if ( $_SESSION['email_sent'] === false )
                             //exit();
             } else{
     */
-            $feedback .= "<li>" . $rst->fields['email'] ."</li>";
+            if($mail_result)$feedback .= "<li>". $rst->fields['email'] ."</li>";
+						if(!$mail_result)$feedback .= "<font color=red><li>FAILED:". $rst->fields['email'] .":".$objSMTP->getErrors()."</li></font>";
 
             //add activity
             if ( ! $company_id )
@@ -338,6 +355,11 @@ function getFile($file_to_open)
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.31  2006/10/26 08:57:56  niclowe
+* -added custom field to mail merge
+* -added error trapping for emails that fail silently (or appear to have worked)
+* -added mail merge preview for custom emails
+*
 * Revision 1.30  2006/02/21 01:58:19  vanmer
 * - changed to use SMTPs.ini.php file from include/classes/SMTPs instead of email directory
 *

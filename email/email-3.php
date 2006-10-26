@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.19 2006/01/02 23:02:14 vanmer Exp $
+ * $Id: email-3.php,v 1.20 2006/10/26 08:57:56 niclowe Exp $
  */
 
 
@@ -83,7 +83,7 @@ else
 $con = get_xrms_dbconnection();
 //$con->debug = 1;
 
-$sql = "select cont.contact_id, cont.email, cont.first_names, cont.last_name, c.company_name, u.username
+$sql = "select cont.contact_id, cont.email, cont.first_names, cont.last_name, c.company_name, u.username,c.company_id
 from contacts cont, companies c, users u
 where c.company_id = cont.company_id
 and c.user_id = u.user_id
@@ -103,6 +103,7 @@ if ($rst) {
         $contact_rows .= '<td class="widget_content">' . $rst->fields['username'] . '</td>';
         $contact_rows .= '<td class="widget_content">' . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</td>';
         $contact_rows .= '<td class="widget_content">' . $rst->fields['email'] . '</td>';
+				$contact_rows .= '<td class="widget_content"><a href="email_merge_preview.php?contact_id='.$rst->fields['contact_id'].'&company_id='.$rst->fields['company_id'].'" target=_blank>Preview</a></td>';
         $contact_rows .= "</tr>\n";
         $rst->movenext();
     }
@@ -123,7 +124,7 @@ start_page($page_title, true, $msg);
         <form action="email-4.php" method="post">
         <table class="widget" cellspacing="1">
             <tr>
-                <td class=widget_header colspan=5><?php echo _("Confirm Recipients"); ?></td>
+                <td class=widget_header colspan=6><?php echo _("Confirm Recipients"); ?></td>
             </tr>
             <tr>
                 <td class="widget_label">&nbsp;</td>
@@ -131,10 +132,11 @@ start_page($page_title, true, $msg);
                 <td class="widget_label"><?php echo _("Owner"); ?></td>
                 <td class="widget_label"><?php echo _("Contact"); ?></td>
                 <td class="widget_label"><?php echo _("E-Mail"); ?></td>
+								<td class="widget_label"><?php echo _("Preview"); ?></td>
             </tr>
             <?php  echo $contact_rows ?>
             <tr>
-                <td class="widget_content_form_element" colspan="5">
+                <td class="widget_content_form_element" colspan="6">
                     <input type="submit" class="button" value="<?php echo _("Continue"); ?>">
                 </td>
             </tr>
@@ -158,6 +160,11 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.20  2006/10/26 08:57:56  niclowe
+ * -added custom field to mail merge
+ * -added error trapping for emails that fail silently (or appear to have worked)
+ * -added mail merge preview for custom emails
+ *
  * Revision 1.19  2006/01/02 23:02:14  vanmer
  * - changed to use centralized dbconnection function
  *

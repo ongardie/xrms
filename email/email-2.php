@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.17 2006/01/02 23:02:14 vanmer Exp $
+* $Id: email-2.php,v 1.18 2006/10/26 08:57:56 niclowe Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -128,6 +128,47 @@ else
     $_SESSION['attachment_list'] = $attach_list;
 
     }
+	
+	//add fields menu for custom emails
+	$i=0;
+	$sql="SHOW COLUMNS FROM contacts";
+	$rst_fields=$con->execute($sql);
+	$contacts_menu.="<select name=\"contacts_fields\">\n";
+	$arr=$rst_fields->GetRows();
+	/*
+	I had to do it the way below because this way doesnt work....
+	$contacts_menu.=$rst_fields->GetMenu("companies_fields");
+	*/
+	while ($i <$rst_fields->RecordCount()) {
+				$contacts_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
+				$i++;
+	}
+	$contacts_menu.="</select>";
+	$i=0;
+	
+	$sql="SHOW COLUMNS FROM companies";
+	$rst_fields=$con->execute($sql);
+	$companies_menu.="<select name=\"companies_fields\">\n";
+	$arr=$rst_fields->GetRows();
+	while ($i <$rst_fields->RecordCount()) {
+				$companies_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
+				$i++;
+	}
+	$companies_menu.="</select>";
+	$i=0;
+	
+	$sql="SHOW COLUMNS FROM addresses";
+	$rst_fields=$con->execute($sql);
+	$addresses_menu.="<select name=\"addresses_fields\">\n";
+	$arr=$rst_fields->GetRows();
+	while ($i <$rst_fields->RecordCount()) {
+				$addresses_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
+				$i++;
+	}
+	$addresses_menu.="</select>";
+
+
+	
 
     $rst->close();
 }
@@ -176,6 +217,26 @@ function nextPage( $_where, $_what )
 
 
 </script>
+<script>
+function insertAtCursor(myField, myValue) {
+//IE support
+if (document.selection) {
+myField.focus();
+sel = document.selection.createRange();
+sel.text = myValue;
+}
+//MOZILLA/NETSCAPE support
+else if (myField.selectionStart || myField.selectionStart == ‘0?) {
+var startPos = myField.selectionStart;
+var endPos = myField.selectionEnd;
+myField.value = myField.value.substring(0, startPos)
++ myValue
++ myField.value.substring(endPos, myField.value.length);
+} else {
+myField.value += myValue;
+}
+}
+</script>
 
 
 <div id="Main">
@@ -188,27 +249,28 @@ function nextPage( $_where, $_what )
       id="mainForm"
       onsubmit="javascript: return validate();" method="post">
 
-<table class="widget" cellspacing="1">
-    <tr>
-        <td class="widget_header" colspan="2">
-            <?php echo _("Edit Message"); ?> - <?php echo $email_template_title ?>
+    <table class="widget" cellspacing="1">
+      <tr> 
+        <td class="widget_header" colspan="2"> 
+          <?php echo _("Edit Message"); ?>
+          - 
+          <?php echo $email_template_title ?>
         </td>
-    </tr>
-    <tr>
-        <td class="widget_label_right" width="1%" nowrap>
-            <?php echo _("From"); ?>:
-        </td>
-        <td class="widget_content_form_element">
-            <input type="text"
+      </tr>
+      <tr> 
+        <td class="widget_label_right" width="1%" nowrap> 
+          <?php echo _("From"); ?>
+          : </td>
+        <td class="widget_content_form_element"> 
+          <input type="text"
                    name="sender_name"
                    id="sender_name"
                    size="50"
                    value="<?php echo $sender_name ?>" />
-            <?php echo $required_indicator; ?>
+          <?php echo $required_indicator; ?>
         </td>
-    </tr>
-
-<!--
+      </tr>
+      <!--
 <tr>
 <td class=widget_label_right width="1%" nowrap><?php echo _("Reply to"); ?>:</td>
 <td class=widget_content_form_element><input type=text name="sender_address" size=50 value="<?php echo $sender_name ?>"><?php echo $required_indicator; ?></td>
@@ -218,96 +280,117 @@ function nextPage( $_where, $_what )
 <td class=widget_content_form_element><input type=text name="bcc_address" size=50 value=""></td>
 </tr>
 -->
-
-    <tr>
-        <td class="widget_label_right" width="1%" nowrap>
-            <?php echo _("Subject"); ?>:
-        </td>
-        <td class="widget_content_form_element">
-            <input type=text
+      <tr> 
+        <td class="widget_label_right" width="1%" nowrap> 
+          <?php echo _("Subject"); ?>
+          : </td>
+        <td class="widget_content_form_element"> 
+          <input type=text
                    name="email_template_title"
                    id="email_template_title"
                    size="50"
                    value="<?php echo $email_template_title ?>" />
         </td>
-    </tr>
-    <tr>
-        <td class="widget_content_form_element" colspan="2">
-            <textarea class="monospace"
-                      name="email_template_body"
-                      id="email_template_body"rows="20"
-                      cols="80"><?php echo $email_template_body ?></textarea></td>
-    </tr>
-    <tr>
-        <td class="widget_label_right" width="1%" nowrap>
-            <?php echo _("Attachments"); ?>:
+      </tr>
+      <tr> 
+        <td class="widget_content_form_element"> 
+          <table width="75%" border="1" cellpadding="2">
+            <tr> 
+              <td> 
+                <? echo $contacts_menu; ?>
+              </td>
+              <td><a onClick="document.forms[0].email_template_body.value=document.forms[0].email_template_body.value +'{'+document.forms[0].contacts_fields.value+'}'">Add</a></td>
+            </tr>
+            <tr> 
+              <td> 
+                <? echo $companies_menu; ?>
+              </td>
+              <td><a onClick="document.forms[0].email_template_body.value=document.forms[0].email_template_body.value +'{'+document.forms[0].companies_fields.value+'}'">Add</a> 
+			  </td>
+            </tr>
+            <tr> 
+              <td> 
+                <? echo $addresses_menu; ?>
+              </td>
+              <td><a onClick="document.forms[0].email_template_body.value=document.forms[0].email_template_body.value +'{'+document.forms[0].addresses_fields.value+'}'">Add</a></td>
+            </tr>
+            <tr> 
+              <td colspan="2">Click 'Add' to add the custom field to your mail 
+                merge. You can also use these fields in the SUBJECT line too - 
+                just copy-&gt;paste them into it.<BR><BR> At this stage, clicking &quot;Add&quot; 
+                makes the variable appears only at the end of the email - you 
+                can move it.<BR><BR>A Clever Java Script programmer could fix this.</td>
+            </tr>
+          </table>
+          <br />
         </td>
         <td class="widget_content_form_element">
-            <input type="file"
+          <textarea class="monospace"
+                      name="email_template_body"
+                      id="email_template_body"rows="20"
+                      cols="80"><?php echo $email_template_body ?></textarea>
+        </td>
+      </tr>
+      <tr> 
+        <td class="widget_label_right" width="1%" nowrap> 
+          <?php echo _("Attachments"); ?>
+          : </td>
+        <td class="widget_content_form_element"> 
+          <input type="file"
                    name="attach"
                    id="attach"
                    size="50" />
-
-            &nbsp;&nbsp;
-            <input type="button"
+          &nbsp;&nbsp; 
+          <input type="button"
                    class="button"
                    name="go"
                    id="go"
                    value="<?php echo _("Add"); ?>"
                    onclick="javascript: nextPage( 'email-2.php', 'add' );" />
         </td>
-    </tr>
-
-<?php
+      </tr>
+      <?php
 if ( $attach_list )
 { ?>
-    <tr>
-        <td class="widget_label_right" width="1%" nowrap>
-        </td>
-        <td class="widget_content_form_element">
-            <?php
+      <tr> 
+        <td class="widget_label_right" width="1%" nowrap> </td>
+        <td class="widget_content_form_element"> 
+          <?php
                 echo createFileList();
             ?>
-
-            <input type="button"
+          <input type="button"
                    class="button"
                    name="go"
                    id="go"
                    value="<?php echo _("Delete Selected"); ?>"
                    onclick="javascript: nextPage( 'email-2.php', 'del' );" />
         </td>
-    </tr>
-<?php } ?>
-
-    <tr>
-        <td class="widget_content_form_element" colspan="2">
-
-            <input type="hidden"
+      </tr>
+      <?php } ?>
+      <tr> 
+        <td class="widget_content_form_element" colspan="2"> 
+          <input type="hidden"
                    name="act"
                    id="act" />
-
-            <input type="hidden"
+          <input type="hidden"
                    name="email_template_id"
                    id="email_template_id"
                    value="<?php echo $email_template_id ?>" />
-
-            <input type="button"
+          <input type="button"
                    class="button"
                    value="<?php echo _("Continue"); ?>"
                    onclick="javascript: nextPage( 'email-3.php' );" />
-
-            <input type="button"
+          <input type="button"
                    class="button"
                    value="<?php echo _("Update Template"); ?>"
                    onclick="javascript: nextPage( 'update-template.php' );" />
-
-            <input type="button"
+          <input type="button"
                    class="button"
                    value="<?php echo _("Save as New Template"); ?>"
                    onclick="javascript: nextPage( 'save-as-new-template.php' );" />
         </td>
-    </tr>
-</table>
+      </tr>
+    </table>
 
 </form>
 
@@ -365,6 +448,11 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.18  2006/10/26 08:57:56  niclowe
+* -added custom field to mail merge
+* -added error trapping for emails that fail silently (or appear to have worked)
+* -added mail merge preview for custom emails
+*
 * Revision 1.17  2006/01/02 23:02:14  vanmer
 * - changed to use centralized dbconnection function
 *
