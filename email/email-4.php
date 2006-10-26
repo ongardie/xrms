@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.31 2006/10/26 08:57:56 niclowe Exp $
+* $Id: email-4.php,v 1.32 2006/10/26 18:49:15 niclowe Exp $
 *
 * @todo use a more secure method than 'unlink' to delete files after sending them
 */
@@ -103,8 +103,6 @@ if ( $_SESSION['email_sent'] === false )
 
         require_once ( $include_directory . 'classes/SMTPs/SMTPs.php' );
 
-        $msg_body = stripslashes($email_template_body);
-
         while (!$rst->EOF)
         {
             $_email_addr = $rst->fields['email'];
@@ -131,9 +129,9 @@ if ( $_SESSION['email_sent'] === false )
             }
 						//here is where we do the mail merge of the variables
 						include_once "mail_merge_functions.inc";
-						$m=mail_merge_email($subject,$body,$contact_id="",$address_id="");
-						$email_template_title=$m[0];
-						$_email_full=$m[1];
+						$m=mail_merge_email($email_template_title,$email_template_body,$rst->fields['contact_id'],$address_id="");
+						$msg_subject=$m[0];
+						$msg_body=$m[1];				
 
             $objSMTP = new SMTPs ();
 
@@ -141,7 +139,7 @@ if ( $_SESSION['email_sent'] === false )
 						
 
             $objSMTP->setFrom ( '<' . $sender_name . '>' );
-            $objSMTP->setSubject ( stripslashes($email_template_title) );
+            $objSMTP->setSubject ( stripslashes($msg_subject) );
             $objSMTP->setTo ( $_email_full );
             $objSMTP->setSensitivity(1);
 
@@ -193,7 +191,7 @@ if ( $_SESSION['email_sent'] === false )
         // Set our flag to indiate this message has been sent already
         $_SESSION['email_sent'] = true;
 
-        $feedback .= nl2br(htmlspecialchars($msg_body));
+        $feedback .= "<BR><hr /><sample><strong>Subject:</strong></sample><BR>".nl2br(htmlspecialchars($email_template_title))."<BR><BR><sample><strong>Body:</strong></sample><BR>".nl2br(htmlspecialchars($email_template_body));
 
         // Create "activity" log
         $activity_data['activity_type_id']     = $activity_type_id;  // is pulled from activity_type table
@@ -355,6 +353,9 @@ function getFile($file_to_open)
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.32  2006/10/26 18:49:15  niclowe
+* fixed minor bugs
+*
 * Revision 1.31  2006/10/26 08:57:56  niclowe
 * -added custom field to mail merge
 * -added error trapping for emails that fail silently (or appear to have worked)
