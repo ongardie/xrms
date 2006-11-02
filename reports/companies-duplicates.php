@@ -25,6 +25,8 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 $session_user_id = session_check();
 /*
@@ -77,28 +79,44 @@ $user_menu = get_user_menu($con, $user_id, true);
 */
 $sql = "SELECT  
 CONCAT('<a href=../companies/one.php?company_id=',c1.company_id,'>',c1.company_name,'</a>') as company_name,
-c1.company_code,
+c1.company_code,CONCAT('Possible Dupe with ','<a href=../companies/one.php?company_id=',c2.company_id,'>',c2.company_name,' ',c2.company_code,'</a>') as 'Possible Dupe Name',
 c1.profile,
 c1.phone,
 c1.url,
 c1.entered_at
 FROM `companies` c1, companies c2 
-WHERE c1.company_name LIKE c2.company_name AND c1.company_id<>c2.company_id AND c1.company_record_status='a' and c2.company_record_status='a' 
-ORDER BY c1.company_name";
+WHERE c1.company_name LIKE c2.company_name AND c1.company_id<>c2.company_id AND c1.company_record_status='a' and c2.company_record_status='a'"; 
+//ORDER BY c1.company_name";
 				
 ?>
-<div id="report">
-<?	 
-$pager = new ADODB_Pager($con,$sql);
-$pager->Render($rows_per_page=5); 
+<div id="report"><form name="CompanyForm">
 
+<?	 
+//$pager = new ADODB_Pager($con,$sql);
+//$pager->Render(); 
+
+$pager_id='CompanyPager';
+$form_id='CompanyForm';
+$columns = array();
+$columns[] = array('name' => _("Company Name"), 'index_sql' => 'company_name','default_sort' => 'asc');
+$columns[] = array('name' => _("Possible Dupe Name"), 'index_sql' => 'Possible Dupe Name');
+$columns[] = array('name' => _("Company Code"), 'index_sql' => 'company_code');
+$columns[] = array('name' => _("Profile"), 'index_sql' => 'profile');
+$columns[] = array('name' => _("Phone"), 'index_sql' => 'phone');
+$columns[] = array('name' => _("URL"), 'index_sql' => 'url', 'type' => 'html');
+$columns[] = array('name' => _("Entered at"), 'index_sql' => 'entered_at');
+$pager2 = new GUP_Pager($con, $sql, null, _('Duplicate Search Results'), $form_id, $pager_id, $columns);
+$pager2->Render(100);
+?>
+</form>
+<?
 end_page();
 exit;
 
 /**
  * $Log: companies-duplicates.php,v $
- * Revision 1.1  2006/11/02 13:15:25  niclowe
- * initial upload
+ * Revision 1.2  2006/11/02 14:19:25  niclowe
+ * initial upload of de-dupe reports
  *
  * Revision 1.12  2006/01/02 23:46:52  vanmer
  * - changed to use centralized dbconnection function

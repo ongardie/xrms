@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.25 2006/04/05 01:21:28 vanmer Exp $
+ * $Id: index.php,v 1.26 2006/11/02 14:19:26 niclowe Exp $
  */
 require_once('../include-locations.inc');
 
@@ -110,11 +110,19 @@ start_page($page_title, true, $msg);
         </td>
       </tr>
       <tr>
-        <td class=widget_content><a href="activity-summary.php">
-          <?php echo _("Activity Summary"); ?>
+        <td class=widget_content><a href="companies-duplicates.php">
+          <?php echo _("Duplicate Companies"); ?>
           </a></td>
         <td class=widget_content>
-           <?php echo _("Summarizes the count of activities by type, for companies.  Can be restricted by user, category and
+          <?php echo _("Duplicate Companies Report: Show possible duplicates in your database"); ?>
+        </td>
+      </tr>
+      <tr> 
+        <td class=widget_content><a href="activity-summary.php"> 
+          <?php echo _("Activity Summary"); ?>
+          </a></td>
+        <td class=widget_content> 
+          <?php echo _("Summarizes the count of activities by type, for companies.  Can be restricted by user, category and
  dates"); ?>
         </td>
       </tr>
@@ -156,18 +164,18 @@ start_page($page_title, true, $msg);
         </td>
       </tr>
       <tr> 
-        <td class=widget_content><a href="stale-opportunities.php">
+        <td class=widget_content><a href="stale-opportunities.php"> 
           <?php echo _("Stale Opportunities"); ?>
           </a></td>
-        <td class=widget_content>
+        <td class=widget_content> 
           <?php echo _("Stale opportunities by Last Activity Date and User"); ?>
         </td>
       </tr>
       <tr> 
-        <td class=widget_content><a href="stale-crm-status.php">
+        <td class=widget_content><a href="stale-crm-status.php"> 
           <?php echo _("Stale Companies"); ?>
           </a></td>
-        <td class=widget_content>
+        <td class=widget_content> 
           <?php echo _("Stale Companies - by Crms Status, Last Activity Date and User"); ?>
         </td>
       </tr>
@@ -214,6 +222,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.26  2006/11/02 14:19:26  niclowe
+ * initial upload of de-dupe reports
+ *
  * Revision 1.25  2006/04/05 01:21:28  vanmer
  * - added link to new activity summary report
  *
