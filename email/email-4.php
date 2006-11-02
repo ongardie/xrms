@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.33 2006/10/26 20:07:37 niclowe Exp $
+* $Id: email-4.php,v 1.34 2006/11/02 12:38:57 niclowe Exp $
 *
 * @todo use a more secure method than 'unlink' to delete files after sending them
 */
@@ -131,7 +131,7 @@ if ( $_SESSION['email_sent'] === false )
 									$msg_body=$m[1];
 
 									$objSMTP = new SMTPs ();
-									$objSMTP->setConfig( $xrms_file_root.'/include/classes/SMTPs/SMTPs.ini.php');
+									$objSMTP->setConfig($include_directory.'/include/classes/SMTPs/SMTPs.ini.php');
 									$objSMTP->setFrom ( '<' . $sender_name . '>' );
 									$objSMTP->setSubject ( stripslashes($msg_subject) );
 									$objSMTP->setTo ( $_email_full );
@@ -344,6 +344,9 @@ function getFile($file_to_open)
 
 			/**
 			* $Log: email-4.php,v $
+			* Revision 1.34  2006/11/02 12:38:57  niclowe
+			* Fixed bug http://sourceforge.net/forum/message.php?msg_id=3990616
+			*
 			* Revision 1.33  2006/10/26 20:07:37  niclowe
 			* fixed activity handling.
 			* BUG [ 1289036 ] Mail: Add activity on mail merge
