@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-opportunities.php,v 1.4 2006/05/03 00:01:47 vanmer Exp $
+ * $Id: utils-opportunities.php,v 1.5 2006/11/06 18:44:41 jnhayart Exp $
  *
  */
 
@@ -410,6 +410,9 @@ function delete_opportunity($con, $opportunity_id, $delete_from_database = false
     $rst=$con->execute($sql);
     if (!$rst) { db_error_handler($con, $sql); return false; }
 
+    $opportunity_data['opportunity_id'] = $opportunity_id;
+    do_hook_function('opportunity_delete', $opportunity_data);
+
     add_audit_item($con, $session_user_id, 'deleted', 'opportunities', $opportunity_id, 1);
 
     return true;
@@ -425,6 +428,9 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-opportunities.php,v $
+ * Revision 1.5  2006/11/06 18:44:41  jnhayart
+ * Add Hook when deleted opportunity
+ *
  * Revision 1.4  2006/05/03 00:01:47  vanmer
  * - added check to ensure company_id isn't reset to 1 if opportunity or case already exists
  * - added lookup of assumed data in the record on update
