@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.19 2006/07/30 09:26:02 jnhayart Exp $
+ * $Id: new.php,v 1.20 2006/11/13 16:05:35 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -60,6 +60,7 @@ $rst = $con->execute($sql2);
 
 // defining opportunity_type_id before the call to getmenu2 means that this
 // option will be selected when the menu is generated.
+/*
 if (!$opportunity_type_id) {
     if ( $rst && !$rst->EOF ) {
     $opportunity_type_id = $rst->fields['opportunity_type_id'];
@@ -67,20 +68,46 @@ if (!$opportunity_type_id) {
     $opportunity_type_id = 0;
     }
 }
+*/
 
-$opportunity_type_menu = $rst->getmenu2('opportunity_type_id', $opportunity_type_id, false, false, 1, "id=opportunity_type_id onchange=javascript:restrictByOpportunityType();");
-$rst->close();
+if ($opportunity_type_id ) {
+   $sql3 = "select opportunity_type_pretty_name from opportunity_types where opportunity_type_record_status = 'a' and opportunity_type_id = $opportunity_type_id";
+   $rst = $con->execute($sql3);
+   $opportunity_type = $rst->fields['opportunity_type_pretty_name'];
+   $opportunity_type_menu = "<input type=hidden name=opportunity_type_id value=$opportunity_type_id>".$opportunity_type;
+   $rst->close();
+} else {
+   $opportunity_type_menu = $rst->getmenu2('opportunity_type_id', $opportunity_type_id, false, false, 1, "id=opportunity_type_id onchange=javascript:restrictByOpportunityType();");
+   $rst->close();
+}
 
 //get the opportunity status menu
-$sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status = 'a' order by sort_order";
+if($opportunity_type_id) {
+    $sql2 = "SELECT opportunity_status_pretty_name, opportunity_status_id
+            FROM opportunity_statuses
+            WHERE
+                opportunity_status_record_status = 'a' and
+                opportunity_type_id = $opportunity_type_id
+            ORDER BY sort_order";
+} else {
+    //we need the opportunity statuses for all the opportunity_types
+    $sql2 = "SELECT "
+              . $con->Concat("opportunity_type_pretty_name", "' - '", "opportunity_status_pretty_name") . " AS opportunity_status_str ,
+                opportunity_status_id
+            FROM opportunity_statuses os JOIN opportunity_types ot ON os.opportunity_type_id = ot.opportunity_type_id
+            WHERE
+                opportunity_status_record_status = 'a'
+            ORDER BY os.opportunity_type_id, os.sort_order";
+}
 $rst = $con->execute($sql2);
 if ( $rst && !$rst->EOF ) {
   $opportunity_status_id = $rst->fields['opportunity_status_id'];
+  $opportunity_status_menu = $rst->getmenu2('opportunity_status_id', $opportunity_status_id, false);
+  $rst->close();
 } else {
   $opportunity_status_id = '';
+  db_error_handler($con,$sql2);
 }
-$opportunity_status_menu = $rst->getmenu2('opportunity_status_id', $opportunity_status_id, false);
-$rst->close();
 
 // custom fields PlugIns
 $customs_fields_rows = do_hook_function('opportunity_inline_edit', $customs_fields_rows);
@@ -248,6 +275,11 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.20  2006/11/13 16:05:35  braverock
+ * - change the way the opportunity type and opportunity status dropdowns are selected
+ *   roughly based on patch provided by fcrossen for
+ *   https://sourceforge.net/tracker/?func=detail&atid=588128&aid=1595654&group_id=88850
+ *
  * Revision 1.19  2006/07/30 09:26:02  jnhayart
  * new hooks for add capability using custom fileds INLINE
  * use of 3 new hook :
