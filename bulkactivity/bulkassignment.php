@@ -3,7 +3,7 @@
   *
   * bulkassignment.
   *
-  * $Id: bulkassignment.php,v 1.2 2006/10/01 10:48:42 braverock Exp $
+  * $Id: bulkassignment.php,v 1.3 2006/11/14 19:32:45 braverock Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -255,8 +255,9 @@
             <td class=widget_label_right><?php echo _("Rating"); ?></td>
             <td class=widget_content_form_element><?php echo $rating_menu; ?></td>
         </tr>
+        <!---
         <tr>
-            <?php if ($company_custom1_label!='(Custom 1)') { ?>
+            <?php /* if ($company_custom1_label!='(Custom 1)') { ?>
                 <td class=widget_label_right><?php echo $company_custom1_label ?></td><td>
                 <?php echo ' <input type=text name=custom1 size=20 value=' . $custom1 . '>';} ?></td>
             <?php } else {echo '<td class=clear>'; echo '</td><td>';}  ?></td>
@@ -274,9 +275,10 @@
             <?php  if ($company_custom4_label!='(Custom 4)') { ?>
                 <td class=widget_label_right><?php echo $company_custom4_label ?></td><td>
                 <?php echo ' <input type=text name=custom4 size=20 value=' . $custom4 . '>';} ?></td>
-            <?php } else {echo '<td class=clear>'; echo '</td><td>';}  ?></td>
+            <?php } else {echo '<td class=clear>'; echo '</td><td>';} */ ?></td>
 
         </tr>
+        --->
         </table>
         <table class="widget" cellspacing="1">
         <tr>
@@ -323,6 +325,10 @@ end_page();
 
  /**
   * $Log: bulkassignment.php,v $
+  * Revision 1.3  2006/11/14 19:32:45  braverock
+  * - comment out the custom1-4 stuff entirely until someone
+  *   has a chance to work on it and make it work
+  *
   * Revision 1.2  2006/10/01 10:48:42  braverock
   * - remove custom1-4 menu functions, company custom1-4 will stay simple strings
   *   -- use custom_fields plugin if you want select lists
