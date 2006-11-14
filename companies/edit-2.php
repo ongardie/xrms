@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.22 2006/04/26 20:07:29 braverock Exp $
+ * $Id: edit-2.php,v 1.23 2006/11/14 18:57:12 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -32,6 +32,8 @@ $rec['user_id'] = $_POST['user_id'];
 $rec['phone'] = preg_replace("/[^\d]/", '', $_POST['phone']);
 $rec['phone2'] = preg_replace("/[^\d]/", '',$_POST['phone2']);
 $rec['fax'] = preg_replace("/[^\d]/", '',$_POST['fax']);
+$rec['company_type_id'] = $_POST['company_type_id'];
+$campaign_id = $_POST['campaign_id'];
 $rec['url'] = $_POST['url'];
 $rec['employees'] = $_POST['employees'];
 $rec['revenue'] = $_POST['revenue'];
@@ -56,6 +58,13 @@ $con = get_xrms_dbconnection();
 // $con->debug=1;
 update_company($con, $rec, $rec['company_id'], false, get_magic_quotes_gpc());
 
+if ($campaign_id){
+   $rec1['company_id'] = $company_id; 
+   $rec1['campaign_id'] = $campaign_id;
+   $tbl1 = 'company_campaign_map';
+   $ins1 = $con->GetInsertSQL($tbl1, $rec1, get_magic_quotes_gpc());
+   $con->execute($ins1);
+}
 $accounting_rows = do_hook_function('company_accounting_inline_edit_2', $accounting_rows);
 
 /*
@@ -71,6 +80,15 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.23  2006/11/14 18:57:12  braverock
+ * - add company type
+ * - add campain linkage
+ *   based on patches by dbaudone
+ *
+ * Revision 1.23  2006/08/06 01:31:00  dbaudone
+ * - added link to campaign
+ * - added company type field
+ *
  * Revision 1.22  2006/04/26 20:07:29  braverock
  * - move accounting and credit fields from old companies/admin* pages
  *

@@ -2,7 +2,7 @@
 /**
  * Edit company details
  *
- * $Id: edit.php,v 1.23 2006/04/26 20:06:27 braverock Exp $
+ * $Id: edit.php,v 1.24 2006/11/14 18:57:12 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -37,6 +37,7 @@ if ($rst) {
     $legal_name = $rst->fields['legal_name'];
     $company_code = $rst->fields['company_code'];
     $crm_status_id = $rst->fields['crm_status_id'];
+    $company_type_id = $rst->fields['company_type_id'];	
     $user_id = $rst->fields['user_id'];
     $company_source_id = $rst->fields['company_source_id'];
     $industry_id = $rst->fields['industry_id'];
@@ -71,6 +72,7 @@ $user_menu = get_user_menu($con, $user_id, false, 'user_id', false);
 
 $crm_status_menu = build_crm_status_menu($con, $crm_status_id);
 
+$company_type_menu = build_company_type_menu($con, $company_type_id, true);
 $sql2 = "select company_source_pretty_name, company_source_id from company_sources where company_source_record_status = 'a' order by company_source_pretty_name";
 $rst = $con->execute($sql2);
 $company_source_menu = $rst->getmenu2('company_source_id', $company_source_id, false);
@@ -89,6 +91,19 @@ $rst->close();
 $sql = "select account_status_pretty_name, account_status_id from account_statuses where account_status_record_status = 'a'";
 $rst = $con->execute($sql);
 $account_status_menu = $rst->getmenu2('account_status_id', $account_status_id, false);
+$rst->close(); 
+$sql2 = "select campaign_title, campaign_id from campaigns, campaign_statuses 
+         where campaign_record_status = 'a' and 
+         campaign_statuses.campaign_status_id = campaigns.campaign_status_id and
+         campaign_statuses.status_open_indicator = 'o' 
+         order by campaign_title";
+$rst = $con->execute($sql2);
+if ( $rst && !$rst->EOF ) {
+   $campaign_id = $rst->fields['campaign_id'];
+} else {
+   $campaign_id = '';
+}
+$campaign_menu = $rst->getmenu('campaign_id', $campaign_id, true);
 $rst->close();
 
 $accounting_rows = do_hook_function('company_accounting_inline_edit', $accounting_rows);
@@ -127,6 +142,10 @@ confGoTo_includes();
             <tr>
                 <td class=widget_label_right><?php echo _("CRM Status"); ?></td>
                 <td class=widget_content_form_element><?php echo $crm_status_menu; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Company Type"); ?></td>
+                <td class=widget_content_form_element><?php echo $company_type_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Owner"); ?></td>
@@ -220,6 +239,11 @@ confGoTo_includes();
                 <td class=widget_label_right><?php echo _("Profile"); ?></td>
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile><?php echo $profile; ?></textarea></td>
             </tr>
+            <tr></tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Assign to campaign"); ?></td>
+                <td class=widget_content_form_element><?php echo $campaign_menu; ?></td>
+            </tr>
             <tr>
                 <td class=widget_content_form_element><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
                 <td class=widget_content_form_element>
@@ -279,6 +303,16 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.24  2006/11/14 18:57:12  braverock
+ * - add company type
+ * - add campain linkage
+ *   based on patches by dbaudone
+ *
+ * Revision 1.24  2006/06/06 01:46:00  dbaudone
+ * - added company_type_id field
+ * - added company_type menu
+ * - added campaigns menu
+ *
  * Revision 1.23  2006/04/26 20:06:27  braverock
  * - move accounting and credit fields from old companies/admin* pages
  * - add Delete button here, for consistency with other XRMS object types
