@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of cases
  *
- * $Id: edit.php,v 1.23 2006/10/17 22:05:01 braverock Exp $
+ * $Id: edit.php,v 1.24 2006/11/14 20:05:19 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -37,9 +37,9 @@ if ($rst) {
     $contact_id = $rst->fields['contact_id'];
     $case_status_id = $rst->fields['case_status_id'];
     $case_priority_id = $rst->fields['case_priority_id'];
-    
+
     if (!$case_type_id)  $case_type_id = $rst->fields['case_type_id'];
-    
+
     $user_id = $rst->fields['user_id'];
     $case_title = $rst->fields['case_title'];
     $case_description = $rst->fields['case_description'];
@@ -121,12 +121,14 @@ if ($rst) {
 }
 
 $sql = "
-SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name,
-  contact_id
-FROM contacts
-WHERE company_id = $company_id
-  AND contact_record_status = 'a'
-";
+    SELECT " . $con->Concat("first_names", "' '", "last_name") .
+  " AS contact_name, contact_id
+    FROM contacts
+    WHERE company_id = $company_id ";
+if ($company_id == 1) { //add special filter for unknown company
+    $sql .= "AND contact_id = $contact_id ";
+}
+$sql .= "AND contact_record_status = 'a'";
 $rst = $con->execute($sql);
 $contact_menu = $rst->getmenu2('contact_id', $contact_id, false);
 $rst->close();
@@ -169,7 +171,7 @@ confGoTo_includes();
 ?>
 
 <?php jscalendar_includes(); ?>
-    
+
     <script language=JavaScript>
     <!--
         function restrictByCaseType() {
@@ -312,6 +314,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.24  2006/11/14 20:05:19  braverock
+ * - add special filter for contact list on unknown company
+ *   based on patches by fcrossen
+ *
  * Revision 1.23  2006/10/17 22:05:01  braverock
  * - modified calendar script to make it working with every language and system (patch from dbaudone)
  *

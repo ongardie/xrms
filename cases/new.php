@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.20 2006/01/02 22:47:25 vanmer Exp $
+ * $Id: new.php,v 1.21 2006/11/14 20:05:19 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -27,7 +27,14 @@ $con = get_xrms_dbconnection();
 $company_name = fetch_company_name($con, $company_id);
 
 //get menu for contacts
-$sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name, contact_id FROM contacts WHERE company_id = $company_id AND contact_record_status = 'a'";
+$sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") .
+      " AS contact_name, contact_id
+        FROM contacts
+        WHERE company_id = $company_id ";
+if($company_id == 1) { //add special filter for unknown company
+    $sql .= "AND contact_id = $contact_id ";
+}
+$sql .= "AND contact_record_status = 'a'";
 $rst = $con->execute($sql);
 $contact_menu = $rst->getmenu2('contact_id', $contact_id, false, false, 1, 'id=contact_id');
 $rst->close();
@@ -98,7 +105,7 @@ start_page($page_title, true, $msg);
 ?>
 
 <?php jscalendar_includes(); ?>
-    
+
     <script language=JavaScript>
     <!--
         function restrictByCaseType() {
@@ -225,6 +232,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.21  2006/11/14 20:05:19  braverock
+ * - add special filter for contact list on unknown company
+ *   based on patches by fcrossen
+ *
  * Revision 1.20  2006/01/02 22:47:25  vanmer
  * - changed to use centralized dbconnection function
  *
