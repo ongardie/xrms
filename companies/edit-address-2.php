@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a company
  *
- * $Id: edit-address-2.php,v 1.14 2006/08/20 17:17:24 braverock Exp $
+ * $Id: edit-address-2.php,v 1.15 2006/11/14 18:58:15 braverock Exp $
  */
 
 
@@ -20,8 +20,8 @@ $session_user_id = session_check();
 $address_id = $_POST['address_id'];
 $company_id = $_POST['company_id'];
 $country_id = $_POST['country_id'];
-$address_name = $_POST['address_name'];
-$address_body = $_POST['address_body'];
+$address_name = trim($_POST['address_name']);
+$address_body = trim($_POST['address_body']);
 $line1 = $_POST['line1'];
 $line2 = $_POST['line2'];
 $city = $_POST['city'];
@@ -64,6 +64,9 @@ header("Location: addresses.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.15  2006/11/14 18:58:15  braverock
+ * - trim fields that often have extra whitespace
+ *
  * Revision 1.14  2006/08/20 17:17:24  braverock
  * fixes https://sourceforge.net/tracker/index.php?func=detail&aid=1484776&group_id=88850&atid=588128
  * credit Toby Hart Dyke - thartdyke
