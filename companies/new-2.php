@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.30 2006/04/26 19:59:22 braverock Exp $
+ * $Id: new-2.php,v 1.31 2006/11/14 18:55:53 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -29,6 +29,8 @@ $crm_status_id = $_POST['crm_status_id'];
 $user_id = $_POST['user_id'];
 $company_source_id = $_POST['company_source_id'];
 $industry_id = $_POST['industry_id'];
+$campaign_id = $_POST['campaign_id'];
+$company_type_id = $_POST['company_type_id'];
 $phone = preg_replace("/[^\d]/", '', $_POST['phone']);
 $phone2 = preg_replace("/[^\d]/", '', $_POST['phone2']);
 $fax = preg_replace("/[^\d]/", '', $_POST['fax']);
@@ -78,6 +80,8 @@ $rec = array();
 $rec['crm_status_id'] = $crm_status_id;
 $rec['company_source_id'] = $company_source_id;
 $rec['industry_id'] = $industry_id;
+$rec['campaign_id'] = $campaign_id;
+$rec['company_type_id'] = $company_type_id;
 $rec['user_id'] = $user_id;
 $rec['account_status_id'] = $account_status_id;
 $rec['rating_id'] = $rating_id;
@@ -211,6 +215,13 @@ if ($contact_profile) {
 $rec['fax'] = $fax;
 
 $contact_id=add_contact($con, $rec, get_magic_quotes_gpc());
+if ($campaign_id){
+   $rec1['company_id'] = $company_id;
+   $rec1['campaign_id'] = $campaign_id;
+   $tbl1 = 'company_campaign_map';
+   $ins1 = $con->GetInsertSQL($tbl1, $rec1, get_magic_quotes_gpc());
+   $con->execute($ins1);
+}
 
 if (strlen($accounting_system) > 0) {
     add_accounting_customer($con, $company_id, $company_name, $company_code, $customer_credit_limit, $customer_terms);
@@ -226,6 +237,15 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.31  2006/11/14 18:55:53  braverock
+ * - add company type
+ * - add campaign mapping
+ *    loosly based on patches by dbaudone and fcrossen
+ *
+ * Revision 1.31  2006/08/06 01:57:00  dbaudone
+ * - added campaign_id
+ * - added company_type_id
+ *
  * Revision 1.30  2006/04/26 19:59:22  braverock
  * - remove forced setting of legal_name
  *

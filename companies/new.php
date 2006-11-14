@@ -6,7 +6,7 @@
  *
  * @todo Add ability to ctreate a Sales Opportunity for a new company
  *
- * $Id: new.php,v 1.21 2006/01/02 22:56:27 vanmer Exp $
+ * $Id: new.php,v 1.22 2006/11/14 18:55:53 braverock Exp $
  */
 
 /* Include required files */
@@ -39,6 +39,7 @@ if ($clone_id > 0) {
         $company_name      = 'Copy of ' . $rst->fields['company_name'];
         $company_source_id = $rst->fields['company_source_id'];
         $crm_status_id     = $rst->fields['crm_status_id'];
+        $company_type_id   = $rst->fields['company_type_id']; 
         $industry_id       = $rst->fields['industry_id'];
         $user_id           = $rst->fields['user_id'];
       } else {
@@ -46,6 +47,7 @@ if ($clone_id > 0) {
         $company_name      = '';
         $company_source_id = '';
         $crm_status_id     = '';
+        $company_type_id     = '';	
         $industry_id       = '';
         $user_id           = '';
       }
@@ -58,6 +60,7 @@ if ($clone_id > 0) {
   $company_name      = '';
   $company_source_id = '';
   $crm_status_id     = '';
+  $company_type_id   = '';
   $industry_id       = '';
   $user_id           = '';
 }
@@ -67,6 +70,7 @@ $user_id = ($user_id > 0) ? $user_id : $session_user_id;
 $user_menu = get_user_menu($con, $user_id);
 
 $crm_status_menu = build_crm_status_menu($con, $crm_status_id);
+$company_type_menu = build_company_type_menu($con, $company_type_id, true);
 
 $sql2 = "select company_source_pretty_name, company_source_id from company_sources where company_source_record_status = 'a' order by company_source_pretty_name";
 $rst = $con->execute($sql2);
@@ -81,6 +85,19 @@ $rst->close();
 $sql = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
 $rst = $con->execute($sql);
 $country_menu = $rst->getmenu2('country_id', $default_country_id, false);
+$rst->close();
+$sql2 = "select campaign_title, campaign_id from campaigns, campaign_statuses 
+         where campaign_record_status = 'a' and 
+         campaign_statuses.campaign_status_id = campaigns.campaign_status_id and
+         campaign_statuses.status_open_indicator = 'o' 
+         order by campaign_title";
+$rst = $con->execute($sql2);
+if ( $rst && !$rst->EOF ) {
+   $campaign_id = $rst->fields['campaign_id'];
+} else {
+   $campaign_id = '';
+}
+$campaign_menu = $rst->getmenu('campaign_id', $campaign_id, true);
 $rst->close();
 
 $con->close();
@@ -115,6 +132,10 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_label_right><?php echo _("CRM Status"); ?></td>
                 <td class=widget_content_form_element><?php  echo $crm_status_menu; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Company Type"); ?></td>
+                <td class=widget_content_form_element><?php  echo $company_type_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Company Source"); ?></td>
@@ -270,6 +291,17 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><textarea rows=4 cols=60 name=contact_profile></textarea></td>
             </tr>
         </table>
+        
+        <!-- Campaign assignment //-->
+        <table class=widget cellspacing=1 width="100%">
+            <tr>
+                <td class=widget_header colspan=2><?php echo _("Link to Campaign"); ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Campaign"); ?></td>
+                <td class=widget_content_form_element><?php echo $campaign_menu; ?></td>
+            </tr>
+        </table>
 
         </td>
     </tr>
@@ -312,6 +344,16 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.22  2006/11/14 18:55:53  braverock
+ * - add company type
+ * - add campaign mapping
+ *    loosly based on patches by dbaudone and fcrossen
+ *
+ * Revision 1.22  2006/08/06 02:03:00  dbaudone
+ * - added company_type_id field
+ * - added company_type menu
+ * - added campaigns menu
+ *
  * Revision 1.21  2006/01/02 22:56:27  vanmer
  * - changed to use centralized dbconnection function
  *
