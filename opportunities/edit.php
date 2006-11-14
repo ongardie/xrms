@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.30 2006/08/23 21:23:42 jnhayart Exp $
+ * $Id: edit.php,v 1.31 2006/11/14 20:12:03 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -103,12 +103,15 @@ if ($rst) {
 }
 
 //contact menu
-$sql = "
-SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name, contact_id
-FROM contacts
-WHERE company_id = '" . $company_id ."'
-  AND contact_record_status = 'a'
-";
+$sql = " SELECT " . $con->Concat("first_names", "' '", "last_name") .
+       " AS contact_name, contact_id
+         FROM contacts
+         WHERE company_id = $company_id ";
+if ($company_id == 1) { //filter for unknown company
+    $sql .= " AND contact_id = $contact_id ";
+}
+$sql .= " AND contact_record_status = 'a'";
+
 $rst = $con->execute($sql);
 $contact_menu = $rst->getmenu2('contact_id', $contact_id, false);
 $rst->close();
@@ -276,7 +279,7 @@ function logTime() {
             	<td>
             	<input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="var new_message = prompt('<?php echo addslashes(_("Enter Note")); ?>', ''); document.forms[0].opportunity_description.value =
                         logTime() + '<?php echo " " . _("By") . " " . $_SESSION['username']; ?>: ' + new_message + '\n' + document.forms[0].opportunity_description.value;">
-                 
+
             	</td>
             </tr>
             <!-- accounting plugin -->
@@ -355,6 +358,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.31  2006/11/14 20:12:03  braverock
+ * - special handling for unknown company
+ *   based on patches by fcrossen
+ *
  * Revision 1.30  2006/08/23 21:23:42  jnhayart
  * change java display for localisation
  *

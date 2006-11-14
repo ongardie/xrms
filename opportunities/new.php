@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.20 2006/11/13 16:05:35 braverock Exp $
+ * $Id: new.php,v 1.21 2006/11/14 20:12:03 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -27,7 +27,14 @@ $con = get_xrms_dbconnection();
 $company_name = fetch_company_name($con, $company_id);
 
 //generate a contact menu
-$sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name, contact_id FROM contacts WHERE company_id = $company_id AND contact_record_status = 'a'";
+$sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") .
+      " AS contact_name, contact_id
+        FROM contacts
+        WHERE company_id = $company_id ";
+if ($company_id == 1) { //add filter for unknown company
+    $sql .= " AND contact_id = $contact_id";
+}
+$sql .= " AND contact_record_status = 'a'";
 $rst = $con->execute($sql);
 $contact_menu = $rst->getmenu2('contact_id', $contact_id, false);
 $rst->close();
@@ -275,6 +282,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.21  2006/11/14 20:12:03  braverock
+ * - special handling for unknown company
+ *   based on patches by fcrossen
+ *
  * Revision 1.20  2006/11/13 16:05:35  braverock
  * - change the way the opportunity type and opportunity status dropdowns are selected
  *   roughly based on patch provided by fcrossen for
