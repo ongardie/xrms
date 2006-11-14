@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.141 2006/10/17 21:46:05 braverock Exp $
+ * $Id: one.php,v 1.142 2006/11/14 19:55:21 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -193,12 +193,14 @@ $rst->close();
 if ($company_id) {
     //get contact name menu
     $sql = "
-    SELECT " . $con->Concat("first_names","' '","last_name") . " AS contact_name, contact_id
-    FROM contacts
-    WHERE company_id = $company_id
-    AND contact_record_status = 'a'
-    ORDER BY last_name, first_names
-    ";
+        SELECT " . $con->Concat("first_names","' '","last_name") . " AS contact_name, contact_id
+        FROM contacts
+        WHERE company_id = $company_id ";
+        if ($company_id == 1) { //limit the list if this is on the Unknown Company
+            $sql .= "AND contact_id = $contact_id ";
+        }
+        $sql .= "AND contact_record_status = 'a'
+        ORDER BY last_name, first_names";
     $rst = $con->execute($sql);
     if ($rst) {
         $contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
@@ -755,6 +757,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.142  2006/11/14 19:55:21  braverock
+ * - special handling for unknown company
+ *   based on patches by fcrossen
+ *
  * Revision 1.141  2006/10/17 21:46:05  braverock
  * - added user email menu
  * - modified to correctly show only related activities belonging to the same company

@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.52 2006/10/01 12:51:42 braverock Exp $
+* $Id: activities-widget.php,v 1.53 2006/11/14 19:55:21 braverock Exp $
 */
 
 global $include_directory;
@@ -664,7 +664,14 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
                 WHERE company_id = $company_id
                 AND contact_record_status = 'a'
                 ORDER BY last_name";
-
+        if($company_id == 1) { //special handling for unknown company
+            $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name, contact_id
+                    FROM contacts
+                    WHERE company_id = $company_id
+                    AND contact_id = $contact_id
+                    AND contact_record_status = 'a'
+                    ORDER BY last_name";
+        }
         $rst = $con->execute($sql);
         if ($rst) {
 
@@ -884,6 +891,10 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.53  2006/11/14 19:55:21  braverock
+* - special handling for unknown company
+*   based on patches by fcrossen
+*
 * Revision 1.52  2006/10/01 12:51:42  braverock
 * - fix . on line 430
 *
