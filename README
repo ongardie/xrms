@@ -1,7 +1,7 @@
 XRMS CRM - README
 
 =============================================================
-/** $Id: README,v 1.25 2006/07/25 20:34:27 braverock Exp $ **/
+/** $Id: README,v 1.26 2006/11/22 13:14:03 braverock Exp $ **/
 
 ========================
 SUMMARY
@@ -113,13 +113,13 @@ See the file INSTALL in the install/ directory.
 ========================
 LICENSE
 
-Licensed under the Open Software License version 2.0
+XRMS is dual-licensed under the Open Software License version 2.0 and
+the GNU General Public License version 2 or higher.
 
-A copy of this license -- called LICENSE -- is in this folder.
+A copy of the OSL license is in the file called LICENSE in this folder.
 
-XRMS also includes code that is licensed under the GNU General Public
-License (GPL) and GNU Lesser General Public License (LGPL).
-For full details see the file COPYING in this folder.
+XRMS also includes code that is licensed under the GNU Lesser General
+Public License (LGPL). For full details see the file COPYING in this folder.
 
 Whether the Open Software License and the GPL are fully 'compatible' licenses
 in legal terms is an issue for a lawyer, not the development team of XRMS.
@@ -137,6 +137,10 @@ under one of the licenses used by XRMS code.
 
 ========================
 CREDITS
+
+XRMS was originally written by Chris Woofter, and is now maintained
+and extended by a dedicated community of developers and translators
+from companies around the world. See "XRMS Development Team" below.
 
 XRMS includes, and makes extensive use of, John Lim's excellent ADOdb
 database abstraction library.
@@ -156,11 +160,14 @@ Some pages currently make use of the PEAR HTML_QuickForm classes.
 These may be downloaded from http://pear.php.net/package/HTML_QuickForm or by
 simply entering 'pear install HTML_QuickForm' on the command line, if you have
 PEAR installed. If you don't have PEAR installed, you may have errors
-on PEAR.php.
+on PEAR.php like:
+Fatal error: main(): Failed opening required 'PEAR.php' ... in ...
+xrms\include\classes\HTML\QuickForm.php on line 22
+change line 22 from
+require_once('PEAR.php');
+to
+require_once($include_directory.'classes/PEAR/PEAR.php');
 
-XRMS was originally written by Chris Woofter, and is now maintained
-and extended by a dedicated community of developers and translators
-from companies around the world. See "XRMS Development Team" below.
 ========================
 NOTES
 
@@ -229,11 +236,11 @@ resolve and test any conflicts.
 Once you've made your changes and are happy with the result, create a
 patch file for each file you changed using the following command:
 
-diff -u3 origfile changedfile >> filename.patch
+diff -u origfile changedfile >> filename.patch
 or:
-cvs diff -u3 changedfile >> filename.patch
+cvs diff -u changedfile >> filename.patch
 
-the -u3 parameter to diff is very important, because it creates a 'unified'
+the -u parameter to diff is very important, because it creates a 'unified'
 diff with several lines of context.  This allows the patch program to find
 where to insert the changed lines, even if the file has changed slightly
 since the patch was generated.
@@ -272,6 +279,11 @@ output_buffering = On
 Note that turning on output buffering if you don't need it can cause
 all sorts of problems, so leave it off unless absolutely necessary.
 
+Warning: setlocale(): Passing locale category name as string 
+is deprecated. Use the LC_* -constants instead. 
+in C:\<...>\xrms\include\i18n.php on line 232
+change 'LC_MESSAGES' in that file and line to LC_ALL (no quotes)
+ 
 =======
 HINTS, daily reports
 
@@ -348,6 +360,9 @@ please let us know.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.26  2006/11/22 13:14:03  braverock
+ * - updates to troubleshooting tips for PEAR and LC_ warnings
+ *
  * Revision 1.25  2006/07/25 20:34:27  braverock
  * - bump version to 1.99.2
  * - last text changes
