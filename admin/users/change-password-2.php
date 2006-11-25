@@ -5,7 +5,7 @@
  * Check that new password entries are identical
  * Then save in the database.
  *
- * $Id: change-password-2.php,v 1.13 2006/01/02 22:09:39 vanmer Exp $
+ * $Id: change-password-2.php,v 1.14 2006/11/25 15:48:34 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -56,7 +56,7 @@ if ($password == $confirm_password) {
         } else {
             $con->close();
 
-            $msg = urlencode(_("There was a problem with the user ID. Password not Changed."));
+            $msg = urlencode(_("There was a problem with the user ID.(Or not new password). Password not Changed."));
             header("Location: change-password.php?msg=$msg");
         }
     } else { // no result set on finding the user
@@ -71,6 +71,9 @@ if ($password == $confirm_password) {
 
 /**
  *$Log: change-password-2.php,v $
+ *Revision 1.14  2006/11/25 15:48:34  jnhayart
+ *change comment, where new password same of old one
+ *
  *Revision 1.13  2006/01/02 22:09:39  vanmer
  *- changed to use centralized dbconnection function
  *
