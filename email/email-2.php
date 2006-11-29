@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.18 2006/10/26 08:57:56 niclowe Exp $
+* $Id: email-2.php,v 1.19 2006/11/29 20:03:46 niclowe Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -237,7 +237,12 @@ myField.value += myValue;
 }
 }
 </script>
-
+<script language="javascript" type="text/javascript" src="<? echo $http_site_root;?>/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script language="javascript" type="text/javascript">
+tinyMCE.init({
+	mode : "textareas"
+});
+</script>
 
 <div id="Main">
 <div id="Content">
@@ -448,6 +453,9 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.19  2006/11/29 20:03:46  niclowe
+* added tinymce
+*
 * Revision 1.18  2006/10/26 08:57:56  niclowe
 * -added custom field to mail merge
 * -added error trapping for emails that fail silently (or appear to have worked)
