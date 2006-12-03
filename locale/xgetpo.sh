@@ -39,6 +39,7 @@ xgettext ${XGETTEXT_OPTIONS} -j admin/reports/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/salutations/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/system-parameters/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/users/*.php
+xgettext ${XGETTEXT_OPTIONS} -j bulkactivity/*.php
 xgettext ${XGETTEXT_OPTIONS} -j campaigns/*.php
 xgettext ${XGETTEXT_OPTIONS} -j calendar/*.php
 xgettext ${XGETTEXT_OPTIONS} -j cases/*.php
@@ -107,8 +108,8 @@ xgettext ${XGETTEXT_OPTIONS} -j private/*.php
 xgettext ${XGETTEXT_OPTIONS} -j relationships/*.php
 xgettext ${XGETTEXT_OPTIONS} -j reports/*.php
 xgettext ${XGETTEXT_OPTIONS} -j rss/*.php
-xgettext ${XGETTEXT_OPTIONS} -j sql/*.php
-xgettext ${XGETTEXT_OPTIONS} -j sql/mysql/*.php
+#xgettext ${XGETTEXT_OPTIONS} -j sql/*.php
+#xgettext ${XGETTEXT_OPTIONS} -j sql/mysql/*.php
 xgettext ${XGETTEXT_OPTIONS} -j tmp/*.php
 
 # don't forget to add new directories as they are needed
