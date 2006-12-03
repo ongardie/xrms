@@ -3,7 +3,7 @@
   *
   * bulkactivity-0.
   *
-  * $Id: bulkactivity-0.php,v 1.1 2006/10/01 00:15:06 braverock Exp $
+  * $Id: bulkactivity-0.php,v 1.2 2006/12/03 21:17:23 jnhayart Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -167,7 +167,7 @@
 
   $con->close();
 
-  $page_title = _("Assegna una attività ai contatti selezionati");
+  $page_title = _("Assign one activity to a set of contact");
   start_page($page_title, true, $msg);
 
 ?>
@@ -178,7 +178,7 @@
         <input type=hidden name=array_of_contacts value="<?php  echo $array_of_contacts; ?>">
         <table class="widget" cellspacing="1">
             <tr>
-                <td class=widget_header colspan=5><?php echo _("Conferma Selezione"); ?></td>
+                <td class=widget_header colspan=5><?php echo _("Confirm selection"); ?></td>
             </tr>
             <tr>
                 <td class="widget_label">&nbsp;</td>
@@ -277,6 +277,9 @@ end_page();
 
  /**
   * $Log: bulkactivity-0.php,v $
+  * Revision 1.2  2006/12/03 21:17:23  jnhayart
+  * translate string to english
+  *
   * Revision 1.1  2006/10/01 00:15:06  braverock
   * - Initial Revision of Bulk Activity and Bulk Assignment contributed by Danielle Baudone
   *
