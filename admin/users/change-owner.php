@@ -5,7 +5,7 @@
  * Form to enter a new password for a user
  * @todo - add javascript validation on the save.
  *
- * $Id: change-owner.php,v 1.6 2006/07/29 19:48:27 jnhayart Exp $
+ * $Id: change-owner.php,v 1.7 2006/12/03 20:18:46 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -72,9 +72,9 @@ $new_user_id = get_user_menu($con, '', false, 'new_user_id');
 			echo "<BR>"; 
         	echo _("Change Selected : This will change the owner of open companies, campaigns, opportunities and cases.");
 			echo "<BR>"; 
-        	echo _("                  All -> All companies are checked.");
+        	echo _("All -> All companies are checked.");
 			echo "<BR>"; 
-        	echo _("                  None -> No companie is cheched.");
+        	echo _("None -> No companies are cheched.");
 			echo "<BR>"; 
          ?>
     </div>
@@ -93,6 +93,9 @@ end_page();
 
 /**
  *$Log: change-owner.php,v $
+ *Revision 1.7  2006/12/03 20:18:46  braverock
+ *- fix mistranslated strings
+ *
  *Revision 1.6  2006/07/29 19:48:27  jnhayart
  *Release with capabilitie to select all or none on new screen
  *need add  "Change Selected (all)" and "Change Selected (none)" to langage file

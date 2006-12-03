@@ -3,7 +3,7 @@
   *
   * bulkassignment.
   *
-  * $Id: bulkassignment.php,v 1.3 2006/11/14 19:32:45 braverock Exp $
+  * $Id: bulkassignment.php,v 1.4 2006/12/03 20:17:46 braverock Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -284,7 +284,7 @@
         <tr>
                <td class=widget_label><?php echo _("Set category"); ?></td>
                <td class=widget_content_form_element><?php echo $company_category_menu; ?>
-               <class=widget_label_right><?php echo _("  Sign check box to unlik selected companies from the category"); ?>
+               <class=widget_label_right><?php echo _("Select check box to unlink selected Companies from the Category"); ?>
                <class=widget_content_form_element><input type=checkbox id=unlink_category name=unlink_category value=1> </td>
         </tr>
         </table>
@@ -293,7 +293,7 @@
         <tr>
                <td class=widget_label><?php echo _("Set campaign"); ?></td>
                <td class=widget_content_form_element><?php echo $campaign_menu; ?>
-               <class=widget_label_right><?php echo _("  Sign check box to unlink selected companies from the campaign"); ?>
+               <class=widget_label_right><?php echo _("Select check box to unlink selected Companies from the Campaign"); ?>
                <class=widget_content_form_element><input type=checkbox id=unlink_campaign name=unlink_campaign value=1> </td>
         </tr>
         </table>
@@ -325,6 +325,9 @@ end_page();
 
  /**
   * $Log: bulkassignment.php,v $
+  * Revision 1.4  2006/12/03 20:17:46  braverock
+  * - fix mistranslated strings
+  *
   * Revision 1.3  2006/11/14 19:32:45  braverock
   * - comment out the custom1-4 stuff entirely until someone
   *   has a chance to work on it and make it work
