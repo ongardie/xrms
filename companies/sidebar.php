@@ -16,15 +16,13 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.14 2005/04/21 15:27:05 ycreddy Exp $
+ * $Id: sidebar.php,v 1.15 2006/12/03 11:12:39 jnhayart Exp $
  */
 
 // add company information block on sidebar
 
-$company_block = '<table class=widget cellspacing=1 width="100%">
-    <tr>
-        <td class=widget_header colspan=5>Company Information</td>
-    </tr>'."\n";
+$company_block = '<table class=widget cellspacing=1 width="100%"><tr>
+        <td class=widget_header colspan=5>' . _("Company Information") . "</td></tr>\n";
 
 
 $sql = "select company_name, phone,
@@ -92,6 +90,9 @@ $company_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.15  2006/12/03 11:12:39  jnhayart
+ * Add string localisation
+ *
  * Revision 1.14  2005/04/21 15:27:05  ycreddy
  * Added http prefix to url if it does not exist already
  *
