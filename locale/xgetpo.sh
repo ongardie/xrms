@@ -28,6 +28,7 @@ xgettext ${XGETTEXT_OPTIONS} -j admin/company-sources/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/company-types/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/country-address-format/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/crm-statuses/*.php
+xgettext ${XGETTEXT_OPTIONS} -j admin/email-templates/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/export/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/import/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/industries/*.php

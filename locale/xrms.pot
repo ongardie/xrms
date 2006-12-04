@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-03 14:19-0600\n"
+"POT-Creation-Date: 2006-12-04 08:51-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -410,6 +410,8 @@ msgstr ""
 #: admin/acl/Groups_list.php:60 admin/acl/Permission_list.php:63
 #: admin/acl/RolePermission_list.php:95 admin/acl/Role_list.php:54
 #: admin/acl/data_source_list.php:55
+#: admin/email-templates/email_template_list.php:80
+#: admin/email-templates/email_template_type_list.php:79
 msgid "Add New"
 msgstr ""
 
@@ -761,7 +763,7 @@ msgstr ""
 msgid "Attach Note"
 msgstr ""
 
-#: email/email-4.php:287
+#: admin/email-templates/one_email_template.php:59 email/email-4.php:287
 msgid "Attached Files"
 msgstr ""
 
@@ -837,6 +839,10 @@ msgstr ""
 
 #: install/data.php:2826
 msgid "Block Sourceforge Link"
+msgstr ""
+
+#: admin/email-templates/one_email_template.php:39
+msgid "Body"
 msgstr ""
 
 #: contacts/edit.php:218
@@ -2400,6 +2406,8 @@ msgstr ""
 #: admin/acl/GroupGroup_list.php:39 admin/acl/GroupUser_list.php:36
 #: admin/acl/Role_list.php:37 admin/acl/data_source_list.php:39
 #: admin/acl/one_GroupMember.php:71 admin/country-address-format/index.php:62
+#: admin/email-templates/email_template_list.php:33
+#: admin/email-templates/email_template_type_list.php:33
 #: plugins/info/one.php:199 plugins/phone/companies_one.php:626
 #: plugins/phone/contacts_one.php:493 relationships/sidebar.php:177
 msgid "Edit"
@@ -2568,11 +2576,23 @@ msgstr ""
 msgid "Email Merge Preview"
 msgstr ""
 
+#: admin/email-templates/one_email_template.php:46
+#: admin/email-templates/one_email_template_type.php:55
 #: locale/datastrings.php:73
 msgid "Email Template"
 msgstr ""
 
-#: admin/index.php:122
+#: admin/email-templates/one_email_template.php:37
+msgid "Email Template Title"
+msgstr ""
+
+#: admin/email-templates/one_email_template.php:36
+#: admin/email-templates/one_email_template.php:41
+msgid "Email Template Type"
+msgstr ""
+
+#: admin/index.php:122 admin/email-templates/email_template_list.php:57
+#: admin/email-templates/email_template_type_list.php:56
 msgid "Email Templates"
 msgstr ""
 
@@ -3696,6 +3716,21 @@ msgstr ""
 msgid "Manage Data Sources"
 msgstr ""
 
+#: admin/email-templates/one_email_template.php:28
+msgid "Manage Email Template"
+msgstr ""
+
+#: admin/email-templates/email_template_nav.php:7
+#: admin/email-templates/one_email_template_type.php:28
+msgid "Manage Email Template Types"
+msgstr ""
+
+#: admin/email-templates/email_template_list.php:28
+#: admin/email-templates/email_template_nav.php:6
+#: admin/email-templates/email_template_type_list.php:28
+msgid "Manage Email Templates"
+msgstr ""
+
 #: admin/acl/GroupGroup_list.php:31 admin/acl/xrms_acl_nav.php:11
 msgid "Manage Group Groups"
 msgstr ""
@@ -3758,6 +3793,10 @@ msgstr ""
 
 #: admin/system-parameters/some.php:36
 msgid "Manage System Parameters"
+msgstr ""
+
+#: admin/email-templates/email_template_nav.php:4
+msgid "Manage Templates"
 msgstr ""
 
 #: admin/users/some.php:101
@@ -4987,6 +5026,10 @@ msgstr ""
 msgid "Record Owners Changed"
 msgstr ""
 
+#: admin/email-templates/one_email_template.php:38
+msgid "Record Status"
+msgstr ""
+
 #: activities/recurrence_sidebar.php:235 activities/recurrence_sidebar.php:240
 #: activities/recurrence_sidebar.php:246 activities/recurrence_sidebar.php:257
 #: activities/recurrence_sidebar.php:263 activities/recurrence_sidebar.php:270
@@ -5120,6 +5163,11 @@ msgstr ""
 
 #: locale/datastrings.php:157
 msgid "Retains Consultant"
+msgstr ""
+
+#: admin/email-templates/one_email_template.php:47
+#: admin/email-templates/one_email_template_type.php:56
+msgid "Return to List"
 msgstr ""
 
 #: admin/import/import-companies-2.php:155
@@ -6004,6 +6052,10 @@ msgstr ""
 #: reports/overdue-items.php:67 reports/overdue-items.php:197
 #: reports/overdue-items.php:248
 msgid "Type"
+msgstr ""
+
+#: admin/email-templates/one_email_template_type.php:48
+msgid "Type Name"
 msgstr ""
 
 #: admin/index.php:150
