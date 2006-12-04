@@ -36,7 +36,7 @@ function acl_confGoTo($quest, $button, $to_url, $_table, $_id, $acl_action='Read
         if (!check_permission_bool($session_user_id, false, $cid, $acl_action, $table))
             return false;
     }
-    return confGoTo($quest, $button, $to_url);    
+    return confGoTo(addslashes($quest), $button, $to_url);    
 }
 
 // generate html code to ask a $quest(ion) with a $button about
@@ -64,6 +64,9 @@ EOQ;
 
 /*
  * $Log: confgoto.php,v $
+ * Revision 1.5  2006/12/04 09:04:18  jnhayart
+ * Prevent Java errors after localisation
+ *
  * Revision 1.4  2005/06/01 15:59:54  vanmer
  * - added function for ACL control of confgoto to allow buttons to appear only when permissions have been
  * granted
