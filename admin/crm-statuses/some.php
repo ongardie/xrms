@@ -2,7 +2,7 @@
 /**
  * Show and edit the details for all crm statuses
  *
- * $Id: some.php,v 1.11 2006/01/02 21:48:01 vanmer Exp $
+ * $Id: some.php,v 1.12 2006/12/04 20:07:57 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -24,16 +24,13 @@ $maxcnt = $rst->rowcount();
 
 if ($rst) {
     while (!$rst->EOF) {
-	$sort_order = $rst->fields['sort_order'];
+	    $sort_order = $rst->fields['sort_order'];
 	  
-        if (strlen($rst->fields['crm_status_display_html']) > 0) {
-            $crm_status_display = _($rst->fields['crm_status_display_html']);
-        } else {
-            $crm_status_display = _($rst->fields['crm_status_pretty_name']);
-        }
         $table_rows .= '<tr>';
-        $table_rows .= '<td class=widget_content><a href=one.php?crm_status_id=' . $rst->fields['crm_status_id'] . '>' . $crm_status_display . '</a></td>';
-
+        $table_rows .= '<td class=widget_content>' . $rst->fields['crm_status_short_name'] . '</td>';
+        $table_rows .= '<td class=widget_content><a href=one.php?crm_status_id=' . $rst->fields['crm_status_id'] . '>' . $rst->fields['crm_status_pretty_name'] . '</a></td>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['crm_status_pretty_plural'] . '</td>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['crm_status_display_html'] . '</td>';        
 	//sets up ordering links in the table
 	$table_rows .= '<td class=widget_content>';
 	if ($sort_order != $cnt) {
@@ -68,10 +65,14 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Existing CRM Statuses"); ?></td>
+                <td class=widget_header colspan=5><?php echo _("Existing CRM Statuses"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Name"); ?></td>
+                <td class=widget_label><?php echo _("Short Name"); ?></td>
+                <td class=widget_label><?php echo _("Full Name"); ?></td>
+                <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
+                <td class=widget_label><?php echo _("Display HTML"); ?></td>
+                
 		<td class=widget_label width=15%><?php echo _("Move"); ?></td>
             </tr>
             <?php  echo $table_rows; ?>
@@ -118,6 +119,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.12  2006/12/04 20:07:57  jnhayart
+ * cosmetics modif
+ *
  * Revision 1.11  2006/01/02 21:48:01  vanmer
  * - changed to use centralized database connection function
  *

@@ -2,7 +2,7 @@
 /**
  * Manage crm statuses
  *
- * $Id: one.php,v 1.11 2006/01/02 21:48:01 vanmer Exp $
+ * $Id: one.php,v 1.12 2006/12/04 20:07:57 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -70,7 +70,7 @@ start_page($page_title);
 		</table>
 		</form>
 
-		<form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo _("Delete CRM Status?"); ?>');">
+		<form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete CRM Status?")); ?>');">
 		<input type=hidden name="crm_status_id" value="<?php  echo $crm_status_id; ?>">
 		<table class=widget cellspacing=1>
 			<tr>
@@ -102,6 +102,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.12  2006/12/04 20:07:57  jnhayart
+ * cosmetics modif
+ *
  * Revision 1.11  2006/01/02 21:48:01  vanmer
  * - changed to use centralized database connection function
  *
