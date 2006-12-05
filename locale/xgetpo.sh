@@ -33,6 +33,7 @@ xgettext ${XGETTEXT_OPTIONS} -j admin/export/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/import/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/industries/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/opportunity-statuses/*.php
+xgettext ${XGETTEXT_OPTIONS} -j admin/opportunity-types/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/plugin/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/ratings/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/relationship-types/*.php
