@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.19 2006/11/29 20:03:46 niclowe Exp $
+* $Id: email-2.php,v 1.20 2006/12/05 11:29:29 jnhayart Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -424,13 +424,13 @@ var msgToDisplay = '';
 
 if (document.getElementById('sender_name').value == '') {
 numberOfErrors ++;
-msgToDisplay += '\n<?php echo _("You must enter a name to let the recipient know who the email is from."); ?>';
+msgToDisplay += '\n<?php echo addslashes(_("You must enter a name to let the recipient know who the email is from.")); ?>';
 }
 
 /*
 if (document.forms[0].sender_address.value == '') {
 numberOfErrors ++;
-msgToDisplay += '\n<?php echo _("You must enter an reply address so the recipient can reply to the message."); ?>';
+msgToDisplay += '\n<?php echo addslashes(_("You must enter an reply address so the recipient can reply to the message.")); ?>';
 }
 */
 
@@ -453,6 +453,9 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.20  2006/12/05 11:29:29  jnhayart
+* correct localisation for java string
+*
 * Revision 1.19  2006/11/29 20:03:46  niclowe
 * added tinymce
 *

@@ -3,7 +3,7 @@
  *
  * Email 2.
  *
- * $Id: one-template.php,v 1.3 2006/01/02 23:02:14 vanmer Exp $
+ * $Id: one-template.php,v 1.4 2006/12/05 11:29:29 jnhayart Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -132,12 +132,12 @@ function validate() {
 
     if (document.forms[0].email_from.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\n<?php echo _("You must enter a name to let the recipient know who the email is from."); ?>';
+        msgToDisplay += '\n<?php echo addslashes(_("You must enter a name to let the recipient know who the email is from.")); ?>';
     }
 
     if (document.forms[0].email_reply_to.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\n<?php echo _("You must enter an reply address so the recipient can reply to the message."); ?>';
+        msgToDisplay += '\n<?php echo addslashes(_("You must enter an reply address so the recipient can reply to the message.")); ?>';
     }
     
     if (numberOfErrors > 0) {
@@ -159,6 +159,9 @@ end_page();
 
 /**
  * $Log: one-template.php,v $
+ * Revision 1.4  2006/12/05 11:29:29  jnhayart
+ * correct localisation for java string
+ *
  * Revision 1.3  2006/01/02 23:02:14  vanmer
  * - changed to use centralized dbconnection function
  *
