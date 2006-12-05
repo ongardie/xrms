@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.24 2006/04/07 04:31:00 maulani Exp $
+ * $Id: one.php,v 1.25 2006/12/05 11:30:17 jnhayart Exp $
  */
 
 //include required files
@@ -190,7 +190,7 @@ function validate() {
 
     if (document.forms[0].file_pretty_name.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\nYou must enter a file name.';
+        msgToDisplay += '\n<?php echo addslashes(_("You must enter a file name.")); ?>';
     }
 
     if (numberOfErrors > 0) {
@@ -222,6 +222,9 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.25  2006/12/05 11:30:17  jnhayart
+ *localisation of java string
+ *
  *Revision 1.24  2006/04/07 04:31:00  maulani
  *- Remove extra semicolon
  *
