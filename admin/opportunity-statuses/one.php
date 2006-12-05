@@ -4,7 +4,7 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.16 2006/01/02 21:59:08 vanmer Exp $
+ * $Id: one.php,v 1.17 2006/12/05 11:10:01 jnhayart Exp $
  */
 
 //include required common files
@@ -18,6 +18,7 @@ require_once($include_directory . 'adodb-params.php');
 //check to see if we are logged in
 $session_user_id = session_check( 'Admin' );
 
+$aopportunity_type_id = $_GET['aopportunity_type_id'];
 $opportunity_status_id = $_GET['opportunity_status_id'];
 
 $con = get_xrms_dbconnection();
@@ -126,6 +127,7 @@ start_page($page_title);
 
         <form action=edit-2.php method=post>
         <input type=hidden name=opportunity_status_id value="<?php  echo $opportunity_status_id; ?>">
+        <input type=hidden name=aopportunity_type_id value="<?php  echo $aopportunity_type_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Edit Opportunity Status Information"); ?></td>
@@ -218,8 +220,9 @@ start_page($page_title);
     <!-- right column //-->
     <div id="Sidebar">
 
-        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Opportunity Status?"); ?>');">
+        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Opportunity Status?")); ?>');">
         <input type=hidden name=opportunity_status_id value="<?php  echo $opportunity_status_id; ?>">
+        <input type=hidden name=aopportunity_type_id value="<?php  echo $aopportunity_type_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Delete Opportunity Status"); ?></td>
@@ -245,6 +248,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.17  2006/12/05 11:10:01  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.16  2006/01/02 21:59:08  vanmer
  * - changed to use centralized database connection function
  *

@@ -4,7 +4,7 @@
  *
  * Edit campaign-statuses
  *
- * $Id: one.php,v 1.10 2006/01/02 21:37:28 vanmer Exp $
+ * $Id: one.php,v 1.11 2006/12/05 11:09:59 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -83,7 +83,7 @@ start_page($page_title);
         </table>
         </form>
 
-        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Campaign Status?"); ?>');">
+        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Campaign Status?")); ?>');">
         <input type=hidden name=campaign_status_id value="<?php  echo $campaign_status_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
@@ -115,6 +115,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.11  2006/12/05 11:09:59  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.10  2006/01/02 21:37:28  vanmer
  * - changed to use centralized dbconnection function
  *

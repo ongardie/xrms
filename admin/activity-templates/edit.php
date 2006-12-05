@@ -2,7 +2,7 @@
 /**
  * Manage activity templates
  *
- * $Id: edit.php,v 1.11 2006/01/02 21:27:56 vanmer Exp $
+ * $Id: edit.php,v 1.12 2006/12/05 11:09:59 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -132,7 +132,7 @@ start_page($page_title, true, $msg);
     <div id="Sidebar">
 
     <form action=delete.php method=post>
-        <input type=hidden name=activity_template_id value="<?php  echo $activity_template_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Activity Template?"); ?>');">
+        <input type=hidden name=activity_template_id value="<?php  echo $activity_template_id; ?>" onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Activity Template?")); ?>');">
     <input type=hidden name=on_what_table value="<?php echo $on_what_table; ?>">
     <input type=hidden name=on_what_id value="<?php echo $on_what_id; ?>">
     <input type=hidden name=return_url value="<?php echo $return_url; ?>">
@@ -226,6 +226,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.12  2006/12/05 11:09:59  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.11  2006/01/02 21:27:56  vanmer
  * - changed to use centralized dbconnection function
  *

@@ -2,7 +2,7 @@
 /**
  * Manage categories
  *
- * $Id: one.php,v 1.15 2006/01/02 21:43:28 vanmer Exp $
+ * $Id: one.php,v 1.16 2006/12/05 11:10:00 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -111,7 +111,7 @@ start_page($page_title);
                 </table>
                 </form>
 
-                <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Category?"); ?>');">
+                <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Category?")); ?>');">
                 <input type=hidden name=category_id value="<?php  echo $category_id; ?>">
                 <table class=widget cellspacing=1>
                         <tr>
@@ -157,6 +157,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.16  2006/12/05 11:10:00  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.15  2006/01/02 21:43:28  vanmer
  * - changed to use centralized database connection function
  *

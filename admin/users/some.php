@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.23 2006/07/29 09:36:29 jnhayart Exp $
+ * $Id: some.php,v 1.24 2006/12/05 11:10:01 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -197,17 +197,17 @@ function validate() {
 
     if (document.forms[0].new_username.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '<?php echo _("You must enter a username."); ?>';
+        msgToDisplay += '<?php echo addslashes(_("You must enter a username.")); ?>';
     }
 
     if (document.forms[0].last_name.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\n<?php echo _("You must enter a last name."); ?>';
+        msgToDisplay += '\n<?php echo addslashes(_("You must enter a last name.")); ?>';
     }
 
     if (document.forms[0].password.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\n<?php echo _("You must enter a password."); ?>';
+        msgToDisplay += '\n<?php echo addslashes(_("You must enter a password.")); ?>';
     }
 
     if (numberOfErrors > 0) {
@@ -227,6 +227,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.24  2006/12/05 11:10:01  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.23  2006/07/29 09:36:29  jnhayart
  * Limit number of ACL object created and SQL connection
  *

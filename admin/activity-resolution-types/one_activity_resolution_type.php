@@ -7,7 +7,7 @@
  *
  *
  * @author Aaron van Meerten
- * $Id: one_activity_resolution_type.php,v 1.2 2006/01/02 22:14:07 vanmer Exp $
+ * $Id: one_activity_resolution_type.php,v 1.3 2006/12/05 11:09:59 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -42,8 +42,8 @@ start_page($page_title);
                                                                                 
         $model->SetFieldType('resolution_type_record_status', 'db_only');
 
-  $view = new ADOdb_QuickForm_View($con, _("Activity Resolution Type"));
-  $view->SetReturnButton('Return to List', $return_url);
+  $view = new ADOdb_QuickForm_View($con, addslashes(_("Activity Resolution Type")));
+  $view->SetReturnButton(_("Return to List"), $return_url);
 
   $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
   $template_form_html = $controller->ProcessAndRenderForm();
@@ -73,6 +73,9 @@ start_page($page_title);
 
 /**
  * $Log: one_activity_resolution_type.php,v $
+ * Revision 1.3  2006/12/05 11:09:59  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.2  2006/01/02 22:14:07  vanmer
  * - changed to use centralized dbconnection function
  *

@@ -2,7 +2,7 @@
 /**
  * Manage Company Types
  *
- * $Id: some.php,v 1.11 2006/10/17 21:50:57 braverock Exp $
+ * $Id: some.php,v 1.12 2006/12/05 11:10:00 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -23,7 +23,10 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $table_rows .= '<tr>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['company_type_short_name']  . '</td>';
         $table_rows .= '<td class=widget_content><a href=one.php?company_type_id=' . $rst->fields['company_type_id'] . '>' . _($rst->fields['company_type_pretty_name']) . '</a></td>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['company_type_pretty_plural']  . '</td>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['company_type_display_html']  . '</td>';
         $table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -43,7 +46,10 @@ start_page($page_title);
                 <td class=widget_header colspan=4><?php echo _("Company Types"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Name"); ?></td>
+                <td class=widget_label><?php echo _("Short Name"); ?></td>
+                <td class=widget_label><?php echo _("Full Name"); ?></td>
+                <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
+                <td class=widget_label><?php echo _("Display HTML"); ?></td>
             </tr>
             <?php  echo $table_rows; ?>
         </table>
@@ -89,6 +95,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.12  2006/12/05 11:10:00  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.11  2006/10/17 21:50:57  braverock
  * - changed company types query selection (patch from dbaudone)
  *

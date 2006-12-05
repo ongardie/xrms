@@ -2,7 +2,7 @@
 /**
  * Show details of a single rating
  *
- * $Id: one.php,v 1.9 2006/01/02 22:03:16 vanmer Exp $
+ * $Id: one.php,v 1.10 2006/12/05 11:10:01 jnhayart Exp $
  */
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -69,7 +69,7 @@ start_page($page_title);
         </table>
         </form>
 
-        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Rating?"); ?>');">
+        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Rating?")); ?>');">
         <input type=hidden name=rating_id value="<?php  echo $rating_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
@@ -101,6 +101,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.10  2006/12/05 11:10:01  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.9  2006/01/02 22:03:16  vanmer
  * - changed to use centralized dbconnection function
  *

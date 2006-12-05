@@ -4,7 +4,7 @@
  *
  * @author Brad Marshall
  *
- * $Id: new.php,v 1.8 2006/01/02 21:27:56 vanmer Exp $
+ * $Id: new.php,v 1.9 2006/12/05 11:09:59 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -34,7 +34,7 @@ if (strlen($duration) == 0) {
 }
 
 $con = get_xrms_dbconnection();
-//$con->debug = 1;
+$con->debug = 1;
 
 //get next sort_order value, put it at the bottom of the list
 $sql = "select sort_order from activity_templates
@@ -54,7 +54,7 @@ $rec['activity_type_id'] = $activity_type_id;
 $rec['duration'] = $duration;
 $rec['sort_order'] = $sort_order;
 $rec['role_id'] = $role_id;
-
+$rec['activity_description'] = "";
 $tbl = "activity_templates";
 $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
@@ -79,10 +79,13 @@ if ((!$rst->EOF) AND ($rst->fields['activity_type_short_name']=='PRO')) {
     $return_url="/admin/activity-templates/edit.php?on_what_table=$on_what_table&on_what_id=$on_what_d&activity_template_id=$activity_template_id&msg=$msg&return_url=$return_url";
 } 
 //go back to the status edit page after updating
-header("Location: $http_site_root$return_url");
+// header("Location: $http_site_root$return_url");
 
 /**
  * $Log: new.php,v $
+ * Revision 1.9  2006/12/05 11:09:59  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.8  2006/01/02 21:27:56  vanmer
  * - changed to use centralized dbconnection function
  *

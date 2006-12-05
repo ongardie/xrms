@@ -4,7 +4,7 @@
  *
  * Edit account-status
  *
- * $Id: one.php,v 1.9 2006/01/02 21:26:21 vanmer Exp $
+ * $Id: one.php,v 1.10 2006/12/05 11:09:59 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -76,7 +76,7 @@ start_page($page_title);
         </form>
 
         <form action=delete.php method=post>
-        <input type=hidden name=account_status_id value="<?php  echo $account_status_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Account Status?"); ?>');">
+        <input type=hidden name=account_status_id value="<?php  echo $account_status_id; ?>" onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Account Status?")); ?>');">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Delete Account Status"); ?></td>
@@ -118,6 +118,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.10  2006/12/05 11:09:59  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.9  2006/01/02 21:26:21  vanmer
  * - changed to use centralized xrms dbconnection function
  *

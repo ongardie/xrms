@@ -2,7 +2,7 @@
 /**
  * Edit the information for a single opportunity type
  *
- * $Id: one.php,v 1.2 2006/01/02 21:59:08 vanmer Exp $
+ * $Id: one.php,v 1.3 2006/12/05 11:10:01 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -76,7 +76,7 @@ start_page($page_title);
         <!-- right column //-->
     <div id="Sidebar">
 
-        <form action=delete.php method=post  onsubmit="javascript: return confirm('<?php echo _("Delete opportunity Type?"); ?>');">
+        <form action=delete.php method=post  onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete opportunity Type?")); ?>');">
             <input type=hidden name=opportunity_type_id value="<?php  echo $opportunity_type_id; ?>">
             <table class=widget cellspacing=1>
                 <tr>
@@ -101,6 +101,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.3  2006/12/05 11:10:01  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.2  2006/01/02 21:59:08  vanmer
  * - changed to use centralized database connection function
  *

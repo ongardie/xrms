@@ -22,16 +22,13 @@ echo <<<TILLEND
 <input type=hidden name=return_url value="$return_url">
 TILLEND;
 }
-echo <<<TILLEND
-<table class=widget>
-    <tr><td colspan=2 class=widget_header>Participant Positions</td></tr>
-    $activity_position_sidebar
-TILLEND;
+echo "<table class=widget>
+    <tr><td colspan=2 class=widget_header>" . _("Participant Positions") . "</td></tr>$activity_position_sidebar";
+
 if ($user_editable_flag) {
-echo <<<TILLEND
-    <tr><td class=widget_label_right>Position Name</td><td class=widget_content_form_element><input type=text name='participant_position_name'></td></tr>
-    <tr><td colspan=2 class=widget_content><input type=submit class=button value='Add New Participant Position'></td></tr>
-TILLEND;
+echo "<tr><td class=widget_label_right>" . _("Position Name") . "</td><td class=widget_content_form_element><input type=text name='participant_position_name'></td></tr>
+    <tr><td colspan=2 class=widget_content><input type=submit class=button value='" . _("Add New Participant Position"). "'></td></tr>";
+
 }
 echo "</table>";
 if ($user_editable_flag) echo "</form>";

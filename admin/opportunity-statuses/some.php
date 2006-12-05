@@ -5,7 +5,7 @@
  *
  * @todo modify all opportunity status uses to use a sort order
  *
- * $Id: some.php,v 1.13 2006/01/10 08:21:13 gpowers Exp $
+ * $Id: some.php,v 1.14 2006/12/05 11:10:01 jnhayart Exp $
  */
 
 //include required XRMS common files
@@ -53,10 +53,28 @@ if ($aopportunity_type_id) {
         while (!$rst->EOF) {
 
             $sort_order = $rst->fields['sort_order'];
-            $table_rows .= '<tr>'
-                        . '<td class=widget_content><a href=one.php?opportunity_status_id=' . $rst->fields['opportunity_status_id'] . '>'
+            $table_rows .= '<tr>';
+            $table_rows .= '<td class=widget_content>' . $rst->fields['opportunity_status_short_name'] .'</td>';
+            
+            $table_rows .= '<td class=widget_content><a href=one.php?opportunity_status_id=' . $rst->fields['opportunity_status_id'] . '&aopportunity_type_id=' . $aopportunity_type_id . '>' 
                         . _($rst->fields['opportunity_status_pretty_name']) . '</a></td>';
 
+            $table_rows .= '<td class=widget_content>' . $rst->fields['opportunity_status_pretty_plural'] .'</td>';
+            $table_rows .= '<td class=widget_content>' . $rst->fields['opportunity_status_display_html'] .'</td>';
+
+            $table_rows .= '<td class=widget_content>';
+            $status_open_indicator = $rst->fields['status_open_indicator'];
+            if (($status_open_indicator == "o") or ($status_open_indicator == '')){
+            		$table_rows .= _("Open");
+            }
+            if ($status_open_indicator == "w") {
+            	$table_rows .= _("Closed/Won");
+            }
+            if ($status_open_indicator == "l") {
+            	$table_rows .= _("Closed/Lost");
+            }
+			$table_rows .='</td>';
+			
             //add descriptions
             $table_rows .= '<td class=widget_content>'
                         . htmlspecialchars($rst->fields['opportunity_status_long_desc'])
@@ -81,10 +99,10 @@ if ($aopportunity_type_id) {
         }
         $rst->close();
         if (!$table_rows) {
-            $table_rows='<tr><td colspan=3 class=widget_content>'._("No statuses defined for specified opportunity type") . '</td></tr>';
+            $table_rows='<tr><td colspan=7 class=widget_content>'._("No statuses defined for specified opportunity type") . '</td></tr>';
         }
     }
-} else { $table_rows='<tr><td colspan=3 class=widget_content>'._("Select a opportunity type") . '</td></tr>'; }
+} else { $table_rows='<tr><td colspan=7 class=widget_content>'._("Select a opportunity type") . '</td></tr>'; }
 
 $con->close();
 
@@ -117,10 +135,14 @@ start_page($page_title);
    <form action=../sort.php method=post>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Opportunity Statuses"); ?></td>
+                <td class=widget_header colspan=7><?php echo _("Opportunity Statuses"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Name"); ?></td>
+                <td class=widget_label><?php echo _("Short Name"); ?></td>
+                <td class=widget_label><?php echo _("Full Name"); ?></td>
+                <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
+                <td class=widget_label><?php echo _("Display HTML"); ?></td>
+                <td class=widget_label><?php echo _("Open Status"); ?></td>
                 <td class=widget_label width=50%><?php echo _("Description"); ?></td>
                 <td class=widget_label width=15%><?php echo _("Move"); ?></td>
             </tr>
@@ -184,6 +206,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.14  2006/12/05 11:10:01  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.13  2006/01/10 08:21:13  gpowers
  * - added limiting of opp. status by opp. type
  *

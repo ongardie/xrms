@@ -4,7 +4,7 @@
  *
  * Edit salutation
  *
- * $Id: one.php,v 1.2 2006/01/02 22:11:29 vanmer Exp $
+ * $Id: one.php,v 1.3 2006/12/05 11:10:01 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -66,7 +66,7 @@ start_page($page_title);
         </form>
 
         <form action=delete.php method=post>
-        <input type=hidden name=salutation_id value="<?php  echo $salutation_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Salutation?"); ?>');">
+        <input type=hidden name=salutation_id value="<?php  echo $salutation_id; ?>" onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Salutation?")); ?>');">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Delete Salutation"); ?></td>
@@ -108,6 +108,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.3  2006/12/05 11:10:01  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.2  2006/01/02 22:11:29  vanmer
  * - changed to use centralized database connection function
  *

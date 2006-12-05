@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.27 2006/07/17 06:10:53 vanmer Exp $
+ * $Id: one.php,v 1.28 2006/12/05 11:10:01 jnhayart Exp $
  */
 
 //include required files
@@ -135,7 +135,7 @@ start_page($page_title, true, $msg);
           <?php echo $user_preferences_table; ?>
         </form>
 
-        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete User?"); ?>');">
+        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete User?")); ?>');">
         <input type=hidden name=edit_user_id value="<?php  echo $edit_user_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
@@ -167,6 +167,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.28  2006/12/05 11:10:01  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.27  2006/07/17 06:10:53  vanmer
  * - altered to allow admin to change user preferences from one.php page
  * - added parameters for user_id and return_url for user_prefs control page

@@ -64,7 +64,7 @@ start_page($page_title);
 		<form action=new-2.php method=post>
 		<table class=widget cellspacing=1>
 			<tr>
-				<td class=widget_header colspan=2><?php echo _("Add New Role"); ?></td>
+				<td class=widget_header colspan=2><?php echo _("Add New Relationship Type"); ?></td>
 			</tr>
 			<tr>
 				<td class=widget_label_right><?php echo _("Relationship Name"); ?></td>
@@ -109,6 +109,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.4  2006/12/05 11:10:01  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.3  2006/01/02 22:03:16  vanmer
  * - changed to use centralized dbconnection function
  *

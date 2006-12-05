@@ -2,7 +2,7 @@
 /**
  * Manage Case Statuses
  *
- * $Id: one.php,v 1.15 2006/01/02 21:41:51 vanmer Exp $
+ * $Id: one.php,v 1.16 2006/12/05 11:09:59 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -216,7 +216,7 @@ start_page($page_title);
     <!-- right column //-->
     <div id="Sidebar">
 
-        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Case Status?"); ?>');">
+        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Case Status?")); ?>');">
         <input type=hidden name=case_status_id value="<?php  echo $case_status_id; ?>">
         <table class=widget cellspacing=1>
              <tr>
@@ -242,6 +242,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.16  2006/12/05 11:09:59  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.15  2006/01/02 21:41:51  vanmer
  * - changed to use centralized dbconnection function
  *

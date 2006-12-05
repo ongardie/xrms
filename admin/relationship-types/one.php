@@ -4,7 +4,7 @@
  *
  * Edit roles
  *
- * $Id: one.php,v 1.5 2006/01/02 22:03:16 vanmer Exp $
+ * $Id: one.php,v 1.6 2006/12/05 11:10:01 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -51,7 +51,7 @@ start_page($page_title);
         <input type=hidden name=relationship_type_id value="<?php  echo $relationship_type_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2><?php echo _("Edit Role Information"); ?></td>
+                <td class=widget_header colspan=2><?php echo _("Edit Relationship Type"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Relationship Name"); ?></td>
@@ -87,11 +87,11 @@ start_page($page_title);
         </table>
         </form>
 
-        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Relationship Type?"); ?>');">
+        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Relationship Type?")); ?>');">
         <input type=hidden name=relationship_type_id value="<?php  echo $relationship_type_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Delete Role"); ?></td>
+                <td class=widget_header colspan=4><?php echo _("Delete Relationship Type"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content>
@@ -120,6 +120,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.6  2006/12/05 11:10:01  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.5  2006/01/02 22:03:16  vanmer
  * - changed to use centralized dbconnection function
  *

@@ -2,7 +2,7 @@
 /**
  * Manage Activity Resolution Types
  *
- * $Id: some.php,v 1.2 2006/01/02 22:14:07 vanmer Exp $
+ * $Id: some.php,v 1.3 2006/12/05 11:09:59 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -24,6 +24,8 @@ if ($rst) {
         while (!$rst->EOF) {
                 $table_rows .= '<tr>';
                 $table_rows .= '<td class=widget_content><a href=one_activity_resolution_type.php?return_url=some.php&form_action=edit&activity_resolution_type_id=' . $rst->fields['activity_resolution_type_id'] . '>' . $rst->fields['resolution_pretty_name'] . '</a></td>';
+                $table_rows .= '<td class=widget_content>' . $rst->fields['resolution_short_name'] . '</td>';
+                
         $table_rows .= '<td class=widget_content>';
         if($rst->fields['sort_order'] != 1) {
            $table_rows .= "<a href='../sort.php?direction=up&resort_id=".$rst->fields['activity_resolution_type_id']."&sort_order=" . $rst->fields['sort_order']
@@ -53,7 +55,8 @@ start_page($page_title);
                 <td class=widget_header colspan=4><?php echo _("Activity Resolution Types"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Name"); ?></td>
+                <td class=widget_label><?php echo _("Full Name"); ?></td>
+                <td class=widget_label><?php echo _("Short Name"); ?></td>
                 <td class=widget_label width=15%><?php echo _("Move"); ?></td>
             </tr>
             <?php  echo $table_rows; ?>
@@ -96,6 +99,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.3  2006/12/05 11:09:59  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.2  2006/01/02 22:14:07  vanmer
  * - changed to use centralized dbconnection function
  *

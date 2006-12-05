@@ -2,7 +2,7 @@
 /**
  * save an updated an opportunity status  to database after editing it.
  *
- * $Id: edit-2.php,v 1.7 2006/01/02 21:59:08 vanmer Exp $
+ * $Id: edit-2.php,v 1.8 2006/12/05 11:10:01 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -21,6 +21,7 @@ $opportunity_status_pretty_plural = $_POST['opportunity_status_pretty_plural'];
 $opportunity_status_display_html = $_POST['opportunity_status_display_html'];
 $opportunity_status_long_desc = $_POST['opportunity_status_long_desc'];
 $status_open_indicator = $_POST['status_open_indicator'];
+$aopportunity_type_id = $_POST['aopportunity_type_id'];
 
 $con = get_xrms_dbconnection();
 
@@ -43,10 +44,15 @@ $con->execute($upd);
 $con->close();
 
 //go back to the main opportunity status page after updating
-header("Location: some.php");
+// stay on same $aopportunity_type_id = $_POST['aopportunity_type_id'];
+
+header("Location: some.php?aopportunity_type_id=".$aopportunity_type_id);
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.8  2006/12/05 11:10:01  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.7  2006/01/02 21:59:08  vanmer
  * - changed to use centralized database connection function
  *

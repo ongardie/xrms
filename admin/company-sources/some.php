@@ -4,7 +4,7 @@
  *
  * List company sources
  *
- * $Id: some.php,v 1.8 2006/01/02 21:45:15 vanmer Exp $
+ * $Id: some.php,v 1.9 2006/12/05 11:10:00 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -26,7 +26,11 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $table_rows .= '<tr>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['company_source_short_name'] . '</td>';
         $table_rows .= '<td class=widget_content><a href=one.php?company_source_id=' . $rst->fields['company_source_id'] . '>' . _($rst->fields['company_source_pretty_name']) . '</a></td>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['company_source_pretty_plural'] . '</td>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['company_source_display_html'] . '</td>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['company_source_score_adjustment'] . '</td>';
         $table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -45,10 +49,14 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Company Sources"); ?></td>
+                <td class=widget_header colspan=5><?php echo _("Company Sources"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Name"); ?></td>
+                <td class=widget_label><?php echo _("Short Name"); ?></td>
+                <td class=widget_label><?php echo _("Full Name"); ?></td>
+                <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
+                <td class=widget_label><?php echo _("Display HTML"); ?></td>
+                <td class=widget_label><?php echo _("Score Adjustment"); ?></td>
             </tr>
             <?php  echo $table_rows; ?>
         </table>
@@ -98,6 +106,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.9  2006/12/05 11:10:00  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.8  2006/01/02 21:45:15  vanmer
  * - changed to use centralized database connection function
  *

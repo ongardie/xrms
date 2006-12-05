@@ -10,6 +10,7 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check( 'Admin' );
 
 $opportunity_status_id = $_POST['opportunity_status_id'];
+$aopportunity_type_id = $_POST['aopportunity_type_id'];
 
 $con = get_xrms_dbconnection();
 //$con->debug = 1;
@@ -56,6 +57,6 @@ $rst->close();
 
 $con->close();
 
-header("Location: some.php");
+header("Location: some.php?aopportunity_type_id=".$aopportunity_type_id);
 
 ?>

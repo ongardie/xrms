@@ -2,7 +2,7 @@
 /**
  * Edit the details for one Case Priority
  *
- * $Id: one.php,v 1.9 2006/01/02 21:41:50 vanmer Exp $
+ * $Id: one.php,v 1.10 2006/12/05 11:09:59 jnhayart Exp $
  */
 
 //include required files
@@ -77,7 +77,7 @@ start_page($page_title);
         </table>
         </form>
 
-        <form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo _("Delete Priority Type?"); ?>');">
+        <form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Priority Type?")); ?>');">
         <input type=hidden name=case_priority_id value="<?php  echo $case_priority_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
@@ -109,6 +109,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.10  2006/12/05 11:09:59  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.9  2006/01/02 21:41:50  vanmer
  * - changed to use centralized dbconnection function
  *
