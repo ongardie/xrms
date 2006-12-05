@@ -4,7 +4,7 @@
  *
  * List campaign-statuses
  *
- * $Id: some.php,v 1.8 2006/01/02 21:37:28 vanmer Exp $
+ * $Id: some.php,v 1.9 2006/12/05 19:35:02 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -24,7 +24,20 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $table_rows .= '<tr>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['campaign_status_short_name'] . '</td>';
         $table_rows .= '<td class=widget_content><a href="one.php?campaign_status_id=' . $rst->fields['campaign_status_id'] . '">' . _($rst->fields['campaign_status_pretty_name']) . '</a></td>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['campaign_status_pretty_plural'] . '</td>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['campaign_status_display_html'] . '</td>';
+
+        $table_rows .= '<td class=widget_content>';
+        if ( $rst->fields['status_open_indicator'] == 'o' ) {
+         	  $table_rows .= _("Open") ;
+        }
+        if ( $rst->fields['status_open_indicator'] != 'o' ) {
+         	  $table_rows .= _("Closed") ;
+        }
+         $table_rows .= '</td>';
+
         $table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -43,10 +56,14 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Campaign Statuses"); ?></td>
+                <td class=widget_header colspan=5><?php echo _("Campaign Statuses"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Name"); ?></td>
+                <td class=widget_label><?php echo _("Short Name"); ?></td>
+                <td class=widget_label><?php echo _("Full Name"); ?></td>
+                <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
+                <td class=widget_label><?php echo _("Display HTML"); ?></td>
+                <td class=widget_label><?php echo _("Open Status"); ?></td>
             </tr>
             <?php  echo $table_rows; ?>
         </table>
@@ -78,7 +95,6 @@ start_page($page_title);
                 <td class=widget_content_form_element><input type=text name=campaign_status_display_html size=30></td>
             </tr>
             <tr>
-            <tr>
                 <td class=widget_label_right><?php echo _("Open Status"); ?></td>
                 <td class=widget_content_form_element>
                 <select name="status_open_indicator">
@@ -101,6 +117,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.9  2006/12/05 19:35:02  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.8  2006/01/02 21:37:28  vanmer
  * - changed to use centralized dbconnection function
  *

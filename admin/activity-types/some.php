@@ -2,7 +2,7 @@
 /**
  * Manage Activity Types
  *
- * $Id: some.php,v 1.14 2006/01/02 21:30:02 vanmer Exp $
+ * $Id: some.php,v 1.15 2006/12/05 19:34:28 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -23,7 +23,13 @@ $rst = $con->execute($sql);
 if ($rst) {
         while (!$rst->EOF) {
                 $table_rows .= '<tr>';
+                $table_rows .= '<td class=widget_content>' . $rst->fields['activity_type_short_name'] . '</td>';
                 $table_rows .= '<td class=widget_content><a href=one.php?activity_type_id=' . $rst->fields['activity_type_id'] . '>' . $rst->fields['activity_type_pretty_name'] . '</a></td>';
+                $table_rows .= '<td class=widget_content>' . $rst->fields['activity_type_pretty_plural'] . '</td>';
+                $table_rows .= '<td class=widget_content>' . $rst->fields['activity_type_display_html'] . '</td>';
+                $table_rows .= '<td class=widget_content>' . $rst->fields['activity_type_score_adjustment'] . '</td>';
+
+
         $table_rows .= '<td class=widget_content>';
         if($rst->fields['sort_order'] != 1) {
            $table_rows .= "<a href='../sort.php?direction=up&resort_id=".$rst->fields['activity_type_id']."&sort_order=" . $rst->fields['sort_order']
@@ -50,10 +56,14 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Activity Types"); ?></td>
+                <td class=widget_header colspan=6><?php echo _("Activity Types"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Name"); ?></td>
+                <td class=widget_label><?php echo _("Short Name"); ?></td>
+                <td class=widget_label><?php echo _("Full Name"); ?></td>
+                <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
+                <td class=widget_label><?php echo _("Display HTML"); ?></td>
+                <td class=widget_label><?php echo _("Score Adjustment"); ?></td>
                 <td class=widget_label width=15%><?php echo _("Move"); ?></td>
             </tr>
             <?php  echo $table_rows; ?>
@@ -104,6 +114,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.15  2006/12/05 19:34:28  jnhayart
+ * Add cosmetics display, and control localisation
+ *
  * Revision 1.14  2006/01/02 21:30:02  vanmer
  * - changed to use centralized dbconnection function
  *
