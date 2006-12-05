@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of cases
  *
- * $Id: edit.php,v 1.24 2006/11/14 20:05:19 braverock Exp $
+ * $Id: edit.php,v 1.25 2006/12/05 11:28:13 jnhayart Exp $
  */
 
 require_once('../include-locations.inc');
@@ -280,7 +280,7 @@ function validate() {
 
     if (document.forms[0].case_title.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\n<?php echo _("You must enter a case title."); ?>';
+        msgToDisplay += '\n<?php echo addslashes(_("You must enter a case title.")); ?>';
     }
 
     if (numberOfErrors > 0) {
@@ -314,6 +314,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.25  2006/12/05 11:28:13  jnhayart
+ * Add correct localisation of java string
+ *
  * Revision 1.24  2006/11/14 20:05:19  braverock
  * - add special filter for contact list on unknown company
  *   based on patches by fcrossen
