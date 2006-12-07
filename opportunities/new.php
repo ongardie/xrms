@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.22 2006/12/05 11:33:10 jnhayart Exp $
+ * $Id: new.php,v 1.23 2006/12/07 13:54:52 jnhayart Exp $
  */
 
 require_once('../include-locations.inc');
@@ -40,7 +40,12 @@ $contact_menu = $rst->getmenu2('contact_id', $contact_id, false);
 $rst->close();
 
 //get a campaign menu
-$sql2 = "select campaign_title, campaign_id from campaigns where campaign_record_status = 'a' order by campaign_title";
+$sql2 = "select campaign_title, campaign_id from campaigns, campaign_statuses
+         where campaign_record_status = 'a' and
+         campaign_statuses.campaign_status_id = campaigns.campaign_status_id and
+         campaign_statuses.status_open_indicator = 'o'
+         order by campaign_title";
+
 $rst = $con->execute($sql2);
 if($rst) {
     $campaign_menu = $rst->getmenu2('campaign_id', false, true);
@@ -282,6 +287,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.23  2006/12/07 13:54:52  jnhayart
+ * Limit campaign choice to "only" open campaign
+ *
  * Revision 1.22  2006/12/05 11:33:10  jnhayart
  * Add correct localisation of java string
  *
