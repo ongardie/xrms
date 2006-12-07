@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.46 2006/10/14 15:11:38 jnhayart Exp $
+ * $Id: new.php,v 1.47 2006/12/07 13:43:22 jnhayart Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -185,8 +185,16 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name=last_name value="<?php echo $last_name; ?>" size=30></td>
             </tr>
             <tr>
+                <td class=widget_label_right><?php echo _("Contact summary"); ?></td>
+                <td class=widget_content_form_element><input type=text name=summary value="<?php echo $summary; ?>" size=35></td>
+            </tr>
+            <tr>
                 <td class=widget_label_right><?php echo _("Title"); ?></td>
                 <td class=widget_content_form_element><input type=text name=title value="<?php echo $title; ?>" size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Description"); ?></td>
+                <td class=widget_content_form_element><input type=text name=description value='<?php echo $description; ?>' size=30></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Company"); ?></td>
@@ -239,14 +247,6 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name=fax size=30 value="<?php  echo $fax; ?>"></td>
             </tr>
 
-            <tr>
-                <td class=widget_label_right><?php echo _("Summary"); ?></td>
-                <td class=widget_content_form_element><input type=text name=summary value="<?php echo $summary; ?>" size=35></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Description"); ?></td>
-                <td class=widget_content_form_element><input type=text name=description value='<?php echo $description; ?>' size=30></td>
-            </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Interests"); ?></td>
                 <td class=widget_content_form_element><input type=text name=interests size=35></td>
@@ -375,6 +375,11 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.47  2006/12/07 13:43:22  jnhayart
+ * re order fields in Edit/New like in display screen
+ * change label for "Summary" for specific localisation
+ * change label for Owner contact
+ *
  * Revision 1.46  2006/10/14 15:11:38  jnhayart
  *  - eliminated outset style from country menu
  * - patch from dbaudone

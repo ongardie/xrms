@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.50 2006/09/22 17:37:13 niclowe Exp $
+ * $Id: edit.php,v 1.51 2006/12/07 13:43:22 jnhayart Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -174,8 +174,16 @@ confGoTo_includes();
                 <td class=widget_content_form_element><input type=text name=last_name value="<?php echo $last_name; ?>" size=30></td>
             </tr>
             <tr>
+                <td class=widget_label_right><?php echo _("Contact summary"); ?></td>
+                <td class=widget_content_form_element><input type=text name=summary value="<?php echo $summary; ?>" size=35></td>
+            </tr>
+            <tr>
                 <td class=widget_label_right><?php echo _("Title"); ?></td>
                 <td class=widget_content_form_element><input type=text name=title value="<?php echo $title; ?>" size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Description"); ?></td>
+                <td class=widget_content_form_element><input type=text name=description value='<?php echo $description; ?>' size=30></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Company"); ?></td>
@@ -235,14 +243,6 @@ confGoTo_includes();
             <tr>
                 <td class=widget_label_right><?php echo _("Fax"); ?></td>
                 <td class=widget_content_form_element><input type=text name=fax value='<?php echo $fax; ?>' size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Summary"); ?></td>
-                <td class=widget_content_form_element><input type=text name=summary value="<?php echo $summary; ?>" size=35></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Description"); ?></td>
-                <td class=widget_content_form_element><input type=text name=description value='<?php echo $description; ?>' size=30></td>
             </tr>
             <!-- accounting plugin -->
             <tr>
@@ -337,6 +337,11 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.51  2006/12/07 13:43:22  jnhayart
+ * re order fields in Edit/New like in display screen
+ * change label for "Summary" for specific localisation
+ * change label for Owner contact
+ *
  * Revision 1.50  2006/09/22 17:37:13  niclowe
  * fixed incorrect display of fax number reciord due to wrapping with formatting information.
  *

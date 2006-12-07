@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.100 2006/06/15 21:32:59 vanmer Exp $
+ * $Id: one.php,v 1.101 2006/12/07 13:43:22 jnhayart Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -268,7 +268,7 @@ function openMsnSession(strIMAddress) {
                                     <td class=clear><?php  echo $gender; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php echo _("Summary"); ?></td>
+                                    <td class=sublabel><?php echo _("Contact summary"); ?></td>
                                     <td class=clear><?php  echo $summary; ?></td>
                                 </tr>
                                 <tr>
@@ -420,7 +420,7 @@ function openMsnSession(strIMAddress) {
                                 </tr>
                                 <?php if ($owner_username) { ?>
                                 <tr>
-                                    <td class=sublabel><?php echo _("Account Owner"); ?></td>
+                                    <td class=sublabel><?php echo _("Contact Owner"); ?></td>
                                     <td class=clear><?php echo $owner_username; ?></td>
                                 </tr>
 				<?php }; ?>
@@ -508,6 +508,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.101  2006/12/07 13:43:22  jnhayart
+ * re order fields in Edit/New like in display screen
+ * change label for "Summary" for specific localisation
+ * change label for Owner contact
+ *
  * Revision 1.100  2006/06/15 21:32:59  vanmer
  * - added owner to the UI for a contact
  *
