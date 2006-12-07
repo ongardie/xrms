@@ -6,7 +6,7 @@
  *
  * @todo Add ability to ctreate a Sales Opportunity for a new company
  *
- * $Id: new.php,v 1.22 2006/11/14 18:55:53 braverock Exp $
+ * $Id: new.php,v 1.23 2006/12/07 13:34:10 jnhayart Exp $
  */
 
 /* Include required files */
@@ -322,7 +322,7 @@ function validate() {
 
     if (document.forms[0].company_name.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\n<?php echo _("You must enter a company name."); ?>';
+        msgToDisplay += '\n<?php echo addslashes(_("You must enter a company name.")); ?>';
     }
 
     if (numberOfErrors > 0) {
@@ -344,6 +344,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.23  2006/12/07 13:34:10  jnhayart
+ * Translation of Java String
+ *
  * Revision 1.22  2006/11/14 18:55:53  braverock
  * - add company type
  * - add campaign mapping

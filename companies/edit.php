@@ -2,7 +2,7 @@
 /**
  * Edit company details
  *
- * $Id: edit.php,v 1.24 2006/11/14 18:57:12 braverock Exp $
+ * $Id: edit.php,v 1.25 2006/12/07 13:34:10 jnhayart Exp $
  */
 
 require_once('../include-locations.inc');
@@ -281,7 +281,7 @@ function validate() {
 
     if (document.forms[0].company_name.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\n<?php echo _("You must enter a company name."); ?>';
+        msgToDisplay += '\n<?php echo addslashes(_("You must enter a company name.")); ?>';
     }
 
     if (numberOfErrors > 0) {
@@ -303,6 +303,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.25  2006/12/07 13:34:10  jnhayart
+ * Translation of Java String
+ *
  * Revision 1.24  2006/11/14 18:57:12  braverock
  * - add company type
  * - add campain linkage

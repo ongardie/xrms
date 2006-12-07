@@ -2,7 +2,7 @@
 /**
  * Set admin items for a company
  *
- * $Id: admin.php,v 1.8 2006/01/02 22:56:26 vanmer Exp $
+ * $Id: admin.php,v 1.9 2006/12/07 13:34:10 jnhayart Exp $
  */
 
 require_once('../include-locations.inc');
@@ -103,7 +103,7 @@ start_page($page_title, true, $msg);
 		</table>
 		</form>
 
-		<form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo _("Delete Company?"); ?>');">
+		<form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Company?")); ?>');">
 		<input type=hidden name=company_id value="<?php echo $company_id; ?>">
 		<table class=widget cellspacing=1>
 			<tr>
@@ -134,6 +134,9 @@ end_page();
 
 /**
  * $Log: admin.php,v $
+ * Revision 1.9  2006/12/07 13:34:10  jnhayart
+ * Translation of Java String
+ *
  * Revision 1.8  2006/01/02 22:56:26  vanmer
  * - changed to use centralized dbconnection function
  *
