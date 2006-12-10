@@ -2,7 +2,7 @@
 /**
  * Manage Activity Resolution Types
  *
- * $Id: some.php,v 1.3 2006/12/05 11:09:59 jnhayart Exp $
+ * $Id: some.php,v 1.4 2006/12/10 18:30:29 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -49,7 +49,6 @@ start_page($page_title);
 
 <div id="Main">
     <div id="Content">
-
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Activity Resolution Types"); ?></td>
@@ -61,35 +60,14 @@ start_page($page_title);
             </tr>
             <?php  echo $table_rows; ?>
         </table>
+<form method="POST" name="activity_resolution_types">
+<input type="button" class="button" value="<?php echo _("Add New"); ?>" onclick="javascript: location.href='one_activity_resolution_type.php?form_action=new&return_url=some.php'">
+</form>
 
     </div>
 
     <!-- right column //-->
     <div id="Sidebar">
-
-        <form action="one_activity_resolution_type.php" method=GET>
-        <input type=hidden name="form_action" value="create">
-        <input type=hidden name="return_url" value="some.php">
-        <input type=hidden name="sort_order" value="1">
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header colspan=2><?php echo _("Add New Type"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Short Name"); ?></td>
-                <td class=widget_content_form_element><input type=text name=resolution_short_name size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Full Name"); ?></td>
-                <td class=widget_content_form_element><input type=text name=resolution_pretty_name size=30></td>
-            </tr>
-            <tr>
-            <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
-            </tr>
-        </table>
-        </form>
-
     </div>
 </div>
 
@@ -99,6 +77,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.4  2006/12/10 18:30:29  jnhayart
+ * repair Add New button
+ *
  * Revision 1.3  2006/12/05 11:09:59  jnhayart
  * Add cosmetics display, and control localisation
  *

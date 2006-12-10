@@ -7,7 +7,7 @@
  *
  *
  * @author Aaron van Meerten
- * $Id: one_activity_resolution_type.php,v 1.3 2006/12/05 11:09:59 jnhayart Exp $
+ * $Id: one_activity_resolution_type.php,v 1.4 2006/12/10 18:30:29 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -28,7 +28,7 @@ $session_user_id = session_check();
 getGlobalVar($return_url, 'return_url');
 getGlobalVar($activity_resolution_type_id, 'activity_resolution_type_id');
 
-$page_title = 'Manage Activity Resolution Type';
+$page_title = _("Manage Activity Resolution Type");
 
 start_page($page_title);
 
@@ -37,10 +37,10 @@ start_page($page_title);
   $model->ReadSchemaFromDB($con, 'activity_resolution_types');
 
 	$model->SetDisplayNames(array('resolution_short_name' => _("Short Name"), 
-														'resolution_pretty_name' => _("Pretty Name"), 
-														'sort_order' => _("Sort Order")));
+   								  'resolution_pretty_name' => _("Pretty Name"), 
+								  'sort_order' => _("Sort Order")));
                                                                                 
-        $model->SetFieldType('resolution_type_record_status', 'db_only');
+    $model->SetFieldType('resolution_type_record_status', 'db_only');
 
   $view = new ADOdb_QuickForm_View($con, addslashes(_("Activity Resolution Type")));
   $view->SetReturnButton(_("Return to List"), $return_url);
@@ -73,6 +73,9 @@ start_page($page_title);
 
 /**
  * $Log: one_activity_resolution_type.php,v $
+ * Revision 1.4  2006/12/10 18:30:29  jnhayart
+ * repair Add New button
+ *
  * Revision 1.3  2006/12/05 11:09:59  jnhayart
  * Add cosmetics display, and control localisation
  *
