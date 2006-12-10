@@ -5,7 +5,7 @@
  * Copyright (c) 2004-2006 XRMS Development Team
  *
  * @author Aaron van Meerten
- * $Id: one_email_template.php,v 1.8 2006/10/26 22:08:32 niclowe Exp $
+ * $Id: one_email_template.php,v 1.9 2006/12/10 17:39:46 jnhayart Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -28,20 +28,27 @@ getGlobalVar($email_template_id, 'email_template_id');
 $page_title = _("Manage Email Template");
 
 start_page($page_title);
-
+?>
+<script language="javascript" type="text/javascript" src="<?PHP echo $http_site_root;?>/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script language="javascript" type="text/javascript">
+tinyMCE.init({
+	mode : "textareas"
+});
+</script>
+<?php
 
   $model = new ADOdb_QuickForm_Model();
   $model->ReadSchemaFromDB($con, 'email_templates');
 
         $model->SetDisplayNames(array('email_template_type_id' => _("Email Template Type"),
                                       'email_template_title' => _("Email Template Title"),
-																			'email_template_record_status' => _("Record Status"),
+//        							  'email_template_record_status' => _("Record Status"),
                                       'email_template_body' => _("Body")));
 
         $model->SetForeignKeyField('email_template_type_id', _("Email Template Type"), 'email_template_type', 'email_template_type_id', 'email_template_type_name');
-        //$model->SetFieldType('email_template_record_status', 'db_only');
-        $model->SetFieldType('email_template_body', 'textarea','cols=50 rows=10');
-				$model->SetFieldType('email_template_record_status', 'text','size=1');
+        $model->SetFieldType('email_template_record_status', 'db_only');
+        $model->SetFieldType('email_template_body', 'textarea','cols=100 rows=20');
+//		$model->SetFieldType('email_template_record_status', 'text','size=1');
 
   $view = new ADOdb_QuickForm_View($con, _("Email Template"));
   $view->SetReturnButton(_("Return to List"), $return_url);
@@ -86,6 +93,9 @@ if ($_GET['form_action']=='edit') {
 
 /**
  * $Log: one_email_template.php,v $
+ * Revision 1.9  2006/12/10 17:39:46  jnhayart
+ * add Html editor
+ *
  * Revision 1.8  2006/10/26 22:08:32  niclowe
  * added record status for template deletion
  *
