@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.20 2006/12/05 11:29:29 jnhayart Exp $
+* $Id: email-2.php,v 1.21 2006/12/10 15:28:39 jnhayart Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -226,7 +226,7 @@ sel = document.selection.createRange();
 sel.text = myValue;
 }
 //MOZILLA/NETSCAPE support
-else if (myField.selectionStart || myField.selectionStart == ‘0?) {
+else if (myField.selectionStart || myField.selectionStart == '0') {
 var startPos = myField.selectionStart;
 var endPos = myField.selectionEnd;
 myField.value = myField.value.substring(0, startPos)
@@ -237,7 +237,7 @@ myField.value += myValue;
 }
 }
 </script>
-<script language="javascript" type="text/javascript" src="<? echo $http_site_root;?>/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script language="javascript" type="text/javascript" src="<?PHP echo $http_site_root;?>/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script language="javascript" type="text/javascript">
 tinyMCE.init({
 	mode : "textareas"
@@ -302,29 +302,27 @@ tinyMCE.init({
           <table width="75%" border="1" cellpadding="2">
             <tr> 
               <td> 
-                <? echo $contacts_menu; ?>
+                <?PHP echo $contacts_menu; ?>
               </td>
-              <td><a onClick="document.forms[0].email_template_body.value=document.forms[0].email_template_body.value +'{'+document.forms[0].contacts_fields.value+'}'">Add</a></td>
+              <td><a onClick="javascript:tinyMCE.execCommand('mceInsertContent',true,'{'+document.forms[0].contacts_fields.value+'}')">Add</a></td>
             </tr>
             <tr> 
               <td> 
-                <? echo $companies_menu; ?>
+                <?PHP echo $companies_menu; ?>
               </td>
-              <td><a onClick="document.forms[0].email_template_body.value=document.forms[0].email_template_body.value +'{'+document.forms[0].companies_fields.value+'}'">Add</a> 
+              <td><a onClick="javascript:tinyMCE.execCommand('mceInsertContent',true,'{'+document.forms[0].companies_fields.value+'}')">Add</a> 
 			  </td>
             </tr>
             <tr> 
               <td> 
-                <? echo $addresses_menu; ?>
+                <?PHP echo $addresses_menu; ?>
               </td>
-              <td><a onClick="document.forms[0].email_template_body.value=document.forms[0].email_template_body.value +'{'+document.forms[0].addresses_fields.value+'}'">Add</a></td>
+              <td><a onClick="javascript:tinyMCE.execCommand('mceInsertContent',true,'{'+document.forms[0].addresses_fields.value+'}')">Add</a></td>
             </tr>
             <tr> 
               <td colspan="2">Click 'Add' to add the custom field to your mail 
                 merge. You can also use these fields in the SUBJECT line too - 
-                just copy-&gt;paste them into it.<BR><BR> At this stage, clicking &quot;Add&quot; 
-                makes the variable appears only at the end of the email - you 
-                can move it.<BR><BR>A Clever Java Script programmer could fix this.</td>
+                just copy-&gt;paste them into it.<BR></td>
             </tr>
           </table>
           <br />
@@ -453,6 +451,10 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.21  2006/12/10 15:28:39  jnhayart
+* change somes code including
+* put field insert in cursor place
+*
 * Revision 1.20  2006/12/05 11:29:29  jnhayart
 * correct localisation for java string
 *
