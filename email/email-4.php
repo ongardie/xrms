@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.34 2006/11/02 12:38:57 niclowe Exp $
+* $Id: email-4.php,v 1.35 2006/12/11 17:34:36 jnhayart Exp $
 *
 * @todo use a more secure method than 'unlink' to delete files after sending them
 */
@@ -151,7 +151,7 @@ if ( $_SESSION['email_sent'] === false )
 									$output = $msg_body;
 									if (!$output) $output = ' ';
 
-									$objSMTP->setBodyContent (stripslashes( $output ));
+									$objSMTP->setBodyContent (stripslashes( $output ),'html');
 									
 									//this line of code sends the message to the SMTP server
 									$mail_result=$objSMTP->sendMsg ();
@@ -344,6 +344,10 @@ function getFile($file_to_open)
 
 			/**
 			* $Log: email-4.php,v $
+			* Revision 1.35  2006/12/11 17:34:36  jnhayart
+			* add Translation
+			* and force email in HTML (temporary) for test
+			*
 			* Revision 1.34  2006/11/02 12:38:57  niclowe
 			* Fixed bug http://sourceforge.net/forum/message.php?msg_id=3990616
 			*

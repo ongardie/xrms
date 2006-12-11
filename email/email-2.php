@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.21 2006/12/10 15:28:39 jnhayart Exp $
+* $Id: email-2.php,v 1.22 2006/12/11 17:34:36 jnhayart Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -302,22 +302,22 @@ tinyMCE.init({
           <table width="75%" border="1" cellpadding="2">
             <tr> 
               <td> 
-                <?PHP echo $contacts_menu; ?>
+                <?PHP echo _("Contact") . "<BR>" . $contacts_menu; ?>
               </td>
-              <td><a onClick="javascript:tinyMCE.execCommand('mceInsertContent',true,'{'+document.forms[0].contacts_fields.value+'}')">Add</a></td>
+              <td><a onClick="javascript:tinyMCE.execCommand('mceInsertContent',true,'{'+document.forms[0].contacts_fields.value+'}')"><?php echo _("Add");?></a></td>
             </tr>
             <tr> 
               <td> 
-                <?PHP echo $companies_menu; ?>
+                <?PHP echo _("Company") . "<BR>" . $companies_menu; ?>
               </td>
-              <td><a onClick="javascript:tinyMCE.execCommand('mceInsertContent',true,'{'+document.forms[0].companies_fields.value+'}')">Add</a> 
+              <td><a onClick="javascript:tinyMCE.execCommand('mceInsertContent',true,'{'+document.forms[0].companies_fields.value+'}')"><?php echo _("Add");?></a> 
 			  </td>
             </tr>
             <tr> 
               <td> 
-                <?PHP echo $addresses_menu; ?>
+                <?PHP echo _("Addresse") . "<BR>" . $addresses_menu; ?>
               </td>
-              <td><a onClick="javascript:tinyMCE.execCommand('mceInsertContent',true,'{'+document.forms[0].addresses_fields.value+'}')">Add</a></td>
+              <td><a onClick="javascript:tinyMCE.execCommand('mceInsertContent',true,'{'+document.forms[0].addresses_fields.value+'}')"><?php echo _("Add");?></a></td>
             </tr>
             <tr> 
               <td colspan="2">Click 'Add' to add the custom field to your mail 
@@ -451,6 +451,10 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.22  2006/12/11 17:34:36  jnhayart
+* add Translation
+* and force email in HTML (temporary) for test
+*
 * Revision 1.21  2006/12/10 15:28:39  jnhayart
 * change somes code including
 * put field insert in cursor place
