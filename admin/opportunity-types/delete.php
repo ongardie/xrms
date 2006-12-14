@@ -2,7 +2,7 @@
 /**
  * delete (set status to 'd') the information for a single opportunity type
  *
- * $Id: delete.php,v 1.2 2006/01/02 21:59:08 vanmer Exp $
+ * $Id: delete.php,v 1.3 2006/12/14 17:46:16 fcrossen Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -27,12 +27,19 @@ $rec['opportunity_type_record_status'] = 'd';
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
+// Mark the child opportunity_statuses records as deleted
+$sql = "UPDATE opportunity_statuses SET opportunity_status_record_status = 'd' WHERE opportunity_type_id = $opportunity_type_id";
+$rst = $con->execute($sql);
+
 $con->close();
 
 header("Location: some.php");
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.3  2006/12/14 17:46:16  fcrossen
+ * - mark child opportunity-status records as deleted when an opportunity-type is deleted
+ *
  * Revision 1.2  2006/01/02 21:59:08  vanmer
  * - changed to use centralized database connection function
  *
