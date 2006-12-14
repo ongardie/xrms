@@ -2,7 +2,7 @@
 /**
  * delete (set status to 'd') the information for a single case
  *
- * $Id: delete.php,v 1.5 2006/01/02 21:41:51 vanmer Exp $
+ * $Id: delete.php,v 1.6 2006/12/14 17:41:44 fcrossen Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -27,12 +27,19 @@ $rec['case_type_record_status'] = 'd';
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
+// Mark the child case_statuses records as deleted
+$sql = "UPDATE case_statuses SET case_status_record_status = 'd' WHERE case_type_id = $case_type_id";
+$rst = $con->execute($sql);
+
 $con->close();
 
 header("Location: some.php");
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.6  2006/12/14 17:41:44  fcrossen
+ * - mark child case-status records as deleted when a case-type is deleted
+ *
  * Revision 1.5  2006/01/02 21:41:51  vanmer
  * - changed to use centralized dbconnection function
  *
