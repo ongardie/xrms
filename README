@@ -1,7 +1,7 @@
 XRMS CRM - README
 
 =============================================================
-/** $Id: README,v 1.26 2006/11/22 13:14:03 braverock Exp $ **/
+/** $Id: README,v 1.27 2006/12/14 17:15:48 fcrossen Exp $ **/
 
 ========================
 SUMMARY
@@ -313,6 +313,7 @@ Andrew            s-t            Developer
 Olivier Colonna   obac           Developer
 Miguel Gonçalves  mig77          Developer
 Justin Cooper     daturaarutad   Developer
+Francis Crossen   fcrossen       Developer
 Keith Edmunds                    Developer
 John Fawcett      johnfawcett    Developer
 Ken Gregoire      kennyg1        Documentation
@@ -360,6 +361,9 @@ please let us know.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.27  2006/12/14 17:15:48  fcrossen
+ * added Francis Crossen, SF id fcrossen, as a developer
+ *
  * Revision 1.26  2006/11/22 13:14:03  braverock
  * - updates to troubleshooting tips for PEAR and LC_ warnings
  *
