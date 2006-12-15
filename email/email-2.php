@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.22 2006/12/11 17:34:36 jnhayart Exp $
+* $Id: email-2.php,v 1.23 2006/12/15 17:22:13 jnhayart Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -304,20 +304,20 @@ tinyMCE.init({
               <td> 
                 <?PHP echo _("Contact") . "<BR>" . $contacts_menu; ?>
               </td>
-              <td><a onClick="javascript:tinyMCE.execCommand('mceInsertContent',true,'{'+document.forms[0].contacts_fields.value+'}')"><?php echo _("Add");?></a></td>
+              <td><a onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].contacts_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
             <tr> 
               <td> 
                 <?PHP echo _("Company") . "<BR>" . $companies_menu; ?>
               </td>
-              <td><a onClick="javascript:tinyMCE.execCommand('mceInsertContent',true,'{'+document.forms[0].companies_fields.value+'}')"><?php echo _("Add");?></a> 
+              <td><a onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].companies_fields.value+'}');"><?php echo _("Add");?></a> 
 			  </td>
             </tr>
             <tr> 
               <td> 
                 <?PHP echo _("Addresse") . "<BR>" . $addresses_menu; ?>
               </td>
-              <td><a onClick="javascript:tinyMCE.execCommand('mceInsertContent',true,'{'+document.forms[0].addresses_fields.value+'}')"><?php echo _("Add");?></a></td>
+              <td><a onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].addresses_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
             <tr> 
               <td colspan="2">Click 'Add' to add the custom field to your mail 
@@ -451,6 +451,9 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.23  2006/12/15 17:22:13  jnhayart
+* change Javascript syntax for working with IE
+*
 * Revision 1.22  2006/12/11 17:34:36  jnhayart
 * add Translation
 * and force email in HTML (temporary) for test
