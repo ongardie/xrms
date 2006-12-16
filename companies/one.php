@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.145 2006/10/17 22:30:34 braverock Exp $
+ * $Id: one.php,v 1.146 2006/12/16 19:11:51 fcrossen Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -66,6 +66,18 @@ $sql1 = 'select ct.*, c.* ' .
         and c.company_id = $company_id";
 
 $rst1 = $con->execute($sql1);
+
+// get the campaign info
+$sql1a = "SELECT ccm.campaign_id, ccm.company_id, c.campaign_title
+          FROM company_campaign_map ccm, campaigns c
+          WHERE ccm.company_id = $company_id
+          AND c.campaign_id = ccm.campaign_id";
+$rst1a = $con->execute($sql1a);
+if ($rst1a) {
+  $campaign_title = $rst1a->fields['campaign_title'];
+} else {
+  $campaign_title = '';
+}
 
 if ($rst) {
   if ( !$rst->EOF ) {
@@ -615,6 +627,12 @@ function markComplete() {
                                     <td class=clear><?php echo $company_source; ?></td>
                                 </tr>
                                 <?php }; ?>
+                                <?php if ($campaign_title) { ?>
+                                <tr>
+                                    <td width=1% class=sublabel><?php echo _("Campaign"); ?></td>
+                                    <td class=clear><?php echo $campaign_title; ?></td>
+                                </tr>
+                                <?php }; ?>
                                 <?php if (trim($employees)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Employees"); ?></td>
@@ -777,6 +795,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.146  2006/12/16 19:11:51  fcrossen
+ * - tweaked and added code to handle campaigns
+ *
  * Revision 1.145  2006/10/17 22:30:34  braverock
  * patch  2006/08/06 from  dbaudone
  * - added company_type

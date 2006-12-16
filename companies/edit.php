@@ -2,7 +2,7 @@
 /**
  * Edit company details
  *
- * $Id: edit.php,v 1.25 2006/12/07 13:34:10 jnhayart Exp $
+ * $Id: edit.php,v 1.26 2006/12/16 19:11:51 fcrossen Exp $
  */
 
 require_once('../include-locations.inc');
@@ -98,12 +98,17 @@ $sql2 = "select campaign_title, campaign_id from campaigns, campaign_statuses
          campaign_statuses.status_open_indicator = 'o' 
          order by campaign_title";
 $rst = $con->execute($sql2);
-if ( $rst && !$rst->EOF ) {
-   $campaign_id = $rst->fields['campaign_id'];
+
+// Get a campaign_id for this company (if one exists)
+$sql3 = "SELECT campaign_id FROM company_campaign_map WHERE company_id=$company_id";
+$rst3 = $con->execute($sql3);
+if ( $rst3 && !$rst3->EOF ) {
+   $campaign_id = $rst3->fields['campaign_id'];
 } else {
    $campaign_id = '';
 }
-$campaign_menu = $rst->getmenu('campaign_id', $campaign_id, true);
+
+$campaign_menu = $rst->getmenu2('campaign_id', $campaign_id, true);
 $rst->close();
 
 $accounting_rows = do_hook_function('company_accounting_inline_edit', $accounting_rows);
@@ -303,6 +308,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.26  2006/12/16 19:11:51  fcrossen
+ * - tweaked and added code to handle campaigns
+ *
  * Revision 1.25  2006/12/07 13:34:10  jnhayart
  * Translation of Java String
  *

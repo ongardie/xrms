@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.23 2006/11/14 18:57:12 braverock Exp $
+ * $Id: edit-2.php,v 1.24 2006/12/16 19:11:28 fcrossen Exp $
  */
 require_once('../include-locations.inc');
 
@@ -58,13 +58,29 @@ $con = get_xrms_dbconnection();
 // $con->debug=1;
 update_company($con, $rec, $rec['company_id'], false, get_magic_quotes_gpc());
 
-if ($campaign_id){
-   $rec1['company_id'] = $company_id; 
-   $rec1['campaign_id'] = $campaign_id;
-   $tbl1 = 'company_campaign_map';
-   $ins1 = $con->GetInsertSQL($tbl1, $rec1, get_magic_quotes_gpc());
-   $con->execute($ins1);
+// edit.php will pass campaign_id = 0 if we want to remove a campaign or
+// to assign no campaign. This is implemented as a DELETE
+// We also need to check if there is an existing campaign
+// for this company and UPDATE instead of INSERT
+if ($campaign_id) {
+  $rec1['company_id'] = $company_id;
+  $rec1['campaign_id'] = $campaign_id;
+  $sql = "SELECT * FROM company_campaign_map WHERE company_id = $company_id";
+  $rst = $con->execute($sql);
+  if ($rst->RowCount()) { // then there is an existing campaign for this company - UPDATE
+    $sql2 = $con->GetUpdateSQL($rst, $rec1, get_magic_quotes_gpc());
+  }
+  else { // no existing campaign - INSERT
+    $sql2 = $con->GetInsertSQL($rst, $rec1, get_magic_quotes_gpc());
+  }
+  $con->execute($sql2);
 }
+if ($campaign_id == 0) {
+  // we need to DELETE any campaign assignments
+  $sql2 = "DELETE FROM company_campaign_map WHERE company_id = $company_id";
+  $con->execute($sql2);
+}
+
 $accounting_rows = do_hook_function('company_accounting_inline_edit_2', $accounting_rows);
 
 /*
@@ -80,6 +96,9 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.24  2006/12/16 19:11:28  fcrossen
+ * - tweaked and added code to handle campaigns
+ *
  * Revision 1.23  2006/11/14 18:57:12  braverock
  * - add company type
  * - add campain linkage
