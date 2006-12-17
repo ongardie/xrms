@@ -2,7 +2,7 @@
 /**
  * Edit company details
  *
- * $Id: edit.php,v 1.26 2006/12/16 19:11:51 fcrossen Exp $
+ * $Id: edit.php,v 1.27 2006/12/17 10:51:59 jnhayart Exp $
  */
 
 require_once('../include-locations.inc');
@@ -73,11 +73,7 @@ $user_menu = get_user_menu($con, $user_id, false, 'user_id', false);
 $crm_status_menu = build_crm_status_menu($con, $crm_status_id);
 
 $company_type_menu = build_company_type_menu($con, $company_type_id, true);
-$sql2 = "select company_source_pretty_name, company_source_id from company_sources where company_source_record_status = 'a' order by company_source_pretty_name";
-$rst = $con->execute($sql2);
-$company_source_menu = $rst->getmenu2('company_source_id', $company_source_id, false);
-$rst->close();
-
+$company_source_menu = build_company_source_menu(  $con, $company_source_id, true );
 $sql2 = "select industry_pretty_name, industry_id from industries where industry_record_status = 'a' order by industry_pretty_name";
 $rst = $con->execute($sql2);
 $industry_menu = $rst->getmenu2('industry_id', $industry_id, false);
@@ -308,6 +304,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.27  2006/12/17 10:51:59  jnhayart
+ * Add centalized build_company_source_menu
+ *
  * Revision 1.26  2006/12/16 19:11:51  fcrossen
  * - tweaked and added code to handle campaigns
  *
