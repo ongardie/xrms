@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.109 2006/10/01 10:47:29 braverock Exp $
+ * $Id: utils-interface.php,v 1.110 2006/12/17 10:50:16 jnhayart Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -575,6 +575,29 @@ function build_company_type_menu(&$con, $company_type_id='', $blank_company_type
     return $crm_status_menu;
 } //end build_company_type_menu fn
 
+/**
+ * Retrieve menu of Company Source
+ *
+ * @param  handle  $con database connection
+ * @param  integer $company_source_id to set the menu to (default)
+ * @param  boolean $blank_company_type include a blank area
+ * @return string  $company_source_menu the html menu to display
+ */
+
+function build_company_source_menu(&$con, $company_source_id='', $blank_company_source=false) {
+
+    $sql = "select company_source_pretty_name, company_source_id from company_sources where company_source_record_status = 'a' order by company_source_pretty_name";
+
+    $rst = $con->execute($sql);
+    if (!$rst) {
+        db_error_handler($con, $sql);
+    }
+    $crm_company_source_menu = $rst->getmenu2('company_source_id', $company_source_id, $blank_company_source);
+    $rst->close();
+
+    return $crm_company_source_menu;
+} //end build_company_source_menu fn
+
 /*****************************************************************************/
 /**
  * Function public string buildDataTable( array, [[array,] string] )
@@ -1127,6 +1150,9 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.110  2006/12/17 10:50:16  jnhayart
+ * Ad centralised function for Buil_Menu_Company_Source
+ *
  * Revision 1.109  2006/10/01 10:47:29  braverock
  * - revert custom1-4 menu functions, company custom1-4 will stay simple strings
  *   -- use custom_fields plugin if you want select lists
