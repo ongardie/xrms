@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @todo: Active companies should always have active addresses
  *
- * $Id: data_clean.php,v 1.17 2006/12/16 19:02:24 jnhayart Exp $
+ * $Id: data_clean.php,v 1.18 2006/12/17 11:29:31 jnhayart Exp $
  */
 
 // where do we include from
@@ -127,6 +127,7 @@ if ($companies_to_fix > 0) {
     }
 }
 
+
 // There needs to be at least one address for each company
 $sql = "SELECT companies.company_id, companies.company_record_status ";
 $sql .= "FROM companies ";
@@ -160,9 +161,9 @@ if ($companies_to_fix > 0) {
 $sql = "SELECT companies.company_id ";
 $sql .= "FROM companies ";
 $sql .= "LEFT JOIN addresses ON companies.company_id = addresses.company_id ";
-$sql .= "AND addresses.address_record_status = 'a' ";
 $sql .= "WHERE addresses.company_id IS NULL ";
 $sql .= "AND companies.company_record_status = 'a' ";
+$sql .= "AND (addresses.address_record_status = 'a' or addresses.address_record_status = NULL ) ";
 $rst = $con->execute($sql);
 $companies_to_fix = $rst->RecordCount();
 if ($companies_to_fix > 0) {
@@ -185,6 +186,7 @@ if ($companies_to_fix > 0) {
     }
 }
 
+
 // Each company must have a valid default_primary_address
 $sql = "SELECT companies.company_id, companies.company_record_status ";
 $sql .= "FROM companies ";
@@ -201,7 +203,7 @@ if ($companies_to_fix > 0) {
         $sql = "select min(address_id) as the_address
                 FROM addresses
                 WHERE addresses.company_id = $company_id";
-        if($company_record_status = 'a') {
+        if($company_record_status == 'a') {
             $sql .= " AND addresses.address_record_status = 'a'";
         }
         $ast = $con->execute($sql);
@@ -236,7 +238,7 @@ if ($companies_to_fix > 0) {
         $sql = "select min(address_id) as the_address
                 FROM addresses
                 WHERE addresses.company_id = $company_id";
-        if($company_record_status = 'a') {
+        if($company_record_status == 'a') {
             $sql .= " AND addresses.address_record_status = 'a'";
         }
         $ast = $con->execute($sql);
@@ -271,7 +273,7 @@ if ($companies_to_fix > 0) {
         $sql = "select min(address_id) as the_address
                 FROM addresses
                 WHERE addresses.company_id = $company_id";
-        if($company_record_status = 'a') {
+        if($company_record_status == 'a') {
             $sql .= " AND addresses.address_record_status = 'a'";
         }
         $ast = $con->execute($sql);
@@ -306,7 +308,7 @@ if ($companies_to_fix > 0) {
         $sql = "select min(address_id) as the_address
                 FROM addresses
                 WHERE addresses.company_id = $company_id";
-        if($company_record_status = 'a') {
+        if($company_record_status == 'a') {
             $sql .= " AND addresses.address_record_status = 'a'";
         }
         $ast = $con->execute($sql);
@@ -361,15 +363,15 @@ if ($adresses_to_fix > 0) {
     $msg .= _("Need  to assign a default name for") . " " . $adresses_to_fix . " " .  _("Adresses"). "<BR><BR>";
 
 	$rec = array();
-	$rec['adress_name'] = _("(No Name)");
+	$rec['address_name'] = _("(No Name)");
 	
 	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 	$rst = $con->execute($upd);
 }
+$con->debug=0;
 
 //close the database connection, because we don't need it anymore
 $con->close();
-
 $page_title = _("Database Cleanup Complete");
 start_page($page_title, true, $msg);
 
@@ -387,6 +389,9 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.18  2006/12/17 11:29:31  jnhayart
+ * found bug on data_clean, when a company is deleted
+ *
  * Revision 1.17  2006/12/16 19:02:24  jnhayart
  * apply patch from holger
  *
