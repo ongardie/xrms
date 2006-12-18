@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.32 2006/12/07 13:54:52 jnhayart Exp $
+ * $Id: edit.php,v 1.33 2006/12/18 12:03:56 jnhayart Exp $
  */
 
 require_once('../include-locations.inc');
@@ -121,8 +121,7 @@ $user_menu = get_user_menu($con, $user_id);
 //campaign menu
 $sql2 = "select campaign_title, campaign_id from campaigns, campaign_statuses
          where campaign_record_status = 'a' and
-         campaign_statuses.campaign_status_id = campaigns.campaign_status_id and
-         campaign_statuses.status_open_indicator = 'o'
+         campaign_statuses.campaign_status_id = campaigns.campaign_status_id 
          order by campaign_title";
 $rst = $con->execute($sql2);
 $campaign_menu = $rst->getmenu2('campaign_id', $campaign_id, true);
@@ -362,6 +361,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.33  2006/12/18 12:03:56  jnhayart
+ * Remove limitation of Open Campaign in menu
+ * Cause it's possible to edit opp on "closed" campaign
+ *
  * Revision 1.32  2006/12/07 13:54:52  jnhayart
  * Limit campaign choice to "only" open campaign
  *
