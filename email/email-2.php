@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.23 2006/12/15 17:22:13 jnhayart Exp $
+* $Id: email-2.php,v 1.24 2006/12/27 11:41:37 jnhayart Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -304,20 +304,20 @@ tinyMCE.init({
               <td> 
                 <?PHP echo _("Contact") . "<BR>" . $contacts_menu; ?>
               </td>
-              <td><a onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].contacts_fields.value+'}');"><?php echo _("Add");?></a></td>
+              <td><a href="javascript:void(0);" onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].contacts_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
             <tr> 
               <td> 
                 <?PHP echo _("Company") . "<BR>" . $companies_menu; ?>
               </td>
-              <td><a onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].companies_fields.value+'}');"><?php echo _("Add");?></a> 
+              <td><a href="javascript:void(0);" onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].companies_fields.value+'}');"><?php echo _("Add");?></a> 
 			  </td>
             </tr>
             <tr> 
               <td> 
                 <?PHP echo _("Addresse") . "<BR>" . $addresses_menu; ?>
               </td>
-              <td><a onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].addresses_fields.value+'}');"><?php echo _("Add");?></a></td>
+              <td><a href="javascript:void(0);" onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].addresses_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
             <tr> 
               <td colspan="2">Click 'Add' to add the custom field to your mail 
@@ -330,7 +330,7 @@ tinyMCE.init({
         <td class="widget_content_form_element">
           <textarea class="monospace"
                       name="email_template_body"
-                      id="email_template_body"rows="20"
+                      id="email_template_body" rows="20"
                       cols="80"><?php echo $email_template_body ?></textarea>
         </td>
       </tr>
@@ -451,6 +451,9 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.24  2006/12/27 11:41:37  jnhayart
+* Change Syntax for Insert correctly in IE
+*
 * Revision 1.23  2006/12/15 17:22:13  jnhayart
 * change Javascript syntax for working with IE
 *
