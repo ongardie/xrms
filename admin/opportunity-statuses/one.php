@@ -4,7 +4,7 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.17 2006/12/05 11:10:01 jnhayart Exp $
+ * $Id: one.php,v 1.18 2006/12/29 06:48:56 ongardie Exp $
  */
 
 //include required common files
@@ -109,7 +109,7 @@ if ($rst) {
 //get activity type menu
 $sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a'";
 $rst = $con->execute($sql);
-$activity_type_menu = $rst->getmenu2('activity_type_id', '', true);
+$activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
 $rst->close();
 
 $con->close();
@@ -248,6 +248,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.18  2006/12/29 06:48:56  ongardie
+ * - Don't allow blank on activities type drop-down.
+ *
  * Revision 1.17  2006/12/05 11:10:01  jnhayart
  * Add cosmetics display, and control localisation
  *
