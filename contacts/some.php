@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.72 2006/10/14 15:15:30 jnhayart Exp $
+ * $Id: some.php,v 1.73 2006/12/29 06:42:40 ongardie Exp $
  */
 
 //include the standard files
@@ -66,10 +66,9 @@ $sql = "SELECT " .
     $con->Concat($con->qstr('<a id="'), "c.company_name",  $con->qstr('" href="../companies/one.php?company_id='), "c.company_id", $con->qstr('">'), "c.company_name", $con->qstr('</a>')) . " AS company,".
     "company_code, title, description, u.username, cont.email, cont.work_phone, cont.cell_phone, cont.contact_id, cont.last_name, cont.first_names, c.company_name";
 
-$from = " from contacts cont, companies c, users u ";
+$from = " from contacts cont, companies c LEFT JOIN users u ON cont.user_id=u.user_id ";
 
 $where  = "where c.company_id = cont.company_id ";
-$where .= "and c.user_id = u.user_id ";
 $where .= "and contact_record_status = 'a'";
 
 $criteria_count = 0;
@@ -120,7 +119,7 @@ if (strlen($category_id) > 0) {
 
 if (strlen($user_id) > 0) {
     $criteria_count++;
-    $where .= " and c.user_id = $user_id";
+    $where .= " and cont.user_id = $user_id";
 }
 
 $phone_fields=array('work_phone'=>_("Work Phone"),'cell_phone'=>_("Cell Phone"),'home_phone'=>_("Home Phone"), 'work_phone_ext'=>_("Work Phone Ext"));
@@ -504,6 +503,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.73  2006/12/29 06:42:40  ongardie
+ * - Owner should refer to the contact's owner, not the company's.
+ *
  * Revision 1.72  2006/10/14 15:15:30  jnhayart
  * - added Phone and Cell Phone to selectable column layout
  * - add call back for country display of phones numbers
