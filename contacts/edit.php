@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.51 2006/12/07 13:43:22 jnhayart Exp $
+ * $Id: edit.php,v 1.52 2006/12/29 22:37:57 ongardie Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -56,13 +56,13 @@ if ($rst) {
     $division_id = $rst->fields['division_id'];
     $address_id = $rst->fields['address_id'];
     $edit_address=true;
-    if ($address_id==1) {
+    if (empty($address_id) || $address_id==1) {
         $edit_address=false;
     }
     $address= get_formatted_address($con,$address_id);
     $home_address_id = $rst->fields['home_address_id'];
     $edit_home_address=true;
-    if ($home_address_id==1) {
+    if (empty($home_address_id) || $home_address_id==1) {
         $edit_home_address=false;
     }
     $home_address= get_formatted_address($con,$home_address_id);
@@ -337,6 +337,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.52  2006/12/29 22:37:57  ongardie
+ * - Don't allow editing an empty address_id.
+ *
  * Revision 1.51  2006/12/07 13:43:22  jnhayart
  * re order fields in Edit/New like in display screen
  * change label for "Summary" for specific localisation
