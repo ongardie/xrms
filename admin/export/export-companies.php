@@ -98,10 +98,11 @@ $sql = " SELECT
   i.industry_pretty_name AS 'Industry',
   crm.crm_status_pretty_name AS 'CRM Status',
   ast.account_status_pretty_name AS 'Account Status',
-  coun.country_name AS 'Country',
-  catmap.on_what_id, catmap.on_what_table
-FROM contacts cont, companies c, addresses a, company_sources cs, industries i, crm_statuses crm, account_statuses ast, countries coun, entity_category_map catmap
-WHERE
+  coun.country_name AS 'Country'
+FROM contacts cont, companies c, addresses a, company_sources cs, industries i, crm_statuses crm, account_statuses ast, countries coun";
+if ($category_id)
+	$sql .= ", entity_category_map catmap";
+$sql .= " WHERE
   cont.contact_record_status = 'a' AND
   c.company_record_status = 'a' AND
   cont.address_id = a.address_id AND
@@ -163,6 +164,11 @@ if ($csv_output) header("Location: {$http_site_root}/tmp/contacts-export.csv");
 
 /**
  * $Log: export-companies.php,v $
+ * Revision 1.10  2006/12/29 06:25:13  ongardie
+ *  * Don't show on_what_id, on_what_table in CSV.
+ *  * Only join entity_category_map when required.
+ *  * This fixes MySQL crashing when exporting without specifying a category.
+ *
  * Revision 1.9  2006/04/05 01:11:27  vanmer
  * - updated to give some granularity of the export of companies/contacts data
  *
