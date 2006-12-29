@@ -2,7 +2,7 @@
 /**
  * Insert a new Case into the Database
  *
- * $Id: new-2.php,v 1.13 2006/04/29 01:46:12 vanmer Exp $
+ * $Id: new-2.php,v 1.14 2006/12/29 07:22:26 ongardie Exp $
  */
  
 require_once('../include-locations.inc');
@@ -59,6 +59,8 @@ $rec['last_modified_by'] = $session_user_id;
 $case_id=add_case($con, $rec, get_magic_quotes_gpc());
 
 if ($case_id) {
+    do_hook('case_new_2', $case_id);
+    
     if (!$return_url) {
         header("Location: one.php?msg=case_added&case_id=$case_id");
     } else {
@@ -76,6 +78,9 @@ $con->close();
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.14  2006/12/29 07:22:26  ongardie
+ * - Added several case hooks.
+ *
  * Revision 1.13  2006/04/29 01:46:12  vanmer
  * - moved workflow activity instantiation into cases API and out of edit-2.php and new-2.php
  *

@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of cases
  *
- * $Id: edit.php,v 1.25 2006/12/05 11:28:13 jnhayart Exp $
+ * $Id: edit.php,v 1.26 2006/12/29 07:22:26 ongardie Exp $
  */
 
 require_once('../include-locations.inc');
@@ -243,6 +243,7 @@ confGoTo_includes();
                 <td class=widget_label_right><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=case_description><?php  echo $case_description; ?></textarea></td>
             </tr>
+	    <?php do_hook('case_edit_form', $case_id); ?>
             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>">
 <?php
@@ -283,6 +284,8 @@ function validate() {
         msgToDisplay += '\n<?php echo addslashes(_("You must enter a case title.")); ?>';
     }
 
+    <?php do_hook('case_edit_js_validate'); ?>
+
     if (numberOfErrors > 0) {
         alert(msgToDisplay);
         return false;
@@ -314,6 +317,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.26  2006/12/29 07:22:26  ongardie
+ * - Added several case hooks.
+ *
  * Revision 1.25  2006/12/05 11:28:13  jnhayart
  * Add correct localisation of java string
  *

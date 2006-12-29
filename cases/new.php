@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.22 2006/12/05 11:28:13 jnhayart Exp $
+ * $Id: new.php,v 1.23 2006/12/29 07:22:26 ongardie Exp $
  */
 
 require_once('../include-locations.inc');
@@ -170,6 +170,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=case_description></textarea></td>
             </tr>
+	    <?php do_hook('case_new_form'); ?>
             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
             </tr>
@@ -203,6 +204,8 @@ function validate() {
         msgToDisplay += '\n<?php echo addslashes(_("You must enter a case title.")); ?>"); ?>';
     }
 
+    <?php do_hook('case_new_js_validate'); ?>
+
     if (numberOfErrors > 0) {
         alert(msgToDisplay);
         return false;
@@ -232,6 +235,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.23  2006/12/29 07:22:26  ongardie
+ * - Added several case hooks.
+ *
  * Revision 1.22  2006/12/05 11:28:13  jnhayart
  * Add correct localisation of java string
  *

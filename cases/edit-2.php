@@ -59,6 +59,8 @@ if ( ! $no_update ) {
 
     $ret=update_case($con, $rec, $case_id, false, get_magic_quotes_gpc());
 
+    do_hook('case_edit_2', $case_id);
+
     if (!$return_url) $return_url="one.php?msg=saved&case_id=$case_id";
     
     header("Location: $return_url");

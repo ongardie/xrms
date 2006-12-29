@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.50 2006/10/17 22:19:27 braverock Exp $
+ * $Id: one.php,v 1.51 2006/12/29 07:22:26 ongardie Exp $
  */
 
 //include required files
@@ -198,6 +198,7 @@ start_page($page_title, true, $msg);
                                     <td class=clear><?php  echo $closed_at; ?> (<?php  echo $closed_by; ?>)</td>
                                 </tr>
                                 <?php } ?>
+				<?php do_hook('case_one', $case_id); ?>
                                 </table>
                             </td>
 
@@ -300,6 +301,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.51  2006/12/29 07:22:26  ongardie
+ * - Added several case hooks.
+ *
  * Revision 1.50  2006/10/17 22:19:27  braverock
  * - don't show blocks of information for things that aren't set
  *
