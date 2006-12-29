@@ -33,7 +33,7 @@ function bodytags() {
 function topofpage() {
     echo "
 <div style=\"visibility: hidden; position: absolute; background: red;\" id=\"call_info\">
-    <script src=\"" . $http_site_root . "/xrms/plugins/cti/jpspan_server.php?client\"></script>
+    <script src=\"" . $http_site_root . "/plugins/cti/jpspan_server.php?client\"></script>
     <SCRIPT>
         function setupCallTracking(){
             setTimeout('checkForNewCall()', 1000);
@@ -47,7 +47,7 @@ function topofpage() {
                 h.ackcall(results);
                 var oDiv = document.getElementById('call_info');
                 var callInfo = h.getcallerinfo(results);
-                oDiv.innerHTML = 'New call from <A HREF=\"" .  $http_site_root . "/xrms/plugins/cti/screen_pop_redirect.php?call_id=' + callInfo['call_id']  + '\">' + callInfo['callerid'] + '</A> (<A HREF=\"javascript:hideCallInfo()\">Hide</A>)';
+                oDiv.innerHTML = 'New call from <A HREF=\"" .  $http_site_root . "/plugins/cti/screen_pop_redirect.php?call_id=' + callInfo['call_id']  + '\">' + callInfo['callerid'] + '</A> (<A HREF=\"javascript:hideCallInfo()\">Hide</A>)';
                 oDiv.style.visibility = \"visible\";
                 setupCallTracking();
             }else{
@@ -69,7 +69,7 @@ function phone_link_to_display($phone, $phone_to_display) {
         global $company_id;
         global $contact_id;
         $url_phone = urlencode($phone);
-        return "<a href=\"" . $http_site_root . "/xrms/plugins/cti/asteriskdial.php?company_id=" . $company_id . "&contact_id=" . $contact_id . "&phone=" . $url_phone . "\">" . $phone_to_display . "</a>";
+        return "<a href=\"" . $http_site_root . "/plugins/cti/asteriskdial.php?company_id=" . $company_id . "&contact_id=" . $contact_id . "&phone=" . $url_phone . "\">" . $phone_to_display . "</a>";
     }
 }
 
