@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.28 2006/08/19 09:29:44 jnhayart Exp $
+ * $Id: utils-contacts.php,v 1.29 2006/12/29 21:12:40 ongardie Exp $
  *
  */
 
@@ -504,7 +504,8 @@ function pull_contact_fields ( $array_data )
         return $array_data;
 
     // Retrieve only the field names we can handle
-    $contact_fields = array ( 'company_id'           => '',
+    $contact_fields = array ( 'contact_id'           => '',
+                              'company_id'           => '',
                               'division_id'          => '',
                               'address_id'           => '',
                               'home_address_id'      => '',
@@ -555,6 +556,9 @@ include_once $include_directory . 'utils-misc.php';
 /**********************************************************************/
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.29  2006/12/29 21:12:40  ongardie
+ * - Added contact_id to pull_contact_fields().
+ *
  * Revision 1.28  2006/08/19 09:29:44  jnhayart
  * Add email_status in contact fields
  *
