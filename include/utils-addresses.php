@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @author Brian Peterson
  *
- * $Id: utils-addresses.php,v 1.11 2006/08/23 21:02:58 braverock Exp $
+ * $Id: utils-addresses.php,v 1.12 2007/01/05 19:51:59 ongardie Exp $
  *
  */
 
@@ -138,12 +138,12 @@ function add_update_address($con, $address_data, $return_recordset = false, $_ma
                 break;
             }
         }
-
+	
         // Determine if this address already exists
         $found_data = __record_find ( $con, $_table_name, $extra_where, $_magic_quotes );
-
+	
         // Retrieve timezone and GMT data if not already defined
-        if ( (! $found_data['daylight_savings_id'] ) || (! $found_data['gmt_offset'] ) )
+        if ( $found_data['address_id'] && (!$found_data['daylight_savings_id'] || !$found_data['gmt_offset']) )
         {
             $time_zone_offset = time_zone_offset($con, $found_data['address_id']);
             $address_info['daylight_savings_id'] = $time_zone_offset['daylight_savings_id'];
@@ -406,6 +406,9 @@ function pull_address_fields ( $array_data )
 /**********************************************************************/
  /**
  * $Log: utils-addresses.php,v $
+ * Revision 1.12  2007/01/05 19:51:59  ongardie
+ * - Avoid SQL error when address_id isn't available.
+ *
  * Revision 1.11  2006/08/23 21:02:58  braverock
  * - trim address_name to avoid spaces being mistaken for a name
  * - check for bad convention on address record

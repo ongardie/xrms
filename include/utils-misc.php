@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.175 2006/07/12 01:03:22 vanmer Exp $
+ * $Id: utils-misc.php,v 1.176 2007/01/05 19:51:59 ongardie Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -1046,6 +1046,9 @@ function get_formatted_address (&$con,$address_id=false, $company_id=false, $sin
 
 function time_zone_offset($con, $address_id) {
     global $only_confirmed_time_zones;
+
+    if(!isset($address_id))
+        return false;
     $sql = "SELECT country_id, province, city, postal_code
             FROM addresses
             WHERE address_id=" . $address_id;
@@ -1940,6 +1943,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.176  2007/01/05 19:51:59  ongardie
+ * - Avoid SQL error when address_id isn't available.
+ *
  * Revision 1.175  2006/07/12 01:03:22  vanmer
  * - added missing global statement for default language
  *
