@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.23 2006/12/07 13:54:52 jnhayart Exp $
+ * $Id: new.php,v 1.24 2007/01/09 02:39:17 ongardie Exp $
  */
 
 require_once('../include-locations.inc');
@@ -101,6 +101,13 @@ if($opportunity_type_id) {
                 opportunity_status_record_status = 'a' and
                 opportunity_type_id = $opportunity_type_id
             ORDER BY sort_order";
+    $rst = $con->execute($sql2);
+    if($rst->RecordCount() == 0) {
+        echo 'There are no opportunity statuses set for this opportunity type - please set opportunity status first
+	      <a href="../admin/opportunity-statuses/some.php?aopportunity_type_id=', $opportunity_type_id, '">here</a>.';
+        exit;
+    }
+
 } else {
     //we need the opportunity statuses for all the opportunity_types
     $sql2 = "SELECT "
@@ -110,8 +117,8 @@ if($opportunity_type_id) {
             WHERE
                 opportunity_status_record_status = 'a'
             ORDER BY os.opportunity_type_id, os.sort_order";
+    $rst = $con->execute($sql2);
 }
-$rst = $con->execute($sql2);
 if ( $rst && !$rst->EOF ) {
   $opportunity_status_id = $rst->fields['opportunity_status_id'];
   $opportunity_status_menu = $rst->getmenu2('opportunity_status_id', $opportunity_status_id, false);
@@ -287,6 +294,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.24  2007/01/09 02:39:17  ongardie
+ * - If there's no opportunity status available for this opportunity type, point user to administration.
+ * - Improved similar functionality for cases also by passing acase_type_id, aopportunity_type_id in GET requests.
+ *
  * Revision 1.23  2006/12/07 13:54:52  jnhayart
  * Limit campaign choice to "only" open campaign
  *
