@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.176 2007/01/05 19:51:59 ongardie Exp $
+ * $Id: utils-misc.php,v 1.177 2007/01/12 00:02:15 ongardie Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -661,21 +661,22 @@ function db_error_handler (&$con,$sql,$colspan=20) {
 
 
 /**
- * function get_country_id
+ * function get_country
  *
- * Takes an Country name or ISO code and returns the XRMS country id
+ * Takes a country name, ISO code, and/or country_id (only with array $country_info) and returns the XRMS country data
  *
  * @author walter Torres
  *
  * @param object $con Database connection
  * @param mixed $country_info Country name, ISO code or named array with info; keys are table field names
  *
- * @return array $country entire found country record, or array of found country records
+ * @return array $country entire found country record
  */
-function get_country($con, $country_info)
+function get_country(&$con, $country_info)
 {
    /**
-    *  Country data comes in 5 flavors:
+    *  Country data comes in 6 flavors:
+    *   - country_id       XRMS country ID
     *   - country_name     Full [American English] spelling of Country Name
     *   - un_code          3 digit UN country code
     *   - iso_code1        no idea ;)
@@ -695,32 +696,46 @@ function get_country($con, $country_info)
     * @static
     */
     $_retVal = false;
+    $extra_where = array();
 
     // If inbound is an array, assume one of the key names matches a table field name
     if ( is_array($country_info) )
     {
-
-
+    	if(!empty($country_info['country_id']))
+		$extra_where['country_id'] = $country_info['country_id'];
+	if(!empty($country_info['country_name']))
+		$extra_where['country_name'] = $country_info['country_name'];
+	if(!empty($country_info['un_code']))
+		$extra_where['un_code'] = $country_info['un_code'];
+	if(!empty($country_info['iso_code1']))
+		$extra_where['iso_code1'] = $country_info['iso_code1'];
+	if(!empty($country_info['iso_code2']))
+		$extra_where['iso_code2'] = $country_info['iso_code2'];
+	if(!empty($country_info['iso_code3']))
+		$extra_where['iso_code3'] = $country_info['iso_code3'];
     }
     // inbound string could be anything
     else
     {
-        // Define fields to searches
+        if(is_numeric($country_info)){
+        	$extra_where['un_code'] = $country_info;
+	}
+	if(strlen($country_info) <= 3){
+        	$extra_where['iso_code1'] = strtoupper($country_info);
+        	$extra_where['iso_code2'] = strtoupper($country_info);
+        	$extra_where['iso_code3'] = strtoupper($country_info);
+	}
         $extra_where['country_name'] = $country_info;
-        $extra_where['un_code'] = strtoupper($country_info);
-        $extra_where['iso_code1'] = $country_info;
-        $extra_where['iso_code2'] = $country_info;
-        $extra_where['iso_code3'] = $country_info;
-
-        $_table_name = 'countries';
-
-        // Determine if this contact already exists
-        $_retVal = __record_find ( $con, $_table_name, $extra_where, 'OR', $_magic_quotes );
     }
 
-    return $_retVal;
-};
+    $_table_name = 'countries';
+    $_retVal = __record_find ( $con, $_table_name, $extra_where, 'OR', $_magic_quotes );
 
+    if($_retVal['country_id'] == 0) //record not found
+        $_retVal = false;
+
+    return $_retVal;
+}
 
 /**
  * function get_country_from_address
@@ -1943,6 +1958,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.177  2007/01/12 00:02:15  ongardie
+ * - Changes to get_country() to make it more useful.
+ *
  * Revision 1.176  2007/01/05 19:51:59  ongardie
  * - Avoid SQL error when address_id isn't available.
  *
