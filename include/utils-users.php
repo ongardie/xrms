@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-users.php,v 1.4 2005/12/02 01:47:47 vanmer Exp $
+ * $Id: utils-users.php,v 1.5 2007/01/12 00:17:39 ongardie Exp $
  */
 
 /**
@@ -90,7 +90,31 @@ function get_xrms_user($con, $username=false, $user_id=false) {
 }
 
 /**
+ * function get_xrms_user_string
+ *
+ * function to get a displayable string about an xrms user
+ * @param integer $user_id with user_id to search for
+ * @return string or false
+ * 
+*/ 
+function get_xrms_user_string($user_id) {
+	$con =& get_xrms_dbconnection();
+	
+	if(!is_numeric($user_id))
+		return false;
+	
+	$rst = $con->execute('SELECT first_names, last_name FROM users WHERE user_id='.$user_id.' LIMIT 1');
+	if(!$rst || $rst->EOF)
+		return false;
+	
+	return implode(' ', array_filter($rst->fields));
+}
+
+/**
  * $Log: utils-users.php,v $
+ * Revision 1.5  2007/01/12 00:17:39  ongardie
+ * - Added get_xrms_user_string()
+ *
  * Revision 1.4  2005/12/02 01:47:47  vanmer
  * - added XRMS_API package tag
  *
