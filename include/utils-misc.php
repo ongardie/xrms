@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.177 2007/01/12 00:02:15 ongardie Exp $
+ * $Id: utils-misc.php,v 1.178 2007/01/12 22:17:08 ongardie Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -1336,6 +1336,50 @@ function current_page($vars = false, $anchor = false) {
 }
 
 /**
+ * Get a full, absolute URL like $http_site_root
+ *
+ * This function is necessary for those rare occasions when a full URL is required (e.g. in emails)
+ *
+ * @return string full, absolute base URL http(s)://domain(:port)/path/to/xrms/
+ * @author Diego Ongaro
+ */
+function full_http_site_root(){
+	global $http_site_root;
+
+	// Maybe we already have a full URL
+	if(preg_match('/^http(s)?:\/\//', $http_site_root) > 0){
+		return $http_site_root;
+
+	// If not, we should at least have an absolute URL (beginning with a /)
+	}elseif($http_site_root{0} = '/'){
+
+		// URL scheme
+		if($_SERVER['HTTPS'] == 'on')
+			$retVal = 'https://';
+		else
+			$retVal = 'http://';
+		
+		// URL domain name
+		$retVal .= $_SERVER['HTTP_HOST'];
+
+		// URL port (if necessary)
+		if(!(($_SERVER['SERVER_PORT'] == '80' && $_SERVER['HTTPS'] == 'off') ||
+		     ($_SERVER['SERVER_PORT'] == '443' && $_SERVER['HTTPS'] == 'on'))){
+			$retVal .= ':'.$_SERVER['SERVER_PORT'];
+		}
+
+		// Add $http_site_root to it
+		return $retVal.$http_site_root;
+
+	// We can't make a full URL from anything else
+	}else{
+		trigger_error('Configuration $http_site_root must be absolute path', E_USER_WARNING);
+		return $http_site_root;
+	}
+}
+
+
+/**
  * The arr_vars sub-system
  *
  * This is an attempt to simplify processing of passing variables in and
@@ -1958,6 +2002,11 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.178  2007/01/12 22:17:08  ongardie
+ * - Added full_http_site_root() to utils-misc.php
+ * - Made SMTPs' getError() easier to use
+ * - Improved activity modified emails
+ *
  * Revision 1.177  2007/01/12 00:02:15  ongardie
  * - Changes to get_country() to make it more useful.
  *

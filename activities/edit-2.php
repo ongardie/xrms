@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.81 2006/10/17 21:48:43 braverock Exp $
+ * $Id: edit-2.php,v 1.82 2007/01/12 22:17:09 ongardie Exp $
  */
 
 //include required files
@@ -350,28 +350,34 @@ if ($company_id) {
     $email_return=urlencode('/activities/some.php');
 }
 
-if ($email_to) {
-    $sql1 = "SELECT email FROM users WHERE user_id = '$session_user_id'";
-    $rst1 = $con->execute($sql1);
-    if ($rst1) $from_email_address = $rst1->fields['email'];
-    if (!$from_email_address) $from_email_address = get_system_parameter($con, "Sender Email Address");
-    $mimeType = "html";
+if (!empty($email_to)) {
+
     $output = _("Activity");
-    $output .= "<a href=\"" . $http_site_root . ": " . "/activities/one.php?activity_id=" . $activity_id . "\">" . htmlspecialchars($activity_title) . "</a>";
+    $output .= " <a href=\"" . full_http_site_root() . "/activities/one.php?activity_id=" . $activity_id . "\">" . htmlspecialchars($activity_title) . "</a>";
     $output .= "\n<br>" . _("Activity Type") . ": " .  $activity_type;
     $output .= "\n<br>" . _("Owner") . ": " .  $username;
     $output .= "\n<br>" . _("Scheduled End") . ": " . $ends_at_string;
     $output .= "\n<br>" . _("Company") . ": " . $company_name;
     $output .= "\n<br>" . _("Contact") . ": " . $contact_name . "<br>\n";
     $output .= "\n<br>" . _("Activity Notes") . ": <br>\n" .  htmlspecialchars($activity_description);
-    require_once ( $include_directory . 'classes/SMTPs/SMTPs.php' );
+
+    $from_email_address = $con->GetOne('SELECT email FROM users WHERE user_id=?', $session_user_id);
+    if (!$from_email_address)
+         $from_email_address = get_system_parameter($con, "Sender Email Address");
+
+    require_once $include_directory . 'classes/SMTPs/SMTPs.php';
     $objSMTP = new SMTPs ();
     $objSMTP->setConfig( $xrms_file_root.'/include/classes/SMTPs/SMTPs.ini.php');
+
     $objSMTP->setFrom ( $from_email_address  );
     $objSMTP->setSubject ( _("Updated Activity") . " " . $activity_title );
     $objSMTP->setTo ( $email_to );
-    $objSMTP->setBodyContent ( $output, $mimeType );
+    $objSMTP->setBodyContent ( $output, 'html');
+
     $objSMTP->sendMsg ();
+    $errors = $objSMTP->getErrors();
+    if(!empty($errors))
+	trigger_error('SMTP errors: '.$errors, E_USER_WARNING);
 }
 
 $con->close();
@@ -392,6 +398,11 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.82  2007/01/12 22:17:09  ongardie
+ * - Added full_http_site_root() to utils-misc.php
+ * - Made SMTPs' getError() easier to use
+ * - Improved activity modified emails
+ *
  * Revision 1.81  2006/10/17 21:48:43  braverock
  * - use SMTPs class to email activities
  *   modified from patch by dbaudone

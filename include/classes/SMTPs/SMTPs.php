@@ -32,11 +32,11 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.17 $
+   * @version $Revision: 1.18 $
    * @copyright copyright information
    * @license GNU General Public Licence
    *
-   * $Id: SMTPs.php,v 1.17 2006/04/05 03:15:40 ongardie Exp $
+   * $Id: SMTPs.php,v 1.18 2007/01/12 22:17:08 ongardie Exp $
    *
    **/
 
@@ -2363,24 +2363,19 @@ class SMTPs
     */
     function getErrors()
     {
-        $_errMsg = 'No Errors Generated.';
+        $_errMsg = array();
 
-        if ( $this->_smtpsErrors )
+        foreach ( $this->_smtpsErrors as $_err => $_info )
         {
-            $_errMsg = '';
-
-            foreach ( $this->_smtpsErrors as $_err => $_info )
-            {
-                $_errMsg .= 'Error [' . $_info['num'] .']: '. $_info['msg'];
-            }
+            $_errMsg[] = 'Error [' . $_info['num'] .']: '. $_info['msg'];
         }
 
-        return $_errMsg;
+        return implode("\n", $_errMsg);
     }
 
 
 // =============================================================
-};  // end of Class
+}   // end of Class
 
 // =============================================================
 // =============================================================
@@ -2388,6 +2383,11 @@ class SMTPs
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.18  2007/01/12 22:17:08  ongardie
+  * - Added full_http_site_root() to utils-misc.php
+  * - Made SMTPs' getError() easier to use
+  * - Improved activity modified emails
+  *
   * Revision 1.17  2006/04/05 03:15:40  ongardie
   * -Fixed method name typo that resulted in a fatal error.
   *
