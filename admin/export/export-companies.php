@@ -99,7 +99,15 @@ $sql = " SELECT
   crm.crm_status_pretty_name AS 'CRM Status',
   ast.account_status_pretty_name AS 'Account Status',
   coun.country_name AS 'Country'
-FROM contacts cont, companies c, addresses a, company_sources cs, industries i, crm_statuses crm, account_statuses ast, countries coun";
+  FROM contacts cont 
+    LEFT JOIN companies c ON cont.company_id=c.company_id
+    LEFT JOIN addresses a ON cont.address_id=a.address_id 
+    LEFT JOIN company_sources cs ON c.company_source_id=cs.company_source_id
+    LEFT JOIN industries i ON c.industry_id=i.industry_id
+    LEFT JOIN crm_statuses crm ON c.crm_status_id=crm.crm_status_id
+    LEFT JOIN account_statuses ast ON c.account_status_id=ast.account_status_id
+    LEFT JOIN countries coun ON a.country_id=coun.country_id
+";
 if ($category_id)
 	$sql .= ", entity_category_map catmap";
 $sql .= " WHERE
@@ -164,6 +172,9 @@ if ($csv_output) header("Location: {$http_site_root}/tmp/contacts-export.csv");
 
 /**
  * $Log: export-companies.php,v $
+ * Revision 1.11  2007/01/14 18:23:07  braverock
+ * - apply better SQL construction from "Randy Martinsen"
+ *
  * Revision 1.10  2006/12/29 06:25:13  ongardie
  *  * Don't show on_what_id, on_what_table in CSV.
  *  * Only join entity_category_map when required.
