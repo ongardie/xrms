@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of campaigns
  *
- * $Id: new.php,v 1.14 2006/01/02 22:41:51 vanmer Exp $
+ * $Id: new.php,v 1.15 2007/01/15 13:06:43 fcrossen Exp $
  */
 
 require_once('../include-locations.inc');
@@ -32,7 +32,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $con = get_xrms_dbconnection();
 
-$user_menu = get_user_menu($con, $user_id);
+$user_menu = get_user_menu($con, $session_user_id);
 
 $campaign_type_menu    = local_get ( $con,
 				     "select campaign_type_pretty_name, campaign_type_id from campaign_types where campaign_type_record_status = 'a' order by campaign_type_pretty_name",
@@ -175,6 +175,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.15  2007/01/15 13:06:43  fcrossen
+ *  - change to pass correct user_id to get_user_menu function
+ *
  * Revision 1.14  2006/01/02 22:41:51  vanmer
  * - changed to use centralized database connection function
  *
