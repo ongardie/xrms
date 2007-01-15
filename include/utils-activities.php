@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-activities.php,v 1.30 2006/07/12 03:38:26 vanmer Exp $
+ * $Id: utils-activities.php,v 1.31 2007/01/15 17:12:19 fcrossen Exp $
 
  */
 
@@ -185,7 +185,7 @@ function get_activity($con, $activity_data, $show_deleted=false, $return_records
                 left outer join users u2 ON a.last_modified_by = u2.user_id
                 left outer join users u3 ON a.completed_by = u3.user_id
                     left outer join contacts cont on a.contact_id = cont.contact_id
-                    join companies c ON c.company_id = a.company_id
+                    LEFT OUTER join companies c ON c.company_id = a.company_id
                     left outer join addresses addr ON addr.address_id = c.default_primary_address";
 
     $where=array();
@@ -776,6 +776,9 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.31  2007/01/15 17:12:19  fcrossen
+  *  - modified SELECT to use an outer join for companies to facilitate activities attached to campaigns
+  *
   * Revision 1.30  2006/07/12 03:38:26  vanmer
   * - ensure that delete of participant doesn't remove final $ret value
   *
