@@ -8,7 +8,7 @@
 /**
  * Shared opportunity pager functions
  *
- * $Id: opportunities-pager-functions.php,v 1.1 2006/04/11 01:57:46 vanmer Exp $
+ * $Id: opportunities-pager-functions.php,v 1.2 2007/01/16 18:27:08 fcrossen Exp $
  */
 
 /**
@@ -23,7 +23,12 @@ function GetOpportunityPagerData($row) {
     if ($row['is_overdue']) {
     	$row['is_overdue'] = _('Yes');
         $row['Pager_TD_CSS_All_Rows'] = 'overdue_activity';
-    } else {
+    }
+    elseif ($row['is_closed']) {
+    	$row['is_overdue'] = '';
+        $row['Pager_TD_CSS_All_Rows'] = 'closed_activity';
+    }
+    else {
     	$row['is_overdue'] = '';
         $row['Pager_TD_CSS_All_Rows'] = 'open_activity';
     }
@@ -32,6 +37,9 @@ function GetOpportunityPagerData($row) {
 
 /**
  * $Log: opportunities-pager-functions.php,v $
+ * Revision 1.2  2007/01/16 18:27:08  fcrossen
+ *  - add css for closed opportunities
+ *
  * Revision 1.1  2006/04/11 01:57:46  vanmer
  * - added marking of overdue opportunites in red, like activities
  * - added extra columns and groupability on the opportunites pager
