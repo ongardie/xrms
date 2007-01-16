@@ -2,7 +2,7 @@
 /**
  * View Campaign Details
  *
- * $Id: one.php,v 1.23 2006/10/08 19:41:44 jnhayart Exp $
+ * $Id: one.php,v 1.24 2007/01/16 18:24:27 fcrossen Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -75,6 +75,7 @@ require_once($include_locations_location . 'files/sidebar.php');
 
 //include the opportunities sidebar
 $opportunity_limit_sql = "and campaign_id = $campaign_id ";
+$include_closed_opportunities = true;
 require_once("../opportunities/sidebar.php");
 
 // get the new activities widget
@@ -214,6 +215,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.24  2007/01/16 18:24:27  fcrossen
+ *  - include closed opportunities in the sidebar
+ *
  * Revision 1.23  2006/10/08 19:41:44  jnhayart
  * add localisation for 'by'
  *
