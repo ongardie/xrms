@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: teamnotice_list.php,v 1.2 2006/01/30 17:56:13 niclowe Exp $
+ * $Id: teamnotice_list.php,v 1.3 2007/01/16 15:46:19 fcrossen Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -29,6 +29,11 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $page_title = _("Team Notice List");
 
 $form_name = 'TeamnoticeList';
+
+// check GET vars
+$form_action = $_GET['form_action'];
+$teamnotice_id = intval($_GET['teamnotice_id']); // teamnotice_id should always be an integer
+
 //$button1=$con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Delete")."\" onclick=\"javascript: location.href='del.php?teamnotice_id="), 'teamnotice_id', $con->qstr("'\">")) . ";
 $sql="SELECT " . 
 $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Delete")."\" onclick=\"javascript: location.href='teamnotice_list.php?form_action=del&teamnotice_id="), 'teamnotice_id', $con->qstr("'\">")) . " AS LINK, teamnotices.notice_heading as 'Heading' FROM teamnotices where status='a'";
@@ -86,6 +91,9 @@ end_page();
 
 /**
  * $Log: teamnotice_list.php,v $
+ * Revision 1.3  2007/01/16 15:46:19  fcrossen
+ *  - fixed delete teamnotice bug
+ *
  * Revision 1.2  2006/01/30 17:56:13  niclowe
  * fixed delete bug
  * fixed deprecated call by function bug
