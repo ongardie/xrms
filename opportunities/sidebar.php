@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.22 2006/09/22 21:19:43 jnhayart Exp $
+ * $Id: sidebar.php,v 1.23 2007/01/16 18:25:47 fcrossen Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -39,11 +39,15 @@ if (!$opportunity_sidebar_rows_per_page) {
 }
 
 $is_overdue_field="(CASE WHEN (os.status_open_indicator='o') AND (close_at < " . $con->DBTimeStamp(time()) . ") THEN 1 ELSE 0 END)";
+$is_closed_field="(CASE WHEN (os.status_open_indicator <> 'o') THEN 1 ELSE 0 END)";
 
 //build the cases sql query
 $close_at = $con->SQLDate('Y-m-D', 'close_at');
-$opportunity_sql_select = "SELECT $is_overdue_field AS is_overdue,"
-. $con->Concat("'<a id=\"'", "opportunities.opportunity_title",  "'\" href=\"$http_site_root/opportunities/one.php?opportunity_id='", "opportunities.opportunity_id", "'\">'", "opportunities.opportunity_title","'</a>'")
+$opportunity_sql_select = "SELECT $is_overdue_field AS is_overdue,";
+if ($include_closed_opportunities) {
+  $opportunity_sql_select .= $is_closed_field . 'AS is_closed,';
+}
+$opportunity_sql_select .= $con->Concat("'<a id=\"'", "opportunities.opportunity_title",  "'\" href=\"$http_site_root/opportunities/one.php?opportunity_id='", "opportunities.opportunity_id", "'\">'", "opportunities.opportunity_title","'</a>'")
 . " AS opportunity" . ",
   c.company_name AS company, u.username AS owner " . ",
   ot.opportunity_type_pretty_name AS type,
@@ -63,10 +67,11 @@ where opportunities.opportunity_status_id = os.opportunity_status_id
 and opportunities.user_id = u.user_id
 and opportunities.opportunity_type_id = ot.opportunity_type_id
 and opportunities.company_id = c.company_id
-and opportunities.opportunity_record_status = 'a'
-and os.status_open_indicator = 'o'
-$opportunity_limit_sql
-";
+and opportunities.opportunity_record_status = 'a'";
+if (!$include_closed_opportunities) {
+  $opportunity_sql_where .= "and os.status_open_indicator = 'o'";
+}
+$opportunity_sql_where .= $opportunity_limit_sql;
 
 $opportunity_sql="$opportunity_sql_select FROM $opportunity_sql_from $opportunity_sql_where";
 
@@ -153,6 +158,9 @@ $opportunity_rows .= "</form></div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.23  2007/01/16 18:25:47  fcrossen
+ *  - allow for inclusion of closed opportunities by setting $include_closed_opportunities = true
+ *
  * Revision 1.22  2006/09/22 21:19:43  jnhayart
  * Add color on Overdue Opportunity
  *
