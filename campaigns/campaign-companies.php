@@ -20,6 +20,11 @@ $coList=acl_get_list($session_user_id, 'Read', false, 'companies');
 if (!$coList) { $company_rows=''; return false; }
 else { if ($coList!==true) { $coList=implode(",",$coList); $companies_limit_sql.=" AND companies.company_id IN ($coList) "; } }
 
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
+
+require_once('campaign-companies-pager-functions.php');
+
 $co_sidebar_form_id='SidebarCampaignCompanies';
 $co_sidebar_header=_("Companies");
 $target=$http_site_root.current_page();
@@ -46,6 +51,9 @@ $campaign_company_rows .= "</form></div>\n";
 
 /**
  * $Log: campaign-companies.php,v $
+ * Revision 1.4  2007/01/18 16:45:11  fcrossen
+ *  - replace require_once files removed on last commit
+ *
  * Revision 1.3  2007/01/18 16:07:40  fcrossen
  *  - fixed my really stupid error - missing hidden form field for campaign_id
  *
