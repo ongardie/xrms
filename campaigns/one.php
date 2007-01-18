@@ -2,7 +2,7 @@
 /**
  * View Campaign Details
  *
- * $Id: one.php,v 1.24 2007/01/16 18:24:27 fcrossen Exp $
+ * $Id: one.php,v 1.25 2007/01/18 12:52:27 fcrossen Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -73,10 +73,18 @@ require_once($include_locations_location . 'notes/sidebar.php');
 //include the files sidebar
 require_once($include_locations_location . 'files/sidebar.php');
 
+// include the companies sidebar
+require_once("campaign-companies.php");
+
+//print_r($campaign_company_rows);
+//exit;
+
 //include the opportunities sidebar
 $opportunity_limit_sql = "and campaign_id = $campaign_id ";
 $include_closed_opportunities = true;
 require_once("../opportunities/sidebar.php");
+
+
 
 // get the new activities widget
 $new_activity_widget = GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_table, $on_what_id, $company_id, $contact_id); 
@@ -194,11 +202,14 @@ start_page($page_title, true, $msg);
         <!-- categories //-->
         <?php echo $category_rows; ?>
 
-         <!-- opportunities //-->
-         <?php  echo $opportunity_rows; ?>
+        <!-- opportunities //-->
+        <?php  echo $opportunity_rows; ?>
+
+        <!-- companies //-->
+        <?php  echo $campaign_company_rows; ?>
 
         <!-- notes //-->
-            <?php echo $note_rows; ?>
+        <?php echo $note_rows; ?>
 
         <!-- files //-->
         <?php echo $file_rows; ?>
@@ -215,6 +226,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.25  2007/01/18 12:52:27  fcrossen
+ *  - show campaign-companies.php in sidebar
+ *
  * Revision 1.24  2007/01/16 18:24:27  fcrossen
  *  - include closed opportunities in the sidebar
  *
