@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.146 2006/12/16 19:11:51 fcrossen Exp $
+ * $Id: one.php,v 1.147 2007/01/18 14:16:36 fcrossen Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -74,6 +74,7 @@ $sql1a = "SELECT ccm.campaign_id, ccm.company_id, c.campaign_title
           AND c.campaign_id = ccm.campaign_id";
 $rst1a = $con->execute($sql1a);
 if ($rst1a) {
+  $campaign_id = $rst1a->fields['campaign_id'];
   $campaign_title = $rst1a->fields['campaign_title'];
 } else {
   $campaign_title = '';
@@ -630,7 +631,7 @@ function markComplete() {
                                 <?php if ($campaign_title) { ?>
                                 <tr>
                                     <td width=1% class=sublabel><?php echo _("Campaign"); ?></td>
-                                    <td class=clear><?php echo $campaign_title; ?></td>
+                                    <td class=clear><a href="<?php  echo $http_site_root?>/campaigns/one.php?campaign_id=<?php echo $campaign_id; ?>"><?php echo $campaign_title; ?></a></td>
                                 </tr>
                                 <?php }; ?>
                                 <?php if (trim($employees)) { ?>
@@ -795,6 +796,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.147  2007/01/18 14:16:36  fcrossen
+ *  - link campaign_title to campaign/one.php
+ *
  * Revision 1.146  2006/12/16 19:11:51  fcrossen
  * - tweaked and added code to handle campaigns
  *
