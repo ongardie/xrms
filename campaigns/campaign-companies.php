@@ -3,6 +3,7 @@
  * Sidebar list box for Companies
  *
  * This produces a list of companies attached to a given campaign
+ *
  */
 
 if ( !defined('IN_XRMS') )
@@ -47,5 +48,14 @@ $coPager = new GUP_Pager($con, $company_sql, 'GetCampaignCompaniesPagerData', $c
 
 $campaign_company_rows .= $coPager->Render($campaign_companies_rows_per_page);
 $campaign_company_rows .= "</form></div>\n";
+
+/**
+ * $Log: campaign-companies.php,v $
+ * Revision 1.2  2007/01/18 13:20:35  fcrossen
+ *  - initial revision
+ *  - display a list of companies (in sidebar) attached to a campaign
+ *
+ *
+ */
 
 ?>
