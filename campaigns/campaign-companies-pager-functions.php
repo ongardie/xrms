@@ -4,6 +4,7 @@
  *
  * This is the callback function to be used with GUP_Pager
  *
+ *
 */
 
 function GetCampaignCompaniesPagerData($row) {
@@ -19,4 +20,13 @@ function GetCampaignCompaniesPagerData($row) {
     return $row;
 }
 
+/**
+ * $Log: campaign-companies-pager-functions.php,v $
+ * Revision 1.2  2007/01/18 13:18:48  fcrossen
+ *  - initial revision
+ *  - alter value in date_added to show date instead of timestamp
+ *
+ *
+ */
+ 
 ?>
