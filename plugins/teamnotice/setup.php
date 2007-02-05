@@ -4,7 +4,7 @@
   *
   * Copyright (c) 2004 The XRMS Project Team
   *
-  * $Id: setup.php,v 1.2 2005/10/26 21:05:25 niclowe Exp $
+  * $Id: setup.php,v 1.3 2007/02/05 17:31:42 fcrossen Exp $
 
   @todo - have option to show notices on frontpage on logon - maybe add hook to private/home.php
 
@@ -18,9 +18,10 @@
     $xrms_plugin_hooks['plugin_admin']['teamnotice'] = 'teamnotice_setup';
   }
 
-  function teamnotice_sidebar () {
+  function teamnotice_sidebar ($sidebar_string) {
+  
     global $con;
-		$sidebar_string = '<div id="teamnotice_sidebar">
+		$sidebar_string .= '<div id="teamnotice_sidebar">
         <table class=widget cellspacing=1 width="100%">
         <tr>
         <th class=widget_header colspan=4>'
@@ -45,7 +46,7 @@
       }
     $rst->close();
     }
-    $sidebar_String.='</td></tr></table>';
+    $sidebar_string.='</td></tr></table>';
 
     return $sidebar_string;
   }
