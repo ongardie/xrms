@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.73 2006/10/14 14:32:12 jnhayart Exp $
+ * $Id: home.php,v 1.74 2007/02/05 17:28:12 fcrossen Exp $
  */
 
 // include the common files
@@ -118,7 +118,7 @@ require_once("../notes/sidebar.php");
 if ( !isset($sidebar_rows) ) {
   $sidebar_rows = '';
 }
-$sidebar_rows = do_hook_function('private_sidebar_bottom', $sidebar_rows);
+$sidebar_rows = concat_hook_function('private_sidebar_bottom', $sidebar_rows);
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -127,7 +127,7 @@ $sidebar_rows = do_hook_function('private_sidebar_bottom', $sidebar_rows);
 if ( !isset($front_splash) ) {
   $front_splash = '';
 }
-$front_splash = do_hook_function('private_front_splash', $front_splash);
+$front_splash = concat_hook_function('private_front_splash', $front_splash);
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -227,6 +227,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.74  2007/02/05 17:28:12  fcrossen
+ *  - changed sidebar and front splash hooks to concat_hook_function to allow multiple plugins to register against each hook
+ *
  * Revision 1.73  2006/10/14 14:32:12  jnhayart
  * Restore front_splash hook display
  *
