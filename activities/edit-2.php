@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.82 2007/01/12 22:17:09 ongardie Exp $
+ * $Id: edit-2.php,v 1.83 2007/02/06 18:57:55 braverock Exp $
  */
 
 //include required files
@@ -367,7 +367,7 @@ if (!empty($email_to)) {
 
     require_once $include_directory . 'classes/SMTPs/SMTPs.php';
     $objSMTP = new SMTPs ();
-    $objSMTP->setConfig( $xrms_file_root.'/include/classes/SMTPs/SMTPs.ini.php');
+    $objSMTP->setConfig( $include_directory . 'classes/SMTPs/SMTPs.ini.php');
 
     $objSMTP->setFrom ( $from_email_address  );
     $objSMTP->setSubject ( _("Updated Activity") . " " . $activity_title );
@@ -398,6 +398,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.83  2007/02/06 18:57:55  braverock
+ * - fix include directory
+ *
  * Revision 1.82  2007/01/12 22:17:09  ongardie
  * - Added full_http_site_root() to utils-misc.php
  * - Made SMTPs' getError() easier to use
