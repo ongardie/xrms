@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-activities.php,v 1.31 2007/01/15 17:12:19 fcrossen Exp $
+ * $Id: utils-activities.php,v 1.32 2007/02/06 12:38:38 fcrossen Exp $
 
  */
 
@@ -631,7 +631,7 @@ function get_activity_type($con, $short_name=false, $pretty_name=false, $type_id
         $where[]="activity_type_short_name LIKE ".$con->qstr($short_name, get_magic_quotes_gpc());
     }
     if ($pretty_name) {
-        $where[]="activity_type_pretty_name LIKE ".$con->qstr($short_name, get_magic_quotes_gpc());
+        $where[]="activity_type_pretty_name LIKE ".$con->qstr($pretty_name, get_magic_quotes_gpc());
     }
     if ($type_id) {
         $where[]="activity_type_id=$type_id";
@@ -776,6 +776,9 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.32  2007/02/06 12:38:38  fcrossen
+  *  - get_activity() changed to use correct parameter for activity_type_pretty_name
+  *
   * Revision 1.31  2007/01/15 17:12:19  fcrossen
   *  - modified SELECT to use an outer join for companies to facilitate activities attached to campaigns
   *
