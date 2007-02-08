@@ -1,12 +1,12 @@
 <?php
 /**
- * workflow-activities.php -  generates activities that are linked to
+ * utils-workflow.php -  generates activities that are linked to
  *                            the workflow status when the status is changed.
  *
- * @author Brad Marshall
  * @author Brian Peterson
+ * @author Aaron van Meerten
  *
- * $Id: utils-workflow.php,v 1.3 2006/05/06 09:30:30 vanmer Exp $
+ * $Id: utils-workflow.php,v 1.4 2007/02/08 15:54:47 braverock Exp $
  *
  * @todo To extend and internationalize activity template substitution,
  *       we would need to add a table to the database that would hold
@@ -38,12 +38,12 @@ function find_activity_template($con, $on_what_table_template, $on_what_id_templ
     $sql = "select * from activity_templates
         where on_what_table='$on_what_table_template'
         and on_what_id=$on_what_id_template";
-    
+
     if ($template_sort_order) $sql.=" and sort_order=$template_sort_order";
-    
+
     if (!$show_all) $sql .=" and activity_template_record_status='a'";
     $sql .= " order by sort_order";
-    
+
     $rst = $con->execute($sql);
     if (!$rst) { db_error_handler($con, $sql); return false; }
     $ret=array();
@@ -59,9 +59,9 @@ function find_activity_template($con, $on_what_table_template, $on_what_id_templ
 
 function add_workflow_activities($con, $on_what_table_template, $on_what_id_template, $on_what_table, $on_what_id, $company_id, $contact_id, $template_sort_order=1) {
     if (!$template_sort_order) { $template_sort_order=1; }
-    
+
     $activity_templates=find_activity_template($con, $on_what_table_template, $on_what_id_template, $template_sort_order);
-    
+
     //generates insert statement to add activities to the current list
     $cnt = 0;
     if(empty($activity_record_status)) {
@@ -69,7 +69,7 @@ function add_workflow_activities($con, $on_what_table_template, $on_what_id_temp
     }
     if ($activity_templates) {
         foreach ($activity_templates AS $template_info) {
-        
+
             //get the field values from the next record in the query
             $activity_template_id =$template_info['activity_template_id'];
             $activity_type_id = $template_info['activity_type_id'];
@@ -78,14 +78,14 @@ function add_workflow_activities($con, $on_what_table_template, $on_what_id_temp
             $activity_description = $template_info['activity_description'];
             $duration = $template_info['duration'];
             $activity_template_role_id = $template_info['role_id'];
-            
-            
+
+
             //calculate ends_at, based on duration and current date
             if ( is_numeric("$duration") ) {
                 $duration = $duration.' days';
             }
             $ends_at = date('Y-m-d',strtotime($duration));
-    
+
             /**
             * Do variable substitution on the Activity Title in an Activity Template
             *
@@ -108,7 +108,7 @@ function add_workflow_activities($con, $on_what_table_template, $on_what_id_temp
                     }
                 }
             }
-            
+
             $activity_type_data=get_activity_type($con, false, false, $activity_type_id);
             if ($activity_type_data) {
                 $activity_type_name=$activity_type_data['activity_type_short_name'];
@@ -116,24 +116,24 @@ function add_workflow_activities($con, $on_what_table_template, $on_what_id_temp
                     //handle internal activity type
                     case 'INT':
                     break;
-                    
+
                     //handle process activity type (instantiate new entity)
                     case 'PRO':
                         $entity=$template_info['workflow_entity'];
                         $entity_type=$template_info['workflow_entity_type'];
                         $ret=add_process_entity($con, $entity, $entity_type, $activity_title, $activity_description, $company_id, $contact_id, $on_what_table, $on_what_id);
                     break;
-                    
+
                     //process system activities here
                     case 'SYS':
                         $ret=do_hook_function('workflow_system', $template_info);
                     break;
-                    
+
                     default:
                     break;
                 }
             }
-    
+
             $user_id=get_least_busy_user_in_role($con, $activity_template_role_id, strtotime($ends_at));
             if (!$user_id) $user_id=$session_user_id;
             //save to database
@@ -157,7 +157,7 @@ function add_workflow_activities($con, $on_what_table_template, $on_what_id_temp
             $rec['activity_status'] = 'o';
             $rec['activity_record_status'] = $activity_record_status;
 //            print_r($rec);
-    //    $con->debug=true;        
+    //    $con->debug=true;
             add_activity($con, $rec);
     /*
             $tbl = 'activities';
@@ -165,9 +165,9 @@ function add_workflow_activities($con, $on_what_table_template, $on_what_id_temp
             $ins_rst=$con->execute($ins);
             if (!$ins_rst) { db_error_handler($con, $sql); }
     //        echo "INSERTED ". $con->Insert_ID();
-    */        
+    */
             do_hook_function('workflow_addition', $activity_template_id);
-    
+
         }
     }
 }
@@ -179,7 +179,7 @@ function get_open_workflow_activities_on_status_change($con, $on_what_table, $on
 
     $table=$on_what_table;
     $entity=make_singular($on_what_table);
-    
+
     if (!$old_status_id) {
         switch ($table) {
             case 'cases':
@@ -193,9 +193,9 @@ function get_open_workflow_activities_on_status_change($con, $on_what_table, $on
             $old_status=$data["{$entity}_status_id"];
         } else return false;
     } else { $old_status=$old_status_id; }
-    
+
     if ($old_status != $new_status_id) {
-    
+
         /* ADD CHECK TO SEE IF THERE ARE STILL OPEN ACTIVITIES FROM
             THE PREVIOUS STATUS, THEN GIVE THEM OPTIONS  */
         $activity_data=array();
@@ -205,7 +205,7 @@ function get_open_workflow_activities_on_status_change($con, $on_what_table, $on
         $activity_data['contact_id']= $contact_id;
         $activity_data['company_id']=$company_id;
         $activity_data['activity_status']='o';
-    
+
         $open_activities=get_activity($con, $activity_data);
         return $open_activities;
     } else return false;
@@ -391,12 +391,12 @@ function workflow_activity_completed($con, $on_what_table, $on_what_id, $activit
                     if ($activity_sort_open->EOF) $next_activities_sort=true;
                 }
             }
-    
+
             //no activities with the current sort order, so look for the next highest sort order
             if ($next_activities_sort) {
                 //increment sort order to next highest
                 if ($template_sort_order>0) { $template_sort_order+=1; }
-    
+
                 //now we look for the highest sort order for templates with the same status
                 $sql = "SELECT MAX(sort_order) as max_sort_order FROM activity_templates WHERE activity_templates.on_what_table=" . $con->qstr($on_what_singular.'_statuses') . " AND activity_templates.on_what_id=$table_status_id";
                 $max_sort=$con->execute($sql);
@@ -404,7 +404,7 @@ function workflow_activity_completed($con, $on_what_table, $on_what_id, $activit
                 if (!$max_sort) { db_error_handler($con, $sql); }
                 //pull max sort order
                 $max_sort_id=$max_sort->fields['max_sort_order'];
-    
+
                 //if we have a lower sort order than the maximum, then simply spawn workflow activities for our new sort order
                 if ($template_sort_order <= $max_sort_id) {
                     $on_what_table_template = $on_what_singular .  "_statuses";
@@ -415,11 +415,11 @@ function workflow_activity_completed($con, $on_what_table, $on_what_id, $activit
                     $allow_change_status=false;
                 }
             }
-    
+
         if ($allow_change_status) {
             // null out old_status
             $old_status = '';
-            
+
             /* this saves case/opportunity status changes to the database when they are changed in one.php */
             //check if there are open activities from this status
             if ($on_what_singular !== "attached to") {
@@ -435,7 +435,7 @@ function workflow_activity_completed($con, $on_what_table, $on_what_id, $activit
                         if ($status_data) {
                             $status_data=current($status_data);
                             $table_status_id = $status_data[$on_what_singular . '_status_id'];
-            
+
                             //look for activity_templates defined for the next status in the workflow
                             $on_what_table_template=$on_what_singular.'_statuses';
                             $on_what_id_template=$table_status_id;
@@ -443,14 +443,14 @@ function workflow_activity_completed($con, $on_what_table, $on_what_id, $activit
                             //if there are templates defined for the next status, find it
                             if ($templates) {
                                 $no_update = false;
-                            } else { 
+                            } else {
                                 //next status has no templates defined for it, so do not update status automatically.  Set return to allow update
                                 $no_update=true;
                                 $ret['allow_status_change']=true;
                             }
                       }
                 }
-            
+
                     //if there is only one field, the result set is empty (no old activities)
                     //  otherwise prompt the user
                     if ($no_update) {
@@ -458,7 +458,7 @@ function workflow_activity_completed($con, $on_what_table, $on_what_id, $activit
                             $return_url = "/activities/one.php?msg=no_change&activity_id=$activity_return_id";
                             $ret['allow_status_change']=false;
                         } elseif ($return_url) {
-                            //no particular activity is still open, so we must have hit a status that has no template, send no_change message 
+                            //no particular activity is still open, so we must have hit a status that has no template, send no_change message
                             //@TODO add message to indicate no automatic status change to statuses with no templates associated with them
                             if (strpos($return_url,'?')!==false) { $sep='&'; }
                             else { $sep='?'; }
@@ -472,7 +472,7 @@ function workflow_activity_completed($con, $on_what_table, $on_what_id, $activit
                         $ret['return_url']=$return_url;
 
                     }
-            
+
                     //update if there are no open activities
                     if (!$no_update) {
                         $rec = array();
@@ -499,6 +499,9 @@ function workflow_activity_completed($con, $on_what_table, $on_what_id, $activit
 /**
  *
  * $Log: utils-workflow.php,v $
+ * Revision 1.4  2007/02/08 15:54:47  braverock
+ * - clean up file header and comments
+ *
  * Revision 1.3  2006/05/06 09:30:30  vanmer
  * - moved workflow functionality on a completed template activity into seperate function, from activities/edit-2.php
  *
@@ -509,7 +512,5 @@ function workflow_activity_completed($con, $on_what_table, $on_what_id, $activit
  * Revision 1.1  2006/04/29 01:44:02  vanmer
  * - added new file for workflow related functions (utils-workflow.php)
  * - moved workflow related functions out of utils-misc into utils-workflow.php
- *
- *
-**/
+ **/
 ?>
