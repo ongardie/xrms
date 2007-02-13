@@ -6,7 +6,7 @@
  * @author Brian Peterson
  * @author Aaron van Meerten
  *
- * $Id: utils-workflow.php,v 1.4 2007/02/08 15:54:47 braverock Exp $
+ * $Id: utils-workflow.php,v 1.5 2007/02/13 16:14:20 braverock Exp $
  *
  * @todo To extend and internationalize activity template substitution,
  *       we would need to add a table to the database that would hold
@@ -368,6 +368,7 @@ function workflow_activity_completed($con, $on_what_table, $on_what_id, $activit
     if ($status_data) {
         $sort_order=$status_data['sort_order'];
         $type_id=$status_data[strtolower($on_what_singular).'_type_id'];
+        $current_status_open_indicator = $status_data["status_open_indicator"];
     } else { $type_id=false; }
 
         //by default allow the status change code to be run
@@ -428,6 +429,11 @@ function workflow_activity_completed($con, $on_what_table, $on_what_id, $activit
                     $first_activity=current($open_activities);
                     $activity_return_id=$first_activity['activity_id'];
                     $no_update = true;
+                } elseif ($current_status_open_indicator!=="o" ) {
+                    // If current status open indicator is not open ('o') don't
+                    // even try to find next status
+                    $no_update=true;
+                    $ret['allow_status_change']=true;
                 } else {
                         //increment status sort order, find next status
                         $sort_order++;
@@ -435,18 +441,26 @@ function workflow_activity_completed($con, $on_what_table, $on_what_id, $activit
                         if ($status_data) {
                             $status_data=current($status_data);
                             $table_status_id = $status_data[$on_what_singular . '_status_id'];
-
-                            //look for activity_templates defined for the next status in the workflow
-                            $on_what_table_template=$on_what_singular.'_statuses';
-                            $on_what_id_template=$table_status_id;
-                            $templates=find_activity_template($con, $on_what_table_template, $on_what_id_template);
-                            //if there are templates defined for the next status, find it
-                            if ($templates) {
-                                $no_update = false;
-                            } else {
-                                //next status has no templates defined for it, so do not update status automatically.  Set return to allow update
+                            $status_open_indicator = $status_data["status_open_indicator"];
+                            //
+                            // If the next status open indicator is not Open ("o") don't auto change status
+                            if ($status_open_indicator!=="o") {
+                              // Don't automatically change status or start any additional activities
                                 $no_update=true;
                                 $ret['allow_status_change']=true;
+                            } else {
+                                //look for activity_templates defined for the next status in the workflow
+                                $on_what_table_template=$on_what_singular.'_statuses';
+                                $on_what_id_template=$table_status_id;
+                                $templates=find_activity_template($con, $on_what_table_template, $on_what_id_template);
+                                //if there are templates defined for the next status, find it
+                                if ($templates) {
+                                    $no_update = false;
+                                } else { 
+                                    //next status has no templates defined for it, so do not update status automatically.  Set return to allow update
+                                    $no_update=true;
+                                    $ret['allow_status_change']=true;
+                                }
                             }
                       }
                 }
@@ -460,9 +474,14 @@ function workflow_activity_completed($con, $on_what_table, $on_what_id, $activit
                         } elseif ($return_url) {
                             //no particular activity is still open, so we must have hit a status that has no template, send no_change message
                             //@TODO add message to indicate no automatic status change to statuses with no templates associated with them
-                            if (strpos($return_url,'?')!==false) { $sep='&'; }
-                            else { $sep='?'; }
-                            $return_url.=$sep.'msg=no_auto_change';
+                            
+                            // Check to see if current open status is 'o' in which case it makes sense to
+                            // show no_auto_change message to user as entity not in implied end state
+                            if ($current_status_open_indicator==="o" ) {
+                                if (strpos($return_url,'?')!==false) { $sep='&'; }
+                                else { $sep='?'; }
+                                $return_url.=$sep.'msg=no_auto_change';
+                            }
                         }
                         else{
                             $return_url="/private/home.php?msg=no_auto_change";
@@ -499,6 +518,10 @@ function workflow_activity_completed($con, $on_what_table, $on_what_id, $activit
 /**
  *
  * $Log: utils-workflow.php,v $
+ * Revision 1.5  2007/02/13 16:14:20  braverock
+ * - restore functionality to not auto-advance to a closed workflow state
+ *   patches provided by "Mark Hobbs" <mark[dot]hobbs[at]diginus[dot]com>
+ *
  * Revision 1.4  2007/02/08 15:54:47  braverock
  * - clean up file header and comments
  *
