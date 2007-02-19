@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.73 2006/12/29 06:42:40 ongardie Exp $
+ * $Id: some.php,v 1.74 2007/02/19 12:59:17 fcrossen Exp $
  */
 
 //include the standard files
@@ -66,7 +66,8 @@ $sql = "SELECT " .
     $con->Concat($con->qstr('<a id="'), "c.company_name",  $con->qstr('" href="../companies/one.php?company_id='), "c.company_id", $con->qstr('">'), "c.company_name", $con->qstr('</a>')) . " AS company,".
     "company_code, title, description, u.username, cont.email, cont.work_phone, cont.cell_phone, cont.contact_id, cont.last_name, cont.first_names, c.company_name";
 
-$from = " from contacts cont, companies c LEFT JOIN users u ON cont.user_id=u.user_id ";
+// $from = " from contacts cont, companies c LEFT JOIN users u ON cont.user_id=u.user_id ";
+$from = " from contacts cont, companies c LEFT JOIN users u USING (user_id) ";
 
 $where  = "where c.company_id = cont.company_id ";
 $where .= "and contact_record_status = 'a'";
@@ -503,6 +504,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.74  2007/02/19 12:59:17  fcrossen
+ *  - Changed SQL SELECT to use LEFT JOIN USING... needed after MySQL v5.0.12 changed how it handles LEFT JOIN
+ *
  * Revision 1.73  2006/12/29 06:42:40  ongardie
  * - Owner should refer to the contact's owner, not the company's.
  *
