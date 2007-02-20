@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of campaigns
  *
- * $Id: new.php,v 1.15 2007/01/15 13:06:43 fcrossen Exp $
+ * $Id: new.php,v 1.16 2007/02/20 16:45:18 jnhayart Exp $
  */
 
 require_once('../include-locations.inc');
@@ -133,7 +133,7 @@ function validate() {
 
     if (document.forms[0].campaign_title.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\n<?php echo _("You must enter a campaign title."); ?>';
+        msgToDisplay += '\n<?php echo addslashes(_("You must enter a campaign title.")); ?>';
     }
 
     if (numberOfErrors > 0) {
@@ -175,6 +175,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.16  2007/02/20 16:45:18  jnhayart
+ * prevent broken javascript variable after localisation
+ *
  * Revision 1.15  2007/01/15 13:06:43  fcrossen
  *  - change to pass correct user_id to get_user_menu function
  *

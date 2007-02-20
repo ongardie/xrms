@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of campaigns
  *
- * $Id: edit.php,v 1.17 2006/01/02 22:41:51 vanmer Exp $
+ * $Id: edit.php,v 1.18 2007/02/20 16:40:30 jnhayart Exp $
  */
 
 require_once('../include-locations.inc');
@@ -144,7 +144,7 @@ function validate() {
 
     if (document.forms[0].campaign_title.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\n<?php echo _("You must enter a campaign title."); ?>';
+        msgToDisplay += '\n<?php echo addslashes(_("You must enter a campaign title.")); ?>';
     }
 
     if (numberOfErrors > 0) {
@@ -187,6 +187,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.18  2007/02/20 16:40:30  jnhayart
+ * prevent broken javascript variable after localisation
+ *
  * Revision 1.17  2006/01/02 22:41:51  vanmer
  * - changed to use centralized database connection function
  *
