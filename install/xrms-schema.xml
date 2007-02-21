@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <schema version="0.3">
   <table name="ControlledObject">
-    <field name="ControlledObject_id" type="I" size="10">
+    <field name="ControlledObject_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
@@ -10,7 +10,7 @@
     <field name="on_what_table" type="C" size="128"/>
     <field name="on_what_field" type="C" size="128"/>
     <field name="user_field" type="C" size="32"/>
-    <field name="data_source_id" type="I" size="10">
+    <field name="data_source_id" type="I">
       <UNSIGNED/>
     </field>
     <index name="data_source_id">
@@ -32,17 +32,17 @@
     </data>
   </table>
   <table name="ControlledObjectRelationship">
-    <field name="CORelationship_id" type="I" size="10">
+    <field name="CORelationship_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="ChildControlledObject_id" type="I" size="10">
+    <field name="ChildControlledObject_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
     </field>
-    <field name="ParentControlledObject_id" type="I" size="10">
+    <field name="ParentControlledObject_id" type="I">
       <UNSIGNED/>
     </field>
     <field name="on_what_child_field" type="C" size="128"/>
@@ -85,22 +85,22 @@
     </data>
   </table>
   <table name="GroupMember">
-    <field name="GroupMember_id" type="I" size="10">
+    <field name="GroupMember_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="Group_id" type="I" size="10">
+    <field name="Group_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
     </field>
-    <field name="ControlledObject_id" type="I" size="10">
+    <field name="ControlledObject_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
     </field>
-    <field name="on_what_id" type="I" size="11">
+    <field name="on_what_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -114,12 +114,12 @@
     </index>
   </table>
   <table name="GroupMemberCriteria">
-    <field name="GroupMemberCriteria_id" type="I" size="10">
+    <field name="GroupMemberCriteria_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="GroupMember_id" type="I" size="10">
+    <field name="GroupMember_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
@@ -135,23 +135,23 @@
     </index>
   </table>
   <table name="GroupUser">
-    <field name="GroupUser_id" type="I" size="10">
+    <field name="GroupUser_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="Group_id" type="I" size="10">
+    <field name="Group_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
     </field>
-    <field name="user_id" type="I" size="10">
+    <field name="user_id" type="I">
       <UNSIGNED/>
     </field>
-    <field name="Role_id" type="I" size="10">
+    <field name="Role_id" type="I">
       <UNSIGNED/>
     </field>
-    <field name="ChildGroup_id" type="I" size="10">
+    <field name="ChildGroup_id" type="I">
       <UNSIGNED/>
     </field>
     <index name="Group_id">
@@ -168,7 +168,7 @@
     </data>
   </table>
   <table name="Groups">
-    <field name="Group_id" type="I" size="10">
+    <field name="Group_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
@@ -179,7 +179,7 @@
     </data>
   </table>
   <table name="Permission">
-    <field name="Permission_id" type="I" size="10">
+    <field name="Permission_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
@@ -195,7 +195,7 @@
     </data>
   </table>
   <table name="Role">
-    <field name="Role_id" type="I" size="10">
+    <field name="Role_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
@@ -207,17 +207,17 @@
     </data>
   </table>
   <table name="RolePermission">
-    <field name="RolePermission_id" type="I" size="10">
+    <field name="RolePermission_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="Role_id" type="I" size="10">
+    <field name="Role_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
     </field>
-    <field name="CORelationship_id" type="I" size="10">
+    <field name="CORelationship_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
@@ -226,7 +226,7 @@
       <NOTNULL/>
       <DEFAULT value="World"/>
     </field>
-    <field name="Permission_id" type="I" size="10">
+    <field name="Permission_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
@@ -282,7 +282,7 @@
     </data>
   </table>
   <table name="account_statuses">
-    <field name="account_status_id" type="I" size="11">
+    <field name="account_status_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -301,77 +301,77 @@
     </data>
   </table>
   <table name="activities">
-    <field name="activity_id" type="I" size="11">
+    <field name="activity_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="activity_type_id" type="I" size="11">
+    <field name="activity_type_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="user_id" type="I" size="11">
+    <field name="user_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="company_id" type="I" size="11">
+    <field name="company_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="contact_id" type="I" size="11">
+    <field name="contact_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="address_id" type="I" size="10">
+    <field name="address_id" type="I">
       <UNSIGNED/>
     </field>
     <field name="on_what_table" type="C" size="100"/>
-    <field name="on_what_id" type="I" size="11">
+    <field name="on_what_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="on_what_status" type="I" size="11">
+    <field name="on_what_status" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="activity_template_id" type="I" size="11">
+    <field name="activity_template_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="activity_title" type="C" size="100"/>
     <field name="activity_description" type="X"/>
     <field name="entered_at" type="T"/>
-    <field name="entered_by" type="I" size="11">
+    <field name="entered_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="last_modified_at" type="T"/>
-    <field name="last_modified_by" type="I" size="11">
+    <field name="last_modified_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="thread_id" type="I" size="11">
+    <field name="thread_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="followup_from_id" type="I" size="11">
+    <field name="followup_from_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="scheduled_at" type="T"/>
     <field name="ends_at" type="T"/>
     <field name="completed_at" type="T"/>
-    <field name="completed_by" type="I" size="11"/>
+    <field name="completed_by" type="I"/>
     <field name="activity_status" type="C" size="1">
       <DEFAULT value="o"/>
     </field>
     <field name="activity_record_status" type="C" size="1">
       <DEFAULT value="a"/>
     </field>
-    <field name="activity_recurrence_id" type="I" size="11">
+    <field name="activity_recurrence_id" type="I">
       <DEFAULT value="0"/>
     </field>
-    <field name="activity_resolution_type_id" type="I" size="11"/>
-    <field name="activity_priority_id" type="I" size="11"/>
+    <field name="activity_resolution_type_id" type="I"/>
+    <field name="activity_priority_id" type="I"/>
     <field name="resolution_description" type="X"/>
     <index name="act_company_idx">
       <col>company_id</col>
@@ -389,42 +389,42 @@
     </data>
   </table>
   <table name="activities_recurrence">
-    <field name="activity_recurrence_id" type="I" size="11">
+    <field name="activity_recurrence_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="activity_id" type="I" size="11">
+    <field name="activity_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="start_datetime" type="T"/>
     <field name="end_datetime" type="T"/>
-    <field name="end_count" type="I" size="11">
+    <field name="end_count" type="I">
       <DEFAULT value="0"/>
     </field>
-    <field name="frequency" type="I" size="11">
+    <field name="frequency" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="period" type="C" size="100"/>
-    <field name="day_offset" type="I" size="11">
+    <field name="day_offset" type="I">
       <DEFAULT value="0"/>
     </field>
-    <field name="month_offset" type="I" size="11">
+    <field name="month_offset" type="I">
       <DEFAULT value="0"/>
     </field>
-    <field name="week_offset" type="I" size="11">
+    <field name="week_offset" type="I">
       <DEFAULT value="0"/>
     </field>
     <field name="week_days" type="C" size="100"/>
   </table>
   <table name="activity_participant_positions">
-    <field name="activity_participant_position_id" type="I" size="10">
+    <field name="activity_participant_position_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="activity_type_id" type="I" size="10">
+    <field name="activity_type_id" type="I">
       <UNSIGNED/>
     </field>
     <field name="participant_position_name" type="C" size="50"/>
@@ -459,22 +459,22 @@
     </data>
   </table>
   <table name="activity_participants">
-    <field name="activity_participant_id" type="I" size="10">
+    <field name="activity_participant_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="activity_id" type="I" size="10">
+    <field name="activity_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
     </field>
-    <field name="contact_id" type="I" size="10">
+    <field name="contact_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
     </field>
-    <field name="activity_participant_position_id" type="I" size="10">
+    <field name="activity_participant_position_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
@@ -494,7 +494,7 @@
     </index>
   </table>
   <table name="activity_resolution_types">
-    <field name="activity_resolution_type_id" type="I" size="11">
+    <field name="activity_resolution_type_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -518,20 +518,20 @@
     </data>
   </table>
   <table name="activity_templates">
-    <field name="activity_template_id" type="I" size="11">
+    <field name="activity_template_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="role_id" type="I" size="11">
+    <field name="role_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="activity_type_id" type="I" size="11">
+    <field name="activity_type_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="on_what_table" type="C" size="100"/>
-    <field name="on_what_id" type="I" size="11">
+    <field name="on_what_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -551,10 +551,10 @@
       <DEFAULT value="a"/>
     </field>
     <field name="workflow_entity" type="C" size="32"/>
-    <field name="workflow_entity_type" type="I" size="11"/>
+    <field name="workflow_entity_type" type="I"/>
   </table>
   <table name="activity_types">
-    <field name="activity_type_id" type="I" size="11">
+    <field name="activity_type_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -562,7 +562,7 @@
     <field name="activity_type_pretty_name" type="C" size="100"/>
     <field name="activity_type_pretty_plural" type="C" size="100"/>
     <field name="activity_type_display_html" type="C" size="100"/>
-    <field name="activity_type_score_adjustment" type="I" size="11">
+    <field name="activity_type_score_adjustment" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -594,7 +594,7 @@
     </data>
   </table>
   <table name="address_format_strings">
-    <field name="address_format_string_id" type="I" size="11">
+    <field name="address_format_string_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -623,7 +623,7 @@
     </data>
   </table>
   <table name="address_types">
-    <field name="address_type_id" type="I" size="11">
+    <field name="address_type_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -636,15 +636,15 @@
     </data>
   </table>
   <table name="addresses">
-    <field name="address_id" type="I" size="11">
+    <field name="address_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="company_id" type="I" size="11">
+    <field name="company_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="country_id" type="I" size="11">
+    <field name="country_id" type="I">
       <NOTNULL/>
       <DEFAULT value="1"/>
     </field>
@@ -664,7 +664,7 @@
       <DEFAULT value="f"/>
     </field>
     <field name="gmt_offset" type="N" size="10"/>
-    <field name="daylight_savings_id" type="I" size="10">
+    <field name="daylight_savings_id" type="I">
       <UNSIGNED/>
     </field>
     <field name="address_record_status" type="C" size="1">
@@ -688,11 +688,11 @@
     </data>
   </table>
   <table name="audit_items">
-    <field name="audit_item_id" type="I" size="11">
+    <field name="audit_item_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="user_id" type="I" size="11">
+    <field name="user_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -708,7 +708,7 @@
     </field>
   </table>
   <table name="campaign_statuses">
-    <field name="campaign_status_id" type="I" size="11">
+    <field name="campaign_status_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -736,7 +736,7 @@
     </data>
   </table>
   <table name="campaign_types">
-    <field name="campaign_type_id" type="I" size="11">
+    <field name="campaign_type_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -759,19 +759,19 @@
     </data>
   </table>
   <table name="campaigns">
-    <field name="campaign_id" type="I" size="11">
+    <field name="campaign_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="campaign_type_id" type="I" size="11">
+    <field name="campaign_type_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="campaign_status_id" type="I" size="11">
+    <field name="campaign_status_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="user_id" type="I" size="11">
+    <field name="user_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -784,12 +784,12 @@
       <DEFAULT value="0"/>
     </field>
     <field name="entered_at" type="T"/>
-    <field name="entered_by" type="I" size="11">
+    <field name="entered_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="last_modified_at" type="T"/>
-    <field name="last_modified_by" type="I" size="11">
+    <field name="last_modified_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -799,7 +799,7 @@
     </field>
   </table>
   <table name="case_priorities">
-    <field name="case_priority_id" type="I" size="11">
+    <field name="case_priority_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -807,7 +807,7 @@
     <field name="case_priority_pretty_name" type="C" size="100"/>
     <field name="case_priority_pretty_plural" type="C" size="100"/>
     <field name="case_priority_display_html" type="C" size="100"/>
-    <field name="case_priority_score_adjustment" type="I" size="11">
+    <field name="case_priority_score_adjustment" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -823,7 +823,7 @@
     </data>
   </table>
   <table name="case_statuses">
-    <field name="case_status_id" type="I" size="11">
+    <field name="case_status_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -840,7 +840,7 @@
     <field name="case_status_pretty_plural" type="C" size="100"/>
     <field name="case_status_display_html" type="C" size="100"/>
     <field name="case_status_long_desc" type="C" size="200"/>
-    <field name="case_type_id" type="I" size="11">
+    <field name="case_type_id" type="I">
       <NOTNULL/>
       <DEFAULT value="1"/>
     </field>
@@ -866,7 +866,7 @@
     </data>
   </table>
   <table name="case_types">
-    <field name="case_type_id" type="I" size="11">
+    <field name="case_type_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -885,36 +885,36 @@
     </data>
   </table>
   <table name="cases">
-    <field name="case_id" type="I" size="11">
+    <field name="case_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="case_type_id" type="I" size="11">
+    <field name="case_type_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="case_status_id" type="I" size="11">
+    <field name="case_status_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="case_priority_id" type="I" size="11">
+    <field name="case_priority_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="company_id" type="I" size="11">
+    <field name="company_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="division_id" type="I" size="11"/>
-    <field name="contact_id" type="I" size="11">
+    <field name="division_id" type="I"/>
+    <field name="contact_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="user_id" type="I" size="11">
+    <field name="user_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="priority" type="I" size="11">
+    <field name="priority" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -922,22 +922,22 @@
     <field name="case_description" type="X"/>
     <field name="due_at" type="T"/>
     <field name="entered_at" type="T"/>
-    <field name="entered_by" type="I" size="11">
+    <field name="entered_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="last_modified_at" type="T"/>
-    <field name="last_modified_by" type="I" size="11">
+    <field name="last_modified_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="owned_at" type="T"/>
-    <field name="owned_by" type="I" size="11">
+    <field name="owned_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="closed_at" type="T"/>
-    <field name="closed_by" type="I" size="11">
+    <field name="closed_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -947,7 +947,7 @@
     </field>
   </table>
   <table name="categories">
-    <field name="category_id" type="I" size="11">
+    <field name="category_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -966,11 +966,11 @@
     </data>
   </table>
   <table name="category_category_scope_map">
-    <field name="category_id" type="I" size="11">
+    <field name="category_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="category_scope_id" type="I" size="11">
+    <field name="category_scope_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -993,7 +993,7 @@
     </data>
   </table>
   <table name="category_scopes">
-    <field name="category_scope_id" type="I" size="11">
+    <field name="category_scope_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -1014,34 +1014,35 @@
     </data>
   </table>
   <table name="companies">
-    <field name="company_id" type="I" size="11">
+    <field name="company_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="user_id" type="I" size="11">
+    <field name="user_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="company_source_id" type="I" size="11">
+    <field name="company_source_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="industry_id" type="I" size="11">
+    <field name="industry_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="crm_status_id" type="I" size="11">
+    <field name="crm_status_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="rating_id" type="I" size="11">
+    <field name="rating_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="account_status_id" type="I" size="11">
+    <field name="account_status_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
+    <field name="company_type_id" type="I"/>
     <field name="company_name" type="C" size="100"/>
     <field name="company_code" type="C" size="10"/>
     <field name="legal_name" type="C" size="100"/>
@@ -1053,37 +1054,37 @@
     <field name="url" type="C" size="50"/>
     <field name="employees" type="C" size="50"/>
     <field name="revenue" type="C" size="50"/>
-    <field name="credit_limit" type="I" size="11">
+    <field name="credit_limit" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="terms" type="I" size="11">
+    <field name="terms" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="entered_at" type="T"/>
-    <field name="entered_by" type="I" size="11">
+    <field name="entered_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="last_modified_at" type="T"/>
-    <field name="last_modified_by" type="I" size="11">
+    <field name="last_modified_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="default_primary_address" type="I" size="11">
+    <field name="default_primary_address" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="default_billing_address" type="I" size="11">
+    <field name="default_billing_address" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="default_shipping_address" type="I" size="11">
+    <field name="default_shipping_address" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="default_payment_address" type="I" size="11">
+    <field name="default_payment_address" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -1108,36 +1109,36 @@
     </data>
   </table>
   <table name="company_division">
-    <field name="division_id" type="I" size="11">
+    <field name="division_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="company_id" type="I" size="11">
+    <field name="company_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="address_id" type="I" size="11"/>
-    <field name="user_id" type="I" size="11">
+    <field name="address_id" type="I"/>
+    <field name="user_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="company_source_id" type="I" size="11">
+    <field name="company_source_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="industry_id" type="I" size="11">
+    <field name="industry_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="division_name" type="C" size="100"/>
     <field name="description" type="X"/>
     <field name="entered_at" type="T"/>
-    <field name="entered_by" type="I" size="11">
+    <field name="entered_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="last_modified_at" type="T"/>
-    <field name="last_modified_by" type="I" size="11">
+    <field name="last_modified_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -1150,7 +1151,7 @@
     </field>
   </table>
   <table name="company_former_names">
-    <field name="company_id" type="I" size="11">
+    <field name="company_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -1164,14 +1165,14 @@
     </index>
   </table>
   <table name="company_relationship">
-    <field name="company_from_id" type="I" size="11">
+    <field name="company_from_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="relationship_type" type="C" size="100">
       <NOTNULL/>
     </field>
-    <field name="company_to_id" type="I" size="11">
+    <field name="company_to_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -1182,7 +1183,7 @@
     </index>
   </table>
   <table name="company_sources">
-    <field name="company_source_id" type="I" size="11">
+    <field name="company_source_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -1193,7 +1194,7 @@
     <field name="company_source_record_status" type="C" size="1">
       <DEFAULT value="a"/>
     </field>
-    <field name="company_source_score_adjustment" type="I" size="11">
+    <field name="company_source_score_adjustment" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -1211,7 +1212,7 @@
     </data>
   </table>
   <table name="company_types">
-    <field name="company_type_id" type="I" size="11">
+    <field name="company_type_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -1231,17 +1232,17 @@
     </data>
   </table>
   <table name="contact_former_companies">
-    <field name="cfc_id" type="I" size="10">
+    <field name="cfc_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="contact_id" type="I" size="11">
+    <field name="contact_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="companychange_at" type="T"/>
-    <field name="former_company_id" type="I" size="11">
+    <field name="former_company_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -1253,27 +1254,27 @@
     </index>
   </table>
   <table name="contacts">
-    <field name="contact_id" type="I" size="11">
+    <field name="contact_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="company_id" type="I" size="11">
+    <field name="company_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="division_id" type="I" size="11">
+    <field name="division_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="user_id" type="I" size="11">
+    <field name="user_id" type="I">
         <NOTNULL/>
         <DEFAULT value="0"/>
     </field>
-    <field name="address_id" type="I" size="11">
+    <field name="address_id" type="I">
       <NOTNULL/>
       <DEFAULT value="1"/>
     </field>
-    <field name="home_address_id" type="I" size="10">
+    <field name="home_address_id" type="I">
       <UNSIGNED/>
     </field>
     <field name="salutation" type="C" size="20"/>
@@ -1292,7 +1293,7 @@
       <DEFAULT value="a"/>
     </field>
     <field name="work_phone" type="C" size="50"/>
-    <field name="work_phone_ext" type="I" size="11">
+    <field name="work_phone_ext" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -1312,12 +1313,12 @@
     <field name="extref2" type="C" size="50"/>
     <field name="extref3" type="C" size="50"/>
     <field name="entered_at" type="T"/>
-    <field name="entered_by" type="I" size="11">
+    <field name="entered_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="last_modified_at" type="T"/>
-    <field name="last_modified_by" type="I" size="11">
+    <field name="last_modified_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -1341,11 +1342,11 @@
     </index>
   </table>
   <table name="countries">
-    <field name="country_id" type="I" size="11">
+    <field name="country_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="address_format_string_id" type="I" size="11">
+    <field name="address_format_string_id" type="I">
       <NOTNULL/>
       <DEFAULT value="1"/>
     </field>
@@ -1596,7 +1597,7 @@
     </data>
   </table>
   <table name="crm_statuses">
-    <field name="crm_status_id" type="I" size="11">
+    <field name="crm_status_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -1620,7 +1621,7 @@
     </data>
   </table>
   <table name="data_source">
-    <field name="data_source_id" type="I" size="10">
+    <field name="data_source_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
@@ -1631,17 +1632,17 @@
     </data>
   </table>
   <table name="email_template_type">
-    <field name="email_template_type_id" type="I" size="11">
+    <field name="email_template_type_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
     <field name="email_template_type_name" type="C" size="64"/>
-    <field name="modified_by" type="I" size="11">
+    <field name="modified_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="modified_on" type="T"/>
-    <field name="created_by" type="I" size="11">
+    <field name="created_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -1651,11 +1652,11 @@
     </data>
   </table>
   <table name="email_templates">
-    <field name="email_template_id" type="I" size="11">
+    <field name="email_template_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="email_template_type_id" type="I" size="11">
+    <field name="email_template_type_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -1674,12 +1675,12 @@
     </data>
   </table>
   <table name="entity_category_map">
-    <field name="category_id" type="I" size="11">
+    <field name="category_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="on_what_table" type="C" size="100"/>
-    <field name="on_what_id" type="I" size="11">
+    <field name="on_what_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -1690,7 +1691,7 @@
     </index>
   </table>
   <table name="files">
-    <field name="file_id" type="I" size="11">
+    <field name="file_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -1698,18 +1699,18 @@
     <field name="file_pretty_name" type="C" size="100"/>
     <field name="file_description" type="X"/>
     <field name="file_filesystem_name" type="C" size="100"/>
-    <field name="file_size" type="I" size="11">
+    <field name="file_size" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="file_type" type="C" size="100"/>
     <field name="on_what_table" type="C" size="100"/>
-    <field name="on_what_id" type="I" size="11">
+    <field name="on_what_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="entered_at" type="T"/>
-    <field name="entered_by" type="I" size="11">
+    <field name="entered_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -1722,7 +1723,7 @@
     </field>
   </table>
   <table name="industries">
-    <field name="industry_id" type="I" size="11">
+    <field name="industry_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -1757,18 +1758,18 @@
     </data>
   </table>
   <table name="notes">
-    <field name="note_id" type="I" size="11">
+    <field name="note_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
     <field name="note_description" type="X"/>
     <field name="on_what_table" type="C" size="100"/>
-    <field name="on_what_id" type="I" size="11">
+    <field name="on_what_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="entered_at" type="T"/>
-    <field name="entered_by" type="I" size="11">
+    <field name="entered_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -1778,29 +1779,29 @@
     </field>
   </table>
   <table name="opportunities">
-    <field name="opportunity_id" type="I" size="11">
+    <field name="opportunity_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="opportunity_type_id" type="I" size="11">
+    <field name="opportunity_type_id" type="I">
       <NOTNULL/>
       <DEFAULT value="1"/>
     </field>
-    <field name="opportunity_status_id" type="I" size="11">
+    <field name="opportunity_status_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="campaign_id" type="I" size="11"/>
-    <field name="company_id" type="I" size="11">
+    <field name="campaign_id" type="I"/>
+    <field name="company_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="division_id" type="I" size="11"/>
-    <field name="contact_id" type="I" size="11">
+    <field name="division_id" type="I"/>
+    <field name="contact_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="user_id" type="I" size="11">
+    <field name="user_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -1811,28 +1812,28 @@
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="probability" type="I" size="11">
+    <field name="probability" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="close_at" type="T"/>
     <field name="entered_at" type="T"/>
-    <field name="entered_by" type="I" size="11">
+    <field name="entered_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="last_modified_at" type="T"/>
-    <field name="last_modified_by" type="I" size="11">
+    <field name="last_modified_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="owned_at" type="T"/>
-    <field name="owned_by" type="I" size="11">
+    <field name="owned_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="closed_at" type="T"/>
-    <field name="closed_by" type="I" size="11">
+    <field name="closed_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -1841,11 +1842,11 @@
     </field>
   </table>
   <table name="opportunity_statuses">
-    <field name="opportunity_status_id" type="I" size="11">
+    <field name="opportunity_status_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="opportunity_type_id" type="I" size="11">
+    <field name="opportunity_type_id" type="I">
       <NOTNULL/>
       <DEFAULT value="1"/>
     </field>
@@ -1876,7 +1877,7 @@
     </data>
   </table>
   <table name="opportunity_types">
-    <field name="opportunity_type_id" type="I" size="11">
+    <field name="opportunity_type_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -1893,11 +1894,11 @@
     </data>
   </table>
   <table name="pager_saved_view">
-    <field name="pager_saved_view_id" type="I" size="11">
+    <field name="pager_saved_view_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="user_id" type="I" size="11">
+    <field name="user_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -1905,7 +1906,7 @@
     <field name="view_data" type="X"/>
   </table>
   <table name="ratings">
-    <field name="rating_id" type="I" size="11">
+    <field name="rating_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -1924,24 +1925,24 @@
     </data>
   </table>
   <table name="recent_items">
-    <field name="recent_item_id" type="I" size="11">
+    <field name="recent_item_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="user_id" type="I" size="11">
+    <field name="user_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="on_what_table" type="C" size="100"/>
     <field name="recent_action" type="C" size="100"/>
-    <field name="on_what_id" type="I" size="11">
+    <field name="on_what_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="recent_item_timestamp" type="T"/>
   </table>
   <table name="relationship_types">
-    <field name="relationship_type_id" type="I" size="10">
+    <field name="relationship_type_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
@@ -1969,22 +1970,22 @@
     </data>
   </table>
   <table name="relationships">
-    <field name="relationship_id" type="I" size="10">
+    <field name="relationship_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="from_what_id" type="I" size="10">
+    <field name="from_what_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
     </field>
-    <field name="to_what_id" type="I" size="10">
+    <field name="to_what_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
     </field>
-    <field name="relationship_type_id" type="I" size="10">
+    <field name="relationship_type_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
@@ -2003,7 +2004,7 @@
     </index>
   </table>
   <table name="salutations">
-    <field name="salutation_id" type="I" size="11">
+    <field name="salutation_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -2207,13 +2208,13 @@
     </data>
   </table>
   <table name="saved_actions">
-    <field name="saved_id" type="I" size="10">
+    <field name="saved_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
     <field name="saved_title" type="C" size="100"/>
-    <field name="user_id" type="I" size="10">
+    <field name="user_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
@@ -2247,7 +2248,7 @@
     </index>
   </table>
   <table name="time_daylight_savings">
-    <field name="daylight_savings_id" type="I" size="11">
+    <field name="daylight_savings_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
@@ -2279,18 +2280,18 @@
     </data>
   </table>
   <table name="time_zones">
-    <field name="time_zone_id" type="I" size="11">
+    <field name="time_zone_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="country_id" type="I" size="11">
+    <field name="country_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
     <field name="province" type="C" size="255"/>
     <field name="city" type="C" size="255"/>
     <field name="postal_code" type="C" size="24"/>
-    <field name="daylight_savings_id" type="I" size="11">
+    <field name="daylight_savings_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -3029,18 +3030,18 @@
     </data>
   </table>
   <table name="user_preference_type_options">
-    <field name="up_option_id" type="I" size="10">
+    <field name="up_option_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="user_preference_type_id" type="I" size="10">
+    <field name="user_preference_type_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
     </field>
     <field name="option_value" type="C" size="255"/>
-    <field name="sort_order" type="I" size="10">
+    <field name="sort_order" type="I">
       <NOTNULL/>
       <DEFAULT value="1"/>
       <UNSIGNED/>
@@ -3089,7 +3090,7 @@
     </data>
   </table>
   <table name="user_preference_types">
-    <field name="user_preference_type_id" type="I" size="10">
+    <field name="user_preference_type_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
@@ -3147,16 +3148,16 @@
     </data>
   </table>
   <table name="user_preferences">
-    <field name="user_preference_id" type="I" size="10">
+    <field name="user_preference_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
-    <field name="user_id" type="I" size="11">
+    <field name="user_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="user_preference_type_id" type="I" size="10">
+    <field name="user_preference_type_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
@@ -3168,11 +3169,11 @@
       <DEFAULT value="a"/>
     </field>
     <field name="user_preference_modified_on" type="T"/>
-    <field name="user_preference_created_by" type="I" size="11">
+    <field name="user_preference_created_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
-    <field name="user_preference_modified_by" type="I" size="11">
+    <field name="user_preference_modified_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -3203,11 +3204,11 @@
     </data>
   </table>
   <table name="users">
-    <field name="user_id" type="I" size="11">
+    <field name="user_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
     </field>
-    <field name="user_contact_id" type="I" size="11">
+    <field name="user_contact_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -3220,7 +3221,7 @@
       <NOTNULL/>
       <DEFAULT value="english"/>
     </field>
-    <field name="gmt_offset" type="I" size="11">
+    <field name="gmt_offset" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
     </field>
@@ -3237,29 +3238,29 @@
     </data>
   </table>
   <table name="workflow_history">
-    <field name="workflow_history_id" type="I" size="10">
+    <field name="workflow_history_id" type="I">
       <KEY/>
       <AUTOINCREMENT/>
       <UNSIGNED/>
     </field>
     <field name="on_what_table" type="C" size="32"/>
-    <field name="on_what_id" type="I" size="10">
+    <field name="on_what_id" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
     </field>
-    <field name="old_status" type="I" size="10">
+    <field name="old_status" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
     </field>
-    <field name="new_status" type="I" size="10">
+    <field name="new_status" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
     </field>
     <field name="status_change_timestamp" type="T"/>
-    <field name="status_change_by" type="I" size="10">
+    <field name="status_change_by" type="I">
       <NOTNULL/>
       <DEFAULT value="0"/>
       <UNSIGNED/>
