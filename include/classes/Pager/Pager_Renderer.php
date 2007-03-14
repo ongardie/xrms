@@ -6,13 +6,13 @@
  *
  * How it works:
  *
- * 
+ *
  *
  * @link http://localhost/xrms/include/classes/Pager/examples/  http://localhost/xrms/include/classes/Pager/examples/
  *
  * @example Pager_Renderer.doc.1.php check out
  *
- * $Id: Pager_Renderer.php,v 1.2 2006/01/27 13:47:38 vanmer Exp $
+ * $Id: Pager_Renderer.php,v 1.3 2007/03/14 14:18:57 braverock Exp $
  */
 
 
@@ -39,7 +39,7 @@ class Pager_Renderer {
         $render_data =& $this->render_data;
         if($buffer_output) {
              ob_start();
-        } 
+        }
 
         $this->RenderBeginWidget();
         $this->RenderTitle();
@@ -117,8 +117,8 @@ class Pager_Renderer {
         global $http_site_root;
 
 
-        $selected_column_arrow_html = ($render_data['sort_order'] == "asc") ? 
-                                ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/asc.gif" alt="">' : 
+        $selected_column_arrow_html = ($render_data['sort_order'] == "asc") ?
+                                ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/asc.gif" alt="">' :
                                 ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/desc.gif" alt="">';
 
 
@@ -144,46 +144,59 @@ class Pager_Renderer {
                                         </td>";
 
             }
-	
+
             echo "<tr>$column_header_html</tr>";
 
-            $col_classnames = $render_data['header']['col_classnames'][$i]; 
+            $col_classnames = $render_data['header']['col_classnames'][$i];
 
 
-	        if(count($render_data['rows'])) {	
+	        if(count($render_data['rows'])) {
 		        // then the columns themselves
                 $color_counter = 0;
 
 		        foreach($render_data['rows'] as $i => $row) {
 		            echo  "<tr valign=top>\n";
-		
+
 		            // set up row_classnames (alternate colors and also add Pager_TD_CSS_All_Rows if it exists)
                     $row_classnames = (($color_counter++ % 2) == 1) ? "widget_content" : "widget_content_alt";
-    
+
                     if($row['Pager_TD_CSS_All_Rows']) {
                         $row_classnames .= ' ' . $row['Pager_TD_CSS_All_Rows'];
-                    } 
+                    }
 
-		
-		            // This is the actual data 
+
+		            // This is the actual data
 		            for($j=0; $j<$render_data['column_count']; $j++) {
-		
+                        $align='';
+                        if($render_data[$j]['align']){
+                            switch ($render_data[$j]['align']) {
+                                case 'left':
+                                    $align = 'align="left" ';
+                                    break;
+                                case 'right':
+                                    $align = 'align="right"';
+                                    break;
+                                default:
+                                    $align='';
+                                    break;
+                            }
+                        }
 		                if($render_data[$j]['data_type']) {
 		                    if('currency' == $render_data[$j]['data_type'] AND is_numeric($render_data['rows'][$i]['columns'][$j])) {
-		                        echo "<td class='$row_classnames {$col_classnames[$j]}'>$" . number_format($render_data['rows'][$i]['columns'][$j], 2, '.', ',') . "</td>\n";
+		                        echo "<td class='$row_classnames {$col_classnames[$j]}' $align>$" . number_format($render_data['rows'][$i]['columns'][$j], 2, '.', ',') . "</td>\n";
 		                    } elseif('currency_six_places' == $render_data[$j]['data_type'] AND is_numeric($render_data['rows'][$i]['columns'][$j])) {
-		                        echo "<td class='$row_classnames {$col_classnames[$j]}'>$" . number_format($render_data['rows'][$i]['columns'][$j], 6, '.', ',') . "</td>\n";
+		                        echo "<td class='$row_classnames {$col_classnames[$j]}' $align>$" . number_format($render_data['rows'][$i]['columns'][$j], 6, '.', ',') . "</td>\n";
 		                    } elseif('date' == $render_data[$j]['data_type']) {
-		                        echo "<td class='$row_classnames {$col_classnames[$j]}'>" .  date ( 'Y-m-d' , strtotime($render_data['rows'][$i]['columns'][$j])) . "</td>\n";
+		                        echo "<td class='$row_classnames {$col_classnames[$j]}' $align>" .  date ( 'Y-m-d' , strtotime($render_data['rows'][$i]['columns'][$j])) . "</td>\n";
 		                    } elseif('int' == $render_data[$j]['data_type']) {
-		                        echo "<td class='$row_classnames {$col_classnames[$j]}'>" . number_format($render_data['rows'][$i]['columns'][$j], 0, '.',',') . "</td>\n";
+		                        echo "<td class='$row_classnames {$col_classnames[$j]}' $align>" . number_format($render_data['rows'][$i]['columns'][$j], 0, '.',',') . "</td>\n";
 		                    } elseif('filesize' == $render_data[$j]['data_type']) {
-		                        echo "<td class='$row_classnames {$col_classnames[$j]}'>" . pretty_filesize($render_data['rows'][$i]['columns'][$j], 0, '.',',') . "</td>\n";
+		                        echo "<td class='$row_classnames {$col_classnames[$j]}' $align>" . pretty_filesize($render_data['rows'][$i]['columns'][$j], 0, '.',',') . "</td>\n";
 		                    } else {
-		                        echo "<td class='$row_classnames {$col_classnames[$j]}'>" . $render_data['rows'][$i]['columns'][$j] . "</td>\n";
+		                        echo "<td class='$row_classnames {$col_classnames[$j]}' $align>" . $render_data['rows'][$i]['columns'][$j] . "</td>\n";
 		                    }
 		                } else {
-		                    echo "<td class='$row_classnames {$col_classnames[$j]}'>" . $render_data['rows'][$i]['columns'][$j] . "</td>\n";
+		                    echo "<td class='$row_classnames {$col_classnames[$j]}' $align>" . $render_data['rows'][$i]['columns'][$j] . "</td>\n";
 		                }
 		            }
 		        }
@@ -203,7 +216,7 @@ class Pager_Renderer {
     * private method to render the totals and subtotals columns
     */
     function RenderTotals($caption, $values, $row_classnames, $col_classnames) {
-
+        global $render_data;
         if(0 != count($values)) {
 
             echo "<tr>";
@@ -211,11 +224,25 @@ class Pager_Renderer {
 
             // starting with 1 because column 1 is used for the header, so sorry!
             for ($i=1; $i < count($this->pager->column_info); $i++) {
+                        $align='';
+                        if(isset($this->pager->column_info[$i]['align'])){
+                            switch ($this->pager->column_info[$i]['align']) {
+                                case 'left':
+                                    $align = 'align="left" ';
+                                    break;
+                                case 'right':
+                                    $align = 'align="right"';
+                                    break;
+                                default:
+                                    $align='';
+                                    break;
+                            }
+                        }
                 if(isset($values[$this->pager->column_info[$i]['index']])) {
                     if('currency' == $this->pager->column_info[$i]['data_type']) {
-                        echo "<td class=\"$row_classnames {$col_classnames[$i]}\"><b>$" . number_format($values[$this->pager->column_info[$i]['index']], 2, '.', ',') . "</b></td>\n";
+                        echo "<td class=\"$row_classnames {$col_classnames[$i]}\" $align><b>$" . number_format($values[$this->pager->column_info[$i]['index']], 2, '.', ',') . "</b></td>\n";
                     } else {
-                        echo "<td class=\"$row_classnames {$col_classnames[$i]}\"><b>" . $values[$this->pager->column_info[$i]['index']] . "</b></td>";
+                        echo "<td class=\"$row_classnames {$col_classnames[$i]}\" $align><b>" . $values[$this->pager->column_info[$i]['index']] . "</b></td>";
                     }
                 } else {
                     echo "<td class=\"widget_content_alt\">&nbsp;</td>";
@@ -244,6 +271,9 @@ class Pager_Renderer {
 }
 /**
  * $Log: Pager_Renderer.php,v $
+ * Revision 1.3  2007/03/14 14:18:57  braverock
+ * - add 'align' option to columns array for simple alignment
+ *
  * Revision 1.2  2006/01/27 13:47:38  vanmer
  * - added check to ensure that field is numeric before forcing it through numeric format on datatype of currencies
  *
