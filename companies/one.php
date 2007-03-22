@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.147 2007/01/18 14:16:36 fcrossen Exp $
+ * $Id: one.php,v 1.148 2007/03/22 12:39:14 jswalter Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -287,12 +287,12 @@ $columns[] = array('name' => _('Name'), 'index_sql' => 'name', 'sql_sort_column'
 $columns[] = array('name' => _('Summary'), 'index_sql' => 'summary');
 $columns[] = array('name' => _('Title'), 'index_sql' => 'title');
 $columns[] = array('name' => _('Description'), 'index_sql' => 'description');
-$columns[] = array('name' => _('Phone'), 'index_calc' => 'work_phone');
+$columns[] = array('name' => _('Work Phone'), 'index_calc' => 'work_phone');
 $columns[] = array('name' => _('Extension'), 'index_calc' => 'work_phone_ext');
 $columns[] = array('name' => _('E-Mail'), 'index_calc' => 'email', 'sql_sort_column' => 'email');
+$columns[] = array('name' => _('Home Phone'), 'index_calc' => 'home_phone', 'sql_sort_column' => 'home_phone');
 $columns[] = array('name' => _('Cell Phone'), 'index_calc' => 'cell_phone', 'sql_sort_column' => 'cell_phone');
 
-$columns[] = array('name' => _('cell_phone'), 'index_calc' => 'cell_phone', 'sql_sort_column' => 'cell_phone');
 // no reason to set this if you don't want all by default
 $default_columns = null;
 $default_columns = array('name','summary','title','work_phone','cell_phone','email');
@@ -796,6 +796,12 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.148  2007/03/22 12:39:14  jswalter
+ * within CONTACT columns display:
+ *  - corrected 'cell_phone' title to 'Cell Phone'
+ *  - modified 'Phone' to 'Work Phone'
+ *  - added 'Home Phone' to AVAILABLE list
+ *
  * Revision 1.147  2007/01/18 14:16:36  fcrossen
  *  - link campaign_title to campaign/one.php
  *
