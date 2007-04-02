@@ -1,7 +1,7 @@
 XRMS CRM - README
 
 =============================================================
-/** $Id: README,v 1.28 2006/12/14 17:18:58 fcrossen Exp $ **/
+/** $Id: README,v 1.29 2007/04/02 11:05:45 braverock Exp $ **/
 
 ========================
 SUMMARY
@@ -127,13 +127,17 @@ When in doubt, it is the intention of the development team that the more
 'open' of the two licenses should apply.
 
 Plugins that use the plugin architecture of XRMS may have any licensing
-status that the authors of the plugin wish.  XRMS plugins do not need to
-be distributed, at the sole discretion of the author.  XRMS Plugins that are
+status that the authors of the plugin wish.  XRMS plugins do not need to be
+distributed, at the sole discretion of the author.  XRMS Plugins that are
 distributed may be distributed under any license, and will not be restricted
-to the Open Software License or the GPL.  The development team certainly
-wishes to encourage plugins to be distributed under an 'open source' or
-'free software' license, and any plugin distributed with XRMS must be
-under one of the licenses used by XRMS code.
+ to the GPL.  CSS Themes for the layout and display of XRMS may also be
+ created and distributed under any license.  For example this means that you
+ may create a theme that uses your corporate trademarked logo and colors
+ without fear that they would somehow be "appropriated" or "tainted" by the
+ GPL. The development team certainly wishes to encourage plugins and themes
+ to be distributed under an 'open source' or 'free software' license, and
+ any plugin or theme distributed with XRMS must be under one of the licenses
+ used by XRMS code.
 
 ========================
 CREDITS
@@ -279,11 +283,11 @@ output_buffering = On
 Note that turning on output buffering if you don't need it can cause
 all sorts of problems, so leave it off unless absolutely necessary.
 
-Warning: setlocale(): Passing locale category name as string 
-is deprecated. Use the LC_* -constants instead. 
+Warning: setlocale(): Passing locale category name as string
+is deprecated. Use the LC_* -constants instead.
 in C:\<...>\xrms\include\i18n.php on line 232
 change 'LC_MESSAGES' in that file and line to LC_ALL (no quotes)
- 
+
 =======
 HINTS, daily reports
 
@@ -361,6 +365,9 @@ please let us know.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.29  2007/04/02 11:05:45  braverock
+ * - add more explicit licensing discussion of CSS Themes
+ *
  * Revision 1.28  2006/12/14 17:18:58  fcrossen
  * no message
  *
