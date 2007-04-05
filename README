@@ -1,7 +1,7 @@
 XRMS CRM - README
 
 =============================================================
-/** $Id: README,v 1.29 2007/04/02 11:05:45 braverock Exp $ **/
+/** $Id: README,v 1.30 2007/04/05 17:22:49 myelocyte Exp $ **/
 
 ========================
 SUMMARY
@@ -333,6 +333,7 @@ David Uhlman      d2uhlman       Developer
 Aaron van Meerten vanmer         Developer
 Neil Williams     metamedia      Developer
 Chris Woofter     cdwtech        Developer - Original Author of XRMS
+David Gaya        myelocyte      Developer
 
 Brunno Barrera                   Translator - Spanish
 Alan Baghumian                   Translator - Farsi
@@ -365,6 +366,9 @@ please let us know.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.30  2007/04/05 17:22:49  myelocyte
+ * This is my first CVS update. Adding myself to README developer list.
+ *
  * Revision 1.29  2007/04/02 11:05:45  braverock
  * - add more explicit licensing discussion of CSS Themes
  *
