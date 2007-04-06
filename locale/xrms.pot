@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-04 22:50+0200\n"
+"POT-Creation-Date: 2007-04-06 18:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -355,7 +355,7 @@ msgstr ""
 #: admin/ratings/some.php:88 admin/relationship-types/some.php:98
 #: admin/salutations/some.php:75 admin/users/some.php:182
 #: email/email-2.php:307 email/email-2.php:313 email/email-2.php:320
-#: email/email-2.php:351 plugins/phone/companies_one.php:699
+#: email/email-2.php:349 plugins/phone/companies_one.php:699
 #: plugins/phone/contacts_one.php:524
 msgid "Add"
 msgstr ""
@@ -747,7 +747,7 @@ msgstr ""
 msgid "Attached to"
 msgstr ""
 
-#: email/email-2.php:339
+#: email/email-2.php:337
 msgid "Attachments"
 msgstr ""
 
@@ -1228,6 +1228,12 @@ msgstr ""
 msgid "Clear Search"
 msgstr ""
 
+#: email/email-2.php:323
+msgid ""
+"Click 'Add' to add the custom field to your mail merge. You can also use "
+"these fields in the SUBJECT line too, just copy-&gt;paste them into it."
+msgstr ""
+
 #: admin/account-statuses/one.php:87 admin/activity-templates/edit.php:145
 #: admin/activity-types/one.php:97 admin/campaign-statuses/one.php:94
 #: admin/campaign-types/one.php:81 admin/case-priorities/one.php:88
@@ -1663,7 +1669,7 @@ msgstr ""
 #: admin/users/change-owner-2.php:149
 #: bulkactivity/bulk-activities-widget.php:88
 #: bulkactivity/bulkactivity-0.php:238 bulkactivity/bulkactivity.php:211
-#: bulkactivity/bulkassignment.php:315 email/email-2.php:384
+#: bulkactivity/bulkassignment.php:315 email/email-2.php:382
 #: email/email-3.php:140 email/email.php:177 email/index.php:78
 msgid "Continue"
 msgstr ""
@@ -2139,7 +2145,7 @@ msgstr ""
 msgid "Delete Salutation?"
 msgstr ""
 
-#: email/email-2.php:368
+#: email/email-2.php:366
 msgid "Delete Selected"
 msgstr ""
 
@@ -5160,6 +5166,7 @@ msgstr ""
 #: admin/activity-resolution-types/one_activity_resolution_type.php:46
 #: admin/email-templates/one_email_template.php:54
 #: admin/email-templates/one_email_template_type.php:56
+#: companies/one-address.php:126
 msgid "Return to List"
 msgstr ""
 
@@ -5280,7 +5287,7 @@ msgstr ""
 msgid "Save and Update All Records"
 msgstr ""
 
-#: email/email-2.php:392 email/one-template.php:94
+#: email/email-2.php:390 email/one-template.php:94
 msgid "Save as New Template"
 msgstr ""
 
@@ -6157,7 +6164,7 @@ msgstr ""
 msgid "Update Successful"
 msgstr ""
 
-#: email/email-2.php:388 email/one-template.php:94
+#: email/email-2.php:386 email/one-template.php:94
 msgid "Update Template"
 msgstr ""
 
@@ -6537,7 +6544,7 @@ msgstr ""
 msgid "You must enter a last name."
 msgstr ""
 
-#: email/email-2.php:425 email/one-template.php:135
+#: email/email-2.php:423 email/one-template.php:135
 msgid "You must enter a name to let the recipient know who the email is from."
 msgstr ""
 
@@ -6557,7 +6564,7 @@ msgstr ""
 msgid "You must enter an opportunity title."
 msgstr ""
 
-#: email/email-2.php:431 email/one-template.php:140
+#: email/email-2.php:429 email/one-template.php:140
 msgid ""
 "You must enter an reply address so the recipient can reply to the message."
 msgstr ""

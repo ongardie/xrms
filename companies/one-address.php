@@ -2,7 +2,7 @@
 /**
  * Edit address for a company
  *
- * $Id: one-address.php,v 1.13 2006/03/29 18:24:38 maulani Exp $
+ * $Id: one-address.php,v 1.14 2007/04/06 16:27:19 myelocyte Exp $
  */
 
 require_once('../include-locations.inc');
@@ -123,7 +123,7 @@ $company_name = fetch_company_name($con, $company_id);
     // View    
     $view = new ADOdb_QuickForm_View($con, $page_title, 'post');
 
-    $view->SetReturnButton('Return to List', $return_url);
+    $view->SetReturnButton(_('Return to List'), $return_url);
     $view->SetReturnAfterUpdate($return_url);
 
     // delete button
@@ -216,6 +216,12 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.14  2007/04/06 16:27:19  myelocyte
+ * - Enabled localization of two strings
+ * - Updated pot file to reflect this changes
+ * - Updated Spanish translation
+ * - Changed some Spanish strings
+ *
  * Revision 1.13  2006/03/29 18:24:38  maulani
  * - Set default country instead of a blank option when creating a new address
  *

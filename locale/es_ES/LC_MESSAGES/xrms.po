@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xrms\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-04 22:50+0200\n"
-"PO-Revision-Date: 2007-04-04 22:53+0200\n"
+"POT-Creation-Date: 2007-04-06 18:10+0200\n"
+"PO-Revision-Date: 2007-04-06 17:58+0200\n"
 "Last-Translator: david\n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -62,7 +62,8 @@ msgstr "día(s)"
 
 #: include/utils-workflow.php:329
 msgid " has been created.  To access it, you can use the link here:"
-msgstr "ha sido creado. Para acceder a esto, usted puede usar el siguiente enlace:"
+msgstr ""
+"ha sido creado. Para acceder a esto, usted puede usar el siguiente enlace:"
 
 #: activities/recurrence_sidebar.php:230
 msgid " month(s)"
@@ -365,7 +366,7 @@ msgstr "Actividad insertada"
 #: admin/ratings/some.php:88 admin/relationship-types/some.php:98
 #: admin/salutations/some.php:75 admin/users/some.php:182
 #: email/email-2.php:307 email/email-2.php:313 email/email-2.php:320
-#: email/email-2.php:351 plugins/phone/companies_one.php:699
+#: email/email-2.php:349 plugins/phone/companies_one.php:699
 #: plugins/phone/contacts_one.php:524
 msgid "Add"
 msgstr "Añadir"
@@ -759,7 +760,7 @@ msgstr "Anexado A"
 msgid "Attached to"
 msgstr "Anexo A"
 
-#: email/email-2.php:339
+#: email/email-2.php:337
 msgid "Attachments"
 msgstr "Anexos"
 
@@ -1246,6 +1247,15 @@ msgstr "Limpiar Filtro"
 msgid "Clear Search"
 msgstr "Limpiar Búsqueda"
 
+#: email/email-2.php:323
+msgid ""
+"Click 'Add' to add the custom field to your mail merge. You can also use "
+"these fields in the SUBJECT line too, just copy-&gt;paste them into it."
+msgstr ""
+"Pulse 'Añadir' para añadir el campo a la fusión de correo. Estos campos "
+"también se pueden utilizar en la línea de ASUNTO, solo tiene que copiar y "
+"pegarlos."
+
 #: admin/account-statuses/one.php:87 admin/activity-templates/edit.php:145
 #: admin/activity-types/one.php:97 admin/campaign-statuses/one.php:94
 #: admin/campaign-types/one.php:81 admin/case-priorities/one.php:88
@@ -1544,7 +1554,8 @@ msgstr "Computación"
 
 #: admin/plugin/plugin-admin.php:287
 msgid "Config file can't be opened. Please check vars.php."
-msgstr "El archivo de configuración no puede abrirse. Por favor verifique vars.php."
+msgstr ""
+"El archivo de configuración no puede abrirse. Por favor verifique vars.php."
 
 #: admin/plugin/plugin-admin.php:285
 msgid "Config written successfully."
@@ -1557,7 +1568,7 @@ msgstr "Confirmar Nueva Contraseña"
 #: bulkactivity/bulkactivity.php:170 bulkactivity/bulkactivity.php:198
 #: email/email-3.php:116 email/email-3.php:127
 msgid "Confirm Recipients"
-msgstr "Confirmar Recipientes"
+msgstr "Confirmar destinatarios"
 
 #: bulkactivity/bulkassignment.php:302
 msgid "Confirm Selection"
@@ -1684,7 +1695,7 @@ msgstr "Conteniendo"
 #: admin/users/change-owner-2.php:149
 #: bulkactivity/bulk-activities-widget.php:88
 #: bulkactivity/bulkactivity-0.php:238 bulkactivity/bulkactivity.php:211
-#: bulkactivity/bulkassignment.php:315 email/email-2.php:384
+#: bulkactivity/bulkassignment.php:315 email/email-2.php:382
 #: email/email-3.php:140 email/email.php:177 email/index.php:78
 msgid "Continue"
 msgstr "Continuar"
@@ -2165,7 +2176,7 @@ msgstr "Eliminar Saludo"
 msgid "Delete Salutation?"
 msgstr "¿Eliminar Saludo?"
 
-#: email/email-2.php:368
+#: email/email-2.php:366
 msgid "Delete Selected"
 msgstr "Eliminar Seleccionado"
 
@@ -2621,7 +2632,8 @@ msgid "Email This To"
 msgstr "Enviar email de esto a"
 
 #: locale/datastrings.php:74
-msgid "Email address to use as the sender address when sending reports via email."
+msgid ""
+"Email address to use as the sender address when sending reports via email."
 msgstr ""
 "Dirección de Email a utilizar como la dirección del remitente cuando se "
 "envíen reportes por email."
@@ -2696,7 +2708,7 @@ msgstr "Introduzca Nuevo Formato"
 
 #: contacts/new.php:220
 msgid "Enter New or Edit Existing Address"
-msgstr "Introduzca una Dirección Nueva o Edite la Existente"
+msgstr "Entrar una nueva dirección o editar la existente"
 
 #: activities/one.php:551 opportunities/edit.php:283
 msgid "Enter Note"
@@ -3015,7 +3027,7 @@ msgstr "Finalizado"
 #: admin/users/self.php:72 admin/users/some.php:154 companies/new.php:258
 #: contacts/edit.php:169 contacts/new.php:180 contacts/some.php:278
 msgid "First Names"
-msgstr "Nombres"
+msgstr "Nombre"
 
 #: activities/edit-2.php:388
 msgid "Follow-up"
@@ -3296,21 +3308,24 @@ msgstr "¿Cuantas de sus cuentas vienen de cada fuente?"
 
 #: reports/index.php:60
 msgid "How many opportunities are in each stage of the sales closing process?"
-msgstr "¿Cuantas oportunidades existen en cada etapa del proceso de cierre de ventas?"
+msgstr ""
+"¿Cuantas oportunidades existen en cada etapa del proceso de cierre de ventas?"
 
 #: reports/index.php:68
 msgid "How many opportunities are tied to companies in each industry?"
 msgstr "¿Cuantas oportunidades están enlazadas a compañías en cada industria?"
 
 #: reports/index.php:64
-msgid "How much potential revenue is in each stage of the sales closing process?"
+msgid ""
+"How much potential revenue is in each stage of the sales closing process?"
 msgstr ""
 "¿Cuantos ingresos potenciales están en cada etapa del proceso de cierre de "
 "ventas?"
 
 #: reports/index.php:72
 msgid "How much potential revenue is tied to companies in each industry?"
-msgstr "¿Cuanto ingreso potencial esta enlazado a las compañías en cada industria?"
+msgstr ""
+"¿Cuanto ingreso potencial esta enlazado a las compañías en cada industria?"
 
 #: locale/datastrings.php:96
 msgid ""
@@ -3439,7 +3454,8 @@ msgstr "Insertar Bitácora"
 
 #: install/data.php:2893 locale/datastrings.php:98
 msgid "Insert method used when no Company is defined for a new Contact"
-msgstr "Método usado cuando no se defina ninguna Compañía para un nuevo Contacto"
+msgstr ""
+"Método usado cuando no se defina ninguna Compañía para un nuevo Contacto"
 
 #: private/home.php:49
 msgid ""
@@ -3496,11 +3512,11 @@ msgstr "Últimos Datos"
 #: contacts/one.php:418 opportunities/one.php:270
 #: plugins/phone/companies_one.php:541 plugins/phone/contacts_one.php:480
 msgid "Last Modified"
-msgstr "Última modificación en"
+msgstr "Modificada"
 
 #: activities/one.php:582
 msgid "Last Modified By"
-msgstr "Última modificación por"
+msgstr "Modificada por"
 
 #: admin/import/import-activities-2.php:77
 #: admin/import/import-activities-3.php:111
@@ -3509,7 +3525,7 @@ msgstr "Última modificación por"
 #: admin/users/self.php:68 admin/users/some.php:150 companies/new.php:262
 #: contacts/edit.php:173 contacts/new.php:184 contacts/some.php:277
 msgid "Last Name"
-msgstr "Apellido"
+msgstr "Apellidos"
 
 #: activities/one.php:154
 msgid "Last modified by"
@@ -3680,7 +3696,7 @@ msgstr "Correo"
 #: plugins/phone/companies_one.php:629 relationships/sidebar.php:336
 #: relationships/sidebar.php:338
 msgid "Mail Merge"
-msgstr "Fusión de Correo"
+msgstr "Fusión de correo"
 
 #: include/utils-addresses.php:157 include/utils-addresses.php:162
 #: include/utils-addresses.php:172
@@ -4312,7 +4328,8 @@ msgstr "Sin rol especificado"
 
 #: contacts/new_contact_company_select.php:59
 msgid "No search results, please try a less restrictive search"
-msgstr "Búsqueda sin resultados, por favor trate una búsqueda con menos restricciones"
+msgstr ""
+"Búsqueda sin resultados, por favor trate una búsqueda con menos restricciones"
 
 #: admin/case-statuses/some.php:78
 msgid "No statuses defined for specified case type"
@@ -4341,7 +4358,7 @@ msgstr "Sin Utilidad"
 
 #: companies/one-address.php:85
 msgid "Non-Standard Address"
-msgstr "Dirección No Estándar"
+msgstr "Dirección especial"
 
 #: admin/users/change-owner.php:77
 msgid "None -> No companies are cheched."
@@ -4434,7 +4451,8 @@ msgstr "Nombre Objeto"
 
 #: admin/acl/one_ControlledObjectRelationship.php:49
 msgid "Object/Child Object combination fails recursion check."
-msgstr "Combinación de Objeto/Objeto Hijo falla en la verificación de recursión."
+msgstr ""
+"Combinación de Objeto/Objeto Hijo falla en la verificación de recursión."
 
 #: locale/datastrings.php:129
 msgid "Obsolete/Out of Date"
@@ -4635,9 +4653,12 @@ msgstr "Items Atrasados"
 msgid "Overdue Items to Email"
 msgstr "Enviar items atrasados por Email"
 
+# (David) Traducción libre porque en el original inglés no coinciden 
+#   el mismo concepto en distintas pantallas, Nueva Compañía y Editar 
+#   dirección. Ver Non-Standard Address.
 #: companies/new.php:245 companies/some.php:847
 msgid "Override Address"
-msgstr "Sobreescribir Dirección"
+msgstr "Dirección especial"
 
 #: files/some.php:329
 msgid "Owl File Management"
@@ -4718,11 +4739,11 @@ msgstr "Socios"
 
 #: admin/users/some.php:162
 msgid "Password"
-msgstr "Contraseñas"
+msgstr "Contraseña"
 
 #: include/utils-interface.php:81
 msgid "Password Does Not Match."
-msgstr "La Contraseña no coincide."
+msgstr "La contraseña no coincide."
 
 #: contacts/edit-address.php:107
 msgid "Payment Address"
@@ -5159,7 +5180,8 @@ msgid "Removed contact from activity."
 msgstr "Contacto eliminado de actividad."
 
 #: admin/updateto2.0.php:4775
-msgid "Removed deprecated Owl preference, now entirely controlled by Owl Plugin"
+msgid ""
+"Removed deprecated Owl preference, now entirely controlled by Owl Plugin"
 msgstr ""
 "Eliminada la preferencia Owl obsoleta, ahora es controlado completamente por "
 "el Plugin Owl"
@@ -5220,6 +5242,7 @@ msgstr "Retiene el Consultor"
 #: admin/activity-resolution-types/one_activity_resolution_type.php:46
 #: admin/email-templates/one_email_template.php:54
 #: admin/email-templates/one_email_template_type.php:56
+#: companies/one-address.php:126
 msgid "Return to List"
 msgstr "Volver a la lista"
 
@@ -5340,7 +5363,7 @@ msgstr "Guardar y Continuar"
 msgid "Save and Update All Records"
 msgstr "Guardar y Actualizar Todos los Registros"
 
-#: email/email-2.php:392 email/one-template.php:94
+#: email/email-2.php:390 email/one-template.php:94
 msgid "Save as New Template"
 msgstr "Guardar como Nueva Plantilla"
 
@@ -5474,7 +5497,7 @@ msgstr "Seleccionar"
 
 #: include/classes/Pager/Pager_Columns.php:589
 msgid "Select Column Layouts"
-msgstr "Definir Columnas"
+msgstr "Definir columnas"
 
 #: include/classes/Pager/Pager_Columns.php:633
 msgid "Select Columns for Display"
@@ -5626,7 +5649,7 @@ msgstr "Tamaño por Estado"
 
 #: companies/some.php:936 contacts/some.php:406
 msgid "Snail Mail Merge"
-msgstr "Plantillas de Correo"
+msgstr "Fusión de correo postal"
 
 #: admin/activity-resolution-types/one_activity_resolution_type.php:41
 #: admin/activity-templates/edit.php:120 admin/case-statuses/one.php:184
@@ -5775,7 +5798,8 @@ msgstr "Subtotal esta pág:"
 
 #: admin/updateto2.0.php:4335
 msgid "Successfully added activity participant positions table."
-msgstr "Se ha añadido con éxito la tabla de puestos de participantes de actividad."
+msgstr ""
+"Se ha añadido con éxito la tabla de puestos de participantes de actividad."
 
 #: admin/updateto2.0.php:4308
 msgid "Successfully added activity participants table."
@@ -5819,7 +5843,8 @@ msgstr "Tabla email_template_type agregada con éxito."
 
 #: admin/updateto2.0.php:4474 install/database.php:895
 msgid "Successfully added opportunity type to opportunity status table."
-msgstr "Tipo de Oportunidad agregado con éxito a la tabla de estado de oportunidades."
+msgstr ""
+"Tipo de Oportunidad agregado con éxito a la tabla de estado de oportunidades."
 
 #: admin/updateto2.0.php:4485
 msgid "Successfully added opportunity type to opportunity table."
@@ -5860,7 +5885,8 @@ msgid "Successfully removed criteria"
 msgstr "Criterio eliminado con éxito"
 
 #: admin/updateto2.0.php:4317
-msgid "Successfully updated overly long activity participant record status field"
+msgid ""
+"Successfully updated overly long activity participant record status field"
 msgstr ""
 "Actualización exitosa del campo de estado del registro de participante de "
 "actividades demasiado largas"
@@ -5932,13 +5958,15 @@ msgstr "Tabla"
 msgid "Tables"
 msgstr "Tablas"
 
+# (David) Pongo de manera más genérica, porque 
+# en España RIF no significa nada se usa NIF.
 #: admin/import/import-companies-2.php:146
 #: admin/import/import-companies-3.php:187 companies/admin.php:77
 #: companies/edit.php:194 companies/one.php:597 contacts/edit.php:263
 #: contacts/new.php:270 contacts/one.php:292
 #: plugins/phone/companies_one.php:553
 msgid "Tax ID"
-msgstr "RIF"
+msgstr "ID fiscal"
 
 #: reports/companies-list.php:179
 msgid "Tel"
@@ -6100,12 +6128,12 @@ msgstr "Exposiciones"
 
 #: contacts/edit.php:316
 msgid "Transfer"
-msgstr "Transferencia"
+msgstr "Transferir"
 
 #: contacts/transfer-2.php:51 contacts/transfer-2.php:67
 #: contacts/transfer.php:33
 msgid "Transfer to Another Company"
-msgstr "Transferir a Otra Compañía"
+msgstr "Transferir a otra compañía"
 
 #: activities/recurrence_sidebar.php:134
 msgid "Tue"
@@ -6172,7 +6200,8 @@ msgstr ""
 "oportunidades"
 
 #: activities/associate-activities.php:160
-msgid "Unable to associate Activities because there is no open Case or Opportunity"
+msgid ""
+"Unable to associate Activities because there is no open Case or Opportunity"
 msgstr ""
 "No habilitado para asociar Actividades debido a que no hay abiertos Casos u "
 "Oportunidades"
@@ -6246,7 +6275,7 @@ msgstr "Actualizar Actividad Recurrente"
 msgid "Update Successful"
 msgstr "Actualización Exitosa"
 
-#: email/email-2.php:388 email/one-template.php:94
+#: email/email-2.php:386 email/one-template.php:94
 msgid "Update Template"
 msgstr "Actualizar Plantilla"
 
@@ -6293,7 +6322,7 @@ msgstr "Usar Dirección Alternativa"
 
 #: companies/one-address.php:86
 msgid "Use Non-Standard Address"
-msgstr "Usar Dirección No-Estándar"
+msgstr "Usar dirección especial"
 
 #: admin/import/import-companies-2.php:126
 #: admin/import/import-companies-2.php:137
@@ -6361,10 +6390,12 @@ msgstr "Reportes de Usuario"
 msgid "User Roles"
 msgstr "Roles de Usuario"
 
+# (David) Simplifico Nombre de usuario a Usuario porque para la 
+# pantalla de login es demasiado largo
 #: admin/users/one.php:111 admin/users/self.php:76 admin/users/some.php:116
 #: admin/users/some.php:129 admin/users/some.php:158
 msgid "Username"
-msgstr "Nombre de Usuario"
+msgstr "Usuario"
 
 #: admin/index.php:142
 msgid "Users"
@@ -6605,7 +6636,8 @@ msgid "You may need to update your database structure."
 msgstr "Puede que tenga que actualizar la estructura de su base de datos."
 
 #: private/home.php:39
-msgid "You must configure your database connection in vars.php before using XRMS."
+msgid ""
+"You must configure your database connection in vars.php before using XRMS."
 msgstr ""
 "Debe configurar su conexión a la base de datos en vars.php antes de usar "
 "XRMS."
@@ -6634,7 +6666,7 @@ msgstr "Debe introducir un apellido"
 msgid "You must enter a last name."
 msgstr "Debe introducir un apellido."
 
-#: email/email-2.php:425 email/one-template.php:135
+#: email/email-2.php:423 email/one-template.php:135
 msgid "You must enter a name to let the recipient know who the email is from."
 msgstr ""
 "Debe introducir un nombre para que el destinatario sepa quien le ha enviado "
@@ -6656,8 +6688,9 @@ msgstr "Debe introducir un usuario."
 msgid "You must enter an opportunity title."
 msgstr "Debe introducir un título de oportunidad."
 
-#: email/email-2.php:431 email/one-template.php:140
-msgid "You must enter an reply address so the recipient can reply to the message."
+#: email/email-2.php:429 email/one-template.php:140
+msgid ""
+"You must enter an reply address so the recipient can reply to the message."
 msgstr ""
 "Debe introducir una dirección de respuesta para que el destinatario pueda "
 "responder al mensaje."
@@ -6727,7 +6760,8 @@ msgstr "todos los días de la semana"
 
 #: include/utils-users.php:30
 msgid "already exists in the system, please choose a different username"
-msgstr "ya existe en el sistema, por favor escoja un nombre de usuario diferente"
+msgstr ""
+"ya existe en el sistema, por favor escoja un nombre de usuario diferente"
 
 #: activities/some.php:360
 msgid "and"
@@ -7136,4 +7170,3 @@ msgstr "xrms_version"
 #: admin/import/import-activities.php:76
 msgid "you can also link imported activities to campaign."
 msgstr "También se puede enlazar las actividades a una campaña."
-

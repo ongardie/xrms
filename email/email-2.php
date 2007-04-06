@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.24 2006/12/27 11:41:37 jnhayart Exp $
+* $Id: email-2.php,v 1.25 2007/04/06 16:27:19 myelocyte Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -320,9 +320,7 @@ tinyMCE.init({
               <td><a href="javascript:void(0);" onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].addresses_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
             <tr> 
-              <td colspan="2">Click 'Add' to add the custom field to your mail 
-                merge. You can also use these fields in the SUBJECT line too - 
-                just copy-&gt;paste them into it.<BR></td>
+              <td colspan="2"><?php echo _("Click 'Add' to add the custom field to your mail merge. You can also use these fields in the SUBJECT line too, just copy-&gt;paste them into it.");?><BR></td>
             </tr>
           </table>
           <br />
@@ -451,6 +449,12 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.25  2007/04/06 16:27:19  myelocyte
+* - Enabled localization of two strings
+* - Updated pot file to reflect this changes
+* - Updated Spanish translation
+* - Changed some Spanish strings
+*
 * Revision 1.24  2006/12/27 11:41:37  jnhayart
 * Change Syntax for Insert correctly in IE
 *
