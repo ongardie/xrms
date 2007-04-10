@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.36 2006/10/01 00:51:12 braverock Exp $
+ * $Id: some.php,v 1.37 2007/04/10 21:27:40 myelocyte Exp $
  */
 
 require_once('../include-locations.inc');
@@ -248,7 +248,7 @@ start_page($page_title, true, $msg);
             </td>
         </tr>
         <tr>
-            <td class=widget_label colspan="2"><?php echo _("Saved Searches"); ?></td>
+            <td class=widget_label colspan="1"><?php echo _("Saved Searches"); ?></td>
             <td class=widget_label colspan="2"><?php echo _("Search Title"); ?></td>
         </tr>
         <tr>
@@ -383,6 +383,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.37  2007/04/10 21:27:40  myelocyte
+ * - widget label was 2 columns but widget content was just 1 column, adjusting
+ *
  * Revision 1.36  2006/10/01 00:51:12  braverock
  * - normalize use of truncate flag in get_user_menu
  *
