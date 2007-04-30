@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.21 2007/04/30 16:02:50 fcrossen Exp $
+ * $Id: updateto2.0.php,v 1.22 2007/04/30 16:16:23 fcrossen Exp $
  */
 
 // where do we include from
@@ -4873,8 +4873,12 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.22  2007/04/30 16:16:23  fcrossen
+ * - fixed errant log entry below
+ * - previous edit was to add a preference type for how phone fields are cleaned
+ *
  * Revision 1.21  2007/04/30 16:02:50  fcrossen
- *  - added clean_phone_number()
+ *  - added clean_phone_number() (see next log entry)
  *
  * Revision 1.20  2006/10/18 18:14:58  braverock
  * - add company_type_id to companies table
