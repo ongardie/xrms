@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.31 2006/11/14 18:55:53 braverock Exp $
+ * $Id: new-2.php,v 1.32 2007/04/30 16:05:42 fcrossen Exp $
  */
 require_once('../include-locations.inc');
 
@@ -31,9 +31,9 @@ $company_source_id = $_POST['company_source_id'];
 $industry_id = $_POST['industry_id'];
 $campaign_id = $_POST['campaign_id'];
 $company_type_id = $_POST['company_type_id'];
-$phone = preg_replace("/[^\d]/", '', $_POST['phone']);
-$phone2 = preg_replace("/[^\d]/", '', $_POST['phone2']);
-$fax = preg_replace("/[^\d]/", '', $_POST['fax']);
+$phone = clean_phone_number($_POST['phone']);
+$phone2 = clean_phone_number($_POST['phone2']);
+$fax = clean_phone_number($_POST['fax']);
 $url = $_POST['url'];
 $employees = $_POST['employees'];
 $revenue = $_POST['revenue'];
@@ -237,6 +237,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.32  2007/04/30 16:05:42  fcrossen
+ * - added call to clean_phone_fields()
+ *
  * Revision 1.31  2006/11/14 18:55:53  braverock
  * - add company type
  * - add campaign mapping

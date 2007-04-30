@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.37 2006/08/19 09:33:25 jnhayart Exp $
+ * $Id: new-2.php,v 1.38 2007/04/30 16:06:29 fcrossen Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -105,6 +105,11 @@ if(!$salutation) {
     $salutation = "";
 }
 
+// clean phone fields
+$work_phone = clean_phone_number($work_phone);
+$cell_phone = clean_phone_number($cell_phone);
+$home_phone = clean_phone_number($home_phone);
+$fax = clean_phone_number($fax);
 
 //save to database
 $rec = array();
@@ -186,6 +191,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.38  2007/04/30 16:06:29  fcrossen
+ * - added call to clean_phone_fields()
+ *
  * Revision 1.37  2006/08/19 09:33:25  jnhayart
  * add button for set a mail to opt-out directly during creation
  *
