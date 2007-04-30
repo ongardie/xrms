@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.20 2006/10/18 18:14:58 braverock Exp $
+ * $Id: updateto2.0.php,v 1.21 2007/04/30 16:02:50 fcrossen Exp $
  */
 
 // where do we include from
@@ -4831,6 +4831,22 @@ if ($pager_view_pref) {
     $ret_bool = add_field($con, $table_name, $field_definition, $table_opts, &$upgrade_msgs);
     if ($ret_bool) $msg .= _("added column company_type_id to companies table");
 
+// Add a system preference type for allowable characters in phone/fax numbers. Defaults to old XRMS
+// way of digits only
+$pref_type = 'phone_fax_number_clean';
+if (!get_user_preference_type($con, $pref_type)) {
+    $pref_pretty_name = _('Phone/Fax number cleaning');
+    $pref_description = _("Set how XRMS cleans phone and fax numbers entered by users. Default (old XRMS behaviour) removes all non-numeric characters. International Number Format (ITU-T Recommendation E.123) also allows '+' and up to 2 spaces.");
+    $pref_option_default = _('Default');
+    $pref_option_european = _('ITU-T E.123');
+	$phone_pref_type_id = add_user_preference_type($con, $pref_type, $pref_pretty_name, $pref_description, 0, 0, 'select');
+	$phone_option_default_id = add_preference_option($con, $phone_pref_type_id, $pref_option_default);
+	$phone_option_itu_id = add_preference_option($con, $phone_pref_type_id, $pref_option_european);
+	set_admin_preference($con, $pref_type, $pref_option_default, false, true);
+	if ($msg) $msg .= '<br>';
+	$msg .= _("added system preference for Phone/Fax number cleaning");
+}
+
 //FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
 set_admin_preference($con, 'xrms_version', '1.99.2');
 
@@ -4857,6 +4873,9 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.21  2007/04/30 16:02:50  fcrossen
+ *  - added clean_phone_number()
+ *
  * Revision 1.20  2006/10/18 18:14:58  braverock
  * - add company_type_id to companies table
  * - add $msg strings for creation of several other tables that didn't have notation
