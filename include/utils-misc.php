@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.178 2007/01/12 22:17:08 ongardie Exp $
+ * $Id: utils-misc.php,v 1.179 2007/04/30 16:14:39 fcrossen Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -876,6 +876,7 @@ function get_formatted_phone ($con, $address_id, $phone, $country_id=false) {
 /**
  *
  * Strips many fields in array of phone field formatting strings, taking an array by reference and modifying its contents
+ * by calling clean_phone_number()
  *
  * @param array $array to modify and clean the phone fields in (by references)
  * @param array $array of array_keys in the first array which correspond to phone fields
@@ -887,11 +888,60 @@ function clean_phone_fields(&$fields, $phone_fields) {
     $count=0;
     foreach ($phone_fields as $pf) {
         if (array_key_exists($pf, $fields)) {
-            $fields[$pf]=preg_replace("/[^\d]/", '', $fields[$pf]);
+         	clean_phone_number($fields[$pf]);
             $count++;
         }
     }
     return $count;
+}
+
+/**
+ *
+ * Cleans a phone number based on phone_fax_number_clean system preference.
+ *
+ * @param string $phone_number_in number to remove unwanted characters from
+ *
+ * @return string number after cleaning
+ */
+
+function clean_phone_number($phone_number_in) {
+ 	$phone_number = strval(trim($phone_number_in));
+ 	$cleaned_phone_number = '';
+ 	$dbcon = get_xrms_dbconnection();
+ 	if (($cleaning_preference = get_admin_preference( $dbcon, 'phone_fax_number_clean')) == _('Default')) {
+ 		return preg_replace("/[^\d]/", '', $phone_number);
+	}
+	elseif ($cleaning_preference == _('ITU-T E.123')) {
+	    // remove non '+' character, non-digit, non-space from number
+ 		$phone_number = preg_replace("/[^\+\d\ ]/", '', $phone_number);
+ 		// matches a '+' char at the beginiing of the number
+ 		if (preg_match('/^\+/', $phone_number)) {
+			$cleaned_phone_number = '+';
+			// remove all '+' chars
+			$phone_number = preg_replace("/\+/", '', $phone_number);
+		}
+		$phone_number = trim($phone_number);
+		// matches digits at the beginning of the number (up to the first space/spaces)
+		$matches = array();
+ 		if (preg_match('/^\d*/', $phone_number, $matches)) {
+			$cleaned_phone_number .= $matches[0] . ' ';
+			$phone_number = preg_replace("/^\d*/", '', $phone_number);
+		}
+		$phone_number = trim($phone_number);
+		// matches digits up to the next space/spaces
+		$matches = array();
+ 		if (preg_match('/^\d+/', $phone_number, $matches)) {
+			$cleaned_phone_number .= $matches[0] . ' ';
+			$phone_number = preg_replace("/^\d+/", '', $phone_number);
+		}
+		// matches any non-digit char
+ 		$cleaned_phone_number .= preg_replace("/[^\d]/", '', $phone_number);
+ 		return $cleaned_phone_number;
+	}
+	else {
+	 	// failsafe behaviour of this function - as per xrms default...
+	 	return preg_replace("/[^\d]/", '', $phone_number_in);		
+	}
 }
 
 /**********************************************************************/
@@ -2002,6 +2052,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.179  2007/04/30 16:14:39  fcrossen
+ * - added clean_phone_number(); altered clean_phone_fields()
+ *
  * Revision 1.178  2007/01/12 22:17:08  ongardie
  * - Added full_http_site_root() to utils-misc.php
  * - Made SMTPs' getError() easier to use
