@@ -1,0 +1,20 @@
+/**
+ * Basic XRMS theme with vertical layout
+ * Imports the basic theme, and then modifies layout attributes
+ * to move sidebar to the left side
+ *  (URIs are always relative to the stylesheet)
+ */
+@import url(../basic/basic.css);
+/**
+ * Change margin/width for 'sidebar' following main content
+ */
+/* Make Sidebar follow Content */
+#Main #Content {
+    width: auto;
+    margin: 2px;
+}
+#Main #Sidebar {
+    position: relative;
+    width: auto;
+    margin: 2px;
+}
