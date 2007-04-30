@@ -1,7 +1,7 @@
 /**
  * Basic XRMS theme with vertical layout
  * Imports the basic theme, and then modifies layout attributes
- * to move sidebar to the left side
+ * to move sidebar to follow main div
  *  (URIs are always relative to the stylesheet)
  */
 @import url(../basic/basic.css);
