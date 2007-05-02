@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.74 2007/02/19 12:59:17 fcrossen Exp $
+ * $Id: some.php,v 1.75 2007/05/02 14:59:36 fcrossen Exp $
  */
 
 //include the standard files
@@ -125,12 +125,14 @@ if (strlen($user_id) > 0) {
 
 $phone_fields=array('work_phone'=>_("Work Phone"),'cell_phone'=>_("Cell Phone"),'home_phone'=>_("Home Phone"), 'work_phone_ext'=>_("Work Phone Ext"));
 if ($phone_search) {
+  	$idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
     $sql_phone_search=preg_replace("/[^\d]/", '', $phone_search);
     $phonewhere=array();
     foreach ($phone_fields as $phonefield => $phonelabel) {
         $criteria_count++;
         $sql .= ", $phonefield ";
-        $phonewhere[] = "($phonefield LIKE " . $con->qstr('%'.$sql_phone_search.'%'). ")";
+//        $phonewhere[] = "($phonefield LIKE " . $con->qstr('%'.$sql_phone_search.'%'). ")";
+        $phonewhere[] = "(REPLACE(REPLACE($phonefield,' ',''),'+','$idd_prefix') LIKE " . $con->qstr('%'.$sql_phone_search.'%'). ")";
         $extra_defaults[]=$phonefield;
         $advanced_search_columns[] = array('name' => $phonelabel, 'index_sql' => $phonefield);
     }
@@ -504,6 +506,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.75  2007/05/02 14:59:36  fcrossen
+ * - changed search by phone number. Now accounts for idd_prefix and phone_fax_number_clean system preferences
+ *
  * Revision 1.74  2007/02/19 12:59:17  fcrossen
  *  - Changed SQL SELECT to use LEFT JOIN USING... needed after MySQL v5.0.12 changed how it handles LEFT JOIN
  *

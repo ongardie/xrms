@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.84 2006/10/14 14:43:34 jnhayart Exp $
+ * $Id: some.php,v 1.85 2007/05/02 14:58:41 fcrossen Exp $
  */
 
 require_once('../include-locations.inc');
@@ -220,46 +220,56 @@ if ( $legal_name ) {
 }
 
 if ( $phone ) {
+ 	$idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
     $sql_phone=preg_replace("/[^\d]/", '', $phone);
     $criteria_count++;
     $sql .= ', c.phone ';
   if ($not_phone)
-    $where .= " and c.phone not like " . $con->qstr('%'.$sql_phone.'%', get_magic_quotes_gpc())." \n";
+//    $where .= " and c.phone not like " . $con->qstr('%'.$sql_phone.'%', get_magic_quotes_gpc())." \n";
+    $where .= " and REPLACE( REPLACE( c.phone, ' ', '' ) , '+', '$idd_prefix' ) not like " . $con->qstr('%'.$sql_phone.'%', get_magic_quotes_gpc())." \n";
   else
-    $where .= " and c.phone like " . $con->qstr('%'.$sql_phone.'%', get_magic_quotes_gpc())." \n";
+//    $where .= " and c.phone like " . $con->qstr('%'.$sql_phone.'%', get_magic_quotes_gpc())." \n";
+    $where .= " and REPLACE( REPLACE( c.phone, ' ', '' ) , '+', '$idd_prefix' ) like " . $con->qstr('%'.$sql_phone.'%', get_magic_quotes_gpc())." \n";
     $extra_defaults[]='phone';
     $advanced_search_columns[] = array('name' => _("Phone"), 'index_sql' => 'phone');
 }
 
 if ( $phone2 ) {
+ 	$idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
     $sql_phone2=preg_replace("/[^\d]/", '', $phone2);
     $criteria_count++;
     $sql .= ', c.phone2 ';
-    $where .= " and c.phone2 like " . $con->qstr('%'.$sql_phone2.'%', get_magic_quotes_gpc())." \n";
+//    $where .= " and c.phone2 like " . $con->qstr('%'.$sql_phone2.'%', get_magic_quotes_gpc())." \n";
+    $where .= " and REPLACE( REPLACE( c.phone2, ' ', '' ) , '+', '$idd_prefix' ) like " . $con->qstr('%'.$sql_phone2.'%', get_magic_quotes_gpc())." \n";
     $extra_defaults[]='phone2';
     $advanced_search_columns[] = array('name' => _("Phone 2"), 'index_sql' => 'phone2');
 }
 
 if ( $fax ) {
+ 	$idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
     $sql_fax=preg_replace("/[^\d]/", '', $fax);
     $criteria_count++;
     $sql .= ', c.fax ';
-    $where .= " and c.fax like " . $con->qstr('%'.$sql_fax.'%', get_magic_quotes_gpc())." \n";
+//    $where .= " and c.fax like " . $con->qstr('%'.$sql_fax.'%', get_magic_quotes_gpc())." \n";
+    $where .= " and REPLACE( REPLACE( c.fax, ' ', '' ) , '+', '$idd_prefix' ) like " . $con->qstr('%'.$sql_fax.'%', get_magic_quotes_gpc())." \n";
     $extra_defaults[]='fax';
     $advanced_search_columns[] = array('name' => _("Fax"), 'index_sql' => 'fax');
 }
 
 $phone_fields=array('phone'=>_("Phone"),'phone2'=>_("Phone 2"),'fax'=>_("Fax"));
 if ($phone_search) {
+ 	$idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
     $sql_phone_search=preg_replace("/[^\d]/", '', $phone_search);
     $phonewhere=array();
     foreach ($phone_fields as $phonefield => $phonelabel) {
         $criteria_count++;
         $sql .= ", $phonefield ";
       if ($not_phone)
-        $phonewhere[] = "($phonefield NOT LIKE " . $con->qstr('%'.$sql_phone_search.'%'). ")";
+//        $phonewhere[] = "($phonefield NOT LIKE " . $con->qstr('%'.$sql_phone_search.'%'). ")";
+        $phonewhere[] = "(REPLACE(REPLACE($phonefield,' ',''),'+','$idd_prefix') NOT LIKE " . $con->qstr('%'.$sql_phone_search.'%'). ")";
       else
-        $phonewhere[] = "($phonefield LIKE " . $con->qstr('%'.$sql_phone_search.'%'). ")";
+//        $phonewhere[] = "($phonefield LIKE " . $con->qstr('%'.$sql_phone_search.'%'). ")";
+        $phonewhere[] = "(REPLACE(REPLACE($phonefield,' ',''),'+','$idd_prefix') LIKE " . $con->qstr('%'.$sql_phone_search.'%'). ")";
         $extra_defaults[]=$phonefield;
         $advanced_search_columns[] = array('name' => $phonelabel, 'index_sql' => $phonefield);
     }
@@ -1037,6 +1047,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.85  2007/05/02 14:58:41  fcrossen
+ * - changed search by phone number. Now accounts for idd_prefix and phone_fax_number_clean system preferences
+ *
  * Revision 1.84  2006/10/14 14:43:34  jnhayart
  * Store name of company search in log
  *
