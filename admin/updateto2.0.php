@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.22 2007/04/30 16:16:23 fcrossen Exp $
+ * $Id: updateto2.0.php,v 1.23 2007/05/02 15:04:58 fcrossen Exp $
  */
 
 // where do we include from
@@ -4835,7 +4835,7 @@ if ($pager_view_pref) {
 // way of digits only
 $pref_type = 'phone_fax_number_clean';
 if (!get_user_preference_type($con, $pref_type)) {
-    $pref_pretty_name = _('Phone/Fax number cleaning');
+    $pref_pretty_name = _('Phone/Fax Number Cleaning');
     $pref_description = _("Set how XRMS cleans phone and fax numbers entered by users. Default (old XRMS behaviour) removes all non-numeric characters. International Number Format (ITU-T Recommendation E.123) also allows '+' and up to 2 spaces.");
     $pref_option_default = _('Default');
     $pref_option_european = _('ITU-T E.123');
@@ -4844,7 +4844,17 @@ if (!get_user_preference_type($con, $pref_type)) {
 	$phone_option_itu_id = add_preference_option($con, $phone_pref_type_id, $pref_option_european);
 	set_admin_preference($con, $pref_type, $pref_option_default, false, true);
 	if ($msg) $msg .= '<br>';
-	$msg .= _("added system preference for Phone/Fax number cleaning");
+	$msg .= _("added system preference for Phone/Fax Number Cleaning");
+}
+
+// Add a system preference type for international dialing code...
+$pref_type = 'idd_prefix';
+if (!get_user_preference_type($con, $pref_type)) {
+    $pref_pretty_name = _('IDD Prefix (International Direct Dialing)');
+    $pref_description = _("Enter your IDD prefix (e.g. '00', '+', '011'). This should match the IDD prefix that Caller ID displays for incoming calls. The IDD prefix is replaced by '+' when phone numbers are stored to the database (when ITU-T E.123 Phone/Fax Number Cleaning preference is set).");
+	$int_dial_code_pref_type_id = add_user_preference_type($con, $pref_type, $pref_pretty_name, $pref_description, 0, 0, 'text');    
+	if ($msg) $msg .= '<br>';
+	$msg .= _("added system preference for IDD Prefix (International Direct Dialing)");
 }
 
 //FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
@@ -4873,6 +4883,9 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.23  2007/05/02 15:04:58  fcrossen
+ * - Add a system preference type for IDD prefix
+ *
  * Revision 1.22  2007/04/30 16:16:23  fcrossen
  * - fixed errant log entry below
  * - previous edit was to add a preference type for how phone fields are cleaned
