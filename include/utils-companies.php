@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-companies.php,v 1.15 2006/08/10 17:44:58 jnhayart Exp $
+ * $Id: utils-companies.php,v 1.16 2007/05/02 11:26:25 fcrossen Exp $
  *
  */
 
@@ -91,6 +91,10 @@ function add_update_company($con, $company_data, $magic_quotes=false)
 //        global $session_user_id;
 //        $company_data['user_id'] = $session_user_id;
 
+        /** CLEAN INCOMING DATA FIELDS ***/
+        $company_phone_fields=array('phone', 'phone2','fax');
+        $phone_clean_count=clean_phone_fields_for_db($company_data, $company_phone_fields);
+
         // Add/update/retrieve address ifno
         $_address_info = add_update_address($con, $company_data );
 
@@ -163,6 +167,11 @@ function add_company($con, $company_data, $magic_quotes=false)
     // 'company_name' is required, without that, we have nothing to work with
     if ( ($company_data['company_name']) && ( strlen($company_data['company_name']) > 0 ) )
     {
+
+        /** CLEAN INCOMING DATA FIELDS ***/
+        $company_phone_fields=array('phone', 'phone2','fax');
+        $phone_clean_count=clean_phone_fields_for_db($company_data, $company_phone_fields);
+
         // Session data
         global $session_user_id;
         $table='companies';
@@ -325,8 +334,8 @@ function update_company($con, $company_data, $company_id=false, $company_rst=fal
     if (!$company_rst) return false;
 
     /** CLEAN INCOMING DATA FIELDS ***/
-    $company_phone_fields=array('work_phone','cell_phone','home_phone','fax');
-    $phone_clean_count=clean_phone_fields($company_data, $company_phone_fields);
+    $company_phone_fields=array('phone', 'phone2','fax');
+    $phone_clean_count=clean_phone_fields_for_db($company_data, $company_phone_fields);
 
     $company_data['last_modified_at'] = time();
     $company_data['last_modified_by'] = $session_user_id;
@@ -634,6 +643,9 @@ include_once $include_directory . 'utils-addresses.php';
 
  /**
  * $Log: utils-companies.php,v $
+ * Revision 1.16  2007/05/02 11:26:25  fcrossen
+ * - intergated clean_phone_fields_for_db() into API functions for add/update
+ *
  * Revision 1.15  2006/08/10 17:44:58  jnhayart
  * Correct Bug on save Date and User when update
  *

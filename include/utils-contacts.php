@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.29 2006/12/29 21:12:40 ongardie Exp $
+ * $Id: utils-contacts.php,v 1.30 2007/05/02 11:26:25 fcrossen Exp $
  *
  */
 
@@ -156,7 +156,7 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
     /* CLEAN INCOMING DATA FIELDS */
     // make sure the phone numbers are in a format we can deal with
     $contact_phone_fields = array('work_phone','cell_phone','home_phone','fax');
-    $phone_clean_count    = clean_phone_fields($contact_info, $contact_phone_fields);
+    $phone_clean_count    = clean_phone_fields_for_db($contact_info, $contact_phone_fields);
 
     // If 'field' this exists, but has no data, remove it
     if (strlen($contact_data['user_id']) == 0)
@@ -438,7 +438,7 @@ function update_contact($con, $contact, $contact_id = false, $contact_rst = fals
 
     //** CLEAN INCOMING DATA FIELDS ***
     $contact_phone_fields=array('work_phone','cell_phone','home_phone','fax');
-    $phone_clean_count=clean_phone_fields($contact, $contact_phone_fields);
+    $phone_clean_count=clean_phone_fields_for_db($contact, $contact_phone_fields);
 
     $contact['last_modified_at'] = time();
     $contact['last_modified_by'] = $session_user_id;
@@ -556,6 +556,9 @@ include_once $include_directory . 'utils-misc.php';
 /**********************************************************************/
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.30  2007/05/02 11:26:25  fcrossen
+ * - intergated clean_phone_fields_for_db() into API functions for add/update
+ *
  * Revision 1.29  2006/12/29 21:12:40  ongardie
  * - Added contact_id to pull_contact_fields().
  *
