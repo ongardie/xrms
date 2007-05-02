@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.30 2007/05/02 11:26:25 fcrossen Exp $
+ * $Id: utils-contacts.php,v 1.31 2007/05/02 15:03:45 fcrossen Exp $
  *
  */
 
@@ -313,6 +313,13 @@ function find_contact($con, $contact_data, $show_deleted = false, $return_record
         else return $contact;
     } else {
 
+        /** CLEAN INCOMING DATA FIELDS ***/
+        $contact_phone_fields=array('work_phone','cell_phone','home_phone','fax');
+        $phone_clean_count=clean_phone_fields($contact_data, $contact_phone_fields);
+
+		// $idd_prefix used when searching for phone numbers...
+		$idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
+
         $extra_where=array();
         foreach ($contact_data as $ckey=>$cval) {
             switch ($ckey) {
@@ -324,13 +331,16 @@ function find_contact($con, $contact_data, $show_deleted = false, $return_record
                     unset($contact_data[$ckey]);
                     $extra_where[]="$ckey LIKE ".$con->qstr($cval);
                 break;
+                case 'work_phone':
+                case 'cell_phone':
+                case 'home_phone':
+                case 'fax':
+                    unset($contact_data[$ckey]);
+                    $extra_where[]="REPLACE(REPLACE($ckey,' ',''),'+','$idd_prefix') like " . $con->qstr('%'.$ckey.'%', get_magic_quotes_gpc());
+                break;
             }
         }
         if (!$show_deleted) $contact_data['contact_record_status']='a';
-
-        /** CLEAN INCOMING DATA FIELDS ***/
-        $contact_phone_fields=array('work_phone','cell_phone','home_phone','fax');
-        $phone_clean_count=clean_phone_fields($contact_data, $contact_phone_fields);
 
         if (count($extra_where)==0) $extra_where=false;
         $wherestr=make_where_string($con, $contact_data, $tablename, $extra_where);
@@ -556,6 +566,9 @@ include_once $include_directory . 'utils-misc.php';
 /**********************************************************************/
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.31  2007/05/02 15:03:45  fcrossen
+ * - changed find_ function to allow for phone_fax_number_clean and idd_prefix system preferences
+ *
  * Revision 1.30  2007/05/02 11:26:25  fcrossen
  * - intergated clean_phone_fields_for_db() into API functions for add/update
  *

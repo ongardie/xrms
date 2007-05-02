@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-companies.php,v 1.16 2007/05/02 11:26:25 fcrossen Exp $
+ * $Id: utils-companies.php,v 1.17 2007/05/02 15:03:45 fcrossen Exp $
  *
  */
 
@@ -215,7 +215,14 @@ function find_company($con, $company_data, $show_deleted = false, $return_record
         else return $company;
     } else {
 
-        $extra_where=array();
+        /** CLEAN INCOMING DATA FIELDS ***/
+        $company_phone_fields=array('work_phone','cell_phone','home_phone','fax');
+        $phone_clean_count=clean_phone_fields($company_data, $company_phone_fields);
+ 		
+		// $idd_prefix used when searching for phone numbers...
+		$idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
+        
+		$extra_where=array();
         foreach ($company_data as $ckey=>$cval) {
             switch ($ckey) {
                 case 'legal_name':
@@ -225,13 +232,16 @@ function find_company($con, $company_data, $show_deleted = false, $return_record
                     unset($company_data[$ckey]);
                     $extra_where[]="$ckey LIKE ".$con->qstr($cval);
                 break;
+                case 'work_phone':
+                case 'cell_phone':
+                case 'home_phone':
+                case 'fax':
+                    unset($company_data[$ckey]);
+                    $extra_where[]="REPLACE(REPLACE($ckey,' ',''),'+','$idd_prefix') like " . $con->qstr('%'.$ckey.'%', get_magic_quotes_gpc());
+                break;
             }
         }
         if (!$show_deleted) $company_data['company_record_status']='a';
-
-        /** CLEAN INCOMING DATA FIELDS ***/
-        $company_phone_fields=array('work_phone','cell_phone','home_phone','fax');
-        $phone_clean_count=clean_phone_fields($company_data, $company_phone_fields);
 
         if (count($extra_where)==0) $extra_where=false;
         $wherestr=make_where_string($con, $company_data, $tablename, $extra_where);
@@ -643,6 +653,9 @@ include_once $include_directory . 'utils-addresses.php';
 
  /**
  * $Log: utils-companies.php,v $
+ * Revision 1.17  2007/05/02 15:03:45  fcrossen
+ * - changed find_ function to allow for phone_fax_number_clean and idd_prefix system preferences
+ *
  * Revision 1.16  2007/05/02 11:26:25  fcrossen
  * - intergated clean_phone_fields_for_db() into API functions for add/update
  *
