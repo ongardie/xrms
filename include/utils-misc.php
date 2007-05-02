@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.182 2007/05/02 11:42:32 fcrossen Exp $
+ * $Id: utils-misc.php,v 1.183 2007/05/02 15:02:14 fcrossen Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -934,6 +934,11 @@ function clean_phone_number_for_db($phone_number_in) {
  		return preg_replace("/[^\d]/", '', $phone_number);
 	}
 	elseif ($cleaning_preference == _('ITU-T E.123')) {
+		$idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
+		// we want to replace the idd prefix with '+' if it is there...
+		if (strpos($phone_number, $idd_prefix) === 0) {
+			$phone_number = '+' . trim(substr($phone_number,strlen($idd_prefix)));
+		}
 	    // remove non '+' character, non-digit, non-space from number
  		$phone_number = preg_replace("/[^\+\d\ ]/", '', $phone_number);
  		// matches a '+' char at the beginiing of the number
@@ -2074,6 +2079,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.183  2007/05/02 15:02:14  fcrossen
+ * - changed clean_phone_number_for_db(). Now accounts for idd_prefix system preference
+ *
  * Revision 1.182  2007/05/02 11:42:32  fcrossen
  * - fixed minor typo in clean_phone_fields_for_db()
  *
