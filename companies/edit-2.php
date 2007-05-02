@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.25 2007/04/30 16:05:42 fcrossen Exp $
+ * $Id: edit-2.php,v 1.26 2007/05/02 10:35:17 fcrossen Exp $
  */
 require_once('../include-locations.inc');
 
@@ -29,9 +29,9 @@ $rec['company_source_id'] = $_POST['company_source_id'];
 $rec['industry_id'] = $_POST['industry_id'];
 $rec['rating_id'] = $_POST['rating_id'];
 $rec['user_id'] = $_POST['user_id'];
-$rec['phone'] = clean_phone_number($_POST['phone']);
-$rec['phone2'] = clean_phone_number($_POST['phone2']);
-$rec['fax'] = clean_phone_number($_POST['fax']);
+$rec['phone'] = clean_phone_number_for_db($_POST['phone']);
+$rec['phone2'] = clean_phone_number_for_db($_POST['phone2']);
+$rec['fax'] = clean_phone_number_for_db($_POST['fax']);
 $rec['company_type_id'] = $_POST['company_type_id'];
 $campaign_id = $_POST['campaign_id'];
 $rec['url'] = $_POST['url'];
@@ -96,6 +96,9 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.26  2007/05/02 10:35:17  fcrossen
+ * - clean_phone_number() renamed to clean_phone_number_for_db() for clarity
+ *
  * Revision 1.25  2007/04/30 16:05:42  fcrossen
  * - added call to clean_phone_fields()
  *

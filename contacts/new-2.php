@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.38 2007/04/30 16:06:29 fcrossen Exp $
+ * $Id: new-2.php,v 1.39 2007/05/02 10:36:06 fcrossen Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -106,10 +106,10 @@ if(!$salutation) {
 }
 
 // clean phone fields
-$work_phone = clean_phone_number($work_phone);
-$cell_phone = clean_phone_number($cell_phone);
-$home_phone = clean_phone_number($home_phone);
-$fax = clean_phone_number($fax);
+$work_phone = clean_phone_number_for_db($work_phone);
+$cell_phone = clean_phone_number_for_db($cell_phone);
+$home_phone = clean_phone_number_for_db($home_phone);
+$fax = clean_phone_number_for_db($fax);
 
 //save to database
 $rec = array();
@@ -191,6 +191,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.39  2007/05/02 10:36:06  fcrossen
+ * - clean_phone_number() renamed to clean_phone_number_for_db() for clarity
+ *
  * Revision 1.38  2007/04/30 16:06:29  fcrossen
  * - added call to clean_phone_fields()
  *
