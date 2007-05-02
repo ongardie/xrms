@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.39 2007/05/02 10:36:06 fcrossen Exp $
+ * $Id: new-2.php,v 1.40 2007/05/02 11:22:49 fcrossen Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -105,11 +105,14 @@ if(!$salutation) {
     $salutation = "";
 }
 
+/*
+// This is now being done in utils-contacts.php in add_contact()
 // clean phone fields
 $work_phone = clean_phone_number_for_db($work_phone);
 $cell_phone = clean_phone_number_for_db($cell_phone);
 $home_phone = clean_phone_number_for_db($home_phone);
 $fax = clean_phone_number_for_db($fax);
+*/
 
 //save to database
 $rec = array();
@@ -191,6 +194,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.40  2007/05/02 11:22:49  fcrossen
+ * - call to clean_phone_number_for_db() moved to API functions
+ *
  * Revision 1.39  2007/05/02 10:36:06  fcrossen
  * - clean_phone_number() renamed to clean_phone_number_for_db() for clarity
  *

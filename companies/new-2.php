@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.33 2007/05/02 10:35:17 fcrossen Exp $
+ * $Id: new-2.php,v 1.34 2007/05/02 11:22:08 fcrossen Exp $
  */
 require_once('../include-locations.inc');
 
@@ -31,9 +31,9 @@ $company_source_id = $_POST['company_source_id'];
 $industry_id = $_POST['industry_id'];
 $campaign_id = $_POST['campaign_id'];
 $company_type_id = $_POST['company_type_id'];
-$phone = clean_phone_number_for_db($_POST['phone']);
-$phone2 = clean_phone_number_for_db($_POST['phone2']);
-$fax = clean_phone_number_for_db($_POST['fax']);
+$phone = $_POST['phone'];
+$phone2 = $_POST['phone2'];
+$fax = $_POST['fax'];
 $url = $_POST['url'];
 $employees = $_POST['employees'];
 $revenue = $_POST['revenue'];
@@ -237,6 +237,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.34  2007/05/02 11:22:08  fcrossen
+ * - call to clean_phone_number_for_db() moved to API functions
+ *
  * Revision 1.33  2007/05/02 10:35:17  fcrossen
  * - clean_phone_number() renamed to clean_phone_number_for_db() for clarity
  *

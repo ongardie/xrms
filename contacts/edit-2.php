@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.36 2007/05/02 10:36:06 fcrossen Exp $
+ * $Id: edit-2.php,v 1.37 2007/05/02 11:22:49 fcrossen Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -34,11 +34,11 @@ $tax_id = $_POST['tax_id'];
 $gender = $_POST['gender'];
 $salutation = $_POST['salutation'];
 $email = $_POST['email'];
-$work_phone = clean_phone_number_for_db($_POST['work_phone']);
+$work_phone = $_POST['work_phone'];
 $work_phone_ext = $_POST['work_phone_ext'];
-$cell_phone = clean_phone_number_for_db($_POST['cell_phone']);
-$home_phone = clean_phone_number_for_db($_POST['home_phone']);
-$fax = clean_phone_number_for_db($_POST['fax']);
+$cell_phone = $_POST['cell_phone'];
+$home_phone = $_POST['home_phone'];
+$fax = $_POST['fax'];
 $user_id = $_POST['user_id'];
 $email_status = $_POST['email_status'];
 if (!$email_status) { $email_status='a'; };
@@ -148,6 +148,9 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.37  2007/05/02 11:22:49  fcrossen
+ * - call to clean_phone_number_for_db() moved to API functions
+ *
  * Revision 1.36  2007/05/02 10:36:06  fcrossen
  * - clean_phone_number() renamed to clean_phone_number_for_db() for clarity
  *
