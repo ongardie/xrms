@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.181 2007/05/02 11:25:10 fcrossen Exp $
+ * $Id: utils-misc.php,v 1.182 2007/05/02 11:42:32 fcrossen Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -910,7 +910,7 @@ function clean_phone_fields_for_db(&$fields, $phone_fields) {
     $count=0;
     foreach ($phone_fields as $pf) {
         if (array_key_exists($pf, $fields)) {
-         	clean_phone_number_for_db($fields[$pf]);
+         	$fields[$pf] = clean_phone_number_for_db($fields[$pf]);
             $count++;
         }
     }
@@ -2074,6 +2074,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.182  2007/05/02 11:42:32  fcrossen
+ * - fixed minor typo in clean_phone_fields_for_db()
+ *
  * Revision 1.181  2007/05/02 11:25:10  fcrossen
  * - tidied clean_phone_* functions
  *
