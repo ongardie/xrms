@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.179 2007/04/30 16:14:39 fcrossen Exp $
+ * $Id: utils-misc.php,v 1.180 2007/05/02 10:33:12 fcrossen Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -876,7 +876,6 @@ function get_formatted_phone ($con, $address_id, $phone, $country_id=false) {
 /**
  *
  * Strips many fields in array of phone field formatting strings, taking an array by reference and modifying its contents
- * by calling clean_phone_number()
  *
  * @param array $array to modify and clean the phone fields in (by references)
  * @param array $array of array_keys in the first array which correspond to phone fields
@@ -888,7 +887,7 @@ function clean_phone_fields(&$fields, $phone_fields) {
     $count=0;
     foreach ($phone_fields as $pf) {
         if (array_key_exists($pf, $fields)) {
-         	clean_phone_number($fields[$pf]);
+         	$fields[$pf]=preg_replace("/[^\d]/", '', $fields[$pf]);
             $count++;
         }
     }
@@ -904,7 +903,7 @@ function clean_phone_fields(&$fields, $phone_fields) {
  * @return string number after cleaning
  */
 
-function clean_phone_number($phone_number_in) {
+function clean_phone_number_for_db($phone_number_in) {
  	$phone_number = strval(trim($phone_number_in));
  	$cleaned_phone_number = '';
  	$dbcon = get_xrms_dbconnection();
@@ -2052,6 +2051,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.180  2007/05/02 10:33:12  fcrossen
+ * - reverted changes to clean_phone_fields()
+ * - renamed clean_phone_number() to clean_phone_number_for_db() for clarity
+ *
  * Revision 1.179  2007/04/30 16:14:39  fcrossen
  * - added clean_phone_number(); altered clean_phone_fields()
  *
