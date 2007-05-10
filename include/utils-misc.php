@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.183 2007/05/02 15:02:14 fcrossen Exp $
+ * $Id: utils-misc.php,v 1.184 2007/05/10 11:48:21 fcrossen Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -588,14 +588,14 @@ function show_test_values($param1 = '', $param2 = '', $param3 = '', $param4 = ''
     <title>Test Results</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
-    <body>
-    Username = $session_username<BR>
-    Param1   = $p1<BR>
-    Param2   = $p2<BR>
-    Param3   = $p3<BR>
-    Param4   = $p4<BR>
-    Param5   = $p5<BR>
-    </body>
+    <body><pre><font size="2">
+    Username = $session_username<hR>
+    Param1   = $p1<hR>
+    Param2   = $p2<hR>
+    Param3   = $p3<hR>
+    Param4   = $p4<hR>
+    Param5   = $p5<hR>
+    </font></pre></body>
     </html>
 EOQ;
 exit;
@@ -2079,6 +2079,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.184  2007/05/10 11:48:21  fcrossen
+ * - show_test_values() now uses <pre> style. Makes display of arrays and objects easier on the eye
+ *
  * Revision 1.183  2007/05/02 15:02:14  fcrossen
  * - changed clean_phone_number_for_db(). Now accounts for idd_prefix system preference
  *
