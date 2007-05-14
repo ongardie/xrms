@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.34 2007/05/02 11:22:08 fcrossen Exp $
+ * $Id: new-2.php,v 1.35 2007/05/14 16:58:31 fcrossen Exp $
  */
 require_once('../include-locations.inc');
 
@@ -196,7 +196,7 @@ if ($title) {
     $rec['title'] = $title;
 }
 if ($work_phone) {
-    $rec['work_phone'] = preg_replace("/[^\d]/", '', $work_phone);
+    $rec['work_phone'] = $work_phone;
 } else {
     $rec['work_phone'] = $phone;
 }
@@ -204,10 +204,10 @@ if ($work_phone_ext) {
     $rec['work_phone_ext']=$work_phone_ext;
 }
 if ($cell_phone) {
-    $rec['cell_phone']=preg_replace("/[^\d]/", '', $cell_phone);
+    $rec['cell_phone']=$cell_phone;
 }
 if ($home_phone) {
-    $rec['home_phone']=preg_replace("/[^\d]/", '', $home_phone);
+    $rec['home_phone']=$home_phone;
 }
 if ($contact_profile) {
     $rec['profile']=$contact_profile;
@@ -237,6 +237,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.35  2007/05/14 16:58:31  fcrossen
+ * - removed all preg_replace functions for phone numbers. These are now handled by the API.
+ *
  * Revision 1.34  2007/05/02 11:22:08  fcrossen
  * - call to clean_phone_number_for_db() moved to API functions
  *
