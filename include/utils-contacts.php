@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.31 2007/05/02 15:03:45 fcrossen Exp $
+ * $Id: utils-contacts.php,v 1.32 2007/05/14 16:53:09 fcrossen Exp $
  *
  */
 
@@ -156,7 +156,7 @@ function add_update_contact($con, $contact_info, $_return_data = false, $_magic_
     /* CLEAN INCOMING DATA FIELDS */
     // make sure the phone numbers are in a format we can deal with
     $contact_phone_fields = array('work_phone','cell_phone','home_phone','fax');
-    $phone_clean_count    = clean_phone_fields_for_db($contact_info, $contact_phone_fields);
+    $phone_clean_count    = clean_phone_fields_for_db($contact_data, $contact_phone_fields);
 
     // If 'field' this exists, but has no data, remove it
     if (strlen($contact_data['user_id']) == 0)
@@ -566,6 +566,9 @@ include_once $include_directory . 'utils-misc.php';
 /**********************************************************************/
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.32  2007/05/14 16:53:09  fcrossen
+ * - clean_phone_fields_for_db was cleaning the wrong array ($contact_info should be $contact_data)
+ *
  * Revision 1.31  2007/05/02 15:03:45  fcrossen
  * - changed find_ function to allow for phone_fax_number_clean and idd_prefix system preferences
  *
