@@ -2,7 +2,7 @@
 /**
  * Sidebar box for notes
  *
- * $Id: sidebar.php,v 1.18 2005/01/11 13:22:03 braverock Exp $
+ * $Id: sidebar.php,v 1.19 2007/05/14 17:26:10 fcrossen Exp $
  */
 if ( !defined('IN_XRMS') )
 {
@@ -36,7 +36,7 @@ if (strlen($on_what_table)>0){
   if (isset($on_what_id)) {
     $where = "and on_what_id = '$on_what_id'";
   }
-  $note_sql = "select note_id, note_description, entered_by, entered_at, username, user_contact_id
+  $note_sql = "select note_id, note_description, entered_by, entered_at, username, user_contact_id, on_what_table, on_what_id
             from notes, users
             where notes.entered_by = users.user_id
             and on_what_table = '$on_what_table'
@@ -89,6 +89,7 @@ if (strlen($rst->fields['username']) > 0) {
           break;
         case 'opportunities':
           $on_what_name = 'opportunity_title AS on_what_name ';
+          $note_opportunity_id   = $rst->fields['on_what_id'];
           break;
         case 'cases':
           $on_what_name = 'case_title AS on_what_name ';
@@ -122,7 +123,10 @@ if (strlen($rst->fields['username']) > 0) {
       $return_url = "&return_url=/contacts/one.php?contact_id=" . $note_contact_id;
     } elseif ($note_company_id) {
       $return_url = "&return_url=/companies/one.php?company_id=" . $note_company_id;
-    } else {
+    } elseif ($note_opportunity_id) {
+      $return_url = "&return_url=/opportunities/one.php?opportunity_id=" . $note_opportunity_id;
+	}
+	else {
       $return_url = "&return_url=/private/home.php";
     }
 
@@ -208,6 +212,9 @@ $note_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.19  2007/05/14 17:26:10  fcrossen
+ * - fixed return_url bug - see https://sourceforge.net/forum/message.php?msg_id=4290886
+ *
  * Revision 1.18  2005/01/11 13:22:03  braverock
  * - removed on_what_string hack, changed to use standard make_singular fn
  *
