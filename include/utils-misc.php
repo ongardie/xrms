@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.184 2007/05/10 11:48:21 fcrossen Exp $
+ * $Id: utils-misc.php,v 1.185 2007/05/15 23:17:30 ongardie Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -258,14 +258,10 @@ function add_audit_item(&$con, $user_id, $audit_item_type, $on_what_table, $on_w
  * @return string  $company_name
  */
 function fetch_company_name($con, $company_id) {
-
-    $rst_company_name = $con->execute("select company_name from companies where company_id = $company_id");
-    if ($rst_company_name) {
-        $company_name = $rst_company_name->fields['company_name'];
-        $rst_company_name->close();
-    }
-
-    return $company_name;
+    if(!$con || !$company_id)
+        return false;
+    else
+        return $con->GetOne('SELECT company_name FROM companies WHERE company_id='.$company_id);
 }
 
 
@@ -1005,18 +1001,24 @@ function get_company_address_select($con, $company_id, $address_id=false, $field
  * @return array $addresses with address_id of each address associated with company
 **/
 function get_company_addresses($con, $company_id=false) {
-    if (!$company_id) return false;
-    $company_addresses=array();
+    if (!$company_id)
+        return false;
 
-    $sql = "SELECT address_id FROM addresses WHERE company_id=$company_id AND address_record_status='a'";
-    $rst = $con->execute($sql);
-    if (!$rst) { db_error_handler($con, $sql); return false; }
-    while (!$rst->EOF) {
-        $company_addresses[]=$rst->fields['address_id'];
-        $rst->movenext();
+    $sql = "SELECT address_id 
+            FROM addresses 
+            WHERE on_what_table = 'companies' 
+	      AND on_what_id=$company_id 
+	      AND address_record_status='a'";
+    $addresses = $con->GetCol($sql);
+    
+    if ($addresses === false) { 
+        db_error_handler($con, $sql);
+        return false;
+    } elseif (empty($addresses)) {
+        return false;
+    } else {
+        return $addresses;
     }
-    if (count($company_addresses)>0) return $company_addresses;
-    else return false;
 }
 
 /**
@@ -2079,6 +2081,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.185  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.184  2007/05/10 11:48:21  fcrossen
  * - show_test_values() now uses <pre> style. Makes display of arrays and objects easier on the eye
  *

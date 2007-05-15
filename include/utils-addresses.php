@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @author Brian Peterson
  *
- * $Id: utils-addresses.php,v 1.12 2007/01/05 19:51:59 ongardie Exp $
+ * $Id: utils-addresses.php,v 1.13 2007/05/15 23:17:30 ongardie Exp $
  *
  */
 
@@ -103,6 +103,12 @@ function add_update_address($con, $address_data, $return_recordset = false, $_ma
         $address_info['company_id'] = 1;
     }
 
+    if(!empty($address_info['company_id'])){
+        $address_info['on_what_id'] = $address_info['company_id'];
+        $address_info['on_what_table'] = 'companies';
+        unset($address_info['company_id']);
+    }
+
     //set up the country
     global $default_country_id;
     if ( ( ! $address_info['country_id'] ) && ( ! $address_info['country'] ) )
@@ -138,10 +144,10 @@ function add_update_address($con, $address_data, $return_recordset = false, $_ma
                 break;
             }
         }
-	
+        
         // Determine if this address already exists
         $found_data = __record_find ( $con, $_table_name, $extra_where, $_magic_quotes );
-	
+        
         // Retrieve timezone and GMT data if not already defined
         if ( $found_data['address_id'] && (!$found_data['daylight_savings_id'] || !$found_data['gmt_offset']) )
         {
@@ -216,7 +222,7 @@ function add_address($con, $address_data, $_magic_quotes=false)
     } else {
         return false;
     }
-};
+}
 
 /**********************************************************************/
 /**
@@ -288,11 +294,13 @@ function get_address($con, $address_id, $return_rst=false)
     $sql = "SELECT addresses.*,countries.* FROM addresses JOIN countries ON addresses.country_id=countries.country_id WHERE address_id=$address_id";
     $rst = $con->execute($sql);
     if (!$rst) {
-        db_error_handler($con, $sql); return false;
+        db_error_handler($con, $sql);
+        return false;
     } else {
-        if ($return_rst) {
+        if ($return_rst)
             return $rst;
-       } else return $rst->fields;
+        else
+            return $rst->fields;
     }
 
     //shouldn't ever get here
@@ -316,19 +324,16 @@ function update_address($con, $address_data, $return_recordset=false, $_magic_qu
 {
     $result = add_update_address($con, $address_data, $return_recordset, $_magic_quotes);
 
-    if ($result && !$return_recordset) {
-        return true;
-    } elseif ($result && $return_recordset) {
+    if($result && $return_recordset)
         return $result;
-    } else {
-        return false;
-    };
-};
+    else
+        return ($result != false);
+}
 
 /**********************************************************************/
 /**
  * Deletes an address from XRMS, based on passed in address_id
- * Can delete address from database or mark as removed using record status
+ * NOT IMPLEMENTED: Can delete address from database or mark as removed using record status
  *
  * @param adodbconnection $con                   ADOdb connection Object
  * @param integer         $address_id            Identifying which address to delete
@@ -363,7 +368,7 @@ function delete_address($con, $address_id = false, $delete_from_database = false
     }
 
     return $_retVal;
-};
+}
 
 /**********************************************************************/
 
@@ -406,6 +411,9 @@ function pull_address_fields ( $array_data )
 /**********************************************************************/
  /**
  * $Log: utils-addresses.php,v $
+ * Revision 1.13  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.12  2007/01/05 19:51:59  ongardie
  * - Avoid SQL error when address_id isn't available.
  *

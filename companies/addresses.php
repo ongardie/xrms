@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.28 2006/03/19 01:51:39 ongardie Exp $
+ * $Id: addresses.php,v 1.29 2007/05/15 23:17:30 ongardie Exp $
  */
 
 require_once('../include-locations.inc');
@@ -44,7 +44,8 @@ $sql = "select " .
 $con->Concat($con->qstr('<a href="one-address.php?form_action=edit&return_url='.$url_return_url.'&company_id=' . $company_id . '&address_id='), 'a.address_id', $con->qstr('">'), 'a.address_name', $con->qstr('</a>')) . " as address_link,
 a.address_name, a.address_id, c.default_primary_address, c.default_billing_address, c.default_shipping_address, c.default_payment_address from companies c, addresses a
 where a.address_record_status = 'a'
-and c.company_id = a.company_id
+and a.on_what_table = 'companies'
+and c.company_id = a.on_what_id
 and c.company_id = $company_id";
 
 if ($address_street) {
@@ -213,6 +214,9 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.29  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.28  2006/03/19 01:51:39  ongardie
  * - Used By Contacts now also includes contacts with the address as their home.
  *

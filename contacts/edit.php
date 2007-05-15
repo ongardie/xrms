@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.52 2006/12/29 22:37:57 ongardie Exp $
+ * $Id: edit.php,v 1.53 2007/05/15 23:17:30 ongardie Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -122,7 +122,7 @@ $rst = $con->execute($sql);
 $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
 $rst->close();
 
-$sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_name";
+$sql = "select address_name, address_id from addresses where on_what_table='companies' and on_what_id = $company_id and address_record_status = 'a' order by address_name";
 $rst = $con->execute($sql);
 if ($rst){
     $address_menu = $rst->getmenu2('address_id', $address_id, true);
@@ -337,6 +337,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.53  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.52  2006/12/29 22:37:57  ongardie
  * - Don't allow editing an empty address_id.
  *

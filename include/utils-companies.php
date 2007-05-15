@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-companies.php,v 1.17 2007/05/02 15:03:45 fcrossen Exp $
+ * $Id: utils-companies.php,v 1.18 2007/05/15 23:17:30 ongardie Exp $
  *
  */
 
@@ -302,16 +302,20 @@ function get_company($con, $company_id, $return_rst=false, $include_extras=true)
     $sql .=" WHERE companies.company_id = $company_id";
 
     $rst = $con->execute($sql);
+    
     if (!$rst) {
-        db_error_handler($con, $sql); return false;
-    } else {
-        // Make sure we have a company record
-        if ($rst->NumRows()) {
-            if ($return_rst) {
-                return $rst;
-            } else return $rst->fields;
-        } else return false;
+        db_error_handler($con, $sql);
+        return false;
     }
+    
+    // Make sure we have a company record
+    if ($rst->EOF)
+        return false;
+
+    if ($return_rst)
+        return $rst;
+    else 
+        return $rst->fields;
 
     //shouldn't ever get here
     return false;
@@ -366,7 +370,7 @@ function update_company($con, $company_data, $company_id=false, $company_rst=fal
 
     return true;
 
-};
+}
 
 /**********************************************************************/
 /**
@@ -381,7 +385,9 @@ function update_company($con, $company_data, $company_id=false, $company_rst=fal
  * @return boolean indicating success of delete operation
  */
 function delete_company($con, $company_id, $delete_from_database=false) {
-    if (!$company_id) return false;
+    if (!$company_id)
+        return false;
+        
     if ($delete_from_database) {
         $sql = "DELETE FROM companies";
     } else {
@@ -390,7 +396,10 @@ function delete_company($con, $company_id, $delete_from_database=false) {
     $sql .= "  WHERE company_id=$company_id";
 
     $rst=$con->execute($sql);
-    if (!$rst) { db_error_handler($con, $sql); return false; }
+    if (!$rst) {
+        db_error_handler($con, $sql);
+        return false;
+    }
 
     return true;
 }
@@ -406,20 +415,20 @@ function update_unknown_company($con, $company_id=1) {
     $rst=$con->execute($sql);
     if (!$rst) { db_error_handler($con, $sql); return false; }
 
-        $now=time();
-        $unknown_company_data=array('company_id'=>$company_id, 'company_name'=>'Unknown Company');
-        $unknown_company_data['company_record_status']='a';
-        $unknown_company_data['industry_id']=1;
-        $unknown_company_data['crm_status_id']=1;
-        $unknown_company_data['rating_id']=3;
-        $unknown_company_data['account_status_id']=4;
-        $unknown_company_data['company_source_id']=1;
-        $unknown_company_data['company_code']='NOCOMPANY';
-        $unknown_company_data['user_id']=1;
-        $unknown_company_data['entered_by']=1;
-        $unknown_company_data['last_modified_by']=1;
-        $unknown_company_data['entered_at']=$now;
-        $unknown_company_data['last_modified_at']=$now;
+    $now=time();
+    $unknown_company_data=array('company_id'=>$company_id, 'company_name'=>'Unknown Company');
+    $unknown_company_data['company_record_status']='a';
+    $unknown_company_data['industry_id']=1;
+    $unknown_company_data['crm_status_id']=1;
+    $unknown_company_data['rating_id']=3;
+    $unknown_company_data['account_status_id']=4;
+    $unknown_company_data['company_source_id']=1;
+    $unknown_company_data['company_code']='NOCOMPANY';
+    $unknown_company_data['user_id']=1;
+    $unknown_company_data['entered_by']=1;
+    $unknown_company_data['last_modified_by']=1;
+    $unknown_company_data['entered_at']=$now;
+    $unknown_company_data['last_modified_at']=$now;
 
 //default_primary_address, default_billing_address, default_shipping_address, default_payment_address, user_id, company_source_id, crm_status_id, industry_id, account_status_id, rating_id, company_name, company_code, profile,entered_at, entered_by, last_modified_at, last_modified_by
 
@@ -653,6 +662,9 @@ include_once $include_directory . 'utils-addresses.php';
 
  /**
  * $Log: utils-companies.php,v $
+ * Revision 1.18  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.17  2007/05/02 15:03:45  fcrossen
  * - changed find_ function to allow for phone_fax_number_clean and idd_prefix system preferences
  *

@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.40 2007/05/02 11:22:49 fcrossen Exp $
+ * $Id: new-2.php,v 1.41 2007/05/15 23:17:30 ongardie Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -69,13 +69,11 @@ if (!$home_address_id) {
 
     if (!$city AND $_POST['city']) $city=$_POST['city'];
 
-    if ($line1 AND $city AND $address_country_id) {
+    if ($line1 AND $address_country_id) {
         $use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
 
         $rec = array();
         $rec['country_id'] = $address_country_id;
-//Do not set company ID for a contact's home address
-//            $rec['company_id']=$company_id;
         $rec['line1'] = $line1;
         $rec['line2'] = $line2;
         $rec['city'] = $city;
@@ -177,9 +175,22 @@ if ($contact_data) {
     }
 }
 
+// If we just added an address and a contact, make it reference our new contact
+if($contact_id && $home_address_id > 1) {
+    $rec = array();
+    $rec['on_what_table'] = 'contacts';
+    $rec['on_what_id'] = $contact_id;
+    $con->AutoExecute('addresses', $rec, 'UPDATE', 'address_id='.$home_address_id);
+    if (!$rst) {
+        db_error_handler($con, 'Updating address to contact reference');
+    }
+}
+
 $con->close();
+
 if ($edit_address == "on") {
-    header("Location: edit-address.php?msg=contact_added&contact_id=$contact_id");
+    header("Location: ../companies/addresses.php?msg=contact_added&company_id=$company_id&edit_contact_id=$contact_id".
+           "&final_return_url=$http_site_root/contacts/one.php?contact_id=$contact_id");
 } else {
     if (!$return_url) {
         if ($company_id) {
@@ -194,6 +205,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.41  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.40  2007/05/02 11:22:49  fcrossen
  * - call to clean_phone_number_for_db() moved to API functions
  *

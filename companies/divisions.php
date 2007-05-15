@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: divisions.php,v 1.16 2006/03/22 02:31:12 braverock Exp $
+ * $Id: divisions.php,v 1.17 2007/05/15 23:17:30 ongardie Exp $
  */
 
 require_once('../include-locations.inc');
@@ -53,7 +53,12 @@ if ($rst) {
     $rst->close();
 }
 
-$sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_name";
+$sql = "SELECT address_name, address_id 
+	FROM addresses 
+	WHERE on_what_table = 'companies'
+	  AND on_what_id = $company_id
+	  AND address_record_status = 'a'
+	ORDER BY address_name";
 $rst = $con->execute($sql);
 $address_menu = $rst->getmenu2('address_id', $address_id, true);
 $rst->close();
@@ -117,6 +122,9 @@ end_page();
 
 /**
  * $Log: divisions.php,v $
+ * Revision 1.17  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.16  2006/03/22 02:31:12  braverock
  * - fix missing return_url
  *   -  patch submitted by MarkoL

@@ -2,7 +2,7 @@
 /**
  * Edit address for a contact
  *
- * $Id: edit-address.php,v 1.12 2006/01/02 22:59:59 vanmer Exp $
+ * $Id: edit-address.php,v 1.13 2007/05/15 23:17:30 ongardie Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -61,7 +61,7 @@ $company_name = fetch_company_name($con, $company_id);
 
 $sql = "select * from addresses a
 where address_record_status = 'a'
-and company_id = $company_id";
+and on_what_table='companies' and on_what_id = $company_id";
 
 $rst = $con->execute($sql);
 
@@ -255,6 +255,9 @@ end_page();
 
 /**
  * $Log: edit-address.php,v $
+ * Revision 1.13  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.12  2006/01/02 22:59:59  vanmer
  * - changed to use centralized dbconnection function
  *

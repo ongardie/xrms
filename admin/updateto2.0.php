@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.23 2007/05/02 15:04:58 fcrossen Exp $
+ * $Id: updateto2.0.php,v 1.24 2007/05/15 23:17:29 ongardie Exp $
  */
 
 // where do we include from
@@ -4857,6 +4857,75 @@ if (!get_user_preference_type($con, $pref_type)) {
 	$msg .= _("added system preference for IDD Prefix (International Direct Dialing)");
 }
 
+// Addresses now use on_what_table, on_what_id instead of company_id:
+//  Stage 1: Add on_what_table
+$field_definition = array();
+$field_definition[] = array('NAME' => 'on_what_table', 'TYPE' => 'C', 'SIZE' => 100);
+if(add_field($con, 'addresses', $field_definition, '', &$upgrade_msgs)) {
+    if($msg)
+    	$msg .= '<br>';
+
+    $msg .= _("added on_what_table to addresses table") . '<br>';
+    
+    // Stage 2: Rename company_id to on_what_id
+    if(rename_fieldname($con, 'addresses', 'company_id', 'on_what_id', &$upgrade_msgs))
+        $msg .= _("renamed company_id to on_what_id in addresses table") . '<br>';
+    
+    // Stage 3: Set on_what_table='companies' wherever on_what_id > 1
+    $record = array('on_what_table' => 'companies');
+    if($con->AutoExecute('addresses', $record, 'UPDATE', 'on_what_id > 1'))
+        $msg .= _("defaulted on_what_table to companies in addresses table") . '<br>';
+
+    // Stage 4: Clear on_what_id wherever it's 1
+    $record = array('on_what_id' => 0);
+    if($con->AutoExecute('addresses', $record, 'UPDATE', 'on_what_id = 1'))
+        $msg .= _("dropped references to unknown company in addresses table") . '<br>';
+   
+    // Stage 5: Set on_what_table='companies', on_what_id=company_id where possible for addresses with missing references
+    // I don't know of a better database-independent way of doing this
+    $sql = 'SELECT a.address_id, c.company_id
+            FROM addresses a, companies c
+            WHERE a.address_id != 1 AND a.on_what_id = 0 AND (
+	     c.default_primary_address  = a.address_id OR
+	     c.default_billing_address  = a.address_id OR
+	     c.default_shipping_address = a.address_id OR
+	     c.default_payment_address  = a.address_id)';
+    $rst = $con->Execute($sql);
+
+    $record = array('on_what_table' => 'companies', 'on_what_id' => null);
+    while(!$rst->EOF){
+        $record['on_what_id'] = $rst->fields['company_id'];
+        $con->AutoExecute('addresses', $record, 'UPDATE', 'address_id = '.$rst->fields['address_id']);
+        $rst->moveNext();
+    }
+    if($rst->RecordCount())
+        $msg .=_("created references to companies in address table") . '<br>';
+
+    // Stage 6: Set on_what_table='contacts', on_what_id=contact_id where possible for addresses with missing references
+    // I don't know of a better database-independent way of doing this
+    $sql = 'SELECT a.address_id, c.contact_id
+            FROM addresses a, contacts c
+            WHERE a.address_id != 1 AND a.on_what_id = 0 
+	      AND (c.address_id = a.address_id OR c.home_address_id = a.address_id)';
+    $rst = $con->Execute($sql);
+    
+    $record = array('on_what_table' => 'contacts', 'on_what_id' => null);
+    while(!$rst->EOF){
+        $record['on_what_id'] = $rst->fields['contact_id'];
+        $con->AutoExecute('addresses', $record, 'UPDATE', 'address_id = '.$rst->fields['address_id']);
+	$rst->MoveNext();
+    }
+    if($rst->RecordCount())
+        $msg .= _("created references to contacts in address table") . '<br>';
+    
+    // Stage 7: Delete addresses that still have missing references
+    $record = array('address_record_status' => 'd');
+    if($con->AutoExecute('addresses', $record, 'UPDATE', 'address_id != 1 AND on_what_id = 0'))
+        $msg .= _("deleted addresses with no references") . '<br><br>';
+
+} // end address modifications
+
+
 //FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
 set_admin_preference($con, 'xrms_version', '1.99.2');
 
@@ -4883,6 +4952,9 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.24  2007/05/15 23:17:29  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.23  2007/05/02 15:04:58  fcrossen
  * - Add a system preference type for IDD prefix
  *

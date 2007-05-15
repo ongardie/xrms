@@ -8,7 +8,7 @@
  * @author Beth Macknik
  * @package XRMS_API
  *
- * $Id: utils-database.php,v 1.31 2006/04/28 02:44:17 vanmer Exp $
+ * $Id: utils-database.php,v 1.32 2007/05/15 23:17:30 ongardie Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -370,7 +370,7 @@ register_shutdown_function('db_con_cleanup');
         $fields = get_schema_of_table($con, $_strTableName);
 
         return $fields['primarykey'];
-    };
+    }
 
    /**
     * Retrieves the 'record_status' field of a given table
@@ -408,7 +408,7 @@ register_shutdown_function('db_con_cleanup');
             $_field = false;
 
         return $_field;
-    };
+    }
 
 
    /**
@@ -471,7 +471,7 @@ register_shutdown_function('db_con_cleanup');
         } */
 
         return $struct;
-    };
+    }
 
 
 /*****************************************************************************/
@@ -665,7 +665,7 @@ function __record_add_update ( $_objCon, $_strTableName, $_identifier, $_aryData
 
     // Send back what we have
     return $_retVal;
-};
+}
 
 
  /**
@@ -776,7 +776,7 @@ function __record_insert ( $_objCon, $_strTableName, $_aryData, $_magic_quotes =
 
     // Send back what we have
     return $_retVal;
-};
+}
 
  /**
   * Generic UPDATE method for database
@@ -917,7 +917,7 @@ function __record_update ( $_objCon, $_strTableName, $_identifier, $_aryData, $_
 
     // Send back what we have
     return $_retVal;
-};
+}
 
  /**
   * Generic "FIND" Record method for database
@@ -1087,7 +1087,7 @@ function __record_find ( $_objCon, $_strTableName, $_aryData, $_search_condition
 
     // Send back what we have
     return $_retVal;
-};
+}
 
  /**
   * Generic "DELETE" Record method for database
@@ -1157,7 +1157,7 @@ function __record_delete ( $_objCon, $_strTableName, $_identifier, $_aryData )
         return false;
     }
 
-};
+}
 
 /*****************************************************************************/
 
@@ -1225,11 +1225,11 @@ function add_field($con, $table_name, $field_definition, $table_opts='', &$upgra
     $old_upgrade_count=count($upgrade_msgs);
     //ensure that table already exists
     if (in_array($table_name,$table_list)) {
-        $cols=$dict->MetaColumns($table_name);
-//        print_r($cols);
+        $cols=$con->MetaColumnNames($table_name);
+        //print_r($cols);
         foreach ($field_definition as $fielddata) {
             $field_name=$fielddata['NAME'];
-            if (!array_key_exists($field_name, $cols)) {
+            if (!in_array($field_name, $cols)) {
                 $fdef=array($fielddata);
                 $sql=$dict->ChangeTableSQL($table_name, $fdef, $table_opts);
                 foreach ($sql AS $sql_line) {
@@ -1270,6 +1270,9 @@ function drop_table($con, $table_name, &$upgrade_msgs) {
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.32  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.31  2006/04/28 02:44:17  vanmer
  * - added parameter in getUpdateSQL to fix bug where updates were forced where fields were not defined when magic_quotes is enabled, fix passes magic quotes in the right parameter order
  *

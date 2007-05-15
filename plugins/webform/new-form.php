@@ -6,7 +6,7 @@
  *
  * @todo add opportunity
  *
- * $Id: new-form.php,v 1.8 2006/10/09 16:20:17 braverock Exp $
+ * $Id: new-form.php,v 1.9 2007/05/15 23:17:31 ongardie Exp $
  *
  * NOTE: You need to set a session_user_id below.
  *       You should probably create and XRMS user just for
@@ -256,7 +256,9 @@ if(!$rst->RecordCount()){
 
   $sql = "insert into addresses set
 
-                 company_id = $company_id,
+                 on_what_table = 'companies',
+
+                 on_what_id = $company_id,
 
                  country_id = $country_id,
 
@@ -439,6 +441,9 @@ header("Location: $after_adding_new_companies_from_your_web_site_redirect_to_thi
 
 /**
  * $Log: new-form.php,v $
+ * Revision 1.9  2007/05/15 23:17:31  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.8  2006/10/09 16:20:17  braverock
  * use $_SESSION['session_user_id'] instead of $_POST for security
  *

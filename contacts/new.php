@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.47 2006/12/07 13:43:22 jnhayart Exp $
+ * $Id: new.php,v 1.48 2007/05/15 23:17:30 ongardie Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -113,7 +113,12 @@ if ( !isset($division_menu) ) {
 
 // build address menu
 if ( isset($company_id) ) {
-   $sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_name";
+   $sql = "SELECT address_name, address_id 
+           FROM addresses 
+	   WHERE on_what_table='companies' 
+	     AND on_what_id = $company_id 
+	     AND address_record_status = 'a' 
+	   ORDER BY address_name";
    $rst = $con->execute($sql);
    if ($rst) {
      if ( !$rst->EOF AND !$address_id ) {
@@ -375,6 +380,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.48  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.47  2006/12/07 13:43:22  jnhayart
  * re order fields in Edit/New like in display screen
  * change label for "Summary" for specific localisation

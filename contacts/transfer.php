@@ -2,7 +2,7 @@
 /**
  * Transfer a Contact to Another Company
  *
- * $Id: transfer.php,v 1.10 2006/01/02 23:00:00 vanmer Exp $
+ * $Id: transfer.php,v 1.11 2007/05/15 23:17:30 ongardie Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -21,7 +21,6 @@ $contact_id = $_GET['contact_id'];
 $con = get_xrms_dbconnection();
 // $con->debug = 1;
 
-// This query is done separately in case there is no current address
 $sql = "select * from contacts where contact_id = $contact_id";
 $rst = $con->execute($sql);
 
@@ -75,6 +74,9 @@ end_page();
 
 /**
  * $Log: transfer.php,v $
+ * Revision 1.11  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.10  2006/01/02 23:00:00  vanmer
  * - changed to use centralized dbconnection function
  *

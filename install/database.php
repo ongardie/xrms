@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.59 2005/12/06 22:39:37 vanmer Exp $
+ * $Id: database.php,v 1.60 2007/05/15 23:17:30 ongardie Exp $
  */
 
 /**
@@ -517,7 +517,8 @@ function company_db_tables($con, $table_list) {
     if (!in_array('addresses',$table_list)) {
         $sql ="create table addresses (
                address_id          int not null primary key auto_increment,
-               company_id          int not null default 0,
+               on_what_table       varchar(100) not null default '',
+               on_what_id          int not null default 0,
                country_id          int not null default 1,
                address_name            varchar(100) not null default '',
                address_body            varchar(255) not null default '',
@@ -1275,6 +1276,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.60  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.59  2005/12/06 22:39:37  vanmer
  * - removed system parameters tables from database structure
  *

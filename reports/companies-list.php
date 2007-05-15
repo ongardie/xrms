@@ -188,7 +188,7 @@ function companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_
     {
         $sql2 .= ", categories ca, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm ";
     }
-    $sql2 .= "where a.company_id=c.company_id and c.default_primary_address=a.address_id ";
+    $sql2 .= "where a.on_what_table='companies' and a.on_what_id=c.company_id and c.default_primary_address=a.address_id ";
     $sql2 .= "and c.company_record_status='a' and a.address_record_status='a' and co.country_id = a.country_id ";
     $sql2 .= "and co.country_record_status='a' and u.user_id = c.user_id ";
     $sql2 .= "and ". multi_cond('a.city',$city);
@@ -321,6 +321,9 @@ function nbsp($in)
 
 /**
  * $Log: companies-list.php,v $
+ * Revision 1.13  2007/05/15 23:17:31  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.12  2006/01/02 23:46:52  vanmer
  * - changed to use centralized dbconnection function
  *

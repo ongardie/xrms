@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.37 2006/08/03 15:59:50 ongardie Exp $
+ * $Id: import-companies-3.php,v 1.38 2007/05/15 23:17:29 ongardie Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -498,7 +498,8 @@ foreach ($filearray as $row) {
             $sql_check_address = "select address_id from addresses where
                                   line1 = ". $con->qstr($address_line1) ." and
                                   city = ". $con->qstr($address_city) ." and
-                                  company_id = $company_id";
+                                  on_what_table='companies' and
+                                  on_what_id = $company_id";
             debugSql($sql_check_address);
             $rst = $con->execute($sql_check_address);
             if ($rst->fields['address_id']) {
@@ -556,7 +557,8 @@ foreach ($filearray as $row) {
 
                 //insert the new address
                 $rec = array();
-                $rec['company_id'] = $company_id;
+        	$rec['on_what_table'] = 'companies';
+                $rec['on_what_id'] = $company_id;
                 $rec['address_name'] = $address_name;
                 $rec['line1'] = trim($address_line1);
                 $rec['line2'] = trim($address_line2);
@@ -678,7 +680,8 @@ foreach ($filearray as $row) {
 
                 //insert the new address
                 $rec = array();
-                $rec['company_id'] = $company_id;
+        	$rec['on_what_table'] = 'companies';
+                $rec['on_what_id'] = $company_id;
                 $rec['address_name'] = $address2_name;
                 $rec['line1'] = trim($address2_line1);
                 $rec['line2'] = trim($address2_line2);
@@ -1040,6 +1043,9 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.38  2007/05/15 23:17:29  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.37  2006/08/03 15:59:50  ongardie
  * $rst->fields['key'], not $rst->field('key')
  *

@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.110 2006/12/17 10:50:16 jnhayart Exp $
+ * $Id: utils-interface.php,v 1.111 2007/05/15 23:17:30 ongardie Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -91,6 +91,8 @@ function status_msg($msg) {
       return _("Status not automatically changed.") . ' ' . _("Status should be changed by hand to reflect resolution.");
     case 'division_added':
       return _("Division Added.");
+    case 'division_deleted':
+      return _("Division Deleted.");
 
     // handle unknown messages
     default:
@@ -1150,6 +1152,9 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.111  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.110  2006/12/17 10:50:16  jnhayart
  * Ad centralised function for Buil_Menu_Company_Source
  *

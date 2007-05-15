@@ -4,7 +4,7 @@
  *
  * Delete address-type
  *
- * $Id: delete.php,v 1.2 2006/01/02 22:35:33 vanmer Exp $
+ * $Id: delete.php,v 1.3 2007/05/15 23:17:29 ongardie Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -20,7 +20,7 @@ $address_type_id = $_POST['address_type_id'];
 
 $con = get_xrms_dbconnection();
 
-$sql = "DELETE * FROM address_types WHERE address_type_id = $address_type_id";
+$sql = "DELETE FROM address_types WHERE address_type_id = $address_type_id";
 $rst = $con->execute($sql);
 
 $con->close();
@@ -29,6 +29,9 @@ header("Location: some.php");
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.3  2007/05/15 23:17:29  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.2  2006/01/02 22:35:33  vanmer
  * - changed to use centralized dbconnection function
  *

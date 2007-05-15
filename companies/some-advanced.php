@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.23 2006/01/02 22:56:27 vanmer Exp $
+ * $Id: some-advanced.php,v 1.24 2007/05/15 23:17:30 ongardie Exp $
  */
 
 require_once('../include-locations.inc');
@@ -130,7 +130,8 @@ if ($company_category_id > 0) {
 $where = "where c.industry_id = i.industry_id ";
 $where .= "and c.company_id = con.company_id  ";
 $where .= "and c.crm_status_id = crm.crm_status_id ";
-$where .= "and c.company_id = addr.company_id ";
+$where .= "and c.company_id = addr.on_what_id ";
+$where .= "and addr.on_what_table = 'companies' ";
 $where .= "and r.rating_id = c.rating_id ";
 $where .= "and as1.account_status_id = c.account_status_id ";
 $where .= "and c.user_id = u.user_id ";
@@ -430,6 +431,9 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.24  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.23  2006/01/02 22:56:27  vanmer
  * - changed to use centralized dbconnection function
  *

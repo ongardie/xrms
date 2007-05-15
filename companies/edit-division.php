@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division.php,v 1.18 2006/04/21 00:00:39 vanmer Exp $
+ * $Id: edit-division.php,v 1.19 2007/05/15 23:17:30 ongardie Exp $
  */
 
 require_once('../include-locations.inc');
@@ -38,7 +38,12 @@ if ($rst) {
     $rst->close();
 }
 
-$sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_name";
+$sql = "SELECT address_name, address_id 
+	FROM addresses 
+	WHERE on_what_table = 'companies'
+	  AND on_what_id = $company_id
+	  AND address_record_status = 'a' 
+	ORDER BY address_name";
 $rst = $con->execute($sql);
 $address_menu = $rst->getmenu2('address_id', $address_id, true);
 $rst->close();
@@ -124,6 +129,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: edit-division.php,v $
+ * Revision 1.19  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.18  2006/04/21 00:00:39  vanmer
  * - ensure that plugin output for division bottom works the same for company and division pages
  *

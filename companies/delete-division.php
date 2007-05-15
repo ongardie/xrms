@@ -2,7 +2,7 @@
 /**
  * Delete a division by setting its status
  *
- * $Id: delete-division.php,v 1.4 2006/01/02 22:56:26 vanmer Exp $
+ * $Id: delete-division.php,v 1.5 2007/05/15 23:17:30 ongardie Exp $
  */
 
 require_once('../include-locations.inc');
@@ -33,10 +33,13 @@ $con->execute($upd);
 
 $con->close();
 
-header("Location: divisions.php?msg=address_deleted&company_id=$company_id");
+header("Location: divisions.php?msg=division_deleted&company_id=$company_id");
 
 /**
  * $Log: delete-division.php,v $
+ * Revision 1.5  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.4  2006/01/02 22:56:26  vanmer
  * - changed to use centralized dbconnection function
  *

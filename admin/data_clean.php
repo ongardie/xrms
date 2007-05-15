@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @todo: Active companies should always have active addresses
  *
- * $Id: data_clean.php,v 1.18 2006/12/17 11:29:31 jnhayart Exp $
+ * $Id: data_clean.php,v 1.19 2007/05/15 23:17:29 ongardie Exp $
  */
 
 // where do we include from
@@ -127,6 +127,8 @@ if ($companies_to_fix > 0) {
     }
 }
 
+
+/* Commented out per braverock's recommendation when I was switching addresses to on_what_table, on_what_id -ongardie
 
 // There needs to be at least one address for each company
 $sql = "SELECT companies.company_id, companies.company_record_status ";
@@ -326,6 +328,7 @@ if ($companies_to_fix > 0) {
         $rst->movenext();
     }
 }
+*/
 
 // Make sure that all activities have a name (only active)
 $sql = "SELECT * FROM activities WHERE activity_title = '' and activity_record_status ='a' ";
@@ -389,6 +392,9 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.19  2007/05/15 23:17:29  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.18  2006/12/17 11:29:31  jnhayart
  * found bug on data_clean, when a company is deleted
  *

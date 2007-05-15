@@ -1,8 +1,8 @@
 <?php
 /**
- * Edit address for a company
+ * Edit address for a company or contact
  *
- * $Id: one-address.php,v 1.14 2007/04/06 16:27:19 myelocyte Exp $
+ * $Id: one-address.php,v 1.15 2007/05/15 23:17:30 ongardie Exp $
  */
 
 require_once('../include-locations.inc');
@@ -29,9 +29,6 @@ getGlobalVar($address_type, 'address_type');
 getGlobalVar($use_pretty_address, 'use_pretty_address');
 getGlobalVar($msg, 'msg');
 
-
-$company_name = fetch_company_name($con, $company_id);
-
     if ($company_id) {
         switch ($form_action) {
             case 'new':
@@ -47,7 +44,7 @@ $company_name = fetch_company_name($con, $company_id);
                 $page_title=_("View Business Address");
             break;
         }
-    } else if ($contact_id) {
+    } elseif ($contact_id) {
         switch ($form_action) {
             case 'new':
                 $page_title = _("New Home Address");
@@ -60,6 +57,9 @@ $company_name = fetch_company_name($con, $company_id);
                 $page_title=_("View Home Address");
             break;
         }    
+    } else {
+        echo 'Need company id and/or contact id';
+	exit;
     }
 
 
@@ -80,36 +80,50 @@ $company_name = fetch_company_name($con, $company_id);
                                   'province' => _("State/Province"), 
                                   'postal_code' => _("Postal Code"),
                                   'country_id' => _("Country"),
-                                  'company_id' => _("Company"),
+                                  'on_what_id' => _("Company"),
                                   'address_type' => _("Address Type"),
                                   'address_body' => _("Non-Standard Address"),
                                   'use_pretty_address' => _("Use Non-Standard Address"),
                                   'sort_order' => _("Sort Order")));
 
-    $display_order=array('company_id','address_name','line1','line2','city','province','postal_code','country_id','address_type', 'use_pretty_address','address_body');
+    $display_order=array('on_what_id','address_name','line1','line2','city','province','postal_code','country_id','address_type', 'use_pretty_address','address_body');
         
     $model->SetDisplayOrders($display_order);
 
     $model->SetForeignKeyField('country_id', _("Country"), 'countries', 'country_id', 'country_name', $con, null, 'country_name');
-	$model->SetForeignKeyField('address_type', _("Address Type"), 'address_types', 'address_type', 'address_type', $con, null, 'address_type_sort_value');
+    $model->SetForeignKeyField('address_type', _("Address Type"), 'address_types', 'address_type', 'address_type', $con, null, 'address_type_sort_value');
         
+
     $model->SetFieldType('address_record_status', 'db_only');
     $model->SetFieldType('gmt_offset', 'db_only');
     $model->SetFieldType('daylight_savings_id', 'db_only');
         
     $model->SetCheckboxField('use_pretty_address', 't','f');
-    if ($company_id) {
-        $model->SetHiddenLinkField('company_id', "$http_site_root/companies/one.php?company_id=$company_id",$company_name, $company_id);
-    } else {
-        $model->SetFieldType('company_id','hidden');
-        $model->SetFieldValue('company_id',0);
-    }
+    
     $model->SetFieldType('address_body', 'textarea','cols=50 rows=10');
 
-	global $default_country_id;
-	$model->SetFieldValue('country_id', $default_country_id);
-
-    if ($contact_id) {
+    global $default_country_id;
+    $model->SetFieldValue('country_id', $default_country_id);
+    
+    $model->SetFieldType('on_what_id','hidden');
+    if ($company_id) {
+        $model->AddDatabaseFilter('on_what_table', 'companies');
+	$model->SetFieldValue('on_what_id', $company_id);
+    }else{
+        $model->AddDatabaseFilter('on_what_table', 'contacts');
+	$model->SetFieldValue('on_what_id', $contact_id);
+    }
+    
+    if ($company_id) {
+	$model->AddField('<input type="hidden" name="company_id" value="'.$company_id.'">
+	    <tr>
+	     <td class="widget_content widget_label_right">Company</td>
+	     <td valign="top" align="left" class="widget_content_form_element">
+	      <a href="'.$http_site_root.'/companies/one.php?company_id='.$company_id.'">'.
+	       fetch_company_name($con, $company_id).
+	    '</a></td></tr>', 'html', 0);
+    }
+    if ($contact_id) { // these are not exclusive - don't replace this with an "else"
         $model->AddField("<input type=hidden name=contact_id value=$contact_id>", 'html',0);
     }
 
@@ -145,7 +159,10 @@ $company_name = fetch_company_name($con, $company_id);
         $return_url .= "&msg=$msg";
     }
 
-    if (!$template_form_html) header("Location: $return_url&msg=$msg");
+    if (!$template_form_html) {
+        header("Location: $return_url&msg=$msg");
+	exit;
+    }
 
     start_page($page_title, true, $msg);
 ?>
@@ -216,6 +233,9 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.15  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.14  2007/04/06 16:27:19  myelocyte
  * - Enabled localization of two strings
  * - Updated pot file to reflect this changes

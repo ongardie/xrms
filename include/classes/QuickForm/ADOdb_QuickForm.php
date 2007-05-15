@@ -1,4 +1,4 @@
-<?php
+<?php // vim: tabstop=4
 /**
  * View class of the ADOdb_QuickForm system.  
  *
@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.24 2006/01/27 22:45:05 daturaarutad Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.25 2007/05/15 23:17:30 ongardie Exp $
  */
 
 
@@ -704,6 +704,9 @@ END;
 
 /**
 * $Log: ADOdb_QuickForm.php,v $
+* Revision 1.25  2007/05/15 23:17:30  ongardie
+* - Addresses now associate with on_what_table, on_what_id instead of company_id.
+*
 * Revision 1.24  2006/01/27 22:45:05  daturaarutad
 * fix to GetOriginalFieldName if field not found
 *

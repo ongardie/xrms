@@ -2,7 +2,7 @@
 /**
  * Delete company
  *
- * $Id: delete.php,v 1.7 2006/04/26 19:49:46 braverock Exp $
+ * $Id: delete.php,v 1.8 2007/05/15 23:17:30 ongardie Exp $
  */
 require_once('../include-locations.inc');
 
@@ -63,7 +63,7 @@ $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
 
-$sql = "SELECT * FROM addresses WHERE company_id = $company_id";
+$sql = "SELECT * FROM addresses WHERE on_what_table='companies' AND on_what_id = $company_id";
 $rst = $con->execute($sql);
 
 $rec = array();
@@ -100,6 +100,9 @@ header("Location: some.php?msg=company_deleted");
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.8  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.7  2006/04/26 19:49:46  braverock
  * - change to use GetGlobalVar to handle both $_POST and $_GET
  *

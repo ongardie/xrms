@@ -1,4 +1,4 @@
-<?php
+<?php // vim:tabstop=4
 /**
 * Model class of the ADOdb_QuickForm system.
 *
@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.19 2005/11/17 18:15:40 daturaarutad Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.20 2007/05/15 23:17:30 ongardie Exp $
 */
 
 
@@ -39,6 +39,8 @@ class ADOdb_QuickForm_Model {
 	/** @var string value to set when record is deleted */
     var $logical_delete_value;
 
+	/** @var array database filters array(column1 => value1, column2 => value2, ...) */
+	var $db_filters;
 
 	/**
 	* Constructor
@@ -47,6 +49,7 @@ class ADOdb_QuickForm_Model {
 	function ADOdb_QuickForm_Model() { 
 		$this->DBStructure = array();
 		$this->Values = array();
+		$this->db_filters = array();
 	}
 
 
@@ -236,6 +239,18 @@ class ADOdb_QuickForm_Model {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	* Add database filter.
+	* Used for things like on_what_table='companies'
+	*
+	* @param string $column
+	* @param string $value
+	*/
+	function AddDatabaseFilter($column, $value){
+		$this->RemoveField($column);
+		$this->db_filters[$column] = $value;
 	}
 
 	/**
@@ -621,9 +636,17 @@ class ADOdb_QuickForm_Model {
 	
 			$columns = $this->GetColumns();
 	
-   			$sql="select $columns from $tablename where $primarykeyname = $id";
-
 			$dbh = $this->DBStructure['dbh']; 
+   			
+			$sql="select $columns from $tablename where $primarykeyname = $id";
+			
+			if(!empty($this->db_filters)){
+				$sql .= " and (";
+				foreach($this->db_filters as $col => $val)
+					$sql .= $col." = ".$dbh->qstr($val);
+				$sql .= ")";
+			}
+
    			$this->rst = $dbh->execute($sql);
 	
    			if (!$this->rst) { db_error_handler($dbh,$sql); return false; }
@@ -661,7 +684,7 @@ class ADOdb_QuickForm_Model {
 	
     	if (!$this->rst) { db_error_handler($dbh,$sql); return false; }
 	
-    	$sql = $dbh->GetUpdateSQL($this->rst, $this->Values, true, false, ADODB_FORCE_NULL);
+    	$sql = $dbh->GetUpdateSQL($this->rst, array_merge($this->Values, $this->db_filters), true, false, ADODB_FORCE_NULL);
 	
     	if($sql) {
       		$rst=$dbh->execute($sql);
@@ -683,7 +706,7 @@ class ADOdb_QuickForm_Model {
 		// only quote enums on Insert
 		$quoted_values = $this->QuoteValues();
 	
-    	$sql = $dbh->GetInsertSQL($tablename, $quoted_values, false, ADODB_FORCE_IGNORE);
+    	$sql = $dbh->GetInsertSQL($tablename, array_merge($quoted_values, $this->db_filters), false, ADODB_FORCE_IGNORE);
 
     	if($sql) {
       		$rst=$dbh->execute($sql);
@@ -779,6 +802,9 @@ class ADOdb_QuickForm_Model {
 
 /**
 * $Log: ADOdb_QuickForm_Model.php,v $
+* Revision 1.20  2007/05/15 23:17:30  ongardie
+* - Addresses now associate with on_what_table, on_what_id instead of company_id.
+*
 * Revision 1.19  2005/11/17 18:15:40  daturaarutad
 * oops
 *

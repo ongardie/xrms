@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a contact
  *
- * $Id: edit-address-2.php,v 1.17 2006/06/23 22:02:24 ongardie Exp $
+ * $Id: edit-address-2.php,v 1.18 2007/05/15 23:17:30 ongardie Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -92,7 +92,8 @@ if ($alt_address) {
 
     //save to database
     $rec = array();
-    $rec['company_id'] = $company_id;
+    $rec['on_what_table'] = 'companies';
+    $rec['on_what_id'] = $company_id;
     $rec['country_id'] = $country_id;
     $rec['address_name'] = $address_name;
     $rec['line1'] = $line1;
@@ -161,6 +162,9 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.18  2007/05/15 23:17:30  ongardie
+ * - Addresses now associate with on_what_table, on_what_id instead of company_id.
+ *
  * Revision 1.17  2006/06/23 22:02:24  ongardie
  * Needed the require of utils-addresses for add_address() to work.
  *
@@ -211,7 +215,7 @@ header("Location: $return_url");
  * - added processing for "Use Alternate Address" section
  *
  * Revision 1.2  2004/06/09 17:36:09  gpowers
- * - added $Id: edit-address-2.php,v 1.17 2006/06/23 22:02:24 ongardie Exp $Log: tags.
+ * - added $Id: edit-address-2.php,v 1.18 2007/05/15 23:17:30 ongardie Exp $Log: tags.
  *
  * Revision 1.1  2004/06/09 16:52:14  gpowers
  * - Contact Address Editing

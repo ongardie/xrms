@@ -100,11 +100,11 @@ custom4, extref1, extref2, extref3
 
 my $putAddress = $xrms_dbh->prepare(q{
     INSERT INTO addresses ( 
-		address_id, company_id, country_id, address_name, address_body, line1, line2,
+		address_id, on_what_table, on_what_id, country_id, address_name, address_body, line1, line2,
 city, province, postal_code,
 		use_pretty_address, offset, daylight_savings_id, address_record_status
 	) VALUES (
-		NULL,?,189,?,'',?,'',?,'',?,
+		NULL,'companies',?,189,?,'',?,'',?,'',?,
 		'f',NULL,NULL,'a'
 	) 
 });
