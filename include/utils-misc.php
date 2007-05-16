@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.185 2007/05/15 23:17:30 ongardie Exp $
+ * $Id: utils-misc.php,v 1.186 2007/05/16 16:02:26 fcrossen Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -925,7 +925,7 @@ function clean_phone_fields_for_db(&$fields, $phone_fields) {
 function clean_phone_number_for_db($phone_number_in) {
  	$phone_number = strval(trim($phone_number_in));
  	$cleaned_phone_number = '';
- 	$dbcon = get_xrms_dbconnection();
+ 	$con = get_xrms_dbconnection();
  	if (($cleaning_preference = get_admin_preference( $dbcon, 'phone_fax_number_clean')) == _('Default')) {
  		return preg_replace("/[^\d]/", '', $phone_number);
 	}
@@ -2081,6 +2081,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.186  2007/05/16 16:02:26  fcrossen
+ * - clean_phone_number_for_db() fixed typo causing PHP Notice:  Undefined variable
+ *
  * Revision 1.185  2007/05/15 23:17:30  ongardie
  * - Addresses now associate with on_what_table, on_what_id instead of company_id.
  *
