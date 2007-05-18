@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.48 2007/05/15 23:17:30 ongardie Exp $
+ * $Id: new.php,v 1.49 2007/05/18 14:43:35 fcrossen Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -251,12 +251,6 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php echo _("Fax"); ?></td>
                 <td class=widget_content_form_element><input type=text name=fax size=30 value="<?php  echo $fax; ?>"></td>
             </tr>
-
-            <tr>
-                <td class=widget_label_right><?php echo _("Interests"); ?></td>
-                <td class=widget_content_form_element><input type=text name=interests size=35></td>
-            </tr>
-
             <tr>
                 <td class=widget_label_right><?php echo _("Gender"); ?></td>
                 <td class=widget_content_form_element>
@@ -380,6 +374,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.49  2007/05/18 14:43:35  fcrossen
+ * - removed the extra/redundant 'interests' field
+ *
  * Revision 1.48  2007/05/15 23:17:30  ongardie
  * - Addresses now associate with on_what_table, on_what_id instead of company_id.
  *
