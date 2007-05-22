@@ -1,7 +1,7 @@
 <?php
 /*
 *
-* Mapquest XRMS Plugin v0.1
+* Mapquest XRMS Plugin
 *
 * copyright 2004 Glenn Powers <glenn@net127.com>
 *
@@ -18,8 +18,15 @@ function mapquest($line1, $city, $province, $iso_code2, $address_to_display) {
     $url_province = urlencode ($province);
     $url_country = urlencode ($iso_code2);
 
-    return "<a href=\"http://www.mapquest.com/maps/map.adp?country=" . $url_country ."&address=" . $url_line1 . "&city=" . $url_city . "&state=" . $url_province . "\">" . $address_to_display . "</a>";
+    return "<a target=\"_blank\" href=\"http://www.mapquest.com/maps/map.adp?country=" . $url_country ."&address=" . $url_line1 . "&city=" . $url_city . "&state=" . $url_province . "\">" . $address_to_display . "</a>";
 //    return "COUNTRY: " . $url_country . "<BR>city: " . $url_city  . "<BR>address_id: " . $address_id;
 }
 
+/**
+ * $Log: setup.php,v $
+ * Revision 1.2  2007/05/22 13:18:46  fcrossen
+ * - change url target to "_blank" as per request from pmaxx (https://sourceforge.net/forum/forum.php?thread_id=1561411&forum_id=364724)
+ *
+ *
+ */
 ?>
