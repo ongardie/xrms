@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.54 2006/12/29 22:00:14 ongardie Exp $
+* $Id: activities-widget.php,v 1.55 2007/06/01 14:27:09 fcrossen Exp $
 */
 
 global $include_directory;
@@ -733,9 +733,11 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
                         <input type=text size=16 ID=\"f_date_new_activity\" name=ends_at value=\"" . date('Y-m-d') . "\">
                         <img ID=\"f_trigger_new_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" . "</td>
                     <td>\n".
-                        render_create_button(_("Add")) .
-                        render_create_button(_("Done"),'button',"javascript: markComplete();") . "
-                    </td>
+//                        render_create_button(_("Add")) .
+//                        render_create_button(_("Done"),'button',"javascript: markComplete();") . "
+                        render_create_button(_("Add"), 'submit', false, false, false, 'activities') .
+                        render_create_button(_("Done"),'button',"javascript: markComplete();", false, false, 'activities') . "
+                    <td>\n".                    
                 </tr>
             </table>
             </form>
@@ -891,6 +893,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.55  2007/06/01 14:27:09  fcrossen
+* - fixed missing table name in call to render_create_button() - perms were not being checked. See https://sourceforge.net/forum/forum.php?thread_id=1742584&forum_id=305410
+*
 * Revision 1.54  2006/12/29 22:00:14  ongardie
 * - Avoid SQL error when contact_id is empty.
 *
