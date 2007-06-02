@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.56 2007/06/02 11:29:42 fcrossen Exp $
+* $Id: activities-widget.php,v 1.57 2007/06/02 11:32:52 fcrossen Exp $
 */
 
 global $include_directory;
@@ -737,7 +737,7 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
 //                        render_create_button(_("Done"),'button',"javascript: markComplete();") . "
                         render_create_button(_("Add"), 'submit', false, false, false, 'activities') .
                         render_create_button(_("Done"),'button',"javascript: markComplete();", false, false, 'activities') . "
-                    <td>\n.                    
+                    </td>                    
                 </tr>
             </table>
             </form>
@@ -893,6 +893,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.57  2007/06/02 11:32:52  fcrossen
+* - fixed a HTML typo
+*
 * Revision 1.56  2007/06/02 11:29:42  fcrossen
 * - fixed missing " char introduced in last commit. (Thanks randym56!)
 *
