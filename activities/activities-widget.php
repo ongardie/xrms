@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.55 2007/06/01 14:27:09 fcrossen Exp $
+* $Id: activities-widget.php,v 1.56 2007/06/02 11:29:42 fcrossen Exp $
 */
 
 global $include_directory;
@@ -737,7 +737,7 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
 //                        render_create_button(_("Done"),'button',"javascript: markComplete();") . "
                         render_create_button(_("Add"), 'submit', false, false, false, 'activities') .
                         render_create_button(_("Done"),'button',"javascript: markComplete();", false, false, 'activities') . "
-                    <td>\n".                    
+                    <td>\n.                    
                 </tr>
             </table>
             </form>
@@ -893,6 +893,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.56  2007/06/02 11:29:42  fcrossen
+* - fixed missing " char introduced in last commit. (Thanks randym56!)
+*
 * Revision 1.55  2007/06/01 14:27:09  fcrossen
 * - fixed missing table name in call to render_create_button() - perms were not being checked. See https://sourceforge.net/forum/forum.php?thread_id=1742584&forum_id=305410
 *
