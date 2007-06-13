@@ -1,4 +1,5 @@
-$Id: README,v 1.2 2005/02/10 13:42:18 braverock Exp $
+Provides certain userdefined fields in XRMS.
+$Id: README.txt,v 1.1 2007/06/13 17:38:11 niclowe Exp $
 
 *******************************
 *** WARNING WARNING WARNING ***
