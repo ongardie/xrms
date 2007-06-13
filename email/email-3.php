@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.21 2007/06/13 16:42:12 niclowe Exp $
+ * $Id: email-3.php,v 1.22 2007/06/13 16:51:42 niclowe Exp $
  */
 
 
@@ -83,14 +83,13 @@ else
 $con = get_xrms_dbconnection();
 //$con->debug = 1;
 
-$sql = "select cont.contact_id, cont.email, cont.first_names, cont.last_name, c.company_name, u.username,c.company_id
+$sql = "select cont.contact_id, cont.email, cont.first_names, cont.last_name, c.company_name, u.username,c.company_id, cont.email_status
 from contacts cont, companies c, users u
 where c.company_id = cont.company_id
 and c.user_id = u.user_id
 and cont.contact_id in ($imploded_contacts)
 and length(cont.email) > 0
 and contact_record_status = 'a' 
-and cont.email_status='a'
 order by c.company_name,cont.last_name asc";
 
 $_x = 1;
@@ -100,7 +99,22 @@ if ($rst) {
     while (!$rst->EOF) {
         $contact_rows .= '<tr>';
         $contact_rows .= '<td class="widget_content_form_element">';
-        $contact_rows .= '<input type="checkbox" name="array_of_contacts[]" id="array_of_contacts_' . $_x++ . '" value="' . $rst->fields['contact_id'] . '" checked="checked"></td>';
+				switch ($rst->fields['email_status']) {
+          case "a" : // active emails;
+										$contact_rows .= '<input type="checkbox" name="array_of_contacts[]" id="array_of_contacts_' . $_x++ . '" value="' . $rst->fields['contact_id'] . '" checked="checked"></td>';
+                    break;
+          case "o" : // opted out emails;
+							 		 $contact_rows .= '<input type="checkbox" name="array_of_contacts[]" id="array_of_contacts_' . $_x++ . '" value="' . $rst->fields['contact_id'] . '">'._("Opted Out").'</td>';
+                    break;
+          case "b" : // code to do something;
+							 		 $contact_rows .= '<input type="checkbox" name="array_of_contacts[]" id="array_of_contacts_' . $_x++ . '" value="' . $rst->fields['contact_id'] . '">'._("Bounced").'</td>';
+                    break;
+          case "" : // code to do something;
+                    break;
+          default : // code to do something;
+									$contact_rows .= '<input type="checkbox" name="array_of_contacts[]" id="array_of_contacts_' . $_x++ . '" value="' . $rst->fields['contact_id'] . '" checked="checked"></td>';
+        }
+        
         $contact_rows .= '<td class="widget_content">' . $rst->fields['company_name'] . '</td>';
         $contact_rows .= '<td class="widget_content">' . $rst->fields['username'] . '</td>';
         $contact_rows .= '<td class="widget_content">' . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</td>';
@@ -129,7 +143,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_header colspan=6><?php echo _("Confirm Recipients"); ?></td>
             </tr>
             <tr>
-                <td class="widget_label">&nbsp;</td>
+                <td class="widget_label"><?php echo _("Email Status"); ?></td>
                 <td class="widget_label"><?php echo _("Company"); ?></td>
                 <td class="widget_label"><?php echo _("Owner"); ?></td>
                 <td class="widget_label"><?php echo _("Contact"); ?></td>
@@ -162,8 +176,8 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
- * Revision 1.21  2007/06/13 16:42:12  niclowe
- * Allowed only email addresses with status 'a' to be sent with the bulk mailer...
+ * Revision 1.22  2007/06/13 16:51:42  niclowe
+ * fixed bug where opted out email addresses werent counted in bulk mailer.
  *
  * Revision 1.20  2006/10/26 08:57:56  niclowe
  * -added custom field to mail merge
