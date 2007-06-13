@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.25 2007/04/06 16:27:19 myelocyte Exp $
+* $Id: email-2.php,v 1.26 2007/06/13 17:08:19 niclowe Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -128,50 +128,49 @@ else
     $_SESSION['attachment_list'] = $attach_list;
 
     }
-	
-	//add fields menu for custom emails
-	$i=0;
-	$sql="SHOW COLUMNS FROM contacts";
-	$rst_fields=$con->execute($sql);
-	$contacts_menu.="<select name=\"contacts_fields\">\n";
-	$arr=$rst_fields->GetRows();
-	/*
-	I had to do it the way below because this way doesnt work....
-	$contacts_menu.=$rst_fields->GetMenu("companies_fields");
-	*/
-	while ($i <$rst_fields->RecordCount()) {
-				$contacts_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
-				$i++;
-	}
-	$contacts_menu.="</select>";
-	$i=0;
-	
-	$sql="SHOW COLUMNS FROM companies";
-	$rst_fields=$con->execute($sql);
-	$companies_menu.="<select name=\"companies_fields\">\n";
-	$arr=$rst_fields->GetRows();
-	while ($i <$rst_fields->RecordCount()) {
-				$companies_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
-				$i++;
-	}
-	$companies_menu.="</select>";
-	$i=0;
-	
-	$sql="SHOW COLUMNS FROM addresses";
-	$rst_fields=$con->execute($sql);
-	$addresses_menu.="<select name=\"addresses_fields\">\n";
-	$arr=$rst_fields->GetRows();
-	while ($i <$rst_fields->RecordCount()) {
-				$addresses_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
-				$i++;
-	}
-	$addresses_menu.="</select>";
-
-
-	
-
     $rst->close();
 }
+
+//add fields menu for custom emails
+$con = get_xrms_dbconnection();
+$i=0;
+$sql="SHOW COLUMNS FROM contacts";
+$rst_fields=$con->execute($sql);
+$contacts_menu.="<select name=\"contacts_fields\">\n";
+$arr=$rst_fields->GetRows();
+/*
+I had to do it the way below because this way doesnt work....
+$contacts_menu.=$rst_fields->GetMenu("companies_fields");
+*/
+while ($i <$rst_fields->RecordCount()) {
+		$contacts_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
+		$i++;
+}
+$contacts_menu.="</select>";
+$i=0;
+
+$sql="SHOW COLUMNS FROM companies";
+$rst_fields=$con->execute($sql);
+$companies_menu.="<select name=\"companies_fields\">\n";
+$arr=$rst_fields->GetRows();
+while ($i <$rst_fields->RecordCount()) {
+		$companies_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
+		$i++;
+}
+$companies_menu.="</select>";
+$i=0;
+
+$sql="SHOW COLUMNS FROM addresses";
+$rst_fields=$con->execute($sql);
+$addresses_menu.="<select name=\"addresses_fields\">\n";
+$arr=$rst_fields->GetRows();
+while ($i <$rst_fields->RecordCount()) {
+		$addresses_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
+		$i++;
+}
+$addresses_menu.="</select>";
+
+
 
 
 function createFileList ()
@@ -449,6 +448,9 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.26  2007/06/13 17:08:19  niclowe
+* Fixed [ 1648768 ] Bug in email-2.php
+*
 * Revision 1.25  2007/04/06 16:27:19  myelocyte
 * - Enabled localization of two strings
 * - Updated pot file to reflect this changes
