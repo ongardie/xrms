@@ -1,3 +1,4 @@
+Active PHP Bookmarks - lbstone.com/apb/
 ######################################################################
 Active PHP Bookmarks - lbstone.com/apb/
 Plugin for XRMS - http://sourceforge.net/projects/xrms/
