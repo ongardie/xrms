@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.20 2006/10/26 08:57:56 niclowe Exp $
+ * $Id: email-3.php,v 1.21 2007/06/13 16:42:12 niclowe Exp $
  */
 
 
@@ -89,7 +89,9 @@ where c.company_id = cont.company_id
 and c.user_id = u.user_id
 and cont.contact_id in ($imploded_contacts)
 and length(cont.email) > 0
-and contact_record_status = 'a' order by c.company_name,cont.last_name asc";
+and contact_record_status = 'a' 
+and cont.email_status='a'
+order by c.company_name,cont.last_name asc";
 
 $_x = 1;
 
@@ -160,6 +162,9 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.21  2007/06/13 16:42:12  niclowe
+ * Allowed only email addresses with status 'a' to be sent with the bulk mailer...
+ *
  * Revision 1.20  2006/10/26 08:57:56  niclowe
  * -added custom field to mail merge
  * -added error trapping for emails that fail silently (or appear to have worked)
