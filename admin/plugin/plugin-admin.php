@@ -15,7 +15,7 @@
  * @author Philippe Mingo
  * @author Brian Peterson
  *
- * $Id: plugin-admin.php,v 1.8 2007/06/13 18:15:06 niclowe Exp $
+ * $Id: plugin-admin.php,v 1.9 2007/06/13 18:21:45 niclowe Exp $
  * @package xrms
  * @subpackage plugins
  */
@@ -247,7 +247,7 @@ echo "<tr><th colspan=2>" .
                 $text=file_get_contents($value);
                 //grab the first say 50 characters of the readme file
 								$first_50__chars=substr($text,0,50);
-                $readme_html="<a href=$value>".$first_50__chars.strlen($first_50__chars)."</a>";
+                $readme_html="<a href=$value>".$first_50__chars."</a>";
             }else{
                 $readme_html="No documentation";
             }
@@ -317,8 +317,8 @@ echo $output;
 
 /**
  * $Log: plugin-admin.php,v $
- * Revision 1.8  2007/06/13 18:15:06  niclowe
- * First line is file description now for new plugin documentation
+ * Revision 1.9  2007/06/13 18:21:45  niclowe
+ * minor bugfix
  *
  * Revision 1.7  2005/11/28 18:46:16  daturaarutad
  * move status message to top of page
