@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: teamnotice_list.php,v 1.3 2007/01/16 15:46:19 fcrossen Exp $
+ * $Id: teamnotice_list.php,v 1.4 2007/06/13 16:54:54 niclowe Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -36,7 +36,7 @@ $teamnotice_id = intval($_GET['teamnotice_id']); // teamnotice_id should always 
 
 //$button1=$con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Delete")."\" onclick=\"javascript: location.href='del.php?teamnotice_id="), 'teamnotice_id', $con->qstr("'\">")) . ";
 $sql="SELECT " . 
-$con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Delete")."\" onclick=\"javascript: location.href='teamnotice_list.php?form_action=del&teamnotice_id="), 'teamnotice_id', $con->qstr("'\">")) . " AS LINK, teamnotices.notice_heading as 'Heading' FROM teamnotices where status='a'";
+$con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Delete")."\" onclick=\"javascript: location.href='teamnotice_list.php?form_action=del&teamnotice_id="), 'teamnotice_id', $con->qstr("'\">")) . " AS LINK, teamnotices.notice_heading as Heading FROM teamnotices where status='a'";
 
     $columns = array();
     $columns[] = array('name' => 'Delete', 'index_sql' => 'LINK');
@@ -91,6 +91,9 @@ end_page();
 
 /**
  * $Log: teamnotice_list.php,v $
+ * Revision 1.4  2007/06/13 16:54:54  niclowe
+ * Fixed bug [ 1676227 ] Fix of SQL syntax error for teamnotices plugin - Postgres
+ *
  * Revision 1.3  2007/01/16 15:46:19  fcrossen
  *  - fixed delete teamnotice bug
  *
