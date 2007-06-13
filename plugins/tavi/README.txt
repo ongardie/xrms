@@ -1,4 +1,6 @@
-$Id: README.txt,v 1.1 2005/04/12 20:45:10 gpowers Exp $
+WikkiTikkiTavi Plugin for XRMS
+
+$Id: README.txt,v 1.2 2007/06/13 18:08:29 niclowe Exp $
 
 XRMS Tavi Plugin - REAMDE
 -------------------------

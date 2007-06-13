@@ -1,3 +1,4 @@
+Show notices for your sales team on login in XRMS.
 1/7/2005
 
 TeamNotice Plugin

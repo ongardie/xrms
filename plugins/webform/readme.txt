@@ -1,4 +1,5 @@
-# $Id: readme.txt,v 1.2 2006/10/05 11:23:22 braverock Exp $
+Integrated Contact Us form for your website.
+# $Id: readme.txt,v 1.3 2007/06/13 18:09:22 niclowe Exp $
 
 What this plugin does/can do
 
@@ -26,6 +27,9 @@ Nic Lowe
 Www.newtowncarshare.info
 
 # $Log: readme.txt,v $
+# Revision 1.3  2007/06/13 18:09:22  niclowe
+# First line is file description now for new plugin documentation
+#
 # Revision 1.2  2006/10/05 11:23:22  braverock
 # - move all vars to vars_webform.inc
 # - make index a simple redirect to avoid header errors

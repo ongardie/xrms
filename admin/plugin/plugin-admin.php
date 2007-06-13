@@ -15,7 +15,7 @@
  * @author Philippe Mingo
  * @author Brian Peterson
  *
- * $Id: plugin-admin.php,v 1.7 2005/11/28 18:46:16 daturaarutad Exp $
+ * $Id: plugin-admin.php,v 1.8 2007/06/13 18:15:06 niclowe Exp $
  * @package xrms
  * @subpackage plugins
  */
@@ -237,8 +237,25 @@ echo "<tr><th colspan=2>" .
         } else {
             $sw = '';
         }
+        //this code looks for a README type files in the directory path of the plugin
+        $filename_array=array("../../plugins/".$plg."/README.txt","../../plugins/".$plg."/README");
+				$foundfile=0;
+        foreach ($filename_array As $value) {
+					if($foundfile==0){				
+            if(file_exists($value)){
+    						$foundfile=1;
+                $text=file_get_contents($value);
+                //grab the first say 50 characters of the readme file
+								$first_50__chars=substr($text,0,50);
+                $readme_html="<a href=$value>".$first_50__chars.strlen($first_50__chars)."</a>";
+            }else{
+                $readme_html="No documentation";
+            }
+					}
+        }
+				
         echo '<tr>' .
-             "<td>$plg</td><td><input$sw type=checkbox name=plgs_$plg></td>".
+             "<td>$plg</td><td><input$sw type=checkbox name=plgs_$plg></td><td>$readme_html</td>".
              "</tr>\n";
       }
       echo '<tr><td><input type=submit value='._("Submit").'></td></tr>';
@@ -300,6 +317,9 @@ echo $output;
 
 /**
  * $Log: plugin-admin.php,v $
+ * Revision 1.8  2007/06/13 18:15:06  niclowe
+ * First line is file description now for new plugin documentation
+ *
  * Revision 1.7  2005/11/28 18:46:16  daturaarutad
  * move status message to top of page
  *
