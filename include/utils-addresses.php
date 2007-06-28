@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @author Brian Peterson
  *
- * $Id: utils-addresses.php,v 1.13 2007/05/15 23:17:30 ongardie Exp $
+ * $Id: utils-addresses.php,v 1.14 2007/06/28 04:35:44 niclowe Exp $
  *
  */
 
@@ -259,8 +259,10 @@ function find_address($con, $address_data, $show_deleted = false, $return_record
     * @static
     */
     $where_fields = array();
+    $_table_name = 'addresses';
 
     foreach ($address_data as $_field => $_value) {
+						
         switch ($_field) {
             case 'city':
             case 'province':
@@ -270,8 +272,9 @@ function find_address($con, $address_data, $show_deleted = false, $return_record
                 $extra_where[$_field] = $_value;
         }
     }
-
-    $_retVal = __record_find ( $con, $_table_name, $where_fields, $show_deleted, $return_recordset );
+		//old code - Nic 20070628
+    //$_retVal = __record_find ( $con, $_table_name, $where_fields, $show_deleted, $return_recordset );
+		$_retVal = __record_find ( $con, $_table_name, $extra_where, $show_deleted, $return_recordset );
 
     return $_retVal;
 };
@@ -411,6 +414,10 @@ function pull_address_fields ( $array_data )
 /**********************************************************************/
  /**
  * $Log: utils-addresses.php,v $
+ * Revision 1.14  2007/06/28 04:35:44  niclowe
+ * fixed bug in find_address function that meant it sent an where array to _record_find .
+ * Also $_table_name wasnt dimensioned..
+ *
  * Revision 1.13  2007/05/15 23:17:30  ongardie
  * - Addresses now associate with on_what_table, on_what_id instead of company_id.
  *
