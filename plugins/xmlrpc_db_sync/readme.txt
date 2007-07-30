@@ -1,25 +1,26 @@
 XMLRPC Foreign Database Synchronisation Tool.
 
 This tool is used for one way synchronisation (towards XRMS) with foreign databases or applications.
+It requires high level of technical knowledge to implement correctly. 
 
 It is an implementation of Keith Devens XMLRPC tool for php.
 
-This plugin allows other applications to remotely call certain XRMS functions that are useful for syncrhonising different databases.
+This plugin allows other applications to remotely call certain XRMS functions that are useful for synchronising different databases.
 
-For example, lets say you had another application called the "CLIENT" that has your company and contact records in it. You wish to make sure that XRMS (the "SERVER") has the same information, and that when you update your data in CLIENT, you want it also to be updated in the SERVER.
+For example, lets say you had another application called the "CLIENT" that has your company and contact records in it. You wish to make sure that XRMS (the "SERVER") has the same information, and that when you update your data in CLIENT, you want it also to be updated in the SERVER. Your CLIENT might be an accounting database, for example.
 
-You can use these functions available in the xrms_api.php file to do this by calling them directly from your CLIENT application.
+You can use these functions available in the xrms_api.php file to do this by calling them directly from your CLIENT application, providing you are able to modify the CLIENT codebase.
 
 To ensure security, there are certain prohibited sql strings that cannot be passed. This is to protect remote access by hackers who attempt to corrupt or modify your database.
 
-The benefits of using XMLRPC mean that if your application is in:
+The benefits of using XMLRPC mean that if your CLIENT application is in:
 
 JAVA
 VB
 VB.NET
 PHP
 PYTHON
-etc
+or many other languages supported by XMLRPC
 
 the application can still talk to XRMS using the XMLRPC protocol.
 
