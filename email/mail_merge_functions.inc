@@ -61,8 +61,16 @@ function mail_merge_text($text,$contact_id,$address_id=""){
 									AND c.contact_id='".$contact_id."'
 									AND a.address_id='".$address_id."'";
 						}
-
+						
 						$rst_data = $con->execute($sql);
+						//if there is no address get contact info without address info 
+            if ($rst_data->fields['address_id'] <= 0) { 
+            $sql="select c.*, cn.*  
+            FROM contacts as c, companies as cn  
+            WHERE c.company_id=cn.company_id  
+            AND c.contact_id='".$contact_id."'"; 
+            $rst_data = $con->execute($sql); 
+            } 
 
 
 						//echo $sql;
