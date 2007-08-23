@@ -140,57 +140,6 @@ function HelloWorld($dummy){
 
 }
 
-function blogger_getRecentPosts($params){
-
-			/*getRecentPosts(String appkey, String blogid, String username, String password, int numberOfPosts)
-
-			Returns an array of structs containing the latest n posts to a given blog, newest first.
-
-			Each post struct includes: dateCreated (when post was made), userid (who made the post), postid, and content.*/
-
-			$username = $params[2];
-
-			$password = $params[3];
-
-			$numposts = $params[4];
-
-			if(validateLogin($username, $password)){
-
-						$conn = init_db_connection();
-
-						$rs_id = get_weblog_entries('1', $conn, $numposts);
-
-						$posts = array();
-
-						while($row = mysql_fetch_assoc($rs_id)){
-
-									$post['userid'] = '1';
-
-									$post['dateCreated'] = XMLRPC_convert_timestamp_to_iso8601(
-
-									convert_mysql_datetime($row['DateTime_Entered']));
-
-									$post['content'] = $row['entry'];
-
-									$post['postid'] = (string)$row['weblog_id'];
-
-									$posts[] = $post;
-
-						}
-
-						close_db_connection($conn);
-
-						XMLRPC_response(XMLRPC_prepare($posts), WEBLOG_XMLRPC_USERAGENT);
-
-			}else{
-
-						XMLRPC_error("1", "getRecentPosts() error: Your login ($username, $password) didn't validate.",
-
-						WEBLOG_XMLRPC_USERAGENT);
-
-			}
-
-}
 
 function XMLRPC_method_not_found($methodName){
 
