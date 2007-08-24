@@ -16,7 +16,7 @@ $xmlrpc_methods['xrms_find_address']  		= 'xrms_find_address';
 $xmlrpc_methods['xrms_add_update_address']  		= 'xrms_add_update_address';
 
 
-require_once('../../../include-locations.inc');
+require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
