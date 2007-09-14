@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.101 2006/12/07 13:43:22 jnhayart Exp $
+ * $Id: one.php,v 1.102 2007/09/14 17:45:27 myelocyte Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -412,11 +412,11 @@ function openMsnSession(strIMAddress) {
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Created"); ?></td>
-                                    <td class=clear><?php  echo $entered_at; ?> by <?php echo $entered_by_username; ?></td>
+                                    <td class=clear><?php  echo $entered_at .' '. _("by") .' '. $entered_by_username; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Last Modified"); ?></td>
-                                    <td class=clear><?php  echo $last_modified_at; ?> by <?php echo $last_modified_by_username; ?></td>
+                                    <td class=clear><?php  echo $last_modified_at .' '. _("by") .' '. $last_modified_by_username; ?></td>
                                 </tr>
                                 <?php if ($owner_username) { ?>
                                 <tr>
@@ -508,6 +508,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.102  2007/09/14 17:45:27  myelocyte
+ * I18n of the word BY in Modified by and Created by.
+ *
  * Revision 1.101  2006/12/07 13:43:22  jnhayart
  * re order fields in Edit/New like in display screen
  * change label for "Summary" for specific localisation
