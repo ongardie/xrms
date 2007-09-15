@@ -1,18 +1,17 @@
-# translation of xrms.po to Español
-# translation of xrms.po to Catalan
+# translation of xrms.po to Català
 # David Gaya <david.gaya@gmail.com>, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: xrms\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-04-06 18:10+0200\n"
-"PO-Revision-Date: 2007-04-13 16:39+0200\n"
+"PO-Revision-Date: 2007-09-15 18:16+0200\n"
 "Last-Translator: David Gaya <david.gaya@gmail.com>\n"
-"Language-Team: Español <david.gaya@gmail.com>\n"
+"Language-Team: Català\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9.1\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: activities/activities-widget.php:724
 msgid " "
@@ -247,7 +246,7 @@ msgstr "Activitat"
 
 #: include/utils-interface.php:68
 msgid "Activity Added."
-msgstr "S'ha afegir l'activitat."
+msgstr "S'ha afegit l'activitat."
 
 #: include/utils-interface.php:70
 msgid "Activity Deleted."
@@ -508,7 +507,7 @@ msgstr "Afegit"
 
 #: admin/updateto2.0.php:4657
 msgid "Added New Countries."
-msgstr "S'han afegir nous països."
+msgstr "S'han afegit nous països."
 
 #: activities/new_activity_participant.php:142
 msgid "Added contact to activity."
@@ -805,11 +804,11 @@ msgstr ""
 
 #: locale/datastrings.php:26
 msgid "Block SourceForge Link"
-msgstr ""
+msgstr "Bloqueja l'enllaç amb SourceForge"
 
 #: install/data.php:2826
 msgid "Block Sourceforge Link"
-msgstr ""
+msgstr "Bloqueja l'enllaç amb SourceForge"
 
 #: admin/email-templates/one_email_template.php:46
 msgid "Body"
@@ -953,7 +952,7 @@ msgstr "Campanya"
 
 #: include/utils-interface.php:60
 msgid "Campaign Added."
-msgstr ""
+msgstr "S'ha afegit la campanya."
 
 #: include/utils-interface.php:62
 msgid "Campaign Deleted."
@@ -1021,7 +1020,7 @@ msgstr "Núm. cas"
 
 #: include/utils-interface.php:72
 msgid "Case Added."
-msgstr ""
+msgstr "S'ha afegit el cas."
 
 #: include/utils-interface.php:74
 msgid "Case Deleted."
@@ -1111,7 +1110,7 @@ msgstr "Àmbits de la categoria"
 #: contacts/one.php:313 contacts/sidebar.php:175 contacts/some.php:126
 #: contacts/some.php:368 plugins/phone/contacts_one.php:373
 msgid "Cell Phone"
-msgstr "Mòbil"
+msgstr "Mòvil"
 
 #: admin/country-address-format/edit.php:62
 msgid "Change"
@@ -1127,11 +1126,11 @@ msgstr "Canvia adjunt"
 
 #: files/one.php:150
 msgid "Change Date"
-msgstr ""
+msgstr "Canviar data"
 
 #: files/one.php:157
 msgid "Change File"
-msgstr ""
+msgstr "Canviar fitxer"
 
 #: reports/companies-by-company-source.php:68
 #: reports/companies-by-crm-status.php:66 reports/companies-by-industry.php:70
@@ -1172,7 +1171,7 @@ msgstr ""
 
 #: include/utils-interface.php:87
 msgid "Changes saved."
-msgstr ""
+msgstr "S'han desat els canvis."
 
 #: admin/acl/acl_results.php:145
 msgid "Check Permission on an object for a user"
@@ -1388,7 +1387,7 @@ msgstr "Empresa"
 
 #: include/utils-interface.php:47
 msgid "Company Added."
-msgstr ""
+msgstr "S'ha afegit l'empresa."
 
 #: reports/company-contacts-printout.php:209
 msgid "Company Category"
@@ -1411,7 +1410,7 @@ msgstr ""
 #: companies/one.php:465 companies/one.php:488
 #: plugins/phone/companies_one.php:434 plugins/phone/companies_one.php:461
 msgid "Company Details"
-msgstr ""
+msgstr "Detalls de l'empresa"
 
 #: activities/some.php:272 admin/import/import-activities-2.php:71
 #: admin/import/import-activities-3.php:105
@@ -1557,7 +1556,7 @@ msgstr ""
 
 #: reports/audit-items.php:55
 msgid "Connection Details"
-msgstr ""
+msgstr "Detalls de la connexió"
 
 #: locale/datastrings.php:49
 msgid "Construction"
@@ -1591,7 +1590,7 @@ msgstr "Persona"
 
 #: include/utils-interface.php:51
 msgid "Contact Added."
-msgstr ""
+msgstr "S'ha afegit la persona."
 
 #: reports/company-contacts-printout.php:177
 msgid "Contact Call List"
@@ -1604,7 +1603,7 @@ msgstr ""
 #: contacts/one.php:230 contacts/one.php:252
 #: plugins/phone/contacts_one.php:282 plugins/phone/contacts_one.php:309
 msgid "Contact Details"
-msgstr ""
+msgstr "Detalls de la persona"
 
 #: activities/some.php:271 admin/import/import-activities-2.php:75
 #: admin/import/import-activities-3.php:109
@@ -1627,7 +1626,7 @@ msgstr "Informació de persona"
 #: companies/new.php:255 contacts/edit.php:161 contacts/new.php:173
 #: contacts/sidebar.php:100
 msgid "Contact Information"
-msgstr ""
+msgstr "Informació de la persona"
 
 #: contacts/some.php:432
 msgid "Contact Options"
@@ -2216,7 +2215,7 @@ msgstr "Separa"
 
 #: plugins/info/one.php:178
 msgid "Details"
-msgstr ""
+msgstr "Detalls"
 
 #: locale/datastrings.php:64
 msgid "Developed"
@@ -2310,7 +2309,7 @@ msgstr "Divisió"
 
 #: include/utils-interface.php:93
 msgid "Division Added."
-msgstr ""
+msgstr "S'ha afegit la divisió."
 
 #: companies/divisions.php:91
 msgid "Division Description"
@@ -2923,7 +2922,7 @@ msgstr ""
 
 #: files/one.php:98
 msgid "File Details"
-msgstr ""
+msgstr "Detalls del fitxer"
 
 #: admin/import/import-activities.php:92 admin/import/import-companies.php:93
 msgid "File Format"
@@ -2947,7 +2946,7 @@ msgstr "Resum fitxer"
 
 #: files/new.php:108
 msgid "File added successfully"
-msgstr ""
+msgstr "S'ha afegit el fitxer"
 
 #: files/edit-2.php:78 files/edit-2.php:109
 msgid "File was updated successfully."
@@ -3505,7 +3504,7 @@ msgstr ""
 #: companies/new.php:221 companies/one-address.php:77 companies/some.php:353
 #: companies/some.php:809 contacts/edit-address.php:197 contacts/new.php:326
 msgid "Line 1"
-msgstr ""
+msgstr "Línia 1"
 
 #: admin/import/import-companies-2.php:120
 #: admin/import/import-companies-2.php:131
@@ -3514,7 +3513,7 @@ msgstr ""
 #: companies/new.php:225 companies/one-address.php:78 companies/some.php:360
 #: companies/some.php:813 contacts/edit-address.php:201 contacts/new.php:330
 msgid "Line 2"
-msgstr ""
+msgstr "Línia 2"
 
 #: admin/case-statuses/one.php:177
 msgid "Link Workflow Activity To Case Status"
@@ -3522,11 +3521,11 @@ msgstr "Enllaça activitat de flux de treball amb estat de cas"
 
 #: admin/opportunity-statuses/one.php:180
 msgid "Link Workflow Activity To Opportunity Status"
-msgstr ""
+msgstr "Enllaça activitat de flux de treball amb estat d'oportunitat"
 
 #: companies/new.php:294
 msgid "Link to Campaign"
-msgstr ""
+msgstr "Enllaça amb campanya"
 
 #: relationships/sidebar.php:107
 msgid "Linked Relationships"
@@ -4266,7 +4265,7 @@ msgstr ""
 
 #: contacts/new_contact_company_select.php:59
 msgid "No search results, please try a less restrictive search"
-msgstr ""
+msgstr "La cerca no ha donat cap resultat, intenta amb una cerca menys restrictiva"
 
 #: admin/case-statuses/some.php:78
 msgid "No statuses defined for specified case type"
@@ -4495,7 +4494,7 @@ msgstr "Oportunitat"
 
 #: include/utils-interface.php:64
 msgid "Opportunity Added."
-msgstr "Oportunitat afegida"
+msgstr "S'ha afegit l'oportunitat."
 
 #: include/utils-interface.php:66
 msgid "Opportunity Deleted."
@@ -5072,7 +5071,7 @@ msgstr ""
 
 #: admin/relationship-types/one.php:42
 msgid "Relationship Type Details"
-msgstr ""
+msgstr "Detalls del tipus de relació"
 
 #: admin/index.php:239 admin/relationship-types/some.php:48
 msgid "Relationship Types"
@@ -5440,7 +5439,7 @@ msgstr "Tria un tipus de cas"
 
 #: contacts/new_contact_company_select.php:53
 msgid "Select a company or create a"
-msgstr ""
+msgstr "Tria una empresa o crea'n una"
 
 #: admin/opportunity-statuses/some.php:105
 msgid "Select a opportunity type"
@@ -6260,7 +6259,7 @@ msgstr "Usuari"
 
 #: admin/users/one.php:73
 msgid "User Details"
-msgstr ""
+msgstr "Detalls d'usuari"
 
 #: plugins/cti/cdr.php:264
 msgid "User Field"
@@ -6919,7 +6918,7 @@ msgstr "opportunity_status_pretty_name"
 
 #: contacts/new_contact_company_select.php:78
 msgid "or create a"
-msgstr ""
+msgstr "o crea una"
 
 #: locale/datastrings.php:247
 msgid "pager_columns"
