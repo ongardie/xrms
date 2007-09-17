@@ -1,28 +1,27 @@
-# translation of xrms.po to Español
 # translation of xrms.po to Spanish
 # This file is distributed under the same license as the XRMS package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
+#
 # David Gaya <david.gaya@gmail.com>, 2007.
 # David Gaya <david.gaya@gmail.com>, 2006.
 # Daniel Rodriguez <dgrodriguez@cantv.net>, 2006.
 # Daniel Rodriguez <dgrodriguez@cantv.net>, 2005.
 # David Gaya <david.gaya@gmail.com>, 2005.
 # Eduardo Jaramillo R. <nejarami@cable.net.co>, 2004.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: xrms\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-04-06 18:10+0200\n"
-"PO-Revision-Date: 2007-04-06 17:58+0200\n"
-"Last-Translator: david\n"
-"Language-Team: Spanish\n"
+"PO-Revision-Date: 2007-08-29 22:58+0200\n"
+"Last-Translator: David Gaya <david.gaya@gmail.com>\n"
+"Language-Team: Spanish <ca@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: Spain\n"
-"X-Generator: KBabel 1.9.1\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: activities/activities-widget.php:724
 msgid " "
@@ -62,8 +61,7 @@ msgstr "día(s)"
 
 #: include/utils-workflow.php:329
 msgid " has been created.  To access it, you can use the link here:"
-msgstr ""
-"ha sido creado. Para acceder a esto, usted puede usar el siguiente enlace:"
+msgstr "ha sido creado. Para acceder a esto, usted puede usar el siguiente enlace:"
 
 #: activities/recurrence_sidebar.php:230
 msgid " month(s)"
@@ -1554,8 +1552,7 @@ msgstr "Computación"
 
 #: admin/plugin/plugin-admin.php:287
 msgid "Config file can't be opened. Please check vars.php."
-msgstr ""
-"El archivo de configuración no puede abrirse. Por favor verifique vars.php."
+msgstr "El archivo de configuración no puede abrirse. Por favor verifique vars.php."
 
 #: admin/plugin/plugin-admin.php:285
 msgid "Config written successfully."
@@ -2632,8 +2629,7 @@ msgid "Email This To"
 msgstr "Enviar email de esto a"
 
 #: locale/datastrings.php:74
-msgid ""
-"Email address to use as the sender address when sending reports via email."
+msgid "Email address to use as the sender address when sending reports via email."
 msgstr ""
 "Dirección de Email a utilizar como la dirección del remitente cuando se "
 "envíen reportes por email."
@@ -3308,24 +3304,21 @@ msgstr "¿Cuantas de sus cuentas vienen de cada fuente?"
 
 #: reports/index.php:60
 msgid "How many opportunities are in each stage of the sales closing process?"
-msgstr ""
-"¿Cuantas oportunidades existen en cada etapa del proceso de cierre de ventas?"
+msgstr "¿Cuantas oportunidades existen en cada etapa del proceso de cierre de ventas?"
 
 #: reports/index.php:68
 msgid "How many opportunities are tied to companies in each industry?"
 msgstr "¿Cuantas oportunidades están enlazadas a compañías en cada industria?"
 
 #: reports/index.php:64
-msgid ""
-"How much potential revenue is in each stage of the sales closing process?"
+msgid "How much potential revenue is in each stage of the sales closing process?"
 msgstr ""
 "¿Cuantos ingresos potenciales están en cada etapa del proceso de cierre de "
 "ventas?"
 
 #: reports/index.php:72
 msgid "How much potential revenue is tied to companies in each industry?"
-msgstr ""
-"¿Cuanto ingreso potencial esta enlazado a las compañías en cada industria?"
+msgstr "¿Cuanto ingreso potencial esta enlazado a las compañías en cada industria?"
 
 #: locale/datastrings.php:96
 msgid ""
@@ -3454,8 +3447,7 @@ msgstr "Insertar Bitácora"
 
 #: install/data.php:2893 locale/datastrings.php:98
 msgid "Insert method used when no Company is defined for a new Contact"
-msgstr ""
-"Método usado cuando no se defina ninguna Compañía para un nuevo Contacto"
+msgstr "Método usado cuando no se defina ninguna Compañía para un nuevo Contacto"
 
 #: private/home.php:49
 msgid ""
@@ -4328,8 +4320,7 @@ msgstr "Sin rol especificado"
 
 #: contacts/new_contact_company_select.php:59
 msgid "No search results, please try a less restrictive search"
-msgstr ""
-"Búsqueda sin resultados, por favor trate una búsqueda con menos restricciones"
+msgstr "Búsqueda sin resultados, por favor trate una búsqueda con menos restricciones"
 
 #: admin/case-statuses/some.php:78
 msgid "No statuses defined for specified case type"
@@ -4451,8 +4442,7 @@ msgstr "Nombre Objeto"
 
 #: admin/acl/one_ControlledObjectRelationship.php:49
 msgid "Object/Child Object combination fails recursion check."
-msgstr ""
-"Combinación de Objeto/Objeto Hijo falla en la verificación de recursión."
+msgstr "Combinación de Objeto/Objeto Hijo falla en la verificación de recursión."
 
 #: locale/datastrings.php:129
 msgid "Obsolete/Out of Date"
@@ -4653,8 +4643,8 @@ msgstr "Items Atrasados"
 msgid "Overdue Items to Email"
 msgstr "Enviar items atrasados por Email"
 
-# (David) Traducción libre porque en el original inglés no coinciden 
-#   el mismo concepto en distintas pantallas, Nueva Compañía y Editar 
+# (David) Traducción libre porque en el original inglés no coinciden
+#   el mismo concepto en distintas pantallas, Nueva Compañía y Editar
 #   dirección. Ver Non-Standard Address.
 #: companies/new.php:245 companies/some.php:847
 msgid "Override Address"
@@ -4838,7 +4828,7 @@ msgstr "Por favor seleccione un tipo de entidad para buscar"
 
 #: include/utils-interface.php:83
 msgid "Please try again."
-msgstr "Por favor trate de nuevo."
+msgstr "Inténtelo de nuevo."
 
 #: admin/index.php:256
 msgid "Plugin Activation"
@@ -5180,8 +5170,7 @@ msgid "Removed contact from activity."
 msgstr "Contacto eliminado de actividad."
 
 #: admin/updateto2.0.php:4775
-msgid ""
-"Removed deprecated Owl preference, now entirely controlled by Owl Plugin"
+msgid "Removed deprecated Owl preference, now entirely controlled by Owl Plugin"
 msgstr ""
 "Eliminada la preferencia Owl obsoleta, ahora es controlado completamente por "
 "el Plugin Owl"
@@ -5798,8 +5787,7 @@ msgstr "Subtotal esta pág:"
 
 #: admin/updateto2.0.php:4335
 msgid "Successfully added activity participant positions table."
-msgstr ""
-"Se ha añadido con éxito la tabla de puestos de participantes de actividad."
+msgstr "Se ha añadido con éxito la tabla de puestos de participantes de actividad."
 
 #: admin/updateto2.0.php:4308
 msgid "Successfully added activity participants table."
@@ -5843,8 +5831,7 @@ msgstr "Tabla email_template_type agregada con éxito."
 
 #: admin/updateto2.0.php:4474 install/database.php:895
 msgid "Successfully added opportunity type to opportunity status table."
-msgstr ""
-"Tipo de Oportunidad agregado con éxito a la tabla de estado de oportunidades."
+msgstr "Tipo de Oportunidad agregado con éxito a la tabla de estado de oportunidades."
 
 #: admin/updateto2.0.php:4485
 msgid "Successfully added opportunity type to opportunity table."
@@ -5885,8 +5872,7 @@ msgid "Successfully removed criteria"
 msgstr "Criterio eliminado con éxito"
 
 #: admin/updateto2.0.php:4317
-msgid ""
-"Successfully updated overly long activity participant record status field"
+msgid "Successfully updated overly long activity participant record status field"
 msgstr ""
 "Actualización exitosa del campo de estado del registro de participante de "
 "actividades demasiado largas"
@@ -5958,7 +5944,7 @@ msgstr "Tabla"
 msgid "Tables"
 msgstr "Tablas"
 
-# (David) Pongo de manera más genérica, porque 
+# (David) Pongo de manera más genérica, porque
 # en España RIF no significa nada se usa NIF.
 #: admin/import/import-companies-2.php:146
 #: admin/import/import-companies-3.php:187 companies/admin.php:77
@@ -6200,8 +6186,7 @@ msgstr ""
 "oportunidades"
 
 #: activities/associate-activities.php:160
-msgid ""
-"Unable to associate Activities because there is no open Case or Opportunity"
+msgid "Unable to associate Activities because there is no open Case or Opportunity"
 msgstr ""
 "No habilitado para asociar Actividades debido a que no hay abiertos Casos u "
 "Oportunidades"
@@ -6390,7 +6375,7 @@ msgstr "Reportes de Usuario"
 msgid "User Roles"
 msgstr "Roles de Usuario"
 
-# (David) Simplifico Nombre de usuario a Usuario porque para la 
+# (David) Simplifico Nombre de usuario a Usuario porque para la
 # pantalla de login es demasiado largo
 #: admin/users/one.php:111 admin/users/self.php:76 admin/users/some.php:116
 #: admin/users/some.php:129 admin/users/some.php:158
@@ -6492,7 +6477,7 @@ msgstr ""
 
 #: include/utils-interface.php:83
 msgid "We could not authenticate you."
-msgstr "No hemos podido verificar su autenticación."
+msgstr "No se ha podido autentificarle."
 
 #: companies/sidebar.php:72 locale/datastrings.php:189
 msgid "Web Site"
@@ -6636,8 +6621,7 @@ msgid "You may need to update your database structure."
 msgstr "Puede que tenga que actualizar la estructura de su base de datos."
 
 #: private/home.php:39
-msgid ""
-"You must configure your database connection in vars.php before using XRMS."
+msgid "You must configure your database connection in vars.php before using XRMS."
 msgstr ""
 "Debe configurar su conexión a la base de datos en vars.php antes de usar "
 "XRMS."
@@ -6689,8 +6673,7 @@ msgid "You must enter an opportunity title."
 msgstr "Debe introducir un título de oportunidad."
 
 #: email/email-2.php:429 email/one-template.php:140
-msgid ""
-"You must enter an reply address so the recipient can reply to the message."
+msgid "You must enter an reply address so the recipient can reply to the message."
 msgstr ""
 "Debe introducir una dirección de respuesta para que el destinatario pueda "
 "responder al mensaje."
@@ -6760,8 +6743,7 @@ msgstr "todos los días de la semana"
 
 #: include/utils-users.php:30
 msgid "already exists in the system, please choose a different username"
-msgstr ""
-"ya existe en el sistema, por favor escoja un nombre de usuario diferente"
+msgstr "ya existe en el sistema, por favor escoja un nombre de usuario diferente"
 
 #: activities/some.php:360
 msgid "and"
@@ -6913,7 +6895,7 @@ msgstr "db"
 
 #: include/classes/Pager/Pager_Columns.php:453
 msgid "default"
-msgstr "por defecto"
+msgstr "default"
 
 #: locale/datastrings.php:225
 msgid "division_id"
@@ -7170,3 +7152,4 @@ msgstr "xrms_version"
 #: admin/import/import-activities.php:76
 msgid "you can also link imported activities to campaign."
 msgstr "También se puede enlazar las actividades a una campaña."
+
