@@ -4,7 +4,7 @@
 *
 * @author Glenn Powers
 *
-* $Id: stale-crm-status.php,v 1.3 2006/09/22 17:14:00 niclowe Exp $
+* $Id: stale-crm-status.php,v 1.4 2007/09/17 14:34:49 myelocyte Exp $
 */
 require_once('../include-locations.inc');
 
@@ -17,7 +17,7 @@ require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 $form_name="Stale Crm Status";
-// $session_user_id = session_check();
+$session_user_id = session_check();
 $msg = $_GET['msg'];
 $starting = $_GET['starting'];
 $ending = $_GET['ending'];
@@ -196,6 +196,10 @@ if (($display) || (!$friendly)) {
 
 /**
 * $Log: stale-crm-status.php,v $
+* Revision 1.4  2007/09/17 14:34:49  myelocyte
+* - fixed bug: "[ 1737224 ] Table opportunity_types in Closed Items Report"
+* - enabled session_check() to some reports to solve "implode function" error
+*
 * Revision 1.3  2006/09/22 17:14:00  niclowe
 * fixed minor bug that meant not all stale crm status companies were shown.
 *

@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: stale-opportunities.php,v 1.1 2006/01/28 22:22:40 niclowe Exp $
+ * $Id: stale-opportunities.php,v 1.2 2007/09/17 14:34:49 myelocyte Exp $
  */
 require_once('../include-locations.inc');
 
@@ -14,7 +14,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
 
-// $session_user_id = session_check();
+$session_user_id = session_check();
 $msg = $_GET['msg'];
 $starting = $_GET['starting'];
 $ending = $_GET['ending'];
@@ -231,6 +231,10 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: stale-opportunities.php,v $
+ * Revision 1.2  2007/09/17 14:34:49  myelocyte
+ * - fixed bug: "[ 1737224 ] Table opportunity_types in Closed Items Report"
+ * - enabled session_check() to some reports to solve "implode function" error
+ *
  * Revision 1.1  2006/01/28 22:22:40  niclowe
  * First Commit of new reports - Stale Companies and Opportunities
  *

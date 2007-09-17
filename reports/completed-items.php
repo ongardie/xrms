@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: completed-items.php,v 1.18 2006/01/02 23:46:52 vanmer Exp $
+ * $Id: completed-items.php,v 1.19 2007/09/17 14:34:49 myelocyte Exp $
  */
 require_once('../include-locations.inc');
 
@@ -15,7 +15,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-// $session_user_id = session_check();
+$session_user_id = session_check();
 $msg = $_GET['msg'];
 $starting = $_GET['starting'];
 $ending = $_GET['ending'];
@@ -279,31 +279,34 @@ foreach ($userArray as $key => $user_id) {
         $rst = $con->execute($sql);
         if (!$rst->EOF) {
             $output .= "<p><font size=+2><b>" . _("COMPLETED OPPORTUNITIES for") . " $name</b></font><br></p>\n";
-            $output .= "<table>";
-            $output .= "<tr><td colspan=4><hr></td></tr>\n";
-            $output .= "    <tr>";
-            $output .= "        <th align=left>" . _("Entered") . "</th>";
-            $output .= "        <th align=left>" . _("Type") . "</th>";
-            $output .= "        <th align=left>" . _("Company") . "</th>";
-            $output .= "        <th align=left>" . _("Contact") . "</th>";
-            $output .= "        <th align=left>" . _("Opportunity") . "</th>";
-            $output .= "    </tr>";
-            $output .= "<tr><td colspan=4><hr></td></tr>\n";
+            $output .= "<table>\n";
+            $output .= "    <tr><td colspan=6><hr></td></tr>\n";
+            $output .= "    <tr>\n";
+            $output .= "        <th align=left>" . _("Entered") .     "</th>\n";
+            $output .= "        <th align=left>" . _("Ends at") .     "</th>\n";
+            $output .= "        <th align=left>" . _("Type")    .     "</th>\n";
+            $output .= "        <th align=left>" . _("Company") .     "</th>\n";
+            $output .= "        <th align=left>" . _("Contact") .     "</th>\n";
+            $output .= "        <th align=left>" . _("Opportunity") . "</th>\n";
+            $output .= "    </tr>\n";
+            $output .= "    <tr><td colspan=6><hr></td></tr>\n";
             while (!$rst->EOF) {
-                $output .= "<tr>\n<td>" . $rst->fields['entered_at'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $output .= "<td>" . $rst->fields['ends_at'] . "&nbsp;&nbsp;</td>\n";
-                $sql4 = "SELECT opportunity_type_pretty_name from campaign_types where opportunity_type_id = " . $rst->fields['opportunity_type_id'];
+                $output .= "    <tr>\n";
+                $output .= "        <td>" . $rst->fields['entered_at'] . "</td>\n";
+                $output .= "        <td>" . $rst->fields['ends_at']    . "&nbsp;&nbsp;</td>\n";
+                $sql4 = "SELECT opportunity_type_pretty_name from opportunity_types where opportunity_type_id = " . $rst->fields['opportunity_type_id'];
                 $rst4 = $con->execute($sql4);
-                $output .= "<td>" . $rst4->fields['opportunity_type_pretty_name'] . "&nbsp;&nbsp;</td>\n";
+                $output .= "        <td>" . $rst4->fields['opportunity_type_pretty_name'] . "&nbsp;&nbsp;</td>\n";
                 $sql5 = "SELECT company_name from companies where company_id = " . $rst->fields['company_id'];
                 $rst5 = $con->execute($sql5);
-                $output .= "<td>" . $rst5->fields['company_name'] . "&nbsp;&nbsp;&nbsp;</td>\n";
+                $output .= "        <td>" . $rst5->fields['company_name'] . "&nbsp;&nbsp;&nbsp;</td>\n";
                 $sql6 = "SELECT last_name, first_names from contacts where contact_id = " . $rst->fields['contact_id'];
                 $rst6 = $con->execute($sql6);
-                $output .= "<td>" . $rst6->fields['last_name'] . ", " . $rst6->fields['first_names'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $output .= "<td><a href=\"" . $http_site_root . "/opportunities/one.php?opportunity_id=" . $rst->fields['opportunity_id'] . "\">" . $rst->fields['opportunity_title'] . "</a></td>\n</td>\n";
+                $output .= "        <td>" . $rst6->fields['last_name'] . ", " . $rst6->fields['first_names'] . "&nbsp;&nbsp;&nbsp;</td>\n";
+                $output .= "        <td><a href=\"" . $http_site_root . "/opportunities/one.php?opportunity_id=" . $rst->fields['opportunity_id'] . "\">" . $rst->fields['opportunity_title'] . "</a></td>\n";
+                $output .= "    </tr>\n";
                 if ($use_hr =='y') {
-                    $output .= "<tr><td colspan=4><hr></td></tr>\n";
+                    $output .= "    <tr><td colspan=6><hr></td></tr>\n";
                 }
                 $rst->movenext();
             }
@@ -385,6 +388,10 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: completed-items.php,v $
+ * Revision 1.19  2007/09/17 14:34:49  myelocyte
+ * - fixed bug: "[ 1737224 ] Table opportunity_types in Closed Items Report"
+ * - enabled session_check() to some reports to solve "implode function" error
+ *
  * Revision 1.18  2006/01/02 23:46:52  vanmer
  * - changed to use centralized dbconnection function
  *

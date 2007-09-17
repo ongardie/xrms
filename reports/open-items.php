@@ -2,7 +2,7 @@
 /**
  * @author Glenn Powers
  *
- * $Id: open-items.php,v 1.21 2006/01/02 23:46:52 vanmer Exp $
+ * $Id: open-items.php,v 1.22 2007/09/17 14:34:49 myelocyte Exp $
  */
 require_once('../include-locations.inc');
 
@@ -13,7 +13,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-// $session_user_id = session_check();
+$session_user_id = session_check();
 $msg = $_GET['msg'];
 $user_id = $_GET['user_id'];
 $type = $_GET['type'];
@@ -379,6 +379,10 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: open-items.php,v $
+ * Revision 1.22  2007/09/17 14:34:49  myelocyte
+ * - fixed bug: "[ 1737224 ] Table opportunity_types in Closed Items Report"
+ * - enabled session_check() to some reports to solve "implode function" error
+ *
  * Revision 1.21  2006/01/02 23:46:52  vanmer
  * - changed to use centralized dbconnection function
  *
