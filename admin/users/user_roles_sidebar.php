@@ -2,7 +2,7 @@
 /**
  * Roles sidebar, used to display/edit roles for a user
  *
- * $Id: user_roles_sidebar.php,v 1.9 2006/07/25 20:25:54 vanmer Exp $
+ * $Id: user_roles_sidebar.php,v 1.10 2007/09/17 17:39:22 myelocyte Exp $
 **/
 if (!$edit_user_id) {
     $edit_user_id=$session_user_id;
@@ -48,7 +48,7 @@ if ($user_roles) {
             $group_user_info=get_group_user($acl, $guser_id);
             if ($group_user_info) {
                 $group_user_info=current($group_user_info);
-                $group_info=$group_user_info['group_name'];
+                $group_info=$group_user_info['Group_name'];
                 $role_rows.="<tr><td>$group_info</td><td>$user_role</td>";
                 if ($action=='edit') {
                     $role_rows.="<td><input type=button class=button onclick=\"deleteRole($guser_id);\" value=\""._("Delete") . "\"></td>";
@@ -80,6 +80,9 @@ $user_role_sidebar.="
 /*************************************************************************/
 /**
  * $Log: user_roles_sidebar.php,v $
+ * Revision 1.10  2007/09/17 17:39:22  myelocyte
+ * - Applied patch: "[ 1766094 ] Typo in user_roles_sidebar.php" by Tobias (toaaot) that fixes the "user role" side bar hiding the group names.
+ *
  * Revision 1.9  2006/07/25 20:25:54  vanmer
  * - ensure that group membership information is available before attempting to render it
  *
