@@ -4,7 +4,7 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.18 2006/12/29 06:48:56 ongardie Exp $
+ * $Id: one.php,v 1.19 2007/09/17 21:31:54 myelocyte Exp $
  */
 
 //include required common files
@@ -146,7 +146,7 @@ start_page($page_title);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
-                <td class=widget_content_form_element><input type=text size=60 name=opportunity_status_display_html value="<?php  echo $opportunity_status_display_html; ?>"></td>
+                <td class=widget_content_form_element><input type=text size=60 name=opportunity_status_display_html value="<?php  echo htmlspecialchars($opportunity_status_display_html); ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Long Description"); ?></td>
@@ -248,6 +248,12 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.19  2007/09/17 21:31:54  myelocyte
+ * - Fixed bugs: 984168, 984170 and similar bugs not reported
+ *    I have added htmlspecialchars function in one.php before all display_html variable is
+ *    displayed. This same error affected most of the display_html fields in Admin section.
+ *    I tried to fix them all.
+ *
  * Revision 1.18  2006/12/29 06:48:56  ongardie
  * - Don't allow blank on activities type drop-down.
  *

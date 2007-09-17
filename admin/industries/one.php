@@ -2,7 +2,7 @@
 /**
  * Manage industries
  *
- * $Id: one.php,v 1.10 2006/12/05 11:10:00 jnhayart Exp $
+ * $Id: one.php,v 1.11 2007/09/17 21:31:54 myelocyte Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -61,7 +61,7 @@ start_page($page_title);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
-                <td class=widget_content_form_element><input type=text name=industry_display_html value="<?php  echo $industry_display_html; ?>"></td>
+                <td class=widget_content_form_element><input type=text name=industry_display_html value="<?php  echo htmlspecialchars($industry_display_html); ?>"></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
@@ -101,6 +101,12 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.11  2007/09/17 21:31:54  myelocyte
+ * - Fixed bugs: 984168, 984170 and similar bugs not reported
+ *    I have added htmlspecialchars function in one.php before all display_html variable is
+ *    displayed. This same error affected most of the display_html fields in Admin section.
+ *    I tried to fix them all.
+ *
  * Revision 1.10  2006/12/05 11:10:00  jnhayart
  * Add cosmetics display, and control localisation
  *

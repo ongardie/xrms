@@ -2,7 +2,7 @@
 /**
  * Edit the information for a single opportunity type
  *
- * $Id: one.php,v 1.3 2006/12/05 11:10:01 jnhayart Exp $
+ * $Id: one.php,v 1.4 2007/09/17 21:31:55 myelocyte Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -64,7 +64,7 @@ start_page($page_title);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
-                <td class=widget_content_form_element><input type=text size=30 name=opportunity_type_display_html value="<?php  echo $opportunity_type_display_html; ?>"></td>
+                <td class=widget_content_form_element><input type=text size=30 name=opportunity_type_display_html value="<?php  echo htmlspecialchars($opportunity_type_display_html); ?>"></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
@@ -101,6 +101,12 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.4  2007/09/17 21:31:55  myelocyte
+ * - Fixed bugs: 984168, 984170 and similar bugs not reported
+ *    I have added htmlspecialchars function in one.php before all display_html variable is
+ *    displayed. This same error affected most of the display_html fields in Admin section.
+ *    I tried to fix them all.
+ *
  * Revision 1.3  2006/12/05 11:10:01  jnhayart
  * Add cosmetics display, and control localisation
  *
