@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.85 2007/05/02 14:58:41 fcrossen Exp $
+ * $Id: some.php,v 1.86 2007/09/17 14:41:18 myelocyte Exp $
  */
 
 require_once('../include-locations.inc');
@@ -343,9 +343,9 @@ if ( $profile ) {
     $criteria_count++;
     $sql .= ', c.profile ';
   if ($not_profile)
-    $where .= " and c.profile not like " . $con->qstr($profile, get_magic_quotes_gpc())." \n";
+    $where .= " and c.profile not like " . $con->qstr("%".$profile."%", get_magic_quotes_gpc())." \n";
   else
-    $where .= " and c.profile like " . $con->qstr($profile, get_magic_quotes_gpc())." \n";
+    $where .= " and c.profile like " . $con->qstr("%".$profile."%", get_magic_quotes_gpc())." \n";
     $advanced_search_columns[] = array('name' => _("Profile"), 'index_sql' => 'profile');
 }
 
@@ -788,7 +788,7 @@ if (!$advanced_search) {
                 <?php echo _("!")?>
                 <?php if ($not_profile) { echo ' <input type=checkbox name="not_profile" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_profile" value=1>';}?>
-                <input type=text size=50 name=profile_name value="<?php echo $profile; ?>"></td>
+                <input type=text size=50 name=profile value="<?php echo $profile; ?>"></td>
 
             </tr>
              <tr>
@@ -1047,6 +1047,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.86  2007/09/17 14:41:18  myelocyte
+ * - Fixed bug "[ 1725698 ] advanced search profile not working", with patch provided by Björn (bschimpf)
+ *
  * Revision 1.85  2007/05/02 14:58:41  fcrossen
  * - changed search by phone number. Now accounts for idd_prefix and phone_fax_number_clean system preferences
  *
