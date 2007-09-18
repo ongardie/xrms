@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-contacts.php,v 1.32 2007/05/14 16:53:09 fcrossen Exp $
+ * $Id: utils-contacts.php,v 1.33 2007/09/18 16:14:45 myelocyte Exp $
  *
  */
 
@@ -517,18 +517,19 @@ function pull_contact_fields ( $array_data )
     $contact_fields = array ( 'contact_id'           => '',
                               'company_id'           => '',
                               'division_id'          => '',
+                              'user_id'              => '',
                               'address_id'           => '',
                               'home_address_id'      => '',
+                              'salutation'           => '',
                               'last_name'            => '',
                               'first_names'          => '',
-                              'email'                => '',
-                              'email_status'         => '',
-                              'salutation'           => '',
                               'gender'               => '',
                               'date_of_birth'        => '',
                               'summary'              => '',
                               'title'                => '',
                               'description'          => '',
+                              'email'                => '',
+                              'email_status'         => '',
                               'work_phone'           => '',
                               'work_phone_ext'       => '',
                               'cell_phone'           => '',
@@ -566,6 +567,10 @@ include_once $include_directory . 'utils-misc.php';
 /**********************************************************************/
  /**
  * $Log: utils-contacts.php,v $
+ * Revision 1.33  2007/09/18 16:14:45  myelocyte
+ * - Patch fixed: [ 1766331 ] 'user_id' key missing in pull_contact_fields()
+ * - Rearranged the field list in pull_contact_fields() to match database field order
+ *
  * Revision 1.32  2007/05/14 16:53:09  fcrossen
  * - clean_phone_fields_for_db was cleaning the wrong array ($contact_info should be $contact_data)
  *
