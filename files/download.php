@@ -5,7 +5,7 @@
  * Files that have been stored on the server are downloaded to
  * the user's default location.
  *
- * $Id: download.php,v 1.20 2006/01/02 23:03:52 vanmer Exp $
+ * $Id: download.php,v 1.21 2007/10/17 01:09:44 randym56 Exp $
  */
 
 require_once('../include-locations.inc');
@@ -34,6 +34,7 @@ $rst = $con->execute($sql);
 if ($rst) {
   // no database errors
   if ( !$rst->EOF ) {
+    $file_name       		= $rst->fields['file_name'];
     $file_pretty_name       = $rst->fields['file_pretty_name'];
     $file_filesystem_name   = $rst->fields['file_filesystem_name'];
     $file_description       = $rst->fields['file_description'];
@@ -43,6 +44,7 @@ if ($rst) {
     $file_size              = pretty_filesize($rst->fields['file_size']);
     $file_size_actual       = $rst->fields['file_size'];
   } else {
+    $file_name       		= '';
     $file_pretty_name       = '';
     $file_filesystem_name   = '';
     $file_description       = '';
@@ -68,7 +70,7 @@ if ( !$file_type ) {
         // instead
         require_once($include_directory.'mime/mime-array.php');
     //}
-    $file_type = mime_content_type_ ( $file_filesystem_name );
+    $file_type = mime_content_type_ ( $file_name );
 }
 
 $disposition = "attachment"; // "inline" to view file in browser or "attachment" to download to hard disk
@@ -81,7 +83,7 @@ do_hook_function('file_download_file', $plugin_params);
 
 
 $file_to_open = $file_storage_directory . $file_filesystem_name;
-$file_original_name = str_replace($file_id . '_', '', $file_filesystem_name);
+$file_original_name = $file_name;
 
 
 
@@ -113,6 +115,9 @@ exit();
 
 /**
  * $Log: download.php,v $
+ * Revision 1.21  2007/10/17 01:09:44  randym56
+ * Changed files to save with random numbers to remove security breach by saving files that can be executed by hackers.
+ *
  * Revision 1.20  2006/01/02 23:03:52  vanmer
  * - changed to use centralized dbconnection function
  *

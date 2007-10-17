@@ -2,7 +2,7 @@
 /**
 * Insert Updated File information into the database
 *
-* $Id: edit-2.php,v 1.12 2006/07/10 13:18:38 braverock Exp $
+* $Id: edit-2.php,v 1.13 2007/10/17 01:09:44 randym56 Exp $
 */
 
 //include required files
@@ -11,11 +11,17 @@ require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-files.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'mime/mime-array.php');
 
 $file_id = $_POST['file_id'];
+
 getGlobalVar($return_url, 'return_url');
+if (!$return_url) $return_url = $_POST['return_url'];
+//echo $return_url;
+//exit;
 $file_description = $_POST['file_description'];
 $file_entered_at = $_POST['file_entered_at'];
 // BOZZ BEGIN
@@ -40,16 +46,17 @@ if ($file_name != "") {
     $rec = array();
     $rec['file_pretty_name'] = $file_pretty_name;
     $rec['file_description'] = $file_description;
-    $rec['file_filesystem_name'] = $file_name;
+    $rec['file_filesystem_name'] = $rst->fields['file_filesystem_name']; //keep old name
     $rec['entered_at'] = $file_entered_at;
     $rec['file_size'] = $file_size;
+	$rec['file_name'] = $file_name;
     // BEGIN BOZZ
     // store file using plugin
     $file_to_update = $rst->fields;
     $rec['external_id'] = $file_to_update['external_id'];
 
     $file_plugin_params = array('file_field_name' => 'file1', 'file_info' => $rec);
-    do_hook_function('file_update_file', $file_plugin_params);
+    do_hook_function('file_update_file', $file_plugin_params); // for OWL interface only
 
     $rec = $file_plugin_params['file_info'];
 
@@ -64,18 +71,15 @@ if ($file_name != "") {
         $con->execute($upd);
 
         if(!$file_plugin_params['file_stored']) {
-            move_uploaded_file($_FILES['file1']['tmp_name'], $file_storage_directory . $file_id . '_' . $file_name);
-
-            // update the file record
+            // if it didn't store with OWL then update the file record with the new name and overwrite the old file
             $sql = "SELECT * FROM files WHERE file_id = $file_id";
             $rst = $con->execute($sql);
-
-            $rec = array();
-            $rec['file_filesystem_name'] = $file_id . '_' . $file_name;
-
-            $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-            $con->execute($upd);
-            $msg = _('File was updated successfully.');
+		    if (move_uploaded_file($_FILES['file1']['tmp_name'], $file_storage_directory . $rst->fields['file_filesystem_name'])) {
+				$rec['file_record_status'] = 'a'; // make sure it is not 'p' for approved 
+            	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+            	$con->execute($upd);
+	            $msg = _('File was updated successfully.');
+				} else $msg = _('File update failed. Exceeds file size of: '.$max_file_size);
         }
     }
 
@@ -129,6 +133,9 @@ if($error) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.13  2007/10/17 01:09:44  randym56
+ * Changed files to save with random numbers to remove security breach by saving files that can be executed by hackers.
+ *
  * Revision 1.12  2006/07/10 13:18:38  braverock
  * - clean indentation
  * - remove trailing whitespace

@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.23 2006/03/21 20:29:41 maulani Exp $
+ * $Id: new.php,v 1.24 2007/10/17 01:09:44 randym56 Exp $
  */
 
 require_once('../include-locations.inc');
@@ -20,6 +20,7 @@ $session_user_id = session_check('','Create');
 
 getGlobalVar($msg, 'msg');
 getGlobalVar($return_url, 'return_url');
+if (!$return_url) $return_url = $_POST['return_url'];
 
 $error = false;
 
@@ -54,7 +55,7 @@ if ( $_POST['act'] == 'up' )
         // params: (file_field_name, record associative array)
         $file_plugin_params = array('file_field_name' => 'file1', 'file_info' => $rec);
 
-
+		// OWL Plugin
         do_hook_function('file_add_file', $file_plugin_params);
 
         // external_id gets set by the hook
@@ -77,43 +78,34 @@ if ( $_POST['act'] == 'up' )
 	
 	        // What ID where we given
 	        $file_id = $con->insert_id();
-	
-	        // If the file was not stored by a plugin...
-	        if(!$file_plugin_params['file_stored']) {
-	
-	            if ( $objUpFile = getFileUpLoad ( 'file1' ) ) {
-	
-	                // Now we need to UPDATE that same record
-	                // update the file record
-	                $sql = "SELECT * FROM files WHERE file_id = $file_id";
-	                $rst = $con->execute($sql);
-	
-	                // We need to RENAME the 'file_filesystem_name' name with the record ID
-	                $rec = array();
-	                $rec['file_filesystem_name'] = $file_id . '_' . $file_name;
-	
-	                $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	                $con->execute($upd);
-	                $con->close();
-	
-	                // The file needs to be renamed to add the record index to it
-	                rename_file ( $file_name, $rec['file_filesystem_name'] );
-	            }
+			
+	        // If the file was not stored by OWL plugin...
+	        if(!$file_plugin_params['file_stored']) { 
+				// if it didn't store with OWL then update the file record with the new name and overwrite the old file
+				$sql = "SELECT * FROM files WHERE file_id = $file_id";
+				$rst = $con->execute($sql);
+				// set new file name as random number in DB and then later rename the file to the same name for security
+				$new_file_name = $file_id . '_' . random_string ( 24 );
+				
+				$rec['file_filesystem_name'] = $new_file_name;
+				$rec['file_record_status'] = 'a'; // make sure it is not 'p' for approved 
+				$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+				$con->execute($upd);
+				if (move_uploaded_file($_FILES['file1']['tmp_name'], $file_storage_directory . $new_file_name)) { // nor working for large pdf files
+				$msg = _('File was uploaded successfully.'); } else {$msg = _('File upload failed - Exceeds file size of: '.$max_file_size);};
 	        }
 	    }
 	}
 
-    if (! $error)
-    {
-        $msg = _('File added successfully');
-        // go back to our orginal page
-        $sep = get_url_seperator($return_url);
+	if (!$msg AND !$error) $msg = _('File added successfully');
+	// go back to our orginal page
+	$sep = get_url_seperator($return_url);
 
-        header("Location: " . $http_site_root . $return_url . $sep . "msg=$msg");
+	header("Location: " . $http_site_root . $return_url . $sep . "msg=$msg");
 
-        // Just to make sure we stop here
-        exit;
-    }
+	// Just to make sure we stop here
+	exit;
+   
 
 }
 
@@ -160,6 +152,13 @@ if ( $_POST['act'] == 'up' )
                 FROM campaigns
                 WHERE campaign_id = $on_what_id";
     }
+    elseif ($on_what_table == 'activity_templates')
+    {
+        $sql = "SELECT activity_title
+                    AS attached_to_name
+                FROM activity_templates
+                WHERE activity_template_id = $on_what_id";
+    }
     else
     {
         $table_name = table_name($on_what_table);
@@ -196,6 +195,9 @@ if ( $_POST['act'] == 'up' )
 
 /**
  * $Log: new.php,v $
+ * Revision 1.24  2007/10/17 01:09:44  randym56
+ * Changed files to save with random numbers to remove security breach by saving files that can be executed by hackers.
+ *
  * Revision 1.23  2006/03/21 20:29:41  maulani
  * - Remove deprecated call-by-reference item.  Function already defined with
  *   call-by-reference
