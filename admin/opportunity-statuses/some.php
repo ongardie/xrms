@@ -5,7 +5,7 @@
  *
  * @todo modify all opportunity status uses to use a sort order
  *
- * $Id: some.php,v 1.14 2006/12/05 11:10:01 jnhayart Exp $
+ * $Id: some.php,v 1.15 2007/10/17 15:14:20 randym56 Exp $
  */
 
 //include required XRMS common files
@@ -107,7 +107,7 @@ if ($aopportunity_type_id) {
 $con->close();
 
 
-$page_title = _("Manage Opportunity Statuses");
+$page_title = _("Manage Opportunity Statuses (Hopper Tracks)");
 start_page($page_title);
 
 ?>
@@ -135,7 +135,7 @@ start_page($page_title);
    <form action=../sort.php method=post>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=7><?php echo _("Opportunity Statuses"); ?></td>
+                <td class=widget_header colspan=7><?php echo _("Opportunity Statuses (Hopper Tracks)"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Short Name"); ?></td>
@@ -206,6 +206,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.15  2007/10/17 15:14:20  randym56
+ * Show ID field to make ACL mods for group members easier and match new docs
+ *
  * Revision 1.14  2006/12/05 11:10:01  jnhayart
  * Add cosmetics display, and control localisation
  *

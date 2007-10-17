@@ -4,7 +4,7 @@
  *
  * List company sources
  *
- * $Id: some.php,v 1.9 2006/12/05 11:10:00 jnhayart Exp $
+ * $Id: some.php,v 1.10 2007/10/17 15:11:59 randym56 Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -26,11 +26,11 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $table_rows .= '<tr>';
-        $table_rows .= '<td class=widget_content>' . $rst->fields['company_source_short_name'] . '</td>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['company_source_id'] . '</td>';
         $table_rows .= '<td class=widget_content><a href=one.php?company_source_id=' . $rst->fields['company_source_id'] . '>' . _($rst->fields['company_source_pretty_name']) . '</a></td>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['company_source_pretty_name'] . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['company_source_pretty_plural'] . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['company_source_display_html'] . '</td>';
-        $table_rows .= '<td class=widget_content>' . $rst->fields['company_source_score_adjustment'] . '</td>';
         $table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -52,11 +52,11 @@ start_page($page_title);
                 <td class=widget_header colspan=5><?php echo _("Company Sources"); ?></td>
             </tr>
             <tr>
+                <td class=widget_label><?php echo _("ID"); ?></td>
                 <td class=widget_label><?php echo _("Short Name"); ?></td>
                 <td class=widget_label><?php echo _("Full Name"); ?></td>
                 <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
                 <td class=widget_label><?php echo _("Display HTML"); ?></td>
-                <td class=widget_label><?php echo _("Score Adjustment"); ?></td>
             </tr>
             <?php  echo $table_rows; ?>
         </table>
@@ -106,6 +106,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.10  2007/10/17 15:11:59  randym56
+ * Show ID field to make ACL mods for group members easier and match new docs
+ *
  * Revision 1.9  2006/12/05 11:10:00  jnhayart
  * Add cosmetics display, and control localisation
  *

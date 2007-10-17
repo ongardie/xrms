@@ -2,7 +2,7 @@
 /**
  * Manage Activity Resolution Types
  *
- * $Id: some.php,v 1.4 2006/12/10 18:30:29 jnhayart Exp $
+ * $Id: some.php,v 1.5 2007/10/17 15:06:24 randym56 Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -23,6 +23,7 @@ $rst = $con->execute($sql);
 if ($rst) {
         while (!$rst->EOF) {
                 $table_rows .= '<tr>';
+                $table_rows .= '<td class=widget_content>' . $rst->fields['activity_resolution_type_id'] . '</td>';
                 $table_rows .= '<td class=widget_content><a href=one_activity_resolution_type.php?return_url=some.php&form_action=edit&activity_resolution_type_id=' . $rst->fields['activity_resolution_type_id'] . '>' . $rst->fields['resolution_pretty_name'] . '</a></td>';
                 $table_rows .= '<td class=widget_content>' . $rst->fields['resolution_short_name'] . '</td>';
                 
@@ -51,9 +52,10 @@ start_page($page_title);
     <div id="Content">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Activity Resolution Types"); ?></td>
+                <td class=widget_header colspan=5><?php echo _("Activity Resolution Types"); ?></td>
             </tr>
             <tr>
+                <td class=widget_label><?php echo _("ID"); ?></td>
                 <td class=widget_label><?php echo _("Full Name"); ?></td>
                 <td class=widget_label><?php echo _("Short Name"); ?></td>
                 <td class=widget_label width=15%><?php echo _("Move"); ?></td>
@@ -77,6 +79,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.5  2007/10/17 15:06:24  randym56
+ * Show ID field to make ACL mods for group members easier and match new docs
+ *
  * Revision 1.4  2006/12/10 18:30:29  jnhayart
  * repair Add New button
  *

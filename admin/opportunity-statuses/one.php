@@ -4,7 +4,7 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.19 2007/09/17 21:31:54 myelocyte Exp $
+ * $Id: one.php,v 1.20 2007/10/17 15:14:20 randym56 Exp $
  */
 
 //include required common files
@@ -39,7 +39,8 @@ if ($rst) {
     $opportunity_status_pretty_plural = $rst->fields['opportunity_status_pretty_plural'];
     $opportunity_status_display_html = $rst->fields['opportunity_status_display_html'];
     $opportunity_status_long_desc = $rst->fields['opportunity_status_long_desc'];
-
+	$status_workflow_type = $rst->fields['status_workflow_type'];
+	$workflow_goto = $rst->fields['workflow_goto'];
     $rst->close();
 }
 
@@ -48,6 +49,7 @@ $table_name = "opportunity_statuses";
 // list of all activity templates connected to this opportunity
 $sql_activity_templates="select activity_title,
                                 duration,
+								fixed_date,
                                 activity_template_id,
                                 activity_type_pretty_name, activity_templates.sort_order, role_name
                          from activity_types,
@@ -69,6 +71,7 @@ if ($rst) {
     $maxcnt = $rst->rowcount();
     while (!$rst->EOF) {
         $sort_order = $rst->fields['sort_order'];
+		if ($rst->fields['fixed_date']>'') $fixed_date = date("Y-m-d", strtotime($rst->fields['fixed_date'])); else $fixed_date='';
         $activity_rows .= '<tr>';
         $activity_rows .= "<td class='$classname'>"
             . "<a href='$http_site_root/admin/activity-templates/edit.php?activity_template_id="
@@ -77,6 +80,7 @@ if ($rst) {
             . $opportunity_status_id . "'>"
             . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['duration'] . '</td>';
+		$activity_rows .= '<td class=' . $classname . '>' . $fixed_date . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>'. $rst->fields['role_name'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>'
@@ -112,12 +116,24 @@ $rst = $con->execute($sql);
 $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
 $rst->close();
 
+//get Opportunity Statuses menu for drop down
+$sql = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status = 'a'";
+$rst = $con->execute($sql);
+$opportunity_status_menu = $rst->getmenu2('workflow_goto', $workflow_goto, true);
+$rst->close();
+
+//get workflow_goto list menu
+//$sql = "select opportunity_status_pretty_name, opportunity_status_short_name from opportunity_statuses where opportunity_status_record_status = 'a'";
+//$rst = $con->execute($sql);
+//$workflow_goto_menu = $rst->getmenu2('opportunity_status_short_name', $workflow_goto, true);
+//$rst->close();
+
 $con->close();
 
 //get role menu
 $role_menu = get_role_list(false, true, 'role_id', $role_id, true);
 
-$page_title = _("Opportunity Status Details").': '.$opportunity_status_pretty_name;
+$page_title = _("Opportunity Status (Hopper Track) Details").': '.$opportunity_status_pretty_name;
 start_page($page_title);
 
 ?>
@@ -130,7 +146,7 @@ start_page($page_title);
         <input type=hidden name=aopportunity_type_id value="<?php  echo $aopportunity_type_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Edit Opportunity Status Information"); ?></td>
+                <td class=widget_header colspan=4><?php echo _("Edit Opportunity Status (Hopper Track) Information"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Short Name"); ?></td>
@@ -146,7 +162,7 @@ start_page($page_title);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
-                <td class=widget_content_form_element><input type=text size=60 name=opportunity_status_display_html value="<?php  echo htmlspecialchars($opportunity_status_display_html); ?>"></td>
+                <td class=widget_content_form_element><input type=text size=60 name=opportunity_status_display_html value="<?php  echo $opportunity_status_display_html; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Long Description"); ?></td>
@@ -162,9 +178,25 @@ start_page($page_title);
                 </select>
                 </td>
             </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Workflow Resolution Type"); ?></td>
+                <td class=widget_content_form_element>
+                <select name="status_workflow_type">
+                    <option value="0" <?php if (($status_workflow_type == 0) or ($status_workflow_type == null)) {print " selected ";} ?>><?php echo _("End"); ?>
+                    <option value="1" <?php if ($status_workflow_type == 1) {print " selected ";} ?>><?php echo _("Repeat"); ?>
+                    <option value="2" <?php if ($status_workflow_type == 2) {print " selected ";} ?>><?php echo _("GoTo"); ?>
+                </select>
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Workflow GoTo"); ?></td>
+					<td class=widget_content_form_element><?php  echo $opportunity_status_menu; ?> (Used only if "Go To" selected in Workflow Resolution Type field.)</td>
+            </tr>
 
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
+              <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"> 
+                  <br>
+                NOTE: The opportunity defaults as a &quot;delta-day&quot; event unless you enter a date in any of the Activity Workflow items below. You must leave the date field blank in ALL records to maintain a &quot;delta-day&quot; opportunity.&nbsp; It is not possible to combine &quot;delta-day&quot; and &quot;calendar&quot; driven hoppers. To set this opportunity as a calendar hopper, you simply put 0 in the Duration column first. </td>
             </tr>
 
         </table>
@@ -177,17 +209,20 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=5><?php echo _("Link Workflow Activity To Opportunity Status"); ?></td>
+                <td class=widget_header colspan=6><?php echo _("Link Workflow Activity To Opportunity Status (Hopper Track)"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Title"); ?></td>
                 <td class=widget_label><?php echo _("Duration"); ?><br> <?php echo _("(defaults to days)"); ?></td>
+				<td class=widget_label><?php echo _("Fixed Date"); ?><br> <?php echo _("(Duration MUST = 0)"); ?></td>
                 <td class=widget_label><?php echo _("Type"); ?></td>
                 <td class=widget_label><?php echo _("Role"); ?></td>
                 <td class=widget_label colspan=2 width="20%"><?php echo _("Sort Order"); ?></td>
             <tr>
                 <td class=widget_content_form_element><input type=text size=30 name="title"></td>
                 <td class=widget_content_form_element><input type=text name="duration"></td>
+				<td class=widget_contect_form_element><input type=text size=16 ID="f_date_activity" name="fixed_date">
+                        <img ID="f_trigger_activity" style="CURSOR: hand" border=0 src="../../img/cal.gif"></td>
                 <td class=widget_content_form_element>
                     <?php
                         echo $activity_type_menu;
@@ -205,13 +240,24 @@ start_page($page_title);
                     echo $activity_rows;
                 } else {
                     echo "<tr>\n";
-                    echo "\t\t".'<td class=widget_content_form_element colspan=6>'._("No linked activities")."</td>\n";
+                    echo "\t\t".'<td class=widget_content_form_element colspan=7>'._("No linked activities")."</td>\n";
                     echo "\t</tr>\n";
                 }
             ?>
 
         </table>
         </form>
+            <script language="JavaScript" type="text/javascript">
+                    Calendar.setup({
+                    inputField     :    "f_date_activity",      // id of the input field
+                    ifFormat       :    "%Y-%m-%d",       // format of the input field
+                    showsTime      :    true,            // will display a time selector
+                    button         :    "f_trigger_activity",   // trigger for the calendar (button ID)
+                    singleClick    :    false,           // double-click mode
+                    step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+                    align          :    "TL"           // alignment (defaults to \"Bl\")
+                });
+			</script>
 
 
     </div>
@@ -220,12 +266,12 @@ start_page($page_title);
     <!-- right column //-->
     <div id="Sidebar">
 
-        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Opportunity Status?")); ?>');">
+        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Opportunity Status (Hopper Track)?")); ?>');">
         <input type=hidden name=opportunity_status_id value="<?php  echo $opportunity_status_id; ?>">
         <input type=hidden name=aopportunity_type_id value="<?php  echo $aopportunity_type_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Delete Opportunity Status"); ?></td>
+                <td class=widget_header colspan=4><?php echo _("Delete Opportunity Status (Hopper Track)"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content>
@@ -248,11 +294,16 @@ end_page();
 
 /**
  * $Log: one.php,v $
- * Revision 1.19  2007/09/17 21:31:54  myelocyte
- * - Fixed bugs: 984168, 984170 and similar bugs not reported
- *    I have added htmlspecialchars function in one.php before all display_html variable is
- *    displayed. This same error affected most of the display_html fields in Admin section.
- *    I tried to fix them all.
+ * Revision 1.20  2007/10/17 15:14:20  randym56
+ * Show ID field to make ACL mods for group members easier and match new docs
+ *
+ * 2007/03/18 randym
+ * - Added two input fields for two new fields in table:
+ * - table: opportunity_statuses
+ * - fields added:
+ *    status_workflow_type (integer: used for resolution types –> End=0, Repeat=1, or Goto=2)
+ *    workflow_goto (used to enter the name of another opportunity status – I plan to make this
+ *         a dropdown lookup from the opportunity_statuses table, but for now it’s free-form).
  *
  * Revision 1.18  2006/12/29 06:48:56  ongardie
  * - Don't allow blank on activities type drop-down.

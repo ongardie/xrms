@@ -4,7 +4,7 @@
  *
  * List account-status
  *
- * $Id: some.php,v 1.10 2006/12/05 19:31:27 jnhayart Exp $
+ * $Id: some.php,v 1.11 2007/10/17 15:05:18 randym56 Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -24,6 +24,7 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $table_rows .= '<tr>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['account_status_id'] . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['account_status_short_name'] . '</td>';
         $table_rows .= '<td class=widget_content><a href=one.php?account_status_id=' . $rst->fields['account_status_id'] . '>' . _($rst->fields['account_status_pretty_name']) . '</a></td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['account_status_pretty_plural'] . '</td>';
@@ -46,9 +47,10 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Account Statuses"); ?></td>
+                <td class=widget_header colspan=5><?php echo _("Account Statuses"); ?></td>
             </tr>
             <tr>
+                <td class=widget_label><?php echo _("ID"); ?></td>
                 <td class=widget_label><?php echo _("Short Name"); ?></td>
                 <td class=widget_label><?php echo _("Full Name"); ?></td>
                 <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
@@ -98,6 +100,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.11  2007/10/17 15:05:18  randym56
+ * Show ID field to make ACL mods for group members easier and match new docs
+ *
  * Revision 1.10  2006/12/05 19:31:27  jnhayart
  * cosmetic change
  *

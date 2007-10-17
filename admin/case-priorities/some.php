@@ -2,7 +2,7 @@
 /**
  * Display all case priorities
  *
- * $Id: some.php,v 1.9 2006/12/05 11:09:59 jnhayart Exp $
+ * $Id: some.php,v 1.10 2007/10/17 15:10:25 randym56 Exp $
  */
 
 //include required files
@@ -24,6 +24,7 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $table_rows .= '<tr>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['case_priority_id'] . '</td>';
         $table_rows .= '<td class=widget_content><a href=one.php?case_priority_id=' . $rst->fields['case_priority_id'] . '>' . _($rst->fields['case_priority_short_name']) . '</a></td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['case_priority_pretty_name'] . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['case_priority_pretty_plural'] . '</td>';
@@ -47,9 +48,10 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=5><?php echo _("Case Priorities"); ?></td>
+                <td class=widget_header colspan=6><?php echo _("Case Priorities"); ?></td>
             </tr>
             <tr>
+                <td class=widget_label><?php echo _("ID"); ?></td>
                 <td class=widget_label><?php echo _("Short Name"); ?></td>
                 <td class=widget_label><?php echo _("Full Name"); ?></td>
                 <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
@@ -104,6 +106,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.10  2007/10/17 15:10:25  randym56
+ * Show ID field to make ACL mods for group members easier and match new docs
+ *
  * Revision 1.9  2006/12/05 11:09:59  jnhayart
  * Add cosmetics display, and control localisation
  *

@@ -2,7 +2,7 @@
 /**
  * Show and edit the details for all crm statuses
  *
- * $Id: some.php,v 1.12 2006/12/04 20:07:57 jnhayart Exp $
+ * $Id: some.php,v 1.13 2007/10/17 15:12:53 randym56 Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -27,6 +27,7 @@ if ($rst) {
 	    $sort_order = $rst->fields['sort_order'];
 	  
         $table_rows .= '<tr>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['crm_status_id'] . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['crm_status_short_name'] . '</td>';
         $table_rows .= '<td class=widget_content><a href=one.php?crm_status_id=' . $rst->fields['crm_status_id'] . '>' . $rst->fields['crm_status_pretty_name'] . '</a></td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['crm_status_pretty_plural'] . '</td>';
@@ -65,9 +66,10 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=5><?php echo _("Existing CRM Statuses"); ?></td>
+                <td class=widget_header colspan=6><?php echo _("Existing CRM Statuses"); ?></td>
             </tr>
             <tr>
+                <td class=widget_label><?php echo _("ID"); ?></td>
                 <td class=widget_label><?php echo _("Short Name"); ?></td>
                 <td class=widget_label><?php echo _("Full Name"); ?></td>
                 <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
@@ -119,6 +121,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.13  2007/10/17 15:12:53  randym56
+ * Show ID field to make ACL mods for group members easier and match new docs
+ *
  * Revision 1.12  2006/12/04 20:07:57  jnhayart
  * cosmetics modif
  *

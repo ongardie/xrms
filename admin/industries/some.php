@@ -2,7 +2,7 @@
 /**
  * Manage Industries
  *
- * $Id: some.php,v 1.9 2006/12/05 11:10:00 jnhayart Exp $
+ * $Id: some.php,v 1.10 2007/10/17 15:13:27 randym56 Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -23,6 +23,7 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $table_rows .= '<tr>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['industry_id'] . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['industry_short_name'] . '</td>';
         $table_rows .= '<td class=widget_content><a href=one.php?industry_id=' . $rst->fields['industry_id'] . '>' . _($rst->fields['industry_pretty_name']) . '</a></td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['industry_pretty_plural'] . '</td>';
@@ -43,9 +44,10 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Industries"); ?></td>
+                <td class=widget_header colspan=5><?php echo _("Industries"); ?></td>
             </tr>
             <tr>
+                <td class=widget_label><?php echo _("ID"); ?></td>
                 <td class=widget_label><?php echo _("Short Name"); ?></td>
                 <td class=widget_label><?php echo _("Full Name"); ?></td>
                 <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
@@ -95,6 +97,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.10  2007/10/17 15:13:27  randym56
+ * Show ID field to make ACL mods for group members easier and match new docs
+ *
  * Revision 1.9  2006/12/05 11:10:00  jnhayart
  * Add cosmetics display, and control localisation
  *

@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupMember_list.php,v 1.7 2006/07/13 00:47:20 vanmer Exp $
+ * $Id: GroupMember_list.php,v 1.8 2007/10/17 15:05:44 randym56 Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -84,6 +84,7 @@ echo $pager_columns_selects;
 
 $endrows="<tr><td colspan=$colspan class=widget_class_form_element>$pager_columns_button
 <input type=\"button\" class=\"button\" value=\"".  _("Add New") ."\" onclick=\"javascript: location.href='one_GroupMember.php?form_action=new&return_url=GroupMember_list.php'\"></td></tr>";
+$endrows.="<tr><td colspan=$colspan>Group Members enable you to allow/limit access based on fields within tables.  You are able to set permissions to the group in Manage Role Permissions (see documentation for details about setting permissions.</td></tr>";
 
 $pager->AddEndRows($endrows);
 
@@ -97,6 +98,9 @@ end_page();
 
 /**
  * $Log: GroupMember_list.php,v $
+ * Revision 1.8  2007/10/17 15:05:44  randym56
+ * Show ID field to make ACL mods for group members easier and match new docs
+ *
  * Revision 1.7  2006/07/13 00:47:20  vanmer
  * - changed all columns/pager combinations to reference the same pager name, to allow saved views to operate properly
  *
