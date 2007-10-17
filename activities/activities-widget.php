@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.57 2007/06/02 11:32:52 fcrossen Exp $
+* $Id: activities-widget.php,v 1.58 2007/10/17 00:26:17 randym56 Exp $
 */
 
 global $include_directory;
@@ -45,8 +45,8 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
                              $default_sort = null, $instance='') {
 
     global $http_site_root;
-    // acl filtering
 
+    // acl filtering
     $list=acl_get_list($session_user_id, 'Read', false, 'activities');
 
     if ($list) {
@@ -58,6 +58,14 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
         return '';
     }
 
+        // added by Randy for iCal plugin
+        // call the ical_button hook
+        // make sure $ical_button is defined
+        if ( !isset($ical_button) ) {
+          $ical_button = '';
+        }
+        $ical_button = do_hook_function('ical_button', $ical_button);
+        //$ical_button added to button line below
 
     // This should probably be a system preference.
     $description_substring_length = 80;
@@ -71,6 +79,7 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
     getGlobalVar($before_after, 'before_after');
     getGlobalVar($search_date, 'search_date');
     getGlobalVar($start_end, 'start_end');
+    getGlobalVar($completed, 'completed');
 
 
     // selects the columns this user is interested in
@@ -174,8 +183,8 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
         . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"$http_site_root/contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, cont.first_names, cont.last_name, "
         . "'$return_url' as return_url, "
         . $con->substr."(activity_description, 1, $description_substring_length)"."AS description_brief, "
-        . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS scheduled, "
-        . $con->SQLDate('Y-m-d','a.ends_at') . " AS due, "
+        . $con->SQLDate('Y-m-d H:i:s','a.scheduled_at') . " AS scheduled, "
+        . $con->SQLDate('Y-m-d H:i:s','a.ends_at') . " AS due, "
         . "u.username AS owner, u.user_id, a.activity_id, activity_status, a.on_what_table, a.on_what_id, "
         // these fields are pulled in to speed up the pager sorting (using sql_sort_column)
         . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, cp.case_priority_pretty_name, rt.resolution_short_name ";
@@ -534,11 +543,11 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
                     "<tr><td class=widget_content_form_element colspan=20>
                     $pager_columns_button
                     <input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _("Calendar View") ."\">
-    ".$pager->GetAndUseExportButton()."
-                    <input type=button class=button onclick=\"javascript: location.href='../email/email.php?return_url=$return_url'\" value=\"" . _("Mail Merge") . "\">
+    ".$pager->GetAndUseExportButton(). $ical_button ."
+                    <input type=button class=button onclick=\"javascript: location.href='../email/email.php?return_url=$return_url'\" value=\"" . _("Mail Merge") . "\">" . /* commented out by Randy - neither of these have a place in this widget
                     <input type=button class=button onclick=\"javascript: location.href='../bulkactivity/bulkassignment.php?return_url=$return_url'\" value=\"" . _("Bulk Assignment") . "\">
-                    <input type=button class=button onclick=\"javascript: location.href='../bulkactivity/bulkactivity-0.php?return_url=$return_url'\" value=\"" . _("Bulk Activity") . "\">
-                    <input type=button class=button onclick=\"javascript: location.href='$http_site_root/activities/browse-next.php?browse=true&sql_session_var=$sql_session_var';\" value=\"" . _("Browse") . "\"></td>
+                    <input type=button class=button onclick=\"javascript: location.href='../bulkactivity/bulkactivity-0.php?return_url=$return_url'\" value=\"" . _("Bulk Activity") . "\"> */ 
+                    "<input type=button class=button onclick=\"javascript: location.href='$http_site_root/activities/browse-next.php?browse=true&sql_session_var=$sql_session_var';\" value=\"" . _("Browse") . "\"></td>
                     </tr>\n";
 
         if(is_array($default_sort)) {
@@ -716,32 +725,43 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
                     <td class=widget_header colspan=9>". _("New Activity") . "</td>
                 </tr>
                 <tr>
-                    <td class=widget_label>" . _("Summary") . "</td>
+                    <td class=widget_label>" . _("Summary/Notes") . "</td>
                     <td class=widget_label>" . _("User") . "</td>
                     <td class=widget_label>" . _("Type") . "</td> ".
                     ($contact_menu ? "<td class=widget_label>" . _("Contact") . "</td>" : "") ."
-                    <td class=widget_label>" . _("Scheduled End") . "</td>
+                    <td class=widget_label>" . _("Scheduled Start/End") . "</td>
                     <td class=widget_label>" . _(" ") . "</td>
                 </tr>
                 <tr>
-                    <td class=widget_content_form_element><input type=text name=activity_title></td>
+                    <td class=widget_content_form_element><input type=text name=activity_title>Summary<br>
+                                          <input type=text name=activity_description>Notes</td>
                     <td class=widget_content_form_element>$user_menu</td>
                     <td class=widget_content_form_element>$activity_type_menu</td>" .
                     ($contact_menu ? "<td class=widget_content_form_element>$contact_menu</td>" : "") ."
 
                     <td class=widget_content_form_element>
-                        <input type=text size=16 ID=\"f_date_new_activity\" name=ends_at value=\"" . date('Y-m-d') . "\">
-                        <img ID=\"f_trigger_new_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" . "</td>
+                        <input type=text size=16 ID=\"f_date_start_activity\" name=scheduled_at value=\"" . date('Y-m-d H:i') . "\">
+                        <img ID=\"f_trigger_start_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" . "Start<br>
+                        <input type=text size=16 ID=\"f_date_new_activity\" name=ends_at onFocus=\"CheckDate()\">
+                        <img ID=\"f_trigger_new_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" . "End</td>
                     <td>\n".
 //                        render_create_button(_("Add")) .
 //                        render_create_button(_("Done"),'button',"javascript: markComplete();") . "
-                        render_create_button(_("Add"), 'submit', false, false, false, 'activities') .
-                        render_create_button(_("Done"),'button',"javascript: markComplete();", false, false, 'activities') . "
-                    </td>                    
+                        render_create_button(_("Add"),'submit', false, false, false, 'activities') . "<br>" .
+                        render_create_button(_("Done"),'button',"javascript: markComplete();", false, false, 'activities') . "<td>\n". "
                 </tr>
             </table>
             </form>
             <script language=\"JavaScript\" type=\"text/javascript\">
+                    Calendar.setup({
+                    inputField     :    \"f_date_start_activity\",      // id of the input field
+                    ifFormat       :    \"%Y-%m-%d %H:%M:%S\",       // format of the input field
+                    showsTime      :    true,            // will display a time selector
+                    button         :    \"f_trigger_start_activity\",   // trigger for the calendar (button ID)
+                    singleClick    :    false,           // double-click mode
+                    step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+                    align          :    \"TL\"           // alignment (defaults to \"Bl\")
+                });
                     Calendar.setup({
                     inputField     :    \"f_date_new_activity\",      // id of the input field
                     ifFormat       :    \"%Y-%m-%d %H:%M:%S\",       // format of the input field
@@ -751,6 +771,13 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
                     step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
                     align          :    \"Bl\"           // alignment (defaults to \"Bl\")
                 });
+                function CheckDate() 
+                        {
+                        if (document.$form_name.ends_at.value < document.$form_name.scheduled_at.value) 
+                                {
+                        document.$form_name.ends_at.value = document.$form_name.scheduled_at.value; 
+                                }       
+                }
             </script>
     ";
     return $ret;
@@ -771,6 +798,7 @@ function GetMiniSearchTerms($widget_name, $search_terms) {
     getGlobalVar($search_terms['start_end'], $widget_name.'_start_end');
     getGlobalVar($search_terms['before_after'], $widget_name.'_before_after');
     getGlobalVar($search_terms['search_date'], $widget_name.'_search_date');
+    getGlobalVar($search_terms['completed'], $widget_name.'_completed');
 
     return $search_terms;
 }
@@ -791,6 +819,7 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
         $start_end      = $search_terms['start_end'];
         $before_after   = $search_terms['before_after'];
         $search_date    = $search_terms['search_date'];
+        $completed      = $search_terms['completed'];
 
     }
     if (!$con) $con=get_xrms_dbconnection();
@@ -808,7 +837,7 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=3>
+                <td class=widget_header colspan=4>
 
                     <table width=\"100%\" cellspacing=0 cellpadding=0 border=0>
                     <tr><td class=widget_header align=left>
@@ -821,6 +850,7 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
                 <td class=widget_label>" . _("Summary") . "</td>
                 <td class=widget_label>" . _("Contact") . "</td>
                 <td class=widget_label>" . _("Search By Date") . "</td>
+                                <td>&nbsp;</td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text size=12 name={$widget_name}_activity_title value=\"$title\"></td>
@@ -841,19 +871,28 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
                     <input type=text ID=\"f_date_{$widget_name}_search_date\" name={$widget_name}_search_date value=\"$search_date\">
                     <img ID=\"f_trigger_{$widget_name}_search_date\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">
                 </td>
+                                <td>&nbsp;</td>
             </tr>
             <tr>
                 <td class=widget_label>" . _("Type") . "</td>
                 <td class=widget_label>" . _("Owner") . "</td>
                 <td class=widget_label>" . _("Company") . "</td>
+                                <td class=widget_label>" . _("Activity Status") . "</td>
             </tr>
             <tr>
                 <td class=widget_content_form_element>$activity_type_menu</td>
                 <td class=widget_content_form_element>$activity_owner_menu</td>
                 <td class=widget_content_form_element><input type=text size=12 name={$widget_name}_activity_company value=\"$company\"></td>
+                                <td class=widget_content_form_element>
+                 <select name=\"{$widget_name}_completed\">
+                    <option value=\"o\"" . ($completed == 'o' ?  ' selected' : '' ). '>' . _("Non-Completed") . "</option>
+                    <option value=\"c\"" . ($completed == 'c' ?  ' selected' : '' ). '>' . _("Completed") . "</option>
+                    <option value=\"all\"" . ($completed == 'all' ?  ' selected' : '' ). '>' . _("All") . "</option>
+                </select>
+                                </td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=3>
+                <td class=widget_content_form_element colspan=4>
                     <input type=button class=button onclick=\"document.$form_name.{$widget_name}_status.value='enable'; document.$form_name.submit();\" value=\"" . _('Filter Activities') . "\">
                     <input type=button class=button onclick=\"{$widget_name}_ClearActivitiesFilter()\" value=\"" . _('Clear Filter') . "\">
                 </td>
@@ -893,6 +932,16 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.58  2007/10/17 00:26:17  randym56
+* - added scheduled start date field to "GetNewActivityWidget" Lines 723 & 731-732 & 743-750
+* - added H:i:s to "GetActivitiesWidget" line 177-178
+*
+*
+* $Log: activities-widget.php,v $
+* Revision 1.58  2007/10/17 00:26:17  randym56
+* - added scheduled start date field to "GetNewActivityWidget" Lines 723 & 731-732 & 743-750
+* - added H:i:s to "GetActivitiesWidget" line 177-178
+*
 * Revision 1.57  2007/06/02 11:32:52  fcrossen
 * - fixed a HTML typo
 *
