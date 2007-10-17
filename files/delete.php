@@ -2,7 +2,7 @@
 /**
 * Logically Delete File information in the database
 *
-* $Id: delete.php,v 1.10 2006/07/10 13:19:10 braverock Exp $
+* $Id: delete.php,v 1.11 2007/10/17 01:12:30 randym56 Exp $
 */
 require_once('../include-locations.inc');
 
@@ -39,7 +39,8 @@ do_hook_function('file_delete_file', $file_plugin_params);
 
 // uncomment the following line to remove files from the filesystem
 // when they are deleted by a user. Use with caution.
-// system("rm storage/" . $rst->fields['file_filesystem_name'] );
+//system("rm storage/" . $rst->fields['file_filesystem_name'] );
+unlink($file_storage_directory . $rst->fields['file_filesystem_name'] );
 
 $con->close();
 
@@ -47,6 +48,10 @@ header("Location: {$http_site_root}{$return_url}");
 
 /**
 * $Log: delete.php,v $
+* Revision 1.11  2007/10/17 01:12:30  randym56
+* fixed a bug in this script on line 42 (the remove function was not
+* working - my update is on line 43)
+*
 * Revision 1.10  2006/07/10 13:19:10  braverock
 * - clean indentation
 * - remove trailing whitespace
