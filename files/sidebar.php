@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.31 2006/04/17 19:03:43 vanmer Exp $
+ * $Id: sidebar.php,v 1.32 2007/10/17 01:14:44 randym56 Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -11,7 +11,7 @@ if ( !defined('IN_XRMS') )
   exit;
 }
 
-require_once($include_directory . 'utils-files.php');
+//require_once($include_directory . 'utils-files.php');
 
 // Set up the pager to display the current dir's data
 global $include_directory;
@@ -21,7 +21,7 @@ require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 global $return_url;
 
 
-
+//$con->debug = 1;
 
 ///*
 //COMMENTED until ACL is integrated
@@ -32,7 +32,9 @@ else { if ($fileList!==true) { $fileList=implode(",",$fileList); $file_limit_sql
 
 // Avoid undefined errors until ACL is integrated
 $file_limit_sql = '';
-
+if (!$files_sidebar_rows_per_page) {
+    $files_sidebar_rows_per_page=5;
+}
     // Build data setup
     if (!$on_what_table AND !$on_what_id) {
         //No attachment specified, so show users files (private/home.php)
@@ -42,9 +44,43 @@ $file_limit_sql = '';
         $files_data['on_what_table']    = $on_what_table;
         $files_data['on_what_id']       = $on_what_id;
     }
-    $file_sidebar_rst = get_file_records( $con, $files_data );
 
+//echo $on_what_table . " : " . $on_what_id;
+//taken from utils_files.php
+//    $file_sidebar_rst = get_file_records( $con, $files_data );
+    if (count($files_data))
+    {
+        // build where clause from files_data
+        foreach($files_data as $field => $value) {
+            $where_clause[] = "$field = '$value'";
+        }
 
+        if ($where_clause AND $allow_acl_restriction) {
+            $list=acl_get_list($session_user_id, 'Read', false, 'files');
+            if ($list AND is_array($list)) {
+                $where_clause[]="file_id IN (".implode(",",$list).")";
+            } elseif (!$list) {
+                $where_clause[]="1 = 2";
+            }
+        }
+
+        $where_sql = 'WHERE ' . join(" AND ", $where_clause);
+
+        // Define SQL
+        $file_sql = "SELECT * from files, users
+                            $where_sql
+                        AND files.entered_by = users.user_id
+                        AND file_record_status = 'a'
+                ORDER BY entered_at";
+
+        // any errors ???
+        $file_sidebar_rst = $con->execute($file_sql);
+        if ( ! $file_sidebar_rst )
+        {
+            // yep - report it
+            db_error_handler($con, $file_sql);
+        }
+    }
 
 // files plugin hook
 $plugin_params = array('rst' => $file_sidebar_rst, 'on_what_table' => $on_what_table, 'on_what_id' => $on_what_id);
@@ -60,9 +96,14 @@ if(!$file_rows && !$file_rows['error_status']) {
     if (!$file_sidebar_label) {
         $file_sidebar_label=_("Files");
     }
-    if (!$return_url) {
+    if (!$return_url AND ($on_what_table == 'activity_templates')) {
+        $return_url="/admin/activity_templates/edit.php?".make_singular($on_what_table)."_id=".$on_what_id;
+    } else {
+	    if (!$return_url) {
         $return_url="/$on_what_table/one.php?".make_singular($on_what_table)."_id=".$on_what_id;
-    }
+    	}
+	}
+
 
     $files = array();
 
@@ -96,8 +137,8 @@ if(!$file_rows && !$file_rows['error_status']) {
     if(!$file_sidebar_default_columns) $file_sidebar_default_columns = array('name', 'size','owner', 'date');
 
     $file_pager_columns = new Pager_Columns('Files_Sidebar', $columns, $file_sidebar_default_columns, 'Files_Sidebar_Form');
-    $file_pager_columns_button = $file_pager_columns->GetSelectableColumnsButton();
-    $file_pager_columns_selects = $file_pager_columns->GetSelectableColumnsWidget();
+    //$file_pager_columns_button = $file_pager_columns->GetSelectableColumnsButton();
+    //$file_pager_columns_selects = $file_pager_columns->GetSelectableColumnsWidget();
 
     $columns = $file_pager_columns->GetUserColumns('default');
     $colspan = count($columns);
@@ -124,15 +165,20 @@ if(!$file_rows && !$file_rows['error_status']) {
 
     $file_rows = "<form name=Files_Sidebar_Form method=POST>
                     $file_pager_columns_selects
-                    <input type=hidden name=contact_id value=$contact_id>
+                    <input type=hidden name=activity_template_id value=$activity_template_id>
+					<input type=hidden name=contact_id value=$contact_id>
                     <input type=hidden name=company_id value=$company_id>
                     <input type=hidden name=division_id value=$division_id>\n"
-                    .  $pager->Render() . "
+                    .  $pager->Render($files_sidebar_rows_per_page) . "
                   </form>\n";
 }
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.32  2007/10/17 01:14:44  randym56
+ * Modified to bypass the /include/utils_files.php so that
+ * I could enable paging to work properly.
+ *
  * Revision 1.31  2006/04/17 19:03:43  vanmer
  * - added proper ACL restriction to sidebar output
  *
