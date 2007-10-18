@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.58 2007/10/17 00:26:17 randym56 Exp $
+* $Id: activities-widget.php,v 1.59 2007/10/18 02:01:06 randym56 Exp $
 */
 
 global $include_directory;
@@ -537,18 +537,26 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
         $sql_session_var = $form_name . '_activities_sql';
         $_SESSION[$sql_session_var] = $activity_sql;
 
+        //added by randym56 to enable hiding non-functional buttons
+        $rst = $con->execute($activity_sql);
+        if ($rst->rowcount() > 0) {
+                $show_pager_footer_buttons = true;
+                } else $show_pager_footer_buttons = false;
+        //added by randym56 to enable hiding non-functional buttons
+
         $pager = new GUP_Pager($con, $activity_sql, 'GetActivitiesPagerData', $caption, $form_name, $pager_id, $columns, false, true, true);
 
         $endrows = $end_rows .
-                    "<tr><td class=widget_content_form_element colspan=20>
-                    $pager_columns_button
-                    <input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _("Calendar View") ."\">
-    ".$pager->GetAndUseExportButton(). $ical_button ."
-                    <input type=button class=button onclick=\"javascript: location.href='../email/email.php?return_url=$return_url'\" value=\"" . _("Mail Merge") . "\">" . /* commented out by Randy - neither of these have a place in this widget
-                    <input type=button class=button onclick=\"javascript: location.href='../bulkactivity/bulkassignment.php?return_url=$return_url'\" value=\"" . _("Bulk Assignment") . "\">
-                    <input type=button class=button onclick=\"javascript: location.href='../bulkactivity/bulkactivity-0.php?return_url=$return_url'\" value=\"" . _("Bulk Activity") . "\"> */ 
-                    "<input type=button class=button onclick=\"javascript: location.href='$http_site_root/activities/browse-next.php?browse=true&sql_session_var=$sql_session_var';\" value=\"" . _("Browse") . "\"></td>
-                    </tr>\n";
+                "<tr><td class=widget_content_form_element colspan=20>
+                $pager_columns_button
+                <input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _("Calendar View") ."\">";
+
+        if ($show_pager_footer_buttons) $endrows = $endrows.$pager->GetAndUseExportButton(). $ical_button ."
+                <input type=button class=button onclick=\"javascript: location.href='../email/email.php?return_url=$return_url'\" value=\"" . _("Mail Merge") . "\">" . /* commented out by Randy - neither of these have a place in this widget
+                <input type=button class=button onclick=\"javascript: location.href='../bulkactivity/bulkassignment.php?return_url=$return_url'\" value=\"" . _("Bulk Assignment") . "\">
+                <input type=button class=button onclick=\"javascript: location.href='../bulkactivity/bulkactivity-0.php?return_url=$return_url'\" value=\"" . _("Bulk Activity") . "\"> */
+                "<input type=button class=button onclick=\"javascript: location.href='$http_site_root/activities/browse-next.php?browse=true&sql_session_var=$sql_session_var';\" value=\"" . _("Browse") . "\">";
+        $endrows = $endrows."</td></tr>\n";
 
         if(is_array($default_sort)) {
             $pager->SetDefaultSortColumn($default_sort);
@@ -932,12 +940,18 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.59  2007/10/18 02:01:06  randym56
+* Stop Export, iCal, Mail Merge and Browse buttons from appearing if no data shows in the widget.
+*
 * Revision 1.58  2007/10/17 00:26:17  randym56
 * - added scheduled start date field to "GetNewActivityWidget" Lines 723 & 731-732 & 743-750
 * - added H:i:s to "GetActivitiesWidget" line 177-178
 *
 *
 * $Log: activities-widget.php,v $
+* Revision 1.59  2007/10/18 02:01:06  randym56
+* Stop Export, iCal, Mail Merge and Browse buttons from appearing if no data shows in the widget.
+*
 * Revision 1.58  2007/10/17 00:26:17  randym56
 * - added scheduled start date field to "GetNewActivityWidget" Lines 723 & 731-732 & 743-750
 * - added H:i:s to "GetActivitiesWidget" line 177-178
