@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.87 2007/10/19 18:05:17 randym56 Exp $
+ * $Id: some.php,v 1.88 2007/10/19 18:32:18 randym56 Exp $
  */
 
 require_once('../include-locations.inc');
@@ -950,7 +950,8 @@ $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button";
 if ($show_pager_footer_buttons) $endrows = $endrows . $pager->GetAndUseExportButton() .  "
             <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\">
-            <input type=button class=button onclick=\"javascript: bulkSnailMail();\" value=\""._("Snail Mail Merge")."\">;
+                <input type=button class=button onclick=\"javascript: bulkSnailMail();\" value=\""._("Snail Mail Merge")."\">
+                <input type=button class=button onclick=\"javascript: bulkAssignment();\" value=\""._("Bulk Assignment")."\">";
 $endrows = $endrows."</td></tr>\n";
 
 $pager->AddEndRows($endrows);
@@ -1014,6 +1015,11 @@ function exportIt() {
                 alert('Export functionality hasnt been implemented yet for multiple companies')
 }
 
+function bulkAssignment() {
+    document.forms[0].action = "../bulkactivity/bulkassignment.php?return_url=/companies/some.php";
+    document.forms[0].submit();
+}
+
 function bulkEmail() {
     document.forms[0].action = "../email/email.php?scope=companies";
     document.forms[0].submit();
@@ -1054,6 +1060,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.88  2007/10/19 18:32:18  randym56
+ * Added bulk assignment of fields to selected companies
+ *
  * Revision 1.87  2007/10/19 18:05:17  randym56
  * Hide non functional buttons.
  *
