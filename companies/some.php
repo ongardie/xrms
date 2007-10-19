@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.86 2007/09/17 14:41:18 myelocyte Exp $
+ * $Id: some.php,v 1.87 2007/10/19 18:05:17 randym56 Exp $
  */
 
 require_once('../include-locations.inc');
@@ -220,7 +220,7 @@ if ( $legal_name ) {
 }
 
 if ( $phone ) {
- 	$idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
+        $idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
     $sql_phone=preg_replace("/[^\d]/", '', $phone);
     $criteria_count++;
     $sql .= ', c.phone ';
@@ -235,7 +235,7 @@ if ( $phone ) {
 }
 
 if ( $phone2 ) {
- 	$idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
+        $idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
     $sql_phone2=preg_replace("/[^\d]/", '', $phone2);
     $criteria_count++;
     $sql .= ', c.phone2 ';
@@ -246,7 +246,7 @@ if ( $phone2 ) {
 }
 
 if ( $fax ) {
- 	$idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
+        $idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
     $sql_fax=preg_replace("/[^\d]/", '', $fax);
     $criteria_count++;
     $sql .= ', c.fax ';
@@ -258,7 +258,7 @@ if ( $fax ) {
 
 $phone_fields=array('phone'=>_("Phone"),'phone2'=>_("Phone 2"),'fax'=>_("Fax"));
 if ($phone_search) {
- 	$idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
+        $idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
     $sql_phone_search=preg_replace("/[^\d]/", '', $phone_search);
     $phonewhere=array();
     foreach ($phone_fields as $phonefield => $phonelabel) {
@@ -511,11 +511,11 @@ $country_menu = check_and_get($con,$sql2,'country_id',$country_id);
 
 
 if ($criteria_count > 0) {
-	if (strlen($company_name)>0){
-	    add_audit_item($con, $session_user_id, 'searched', 'companies', $company_name, 4);
-	}
-	else
-	    add_audit_item($con, $session_user_id, 'searched', 'companies', '', 4);
+        if (strlen($company_name)>0){
+            add_audit_item($con, $session_user_id, 'searched', 'companies', $company_name, 4);
+        }
+        else
+            add_audit_item($con, $session_user_id, 'searched', 'companies', '', 4);
 }
 
 $page_title = _("Search Companies");
@@ -657,7 +657,7 @@ if (!$advanced_search) {
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Company Name"); ?></td>
-		    <td class=widget_content_form_element>
+                    <td class=widget_content_form_element>
                 <?php echo _("!")?>
                 <?php if ($not_name) { echo ' <input type=checkbox name="not_name" value=1 checked>'; }
                       else   { echo ' <input type=checkbox name="not_name" value=1>';}?>
@@ -937,14 +937,21 @@ $columns = $pager_columns->GetUserColumns();
 
 echo $pager_columns_selects;
 
+//added by randym56 to enable hiding non-functional buttons
+$rst = $con->execute($sql);
+if ($rst->rowcount() > 0) {
+        $show_pager_footer_buttons = true;
+        } else $show_pager_footer_buttons = false;
+//added by randym56 to enable hiding non-functional buttons
+
 $pager = new GUP_Pager($con, $sql, null, _('Search Results'), $form_id, $pager_id, $columns);
 
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
-            $pager_columns_button
-            " . $pager->GetAndUseExportButton() .  "
+            $pager_columns_button";
+if ($show_pager_footer_buttons) $endrows = $endrows . $pager->GetAndUseExportButton() .  "
             <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\">
-	    <input type=button class=button onclick=\"javascript: bulkSnailMail();\" value=\""._("Snail Mail Merge")."\">
-</td></tr>";
+            <input type=button class=button onclick=\"javascript: bulkSnailMail();\" value=\""._("Snail Mail Merge")."\">;
+$endrows = $endrows."</td></tr>\n";
 
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
@@ -1047,6 +1054,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.87  2007/10/19 18:05:17  randym56
+ * Hide non functional buttons.
+ *
  * Revision 1.86  2007/09/17 14:41:18  myelocyte
  * - Fixed bug "[ 1725698 ] advanced search profile not working", with patch provided by Björn (bschimpf)
  *
