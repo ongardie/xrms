@@ -2,7 +2,7 @@
 /**
 *
 *
-* $Id: bulkassignment-1.php,v 1.1 2006/10/01 00:15:06 braverock Exp $
+* $Id: bulkassignment-1.php,v 1.2 2007/10/19 18:31:34 randym56 Exp $
 *
 */
 
@@ -19,7 +19,7 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 $msg = $_GET['msg'];
 
-$array_of_contacts = $_POST['array_of_contacts'];
+$array_of_companies = $_POST['array_of_companies'];
 
 $return_url = $_POST['return_url'];
 $crm_status_id = $_POST['crm_status_id'];
@@ -94,12 +94,12 @@ exit;
 $con = get_xrms_dbconnection();
 //$con->debug = 1;
 
-if (is_array($array_of_contacts)) {
-    $imploded_contacts = implode(',', $array_of_contacts);
-} elseif (is_numeric($array_of_contacts)) {
-    $imploded_contacts= $array_of_contacts;
+if (is_array($array_of_companies)) {
+    $imploded_contacts = implode(',', $array_of_companies);
+} elseif (is_numeric($array_of_companies)) {
+    $imploded_contacts= $array_of_companies;
 }else {
-    echo _("WARNING: No array of contacts!") . "<br>";
+    echo _("WARNING: No array of companies!") . "<br>";
 }
 
 // loop through the contacts and send each one a copy of the message
@@ -195,6 +195,9 @@ header("Location: " . $http_site_root . $return_url);
 
 /**
  * $Log: bulkassignment-1.php,v $
+ * Revision 1.2  2007/10/19 18:31:34  randym56
+ * - Fixed bugs preventing bulk updates to companies
+ *
  * Revision 1.1  2006/10/01 00:15:06  braverock
  * - Initial Revision of Bulk Activity and Bulk Assignment contributed by Danielle Baudone
  *

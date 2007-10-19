@@ -3,7 +3,7 @@
   *
   * bulkassignment.
   *
-  * $Id: bulkassignment.php,v 1.4 2006/12/03 20:17:46 braverock Exp $
+  * $Id: bulkassignment.php,v 1.5 2007/10/19 18:31:34 randym56 Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -81,102 +81,30 @@
   $rst->close();
 
 
-  $array_of_contacts = array();
-
-  switch ($scope) {
-
-    case "companies":
-
-      //Nic: DO SOMETHING DIFFERENT FOR COMPANIES BECAUSE YOU HAVE TO GET THE CONTACT IDS FROM WITHIN THE COMPANY
-      //I only pass companies the end of the sql, ie the from and the where.
-      //I should have really done this in the first place for all of them.
+  $array_of_companies = array();
       $from=$_SESSION["search_sql"]["from"];
       //var_dump($_SESSION["search_sql"]);
       $where=$_SESSION["search_sql"]["where"];
       $order_by=$_SESSION["search_sql"]["order"];
-      //$from.=" LEFT JOIN contacts cont on cont.company_id=c.company_id ";
+      $from.=" LEFT JOIN contacts cont on cont.company_id=c.company_id ";
       $sql="SELECT c.company_id ".$from.$where.$order_by;
-      //echo $sql; exit;
-      $rst = $con->execute($sql);
+	  $rst = $con->execute($sql);
 
       if ($rst) {
         while (!$rst->EOF) {
-          array_push($array_of_contacts, $rst->fields['company_id']);
+          array_push($array_of_companies, $rst->fields['company_id']);
           $rst->movenext();
         }
       } else {
         db_error_handler ($con, $sql);
       }
-      //echo "1";
-      break;
 
-    case 'contact_list':
-      getGlobalVar($contact_list, 'contact_list');
-      if ($contact_list) {
-        $array_of_contacts=explode(",",$contact_list);
-      } else {
-        db_error_handler ($con, $sql);
-      }
-      //echo "2";
-      break;
+  $_SESSION['array_of_companies'] = serialize($array_of_companies);
 
-    case 'campaigns_company_sidebar':
-      //echo "3";
-      $sql= "SELECT company_id FROM company_campaign_map
-             WHERE campaign_id = $campaign_id_param";
-      //echo $sql; exit;
-      $rst = $con->execute($sql);
-
-      if ($rst) {
-        while (!$rst->EOF) {
-          if ($rst->fields['company_id']){
-              array_push($array_of_contacts, $rst->fields['company_id']);
-          }
-          $rst->movenext();
-        }
-        array_unique($array_of_contacts);
-        //print_r($array_of_contacts);
-      } else {
-        db_error_handler ($con, $sql);
-      }
-    break;
-
-    default:
-      $search_sql=$_SESSION["search_sql"];
-      list($select, $from) = spliti("FROM", $search_sql,2);//need limit otherwise from_unixtime functions get captured
-      list($from, $orderby) = spliti("order by", $from);
-      list($from, $groupby) = spliti("group by", $from);
-
-      $sql= "SELECT c.company_id FROM ".$from;
-      $sql.=" AND c.company_id IS NOT NULL ";
-      //look out for group bys...
-      if($groupby)$sql.="GROUP BY ".$groupby;
-      if($orderby)$sql.=" ORDER BY ".$orderby;
-      $rst = $con->execute($sql);
-
-      if ($rst) {
-        while (!$rst->EOF) {
-          //make sure contact_id isn't null, negative, or false before adding it
-          if ($rst->fields['company_id']){
-              array_push($array_of_contacts, $rst->fields['company_id']);
-          }
-          $rst->movenext();
-        }
-        array_unique($array_of_contacts);
-        //print_r($array_of_contacts);
-      } else {
-        db_error_handler ($con, $sql);
-      }
-      //echo "4";
-      break;
-  } //END switch/CASE
-
-  $_SESSION['array_of_contacts'] = serialize($array_of_contacts);
-
-  if (is_array($array_of_contacts))
-    $imploded_contacts = implode(',', $array_of_contacts);
+  if (is_array($array_of_companies))
+    $imploded_companies = implode(',', $array_of_companies);
   else
-    echo _("WARNING: No array of contacts!") . "<br>";
+    echo _("WARNING: No array of companies!") . "<br>";
 
   $con = get_xrms_dbconnection();
   //$con->debug = 1;
@@ -187,13 +115,13 @@
         c.company_id, u.username, i.industry_pretty_name,
         addr.province as "province", addr.city as "city", co.country_name as "country"';
 
-  $sql .= " from companies c, users u, industries i
-  left join addresses addr on addr.address_id = c.default_primary_address
-  left join countries co on co.country_id = addr.country_id
-  left join company_types ct on c.company_type_id = ct.company_type_id
+  $sql .= " from companies c, users u, industries i, addresses addr, countries co, company_types ct
   where  c.user_id = u.user_id
+  and addr.address_id = c.default_primary_address
+  and co.country_id = addr.country_id
+  and c.company_type_id = ct.company_type_id
   and c.industry_id = i.industry_id
-  and c.company_id in ($imploded_contacts)
+  and c.company_id in ($imploded_companies)
   and company_record_status = 'a' order by c.company_name asc";
 
   //echo $sql; exit;
@@ -205,7 +133,7 @@
       while (!$rst->EOF) {
         $contact_rows .= '<tr>';
         $contact_rows .= '<td class="widget_content_form_element"></td><td>';
-        $contact_rows .= '<input type="checkbox" name="array_of_contacts[]" id="array_of_contacts_' . $_x++ . '" value="' . $rst->fields['company_id'] . '" checked="checked"></td>';
+        $contact_rows .= '<input type="checkbox" name="array_of_companies[]" id="array_of_companies_' . $_x++ . '" value="' . $rst->fields['company_id'] . '" checked="checked"></td>';
         $contact_rows .= '<td class="widget_content">' . $rst->fields['name'] . '</td>';
         $contact_rows .= '<td class="widget_content">' . $rst->fields['industry_pretty_name'] . '</td>';
         $contact_rows .= '<td class="widget_content">' . $rst->fields['city'] . '</td>';
@@ -325,6 +253,9 @@ end_page();
 
  /**
   * $Log: bulkassignment.php,v $
+  * Revision 1.5  2007/10/19 18:31:34  randym56
+  * - Fixed bugs preventing bulk updates to companies
+  *
   * Revision 1.4  2006/12/03 20:17:46  braverock
   * - fix mistranslated strings
   *
