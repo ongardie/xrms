@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.26 2007/06/13 17:08:19 niclowe Exp $
+* $Id: email-2.php,v 1.27 2007/10/27 01:36:33 randym56 Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -128,6 +128,7 @@ else
     $_SESSION['attachment_list'] = $attach_list;
 
     }
+/* following code commented out by Randy and replaced at line 178 below
     $rst->close();
 }
 
@@ -142,9 +143,11 @@ $arr=$rst_fields->GetRows();
 I had to do it the way below because this way doesnt work....
 $contacts_menu.=$rst_fields->GetMenu("companies_fields");
 */
+
+/*
 while ($i <$rst_fields->RecordCount()) {
-		$contacts_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
-		$i++;
+                $contacts_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
+                $i++;
 }
 $contacts_menu.="</select>";
 $i=0;
@@ -154,8 +157,8 @@ $rst_fields=$con->execute($sql);
 $companies_menu.="<select name=\"companies_fields\">\n";
 $arr=$rst_fields->GetRows();
 while ($i <$rst_fields->RecordCount()) {
-		$companies_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
-		$i++;
+                $companies_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
+                $i++;
 }
 $companies_menu.="</select>";
 $i=0;
@@ -165,12 +168,69 @@ $rst_fields=$con->execute($sql);
 $addresses_menu.="<select name=\"addresses_fields\">\n";
 $arr=$rst_fields->GetRows();
 while ($i <$rst_fields->RecordCount()) {
-		$addresses_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
-		$i++;
+                $addresses_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
+                $i++;
 }
 $addresses_menu.="</select>";
 
+*/
 
+
+        //add fields menu for custom emails
+        $i=0;
+        $sql="SHOW COLUMNS FROM contacts";
+        $rst_fields=$con->execute($sql);
+        $contacts_menu.="<select name=\"contacts_fields\">\n";
+        $arr=$rst_fields->GetRows();
+        /*
+        I had to do it the way below because this way doesnt work....
+        $contacts_menu.=$rst_fields->GetMenu("companies_fields");
+        */
+        while ($i <$rst_fields->RecordCount()) {
+                                $contacts_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
+                                $i++;
+        }
+        $contacts_menu.="</select>";
+        $i=0;
+
+        $sql="SHOW COLUMNS FROM companies";
+        $rst_fields=$con->execute($sql);
+        $companies_menu.="<select name=\"companies_fields\">\n";
+        $arr=$rst_fields->GetRows();
+        while ($i <$rst_fields->RecordCount()) {
+                                $companies_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
+                                $i++;
+        }
+        $companies_menu.="</select>";
+        $i=0;
+
+        $sql="SHOW COLUMNS FROM addresses";
+        $rst_fields=$con->execute($sql);
+        $addresses_menu.="<select name=\"addresses_fields\">\n";
+        $arr=$rst_fields->GetRows();
+        while ($i <$rst_fields->RecordCount()) {
+                                $addresses_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
+                                $i++;
+        }
+        $addresses_menu.="</select>";
+
+    $rst->close();
+
+        $user_menu = "<select name=\"user_fields\">\n";
+        $user_menu .= "<option value=\"user_first_names\">user_first_names</option>\n";
+        $user_menu .= "<option value=\"user_last_name\">user_last_name</option>\n";
+        $user_menu .= "<option value=\"user_title\">user_title</option>\n";
+        $user_menu .= "<option value=\"user_company_name\">user_company_name</option>\n";
+        $user_menu .= "<option value=\"user_email\">user_email</option>\n";
+        $user_menu .= "<option value=\"user_phone\">user_phone</option>\n";
+        $user_menu .= "<option value=\"user_fax\">user_fax</option>\n";
+        $user_menu .= "<option value=\"user_cell\">user_cell</option>\n";
+        $user_menu .= "<option value=\"user_custom1\">user_custom1</option>\n";
+        $user_menu .= "<option value=\"user_custom2\">user_custom2</option>\n";
+        $user_menu .= "<option value=\"user_custom3\">user_custom3</option>\n";
+        $user_menu .= "<option value=\"user_custom4\">user_custom4</option>\n";
+        $user_menu .= "</select>";
+}
 
 
 function createFileList ()
@@ -238,13 +298,37 @@ myField.value += myValue;
 </script>
 <script language="javascript" type="text/javascript" src="<?PHP echo $http_site_root;?>/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script language="javascript" type="text/javascript">
-tinyMCE.init({
-	mode : "textareas"
-});
+        tinyMCE.init({
+                mode : "textareas",
+                theme : "advanced",
+                plugins : "style,layer,table,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras",
+                theme_advanced_buttons1_add : "fontselect,fontsizeselect",
+                theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,separator,forecolor,backcolor,advsearchreplace",
+                theme_advanced_buttons2_add_before: "cut,copy,paste,pastetext,pasteword,separator,search,replace,separator",
+                theme_advanced_buttons3_add_before : "tablecontrols,separator",
+                theme_advanced_buttons3_add : "emotions,iespell,media,advhr,separator,print,separator,ltr,rtl,separator,fullscreen",
+                theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,|,visualchars,nonbreaking",
+                theme_advanced_toolbar_location : "top",
+                theme_advanced_toolbar_align : "left",
+                content_css : "example_advanced.css",
+            plugin_insertdate_dateFormat : "%Y-%m-%d",
+            plugin_insertdate_timeFormat : "%H:%M:%S",
+                extended_valid_elements : "hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]",
+                external_link_list_url : "example_link_list.js",
+                external_image_list_url : "example_image_list.js",
+                flash_external_list_url : "example_flash_list.js",
+                media_external_list_url : "example_media_list.js",
+                file_browser_callback : "fileBrowserCallBack",
+                theme_advanced_resize_horizontal : false,
+                theme_advanced_resizing : true,
+                nonbreaking_force_tab : true,
+                apply_source_formatting : true,
+                                fix_table_elements : true,
+                convert_urls : false
+        });
 </script>
 
 <div id="Main">
-<div id="Content">
 
 <form action="email-2.php"
       method="POST"
@@ -252,20 +336,22 @@ tinyMCE.init({
       name="mainForm"
       id="mainForm"
       onsubmit="javascript: return validate();" method="post">
+     <input type="hidden" name="contact_id" value="<?php echo _($contact_id); ?>">
+
 
     <table class="widget" cellspacing="1">
-      <tr> 
-        <td class="widget_header" colspan="2"> 
+      <tr>
+        <td class="widget_header" colspan="2">
           <?php echo _("Edit Message"); ?>
-          - 
+          -
           <?php echo $email_template_title ?>
         </td>
       </tr>
-      <tr> 
-        <td class="widget_label_right" width="1%" nowrap> 
+      <tr>
+        <td class="widget_label_right" width="1%" nowrap>
           <?php echo _("From"); ?>
           : </td>
-        <td class="widget_content_form_element"> 
+        <td class="widget_content_form_element">
           <input type="text"
                    name="sender_name"
                    id="sender_name"
@@ -274,7 +360,6 @@ tinyMCE.init({
           <?php echo $required_indicator; ?>
         </td>
       </tr>
-      <!--
 <tr>
 <td class=widget_label_right width="1%" nowrap><?php echo _("Reply to"); ?>:</td>
 <td class=widget_content_form_element><input type=text name="sender_address" size=50 value="<?php echo $sender_name ?>"><?php echo $required_indicator; ?></td>
@@ -283,12 +368,11 @@ tinyMCE.init({
 <td class=widget_label_right width="1%" nowrap><?php echo _("Bcc"); ?>:</td>
 <td class=widget_content_form_element><input type=text name="bcc_address" size=50 value=""></td>
 </tr>
--->
-      <tr> 
-        <td class="widget_label_right" width="1%" nowrap> 
+      <tr>
+        <td class="widget_label_right" width="1%" nowrap>
           <?php echo _("Subject"); ?>
           : </td>
-        <td class="widget_content_form_element"> 
+        <td class="widget_content_form_element">
           <input type=text
                    name="email_template_title"
                    id="email_template_title"
@@ -296,30 +380,40 @@ tinyMCE.init({
                    value="<?php echo $email_template_title ?>" />
         </td>
       </tr>
-      <tr> 
-        <td class="widget_content_form_element"> 
+      <tr>
+        <td class="widget_content_form_element">
           <table width="75%" border="1" cellpadding="2">
-            <tr> 
-              <td> 
+            <tr>
+              <td>
                 <?PHP echo _("Contact") . "<BR>" . $contacts_menu; ?>
               </td>
               <td><a href="javascript:void(0);" onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].contacts_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
-            <tr> 
-              <td> 
-                <?PHP echo _("Company") . "<BR>" . $companies_menu; ?>
+            <tr>
+              <td>
+                <?PHP echo _("Household") . "<BR>" . $companies_menu; ?>
               </td>
-              <td><a href="javascript:void(0);" onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].companies_fields.value+'}');"><?php echo _("Add");?></a> 
-			  </td>
+              <td><a href="javascript:void(0);" onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].companies_fields.value+'}');"><?php echo _("Add");?></a>
+                          </td>
             </tr>
-            <tr> 
-              <td> 
+            <tr>
+              <td>
                 <?PHP echo _("Addresse") . "<BR>" . $addresses_menu; ?>
               </td>
               <td><a href="javascript:void(0);" onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].addresses_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
-            <tr> 
-              <td colspan="2"><?php echo _("Click 'Add' to add the custom field to your mail merge. You can also use these fields in the SUBJECT line too, just copy-&gt;paste them into it.");?><BR></td>
+<?php if ($my_company_id > 0) { //only show if company ID is set in /include/vars.php?>
+            <tr>
+              <td>
+                <?PHP echo _("User") . "<BR>" . $user_menu; ?>
+              </td>
+              <td><a href="javascript:void(0);" onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].user_fields.value+'}');"><?php echo _("Add");?></a></td>
+            </tr>
+<?php } ?>
+            <tr>
+              <td colspan="2">Click 'Add' to add the custom field to your mail
+                merge. You can also use these fields in the SUBJECT line too -
+                just copy-&gt;paste them into it.<BR></td>
             </tr>
           </table>
           <br />
@@ -327,20 +421,20 @@ tinyMCE.init({
         <td class="widget_content_form_element">
           <textarea class="monospace"
                       name="email_template_body"
-                      id="email_template_body" rows="20"
-                      cols="80"><?php echo $email_template_body ?></textarea>
+                      id="email_template_body" rows="30"
+                      cols="100"><?php echo $email_template_body ?></textarea>
         </td>
       </tr>
-      <tr> 
-        <td class="widget_label_right" width="1%" nowrap> 
+      <tr>
+        <td class="widget_label_right" width="1%" nowrap>
           <?php echo _("Attachments"); ?>
           : </td>
-        <td class="widget_content_form_element"> 
+        <td class="widget_content_form_element">
           <input type="file"
                    name="attach"
                    id="attach"
                    size="50" />
-          &nbsp;&nbsp; 
+          &nbsp;&nbsp;
           <input type="button"
                    class="button"
                    name="go"
@@ -352,9 +446,9 @@ tinyMCE.init({
       <?php
 if ( $attach_list )
 { ?>
-      <tr> 
+      <tr>
         <td class="widget_label_right" width="1%" nowrap> </td>
-        <td class="widget_content_form_element"> 
+        <td class="widget_content_form_element">
           <?php
                 echo createFileList();
             ?>
@@ -367,8 +461,8 @@ if ( $attach_list )
         </td>
       </tr>
       <?php } ?>
-      <tr> 
-        <td class="widget_content_form_element" colspan="2"> 
+      <tr>
+        <td class="widget_content_form_element" colspan="2">
           <input type="hidden"
                    name="act"
                    id="act" />
@@ -394,14 +488,8 @@ if ( $attach_list )
 
 </form>
 
-</div>
 
 <!-- right column //-->
-<div id="Sidebar">
-
-&nbsp;
-
-</div>
 
 </div>
 
@@ -448,6 +536,13 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.27  2007/10/27 01:36:33  randym56
+* 1. Fixed BCC (was not working at all)
+* 2. Added the function to put custom fields for user sending the email (if the user has a related contact record).
+* 3. Added all HTML editing functions for tinymce.
+* 4. Enabled the ability for selecting/de-selecting individuals from the list.
+* 5. Added an "Opt-out" checkbox that gets added to the footer of the e-mail so that when the URL is clicked by a recipient it moves their e-mail to "opt-out".  This is turned on in the preferences DB (item 24).
+*
 * Revision 1.26  2007/06/13 17:08:19  niclowe
 * Fixed [ 1648768 ] Bug in email-2.php
 *

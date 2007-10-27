@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.22 2007/06/13 16:51:42 niclowe Exp $
+ * $Id: email-3.php,v 1.23 2007/10/27 01:36:49 randym56 Exp $
  */
 
 
@@ -89,8 +89,7 @@ where c.company_id = cont.company_id
 and c.user_id = u.user_id
 and cont.contact_id in ($imploded_contacts)
 and length(cont.email) > 0
-and contact_record_status = 'a' 
-order by c.company_name,cont.last_name asc";
+and contact_record_status = 'a' order by c.company_name,cont.last_name asc";
 
 $_x = 1;
 
@@ -99,33 +98,37 @@ if ($rst) {
     while (!$rst->EOF) {
         $contact_rows .= '<tr>';
         $contact_rows .= '<td class="widget_content_form_element">';
-				switch ($rst->fields['email_status']) {
+          switch ($rst->fields['email_status']) {
           case "a" : // active emails;
-										$contact_rows .= '<input type="checkbox" name="array_of_contacts[]" id="array_of_contacts_' . $_x++ . '" value="' . $rst->fields['contact_id'] . '" checked="checked"></td>';
+                    $contact_rows .= '<input type="checkbox" name="array_of_contacts[]" id="array_of_contacts_' . $_x++ . '" value="' . $rst->fields['contact_id'] . '" checked="checked"></td>';
                     break;
           case "o" : // opted out emails;
-							 		 $contact_rows .= '<input type="checkbox" name="array_of_contacts[]" id="array_of_contacts_' . $_x++ . '" value="' . $rst->fields['contact_id'] . '">'._("Opted Out").'</td>';
+                    $contact_rows .= '<input type="checkbox" name="array_of_contacts[]" id="array_of_contacts_' . $_x++ . '" value="' . $rst->fields['contact_id'] . '">'._("Opted Out").'</td>';
                     break;
           case "b" : // code to do something;
-							 		 $contact_rows .= '<input type="checkbox" name="array_of_contacts[]" id="array_of_contacts_' . $_x++ . '" value="' . $rst->fields['contact_id'] . '">'._("Bounced").'</td>';
+                    $contact_rows .= '<input type="checkbox" name="array_of_contacts[]" id="array_of_contacts_' . $_x++ . '" value="' . $rst->fields['contact_id'] . '">'._("Bounced").'</td>';
                     break;
           case "" : // code to do something;
                     break;
           default : // code to do something;
-									$contact_rows .= '<input type="checkbox" name="array_of_contacts[]" id="array_of_contacts_' . $_x++ . '" value="' . $rst->fields['contact_id'] . '" checked="checked"></td>';
+                    $contact_rows .= '<input type="checkbox" name="array_of_contacts[]" id="array_of_contacts_' . $_x++ . '" value="' . $rst->fields['contact_id'] . '" checked="checked"></td>';
         }
-        
         $contact_rows .= '<td class="widget_content">' . $rst->fields['company_name'] . '</td>';
         $contact_rows .= '<td class="widget_content">' . $rst->fields['username'] . '</td>';
         $contact_rows .= '<td class="widget_content">' . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</td>';
         $contact_rows .= '<td class="widget_content">' . $rst->fields['email'] . '</td>';
-				$contact_rows .= '<td class="widget_content"><a href="email_merge_preview.php?contact_id='.$rst->fields['contact_id'].'&company_id='.$rst->fields['company_id'].'" target=_blank>Preview</a></td>';
+                                $contact_rows .= '<td class="widget_content"><a href="email_merge_preview.php?contact_id='.$rst->fields['contact_id'].'&company_id='.$rst->fields['company_id'].'" target=_blank>Preview</a></td>';
         $contact_rows .= "</tr>\n";
         $rst->movenext();
     }
-
+    $count=$_x-1; // get last count of listed records
     $rst->close();
 }
+
+// added by Randy to show opt-out message if preference is set to yes
+$sql_opt_out = "SELECT * FROM user_preferences WHERE user_preference_type_id='25'";
+$rst_opt_out = $con->execute($sql_opt_out);
+if ($rst_opt_out->fields['user_preference_value'] == 'y') $show_opt_out = true; else $show_opt_out = false;
 
 $con->close();
 
@@ -137,24 +140,30 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 
-        <form action="email-4.php" method="post">
+        <form action="email-4.php" method="post" name="sendmail">
         <table class="widget" cellspacing="1">
             <tr>
                 <td class=widget_header colspan=6><?php echo _("Confirm Recipients"); ?></td>
             </tr>
             <tr>
-                <td class="widget_label"><?php echo _("Email Status"); ?></td>
-                <td class="widget_label"><?php echo _("Company"); ?></td>
+                <td class="widget_label">&nbsp;</td>
+                <td class="widget_label"><?php echo _("Household"); ?></td>
                 <td class="widget_label"><?php echo _("Owner"); ?></td>
                 <td class="widget_label"><?php echo _("Contact"); ?></td>
                 <td class="widget_label"><?php echo _("E-Mail"); ?></td>
-								<td class="widget_label"><?php echo _("Preview"); ?></td>
+                                                                <td class="widget_label"><?php echo _("Preview"); ?></td>
             </tr>
             <?php  echo $contact_rows ?>
             <tr>
-                <td class="widget_content_form_element" colspan="6">
-                    <input type="submit" class="button" value="<?php echo _("Continue"); ?>">
-                </td>
+              <td class="widget_content_form_element" colspan="6">
+                    <input type="submit" class="button" value="<?php echo _("Continue"); ?>">&nbsp;
+                                        <?php if ($show_opt_out) {?>
+                                        <input type="checkbox" name="optout">Opt-Out Message?&nbsp;
+                                        <?php } ?>
+                                        <input type=button value="Check All" onClick="checkAll('sendmail','array_of_contacts_',<?php echo $count; ?>)">&nbsp;
+                                        <input type=button value="Uncheck All" onClick="uncheckAll('sendmail','array_of_contacts_',<?php echo $count; ?>)">&nbsp;
+                                        <input type=button value="Switch All" onClick="switchAll('sendmail','array_of_contacts_',<?php echo $count; ?>)"> <br>
+                                <font color="#FF0000"><strong>NOTE: Selecting more than 10 contacts may take a <u>long time</u>... Please be patient - DO NOT REFRESH or Click Send more than ONE TIME or you may send mail multiple times to the same contacts.            </strong></font><strong>    </strong></td>
             </tr>
         </table>
         </form>
@@ -176,6 +185,13 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.23  2007/10/27 01:36:49  randym56
+ * 1. Fixed BCC (was not working at all)
+ * 2. Added the function to put custom fields for user sending the email (if the user has a related contact record).
+ * 3. Added all HTML editing functions for tinymce.
+ * 4. Enabled the ability for selecting/de-selecting individuals from the list.
+ * 5. Added an "Opt-out" checkbox that gets added to the footer of the e-mail so that when the URL is clicked by a recipient it moves their e-mail to "opt-out".  This is turned on in the preferences DB (item 24).
+ *
  * Revision 1.22  2007/06/13 16:51:42  niclowe
  * fixed bug where opted out email addresses werent counted in bulk mailer.
  *
