@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.42 2006/10/17 22:21:06 braverock Exp $
+ * $Id: some.php,v 1.43 2007/10/30 02:33:43 randym56 Exp $
  */
 
 require_once('../include-locations.inc');
@@ -346,7 +346,7 @@ $pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'CasesData', 'Some
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
             " . $pager->GetAndUseExportButton() .  "
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('eMail Merge') . "\"></td></tr>";
 
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
@@ -410,6 +410,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.43  2007/10/30 02:33:43  randym56
+ * - Changed "Mail Merge" to be "eMail Merge" to separate from "Snail Mail Merge"
+ *
  * Revision 1.42  2006/10/17 22:21:06  braverock
  * - add return_url for email (patch from dbaudone)
  *

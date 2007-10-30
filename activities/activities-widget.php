@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.59 2007/10/18 02:01:06 randym56 Exp $
+* $Id: activities-widget.php,v 1.60 2007/10/30 02:31:38 randym56 Exp $
 */
 
 global $include_directory;
@@ -552,7 +552,7 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
                 <input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _("Calendar View") ."\">";
 
         if ($show_pager_footer_buttons) $endrows = $endrows.$pager->GetAndUseExportButton(). $ical_button ."
-                <input type=button class=button onclick=\"javascript: location.href='../email/email.php?return_url=$return_url'\" value=\"" . _("Mail Merge") . "\">" . /* commented out by Randy - neither of these have a place in this widget
+                <input type=button class=button onclick=\"javascript: location.href='../email/email.php?return_url=$return_url'\" value=\"" . _("eMail Merge") . "\">" . /* commented out by Randy - neither of these have a place in this widget
                 <input type=button class=button onclick=\"javascript: location.href='../bulkactivity/bulkassignment.php?return_url=$return_url'\" value=\"" . _("Bulk Assignment") . "\">
                 <input type=button class=button onclick=\"javascript: location.href='../bulkactivity/bulkactivity-0.php?return_url=$return_url'\" value=\"" . _("Bulk Activity") . "\"> */
                 "<input type=button class=button onclick=\"javascript: location.href='$http_site_root/activities/browse-next.php?browse=true&sql_session_var=$sql_session_var';\" value=\"" . _("Browse") . "\">";
@@ -940,15 +940,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
-* Revision 1.59  2007/10/18 02:01:06  randym56
-* Stop Export, iCal, Mail Merge and Browse buttons from appearing if no data shows in the widget.
+* Revision 1.60  2007/10/30 02:31:38  randym56
+* - Changed "Mail Merge" to be "eMail Merge" to separate from "Snail Mail Merge"
 *
-* Revision 1.58  2007/10/17 00:26:17  randym56
-* - added scheduled start date field to "GetNewActivityWidget" Lines 723 & 731-732 & 743-750
-* - added H:i:s to "GetActivitiesWidget" line 177-178
-*
-*
-* $Log: activities-widget.php,v $
 * Revision 1.59  2007/10/18 02:01:06  randym56
 * Stop Export, iCal, Mail Merge and Browse buttons from appearing if no data shows in the widget.
 *

@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.148 2007/03/22 12:39:14 jswalter Exp $
+ * $Id: one.php,v 1.149 2007/10/30 02:35:07 randym56 Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -331,7 +331,7 @@ $pager = new GUP_Pager($con, $sql, 'getContactDetails', _('Contacts'), $contacts
 $contacts_export_button=$pager->GetAndUseExportButton();
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button $contacts_export_button
-            <input class=button type=button value=\"" .  _('Mail Merge') . "\" onclick=\"javascript: location.href='../email/email.php?scope=company&company_id=$company_id&return_url=$return_url'\">" .
+            <input class=button type=button value=\"" .  _('eMail Merge') . "\" onclick=\"javascript: location.href='../email/email.php?scope=company&company_id=$company_id&return_url=$return_url'\">" .
             render_create_button("New",'button',"location.href='$new_contact_location';") .  "</td></tr>";
 
 $pager->AddEndRows($endrows);
@@ -796,6 +796,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.149  2007/10/30 02:35:07  randym56
+ * - Changed "Mail Merge" to be "eMail Merge" to separate from "Snail Mail Merge"
+ *
  * Revision 1.148  2007/03/22 12:39:14  jswalter
  * within CONTACT columns display:
  *  - corrected 'cell_phone' title to 'Cell Phone'

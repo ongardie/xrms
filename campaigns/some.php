@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.37 2007/04/10 21:27:40 myelocyte Exp $
+ * $Id: some.php,v 1.38 2007/10/30 02:33:06 randym56 Exp $
  */
 
 require_once('../include-locations.inc');
@@ -303,7 +303,7 @@ $pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'CampaignForm', 'C
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
             " . $pager->GetAndUseExportButton() .  "
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("eMail Merge")."\"></td></tr>";
 
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
@@ -383,6 +383,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.38  2007/10/30 02:33:06  randym56
+ * - Changed "Mail Merge" to be "eMail Merge" to separate from "Snail Mail Merge"
+ *
  * Revision 1.37  2007/04/10 21:27:40  myelocyte
  * - widget label was 2 columns but widget content was just 1 column, adjusting
  *

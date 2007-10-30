@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.88 2007/10/19 18:32:18 randym56 Exp $
+ * $Id: some.php,v 1.89 2007/10/30 02:36:22 randym56 Exp $
  */
 
 require_once('../include-locations.inc');
@@ -949,7 +949,7 @@ $pager = new GUP_Pager($con, $sql, null, _('Search Results'), $form_id, $pager_i
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button";
 if ($show_pager_footer_buttons) $endrows = $endrows . $pager->GetAndUseExportButton() .  "
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\">
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("eMail Merge")."\">
                 <input type=button class=button onclick=\"javascript: bulkSnailMail();\" value=\""._("Snail Mail Merge")."\">
                 <input type=button class=button onclick=\"javascript: bulkAssignment();\" value=\""._("Bulk Assignment")."\">";
 $endrows = $endrows."</td></tr>\n";
@@ -1060,6 +1060,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.89  2007/10/30 02:36:22  randym56
+ * - Changed "Mail Merge" to be "eMail Merge" to separate from "Snail Mail Merge"
+ *
  * Revision 1.88  2007/10/19 18:32:18  randym56
  * Added bulk assignment of fields to selected companies
  *
