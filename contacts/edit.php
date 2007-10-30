@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.53 2007/05/15 23:17:30 ongardie Exp $
+ * $Id: edit.php,v 1.54 2007/10/30 03:16:13 randym56 Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -82,11 +82,11 @@ if ($rst) {
     $cell_phone = $rst->fields['cell_phone'];
     $home_phone = $rst->fields['home_phone'];
     $profile = $rst->fields['profile'];
-		//this line was corrupting the record when you used it with the skype plugin. I am not sure of its purpose.
-		//I think it is only intended for displaying, not editing records.
-		//so, i removed it. 
+                //this line was corrupting the record when you used it with the skype plugin. I am not sure of its purpose.
+                //I think it is only intended for displaying, not editing records.
+                //so, i removed it. 
     //$fax = get_formatted_phone($con, $rst->fields['address_id'],$rst->fields['fax']);
-		$fax = $rst->fields['fax'];
+                $fax = $rst->fields['fax'];
     $interests = $rst->fields['interests'];
     $custom1 = $rst->fields['custom1'];
     $custom2 = $rst->fields['custom2'];
@@ -160,7 +160,7 @@ confGoTo_includes();
             <tr>
                 <td class=widget_header colspan=2><?php echo _("Contact Information"); ?></td>
             </tr>
-	    <?php do_hook('contact_edit_form_top'); ?>
+            <?php do_hook('contact_edit_form_top'); ?>
             <tr>
                 <td class=widget_label_right><?php echo _("Salutation"); ?></td>
                 <td class=widget_content_form_element><?php echo $salutation_menu; ?></td>
@@ -222,9 +222,10 @@ confGoTo_includes();
             <tr>
                 <td class=widget_label_right><?php echo _("E-Mail"); ?></td>
                 <td class=widget_content_form_element><input type=text name=email value='<?php echo $email; ?>' size=30>
-            		<INPUT type="radio" name="email_status" value="a" <?php if ($email_status=='a') echo 'checked' ?>><?php echo _("Active"); ?>
-            		<INPUT type="radio" name="email_status" value="b" <?php if ($email_status=='b') echo 'checked' ?>><?php echo _("Bounced"); ?>
-					<INPUT type="radio" name="email_status" value="o" <?php if ($email_status=='o') echo 'checked' ?>><?php echo _("Opt-Out"); ?>
+                        <INPUT type="radio" name="email_status" value="a" <?php if ($email_status=='a') echo 'checked' ?>><?php echo _("Active"); ?>
+                        <INPUT type="radio" name="email_status" value="i" <?php if ($email_status=='i') echo 'checked' ?>><?php echo _("Opt-In"); ?>
+                        <INPUT type="radio" name="email_status" value="b" <?php if ($email_status=='b') echo 'checked' ?>><?php echo _("Bounced"); ?>
+                        <INPUT type="radio" name="email_status" value="o" <?php if ($email_status=='o') echo 'checked' ?>><?php echo _("Opt-Out"); ?>
             </td>
 
             <tr>
@@ -337,6 +338,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.54  2007/10/30 03:16:13  randym56
+ * - Added email opt-in radio button for contacts search function
+ *
  * Revision 1.53  2007/05/15 23:17:30  ongardie
  * - Addresses now associate with on_what_table, on_what_id instead of company_id.
  *

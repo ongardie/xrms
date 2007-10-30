@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.49 2007/05/18 14:43:35 fcrossen Exp $
+ * $Id: new.php,v 1.50 2007/10/30 03:16:33 randym56 Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -113,12 +113,12 @@ if ( !isset($division_menu) ) {
 
 // build address menu
 if ( isset($company_id) ) {
-   $sql = "SELECT address_name, address_id 
-           FROM addresses 
-	   WHERE on_what_table='companies' 
-	     AND on_what_id = $company_id 
-	     AND address_record_status = 'a' 
-	   ORDER BY address_name";
+   $sql = "SELECT address_name, address_id
+           FROM addresses
+           WHERE on_what_table='companies'
+             AND on_what_id = $company_id
+             AND address_record_status = 'a'
+           ORDER BY address_name";
    $rst = $con->execute($sql);
    if ($rst) {
      if ( !$rst->EOF AND !$address_id ) {
@@ -204,14 +204,14 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_label_right><?php echo _("Company"); ?></td>
                 <td class=widget_content_form_element><?php
-		if(!empty($company_id) && !empty($company_name)){
-			?>
-			<a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php echo $company_name; ?></a>
-			<?php
-		}elseif(!empty($company_name)){
-			echo $company_name;
-		}
-		?></td>
+                if(!empty($company_id) && !empty($company_name)){
+                        ?>
+                        <a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php echo $company_name; ?></a>
+                        <?php
+                }elseif(!empty($company_name)){
+                        echo $company_name;
+                }
+                ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Division"); ?></td>
@@ -219,20 +219,21 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Business Address"); ?></td>
- 				<td class=widget_content_form_element>
-				<?php
-			 		echo $address_menu."\n";
+                                <td class=widget_content_form_element>
+                                <?php
+                                        echo $address_menu."\n";
                     echo '&nbsp;'._("Enter New or Edit Existing Address")."\n";
                 ?>
                 <input type=checkbox name=edit_address>
-				</td>
+                                </td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("E-Mail"); ?></td>
                 <td class=widget_content_form_element><input type=text name=email value='<?php echo $email; ?>' size=30>
-               		<INPUT type="radio" name="email_status" value="a" 'checked'><?php echo _("Active"); ?>
-					<INPUT type="radio" name="email_status" value="o" ><?php echo _("Opt-Out"); ?>
-			</td>
+                        <INPUT type="radio" name="email_status" value="a" 'checked'><?php echo _("Active"); ?>
+                        <INPUT type="radio" name="email_status" value="i" ><?php echo _("Opt-In"); ?>
+                        <INPUT type="radio" name="email_status" value="o" ><?php echo _("Opt-Out"); ?>
+                        </td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Work Phone"); ?></td>
@@ -251,6 +252,12 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php echo _("Fax"); ?></td>
                 <td class=widget_content_form_element><input type=text name=fax size=30 value="<?php  echo $fax; ?>"></td>
             </tr>
+
+            <tr>
+                <td class=widget_label_right><?php echo _("Interests"); ?></td>
+                <td class=widget_content_form_element><input type=text name=interests size=35></td>
+            </tr>
+
             <tr>
                 <td class=widget_label_right><?php echo _("Gender"); ?></td>
                 <td class=widget_content_form_element>
@@ -374,6 +381,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.50  2007/10/30 03:16:33  randym56
+ * - Added email opt-in radio button for contacts search function
+ *
  * Revision 1.49  2007/05/18 14:43:35  fcrossen
  * - removed the extra/redundant 'interests' field
  *
