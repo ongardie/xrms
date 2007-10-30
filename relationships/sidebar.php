@@ -17,7 +17,7 @@ if ( !defined('IN_XRMS') )
  * @author Neil Roberts
  * @author Aaron van Meerten
  *
- * $Id: sidebar.php,v 1.39 2006/01/13 00:01:00 vanmer Exp $
+ * $Id: sidebar.php,v 1.40 2007/10/30 03:21:10 randym56 Exp $
  */
 
 require_once($include_directory.'utils-relationships.php');
@@ -333,7 +333,7 @@ $relationship_link_rows = '';
                         </tr><!-- Form End -->";
             $contacts=array_unique($contacts);
             if (count($contacts)>0) {
-                $relationship_link_rows .= "<tr><td class=widget_label colspan=2 align=center>"._("Mail Merge")."</td></tr>";
+                $relationship_link_rows .= "<tr><td class=widget_label colspan=2 align=center>"._("eMail Merge")."</td></tr>";
                 $contact_list=implode(",",$contacts);
                 $relationship_link_rows .= "<tr><td class=widget_content_form_element colspan=2><input type=button class=button value=\""._("Mail Merge")."\" onclick=\"javascript:location.href='$http_site_root/email/email.php?scope=contact_list&contact_list=$contact_list'\"></td></tr>";
                 $contacts=array();
@@ -346,6 +346,9 @@ $relationship_link_rows = '';
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.40  2007/10/30 03:21:10  randym56
+ * - Changed "Mail Merge" to be "eMail Merge" to separate from "Snail Mail Merge"
+ *
  * Revision 1.39  2006/01/13 00:01:00  vanmer
  * - changed to use newly created include/utils-relationships.php instead of relationships/relationship_functions.php
  * - removed deprecated relationship_functions.php

@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.68 2006/10/01 00:51:13 braverock Exp $
+ * $Id: some.php,v 1.69 2007/10/30 03:19:02 randym56 Exp $
  */
 
 require_once('../include-locations.inc');
@@ -248,7 +248,7 @@ if ($rst) {
 $sql2 = "select opportunity_type_pretty_name, opportunity_type_id from opportunity_types where opportunity_type_record_status = 'a' order by opportunity_type_pretty_name";
 $rst = $con->execute($sql2);
 if(!$rst) {
-	db_error_handler($con, $sql2);
+        db_error_handler($con, $sql2);
 }
 $opportunity_type_menu = $rst->getmenu2('opportunity_type_id', $opportunity_type_id, true);
 $rst->close();
@@ -461,7 +461,7 @@ $pager = new GUP_Pager($con, $sql, 'GetOpportunityPagerData',  _('Search Results
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
             " . $pager->GetAndUseExportButton() .  "
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("eMail Merge")."\"></td></tr>";
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
 $con->close();
@@ -537,6 +537,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.69  2007/10/30 03:19:02  randym56
+ * - Changed "Mail Merge" to be "eMail Merge" to separate from "Snail Mail Merge"
+ *
  * Revision 1.68  2006/10/01 00:51:13  braverock
  * - normalize use of truncate flag in get_user_menu
  *

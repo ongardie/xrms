@@ -21,10 +21,10 @@ $gSQLBlockRows = 20; // max no of rows per table block
 
 class XRMS_Pager {
 
-	var $SubtotalColumns;
-	var $TotalColumns;
+        var $SubtotalColumns;
+        var $TotalColumns;
 
-	// adodb_pager code begin
+        // adodb_pager code begin
     var $id;    // unique id for pager (defaults to 'adodb')
     var $db;    // ADODB connection object
     var $sql;   // sql used
@@ -51,7 +51,7 @@ class XRMS_Pager {
     var $linkSelectedColor = 'red';
     var $cache = 0;  #secs to cache with CachePageExecute()
     var $how_many_rows;
-	// adodb_pager code end
+        // adodb_pager code end
 
     var $pager_id;
     var $EndRows;
@@ -139,18 +139,18 @@ class XRMS_Pager {
 
         }
 
-		$sql .= " $order_by";
+                $sql .= " $order_by";
 
-		// adodb_pager code begin
-      	$this->sql = $sql;
-      	$this->db = $db;
-      	$this->showPageLinks = true;
-      	$this->selected_column = $this->sort_column-1;
-      	$this->selected_column_html = $this->pretty_sort_order;
+                // adodb_pager code begin
+        $this->sql = $sql;
+        $this->db = $db;
+        $this->showPageLinks = true;
+        $this->selected_column = $this->sort_column-1;
+        $this->selected_column_html = $this->pretty_sort_order;
 
-		// adodb_pager code end
+                // adodb_pager code end
 
-    	//$this->ADODB_Pager($db, $sql, $table_id,  $showPageLinks, $this->current_sort_column-1, $pretty_sort_order);
+        //$this->ADODB_Pager($db, $sql, $table_id,  $showPageLinks, $this->current_sort_column-1, $pretty_sort_order);
    }
 
     //---------------------------
@@ -248,40 +248,40 @@ class XRMS_Pager {
       }
     }
 
-	function RenderGrid()
-	{
+        function RenderGrid()
+        {
 
         // output headers
         $column_count = count($this->column_info);
         for($i=0; $i<$column_count; $i++) {
-		    //$this->gridHeader[] = "<td class=widget_label style=\"text-align: center; padding: 0em 0.5em 0em 0.5em;\"><a href='javascript: " . $this->pager_id . "_resort($i);' style=\"color: grey;\"><b>{$this->column_info[$i]['name']}</b></a>";
-		    //$this->gridHeader[] = "<td class=widget_label><a href='javascript: " . $this->pager_id . "_resort($i);' ><b>{$this->column_info[$i]['name']}</b></a>";
-			$this->gridHeader[] = $this->column_info[$i]['name'];
+                    //$this->gridHeader[] = "<td class=widget_label style=\"text-align: center; padding: 0em 0.5em 0em 0.5em;\"><a href='javascript: " . $this->pager_id . "_resort($i);' style=\"color: grey;\"><b>{$this->column_info[$i]['name']}</b></a>";
+                    //$this->gridHeader[] = "<td class=widget_label><a href='javascript: " . $this->pager_id . "_resort($i);' ><b>{$this->column_info[$i]['name']}</b></a>";
+                        $this->gridHeader[] = $this->column_info[$i]['name'];
 
         }
 
-	  	// adodb_pager code begin 
-      	global $gSQLBlockRows; // used by rs2html to indicate how many rows to display
-      	//include_once(ADODB_DIR.'/tohtml.inc.php');
-      	ob_start();
-      	$gSQLBlockRows = $this->rows;
+                // adodb_pager code begin 
+        global $gSQLBlockRows; // used by rs2html to indicate how many rows to display
+        //include_once(ADODB_DIR.'/tohtml.inc.php');
+        ob_start();
+        $gSQLBlockRows = $this->rows;
 
-      	$this->rs2html($this->rs,$this->gridAttributes,$this->gridHeader,$this->htmlSpecialChars,$this->selected_column,$this->selected_column_html, $this->pager_id . '_');
+        $this->rs2html($this->rs,$this->gridAttributes,$this->gridHeader,$this->htmlSpecialChars,$this->selected_column,$this->selected_column_html, $this->pager_id . '_');
 
-		// Now we output our subtotal rows 
-		$this->CalculateTotals();
+                // Now we output our subtotal rows 
+                $this->CalculateTotals();
         $this->RenderTotals('Subtotals this page:', $this->SubtotalColumns);
         //$this->RenderTotals('Totals:', $this->TotalColumns);
 
-      	$s = ob_get_contents();
-      	ob_end_clean();
-	  	// adodb_pager code end 
+        $s = ob_get_contents();
+        ob_end_clean();
+                // adodb_pager code end 
 
-		$rs = $this->rs;
-		return $s;
-	}
+                $rs = $this->rs;
+                return $s;
+        }
 
-	function CalculateTotals() {
+        function CalculateTotals() {
         $rs = $this->rs;
 
         // Now we output our subtotal rows 
@@ -317,12 +317,12 @@ class XRMS_Pager {
                 }
             }
         }
-		*/
+                */
         return $s;
 
 
 
-	}
+        }
 
 
 
@@ -372,18 +372,18 @@ class XRMS_Pager {
 
 
 
-	
+        
 
     //------------------------------------------------------
     // overridden to add export and mail merge
     function RenderLayout($header,$grid,$footer,$attributes='class=widget cellspacing=1 cellpadding=0 border=0 width="100%"')
     {
-		$colspan = count($this->column_info);
-		if($this->maximize) {
-        	echo "<table {$attributes} ><tr><td colspan=$colspan class=widget_header>" . $this->caption . "<a href=javascript:{$this->pager_id}_unmaximize();>(show paged)</a></td></tr>\n";
-		} else {
-        	echo "<table {$attributes} ><tr><td colspan=$colspan class=widget_header>" . $this->caption . "<a href=javascript:{$this->pager_id}_maximize();>(show all)</a></td></tr>\n";
-		}
+                $colspan = count($this->column_info);
+                if($this->maximize) {
+                echo "<table {$attributes} ><tr><td colspan=$colspan class=widget_header>" . $this->caption . "<a href=javascript:{$this->pager_id}_unmaximize();>(show paged)</a></td></tr>\n";
+                } else {
+                echo "<table {$attributes} ><tr><td colspan=$colspan class=widget_header>" . $this->caption . "<a href=javascript:{$this->pager_id}_maximize();>(show all)</a></td></tr>\n";
+                }
         if ($header != '&nbsp;') {
             echo "<tr><td colspan=$colspan>".
             "<table border=0 cellpadding=0 cellspacing=0 width=\"100%\">".
@@ -394,22 +394,22 @@ class XRMS_Pager {
 
         echo $grid;
 
-		if($this->EndRows) { echo $this->EndRows; }
+                if($this->EndRows) { echo $this->EndRows; }
 
 /*
         if ($this->how_many_rows > 0)
         {
             echo "<tr><td class=widget_content_form_element colspan=50><input type=button class=button onclick=\"javascript: exportIt();\" value='Export'> ";
-            echo "<input type=button class=button onclick=\"javascript: bulkEmail();\" value='Mail Merge'></td></tr>";
+            echo "<input type=button class=button onclick=\"javascript: bulkEmail();\" value='eMail Merge'></td></tr>";
         }
 */
 
         echo "</table>";
     }
 
-	function Render($rows=10) {
+        function Render($rows=10) {
 
-		echo "<a name=\"{$this->pager_id}\"></a>\n";
+                echo "<a name=\"{$this->pager_id}\"></a>\n";
 
         echo <<<END
             <script language="JavaScript" type="text/javascript">
@@ -417,7 +417,7 @@ class XRMS_Pager {
 
             function {$this->pager_id}_submitForm(nextPage) {
                 document.{$this->form_id}.{$this->pager_id}_next_page.value = nextPage;
-				document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
+                                document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
                 document.{$this->form_id}.submit();
             }
 
@@ -425,22 +425,22 @@ class XRMS_Pager {
                 document.{$this->form_id}.{$this->pager_id}_sort_column.value = sortColumn + 1;
                 document.{$this->form_id}.{$this->pager_id}_next_page.value = '';
                 document.{$this->form_id}.{$this->pager_id}_resort.value = 1;
-				document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
+                                document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
                 document.{$this->form_id}.submit();
             }
             function {$this->pager_id}_maximize() {
                 document.{$this->form_id}.{$this->pager_id}_maximize.value = 'true';
                 document.{$this->form_id}.{$this->pager_id}_next_page.value = '';
-				document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
+                                document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
                 document.{$this->form_id}.submit();
-			}
-	        function {$this->pager_id}_unmaximize() {
+                        }
+                function {$this->pager_id}_unmaximize() {
                 document.{$this->form_id}.{$this->pager_id}_maximize.value = null;
                 document.{$this->form_id}.{$this->pager_id}_next_page.value = '';
-				document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
+                                document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
                 document.{$this->form_id}.submit();
-			}
-		
+                        }
+                
 
             //-->
             </script>
@@ -456,7 +456,7 @@ class XRMS_Pager {
 END;
 
 
-		// adodb_pager code begin
+                // adodb_pager code begin
         global $ADODB_COUNTRECS;
 
         if($this->maximize) {
@@ -494,9 +494,9 @@ END;
 
         $this->RenderLayout($header,$grid,$footer);
 
-		// adodb_pager code end
-		//parent::Render($rows);
-	}
+                // adodb_pager code end
+                //parent::Render($rows);
+        }
     function AddEndRows($html) {
         $this->EndRows = $html;
     }
@@ -565,7 +565,7 @@ function rs2html(&$rs,$ztabhtml=false,$zheaderarray=false,$htmlspecialchars=true
 
     $ncols = $rs->FieldCount();
 
-	$ncols = count($this->column_info);
+        $ncols = count($this->column_info);
 
     // *** commented out the line below b/c we don't want *another* freakin' table -- we just want rows
     // $hdr = "<TABLE COLS=$ncols $ztabhtml>\n\n";
@@ -604,7 +604,7 @@ function rs2html(&$rs,$ztabhtml=false,$zheaderarray=false,$htmlspecialchars=true
 
         $s .= "<tr valign=top>\n";
 
-		for($i=0; $i<$ncols; $i++) {
+                for($i=0; $i<$ncols; $i++) {
 
         //for ($i=0, $v=($numoffset) ? $rs->fields[0] : reset($rs->fields);
             //$i < $ncols;

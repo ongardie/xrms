@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: companies_one.php,v 1.3 2005/08/28 15:28:02 braverock Exp $
+ * $Id: companies_one.php,v 1.4 2007/10/30 03:20:16 randym56 Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -626,7 +626,7 @@ function openNewsWindow() {
                 <input class=button type=button value="<?php echo _("Edit"); ?>" onclick="javascript: location.href='edit.php?company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="<?php echo _("Admin"); ?>" onclick="javascript:location.href='admin.php?company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="<?php echo _("Clone"); ?>" onclick="javascript: location.href='new.php?clone_id=<?php echo $company_id ?>';">
-                <input class=button type=button value="<?php echo _("Mail Merge"); ?>" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
+                <input class=button type=button value="<?php echo _("eMail Merge"); ?>" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="<?php echo _("News"); ?>" onclick="javascript: openNewsWindow();">
                 <input class=button type=button value="<?php echo _("Relationships"); ?>" onclick="javascript: location.href='relationships.php?company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="<?php echo _("Addresses"); ?>" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
@@ -764,6 +764,9 @@ end_page();
 
 /**
  * $Log: companies_one.php,v $
+ * Revision 1.4  2007/10/30 03:20:16  randym56
+ * - Changed "Mail Merge" to be "eMail Merge" to separate from "Snail Mail Merge"
+ *
  * Revision 1.3  2005/08/28 15:28:02  braverock
  * - change _new to _blank for broader browser compatibility
  *
