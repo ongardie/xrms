@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.75 2007/05/02 14:59:36 fcrossen Exp $
+ * $Id: some.php,v 1.76 2007/10/30 02:59:28 randym56 Exp $
  */
 
 //include the standard files
@@ -33,6 +33,8 @@ getGlobalVar($saved_title, 'saved_title');
 getGlobalVar($group_item, 'group_item');
 getGlobalVar($delete_saved, 'delete_saved');
 
+global $return_url;
+$return_url = '/contacts/some.php';
 
 /*********** SAVED SEARCH BEGIN **********************/
 load_saved_search_vars($con, $on_what_table, $saved_id, $delete_saved);
@@ -47,10 +49,16 @@ $arr_vars = array ( // local var name             // session variable name, flag
                     'description'        => array ( 'contacts_description', arr_vars_SESSION ),
                     'category_id'        => array ( 'category_id', arr_vars_SESSION ),
                     'user_id'            => array ( 'contacts_user_id', arr_vars_SESSION ),
+                    'crm_status_id'      => array ( 'companies_crm_status_id',arr_vars_GET_SESSION ),
+                    'industry_id'        => array ( 'companies_industry_id',arr_vars_SESSION ),
+                    'company_type_id'    => array ( 'companies_company_type_id',arr_vars_SESSION ),
+                    'company_source_id'  => array ( 'companies_company_source_id',arr_vars_SESSION ),
                     'company_name'       => array ( 'contacts_company_name', arr_vars_GET_SESSION ),
                     'company_code'       => array ( 'contacts_company_code', arr_vars_GET_SESSION ),
                     'phone_search'       => array ( 'phone_search', arr_vars_GET_SESSION ),
-                    'email'              => array ( 'contacts_email', arr_vars_GET_SESSION )
+                    'email'              => array ( 'contacts_email', arr_vars_GET_SESSION ),
+                    'interests'          => array ( 'interests', arr_vars_GET_SESSION ),
+                    'profile'            => array ( 'profile', arr_vars_GET_SESSION )
                    );
 
 // get all passed in variables
@@ -66,10 +74,10 @@ $sql = "SELECT " .
     $con->Concat($con->qstr('<a id="'), "c.company_name",  $con->qstr('" href="../companies/one.php?company_id='), "c.company_id", $con->qstr('">'), "c.company_name", $con->qstr('</a>')) . " AS company,".
     "company_code, title, description, u.username, cont.email, cont.work_phone, cont.cell_phone, cont.contact_id, cont.last_name, cont.first_names, c.company_name";
 
-// $from = " from contacts cont, companies c LEFT JOIN users u ON cont.user_id=u.user_id ";
-$from = " from contacts cont, companies c LEFT JOIN users u USING (user_id) ";
+$from = " from contacts cont, companies c, users u ";
 
 $where  = "where c.company_id = cont.company_id ";
+$where .= "and c.user_id = u.user_id ";
 $where .= "and contact_record_status = 'a'";
 
 $criteria_count = 0;
@@ -123,9 +131,50 @@ if (strlen($user_id) > 0) {
     $where .= " and cont.user_id = $user_id";
 }
 
+// section added by Randy
+if (strlen($crm_status_id) > 0) {
+        $criteria_count++;
+        if ($_POST['not_crm'] == 'y') {
+                $where .= " and c.crm_status_id <> $crm_status_id";
+                } else {
+        $where .= " and c.crm_status_id = $crm_status_id";
+                }
+        }
+
+if (strlen($company_type_id) > 0) {
+    $criteria_count++;
+    $where .= " and c.company_type_id = $company_type_id";
+}
+
+if (strlen($company_source_id) > 0) {
+    $criteria_count++;
+    $where .= " and c.company_source_id = $company_source_id";
+}
+
+if (strlen($industry_id) > 0) {
+    $criteria_count++;
+    $where .= " and c.industry_id = $industry_id";
+}
+
+if ($_POST['opt-in'] == 'y') {
+    $criteria_count++;
+    $where .= " and cont.email_status = 'i'";
+}
+
+if (strlen($interests) > 0) {
+    $criteria_count++;
+    $where .= " and cont.interests like " . $con->qstr('%' . $interests . '%', get_magic_quotes_gpc());
+}
+
+if (strlen($profile) > 0) {
+    $criteria_count++;
+    $where .= " and cont.profile like " . $con->qstr('%' . $profile . '%', get_magic_quotes_gpc());
+}
+
+// end search critera added by Randy
 $phone_fields=array('work_phone'=>_("Work Phone"),'cell_phone'=>_("Cell Phone"),'home_phone'=>_("Home Phone"), 'work_phone_ext'=>_("Work Phone Ext"));
 if ($phone_search) {
-  	$idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
+        $idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
     $sql_phone_search=preg_replace("/[^\d]/", '', $phone_search);
     $phonewhere=array();
     foreach ($phone_fields as $phonefield => $phonelabel) {
@@ -229,6 +278,40 @@ if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'contacts', '', 4);
 }
 
+$sql_crm = "SELECT crm_status_pretty_name, crm_status_id
+FROM crm_statuses
+WHERE crm_status_record_status = 'a'
+ORDER BY crm_status_pretty_name";
+$rst = $con->execute($sql_crm);
+$crm_status_menu = $rst->getmenu2('crm_status_id', $crm_status_id, true);
+$rst->close();
+
+
+$sql_c_type = "SELECT company_type_pretty_name, company_type_id
+FROM company_types
+WHERE company_type_record_status = 'a'
+ORDER BY company_type_pretty_name";
+$rst = $con->execute($sql_c_type);
+$company_type_menu = $rst->getmenu2('company_type_id', $company_type_id, true);
+$rst->close();
+
+
+$sql_c_sources = "SELECT company_source_pretty_name, company_source_id
+FROM company_sources
+WHERE company_source_record_status = 'a'
+ORDER BY company_source_pretty_name";
+$rst = $con->execute($sql_c_sources);
+$company_source_menu = $rst->getmenu2('company_source_id', $company_source_id, true);
+$rst->close();
+
+$sql_ind = "SELECT industry_pretty_name, industry_id
+FROM industries
+WHERE industry_record_status = 'a'
+ORDER BY industry_pretty_name";
+$rst = $con->execute($sql_ind);
+$industry_menu = $rst->getmenu2('industry_id', $industry_id, true);
+$rst->close();
+
 $page_title = _("Contacts");
 
 /******* SAVED SEARCH BEGINS *****/
@@ -303,8 +386,10 @@ if(!isset($contacts_next_page)) {
                 <td class=widget_label><?php echo _("Title"); ?></td>
                 <td class=widget_label><?php echo _("Description"); ?></td>
                 <td class=widget_label><?php echo _("Owner"); ?></td>
-                <td class=widget_label colspan=2><?php echo _("Category"); ?></td>
+                <td class=widget_label><?php echo _("Category"); ?></td>
+                <td class=widget_label><?php echo _("eMail Opt-IN"); ?></td>
             </tr>
+                        <!-- the next section was added by Randy for additional search critera -->
             <tr>
                 <td width="25%" class=widget_content_form_element>
                     <input type=text name="title" size=12 maxlength=100 value="<?php  echo $title; ?>">
@@ -315,10 +400,47 @@ if(!isset($contacts_next_page)) {
                 <td width="15%" class=widget_content_form_element>
                     <?php  echo $user_menu; ?>
                 </td>
-                <td width="25%" class=widget_content_form_element colspan=2>
+                <td width="25%" class=widget_content_form_element>
                     <?php  echo $contact_category_menu; ?>
                 </td>
+                <td width="25%" class=widget_content_form_element>
+                        <input type="checkbox" name="opt-in" value="y" <?php if ($_POST['opt-in'] == 'y') echo "checked"; ?>> Yes
+                </td>
             </tr>
+            <tr>
+                <td class=widget_label><?php echo _("CRM Status"); ?></td>
+                <td class=widget_label><?php echo _("Company Type"); ?></td>
+                <td class=widget_label><?php echo _("Company Source"); ?></td>
+                <td class=widget_label colspan="2"><?php echo _("Industry"); ?></td>
+            </tr>
+            <tr>
+                <td width="25%" class=widget_content_form_element>
+                    !<input type="checkbox" name="not_crm" value="y" <?php if ($_POST['not_crm'] == 'y') echo "checked"; ?>>
+                    <?php  echo $crm_status_menu; ?>
+                </td>
+                <td width="25%" class=widget_content_form_element>
+                    <?php  echo $company_type_menu; ?>
+                </td>
+                <td width="15%" class=widget_content_form_element>
+                    <?php  echo $company_source_menu; ?>
+                </td>
+                <td width="25%" class=widget_content_form_element colspan="2">
+                    <?php  echo $industry_menu; ?>
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_label colspan="2"><?php echo _("Interests"); ?></td>
+                <td class=widget_label colspan="3"><?php echo _("Profile"); ?></td>
+            </tr>
+<tr>
+                <td width="25%" colspan="2" class=widget_content_form_element>
+                    <input type=text name="interests" size=50 maxlength=50 value="<?php  echo $interests; ?>">
+                </td>
+                <td width="25%" colspan="3" class=widget_content_form_element>
+                    <input type=text name="profile" size=50 maxlength=100 value="<?php  echo $profile; ?>">
+                </td>
+
+</tr>
             <tr>
                 <td class=widget_label colspan="2"><?php echo _("Saved Searches"); ?></td>
                 <td class=widget_label colspan="3"><?php echo _("Search Title"); ?></td>
@@ -398,15 +520,21 @@ $columns = $pager_columns->GetUserColumns('default');
         return $row;
     }
 
+//added by randym56 to enable hiding non-functional buttons
+$rst = $con->execute($sql);
+if ($rst->rowcount() > 0) {
+        $show_pager_footer_buttons = true;
+        } else $show_pager_footer_buttons = false;
+//added by randym56 to enable hiding non-functional buttons
 
 $pager = new GUP_Pager($con, $sql, 'getContactDetails', _('Search Results'), 'ContactForm', 'ContactPager', $columns, false);
 
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
-            $pager_columns_button
-            " . $pager->GetAndUseExportButton() .  "
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\">
-            <input type=button class=button onclick=\"javascript: bulkSnailMail();\" value=\""._("Snail Mail Merge")."\">
-</td></tr>";
+            $pager_columns_button";
+if ($show_pager_footer_buttons) $endrows = $endrows . $pager->GetAndUseExportButton() .  "
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("eMail Merge")."\">
+            <input type=button class=button onclick=\"javascript: bulkSnailMail();\" value=\""._("Snail Mail Merge")."\">";
+$endrows = $endrows."</td></tr>\n";
 
 echo $pager_columns_selects;
 
@@ -418,6 +546,7 @@ $pager->Render($system_rows_per_page);
 $con->close();
 
 $new_contact_button=render_create_button(_("New Contact"), 'submit', false, false, false, 'contacts');
+$fast_add_contact_button=render_create_button(_("New Contact and Company"), 'submit', false, false, false, 'contacts');
 ?>
 
     </form>
@@ -435,7 +564,7 @@ $new_contact_button=render_create_button(_("New Contact"), 'submit', false, fals
             </tr>
             <tr>
                 <td class=widget_content_form_element>
-		   <?php echo $new_contact_button; ?>
+                   <?php echo $new_contact_button; ?>
                 </td>
             </tr>
             <?php echo $self_contacts; ?>
@@ -467,12 +596,20 @@ function initialize() {
 
 initialize();
 
+function bulkActivity() {
+    document.forms[0].action = "../bulkactivity/bulkactivity-0.php?return_url=/contacts/some.php";
+    document.forms[0].submit();
+}
 function bulkEmail() {
     document.forms[0].action = "../email/email.php";
     document.forms[0].submit();
 }
 function bulkSnailMail() {
-    document.forms[0].action = "../snailmail/snailmail-1.php?scope=contacts";
+    document.forms[0].action = "../snailmail/snailmail.php?scope=contacts";
+    document.forms[0].submit();
+}
+function exportcontacts() {
+    document.forms[0].action = "../snailmail/exportcontacts.php?scope=contacts";
     document.forms[0].submit();
 }
 function clearSearchCriteria() {
@@ -506,6 +643,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.76  2007/10/30 02:59:28  randym56
+ * - Changed "Mail Merge" to be "eMail Merge" to separate from "Snail Mail Merge"
+ * - New search functions that include some company fields for quicker lookups + more options
+ *
  * Revision 1.75  2007/05/02 14:59:36  fcrossen
  * - changed search by phone number. Now accounts for idd_prefix and phone_fax_number_clean system preferences
  *
