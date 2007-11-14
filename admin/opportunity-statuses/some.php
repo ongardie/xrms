@@ -5,7 +5,7 @@
  *
  * @todo modify all opportunity status uses to use a sort order
  *
- * $Id: some.php,v 1.15 2007/10/17 15:14:20 randym56 Exp $
+ * $Id: some.php,v 1.16 2007/11/14 22:31:30 randym56 Exp $
  */
 
 //include required XRMS common files
@@ -65,16 +65,16 @@ if ($aopportunity_type_id) {
             $table_rows .= '<td class=widget_content>';
             $status_open_indicator = $rst->fields['status_open_indicator'];
             if (($status_open_indicator == "o") or ($status_open_indicator == '')){
-            		$table_rows .= _("Open");
+                        $table_rows .= _("Open");
             }
             if ($status_open_indicator == "w") {
-            	$table_rows .= _("Closed/Won");
+                $table_rows .= _("Closed/Won");
             }
             if ($status_open_indicator == "l") {
-            	$table_rows .= _("Closed/Lost");
+                $table_rows .= _("Closed/Lost");
             }
-			$table_rows .='</td>';
-			
+                        $table_rows .='</td>';
+                        
             //add descriptions
             $table_rows .= '<td class=widget_content>'
                         . htmlspecialchars($rst->fields['opportunity_status_long_desc'])
@@ -107,7 +107,7 @@ if ($aopportunity_type_id) {
 $con->close();
 
 
-$page_title = _("Manage Opportunity Statuses (Hopper Tracks)");
+$page_title = _("Manage Opportunity Statuses");
 start_page($page_title);
 
 ?>
@@ -135,7 +135,7 @@ start_page($page_title);
    <form action=../sort.php method=post>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=7><?php echo _("Opportunity Statuses (Hopper Tracks)"); ?></td>
+                <td class=widget_header colspan=7><?php echo _("Opportunity Statuses"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Short Name"); ?></td>
@@ -206,6 +206,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.16  2007/11/14 22:31:30  randym56
+ * Removed confusing terms
+ *
  * Revision 1.15  2007/10/17 15:14:20  randym56
  * Show ID field to make ACL mods for group members easier and match new docs
  *
