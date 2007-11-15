@@ -32,11 +32,11 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.18 $
+   * @version $Revision: 1.19 $
    * @copyright copyright information
    * @license GNU General Public Licence
    *
-   * $Id: SMTPs.php,v 1.18 2007/01/12 22:17:08 ongardie Exp $
+   * $Id: SMTPs.php,v 1.19 2007/11/15 13:33:49 braverock Exp $
    *
    **/
 
@@ -1855,8 +1855,9 @@ class SMTPs
             // Make RFC821 Compliant, replace bare linefeeds
             $strContent = preg_replace("/(?<!\r)\n/si", "\r\n", $strContent );
 
-            $strContent = rtrim(wordwrap($strContent));
-
+            // Wrap at 75 chars, use CRLF pair for RFC821
+            $strContent = rtrim(wordwrap($strContent),75,"\r\n");
+            
             $this->_msgContent[$strType] = array();
 
             $this->_msgContent[$strType]['mimeType'] = $strMimeType;
@@ -2383,6 +2384,10 @@ class SMTPs
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.19  2007/11/15 13:33:49  braverock
+  * - Fix [ xrms-Bugs-1832327 ] XRMS Mails not accepted by Qmail
+  *   apply patch submitted by Bjorn Schimpf
+  *
   * Revision 1.18  2007/01/12 22:17:08  ongardie
   * - Added full_http_site_root() to utils-misc.php
   * - Made SMTPs' getError() easier to use
