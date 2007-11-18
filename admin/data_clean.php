@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @todo: Active companies should always have active addresses
  *
- * $Id: data_clean.php,v 1.19 2007/05/15 23:17:29 ongardie Exp $
+ * $Id: data_clean.php,v 1.20 2007/11/18 19:45:35 randym56 Exp $
  */
 
 // where do we include from
@@ -337,11 +337,11 @@ $activities_to_fix = $rst->RecordCount();
 if ($activities_to_fix > 0) {
     $msg .= _("Need to assign a default title for") . " " . $activities_to_fix . " " .  _("activities"). "<BR><BR>";
 
-	$rec = array();
-	$rec['activity_title'] = _("(No Name)");
-	
-	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	$rst = $con->execute($upd);
+        $rec = array();
+        $rec['activity_title'] = _("(No Name)");
+        
+        $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+        $rst = $con->execute($upd);
 }
 
 // Make sure that all opportunity have a name (only active)
@@ -351,11 +351,11 @@ $opportunities_to_fix = $rst->RecordCount();
 if ($opportunities_to_fix > 0) {
     $msg .= _("Need to assign a default title for") . " " . $opportunities_to_fix . " " .  _("opportunities"). "<BR><BR>";
 
-	$rec = array();
-	$rec['opportunity_title'] = _("(No Name)");
-	
-	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	$rst = $con->execute($upd);
+        $rec = array();
+        $rec['opportunity_title'] = _("(No Name)");
+        
+        $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+        $rst = $con->execute($upd);
 }
 
 // Make sure that all adress have a name
@@ -365,13 +365,23 @@ $adresses_to_fix = $rst->RecordCount();
 if ($adresses_to_fix > 0) {
     $msg .= _("Need  to assign a default name for") . " " . $adresses_to_fix . " " .  _("Adresses"). "<BR><BR>";
 
-	$rec = array();
-	$rec['address_name'] = _("(No Name)");
-	
-	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	$rst = $con->execute($upd);
+        $rec = array();
+        $rec['address_name'] = _("(No Name)");
+        
+        $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+        $rst = $con->execute($upd);
 }
 $con->debug=0;
+
+//Update address_body to be equal to the default address id - must set Zip code to be '-' instead of NULL where line1 > blank
+$sql = "update addresses set postal_code = '-' where (postal_code IS NULL AND line1 > '')";
+$rst = $con->execute($sql);
+$sql = "UPDATE addresses SET address_body = CONCAT(line1,'\n',line2,'\n',city,', ',province,' ',postal_code) WHERE CHAR_LENGTH(line2) > 0 AND (CHAR_LENGTH(address_body) < 1 OR CHAR_LENGTH(address_body) IS NULL)";
+$rst = $con->execute($sql);
+$sql = "UPDATE addresses SET address_body = CONCAT(line1,'\n',city,', ',province,' ',postal_code) WHERE CHAR_LENGTH(line2) <= 0 AND (CHAR_LENGTH(address_body) < 1 OR CHAR_LENGTH(address_body) IS NULL)";
+$rst = $con->execute($sql);
+$sql = "UPDATE addresses SET address_body = CONCAT(line1,'\n',city,', ',province,' ',postal_code) WHERE line2 IS NULL AND (CHAR_LENGTH(address_body) < 1 OR CHAR_LENGTH(address_body) IS NULL)";
+$rst = $con->execute($sql);
 
 //close the database connection, because we don't need it anymore
 $con->close();
@@ -392,6 +402,9 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.20  2007/11/18 19:45:35  randym56
+ * Add update to populate address_body field from primary address information if blank or null
+ *
  * Revision 1.19  2007/05/15 23:17:29  ongardie
  * - Addresses now associate with on_what_table, on_what_id instead of company_id.
  *
