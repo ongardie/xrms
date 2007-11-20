@@ -32,11 +32,11 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.20 $
+   * @version $Revision: 1.21 $
    * @copyright copyright information
    * @license GNU General Public Licence
    *
-   * $Id: SMTPs.php,v 1.20 2007/11/20 01:25:33 randym56 Exp $
+   * $Id: SMTPs.php,v 1.21 2007/11/20 01:32:32 randym56 Exp $
    *
    **/
 
@@ -1857,9 +1857,10 @@ class SMTPs
             // Make RFC821 Compliant, replace bare linefeeds
             $strContent = preg_replace("/(?<!\r)\n/si", "\r\n", $strContent );
 
-            // Wrap at 75 chars, use CRLF pair for RFC821
-            $strContent = rtrim(wordwrap($strContent),75,"\r\n");
-            
+            // Wrap at 75 chars, use CRLF pair for RFC821 - the following line caused failures in sending messages
+            //$strContent = rtrim(wordwrap($strContent),75,"\r\n");
+            $strContent = rtrim(wordwrap($strContent));  //old line
+
             $this->_msgContent[$strType] = array();
 
             $this->_msgContent[$strType]['mimeType'] = $strMimeType;
@@ -2387,8 +2388,8 @@ class SMTPs
 
  /**
   * $Log: SMTPs.php,v $
-  * Revision 1.20  2007/11/20 01:25:33  randym56
-  * Added lines 1826 & 1985 to stop HTML from going into oblivion causing empty emails
+  * Revision 1.21  2007/11/20 01:32:32  randym56
+  * Line 1861 caused faliures - put back the old code to make it work
   *
   * Revision 1.19  2007/11/15 13:33:49  braverock
   * - Fix [ xrms-Bugs-1832327 ] XRMS Mails not accepted by Qmail
