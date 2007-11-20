@@ -32,11 +32,11 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.19 $
+   * @version $Revision: 1.20 $
    * @copyright copyright information
    * @license GNU General Public Licence
    *
-   * $Id: SMTPs.php,v 1.19 2007/11/15 13:33:49 braverock Exp $
+   * $Id: SMTPs.php,v 1.20 2007/11/20 01:25:33 randym56 Exp $
    *
    **/
 
@@ -1823,6 +1823,8 @@ class SMTPs
         $_header .= 'X-Mailer: SMTPs/PHP Mailer'                   . "\r\n"
                  .  'Mime-Version: 1.0'                            . "\r\n";
 
+        $_header = preg_replace("/(?<!\r)\n/si", "\r\n", $_header); //line added by Randy to fix HTML from going into oblivion
+
         return $_header;
     }
 
@@ -1980,6 +1982,7 @@ class SMTPs
             $content .= "\r\n--" . $this->_getBoundary() . '--' . "\r\n" ;
         }
 
+        $content = preg_replace("/(?<!\r)\n/si", "\r\n", $content); //line added by Randy to fix HTML from going into oblivion
         return $content;
     }
 
@@ -2384,6 +2387,9 @@ class SMTPs
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.20  2007/11/20 01:25:33  randym56
+  * Added lines 1826 & 1985 to stop HTML from going into oblivion causing empty emails
+  *
   * Revision 1.19  2007/11/15 13:33:49  braverock
   * - Fix [ xrms-Bugs-1832327 ] XRMS Mails not accepted by Qmail
   *   apply patch submitted by Bjorn Schimpf
