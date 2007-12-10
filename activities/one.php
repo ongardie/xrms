@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.142 2006/11/14 19:55:21 braverock Exp $
+ * $Id: one.php,v 1.143 2007/12/10 22:34:32 gpowers Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -12,6 +12,7 @@ require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'utils-preferences.php');
 require_once($include_directory . 'utils-activities.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
@@ -25,8 +26,6 @@ getGlobalVar($return_url, 'return_url');
 getGlobalVar($print_view, 'print_view');
 
 if (!$return_url) $return_url='/activities/some.php';
-
-
 
 $on_what_id=$activity_id;
 $session_user_id = session_check();
@@ -400,8 +399,6 @@ $sidebar_plugin_rows = do_hook_function('activity_sidebar_bottom',$param);
 /** End of the sidebar includes **/
 /*********************************/
 
-$con->close();
-
 $page_title = _("Activity Details").': '.$activity_title;
 start_page($page_title, true, $msg);
 
@@ -441,10 +438,36 @@ function logTime() {
     return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
 }
 </script>
+
+<?php if (get_user_preference($con, $user_id, "html_activity_notes") == 'y') { ?>
+<script language="javascript" type="text/javascript" src="<?PHP echo $http_site_root;?>/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script language="javascript" type="text/javascript">
+        tinyMCE.init({
+                mode : "textareas",
+                theme : "advanced",
+                plugins : "table,emotions,iespell,insertdatetime,preview,print,paste,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras",
+                theme_advanced_buttons1_add : "fontselect,fontsizeselect",
+                theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,separator,forecolor,backcolor",
+                theme_advanced_buttons3_add_before : "tablecontrols,separator",
+                theme_advanced_buttons3_add : "iespell,print,fullscreen",
+                theme_advanced_toolbar_location : "top",
+                theme_advanced_toolbar_align : "left",
+                plugin_insertdate_dateFormat : "%Y-%m-%d",
+                plugin_insertdate_timeFormat : "%H:%M:%S",
+                extended_valid_elements : "hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]",
+                theme_advanced_resize_horizontal : false,
+                theme_advanced_resizing : true,
+                nonbreaking_force_tab : true,
+                apply_source_formatting : true,
+                fix_table_elements : true,
+                convert_urls : true
+        });
+</script>
+<?php } ?>
+
 <div id="Main">
 
     <div id="Content">
-
 
         <form action=edit-2.php method=post class="print" name=activity_data>
         <input type=hidden name=return_url value="<?php  echo $return_url; ?>">
@@ -753,10 +776,16 @@ function logTime() {
 
 <?php
 
-    end_page();
+$con->close();
+
+end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.143  2007/12/10 22:34:32  gpowers
+ * - added system preference for html activity notes (uses tinymce)
+ * - move $con->close(); to end of file.
+ *
  * Revision 1.142  2006/11/14 19:55:21  braverock
  * - special handling for unknown company
  *   based on patches by fcrossen
@@ -953,7 +982,7 @@ function logTime() {
  *
  * Revision 1.87  2005/04/28 15:31:35  braverock
  * - applied patch for clearing case/opp/campaign id on editing of activities
- *   patch supplied by Miguel Gonçalves (mig77)
+ *   patch supplied by Miguel Gonï¿½alves (mig77)
  *
  * Revision 1.86  2005/04/20 21:26:27  braverock
  * - change $on_what_table to 'activities' before calling file sidebar
