@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.41 2006/07/30 11:09:09 jnhayart Exp $
+ * $Id: index.php,v 1.42 2007/12/10 18:45:01 gpowers Exp $
  */
 
 //include required stuff
@@ -40,7 +40,7 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header><?php echo _("System Administration"); ?></td>
+                <td class=widget_header><?php echo _("Database Administration"); ?></td>
             </tr>
             <!-- <tr>
                 <td class=widget_content><a href="reports/dashboard.php"><?php echo _("Digital Dashboard"); ?></a></td>
@@ -52,6 +52,8 @@ start_page($page_title, true, $msg);
                 <td class=widget_content><a href="data_clean.php"><?php echo _("Data Cleanup"); ?></a></td>
             </tr>
         </table>
+
+            <?php do_hook('system_monitoring'); ?>
 
         <table class=widget cellspacing=1 width="100%">
             <tr>
@@ -245,7 +247,7 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
         </table>
-
+ 
         <!-- plugins //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
@@ -269,6 +271,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.42  2007/12/10 18:45:01  gpowers
+ * - added 'system_monitoring' plugin hook
+ * - changed "System Administration" to "Database Administration"
+ *
  * Revision 1.41  2006/07/30 11:09:09  jnhayart
  * Add Import activities in admin Import/Export
  *
