@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.128 2006/10/01 00:51:12 braverock Exp $
+ * $Id: some.php,v 1.129 2007/12/10 22:36:20 gpowers Exp $
  */
 
 // handle includes
@@ -450,16 +450,13 @@ $_SESSION["search_sql"]=$sql;
 						);
 	$return_url = '/activities/some.php';
 
-
 	$activities_widget =  GetActivitiesWidget($con, $search_terms, 'ActivitiesData', _('Search Results'), $session_user_id, $return_url, null, null, null, false);
 
 	echo $activities_widget['content'];
 	echo $activities_widget['sidebar'];
 	echo $activities_widget['js'];
 
-
-
-$con->close();
+	$con->close();
 ?>
 
     </form>
@@ -525,6 +522,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.129  2007/12/10 22:36:20  gpowers
+ * - removed extra whitespace
+ *
  * Revision 1.128  2006/10/01 00:51:12  braverock
  * - normalize use of truncate flag in get_user_menu
  *
