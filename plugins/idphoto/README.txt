@@ -1,9 +1,4 @@
-ID Photo XRMS Plugin v0.1
-
-copyright 2004 Glenn Powers <glenn@net127.com>
-Licensed Under the Open Software License v. 2.0
-
-This plugin displays an ID photo on the top of the one contact sidebar.
+display an ID photo on the top of the one contact sidebar.
 
 Photos must be uploaded with the "New" button on the "Files" sidebar.
 
@@ -18,3 +13,5 @@ different size, change or remove "height=160 width=120" in setup.php
 
 enjoy.
 
+copyright 2004-2007 Glenn Powers <glenn@net127.com>
+Licensed Under the Open Software License v. 2.0
