@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: activitytimes.php,v 1.10 2007/12/10 23:27:11 gpowers Exp $
+ * $Id: activitytimes.php,v 1.11 2007/12/10 23:39:53 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -115,10 +115,20 @@ if ($user_id) {
     }
     $con->close();
 
-    echo "<tr><td></td><td align=right><strong>" . _("TOTAL") . "</strong><td><strong>" . formatSeconds($total_time) . "</strong></td><td colspan=2>($total_time " . _("seconds") . ")</td><td></td><td></td></tr>\n";
-    echo "</table>";
+    echo "
+    <tr>
+        <td></td>
+        <td align=right><strong>" . _("TOTAL") . "</strong></td>
+        <td><strong>" . formatSeconds($total_time) . "</strong></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>";
 }
+
 echo "</div>\n";
+
 end_page();
 
 function calcDateDiff( $date1, $date2 ) {
@@ -177,6 +187,9 @@ function formatSeconds( $diff ) {
 
 /**
  * $Log: activitytimes.php,v $
+ * Revision 1.11  2007/12/10 23:39:53  gpowers
+ * - removed total seconds
+ *
  * Revision 1.10  2007/12/10 23:27:11  gpowers
  * - changed form method to get
  *
