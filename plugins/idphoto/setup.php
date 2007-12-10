@@ -2,9 +2,9 @@
 /*
  *  setup.php
  *
- * Copyright (c) 2004 The XRMS Project Team
+ * Copyright (c) 2004-2007 Glenn Powers <glenn@net127.com>
  *
- * $Id: setup.php,v 1.2 2004/11/09 03:12:54 gpowers Exp $
+ * $Id: setup.php,v 1.3 2007/12/10 23:23:06 gpowers Exp $
  */
 
 
