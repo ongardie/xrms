@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.59 2006/08/10 17:47:03 jnhayart Exp $
+ * $Id: one.php,v 1.60 2007/12/10 16:59:19 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -374,10 +374,10 @@ function markComplete() {
         <?php echo $category_rows; ?>
 
         <!-- notes //-->
-        <?php echo $note_rows; ?>
+        <?php if ($enable_notes_sidebar) {echo $note_rows;} ?>
 
         <!-- files //-->
-        <?php echo $file_rows; ?>
+        <?php if ($enable_files_sidebar) {echo $file_rows;} ?>
 
         <!-- relationships //-->
         <?php echo $relationship_link_rows; ?>
@@ -400,6 +400,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.60  2007/12/10 16:59:19  gpowers
+ * - Added 'type' => 'currency' to "Opportunity Size" and "Weighted Size"
+ *
  * Revision 1.59  2006/08/10 17:47:03  jnhayart
  * Take "$" in locale ressource with _("$")
  *
