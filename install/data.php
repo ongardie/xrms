@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.43 2006/08/03 01:55:37 ongardie Exp $
+ * $Id: data.php,v 1.44 2007/12/10 23:22:10 gpowers Exp $
  */
 
 /**
@@ -180,7 +180,7 @@ function misc_db_data($con) {
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'Costa Rica', '188', 'CR', 'CRI', '506')";
         $rst = $con->execute($sql);
-        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'Côte d’Ivoire', '384', 'CI', 'CIV', '225')";
+        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'Cï¿½te dï¿½Ivoire', '384', 'CI', 'CIV', '225')";
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (6, 'Croatia', '191', 'HR', 'HRV', '385')";
         $rst = $con->execute($sql);
@@ -418,7 +418,7 @@ function misc_db_data($con) {
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'Republic of Moldova', '498', 'MD', 'MDA', '373')";
         $rst = $con->execute($sql);
-        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'Réunion', '638', 'RE', 'REU', '262')";
+        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'Rï¿½union', '638', 'RE', 'REU', '262')";
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (6, 'Romania', '642', 'RO', 'ROU', '40')";
         $rst = $con->execute($sql);
@@ -440,7 +440,7 @@ function misc_db_data($con) {
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'San Marino', '674', 'SM', 'SMR', '378')";
         $rst = $con->execute($sql);
-        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'São Tomé and Principe', '678', 'ST', 'STP', '239')";
+        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'Sï¿½o Tomï¿½ and Principe', '678', 'ST', 'STP', '239')";
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (6, 'Saudi Arabia', '682', 'SA', 'SAU', '966')";
         $rst = $con->execute($sql);
@@ -538,7 +538,7 @@ function misc_db_data($con) {
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (9, 'Timor-Leste', '626', 'TL', 'TLS', '670')";
         $rst = $con->execute($sql);
-        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (6, 'land Islands', '248', 'AX', 'ALA', '670')";
+        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (6, 'ï¿½land Islands', '248', 'AX', 'ALA', '670')";
         $rst = $con->execute($sql);
     }
 
@@ -2906,7 +2906,16 @@ function user_preferences_db_data($con) {
         set_admin_preference($con, $undefined_company_method, 'unknown');
     }
 
-
+    $html_activity_notes=add_user_preference_type($con, 'html_activity_notes', "Allow HTML Activity Notes", "Use a HTML Editor on Activity Notes", false, false, 'select');
+    add_preference_option($con, $html_activity_notes, 'y', 'Yes');
+    add_preference_option($con, $html_activity_notes, 'n', 'No');
+     $ret=get_admin_preference($con, $undefined_company_method);
+    if (!$ret) {
+        set_admin_preference($con, $undefined_company_method, 'n');
+    }
+    
+    
+    
 
 }
 
@@ -2928,6 +2937,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.44  2007/12/10 23:22:10  gpowers
+ * - added system preference for HTML activity notes
+ *
  * Revision 1.43  2006/08/03 01:55:37  ongardie
  * - Added "household" unknown company method.
  * - Allow admin/update.php to redirect to admin/updateto2.0.php for v1.99.2.
