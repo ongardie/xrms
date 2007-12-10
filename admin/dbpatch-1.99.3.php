@@ -4,7 +4,7 @@
  *
  * @author Randy Martinsen
  *
- * $Id: dbpatch-1.99.3.php,v 1.1 2007/12/10 14:16:50 randym56 Exp $
+ * $Id: dbpatch-1.99.3.php,v 1.2 2007/12/10 14:46:08 randym56 Exp $
  */
 
 // where do we include from
@@ -59,6 +59,16 @@ $sql ="ALTER TABLE opportunity_statuses
     ";
     $rst = $con->execute($sql);
 
+$sql ="INSERT INTO `user_preference_types` (`user_preference_type_id`,`user_preference_name`,`user_preference_pretty_name`,`user_preference_description`,`allow_multiple_flag`,`allow_user_edit_flag`,`user_preference_type_status`,`preference_type_created_on`,`user_preference_type_modified_on`,`form_element_type`,`read_only`,`skip_system_edit_flag`) VALUES
+ (24,'printer_processor_email','Printer Processor Email','Where snail mail messages are sent for processing',0,1,'a',NULL,NULL,'text',1,0),
+ (25,'show_opt_out','Show Opt-Out dialogs','Shows opt-out dialogs in system for e-mail activities',0,0,'a',NULL,NULL,'select',0,0);";
+    $rst = $con->execute($sql);
+
+$sql ="INSERT INTO `user_preference_type_options` (`up_option_id`,`user_preference_type_id`,`option_value`,`sort_order`,`option_record_status`,`option_display`) VALUES
+ (37,23,'household',1,'a','New Company uses Contact Last Name + Household'),
+ (38,25,'n',1,'a','No'),
+ (39,25,'y',2,'a','Yes');";
+
 //FINAL STEP SET XRMS VERSION IN PREFERENCES TABLE
 set_admin_preference($con, 'xrms_version', '1.99.3');
 
@@ -83,6 +93,10 @@ start_page($page_title, true, $msg);
 end_page();
 /**
  * $Log: dbpatch-1.99.3.php,v $
+ * Revision 1.2  2007/12/10 14:46:08  randym56
+ * - Updated fields for Workflow/Opportunities
+ * - Insert system default table values for opt-in messages, default company name type and printer processor e-mail for snail mail functions
+ *
  * Revision 1.1  2007/12/10 14:16:50  randym56
  * *** empty log message ***
  *
