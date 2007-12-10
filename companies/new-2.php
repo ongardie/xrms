@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.35 2007/05/14 16:58:31 fcrossen Exp $
+ * $Id: new-2.php,v 1.36 2007/12/10 22:59:24 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -78,13 +78,16 @@ $con = get_xrms_dbconnection();
 //save to database
 $rec = array();
 $rec['crm_status_id'] = $crm_status_id;
+if ($rec['crm_status_id'] < 1) {$rec['crm_status_id'] = 1; }
 $rec['company_source_id'] = $company_source_id;
 $rec['industry_id'] = $industry_id;
 $rec['campaign_id'] = $campaign_id;
 $rec['company_type_id'] = $company_type_id;
 $rec['user_id'] = $user_id;
 $rec['account_status_id'] = $account_status_id;
+if ($rec['account_status_id'] < 1) {$rec['account_status_id'] = 1; }
 $rec['rating_id'] = $rating_id;
+if ($rec['rating_id'] < 1) {$rec['rating_id'] = $rating_id = 1; }
 $rec['company_name'] = $company_name;
 $rec['legal_name'] = $legal_name;
 $rec['company_code'] = $company_code;
@@ -237,6 +240,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.36  2007/12/10 22:59:24  gpowers
+ * - added default values for crm_status_id, account_status_id and rating_id
+ *
  * Revision 1.35  2007/05/14 16:58:31  fcrossen
  * - removed all preg_replace functions for phone numbers. These are now handled by the API.
  *

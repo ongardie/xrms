@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.27 2007/05/02 11:22:08 fcrossen Exp $
+ * $Id: edit-2.php,v 1.28 2007/12/10 22:56:23 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -25,6 +25,7 @@ $rec['company_name'] = $_POST['company_name'];
 $rec['legal_name'] = $_POST['legal_name'];
 $rec['company_code'] = $_POST['company_code'];
 $rec['crm_status_id'] = $_POST['crm_status_id'];
+if ($rec['crm_status_id'] < 1) {$rec['crm_status_id'] = 1; }
 $rec['company_source_id'] = $_POST['company_source_id'];
 $rec['industry_id'] = $_POST['industry_id'];
 $rec['rating_id'] = $_POST['rating_id'];
@@ -43,9 +44,11 @@ $rec['custom2'] = $_POST['custom2'];
 $rec['custom3'] = $_POST['custom3'];
 $rec['custom4'] = $_POST['custom4'];
 $rec['account_status_id'] = $_POST['account_status_id'];
+if ($rec['account_status_id'] < 1) {$rec['account_status_id'] = 1; }
 $rec['tax_id'] = $_POST['tax_id'];
 $rec['credit_limit'] = $_POST['credit_limit'];
 $rec['rating_id'] = $_POST['rating_id'];
+if ($rec['rating_id'] < 1) {$rec['rating_id'] = 1; }
 $rec['terms'] = $_POST['terms'];
 $rec['extref1'] = $_POST['extref1'];
 $rec['extref2'] = $_POST['extref2'];
@@ -97,6 +100,9 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.28  2007/12/10 22:56:23  gpowers
+ * - added default values for crm_status_id, account_status_id and rating_id
+ *
  * Revision 1.27  2007/05/02 11:22:08  fcrossen
  * - call to clean_phone_number_for_db() moved to API functions
  *
