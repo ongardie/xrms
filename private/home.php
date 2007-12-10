@@ -5,7 +5,7 @@
  * @todo make the user's home page configurable,
  *       to create a 'personal dashboard'
  *
- * $Id: home.php,v 1.75 2007/12/10 17:06:00 gpowers Exp $
+ * $Id: home.php,v 1.76 2007/12/10 21:33:20 gpowers Exp $
  */
 
 // include the common files
@@ -229,6 +229,9 @@ start_page($page_title,true,$msg);
             <!-- notes //-->
             <?php if ($enable_notes_sidebar) {echo $note_rows;} ?>
 
+        	<!-- rss feeds //-->
+            <?php include("../rss/sidebar.php"); ?>
+
         <!-- sidebar plugins //-->
         <?php echo $sidebar_rows; ?>
 
@@ -241,6 +244,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.76  2007/12/10 21:33:20  gpowers
+ * - added a list of available XRMS RSS feeds to sidebar
+ *
  * Revision 1.75  2007/12/10 17:06:00  gpowers
  * - Added 'private_sidebar_top' hook
  * - Made sidebar box display configurable
