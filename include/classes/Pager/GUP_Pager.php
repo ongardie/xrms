@@ -40,7 +40,7 @@
  *
  * @example GUP_Pager.doc.7.php Another pager example showing Caching
  *
- * $Id: GUP_Pager.php,v 1.50 2007/03/14 14:18:57 braverock Exp $
+ * $Id: GUP_Pager.php,v 1.51 2007/12/10 17:41:12 gpowers Exp $
  */
 
 
@@ -158,6 +158,8 @@ class GUP_Pager {
         $this->hideCaption    = (($hideCaption) ? $hideCaption : _("Hide"));
         $this->form_id         = $form_id;
         $this->pager_id        = $pager_id;
+        // Save pager_id as SESSION var for Google Spreadsheet export plugin
+        $_SESSION['pager_id'] = $pager_id;
         $this->column_info     = $column_info;
         $this->use_cached    = $use_cached;
          $this->page            = _('Page');
@@ -676,8 +678,9 @@ class GUP_Pager {
                     // don't clobber any existing onload functions
                     var oldEvt = window.onload;
                     window.onload = function() {
-                        if (oldEvt) oldEvt();
-
+                        // clobber away, 'cause the old way don't work
+                        // with the Export Pager to Google Spreadsheet plugin
+                        // if (oldEvt) oldEvt();
 
                         var oldAction = document.{$this->form_id}.action;
 
@@ -1272,6 +1275,11 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.51  2007/12/10 17:41:12  gpowers
+ * - Changes for Export Pager to Google Spreadsheet
+ * - saved 'pager_id' as SESSION var
+ * - clobbered any other "on load" events. (Works for me.)
+ *
  * Revision 1.50  2007/03/14 14:18:57  braverock
  * - add 'align' option to columns array for simple alignment
  *
