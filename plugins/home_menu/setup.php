@@ -45,6 +45,14 @@ $menu = "
                     <a href=\"../cases/some.php\">" . _("List Cases") . "</a>
                 </td>
             </tr>
+            <tr>
+                <td class=widget_content_large>
+                    <a href=\"../reports/activitytimes.php?user_id=" . $session_user_id . "\">" . _("Timesheets") . "</a>
+                </td>
+                <td class=widget_content_large>
+                    <a href=\"../reports/audit-items.php\">" . _("Audit Log") . "</a>
+                </td>
+            </tr>
        </table>
 ";
 
