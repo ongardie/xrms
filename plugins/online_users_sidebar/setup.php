@@ -24,19 +24,19 @@ function online_users_sidebar() {
     $data =  '
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=4>'
-                . _("Online Users")
-                . '</td>
+                <td class=widget_header colspan=4>
+                    ' . _("Online Users") . '
+                </td>
             </tr>
           <tr>
                 <td class=widget_label>
-                    Name
+                    ' . _("Name") . '
                 </td>
                 <td class=widget_label>
-                    Approx. Location	
+                    ' . _("Approx. Location") . '	
                 </td>
                 <td class=widget_label>
-                    Idle Time
+                    ' . _("Idle Time") . '
                 </td>
             </tr>';
 
