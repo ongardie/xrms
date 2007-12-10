@@ -1,8 +1,8 @@
 /**
- * $Id: editor_template_src.js,v 1.1 2006/12/10 15:45:18 jnhayart Exp $
+ * $Id: editor_template_src.js,v 1.2 2007/12/10 16:51:22 gpowers Exp $
  *
  * @author Moxiecode
- * @copyright Copyright © 2004-2006, Moxiecode Systems AB, All rights reserved.
+ * @copyright Copyright © 2004-2007, Moxiecode Systems AB, All rights reserved.
  */
 
 var TinyMCE_SimpleTheme = {

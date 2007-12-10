@@ -1,8 +1,8 @@
 /**
- * $Id: editor_plugin_src.js,v 1.1 2006/12/14 18:39:55 jnhayart Exp $
+ * $Id: editor_plugin_src.js,v 1.2 2007/12/10 16:51:23 gpowers Exp $
  *
  * @author Moxiecode
- * @copyright Copyright © 2004-2006, Moxiecode Systems AB, All rights reserved.
+ * @copyright Copyright © 2004-2007, Moxiecode Systems AB, All rights reserved.
  */
 
 /* Import plugin specific language pack */
@@ -14,7 +14,7 @@ var TinyMCE_LayerPlugin = {
 			longname : 'Layer',
 			author : 'Moxiecode Systems AB',
 			authorurl : 'http://tinymce.moxiecode.com',
-			infourl : 'http://tinymce.moxiecode.com/tinymce/docs/plugin_layer.html',
+			infourl : 'http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/layer',
 			version : tinyMCE.majorVersion + "." + tinyMCE.minorVersion
 		};
 	},
