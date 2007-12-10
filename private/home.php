@@ -1,12 +1,11 @@
 <?php
 /**
- * The user's personal home page.
+ * User's personal home page.
  *
  * @todo make the user's home page configurable,
  *       to create a 'personal dashboard'
  *
- *
- * $Id: home.php,v 1.74 2007/02/05 17:28:12 fcrossen Exp $
+ * $Id: home.php,v 1.75 2007/12/10 17:06:00 gpowers Exp $
  */
 
 // include the common files
@@ -33,6 +32,12 @@ require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once('../activities/activities-widget.php');
 require_once('../activities/activities-pager-functions.php');
 
+// SIDEBAR CONFIGURATION
+$enable_opportunity_sidebar	=	1;
+$enable_cases_sidebar		=	1;
+$enable_files_sidebar		=	1;
+$enable_notes_sidebar		=	1;
+
 //connect to the database
 $con = @get_xrms_dbconnection();
 if (!$con->_connectionID) {
@@ -51,7 +56,6 @@ if (!$rst) {
     Header("Location: $redirect");
     exit;
 }
-
 
 //see if we are logged in
 $session_user_id = session_check();
@@ -94,6 +98,13 @@ if (stristr($_SERVER['HTTP_USER_AGENT'], "MMP")) {
 
 /*********************************/
 /*** Include the sidebar boxes ***/
+
+//call the top sidebar hook
+if ( !isset($sidebar_top) ) {
+  $sidebar_top = '';
+}
+$sidebar_top = concat_hook_function('private_sidebar_top', $sidebar_top);
+
 //include the Cases sidebar
 $case_sidebar_default_columns= array('case_name', 'company', 'priority','due');
 $case_limit_sql = "and cases.user_id = $session_user_id";
@@ -193,6 +204,9 @@ start_page($page_title,true,$msg);
 
         <!-- right column //-->
     <div id="Sidebar">
+        <!-- sidebar plugins //-->
+        <?php echo $sidebar_top; ?>
+        
         <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header><?php echo _("Documentation"); ?></td>
@@ -204,16 +218,16 @@ start_page($page_title,true,$msg);
         </table>
 
             <!-- opportunities //-->
-            <?php  echo $opportunity_rows; ?>
+            <?php if ($enable_opportunity_sidebar) {echo $opportunity_rows;} ?>
 
             <!-- cases //-->
-            <?php  echo $case_rows; ?>
+            <?php if ($enable_cases_sidebar) {echo $case_rows;} ?>
 
             <!-- files //-->
-            <?php  echo $file_rows; ?>
+            <?php if ($enable_files_sidebar) {echo $file_rows;} ?>
 
             <!-- notes //-->
-            <?php  echo $note_rows; ?>
+            <?php if ($enable_notes_sidebar) {echo $note_rows;} ?>
 
         <!-- sidebar plugins //-->
         <?php echo $sidebar_rows; ?>
@@ -227,6 +241,10 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.75  2007/12/10 17:06:00  gpowers
+ * - Added 'private_sidebar_top' hook
+ * - Made sidebar box display configurable
+ *
  * Revision 1.74  2007/02/05 17:28:12  fcrossen
  *  - changed sidebar and front splash hooks to concat_hook_function to allow multiple plugins to register against each hook
  *
