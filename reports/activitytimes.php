@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: activitytimes.php,v 1.9 2006/01/02 23:46:52 vanmer Exp $
+ * $Id: activitytimes.php,v 1.10 2007/12/10 23:27:11 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -17,10 +17,10 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
-$starting = $_POST['starting'];
-$ending = $_POST['ending'];
-$user_id = $_POST['user_id'];
-$only_show_completed = $_POST['only_show_completed'];
+$starting = $_GET['starting'];
+$ending = $_GET['ending'];
+$user_id = $_GET['user_id'];
+$only_show_completed = $_GET['only_show_completed'];
 
 //echo ">>$only_show_completed";
 
@@ -42,7 +42,7 @@ $con = get_xrms_dbconnection();
 $user_menu = get_user_menu($con, $user_id);
 ?>
 
-<form action="activitytimes.php" method=post>
+<form action="activitytimes.php" method=get>
 <table>
     <tr>
         <th><?php echo _("Start"); ?></th>
@@ -177,6 +177,9 @@ function formatSeconds( $diff ) {
 
 /**
  * $Log: activitytimes.php,v $
+ * Revision 1.10  2007/12/10 23:27:11  gpowers
+ * - changed form method to get
+ *
  * Revision 1.9  2006/01/02 23:46:52  vanmer
  * - changed to use centralized dbconnection function
  *
