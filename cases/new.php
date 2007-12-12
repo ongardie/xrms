@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.24 2007/01/09 02:39:17 ongardie Exp $
+ * $Id: new.php,v 1.25 2007/12/12 17:50:49 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -134,7 +134,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Case Title"); ?></td>
-                <td class=widget_content_form_element><input type=text size=40 name=case_title id=case_title value="<?php echo $case_title ?>"> <?php  echo $required_indicator ?></td>
+                <td class=widget_content_form_element><input type=text size=40 name=case_title id=case_title value="<?php echo htmlspecialchars(stripslashes($case_title)) ?>"> <?php  echo $required_indicator ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Division"); ?></td>
@@ -239,6 +239,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.25  2007/12/12 17:50:49  gpowers
+ * - changed to allow quotes in casse titles
+ *
  * Revision 1.24  2007/01/09 02:39:17  ongardie
  * - If there's no opportunity status available for this opportunity type, point user to administration.
  * - Improved similar functionality for cases also by passing acase_type_id, aopportunity_type_id in GET requests.
