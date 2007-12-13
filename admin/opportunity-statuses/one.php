@@ -4,7 +4,7 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.22 2007/12/13 00:57:53 randym56 Exp $
+ * $Id: one.php,v 1.23 2007/12/13 17:06:09 randym56 Exp $
  */
 
 //include required common files
@@ -164,6 +164,9 @@ start_page($page_title);
                 </select>
                 </td>
             </tr>
+             <tr>
+              <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>">
+             </tr>
 
         </table>
         </form>
@@ -260,6 +263,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.23  2007/12/13 17:06:09  randym56
+ * Bug fix to add back Save button
+ *
  * Revision 1.22  2007/12/13 00:57:53  randym56
  * Removed code that is still under development for workflow goto functions
  *
