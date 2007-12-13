@@ -4,7 +4,7 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.21 2007/11/14 22:36:36 randym56 Exp $
+ * $Id: one.php,v 1.22 2007/12/13 00:57:53 randym56 Exp $
  */
 
 //include required common files
@@ -39,8 +39,6 @@ if ($rst) {
     $opportunity_status_pretty_plural = $rst->fields['opportunity_status_pretty_plural'];
     $opportunity_status_display_html = $rst->fields['opportunity_status_display_html'];
     $opportunity_status_long_desc = $rst->fields['opportunity_status_long_desc'];
-        $status_workflow_type = $rst->fields['status_workflow_type'];
-        $workflow_goto = $rst->fields['workflow_goto'];
     $rst->close();
 }
 
@@ -116,18 +114,6 @@ $rst = $con->execute($sql);
 $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
 $rst->close();
 
-//get Opportunity Statuses menu for drop down
-$sql = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status = 'a'";
-$rst = $con->execute($sql);
-$opportunity_status_menu = $rst->getmenu2('workflow_goto', $workflow_goto, true);
-$rst->close();
-
-//get workflow_goto list menu
-//$sql = "select opportunity_status_pretty_name, opportunity_status_short_name from opportunity_statuses where opportunity_status_record_status = 'a'";
-//$rst = $con->execute($sql);
-//$workflow_goto_menu = $rst->getmenu2('opportunity_status_short_name', $workflow_goto, true);
-//$rst->close();
-
 $con->close();
 
 //get role menu
@@ -177,26 +163,6 @@ start_page($page_title);
                     <option value="l" <?php if ($status_open_indicator == "l") {print " selected ";} ?>><?php echo _("Closed/Lost"); ?>
                 </select>
                 </td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Workflow Resolution Type"); ?></td>
-                <td class=widget_content_form_element>
-                <select name="status_workflow_type">
-                    <option value="0" <?php if (($status_workflow_type == 0) or ($status_workflow_type == null)) {print " selected ";} ?>><?php echo _("End"); ?>
-                    <option value="1" <?php if ($status_workflow_type == 1) {print " selected ";} ?>><?php echo _("Repeat"); ?>
-                    <option value="2" <?php if ($status_workflow_type == 2) {print " selected ";} ?>><?php echo _("GoTo"); ?>
-                </select>
-                </td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Workflow GoTo"); ?></td>
-                                        <td class=widget_content_form_element><?php  echo $opportunity_status_menu; ?> (Used only if "Go To" selected in Workflow Resolution Type field.)</td>
-            </tr>
-
-            <tr>
-              <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"> 
-                  <br>
-                NOTE: The opportunity defaults as a &quot;delta-day&quot; event unless you enter a date in any of the Activity Workflow items below. You must leave the date field blank in ALL records to maintain a &quot;delta-day&quot; opportunity.&nbsp; It is not possible to combine &quot;delta-day&quot; and &quot;calendar&quot; driven workflow. To set this opportunity as a calendar workflow, you simply put 0 in the Duration column first. </td>
             </tr>
 
         </table>
@@ -294,6 +260,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.22  2007/12/13 00:57:53  randym56
+ * Removed code that is still under development for workflow goto functions
+ *
  * Revision 1.21  2007/11/14 22:36:36  randym56
  * Removed confusing terms
  *
