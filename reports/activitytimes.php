@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: activitytimes.php,v 1.11 2007/12/10 23:39:53 gpowers Exp $
+ * $Id: activitytimes.php,v 1.12 2007/12/29 18:21:57 randym56 Exp $
  */
 require_once('../include-locations.inc');
 
@@ -17,16 +17,16 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
-$starting = $_GET['starting'];
-$ending = $_GET['ending'];
-$user_id = $_GET['user_id'];
-$only_show_completed = $_GET['only_show_completed'];
+$starting = isset($_GET['starting']) ? $_GET['starting'] : $_POST['starting'];
+$ending = isset($_GET['ending']) ? $_GET['ending'] : $_POST['ending'];
+$user_id = isset($_GET['user_id']) ? $_GET['user_id'] : $_POST['user_id'];
+$only_show_completed = isset($_GET['only_show_completed']) ? $_GET['only_show_completed'] : $_POST['only_show_completed'];
 
 //echo ">>$only_show_completed";
 
 if (strlen($only_show_completed) > 0) {
-	$checked_only_show_completed = "checked";
-	$only_show_completed = true;
+        $checked_only_show_completed = "checked";
+        $only_show_completed = true;
 }
 else $only_show_completed = false;
 
@@ -42,7 +42,7 @@ $con = get_xrms_dbconnection();
 $user_menu = get_user_menu($con, $user_id);
 ?>
 
-<form action="activitytimes.php" method=get>
+<form action="activitytimes.php" method=post>
 <table>
     <tr>
         <th><?php echo _("Start"); ?></th>
@@ -84,10 +84,10 @@ if ($user_id) {
     $end_date =  "$ending 23:23:59";
 
     $sql2 = "SELECT * from activities
-    		where activity_record_status = 'a'
-    		and user_id = $user_id 
-    		and scheduled_at between " . $con->qstr($start_date, get_magic_quotes_gpc()) . "
-    		and " . $con->qstr($end_date, get_magic_quotes_gpc());
+                where activity_record_status = 'a'
+                and user_id = $user_id 
+                and scheduled_at between " . $con->qstr($start_date, get_magic_quotes_gpc()) . "
+                and " . $con->qstr($end_date, get_magic_quotes_gpc());
     if ($only_show_completed) $sql2 .= " and activity_status <> 'o' ";
     $sql2 .= " order by scheduled_at ";
     $rst = $con->execute($sql2);
@@ -187,6 +187,9 @@ function formatSeconds( $diff ) {
 
 /**
  * $Log: activitytimes.php,v $
+ * Revision 1.12  2007/12/29 18:21:57  randym56
+ * Changed to use either GET or POST statements
+ *
  * Revision 1.11  2007/12/10 23:39:53  gpowers
  * - removed total seconds
  *
