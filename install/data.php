@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.44 2007/12/10 23:22:10 gpowers Exp $
+ * $Id: data.php,v 1.45 2007/12/29 16:43:24 randym56 Exp $
  */
 
 /**
@@ -2884,9 +2884,9 @@ function user_preferences_db_data($con) {
 
     $pager_columns_data=get_user_preference_type($con, 'pager_columns');
     if ($pager_columns_data AND !$pager_columns_data['skip_system_edit_flag']) {
-	$sql = "UPDATE user_preference_types SET skip_system_edit_flag=1 WHERE user_preference_type_id=".$pager_columns_data['user_preference_type_id'];
-	$rst=$con->execute($sql);
-	if (!$rst) db_error_handler($con, $sql);
+        $sql = "UPDATE user_preference_types SET skip_system_edit_flag=1 WHERE user_preference_type_id=".$pager_columns_data['user_preference_type_id'];
+        $rst=$con->execute($sql);
+        if (!$rst) db_error_handler($con, $sql);
     }
 
     $s=_("Undefined Company Method");
@@ -2909,11 +2909,11 @@ function user_preferences_db_data($con) {
     $html_activity_notes=add_user_preference_type($con, 'html_activity_notes', "Allow HTML Activity Notes", "Use a HTML Editor on Activity Notes", false, false, 'select');
     add_preference_option($con, $html_activity_notes, 'y', 'Yes');
     add_preference_option($con, $html_activity_notes, 'n', 'No');
-     $ret=get_admin_preference($con, $undefined_company_method);
+    $ret=get_admin_preference($con, $html_activity_notes);
     if (!$ret) {
-        set_admin_preference($con, $undefined_company_method, 'n');
+        set_admin_preference($con, $html_activity_notes, 'n');
     }
-    
+
     
     
 
@@ -2937,6 +2937,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.45  2007/12/29 16:43:24  randym56
+ * Bug fix on lines 2912 & 1914 was $undefined_company_method - changed to $html_activity_notes
+ *
  * Revision 1.44  2007/12/10 23:22:10  gpowers
  * - added system preference for HTML activity notes
  *
