@@ -32,11 +32,11 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.21 $
+   * @version $Revision: 1.22 $
    * @copyright copyright information
    * @license GNU General Public Licence
    *
-   * $Id: SMTPs.php,v 1.21 2007/11/20 01:32:32 randym56 Exp $
+   * $Id: SMTPs.php,v 1.22 2007/12/29 15:24:23 randym56 Exp $
    *
    **/
 
@@ -2368,14 +2368,19 @@ class SMTPs
     */
     function getErrors()
     {
-        $_errMsg = array();
+        $_errMsg = 'No Errors Generated.';
 
-        foreach ( $this->_smtpsErrors as $_err => $_info )
+        if ( $this->_smtpsErrors )
         {
-            $_errMsg[] = 'Error [' . $_info['num'] .']: '. $_info['msg'];
+            $_errMsg = '';
+
+            foreach ( $this->_smtpsErrors as $_err => $_info )
+            {
+                $_errMsg .= 'Error [' . $_info['num'] .']: '. $_info['msg'];
+            }
         }
 
-        return implode("\n", $_errMsg);
+        return $_errMsg;
     }
 
 
@@ -2388,6 +2393,9 @@ class SMTPs
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.22  2007/12/29 15:24:23  randym56
+  * Fixed bug found in "function getErrors()"
+  *
   * Revision 1.21  2007/11/20 01:32:32  randym56
   * Line 1861 caused faliures - put back the old code to make it work
   *
