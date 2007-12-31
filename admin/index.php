@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.42 2007/12/10 18:45:01 gpowers Exp $
+ * $Id: index.php,v 1.43 2007/12/31 19:05:52 randym56 Exp $
  */
 
 //include required stuff
@@ -203,6 +203,11 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content>
+                    <a href="category-scopes/some.php"><?php echo _("Category Scopes"); ?></a>
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content>
                     <a href="company-sources/some.php"><?php echo _("Company Sources"); ?></a>
                 </td>
             </tr>
@@ -271,6 +276,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.43  2007/12/31 19:05:52  randym56
+ * Function to add/edit Category Scopes table
+ *
  * Revision 1.42  2007/12/10 18:45:01  gpowers
  * - added 'system_monitoring' plugin hook
  * - changed "System Administration" to "Database Administration"
