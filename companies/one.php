@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.149 2007/10/30 02:35:07 randym56 Exp $
+ * $Id: one.php,v 1.150 2008/01/26 20:04:42 randym56 Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -423,6 +423,7 @@ if ( !isset($bottom_rows) ) {
 }
 //call the sidebar hook
 $bottom_rows = do_hook_function('company_content_bottom', $bottom_rows);
+$bottom_rows .= do_hook_function('company_content_bottom2', $bottom_rows);
 if ($division_id) {
     // add division sidebars
     $bottom_rows .= do_hook_function('company_division_bottom', $bottom_rows);
@@ -796,6 +797,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.150  2008/01/26 20:04:42  randym56
+ * change company_content_bottom to company_content_bottom2.
+ * allows for extra_activity_widget to work in conjunction with this plugin
+ *
  * Revision 1.149  2007/10/30 02:35:07  randym56
  * - Changed "Mail Merge" to be "eMail Merge" to separate from "Snail Mail Merge"
  *

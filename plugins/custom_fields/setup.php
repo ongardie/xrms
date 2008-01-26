@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2004 The XRMS Project Team
  *
- * $Id: setup.php,v 1.7 2006/07/30 09:19:29 jnhayart Exp $
+ * $Id: setup.php,v 1.8 2008/01/26 20:04:17 randym56 Exp $
  */
 
 
@@ -44,7 +44,7 @@ function xrms_plugin_init_custom_fields () {
       = 'cf_private_sidebar_bottom';
     $xrms_plugin_hooks['custom_fields_sidebar_bottom']['custom_fields']
       = 'cf_custom_fields_sidebar_bottom';
-    $xrms_plugin_hooks['company_content_bottom']['custom_fields']
+    $xrms_plugin_hooks['company_content_bottom2']['custom_fields']
       = 'cf_company_content_bottom';
     $xrms_plugin_hooks['plugin_admin']['custom_fields'] = 'custom_fields_setup';
     $xrms_plugin_hooks['xrms_install']['custom_fields'] = 'custom_fields_install';
@@ -191,6 +191,10 @@ function cf_opportunity_inline_edit_2 () {
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.8  2008/01/26 20:04:17  randym56
+ * change company_content_bottom to company_content_bottom2.
+ * allows for extra_activity_widget to work in conjunction with this plugin
+ *
  * Revision 1.7  2006/07/30 09:19:29  jnhayart
  * Modif plugin for add customs fields in oppotunities inline
  * add new hook in setup for this purpose
