@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @todo: Active companies should always have active addresses
  *
- * $Id: data_clean.php,v 1.20 2007/11/18 19:45:35 randym56 Exp $
+ * $Id: data_clean.php,v 1.21 2008/01/29 21:17:39 gpowers Exp $
  */
 
 // where do we include from
@@ -383,6 +383,10 @@ $rst = $con->execute($sql);
 $sql = "UPDATE addresses SET address_body = CONCAT(line1,'\n',city,', ',province,' ',postal_code) WHERE line2 IS NULL AND (CHAR_LENGTH(address_body) < 1 OR CHAR_LENGTH(address_body) IS NULL)";
 $rst = $con->execute($sql);
 
+//Make sure each address has a name
+$sql = "update addresses set address_name = 'Main' where (address_name IS NULL)";
+$rst = $con->execute($sql);
+
 //close the database connection, because we don't need it anymore
 $con->close();
 $page_title = _("Database Cleanup Complete");
@@ -402,6 +406,9 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.21  2008/01/29 21:17:39  gpowers
+ * - Make sure each address has a name
+ *
  * Revision 1.20  2007/11/18 19:45:35  randym56
  * Add update to populate address_body field from primary address information if blank or null
  *
