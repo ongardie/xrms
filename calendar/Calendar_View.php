@@ -4,7 +4,7 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.10 2006/10/01 10:54:01 braverock Exp $
+ * $Id: Calendar_View.php,v 1.11 2008/01/29 19:48:10 gpowers Exp $
  */
 
 global $include_directory;
@@ -74,14 +74,14 @@ class CalendarView {
             }
         }
 
-        //echo "calendar date is $calendar_start_date";
+        // echo "calendar date is $calendar_start_date";
         $this->con                  = $con;
         $this->form_name            = $form_name;
         $this->calendar_date_field  = $calendar_date_field;
         $this->start_date           = $calendar_start_date;
         $this->calendar_type        = $calendar_type;
         $this->display_mode         = $calendar_display_mode;
-
+   
     }
 
     /**
@@ -289,8 +289,8 @@ function Render($activity_data) {
             $start_time = strtotime(date('Y-m-d', strtotime($this->start_date)) . ' ' . $start_hour);
             $end_time = strtotime(date('Y-m-d', strtotime($this->start_date)) . ' ' . $end_hour);
 
-            //echo "start time is $start_time aka " . date('Y-m-d H:i', $start_time) . "<br>";
-            //echo "end time is $end_time aka " . date('Y-m-d H:i', $end_time) . "<br>";
+            // echo "start time is $start_time aka " . date('Y-m-d H:i', $start_time) . "<br>";
+            // echo "end time is $end_time aka " . date('Y-m-d H:i', $end_time) . "<br>";
 
             $days_header .= '<tr>';
             $days_header .= '<td class=widget_content_alt>&nbsp;</td>';
@@ -351,7 +351,7 @@ function Render($activity_data) {
             for($i=0; $i<(($end_time - $start_time)/($slice_length_minutes * 60)); $i++) {
 
                 $current_time = $start_time + $i*$slice_length_minutes*60;
-                //echo date('Y-m-d H:i', $current_time) . '<br>';
+                // echo date('Y-m-d H:i', $current_time) . '<br>';
                 $widget .= '<tr>';
 
                 $widget .= '<td class=widget_content_alt>' . date('H:i', $current_time) . '</td>';
@@ -438,7 +438,7 @@ function Render($activity_data) {
                 $widget .= "</tr>\n";
             }
 
-            $display_date = date('M d', strtotime($this->start_date)) . ' - ' . date('M d', strtotime($this->start_date) + 6 * 86400);
+            $display_date = date('M d, Y', strtotime($this->start_date)) . ' - ' . date('M d, Y', strtotime($this->start_date) + 6 * 86400);
 
             $calendar_nav = "
             <tr>
@@ -662,6 +662,9 @@ function GetCalendarSQLOffset() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.11  2008/01/29 19:48:10  gpowers
+* - added year to calendar view by week to reduce user confusion
+*
 * Revision 1.10  2006/10/01 10:54:01  braverock
 * - localize unlocalized strings
 * - standardize date/time display
