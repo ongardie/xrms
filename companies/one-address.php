@@ -2,7 +2,7 @@
 /**
  * Edit address for a company or contact
  *
- * $Id: one-address.php,v 1.15 2007/05/15 23:17:30 ongardie Exp $
+ * $Id: one-address.php,v 1.16 2008/01/29 22:38:13 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -82,7 +82,7 @@ getGlobalVar($msg, 'msg');
                                   'country_id' => _("Country"),
                                   'on_what_id' => _("Company"),
                                   'address_type' => _("Address Type"),
-                                  'address_body' => _("Non-Standard Address"),
+                                  'address_body' => _("Formatted Address"),
                                   'use_pretty_address' => _("Use Non-Standard Address"),
                                   'sort_order' => _("Sort Order")));
 
@@ -233,6 +233,9 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.16  2008/01/29 22:38:13  gpowers
+ * - updated for consistancy with companies/addresses.php
+ *
  * Revision 1.15  2007/05/15 23:17:30  ongardie
  * - Addresses now associate with on_what_table, on_what_id instead of company_id.
  *
