@@ -1,166 +1,184 @@
 <?php
 /**
-*
-* Log an email message
-*
-* $Id: logger.php,v 1.3 2006/01/02 23:02:14 vanmer Exp $
-*/
+ *
+ * Log an email message
+ *
+ * $Id: logger.php,v 1.4 2008/01/30 21:31:29 gpowers Exp $
+ */
 
-require_once('include-locations-location.inc');
+// include files
+require_once('/var/www/xrms/include-locations.inc');
 
 require_once($include_directory . 'vars.php');
-require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'utils-contacts.php');
+require_once($include_directory . 'utils-activities.php');
+//require_once 'Console/Getopt.php';
+require_once '/usr/share/php/Zend/Mail/Storage/Pop3.php';
 
-require_once 'Console/Getopt.php';
-
-$args = Console_Getopt::readPHPArgv();
-
+// open database connection
 $con = get_xrms_dbconnection();
-// $con->debug = 1;
+$con->debug = 0;
 
-$message = file_get_contents("php://stdin");
-$message_sql = $con->qstr($message);
-preg_match("/Subject: (.*)\n/i", $message, $subject);
-$subject = "Email: " . $subject[1];
-$subject_sql = $con->qstr($subject);
+$session_user_id = 1;
 
-switch ( $args[1] ) {
-     case '-to':
-       $activity_type_id = 3; # "Email To"
-       $addr = $args[2];
-     break;
-     case '-from':
-       $activity_type_id = 4; # "Email From"
-       $addr = $args[2];
-     break;
-     case '-from_in_msg':
-       $activity_type_id = 4; # "Email From"
-       preg_match("/From: (.*)\n/i", $message, $addr);
-       $addr = $addr[1];
-       preg_match("/<([^>]+)>/", $addr, $addr_from);
-       $long_addr = $addr_from[1];
-       if ($long_addr != "") $addr = $long_addr;
-       $addr_sql = $con->qstr($addr);
-     break;
-   }
+// putenv("TZ=America/Chicago");
+    
+$email_host = '';
+$email_addr = '';
+$email_pass = '';
 
-preg_match("/Date: (.*)\n/i", $message, $date);
-$date= $date[1];
+$mail = new Zend_Mail_Storage_Pop3(array('host'     => $email_host,
+                                         'user'     => $email_addr,
+                                         'password' => $email_pass));
 
-$addr_sql = $con->qstr($addr);
+add_audit_item($con, $session_user_id, 'read', 'email_messages', $mail->countMessages(), 1);
+
+foreach ($mail as $messageNum => $message) {
+    $from = $message->from;
+    $from_email = preg_replace('/[^<]*<([^>]+)>.*/','$1',$from);
+    $subject = $message->subject;
+    $tos = $message->to;
+    $date = date("Y-m-d h:i m");
+
+echo "<h2>Processing Email</h2>";
+echo "To: <pre>" . $tos .  "</pre><br />";
+echo "From: <pre>" . $from . "</pre><br />";
+echo "Date: " . $date .  "<br />";
+echo "Subject: " . $subject . "<br />";
+
+    
+// output first text/html part
+    $foundPart = null;
+
+    foreach ($mail->getMessage($messageNum) as $part) {
+        // try {
+            if (strtok($part->contentType, ';') == 'text/plain') {
+                $foundPart = $part;
+                break;
+            }
+            if (strtok($part->contentType, ';') == 'text/html') {
+                $HTMLfoundPart = $part;
+                break;
+            }
+        /*} catch (Zend_Mail_Exception $e) {
+           $error=1;
+        }*/
+    }
+
+    if (strlen($HTMLfoundPart)>0) {
+        $body = $HTMLfoundPart;
+    } elseif (strlen($foundPart)>0) {
+        $body = $foundPart;
+    } else {
+        $body = "UNABLE TO PROCESS MESSAGE!";
+    }
+
+// find the owner
+$sql = "select  user_id from users
+        where email like " . $con->qstr($from_email) . " limit 1";
+$rst = $con->execute($sql);
+
+if (!$rst->EOF) {
+    $activity_data['user_id'] = $rst->fields['user_id'];
+} else {
+    $activity_data['user_id'] = 1;
+}
 
 $sql = "select  contact_id, company_id from contacts
-        where email like " . $addr_sql . " limit 1";
+        where email like " . $con->qstr($from_email) . " limit 1";
 $rst = $con->execute($sql);
 
-if ($rst) {
-    if (!$rst->EOF) {
-        $contact_id = $rst->fields['contact_id'];
-        $company_id = $rst->fields['company_id'];
-    } else {
-        $contact_id = 0; // gotta go somewhere...
-        $company_id = 0; // gotta go somewhere...
-    }
-}
-
-switch ( $args[3] ) {
-     case '-to':
-       $user = $args[4];
-     break;
-     case '-from':
-       $user = $args[4];
-     break;
-   }
-
-$user_sql = $con->qstr($user);
-
-$sql = "select user_id from users
-        where email like " . $user_sql . " limit 1";
-$rst = $con->execute($sql);
-
-if ($rst) {
-    $user_id = $rst->fields['user_id'];
+if (!$rst->EOF) {
+    $contact_id = $rst->fields['contact_id'];
+    $company_id = $rst->fields['company_id'];
 } else {
-    $user_id = 0; // gotta go somewhere...
+    $company_id = 1;
+    $contact_info['company_id'] = $company_id;
+    $contact_info['address_id'] = 1;
+    $contact_info['home_address_id'] = 1;
+    $contact_info['last_name'] = $addr_sql;
+    $contact_info['first_names'] = '(Email)';
+    $contact_info['email'] = $addr_sql;
+    $contact_info['email_status'] = 'a';
+
+    $new_contact = add_update_contact($con, $contact_info);
+    $contact_id  = $new_contact['contact_id'];
 }
 
-// for debugging:
-// echo "From: $addr\n contact_id: $contact_id\nTo: $user\nuser_id: $user_id\n\n";
+$activity_data['activity_type_id'] = 4; # "Email From"
+$activity_data['company_id'] = $company_id;
+$activity_data['scheduled_at'] = $date;
+$activity_data['end_at'] = $date;
 
-# set on_what_table
-$on_what_table = "activities";
 
-# set on_what_id
-$on_what_id = "";
+if (str_word_count($subject) > 0) {
+    $activity_data['activity_title'] = $subject;
+} else {
+    $activity_data['activity_title'] = _("No Subject");
+}
 
-# set on_what_status
-$on_what_status = "";
+$activity_data['contact_id'] = $contact_id;
+$activity_data['activity_status'] = 'o';
+//$activity_data['activity_description'] = $body;
 
-# set activity_title
-$activity_title = $subject_sql;
+preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $tos, $rcpts);
 
-# set activity description
-$activity_description = $message_sql;
+$activity_data['activity_description'] = $body;
+$activity_id = add_activity($con, $activity_data);
 
-# set entered_at time
-$entered_at = $con->DBTimeStamp(time());
+$i=0;
+while($one_to = $rcpts[0][$i]) {
+    // if ($one_to == $email_addr) next;
 
-# set entered_by
-$entered_by = $user_id;
+    $i++;
+    $to_sql = $con->qstr($one_to);
 
-# set last_modified_at time
-$last_modified_at = $con->DBTimeStamp(time());
+    $sql = "SELECT  contact_id, company_id
+            FROM contacts
+            WHERE email like " . $to_sql . " limit 1";
+    $rst = $con->execute($sql);
 
-# set last_modified_by
-$last_modified_by = $user_id;
+    if ($rst && (!$rst->EOF)) {
+        $contact_id = $rst->fields['contact_id'];
+    } else {
+$company_id = 1;
+$contact_info['company_id'] = 1;
+$contact_info['address_id'] = 1;
+$contact_info['home_address_id'] = 1;
+$contact_info['last_name'] = $one_to;
+$contact_info['first_names'] = '(Email)';
+$contact_info['email'] = $one_to;
+$contact_info['email_status'] = 'a';
 
-# set scheduled_at
-$scheduled_at =  $con->DBTimeStamp(strtotime($date));
+$new_contact = add_update_contact($con, $contact_info);
 
-# set ends_at
-$ends_at = $scheduled_at;
+$contact_id  = $new_contact['contact_id'];
+add_activity_participant($con, $activity_id, $contact_id);
+}
 
-# set completed_at
-$completed_at = $scheduled_at;
-
-# set activity_stauts
-$activity_status = "c"; # default to CLOSED status
-
-# set activity_record_status
-$activity_record_status = 'a';
-
-# make insert statment
-$insert = "INSERT INTO `activities` ( `activity_id` , `activity_type_id` , `user_id` , `company_id` , 
-`contact_id` , `on_what_table` , `on_what_id` , `on_what_status` , `activity_title` , `activity_description` , 
-`entered_at` , `entered_by` , `last_modified_at` , `last_modified_by` , `scheduled_at` , `ends_at` , 
-`completed_at` , `activity_status` , `activity_record_status` ) 
-VALUES ( '', '" . $activity_type_id . "', '" . $user_id . "', '" . $company_id . "', '" . $contact_id . "', '
-". $on_what_table . "', '" . $on_what_id . "', '" . $on_what_status . "', " . $activity_title . ", 
-" . $activity_description . ", " . $entered_at . ", '" . $entered_by . ", " . $last_modified_at . ", '
-" . $last_modified_by . "', " . $scheduled_at . ", " . $ends_at . ", " . $completed_at . ", '
-" . $activity_status . "', '" . $activity_record_status . "');";
-
-$rst = $con->execute($insert);
-
-// for debugging:
-// echo $insert . "\n";
-
+$mail->removeMessage($messageNum);
+}
+}
 $con->close();
 
 /**
-* $Log: logger.php,v $
-* Revision 1.3  2006/01/02 23:02:14  vanmer
-* - changed to use centralized dbconnection function
-*
-* Revision 1.2  2005/02/10 14:40:03  maulani
-* - Set last modified info when creating activities
-*
-* Revision 1.1  2004/11/16 00:04:37  gpowers
-* - email logging script (in development)
-*
-*
-*/
+ * $Log: logger.php,v $
+ * Revision 1.4  2008/01/30 21:31:29  gpowers
+ * - updated to use Zend Framework
+ * - still in development
+ *
+ * Revision 1.3  2006/01/02 23:02:14  vanmer
+ * - changed to use centralized dbconnection function
+ *
+ * Revision 1.2  2005/02/10 14:40:03  maulani
+ * - Set last modified info when creating activities
+ *
+ * Revision 1.1  2004/11/16 00:04:37  gpowers
+ * - email logging script (in development)
+ *
+ *
+ */
 ?>
