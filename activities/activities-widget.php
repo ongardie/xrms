@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.60 2007/10/30 02:31:38 randym56 Exp $
+* $Id: activities-widget.php,v 1.61 2008/01/30 21:08:41 gpowers Exp $
 */
 
 global $include_directory;
@@ -111,7 +111,7 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
         if('enable' == $search_enabled) {
             $search_terms = GetMiniSearchTerms($mini_search_widget_name, $search_terms);
         } else {
-            $caption .= ' &nbsp;<input type="button" class="button" onclick="document.getElementById(\'' . $mini_search_widget_name . '\').style.display=\'block\';" value="' . _('Filter Activities') . '">';
+            $caption .= '&nbsp;<input type="button" class="button" onclick="document.getElementById(\'' . $mini_search_widget_name . '\').style.display=\'block\';" value="' . _('Filter Activities') . '">';
         }
         if ($search_enabled!='enable') {
             $search_terms=$initial_search_terms;
@@ -539,7 +539,7 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
 
         //added by randym56 to enable hiding non-functional buttons
         $rst = $con->execute($activity_sql);
-        if ($rst->rowcount() > 0) {
+        if ((!$rst->EOF) && ($rst->rowcount() > 0)) {
                 $show_pager_footer_buttons = true;
                 } else $show_pager_footer_buttons = false;
         //added by randym56 to enable hiding non-functional buttons
@@ -560,7 +560,6 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
 
         if(is_array($default_sort)) {
             $pager->SetDefaultSortColumn($default_sort);
-
         }
         $pager->AddEndRows($endrows);
         $pager->SetCountSQL($count_sql);
@@ -846,13 +845,16 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4>
-
                     <table width=\"100%\" cellspacing=0 cellpadding=0 border=0>
-                    <tr><td class=widget_header align=left>
-                    ". _("Filter Activities") . "</td>
-                    <td class=widget_header align=right>
-                    $showhide_link
-                    </td></tr></table>
+                        <tr>
+                            <td class=widget_header align=left>
+                                ". _("Filter Activities") . "
+                            </td>
+                            <td class=widget_header align=right>
+                                $showhide_link
+                            </td>
+                       </tr>
+                   </table>
             </tr>
             <tr>
                 <td class=widget_label>" . _("Summary") . "</td>
@@ -940,6 +942,10 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.61  2008/01/30 21:08:41  gpowers
+* - added $rst check
+* - formatted HTML
+*
 * Revision 1.60  2007/10/30 02:31:38  randym56
 * - Changed "Mail Merge" to be "eMail Merge" to separate from "Snail Mail Merge"
 *
