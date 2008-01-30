@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: activitytimes.php,v 1.12 2007/12/29 18:21:57 randym56 Exp $
+ * $Id: activitytimes.php,v 1.13 2008/01/30 22:08:11 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -25,8 +25,8 @@ $only_show_completed = isset($_GET['only_show_completed']) ? $_GET['only_show_co
 //echo ">>$only_show_completed";
 
 if (strlen($only_show_completed) > 0) {
-        $checked_only_show_completed = "checked";
-        $only_show_completed = true;
+	$checked_only_show_completed = "checked";
+	$only_show_completed = true;
 }
 else $only_show_completed = false;
 
@@ -42,7 +42,7 @@ $con = get_xrms_dbconnection();
 $user_menu = get_user_menu($con, $user_id);
 ?>
 
-<form action="activitytimes.php" method=post>
+<form action="activitytimes.php" method=get>
 <table>
     <tr>
         <th><?php echo _("Start"); ?></th>
@@ -84,10 +84,10 @@ if ($user_id) {
     $end_date =  "$ending 23:23:59";
 
     $sql2 = "SELECT * from activities
-                where activity_record_status = 'a'
-                and user_id = $user_id 
-                and scheduled_at between " . $con->qstr($start_date, get_magic_quotes_gpc()) . "
-                and " . $con->qstr($end_date, get_magic_quotes_gpc());
+    		where activity_record_status = 'a'
+    		and user_id = $user_id 
+    		and scheduled_at between " . $con->qstr($start_date, get_magic_quotes_gpc()) . "
+    		and " . $con->qstr($end_date, get_magic_quotes_gpc());
     if ($only_show_completed) $sql2 .= " and activity_status <> 'o' ";
     $sql2 .= " order by scheduled_at ";
     $rst = $con->execute($sql2);
@@ -187,6 +187,9 @@ function formatSeconds( $diff ) {
 
 /**
  * $Log: activitytimes.php,v $
+ * Revision 1.13  2008/01/30 22:08:11  gpowers
+ * - changed to allow easier integration
+ *
  * Revision 1.12  2007/12/29 18:21:57  randym56
  * Changed to use either GET or POST statements
  *
