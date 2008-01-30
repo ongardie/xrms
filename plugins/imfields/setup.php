@@ -19,7 +19,7 @@
  * in another file.  It will improve the performance of the entire
  * system.
  *
- * $Id: setup.php,v 1.1 2005/09/25 05:54:55 vanmer Exp $
+ * $Id: setup.php,v 1.2 2008/01/30 21:50:57 gpowers Exp $
  */
 
 
@@ -34,7 +34,7 @@ $im_fields=array('aol_name'=> array ('name'=>_("AOL IM"), 'type'=>'aim'), 'yahoo
 */
 global $im_fields_urlformat;
 $im_fields_urlformat['msn']="javascript: openMsnSession('%n');";
-$im_fields_urlformat['yahoo']="ymsgr:sendim?%n\"><img border=0 src=\"http://opi.yahoo.com/online?u=%n&m=g&t=3\"";
+$im_fields_urlformat['yahoo']="ymsgr:sendim?%n";
 $im_fields_urlformat['aim']="aim:goim?screenname=%n";
 
 
@@ -177,6 +177,10 @@ function imfields_new_contact_process($contact_data) {
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.2  2008/01/30 21:50:57  gpowers
+ * - removed icons from yahoo IM.
+ * - they do not work as expected.
+ *
  * Revision 1.1  2005/09/25 05:54:55  vanmer
  * -Initial Revision of a plugin to handle IM fields for contacts, both display and update
  * - stores contact fields within contact table in XRMS for the time being
