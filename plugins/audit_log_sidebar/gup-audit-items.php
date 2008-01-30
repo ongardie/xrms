@@ -3,14 +3,8 @@
 // copyright 2007 Glenn Powers <glenn@net127.com>
  
 function gup_audit_items() {
-		require_once('../../include-locations.inc');
 
-require_once($include_directory . '/classes/Pager/GUP_Pager.php');
-require_once($include_directory . '/classes/Pager/Pager_Columns.php');
-
-global $http_site_root, $con;
-$user_id = 1;
-$company_id = $_GET['company_id'];
+global $http_site_root, $con, $session_user_id, $company_id;
 
 // $con->debug=1;
 
