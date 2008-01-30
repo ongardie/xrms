@@ -72,24 +72,28 @@ switch ($company_select_action) {
         $body_content.= _("Company").": <input type=text name=company_name>";
         $body_content.="<input type=hidden name=company_select_action  value='showCompanies'>";
         $body_content.="<input type=hidden name=return_url  value='$return_url'>";
-        $body_content.="<input type=submit class=button name=btNewContact value=\""._("Search") ."\">";
-        $body_content.="<input type=submit class=button name=btCancel value=\""._("Cancel") ."\">";
-        if ($noresults) {
+        $body_content.="<input type=button class=button name=btNewContact value=\""._("Search") ."\">";
+        $body_content.="<input type=button class=button name=btNewCompany onclick=\"javascript: location.href='../companies/new.php';\"   value=\""._("New Company") ."\">";
+        $body_content.="<input type=button class=button name=btNoCompany onclick=\"javascript: location.href='new.php?company_id=1';\" value=\"" . _("Create Contact without a Company") . "\">";
+        // $body_content.="<input type=submit class=button name=btCancel value=\""._("Cancel") ."\">";
+        /* if ($noresults) {
             $body_content .= '&nbsp;'._("or create a").'&nbsp;'.
-            '<input class=button type=button value="'._("New Company").'" onclick="javascript: location.href=\'../companies/new.php\'">';
-        }
+            '<input class=button type=button value="'._("").'" >';
+        } */
     break;
 }
+
+
 /* This is the main output of these pages.  This could eventually be made into a template which is included */
 start_page($header_text, true, $msg);
-        echo '<div id="Main">';
-        echo <<<TILLEND
+echo <<<TILLEND
+    <div id="Main">
         <div id="Content">
            <form action=new_contact_company_select.php method=POST>
             <table class=widget cellspacing=1>
                 <tr>
                     <td class=widget_header>
-                        $header_text
+                        $header_text                        
                     </td>
                 </tr>
                 <tr><td class=widget_content>
@@ -98,12 +102,15 @@ start_page($header_text, true, $msg);
              </table>
            </form>
          </div>
-         </div>
+     </div>
 TILLEND;
 end_page();
 
 /*
  * $Log: new_contact_company_select.php,v $
+ * Revision 1.9  2008/01/30 21:26:51  gpowers
+ * - added "
+ *
  * Revision 1.8  2006/03/25 00:31:29  ongardie
  * - Changed "Search for a company" to "Search for Company" because
  *   there are far more translations available, no supported languages dropped,
