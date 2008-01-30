@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @todo: Active companies should always have active addresses
  *
- * $Id: data_clean.php,v 1.23 2008/01/29 22:52:26 gpowers Exp $
+ * $Id: data_clean.php,v 1.24 2008/01/30 21:21:06 gpowers Exp $
  */
 
 // where do we include from
@@ -379,9 +379,9 @@ $rst = $con->execute($sql);
 
 //Make sure each address has a body
 $sql = "UPDATE addresses SET address_body = CONCAT(
-        IFNULL(line1,' '),IF(line1,' ','\n'),
-        IFNULL(line2,' '),IF(line2,' ','\n'),
-        IFNULL(city,' '),IF(city,' ',', '),
+        IFNULL(line1,' '),IF(CHAR_LENGTH(line1)<2,' ','\n'),
+        IFNULL(line2,' '),IF(CHAR_LENGTH(line2)<2,' ','\n'),
+        IFNULL(city,' '),IF(CHAR_LENGTH(city)<2,' ',', '),
         IFNULL(province,' '),' ',
         IFNULL(postal_code,' ')) 
         WHERE (CHAR_LENGTH(address_body) < 1 OR CHAR_LENGTH(address_body) IS NULL)";
@@ -410,6 +410,9 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.24  2008/01/30 21:21:06  gpowers
+ * - added CHAR_LENGTH checks to address body creation
+ *
  * Revision 1.23  2008/01/29 22:52:26  gpowers
  * - getting closer
  *
