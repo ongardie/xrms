@@ -1,6 +1,6 @@
        <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=4>
+                <td class=widget_header>
                     <?php echo _("RSS Feeds"); ?>
                   
                 </td>
@@ -31,7 +31,3 @@
                 </td>
             </tr>
         </table>
-
-        
-        
-        
