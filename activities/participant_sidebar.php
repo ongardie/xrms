@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: participant_sidebar.php,v 1.12 2006/04/28 16:48:51 braverock Exp $
+ * $Id: participant_sidebar.php,v 1.13 2008/01/30 21:18:24 gpowers Exp $
  */
 require_once($include_directory.'utils-activities.php');
 
@@ -46,6 +46,9 @@ function mailmergeParticipants(contacts) {
 
 
 $participant_block .= '<table class=widget cellspacing=1 width="100%">
+ <form action="' . $http_site_root . '/activities/new_activity_participant.php" method=get>
+    <input type=hidden name=activity_id value="' . $activity_id . '">
+    <input type=hidden name=return_url value="/activities/one.php?activity_id=' . $activity_id . '">
     <tr>
         <td class=widget_header colspan=5>'._("Activity Participants").'</td>
     </tr>'."\n";
@@ -75,9 +78,15 @@ if (count($contact_ids)>0) {
     $contacts=false;
 }
 
+global $http_site_root;
+
 $participant_block.="\n".'<tr>
     <td colspan='.$colspan.' class=widget_content_form_element>
-    <input type=button onclick="addParticipant()" value="'
+    
+    
+    
+
+    <input type=submit onclick="addParticipant()" value="'
     ._("Add New Participant")
     .'" class=button name=btAddParticipant>';
 
@@ -87,6 +96,9 @@ $participant_block .= "\n</table></form>";
 
 /**
  * $Log: participant_sidebar.php,v $
+ * Revision 1.13  2008/01/30 21:18:24  gpowers
+ * - added form element for compatibilty with activity templates
+ *
  * Revision 1.12  2006/04/28 16:48:51  braverock
  * - fix colspan
  *
