@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.23 2006/01/02 23:00:00 vanmer Exp $
+ * $Id: sidebar.php,v 1.24 2008/01/30 21:28:16 gpowers Exp $
  */
 
 $new_cell_phone         = isset($_GET['cell_phone']) ? $_GET['cell_phone'] : false;
@@ -178,7 +178,7 @@ if ( $contact_id ) {
         }
         else {
             $contact_block .= "<a href=\"javascript: updateVariable('"._("Enter Cell Phone")."', 'cell_phone', 'contact_id=" . $contact_id . "');\">"
-                           . _("Enter Cell") . "</a><br>";
+                           . _("Enter Cell Phone") . "</a><br>";
         }
 
         if (trim($rst->fields['home_phone'])) {
@@ -204,10 +204,27 @@ if ( $contact_id ) {
     }
 } // if ( $contact_id ) ...
 
-$contact_block .= "\n</table>";
+$contact_block .= "
+    <tr>
+        <td class=widget_content colspan=5>
+            <form action=\"../activities/activity-reconnect.php\" method=\"POST\">
+                       <input type=hidden name=activity_id value=$activity_id>
+                       <input type=hidden name=on_what_entity value=contact>
+                       <input type=hidden name=return_url value=\"" . urlencode($return_url) . "\">
+                " . render_edit_button(_("Transfer Activity"),'submit',
+                    'javascript:document.activity_data.return_url.value=\''.'/activities/activity-reconnect.php'.'\'',
+                    'edit_view', false,'activities',$activity_id) . "
+            </form>
+        </td>
+    </tr>
+</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.24  2008/01/30 21:28:16  gpowers
+ * - Clarified "Cell" to "Cell Phone"
+ * - Added Transfer Activity function
+ *
  * Revision 1.23  2006/01/02 23:00:00  vanmer
  * - changed to use centralized dbconnection function
  *
