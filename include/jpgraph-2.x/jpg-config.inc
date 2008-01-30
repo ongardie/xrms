@@ -4,7 +4,7 @@
 // Description:	Configuration file for JpGraph library
 // Created: 	2004-03-27
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpg-config.inc,v 1.1 2005/03/09 19:47:58 daturaarutad Exp $
+// Ver:		$Id: jpg-config.inc,v 1.2 2008/01/30 21:41:12 gpowers Exp $
 //
 // License:	This code is released under QPL 1.0
 // Copyright (C) 2004 Johan Persson
@@ -41,6 +41,7 @@
 // DEFINE("CACHE_DIR","/tmp/jpgraph_cache/");
 // DEFINE("TTF_DIR","/usr/X11R6/lib/X11/fonts/truetype/");
 // DEFINE("MBTTF_DIR","/usr/share/fonts/ja/TrueType/");
+DEFINE("TTF_DIR","/usr/share/fonts/truetype/msttcorefonts/");
 
 //-------------------------------------------------------------------------
 // Cache directory specification for use with CSIM graphs that are
