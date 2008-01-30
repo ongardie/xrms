@@ -5,7 +5,7 @@
  * Users who do not have admin privileges can update their own
  * user record and password.
  *
- * $Id: self.php,v 1.18 2006/04/05 01:26:46 vanmer Exp $
+ * $Id: self.php,v 1.19 2008/01/30 21:24:22 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -83,8 +83,11 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("GMT Offset"); ?></td>
-                <td class=widget_content_form_element><input type=text size=5 name=gmt_offset value="<?php  echo $gmt_offset; ?>"></td>
+                <td class=widget_label_right><?php echo _("Timezone"); ?></td>
+                <td class=widget_content_form_element><input type=text size=25 name=gmt_offset value="<?php  echo $gmt_offset; ?>">
+                    <?php echo _("NOTE: Must be in <strong>Region/Locale</strong> format!"); ?>
+                    <?php echo _("<a href=\"http://twiki.org/cgi-bin/xtra/tzdatepick.html\" target=\"_new\">Timezone List</a>"); ?>
+                </td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2>
@@ -113,6 +116,10 @@ end_page();
 
 /**
  *$Log: self.php,v $
+ *Revision 1.19  2008/01/30 21:24:22  gpowers
+ *- Changed GMT Offset to Timezone
+ *- Added link to list of Timezones
+ *
  *Revision 1.18  2006/04/05 01:26:46  vanmer
  *- ensure that user has update permission on self
  *
