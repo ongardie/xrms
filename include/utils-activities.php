@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-activities.php,v 1.32 2007/02/06 12:38:38 fcrossen Exp $
+ * $Id: utils-activities.php,v 1.33 2008/01/30 21:33:09 gpowers Exp $
 
  */
 
@@ -175,7 +175,7 @@ function get_activity($con, $activity_data, $show_deleted=false, $return_records
     }
 
     $sql = "SELECT
-                a.*, addr.*, a.address_id AS activity_address_id, c.company_id, c.company_name, cont.first_names, cont.last_name, " .
+                a.*, addr.*, a.on_what_table as activity_on_what_table, a.on_what_id as activity_on_what_id, a.address_id AS activity_address_id, c.company_id, c.company_name, cont.first_names, cont.last_name, " .
                 $con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS entered_by_username, " .
                 $con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS last_modified_by_username, " .
                 $con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS completed_by_username " . "
@@ -776,6 +776,9 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.33  2008/01/30 21:33:09  gpowers
+  * - updated sql to prevent clobbering of on_what_table and on_what_id
+  *
   * Revision 1.32  2007/02/06 12:38:38  fcrossen
   *  - get_activity() changed to use correct parameter for activity_type_pretty_name
   *
