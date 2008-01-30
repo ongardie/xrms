@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.186 2007/05/16 16:02:26 fcrossen Exp $
+ * $Id: utils-misc.php,v 1.187 2008/01/30 21:34:40 gpowers Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -121,6 +121,11 @@ function session_check($c_role='', $action='Read', $check_user_permission=false)
     if ($user_language AND ($user_language!=$xrms_default_language)) {
         set_up_language($user_language, false, false, true);
     }
+
+    //set timezone
+	$sql = "SELECT gmt_offset FROM users WHERE user_id = '" . $_SESSION['session_user_id'] . "'";
+	$rst = $con->execute($sql);
+    putenv("TZ=" . $rst->fields['gmt_offset']);
 
     // make sure we've logged in
     if ( isset($_SESSION['session_user_id']) && 0 == strcmp($_SESSION['xrms_system_id'], $xrms_system_id) ) {
@@ -808,6 +813,11 @@ function get_country_from_address($con, $address_id) {
  * @return string $phone_to_display
  */
 function get_formatted_phone ($con, $address_id, $phone, $country_id=false) {
+    return $phone;
+    //get_formatted_phone_by_country($con, $address_id, $phone, $country_id=false);
+}
+
+function get_formatted_phone_by_address ($con, $address_id, $phone, $country_id=false) {
     global $company_id;
     global $contact_id;
     global $default_country_id;
@@ -928,6 +938,9 @@ function clean_phone_number_for_db($phone_number_in) {
  	$con = get_xrms_dbconnection();
  	if (($cleaning_preference = get_admin_preference( $dbcon, 'phone_fax_number_clean')) == _('Default')) {
  		return preg_replace("/[^\d]/", '', $phone_number);
+	}
+	elseif ($cleaning_preference == _('None')) {
+		 		return $phone_number_in;
 	}
 	elseif ($cleaning_preference == _('ITU-T E.123')) {
 		$idd_prefix = trim(get_admin_preference( $con, 'idd_prefix'));
@@ -2081,6 +2094,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.187  2008/01/30 21:34:40  gpowers
+ * - changed GMT offset to Timezone
+ * - not tested on multiple platforms
+ *
  * Revision 1.186  2007/05/16 16:02:26  fcrossen
  * - clean_phone_number_for_db() fixed typo causing PHP Notice:  Undefined variable
  *
