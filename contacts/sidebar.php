@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.24 2008/01/30 21:28:16 gpowers Exp $
+ * $Id: sidebar.php,v 1.25 2008/02/07 02:33:50 randym56 Exp $
  */
 
 $new_cell_phone         = isset($_GET['cell_phone']) ? $_GET['cell_phone'] : false;
@@ -145,7 +145,7 @@ if ( $contact_id ) {
 
         if ($rst->fields['email']) {
             $contact_block .= "<tr>\n\t\t<td class=widget_content>"
-                            . "<a href=\"mailto:" . $rst->fields['email'] . "\">"
+                            . "<a href='mailto:". $rst->fields['email']."' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$contact_id&contact_id=$contact_id&company_id=$company_id&email=$email&activity_title=email to $first_names $last_name&activity_description=Sent via desktop client&return_url=/contacts/one.php?contact_id=$contact_id'\">"
                             . $rst->fields['email'] . "</a></td>\n\t</tr>";
         }
         else {
@@ -221,6 +221,9 @@ $contact_block .= "
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.25  2008/02/07 02:33:50  randym56
+ * Added activity description in e-mail to
+ *
  * Revision 1.24  2008/01/30 21:28:16  gpowers
  * - Clarified "Cell" to "Cell Phone"
  * - Added Transfer Activity function
