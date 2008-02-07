@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.150 2008/01/26 20:04:42 randym56 Exp $
+ * $Id: one.php,v 1.151 2008/02/07 02:28:16 randym56 Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -321,7 +321,7 @@ if ($division_id) $new_contact_location.= "&division_id=$division_id";
 
         $row['work_phone'] = get_formatted_phone($con, $address_id, $row['work_phone']);
         $row['cell_phone'] = get_formatted_phone($con, $address_id, $row['cell_phone']);
-        $row['email'] = "<a href='mailto:{$row['email']}' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&company_id=$company_id&contact_id={$row['contact_id']}&email=true&return_url=/companies/one.php%3Fcompany_id=$company_id&activity_title=email%20to%20{$row['first_names']}%20{$row['last_name']}'\" >" . htmlspecialchars($row['email']) . '</a>';
+        $row['email'] = "<a href='mailto:{$row['email']}' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&company_id=$company_id&contact_id={$row['contact_id']}&email=true&return_url=/companies/one.php%3Fcompany_id=$company_id&activity_title=email%20to%20{$row['first_names']}%20{$row['last_name']}&&activity_description=Sent%20via%20desktop%20client'\" >" . htmlspecialchars($row['email']) . '</a>';
 
         return $row;
     }
@@ -797,6 +797,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.151  2008/02/07 02:28:16  randym56
+ * Added comment in e-mail to
+ *
  * Revision 1.150  2008/01/26 20:04:42  randym56
  * change company_content_bottom to company_content_bottom2.
  * allows for extra_activity_widget to work in conjunction with this plugin
