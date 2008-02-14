@@ -5,7 +5,7 @@
  * @todo make the user's home page configurable,
  *       to create a 'personal dashboard'
  *
- * $Id: home.php,v 1.76 2007/12/10 21:33:20 gpowers Exp $
+ * $Id: home.php,v 1.77 2008/02/14 13:36:51 randym56 Exp $
  */
 
 // include the common files
@@ -33,10 +33,10 @@ require_once('../activities/activities-widget.php');
 require_once('../activities/activities-pager-functions.php');
 
 // SIDEBAR CONFIGURATION
-$enable_opportunity_sidebar	=	1;
-$enable_cases_sidebar		=	1;
-$enable_files_sidebar		=	1;
-$enable_notes_sidebar		=	1;
+$enable_opportunity_sidebar     =       1;
+$enable_cases_sidebar           =       1;
+$enable_files_sidebar           =       1;
+$enable_notes_sidebar           =       1;
 
 //connect to the database
 $con = @get_xrms_dbconnection();
@@ -70,7 +70,7 @@ if ((!array_key_exists('home',$active_nav_items))) {
     foreach ($active_nav_items as $key=>$item) {
         if ($key!='preferences') {
             $redirect_url=$http_site_root.$item['href'];
-	    break;
+            break;
         }
     }
     if ($redirect_url) {
@@ -155,7 +155,11 @@ if ($user_contact_id) {
 }
 $form_name = 'ActivitiesView';
 
-$search_terms = array('activity_status'                 => "'o'");
+if (!strlen($completed) > 0) {
+    $completed ='o';
+}
+
+$search_terms = array('completed' => $completed);
 
 $default_columns = array('title', 'type', 'contact', 'activity_about', 'scheduled', 'due');
 
@@ -229,7 +233,7 @@ start_page($page_title,true,$msg);
             <!-- notes //-->
             <?php if ($enable_notes_sidebar) {echo $note_rows;} ?>
 
-        	<!-- rss feeds //-->
+                <!-- rss feeds //-->
             <?php include("../rss/sidebar.php"); ?>
 
         <!-- sidebar plugins //-->
@@ -244,6 +248,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.77  2008/02/14 13:36:51  randym56
+ * Fixed bug in $search_terms
+ *
  * Revision 1.76  2007/12/10 21:33:20  gpowers
  * - added a list of available XRMS RSS feeds to sidebar
  *
