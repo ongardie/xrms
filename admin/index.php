@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.43 2007/12/31 19:05:52 randym56 Exp $
+ * $Id: index.php,v 1.44 2008/02/19 23:26:58 randym56 Exp $
  */
 
 //include required stuff
@@ -50,6 +50,9 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content><a href="data_clean.php"><?php echo _("Data Cleanup"); ?></a></td>
+            </tr>
+            <tr>
+                <td class=widget_content><a href="data_purge.php"><?php echo _("Purge all deleted records from system"); ?></a></td>
             </tr>
         </table>
 
@@ -276,6 +279,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.44  2008/02/19 23:26:58  randym56
+ * Added data_purge function
+ *
  * Revision 1.43  2007/12/31 19:05:52  randym56
  * Function to add/edit Category Scopes table
  *
