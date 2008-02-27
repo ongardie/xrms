@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.24 2007/05/15 23:17:29 ongardie Exp $
+ * $Id: updateto2.0.php,v 1.25 2008/02/27 16:01:16 randym56 Exp $
  */
 
 // where do we include from
@@ -4934,6 +4934,8 @@ do_hook_function('xrms_update', $con);
 //close the database connection, because we don't need it anymore
 $con->close();
 
+Header('Location: updateto2.1.php'); // opportunity workflow updates
+
 $page_title = _("Update Complete");
 start_page($page_title, true, $msg);
 
@@ -4952,6 +4954,9 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.25  2008/02/27 16:01:16  randym56
+ * Added header to run updateto2.1.php
+ *
  * Revision 1.24  2007/05/15 23:17:29  ongardie
  * - Addresses now associate with on_what_table, on_what_id instead of company_id.
  *
