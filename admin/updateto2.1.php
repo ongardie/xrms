@@ -8,7 +8,7 @@
  *
  * @author Randy Martinsen
  *
- * $Id: updateto2.1.php,v 1.2 2008/02/27 01:43:21 randym56 Exp $
+ * $Id: updateto2.1.php,v 1.3 2008/02/27 02:00:20 randym56 Exp $
  */
 
 // where do we include from
@@ -165,7 +165,7 @@ if ($rst->EOF) {
 
 
 //FINAL STEP SET XRMS VERSION IN PREFERENCES TABLE
-set_admin_preference($con, 'xrms_version', '2.1.1');
+set_admin_preference($con, 'xrms_version', '1.99.3');
 
 do_hook_function('xrms_update', $con);
 
@@ -188,6 +188,9 @@ start_page($page_title, true, $msg);
 end_page();
 /**
  * $Log: updateto2.1.php,v $
+ * Revision 1.3  2008/02/27 02:00:20  randym56
+ * Set version to 1.99.3
+ *
  * Revision 1.2  2008/02/27 01:43:21  randym56
  * DB updates necessary for some changes made to Opportunity / Case workflow tables in preparation for new scripts.
  *
