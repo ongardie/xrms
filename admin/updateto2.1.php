@@ -8,7 +8,7 @@
  *
  * @author Randy Martinsen
  *
- * $Id: updateto2.1.php,v 1.1 2008/02/27 01:40:43 randym56 Exp $
+ * $Id: updateto2.1.php,v 1.2 2008/02/27 01:43:21 randym56 Exp $
  */
 
 // where do we include from
@@ -188,8 +188,9 @@ start_page($page_title, true, $msg);
 end_page();
 /**
  * $Log: updateto2.1.php,v $
- * Revision 1.1  2008/02/27 01:40:43  randym56
- * *** empty log message ***
+ * Revision 1.2  2008/02/27 01:43:21  randym56
+ * DB updates necessary for some changes made to Opportunity / Case workflow tables in preparation for new scripts.
+ *
  *
 **/
 ?>
