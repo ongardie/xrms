@@ -4,7 +4,7 @@
  *
  * @author Brad Marshall
  *
- * $Id: new.php,v 1.9 2006/12/05 11:09:59 jnhayart Exp $
+ * $Id: new.php,v 1.10 2008/02/27 01:44:57 randym56 Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -34,7 +34,7 @@ if (strlen($duration) == 0) {
 }
 
 $con = get_xrms_dbconnection();
-$con->debug = 1;
+//$con->debug = 1;
 
 //get next sort_order value, put it at the bottom of the list
 $sql = "select sort_order from activity_templates
@@ -79,10 +79,13 @@ if ((!$rst->EOF) AND ($rst->fields['activity_type_short_name']=='PRO')) {
     $return_url="/admin/activity-templates/edit.php?on_what_table=$on_what_table&on_what_id=$on_what_d&activity_template_id=$activity_template_id&msg=$msg&return_url=$return_url";
 } 
 //go back to the status edit page after updating
-// header("Location: $http_site_root$return_url");
+header("Location: $http_site_root$return_url");
 
 /**
  * $Log: new.php,v $
+ * Revision 1.10  2008/02/27 01:44:57  randym56
+ * Turned off debug set by other developers.  Required updates to tables (/admin/updateto2.1.php) to fix errors.
+ *
  * Revision 1.9  2006/12/05 11:09:59  jnhayart
  * Add cosmetics display, and control localisation
  *
