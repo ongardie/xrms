@@ -1,7 +1,7 @@
 XRMS CRM Installation
 
 Original Author: Beth Macknik (maulani)
-$Id: INSTALL,v 1.13 2006/10/10 13:17:20 braverock Exp $
+$Id: INSTALL,v 1.14 2008/02/29 14:28:56 randym56 Exp $
 
 
 INSTALLATION
@@ -243,10 +243,19 @@ If you suspect that php is not running correctly on your server,
 try pointing your web browser at install/phpinfo.php. It should produce
 several pages of information about your php installation.
 
+NOTE: if for some reason the installation gives an error message it may
+have completed the install, but may not show you the following message:
+
+The initial user available is "user1" with a password of "user1".  You should change this
+as soon as you login.  (It can be changed in Users within the Administration section.)
+
 
 /**
  * Change Log for INSTALL file
  * $Log: INSTALL,v $
+ * Revision 1.14  2008/02/29 14:28:56  randym56
+ * Added note about login if install fails
+ *
  * Revision 1.13  2006/10/10 13:17:20  braverock
  *   - should be first_names (plural)
  *   resolves SF bug
