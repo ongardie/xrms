@@ -32,11 +32,11 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.22 $
+   * @version $Revision: 1.23 $
    * @copyright copyright information
    * @license GNU General Public Licence
    *
-   * $Id: SMTPs.php,v 1.22 2007/12/29 15:24:23 randym56 Exp $
+   * $Id: SMTPs.php,v 1.23 2008/03/30 19:00:37 randym56 Exp $
    *
    **/
 
@@ -1935,8 +1935,33 @@ class SMTPs
                      . '   boundary="' . $this->_getBoundary() . '"'   . "\r\n"
                      . "\r\n"
                      . 'This is a multi-part message in MIME format.' . "\r\n";
+            //db: begin
+            // Loop twice through message content array in order to put msg body before attachments
+			foreach ($this->_msgContent as $type => $_content )
+            {
+			if ( $type <> 'attachment' )
+                {
+					$content .= "\r\n--" . $this->_getBoundary() . "\r\n"
+                             . 'Content-Type: ' . $_content['mimeType'] . '; '
+                             . 'charset="' . $this->getCharSet() . '"';
+                    $content .= ( $type == 'html') ? '; name="HTML Part"' : '';
+                    $content .=  "\r\n";
+                    $content .= 'Content-Transfer-Encoding: ';
+					//db: begin  content-transfer-encodig set as quoted printable does not works fine, changed to 8 bit
+                    //$content .= ( $type == 'html') ? 'quoted-printable' : $this->getTransEncodeType();
+					$content .= ( $type == 'html') ? '8 bit' : $this->getTransEncodeType();
+					//db: end
+                    $content .=  "\r\n"
+                             . 'Content-Disposition: inline'  . "\r\n"
+                             . 'Content-Description: ' . $type . ' message' . "\r\n";
 
-            // Loop through message content array
+                    if ( $this->getMD5flag() )
+                        $content .= 'Content-MD5: ' . $_content['md5'] . "\r\n";
+
+                    $content .= "\r\n"
+                             . $_content['data'] . "\r\n";
+				}
+			}
             foreach ($this->_msgContent as $type => $_content )
             {
                 if ( $type == 'attachment' )
@@ -1958,27 +1983,8 @@ class SMTPs
                                  .  $_data['data'] . "\r\n";
                     }
                 }
-                else
-                {
-                    $content .= "\r\n--" . $this->_getBoundary() . "\r\n"
-                             . 'Content-Type: ' . $_content['mimeType'] . '; '
-                             . 'charset="' . $this->getCharSet() . '"';
-                    $content .= ( $type == 'html') ? '; name="HTML Part"' : '';
-                    $content .=  "\r\n";
-                    $content .= 'Content-Transfer-Encoding: ';
-                    $content .= ( $type == 'html') ? 'quoted-printable' : $this->getTransEncodeType();
-                    $content .=  "\r\n"
-                             . 'Content-Disposition: inline'  . "\r\n"
-                             . 'Content-Description: ' . $type . ' message' . "\r\n";
-
-                    if ( $this->getMD5flag() )
-                        $content .= 'Content-MD5: ' . $_content['md5'] . "\r\n";
-
-                    $content .= "\r\n"
-                             . $_content['data'] . "\r\n";
-                }
             }
-
+            //db: end
             // Close message boundries
             $content .= "\r\n--" . $this->_getBoundary() . '--' . "\r\n" ;
         }
@@ -2393,6 +2399,17 @@ class SMTPs
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.23  2008/03/30 19:00:37  randym56
+  * Contribution from dbaudone (dbaudone) - 2008-03-28 18:22
+  * fixes some problems in sending html mail messages with attachments:
+  * Content-transfer-encodig changed from "quoted printable" to "8 bit"
+  * The loop through messages split in two parts in order to put attachments at the end of messages.
+  *
+  * Revision 1.23 2008/03/29 02:12:23 dbaudone 
+  * fixes some problems in sending html mail messages with attachments:
+  * Content-transfer-encodig changed from "quoted printable" to "8 bit"
+  * The loop through messages split in two parts in order to put attachments at the end of messages. 
+  *
   * Revision 1.22  2007/12/29 15:24:23  randym56
   * Fixed bug found in "function getErrors()"
   *
