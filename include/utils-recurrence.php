@@ -4,7 +4,7 @@
  *
  * @author Justin Cooper
  *
- * $Id: utils-recurrence.php,v 1.3 2005/06/08 00:09:25 daturaarutad Exp $
+ * $Id: utils-recurrence.php,v 1.4 2008/04/08 17:18:23 randym56 Exp $
  */
 
 
@@ -104,7 +104,7 @@ function build_recurring_activities_list($start_datetime, $end_datetime, $end_co
                     break;
                 case 'weekly1':
                     foreach($week_days as $day) {
-                        $activities_list[] = strtotime($days_of_week_long[$day], $current_time);
+                        $activities_list[] = strtotime("$days_of_week_long[$day] $hms", $current_time);
                     }
                     break;
 
@@ -127,7 +127,7 @@ function build_recurring_activities_list($start_datetime, $end_datetime, $end_co
 					//echo "day offset is $day_offset<br>";
 
 					for($i=1; $i<57; $i++) {
-						$week_num = date('w', strtotime("$year-$month-$i"));
+						$week_num = date('w', strtotime("$year-$month-$i $hms"));
 						if(0 != $week_num && 6 != $week_num) {
 							$day_count++;
 						} else {
@@ -164,7 +164,7 @@ function build_recurring_activities_list($start_datetime, $end_datetime, $end_co
 					//echo "day offset is $day_offset, month offset is $month<br>";
 
 					for($i=1; $i<57; $i++) {
-						$week_num = date('w', strtotime("$year-$month-$i"));
+						$week_num = date('w', strtotime("$year-$month-$i $hms"));
 						if(0 != $week_num && 6 != $week_num) {
 							$day_count++;
 						} else {
@@ -212,6 +212,9 @@ function build_recurring_activities_list($start_datetime, $end_datetime, $end_co
  
  /**
   * $Log: utils-recurrence.php,v $
+  * Revision 1.4  2008/04/08 17:18:23  randym56
+  * Bug fix to add correct start time to weekly and monthly recurring activities
+  *
   * Revision 1.3  2005/06/08 00:09:25  daturaarutad
   * added new periods to specify business days
   *
