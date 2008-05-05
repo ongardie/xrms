@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.26 2006/11/02 14:19:26 niclowe Exp $
+ * $Id: index.php,v 1.27 2008/05/05 22:16:35 randym56 Exp $
  */
 require_once('../include-locations.inc');
 
@@ -19,6 +19,14 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $con = get_xrms_dbconnection();
 
 $user_menu = get_user_menu($con);
+
+// call the reports_button hook
+// make sure button is defined
+if ( !isset($reports_button) ) {
+        $reports_button = '';
+}
+$reports_button = do_hook_function('reports_button', $reports_button);
+//$reports_button added to button line below
 
 $con->close();
 
@@ -200,16 +208,36 @@ start_page($page_title, true, $msg);
           </form>
         </td>
       </tr>
-      <tr> 
-        <td colspan=2 class=widget_label_center> 
-          <?php echo _("Custom Reports"); ?>
+      <tr>
+        <td colspan=2 class=widget_label_center>
+          <?php echo _("Custom Reports"); if ($admin_on) echo $reports_button;?>
         </td>
       </tr>
-      <?php
-                // allow plugins to insert thier own reports on the main reports page
-                do_hook ('reports_bottom');
-                // eventually, this will need to be one hook per report section, as more reports are created
-            ?>
+                <?php
+                //find and list all uploaded custom reports here
+                //read folder for report files
+                  $reportspath = $xrms_file_root . '/reports/custom/';
+                  if ( file_exists($reportspath) ) {
+                          $fd = opendir( $reportspath );
+                          $op_report = array();
+                          while (false !== ($file = readdir($fd))) {
+                                if ($file != '.' && $file != '..' && $file != 'CVS' && $file != 'index.php') {
+                                        $start1 = strpos(file_get_contents($reportspath.$file),'reportname: ')+12;
+                                        $end1 = strpos(file_get_contents($reportspath.$file),'reportdescrip: ')-$start1-3;
+                                        $start2 = strpos(file_get_contents($reportspath.$file),'reportdescrip: ')+14;
+                                        $end2 = strpos(file_get_contents($reportspath.$file),'author: ')-$start2-3;
+                                        $reportname = substr(file_get_contents($reportspath.$file),$start1,$end1);
+                                        $reportdescrip = substr(file_get_contents($reportspath.$file),$start2,$end2);
+                                        echo "<tr><td><a href=\"" . $http_site_root. "/reports/custom/".$file . "\">".
+                                        $reportname ."</a></td><td>" .
+                                        $reportdescrip . "</td></tr>"; //start at position 12 always
+                                }
+                          }
+                        closedir($fd);
+                        }
+                //display reports
+
+                ?>
     </table>
 
     </div>
@@ -222,6 +250,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.27  2008/05/05 22:16:35  randym56
+ * Added custom reports plugin
+ *
  * Revision 1.26  2006/11/02 14:19:26  niclowe
  * initial upload of de-dupe reports
  *
