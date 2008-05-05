@@ -1,0 +1,50 @@
+<html>
+<body>
+Copy and paste everything below this line into your own PHP editor:<p>
+&lt;?php<br>
+/**<br>
+ * reportname: Brief Name of report here<br>
+ * reportdescrip: Long description here...<br>
+ * author: Your name here<br>
+ */<br>
+require_once('../../include-locations.inc');<br>
+require_once($include_directory . 'vars.php');<br>
+require_once($include_directory . 'utils-interface.php');<br>
+require_once($include_directory . 'utils-misc.php');<br>
+require_once($include_directory . 'adodb/adodb.inc.php');<br>
+require_once($include_directory . 'adodb/adodb-pager.inc.php');<br>
+require_once($include_directory . 'adodb-params.php');<br>
+<br>
+$session_user_id = session_check();<br>
+<br>
+$page_title = _("Your page title goes here");<br>
+start_page($page_title, true, $msg);<br>
+<br>
+$con = get_xrms_dbconnection();<br>
+<br>
+// $con->debug = 1;<br>
+<br>
+// your custom code goes here for queries<br>
+<br>
+?><br>
+<br>
+&lt;div id="report"><br>
+<br>
+Display your report results here...<br>
+<br>
+&lt;/div><br>
+
+&lt;?php<br>
+<br>
+$con->close();<br>
+<br>
+end_page();<br>
+<br>
+/**<br>
+ * any notes you want in the code but not displayed go here<br>
+ * You must not remove any of the headers on lines 1-20.  You must not change the titles in rows 3-5 above.<br>
+ */<br>
+?><br>
+
+</body>
+</html>
