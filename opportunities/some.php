@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.69 2007/10/30 03:19:02 randym56 Exp $
+ * $Id: some.php,v 1.70 2008/05/05 13:28:28 randym56 Exp $
  */
 
 require_once('../include-locations.inc');
@@ -44,7 +44,7 @@ load_saved_search_vars($con, $on_what_table, $saved_id, $delete_saved);
 $arr_vars = array ( // local var name       // session variable name
            'opportunity_title'       => array ( 'opportunities_opportunity_title', arr_vars_SESSION ),
            'company_name'            => array ( 'opportunities_company_name', arr_vars_GET_SESSION ),
-           'user_id'                 => array ( 'opportunities_user_id', arr_vars_SESSION ),
+           'user_id'                 => array ( 'user_id', arr_vars_SESSION ),
            'opportunity_type_id'     => array ( 'opportunity_type_id', arr_vars_SESSION ),
            'opportunity_status_id'   => array ( 'opportunities_opportunity_status_id', arr_vars_GET_SESSION ),
            'opportunity_category_id' => array ( 'opportunities_opportunity_category_id', arr_vars_SESSION ),
@@ -53,6 +53,8 @@ $arr_vars = array ( // local var name       // session variable name
            'before_after'            => array ( 'before_after', arr_vars_GET_SESSION ),
            'search_date'             => array ( 'search_date', arr_vars_GET_SESSION ),
            'hide_closed'             => array ( 'hide_closed', arr_vars_SESSION ),
+           'open_closed'             => array ( 'open_closed', arr_vars_SESSION ),
+           'crm_status_id'           => array ( 'crm_status_id', arr_vars_SESSION ),
            );
 
 // get all passed in variables
@@ -60,6 +62,8 @@ arr_vars_get_all ( $arr_vars );
 
 // set all session variables
 arr_vars_session_set ( $arr_vars );
+
+$open_closed = isset($_GET['open_closed']) ? $_GET['open_closed'] : $open_closed;
 
 $close_at = $con->SQLDate('Y-M-D', 'close_at');
 
@@ -71,7 +75,7 @@ $sql = "SELECT $is_overdue_field AS is_overdue,"
 . $con->Concat("'<a id=\"'", "opp.opportunity_title",  "'\" href=\"one.php?opportunity_id='", "opp.opportunity_id", "'\">'", "opp.opportunity_title","'</a>'")
 . " AS opportunity" . ",
   c.company_name AS 'company',crst.crm_status_pretty_name as 'crm_status', u.username AS owner " . ",
-  ot.opportunity_type_pretty_name AS type,
+  ot.opportunity_type_pretty_name AS type, opp.entered_at, opp.last_modified_at, 
   CASE
     WHEN (opp.size > 0) THEN opp.size
     ELSE 0
@@ -81,7 +85,7 @@ $sql = "SELECT $is_overdue_field AS is_overdue,"
     ELSE 0
   END AS weighted_size" . ",
   os.opportunity_status_pretty_name AS status " . ", opp.probability as 'prob', "
-  . " $close_at AS close_date, close_at, opp.opportunity_title"  . ' ';
+  . " $close_at AS close_date, close_at, opp.opportunity_title"  . ', opp.opportunity_record_status ';
 
 
 if ($opportunity_category_id > 0) {
@@ -98,12 +102,23 @@ $where .= "and opp.opportunity_type_id = ot.opportunity_type_id ";
 $where .= "and opp.company_id = c.company_id ";
 $where .= "and opp.user_id = u.user_id ";
 $where .= "and c.crm_status_id = crst.crm_status_id ";
-$where .= "and opportunity_record_status = 'a' ";
+
+
+if (($open_closed <= '') or (!$open_closed)) $open_closed = 'a';
+//echo $open_closed; exit;
+
+if ($open_closed == 'a') $where .= "and opportunity_record_status = 'a' ";
+if ($open_closed == 'c') $where .= "and opportunity_record_status = 'c' ";
+if ($open_closed == 'all') $where .= "and opportunity_record_status <> 'd' ";
+$criteria_count = 1;
+
+
+//echo $where; exit;
 
 // Begin Add JNH
 if ( $hide_closed )
 {
-    $where .= " AND os.status_open_indicator='o' ";
+    $where .= " AND os.status_open_indicator in ('o','g') ";
 }
 // end Add JNH
 
@@ -113,8 +128,6 @@ if($campaign_id) {
 
 //added by Nic to be able to create mail merge to contacts
 $where.=" and cont.contact_id=opp.contact_id ";
-
-$criteria_count = 0;
 
 if ($opportunity_category_id > 0) {
     $criteria_count++;
@@ -132,7 +145,7 @@ if (strlen($company_name) > 0) {
 
 if (strlen($user_id) > 0) {
     $criteria_count++;
-    $where .= " and opp.user_id = $user_id";
+    $where .= " and opp.user_id = $user_id ";
 }
 
 if (strlen($opportunity_status_id) > 0) {
@@ -144,6 +157,12 @@ if (strlen($opportunity_type_id) > 0) {
     $criteria_count++;
     $where .= " and ot.opportunity_type_id = $opportunity_type_id ";
 }
+
+if (strlen($crm_status_id) > 0) {
+    $criteria_count++;
+    $where .= " and c.crm_status_id = $crm_status_id ";
+}
+
 if (strlen($industry_id) > 0) {
     $criteria_count++;
     $where .= " and c.industry_id = $industry_id";
@@ -174,7 +193,7 @@ if (strlen($industry_id) > 0) {
 
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
-} else {
+} else { 
     $acl_id_list=acl_get_list($session_user_id, 'Read', false, $on_what_table);
     //print_r($acl_id_list);
     if ($acl_id_list) {
@@ -190,7 +209,7 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
 
 $sql .= $from . $where;
 
-//echo $sql;
+//echo $sql; exit;
 
 /******* SAVED SEARCH BEGINS *****/
     $saved_data = $_POST;
@@ -236,7 +255,7 @@ if ($rst) {
     while (!$rst->EOF) {
         $recently_viewed_table_rows .= '<tr>';
         $recently_viewed_table_rows .= "<td class=widget_content><a href='$http_site_root/opportunities/one.php?opportunity_id=" . $rst->fields['opportunity_id'] . "'>" . $rst->fields['opportunity_title'] . '</a></td>';
-        $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['company_code'] . '</td>';
+        $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['company_name'] . '</td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['opportunity_status_pretty_name'] . '</td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['close_at']) . '</td>';
         $recently_viewed_table_rows .= '</tr>';
@@ -291,6 +310,11 @@ and category_record_status =  'a'
 order by category_pretty_name";
 $rst = $con->execute($sql2);
 $opportunity_category_menu = $rst->getmenu2('opportunity_category_id', $opportunity_category_id, true);
+
+
+$sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a'";
+$rst = $con->execute($sql2);
+$crm_status_menu = $rst->getmenu2('crm_status_id', $crm_status_id, true);
 $rst->close();
 
 if ($criteria_count > 0) {
@@ -328,24 +352,33 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Search Criteria"); ?></td>
+                <td class=widget_header colspan=5><?php echo _("Search Criteria"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Opportunity Name"); ?></td>
-                <td class=widget_label><?php echo _("Company"); ?></td>
+                <td class=widget_label><?php echo _($company_singular_title); ?></td>
+                <td class=widget_label><?php echo _("Open/Closed/All"); ?></td>
                 <td class=widget_label><?php echo _("Campaigns"); ?></td>
-                <td class=widget_label colspan=2><?php echo _("Type"); ?></td>
+                <td class=widget_label><?php echo _("Type"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name="opportunity_title" size=20 value="<?php  echo $opportunity_title; ?>"></td>
                 <td class=widget_content_form_element><input type=text name="company_name" size=20 value="<?php  echo $company_name; ?>"></td>
+                <td class=widget_content_form_element>
+                        <select name="open_closed">
+                        <option value="a"<?php if($open_closed == 'a') { print " selected"; }?>><?php echo _("Open Only"); ?></option>
+                        <option value="c"<?php if($open_closed == 'c') { print " selected"; }?>><?php echo _("Closed Only"); ?></option>
+                        <option value="all"<?php if($open_closed == 'all') { print " selected"; }?>><?php echo _("All Ops."); ?></option>
+                    </select>
+                </td>
                 <td class=widget_content_form_element><?php echo $campaign_menu; ?></td>
-                <td class=widget_content_form_element colspan=2><?php  echo $opportunity_type_menu; ?></td>
+                <td class=widget_content_form_element><?php  echo $opportunity_type_menu; ?></td>
             </tr>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Owner"); ?></td>
-                <td class=widget_label><?php echo _("Status"); ?></td>
+                <td class=widget_label><?php echo _("Plan"); ?></td>
+                <td class=widget_label><?php echo _("CRM Status"); ?></td>
                 <td class=widget_label><?php echo _("Category"); ?></td>
                 <td class=widget_label><?php echo _("Close Date"); ?></td>
             </tr>
@@ -353,14 +386,14 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element>
                     <?php  echo $opportunity_status_menu; ?>
-                    <input name="hide_closed" type=checkbox
-                    <?php
+                    <input name="hide_closed" type=checkbox <?php
                         if ($hide_closed) {
                             echo "checked=\"true\"";
                         }
                         echo ">" . _("Hide Closed");
                     ?>
                 </td>
+                <td class=widget_content_form_element><?php  echo $crm_status_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $opportunity_category_menu; ?></td>
                 <td class=widget_content_form_element>
                     <select name="before_after">
@@ -373,11 +406,11 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
             <tr>
-                <td class=widget_label colspan="2"><?php echo _("Saved Searches"); ?></td>
+                <td class=widget_label colspan="3"><?php echo _("Saved Searches"); ?></td>
                 <td class=widget_label colspan="2"><?php echo _("Search Title"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan="2">
+                <td class=widget_content_form_element colspan="3">
                     <?php echo ($saved_menu) ? $saved_menu : _("No Saved Searches"); ?>
                 </td>
                 <td class=widget_content_form_element colspan="2">
@@ -390,7 +423,7 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=6><input class=button type=submit value="<?php echo _("Search"); ?>"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>"> </td>
+                <td class=widget_content_form_element colspan=5><input class=button type=submit value="<?php echo _("Search"); ?>"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>"> </td>
             </tr>
         </table>
 <?php
@@ -423,6 +456,7 @@ $company_query_select = $sql . 'AND c.company_id = XXX-value-XXX';
 $columns = array();
 // Add JNH
 $columns[] = array('name' => _("Overdue"), 'index_sql' => 'is_overdue');
+$columns[] = array('name' => _("Record Status"), 'index_sql' => 'opportunity_record_status');
 // End Add Jnh
 $columns[] = array('name' => _('Opportunity'), 'index_sql' => 'opportunity', 'sql_sort_column' => 'opportunity_title', 'type' => 'url');
 $columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'group_query_list' => $company_query_list, 'group_query_select' => $company_query_select);
@@ -432,11 +466,13 @@ $columns[] = array('name' => _('Opportunity Size'), 'index_sql' => 'opportunity_
 $columns[] = array('name' => _('Probability'), 'index_sql' => 'prob', 'css_classname' => 'right');
 $columns[] = array('name' => _('Weighted Size'), 'index_sql' => 'weighted_size', 'subtotal' => true, 'css_classname' => 'right');
 //$columns[] = array('name' => _('Type'), 'index_sql' => 'type', 'group_query_list' => $type_query_list, 'group_query_select' => $type_query_select);
-$columns[] = array('name' => _('Status'), 'index_sql' => 'status', 'group_query_list' => $status_query_list, 'group_query_select' => $status_query_select);
+$columns[] = array('name' => _('Plan'), 'index_sql' => 'status', 'group_query_list' => $status_query_list, 'group_query_select' => $status_query_select);
 //$columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date', 'sql_sort_column' => 'close_at');
 //JNH
 $columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date', 'sql_sort_column' => 'close_at', 'default_sort' => 'asc');
 //JNH
+$columns[] = array('name' => _('Date Entered'), 'index_sql' => 'entered_at', 'sql_sort_column' => 'opp.entered_at', 'default_sort' => 'asc');
+$columns[] = array('name' => _('Date Modified'), 'index_sql' => 'last_modified_at', 'sql_sort_column' => 'opp.last_modified_at', 'default_sort' => 'asc');
 
 
 
@@ -458,7 +494,7 @@ echo $pager_columns_selects;
 
 $pager = new GUP_Pager($con, $sql, 'GetOpportunityPagerData',  _('Search Results'), 'OpportunityData', 'OpportunityPager', $columns);
 
-$endrows = "<tr><td class=widget_content_form_element colspan=10>
+$endrows = "<tr><td class=widget_content_form_element colspan=13>
             $pager_columns_button
             " . $pager->GetAndUseExportButton() .  "
             <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("eMail Merge")."\"></td></tr>";
@@ -482,8 +518,8 @@ $con->close();
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Opportunity"); ?></td>
-                <td class=widget_label><?php echo _("Company"); ?></td>
-                <td class=widget_label><?php echo _("Status"); ?></td>
+                <td class=widget_label><?php echo _($company_singular_title); ?></td>
+                <td class=widget_label><?php echo _("Plan"); ?></td>
                 <td class=widget_label><?php echo _("Close Date"); ?></td>
             </tr>
             <?php  echo $recently_viewed_table_rows; ?>
@@ -537,6 +573,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.70  2008/05/05 13:28:28  randym56
+ * Fixed Owner selection bug; added date entered and last modified and CRM Status to selectable column layouts; added CRM Status to selection critera.
+ *
  * Revision 1.69  2007/10/30 03:19:02  randym56
  * - Changed "Mail Merge" to be "eMail Merge" to separate from "Snail Mail Merge"
  *
