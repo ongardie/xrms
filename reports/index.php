@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.27 2008/05/05 22:16:35 randym56 Exp $
+ * $Id: index.php,v 1.28 2008/05/06 20:18:55 randym56 Exp $
  */
 require_once('../include-locations.inc');
 
@@ -210,7 +210,7 @@ start_page($page_title, true, $msg);
       </tr>
       <tr>
         <td colspan=2 class=widget_label_center>
-          <?php echo _("Custom Reports"); if ($admin_on) echo $reports_button;?>
+          <?php echo _("Custom Reports"); if (check_user_role(false, $_SESSION['session_user_id'], 'Administrator')) echo $reports_button;?>
         </td>
       </tr>
                 <?php
@@ -228,8 +228,8 @@ start_page($page_title, true, $msg);
                                         $end2 = strpos(file_get_contents($reportspath.$file),'author: ')-$start2-3;
                                         $reportname = substr(file_get_contents($reportspath.$file),$start1,$end1);
                                         $reportdescrip = substr(file_get_contents($reportspath.$file),$start2,$end2);
-                                        echo "<tr><td><a href=\"" . $http_site_root. "/reports/custom/".$file . "\">".
-                                        $reportname ."</a></td><td>" .
+                                        echo "<tr><td class=widget_content><a href=\"" . $http_site_root. "/reports/custom/".$file . "\">".
+                                        $reportname ."</a></td><td class=widget_content>" .
                                         $reportdescrip . "</td></tr>"; //start at position 12 always
                                 }
                           }
@@ -250,6 +250,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.28  2008/05/06 20:18:55  randym56
+ * Set custome reports button to only show for Administrator role
+ *
  * Revision 1.27  2008/05/05 22:16:35  randym56
  * Added custom reports plugin
  *
