@@ -12,7 +12,7 @@
  *
  * @example Pager_Renderer.doc.1.php check out
  *
- * $Id: Pager_Renderer.php,v 1.3 2007/03/14 14:18:57 braverock Exp $
+ * $Id: Pager_Renderer.php,v 1.4 2008/05/17 16:44:05 randym56 Exp $
  */
 
 
@@ -184,8 +184,12 @@ class Pager_Renderer {
 		                if($render_data[$j]['data_type']) {
 		                    if('currency' == $render_data[$j]['data_type'] AND is_numeric($render_data['rows'][$i]['columns'][$j])) {
 		                        echo "<td class='$row_classnames {$col_classnames[$j]}' $align>$" . number_format($render_data['rows'][$i]['columns'][$j], 2, '.', ',') . "</td>\n";
+		                    } elseif('currency0' == $render_data[$j]['data_type'] AND is_numeric($render_data['rows'][$i]['columns'][$j])) {
+		                        echo "<td class='$row_classnames {$col_classnames[$j]}' $align>$" . number_format($render_data['rows'][$i]['columns'][$j], 0, '.', ',') . "</td>\n";
 		                    } elseif('currency_six_places' == $render_data[$j]['data_type'] AND is_numeric($render_data['rows'][$i]['columns'][$j])) {
 		                        echo "<td class='$row_classnames {$col_classnames[$j]}' $align>$" . number_format($render_data['rows'][$i]['columns'][$j], 6, '.', ',') . "</td>\n";
+		                    } elseif('percent' == $render_data[$j]['data_type'] AND is_numeric($render_data['rows'][$i]['columns'][$j])) {
+		                        echo "<td class='$row_classnames {$col_classnames[$j]}' $align>" . number_format($render_data['rows'][$i]['columns'][$j], 0, '.', ',') . "%</td>\n";
 		                    } elseif('date' == $render_data[$j]['data_type']) {
 		                        echo "<td class='$row_classnames {$col_classnames[$j]}' $align>" .  date ( 'Y-m-d' , strtotime($render_data['rows'][$i]['columns'][$j])) . "</td>\n";
 		                    } elseif('int' == $render_data[$j]['data_type']) {
@@ -239,8 +243,10 @@ class Pager_Renderer {
                             }
                         }
                 if(isset($values[$this->pager->column_info[$i]['index']])) {
-                    if('currency' == $this->pager->column_info[$i]['data_type']) {
+                    if('currency' == $this->pager->column_info[$i]['type']) {
                         echo "<td class=\"$row_classnames {$col_classnames[$i]}\" $align><b>$" . number_format($values[$this->pager->column_info[$i]['index']], 2, '.', ',') . "</b></td>\n";
+                    } elseif ('currency0' == $this->pager->column_info[$i]['type']) {
+                        echo "<td class=\"$row_classnames {$col_classnames[$i]}\" $align><b>$" . number_format($values[$this->pager->column_info[$i]['index']], 0, '.', ',') . "</b></td>\n";
                     } else {
                         echo "<td class=\"$row_classnames {$col_classnames[$i]}\" $align><b>" . $values[$this->pager->column_info[$i]['index']] . "</b></td>";
                     }
@@ -271,6 +277,10 @@ class Pager_Renderer {
 }
 /**
  * $Log: Pager_Renderer.php,v $
+ * Revision 1.4  2008/05/17 16:44:05  randym56
+ * Bug in total/subtotal fixed
+ * Added currency0 and percent types
+ *
  * Revision 1.3  2007/03/14 14:18:57  braverock
  * - add 'align' option to columns array for simple alignment
  *
