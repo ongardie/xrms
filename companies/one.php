@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.151 2008/02/07 02:28:16 randym56 Exp $
+ * $Id: one.php,v 1.152 2008/05/24 20:34:23 randym56 Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -89,14 +89,13 @@ if ($rst) {
     $address_id = $rst->fields['default_primary_address'];
     $tax_id = $rst->fields['tax_id'];
     $company_code = $rst->fields['company_code'];
-    $industry_pretty_name = $rst->fields['industry_pretty_name'];
-    $crm_status_pretty_name = $rst->fields['crm_status_pretty_name'];
+    $industry_pretty_name = $rst->fields['industry_display_html'];
+    $crm_status_pretty_name = $rst->fields['crm_status_display_html'];
     if ($rst1)
-       $company_type_pretty_name = $rst1->fields['company_type_pretty_name'];
+       $company_type_pretty_name = $rst1->fields['company_type_display_html'];
     else
        $company_type_pretty_name = '';
     $company_source = $rst->fields['company_source_display_html'];
-    $industry_pretty_name = $rst->fields['industry_pretty_name'];
     $user_id = $rst->fields['user_id'];
     $owner_username = $rst->fields['owner_username'];
     $phone = get_formatted_phone($con, $address_id, $rst->fields['phone']);
@@ -797,6 +796,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.152  2008/05/24 20:34:23  randym56
+ * changed pretty_name to display_html in company view
+ *
  * Revision 1.151  2008/02/07 02:28:16  randym56
  * Added comment in e-mail to
  *

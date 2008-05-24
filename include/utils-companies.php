@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-companies.php,v 1.18 2007/05/15 23:17:30 ongardie Exp $
+ * $Id: utils-companies.php,v 1.19 2008/05/24 20:29:35 randym56 Exp $
  *
  */
 
@@ -283,7 +283,7 @@ function get_company($con, $company_id, $return_rst=false, $include_extras=true)
     if ($include_extras) {
         $sql .=', cs.*,  account_status_display_html, account_status_short_name
                 rating_short_name, rating_display_html,
-                company_source_display_html, i.industry_pretty_name, companies.default_primary_address, ' .
+                company_source_display_html, i.industry_display_html, companies.default_primary_address, ' .
                 $con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS owner_username," .
                 $con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS entered_by," .
                 $con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS last_modified_by ";
@@ -662,6 +662,9 @@ include_once $include_directory . 'utils-addresses.php';
 
  /**
  * $Log: utils-companies.php,v $
+ * Revision 1.19  2008/05/24 20:29:35  randym56
+ * changed pretty_name to display_html in company view
+ *
  * Revision 1.18  2007/05/15 23:17:30  ongardie
  * - Addresses now associate with on_what_table, on_what_id instead of company_id.
  *
