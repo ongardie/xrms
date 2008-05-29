@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.37 2007/10/27 01:37:06 randym56 Exp $
+* $Id: email-4.php,v 1.38 2008/05/29 14:10:54 randym56 Exp $
 *
 * @todo use a more secure method than 'unlink' to delete files after sending them
 */
@@ -79,7 +79,11 @@ if (is_array($array_of_contacts)) {
 } elseif (is_numeric($array_of_contacts)) {
         $imploded_contacts= $array_of_contacts;
 }else {
-        echo _("WARNING: No array of contacts!") . "<br>";
+		$page_title = _("Messages Cannot Be Sent");
+		$msg = "WARNING: No array of contacts!";
+		start_page($page_title, true, $msg);
+		end_page();
+		exit;
 }
 // loop through the contacts and send each one a copy of the message
 $sql = "select * from contacts where contact_id in (" . $imploded_contacts . ")";
@@ -386,6 +390,9 @@ end_page();
 // =============================================================
 /**
 * $Log: email-4.php,v $
+* Revision 1.38  2008/05/29 14:10:54  randym56
+* clean up no-contacts error message
+*
 * Revision 1.37  2007/10/27 01:37:06  randym56
 * 1. Fixed BCC (was not working at all)
 * 2. Added the function to put custom fields for user sending the email (if the user has a related contact record).
