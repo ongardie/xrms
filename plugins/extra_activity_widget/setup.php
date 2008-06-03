@@ -4,7 +4,7 @@
  *
  * This example adds an activities widget to the companies/one.php page, directly after the existing activities widget (and in fact using the same form)
  * 
- * $Id: setup.php,v 1.3 2006/07/19 01:36:53 vanmer Exp $
+ * $Id: setup.php,v 1.4 2008/06/03 15:36:25 randym56 Exp $
 **/
 
 /**
@@ -55,7 +55,7 @@ function extra_activity_widget_company(&$string) {
     $instance='Plugin';
 
     $caption=_("Closed Activities");
-    $form_name="company_one_extra_activity";
+    $form_name="co_one_ext_act";
     //retrieve activities widget
     $activities_widget =  GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session_user_id, $return_url, $extra_where, $end_rows, $default_columns, $show_mini_search, $default_sort, $instance);
 
@@ -71,6 +71,9 @@ function extra_activity_widget_company(&$string) {
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.4  2008/06/03 15:36:25  randym56
+ * Form name was too long for some URLs - shortened so that sorting works properly.
+ *
  * Revision 1.3  2006/07/19 01:36:53  vanmer
  * - only require activities widget when running plugin
  *
