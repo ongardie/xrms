@@ -1,0 +1,323 @@
+/*************************
+ * blueengine XRMS theme *
+ *************************
+ *
+ * This style sheet overlays the default XRMS sheets:
+ *    rmsstyle.css, rmsstyle-ie.css (if IE), and rmsstyle-screen.css
+ * It is used with screen media only.
+ */
+
+
+/** Include the Calendar widget CSS **/
+@import url(../../js/jscalendar/calendar-blue.css);
+
+
+/** ----------
+ * LAYOUT ADJUSTMENTS - to accomodate new font dimentions
+ */
+#Main #Sidebar {
+    margin: 0px;
+}
+
+
+/** ----------
+ * blueengine styles
+ */
+
+body {
+    background-color: #CCDDFF;
+    margin: 4px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+}
+
+#page_header {
+    color: #333366;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+#navline {
+    color: #E8E8E8;
+    background-color: #E8E8E8;
+    border-top: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+    padding: 8px;
+}
+	#navline a {
+		color: #000066;
+		background-color: #6699CC;
+		font-weight: 900;
+		text-decoration: none;
+		padding: 0.2em 0.5em;
+		border: 1px solid #000066;
+	}
+	#navline a:hover {
+		background-color: #CCDDFF;
+	}
+
+#msg {
+    padding: 6px 4px;
+    margin: 4px;
+    background-color: #ffff99;
+    border: 1px solid #ddd;
+}
+
+input.button {
+    color: #000066;
+    background-color: #CCDDFF;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    border: 1px solid #000066;
+    margin: 0px 2px;
+    padding: 1px;
+}
+	input.button:hover {
+		background-color: #E8E8E8;
+	}
+
+table.widget {
+    background-color: #e1e1e1;
+}
+	table.widget th,
+	table.widget td {
+		background-color: #fff;
+	}
+	table.widget .widget_header {
+		background-color: #e8e8e8;
+		padding: 3px 5px;
+	}
+	table.widget .widget_header .widget_header{
+		padding: 0px;
+	}
+	table.widget .widget_content_alt, .widget_content_graph,
+	table.widget .widget_content_market2 {
+		background-color: #FFFFFF;
+		color: #000;
+	}
+	table.widget .widget_content {
+		background-color: #FFFFFF;
+		color: #000;
+	}
+	table.widget .widget_label_center,
+	table.widget .widget_label_center .widget_content,
+	table.widget .widget_label_right,
+	table.widget .widget_content_label {
+		background-color: #F0F0F0;
+	}
+	table.widget .widget_content_form_element {
+		background-color: #f8f8f8;
+		padding: 6px;
+	}
+	table.widget .widget_content_alt {
+		background-color: #F8F8F8;
+		color: #000;
+	}
+	table.widget .widget_content_alt2 {
+		background-color: #fff;
+		color: #000;
+	}
+	table.widget .closed_activity,
+		.closed_activity a {
+		color: #666;
+	}
+	table.widget .scheduled_activity {
+	/*     background-color: #eef; */
+	}
+	table.widget  {
+		background-color: #bbb;
+	}
+	table.widget .widget_label {
+		background-color: #f0f0f0;
+	}
+	table.widget .non_uploaded_file,
+	table.widget .overdue_activity {
+		color: #990000;
+		background-color: #FFFF99;
+	}
+		.overdue_activity a {
+			color: #990000;
+		}
+		.overdue_activity a:hover, .closed_activity a:hover {
+			color: rgb(240,184,47);
+		}
+
+
+/** ----------
+ * FOREGROUND COLORS - black by default (body)
+ */
+body {
+    color: #000;
+}
+table.widget td {
+    color: #999;
+}
+table.widget .sublabel {
+    color: #999;
+}
+#loginbar,
+#loginbar a {
+    color: gray;
+}
+table.widget .widget_header,
+/*table.widget .overdue_activity,*/
+table.widget .non_uploaded_file  {
+  color: #000;
+}
+table.widget .widget_content_graph {
+  color: #fff;
+}
+
+
+/** -------
+ * FONT/TEXT SETTINGS
+ */
+
+/**
+ * Override XRMS font, margin, and padding adjustments for
+ * better display on screen
+ */
+#loginbar {
+    font-size: 12px;
+}
+#msg,
+#loginbar,
+#navline,
+input,
+input.button,
+select,
+tetarea,
+ul.mktree li,
+ul.mktree li ul li,
+table.widget .small,
+table.widget .open_activity,
+table.widget .closed_activity,
+table.widget .overdue_activity,
+table.widget .scheduled_activity,
+table.widget .widget_label,
+table.widget .widget_label_right,
+table.widget .widget_label_center,
+table.widget .widget_content,
+table.widget .widget_content_alt,
+table.widget .widget_content_alt2,
+table.widget .widget_content_form_element,
+table.widget .widget_content_form_element_center,
+table.widget input.button {
+    font-size: 11px;
+}
+#Sidebar table.widget {
+    font-size: 10px;
+}
+/* reset to medium, they're covered by #Sidebar table.widget */
+#Sidebar table.widget .widget_header {
+    font-size: 11px;
+}
+#Sidebar input,
+#Sidebar input.button,
+ul.mktree li ul li ul li,
+ul.mktree li ul li ul li ul li,
+ul.mktree li ul li ul li ul li ul li,
+#Sidebar table.widget .small,
+#Sidebar table.widget .widget_label,
+#Sidebar table.widget .widget_label_right,
+#Sidebar table.widget .widget_label_center,
+#Sidebar table.widget .widget_content_form_element,
+#Sidebar table.widget .widget_content_form_element_center {
+    font-size: 10px;
+}
+
+table.widget td {
+    color: #333;
+}
+
+/** Trident specific bolding of top li in an mktree view **/
+ul.mktree li {
+    font-weight: bold;
+}
+li a.liSelected {
+    font-size: 12px;
+    font-weight: bold;
+    color: rgb(240,184,47);
+}
+ul.mktree li.liOpen    .bullet { background: url(../../img/minus-basic.png)  center left no-repeat; }
+ul.mktree li.liClosed  .bullet { background: url(../../img/plus-basic.png)   center left no-repeat; }
+ul.mktree li.liBullet  .bullet { background: url(../../img/bullet-basic.png) center left no-repeat; }
+
+/** --------
+ * ANCHOR TAGS - colors/decorations
+ */
+a {
+    text-decoration: underline;
+    color: #073771;
+}
+a:hover {
+    text-decoration: underline;
+    color: rgb(240,184,47);
+}
+a:link {
+    text-decoration: underline;
+}
+
+
+/**
+ * PADDING and MARGINS
+ */
+table {
+    border-spacing: 1px;
+}
+table.widget {
+    margin-top: 5px;
+}
+
+table.widget td {
+    padding: 3px; /* use whitespace as separator */
+}
+#page_header {
+    padding: 8px;
+    margin: 0px;
+    line-height: 30px;   /* set line height for image */
+}
+table.widget .widget_label {
+    text-align: center;
+    padding: 1px 1px 1px 1px;
+}
+
+form,
+img,
+input,
+select,
+textarea {
+    margin: 3px;
+}
+table.widget_content {
+    margin: 2px;
+}
+table.widget .widget_content_graph table {
+    margin: 4px auto 4px auto;
+}
+table.widget .sublabel {
+    padding-right: 4px;
+}
+#Main,
+#Sidebar {
+    padding-top: 4px;
+}
+
+
+.non_uploaded_file a {
+    color: #990000; /* should match the color for non_uploaded_file above */
+}
+
+#PagerRestore {
+    padding: 8px 0 0 0;
+    background-image: url(../../img/pagerRestoreDark.png);
+}
+#PagerMaximize {
+    padding: 8px 0 0 0;
+    background-image: url(../../img/pagerMaximizeDark.png);
+}
+#PagerRefresh {
+    padding: 8px 0 0 0;
+    background-image: url(../../img/pagerRefreshDark.png);
+}
