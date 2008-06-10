@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.28 2006/12/05 11:10:01 jnhayart Exp $
+ * $Id: one.php,v 1.29 2008/06/10 20:24:17 randym56 Exp $
  */
 
 //include required files
@@ -55,6 +55,15 @@ if($my_company_id) {
     $rst = $con->execute($sql);
     $contact_menu = $rst->getmenu2('user_contact_id', $user_contact_id, true);
 }
+
+$sql = "select " . $con->Concat("first_names", "' '", "last_name") . " AS user_name,
+		user_id
+		FROM users
+		WHERE user_record_status = 'a'
+		ORDER BY user_id";
+$rst = $con->execute($sql);
+$user_menu = $rst->getmenu2('user_id', $user_id, false);
+
 $current_return_url=$return_url;
 require_once('user_roles_sidebar.php');
 $return_url=$current_return_url;
@@ -143,9 +152,9 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content>
-                <?php echo _("Click the button below to permanently remove this item."); ?>
-                <p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
-                <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
+                <?php echo _("Click the button below to permanently remove this user."); ?>
+                <p><?php echo _("Note: This action will set all Company, Contact & Activity records to the selected user, and CANNOT be undone!"); ?></p>
+                <p><?php echo $user_menu; ?><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
                 </td>
             </tr>
         </table>
@@ -167,6 +176,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.29  2008/06/10 20:24:17  randym56
+ * - Add ability to deactivate users without setting the 'd'elete flag (set to 'b') so that the records don't get purged.
+ * - Add function to move all Company, Contact & Activity records to alternate user when deleting the user to maintain DB integrity.
+ *
  * Revision 1.28  2006/12/05 11:10:01  jnhayart
  * Add cosmetics display, and control localisation
  *

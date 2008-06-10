@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.24 2006/12/05 11:10:01 jnhayart Exp $
+ * $Id: some.php,v 1.25 2008/06/10 20:24:17 randym56 Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -70,7 +70,7 @@ if ($rst) {
     $table_rows_a = '<tr><td>'._("Unable to get data from database").'</td> </tr>';
 }
 
-$sql = "select * from users where user_record_status = 'd' order by last_name, first_names ";
+$sql = "select * from users where user_record_status = 'b' order by last_name, first_names ";
 
 $rst = $con->execute($sql);
 
@@ -227,6 +227,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.25  2008/06/10 20:24:17  randym56
+ * - Add ability to deactivate users without setting the 'd'elete flag (set to 'b') so that the records don't get purged.
+ * - Add function to move all Company, Contact & Activity records to alternate user when deleting the user to maintain DB integrity.
+ *
  * Revision 1.24  2006/12/05 11:10:01  jnhayart
  * Add cosmetics display, and control localisation
  *

@@ -4,7 +4,7 @@
  *
  * Admin changes a user
  *
- * $Id: edit-2.php,v 1.17 2006/01/02 22:09:39 vanmer Exp $
+ * $Id: edit-2.php,v 1.18 2008/06/10 20:24:17 randym56 Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -69,7 +69,7 @@ switch ($userAction) {
     case 'editUser':
         if (array_key_exists('enabled',$_POST)) $enabled=true;
         else $enabled=false;
-        $user_record_status = ($enabled) ? 'a' : 'd';
+        $user_record_status = ($enabled) ? 'a' : 'b';
         
         $gmt_offset = (strlen($gmt_offset) > 0) ? $gmt_offset : 0;
         
@@ -116,6 +116,10 @@ switch ($userAction) {
 }    
 /**
  *$Log: edit-2.php,v $
+ *Revision 1.18  2008/06/10 20:24:17  randym56
+ *- Add ability to deactivate users without setting the 'd'elete flag (set to 'b') so that the records don't get purged.
+ *- Add function to move all Company, Contact & Activity records to alternate user when deleting the user to maintain DB integrity.
+ *
  *Revision 1.17  2006/01/02 22:09:39  vanmer
  *- changed to use centralized dbconnection function
  *
