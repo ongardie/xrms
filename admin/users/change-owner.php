@@ -5,7 +5,7 @@
  * Form to enter a new password for a user
  * @todo - add javascript validation on the save.
  *
- * $Id: change-owner.php,v 1.7 2006/12/03 20:18:46 braverock Exp $
+ * $Id: change-owner.php,v 1.8 2008/06/14 13:36:36 randym56 Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -15,7 +15,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 //
 // become Admin aware - Don't accept the user to edit from the URL
@@ -53,6 +53,7 @@ $new_user_id = get_user_menu($con, '', false, 'new_user_id');
                         <?php echo _("New Owner"); ?>
                     </td>
                     <td class=widget_header width=\"33%">
+                    	<?php echo _("Select Tables to Change"); ?>
                     </td>
                 <tr>
                     <td>     
@@ -60,6 +61,12 @@ $new_user_id = get_user_menu($con, '', false, 'new_user_id');
 					echo "</td><td>";
 					echo $new_user_id; ?>
                     <td>
+                    	<input type="checkbox" name="companies" value="1" checked>Companies<br>
+                    	<input type="checkbox" name="contacts" value="1" checked>Contacts<br>
+                        <input type="checkbox" name="activities" value="1" checked>Activities<br>
+                        <input type="checkbox" name="campaigns" value="1" checked>Campaigns<br>
+                        <input type="checkbox" name="opportunities" value="1" checked>Opportunities<br>
+                        <input type="checkbox" name="cases" value="1" checked>Cases<br>
                         <input type=submit name="Change" value="<?php echo _("Change All"); ?>"><BR>
                         <input type=submit name="Change" value="<?php echo _("Change Selected (all)"); ?>"><BR>
                         <input type=submit name="Change" value="<?php echo _("Change Selected (none)"); ?>">        
@@ -68,13 +75,13 @@ $new_user_id = get_user_menu($con, '', false, 'new_user_id');
             </table>
         </form>
         <?php 
-        	echo _("Change all : This will change the owner of open activities, companies, campaigns, opportunities and cases and remove the old user from these entities");
+        	echo _("Change all : This will change the owner of all records in selected tables.");
+			echo "<BR>";
+        	echo _("Change Selected : This will change the owner of selected company records related to all tables selected above (except campaigns)...");
 			echo "<BR>"; 
-        	echo _("Change Selected : This will change the owner of open companies, campaigns, opportunities and cases.");
+        	echo _("&nbsp;&nbsp;All -> All companies are checked.");
 			echo "<BR>"; 
-        	echo _("All -> All companies are checked.");
-			echo "<BR>"; 
-        	echo _("None -> No companies are cheched.");
+        	echo _("&nbsp;&nbsp;None -> No companies are checked.");
 			echo "<BR>"; 
          ?>
     </div>
@@ -93,6 +100,10 @@ end_page();
 
 /**
  *$Log: change-owner.php,v $
+ *Revision 1.8  2008/06/14 13:36:36  randym56
+ *- Add Contacts table to list of tables.
+ *- Add table select options.
+ *
  *Revision 1.7  2006/12/03 20:18:46  braverock
  *- fix mistranslated strings
  *

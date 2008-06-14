@@ -5,7 +5,7 @@
  * 
  * 
  *
- * $Id: change-owner-2.php,v 1.5 2006/07/29 19:48:27 jnhayart Exp $
+ * $Id: change-owner-2.php,v 1.6 2008/06/14 13:36:36 randym56 Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -18,6 +18,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
+$msg = '';
 //
 // become Admin aware - Don't accept the user to edit from the URL
 // or from POST for non-Admin types.
@@ -39,15 +40,28 @@ if ( !$current_user_id or !$new_user_id ) {
     exit;	
 }
 
+if (!$_POST['companies']=='1' & !$_POST['contacts']=='1' & !$_POST['activities']=='1' & !$_POST['campaigns']=='1' & !$_POST['opportunities']=='1' & !$_POST['cases']=='1') {
+    $msg = urlencode(_("Error: No tables selected"));
+    header("Location: change-owner.php?msg=" . $msg);
+    exit;
+	}
+
+$tables = array();
+
+if ($_POST['companies'] = '1') $tables['companies'] = 'companies';
+if ($_POST['contacts'] = '1') $tables['contacts'] = 'contacts';
+if ($_POST['activities'] = '1') $tables['activities'] = 'activities';
+if ($_POST['campaigns'] = '1') $tables['campaigns'] = 'campaigns';
+if ($_POST['opportunities'] = '1') $tables['opportunities'] = 'opportunities';
+if ($_POST['cases'] = '1') $tables['cases'] = 'cases';
 
 $con = get_xrms_dbconnection();
 
 //uncomment the debug line to see what's going on with the query
 // $con->debug = 1;
+
 if ($Change_Type == _("Change All")) {
 	
-$tables = array('companies', 'activities', 'campaigns', 'opportunities', 'cases');
-
 foreach ($tables as $table) {
 	
 	$singular = make_singular ($table);
@@ -132,7 +146,13 @@ start_page($page_title, true, $msg);
         <form action=change-owner-3.php method=post>
         <input type=hidden name=current_user_id value="<?php echo $current_user_id; ?>">
         <input type=hidden name=new_user_id value="<?php echo $new_user_id; ?>">
-        
+<?php
+if ($_POST['companies'] = '1') echo '<input type=hidden name=companies value="1">';
+if ($_POST['contacts'] = '1') echo '<input type=hidden name=contacts value="1">';
+if ($_POST['activities'] = '1') echo '<input type=hidden name=activities value="1">';
+if ($_POST['opportunities'] = '1') echo '<input type=hidden name=opportunities value="1">';
+if ($_POST['cases'] = '1') echo '<input type=hidden name=cases value="1">';
+?>
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=6><?php echo _("Confirm company"); ?></td>
@@ -159,6 +179,10 @@ end_page();
 
 /**
  *$Log: change-owner-2.php,v $
+ *Revision 1.6  2008/06/14 13:36:36  randym56
+ *- Add Contacts table to list of tables.
+ *- Add table select options.
+ *
  *Revision 1.5  2006/07/29 19:48:27  jnhayart
  *Release with capabilitie to select all or none on new screen
  *need add  "Change Selected (all)" and "Change Selected (none)" to langage file

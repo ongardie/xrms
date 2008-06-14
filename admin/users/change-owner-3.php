@@ -5,7 +5,7 @@
  * Check that new password entries are identical
  * Then save in the database.
  *
- * $Id: change-owner-3.php,v 1.1 2006/04/11 01:42:45 vanmer Exp $
+ * $Id: change-owner-3.php,v 1.2 2008/06/14 13:36:36 randym56 Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -47,29 +47,36 @@ $con = get_xrms_dbconnection();
 //uncomment the debug line to see what's going on with the query
 // $con->debug = 1;
 	
-$tables = array('companies', 'activities', 'opportunities', 'cases');
+$tables = array();
+
+if ($_POST['contacts'] = '1') $tables['contacts'] = 'contacts';
+if ($_POST['activities'] = '1') $tables['activities'] = 'activities';
+if ($_POST['opportunities'] = '1') $tables['opportunities'] = 'opportunities';
+if ($_POST['cases'] = '1') $tables['cases'] = 'cases';
+if ($_POST['companies'] = '1') $tables['companies'] = 'companies';
+
 
 foreach ($tables as $table) {
-	
+
 	$singular = make_singular ($table);
-	
+
     $sql = "SELECT * FROM " . $table ;
     $sql .=	" WHERE user_id = '" . $current_user_id . "'
  			AND " . $singular . "_record_status = 'a' and company_id in (" . $imploded_company . ") ";
- 			
+
     switch ($table) {
     	case "activities":
     	$sql .= "AND activity_status = 'o'";
     	break;
     }
-    
+
     $rst = $con->execute($sql);
 
     if ($rst) {
     	if (!$rst->EOF) {
 	    	$rec = array();
     		$rec['user_id'] = $new_user_id;
-    
+
     		$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
     		$con->execute($upd);
 
@@ -87,6 +94,10 @@ foreach ($tables as $table) {
 
 /**
  * $Log: change-owner-3.php,v $
+ * Revision 1.2  2008/06/14 13:36:36  randym56
+ * - Add Contacts table to list of tables.
+ * - Add table select options.
+ *
  * Revision 1.1  2006/04/11 01:42:45  vanmer
  * - changed the change owner application to use ACL administrator check instead of SESSION variable check
  * - added ability to selectively change ownership by company
