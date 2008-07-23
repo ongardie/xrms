@@ -1,7 +1,7 @@
 XRMS CRM - README
 
 =============================================================
-/** $Id: README,v 1.31 2007/10/16 23:38:35 randym56 Exp $ **/
+/** $Id: README,v 1.32 2008/07/23 08:20:46 polyformal_sp Exp $ **/
 
 ========================
 SUMMARY
@@ -334,7 +334,8 @@ Aaron van Meerten vanmer         Developer
 Neil Williams     metamedia      Developer
 Chris Woofter     cdwtech        Developer - Original Author of XRMS
 David Gaya        myelocyte      Developer
-Randy Martinsen	randym56	   Developer
+Randy Martinsen	  randym56       Developer
+Stefan Pampel     polyformal_sp  Developer
 
 Brunno Barrera                   Translator - Spanish
 Alan Baghumian                   Translator - Farsi
@@ -367,6 +368,9 @@ please let us know.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.32  2008/07/23 08:20:46  polyformal_sp
+ * add myself as a developer: Stefan Pampel
+ *
  * Revision 1.31  2007/10/16 23:38:35  randym56
  * My first post.  Add my name to the developer list.
  *
