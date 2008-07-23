@@ -66,6 +66,11 @@
       $cb_auto_user = (isset($_POST['cb_auto_user'])?$_POST['cb_auto_user']:'');
       $cb_auto_pass = (isset($_POST['cb_auto_pass'])?$_POST['cb_auto_pass']:'');
 
+      $ssl_link="<tr>
+        <td><small><a href=\"https://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"]."\">"._("Secure Login")."</a></small></td>
+        <td><small>"._("Secure login via")." 
+        <acronym title=\"Secure Socket Layer / Transport Layer Security\"> SSL / TLS</acronym>
+        </small></td> </tr>";
       echo "<center><table border=0>\n";
 
       if ($auto_pass) {
@@ -73,7 +78,9 @@
          echo "<input type=checkbox name=cb_auto_pass value=true>\n";
          echo "</td><td valign=center nowrap>\n";
          echo "<small>" . _("Remember my Name & Password") . "<small>\n";
-         echo "</td></tr>\n";
+         echo "</td>";
+         if (!$_SERVER['HTTPS']) echo $ssl_link;
+         echo "</tr>\n";
       }
       else {
          if ($auto_user && !isset($user)) {
