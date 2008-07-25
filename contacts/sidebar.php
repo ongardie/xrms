@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.25 2008/02/07 02:33:50 randym56 Exp $
+ * $Id: sidebar.php,v 1.26 2008/07/25 21:17:27 polyformal_sp Exp $
  */
 
 $new_cell_phone         = isset($_GET['cell_phone']) ? $_GET['cell_phone'] : false;
@@ -144,8 +144,11 @@ if ( $contact_id ) {
         }
 
         if ($rst->fields['email']) {
+            // build contact's full name for using with mailto: 
+            $contact_fullname= $rst->fields['first_names']  ." ". $rst->fields['last_name'];
+            
             $contact_block .= "<tr>\n\t\t<td class=widget_content>"
-                            . "<a href='mailto:". $rst->fields['email']."' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$contact_id&contact_id=$contact_id&company_id=$company_id&email=$email&activity_title=email to $first_names $last_name&activity_description=Sent via desktop client&return_url=/contacts/one.php?contact_id=$contact_id'\">"
+                            . "<a href='mailto:". $contact_fullname." <" . $rst->fields['email'].">' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$contact_id&contact_id=$contact_id&company_id=$company_id&email=$email&activity_title=email to $first_names $last_name&activity_description=Sent via desktop client&return_url=/contacts/one.php?contact_id=$contact_id'\">"
                             . $rst->fields['email'] . "</a></td>\n\t</tr>";
         }
         else {
@@ -221,6 +224,10 @@ $contact_block .= "
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.26  2008/07/25 21:17:27  polyformal_sp
+ * mailto: full name, patch from https://sourceforge.net/tracker/index.php?func=detail&aid=1898592&group_id=88850&atid=588130
+ * missing sidebar_hooks, patch from http://sourceforge.net/tracker/index.php?func=detail&aid=2018568&group_id=88850&atid=588130
+ *
  * Revision 1.25  2008/02/07 02:33:50  randym56
  * Added activity description in e-mail to
  *

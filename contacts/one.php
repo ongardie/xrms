@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.103 2008/02/07 02:33:50 randym56 Exp $
+ * $Id: one.php,v 1.104 2008/07/25 21:17:27 polyformal_sp Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -297,7 +297,7 @@ function openMsnSession(strIMAddress) {
                                     <td class=sublabel><?php echo _("E-Mail"); ?></td>
 
                                     <td class=clear>
-                                    <a href='mailto:<?php echo $email."' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$contact_id&contact_id=$contact_id&company_id=$company_id&email=$email&activity_title=email to $first_names $last_name&activity_description=Sent via desktop client&return_url=/contacts/one.php?contact_id=$contact_id";?>'">
+                                    <a href='mailto:<?php echo $first_names . ' ' . $last_name.' <'.$email.">' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$contact_id&contact_id=$contact_id&company_id=$company_id&email=$email&activity_title=email to $first_names $last_name&activity_description=Sent via desktop client&return_url=/contacts/one.php?contact_id=$contact_id";?>'">
                                     <?php echo htmlspecialchars($email); ?></a>
                                     </td>
                                 </tr>
@@ -508,6 +508,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.104  2008/07/25 21:17:27  polyformal_sp
+ * mailto: full name, patch from https://sourceforge.net/tracker/index.php?func=detail&aid=1898592&group_id=88850&atid=588130
+ * missing sidebar_hooks, patch from http://sourceforge.net/tracker/index.php?func=detail&aid=2018568&group_id=88850&atid=588130
+ *
  * Revision 1.103  2008/02/07 02:33:50  randym56
  * Added activity description in e-mail to
  *

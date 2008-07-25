@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.89 2007/10/30 02:36:22 randym56 Exp $
+ * $Id: some.php,v 1.90 2008/07/25 21:17:26 polyformal_sp Exp $
  */
 
 require_once('../include-locations.inc');
@@ -518,6 +518,28 @@ if ($criteria_count > 0) {
             add_audit_item($con, $session_user_id, 'searched', 'companies', '', 4);
 }
 
+/*********************************/
+/*** Include the sidebar boxes ***/
+
+// make sure $sidebar_rows_top is defined
+if ( !isset($sidebar_rows_top) ) {
+  $sidebar_rows_top = '';
+}
+
+//call the sidebar top hook
+$sidebar_rows_top = do_hook_function('company_some_sidebar_top', $sidebar_rows_top);
+
+// make sure $sidebar_rows_bottom is defined
+if ( !isset($sidebar_rows_bottom) ) {
+  $sidebar_rows_bottom = '';
+}
+
+//call the sidebar bottom hook
+$sidebar_rows_bottom = do_hook_function('company_some_sidebar_bottom', $sidebar_rows_bottom);
+
+/** End of the sidebar includes **/
+/*********************************/
+
 $page_title = _("Search Companies");
 start_page($page_title, true, $msg);
 
@@ -967,6 +989,9 @@ $con->close();
         <!-- right column //-->
     <div id="Sidebar">
 
+        <!-- sidebar plugins - top //-->
+        <?php echo $sidebar_rows_top; ?>
+ 
         <!-- new company //-->
         <div class="noprint">
         <table class=widget cellspacing=1 width="100%">
@@ -989,6 +1014,9 @@ $con->close();
             </tr>
             <?php  echo $recently_viewed_table_rows; ?>
         </table>
+
+        <!-- sidebar plugins - bottom //-->
+        <?php echo $sidebar_rows_bottom; ?>
 
     </div>
 </div>
@@ -1060,6 +1088,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.90  2008/07/25 21:17:26  polyformal_sp
+ * mailto: full name, patch from https://sourceforge.net/tracker/index.php?func=detail&aid=1898592&group_id=88850&atid=588130
+ * missing sidebar_hooks, patch from http://sourceforge.net/tracker/index.php?func=detail&aid=2018568&group_id=88850&atid=588130
+ *
  * Revision 1.89  2007/10/30 02:36:22  randym56
  * - Changed "Mail Merge" to be "eMail Merge" to separate from "Snail Mail Merge"
  *

@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.60 2007/12/10 16:59:19 gpowers Exp $
+ * $Id: one.php,v 1.61 2008/07/25 21:17:27 polyformal_sp Exp $
  */
 
 require_once('../include-locations.inc');
@@ -182,6 +182,23 @@ require_once("../notes/sidebar.php");
 //include the relationships sidebar
 $relationships = array('opportunities' => $opportunity_id);
 require("../relationships/sidebar.php");
+
+// make sure $sidebar_rows_top is defined
+if ( !isset($sidebar_rows_top) ) {
+  $sidebar_rows_top = '';
+}
+
+//call the sidebar top hook
+$sidebar_rows_top = do_hook_function('opportunity_sidebar_top', $sidebar_rows_top);
+
+// make sure $sidebar_rows_bottom is defined
+if ( !isset($sidebar_rows_bottom) ) {
+  $sidebar_rows_bottom = '';
+}
+
+//call the sidebar bottom hook
+$sidebar_rows_bottom = do_hook_function('opportunity_sidebar_bottom', $sidebar_rows_bottom);
+
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -370,6 +387,9 @@ function markComplete() {
     <!-- right column //-->
     <div id="Sidebar">
 
+        <!-- top sidebar plugins //-->
+        <?php echo $sidebar_rows_top; ?>
+ 
         <!-- categories //-->
         <?php echo $category_rows; ?>
 
@@ -381,6 +401,9 @@ function markComplete() {
 
         <!-- relationships //-->
         <?php echo $relationship_link_rows; ?>
+
+        <!-- bottom sidebar plugins //-->
+        <?php echo $sidebar_rows_bottom; ?>
 
     </div>
 </div>
@@ -400,6 +423,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.61  2008/07/25 21:17:27  polyformal_sp
+ * mailto: full name, patch from https://sourceforge.net/tracker/index.php?func=detail&aid=1898592&group_id=88850&atid=588130
+ * missing sidebar_hooks, patch from http://sourceforge.net/tracker/index.php?func=detail&aid=2018568&group_id=88850&atid=588130
+ *
  * Revision 1.60  2007/12/10 16:59:19  gpowers
  * - Added 'type' => 'currency' to "Opportunity Size" and "Weighted Size"
  *

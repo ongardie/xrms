@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.76 2007/10/30 02:59:28 randym56 Exp $
+ * $Id: some.php,v 1.77 2008/07/25 21:17:27 polyformal_sp Exp $
  */
 
 //include the standard files
@@ -339,7 +339,27 @@ if( $rst AND $rst->RowCount() ) {
 
 /********** SAVED SEARCH ENDS ****/
 
+/*********************************/
+/*** Include the sidebar boxes ***/
 
+// make sure $sidebar_rows_top is defined
+if ( !isset($sidebar_rows_top) ) {
+  $sidebar_rows_top = '';
+}
+
+//call the sidebar top hook
+$sidebar_rows_top = do_hook_function('contact_some_sidebar_top', $sidebar_rows_top);
+
+// make sure $sidebar_rows_bottom is defined
+if ( !isset($sidebar_rows_bottom) ) {
+  $sidebar_rows_bottom = '';
+}
+
+//call the sidebar bottom hook
+$sidebar_rows_bottom = do_hook_function('contact_some_sidebar_bottom', $sidebar_rows_bottom);
+
+/** End of the sidebar includes **/
+/*********************************/
 
 start_page($page_title, true, $msg);
 if(!isset($contacts_next_page)) {
@@ -554,6 +574,10 @@ $fast_add_contact_button=render_create_button(_("New Contact and Company"), 'sub
 
         <!-- right column //-->
     <div id="Sidebar">
+
+        <!-- top sidebar plugins //-->
+        <?php echo $sidebar_rows_top; ?>
+
         <form action="new_contact_company_select.php" method=POST onSubmit="return setNewContact_company_name()" name=newContact>
             <input type=hidden name=company_name id='newContact_company_name'>
             <input type=hidden name=return_url value="<?php echo $newContact_return_url; ?>">
@@ -583,6 +607,9 @@ $fast_add_contact_button=render_create_button(_("New Contact and Company"), 'sub
             </tr>
             <?php  echo $recently_viewed_table_rows; ?>
         </table>
+
+        <!-- bottom sidebar plugins //-->
+        <?php echo $sidebar_rows_bottom; ?>
 
     </div>
 </div>
@@ -643,6 +670,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.77  2008/07/25 21:17:27  polyformal_sp
+ * mailto: full name, patch from https://sourceforge.net/tracker/index.php?func=detail&aid=1898592&group_id=88850&atid=588130
+ * missing sidebar_hooks, patch from http://sourceforge.net/tracker/index.php?func=detail&aid=2018568&group_id=88850&atid=588130
+ *
  * Revision 1.76  2007/10/30 02:59:28  randym56
  * - Changed "Mail Merge" to be "eMail Merge" to separate from "Snail Mail Merge"
  * - New search functions that include some company fields for quicker lookups + more options

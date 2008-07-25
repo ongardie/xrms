@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.70 2008/05/05 13:28:28 randym56 Exp $
+ * $Id: some.php,v 1.71 2008/07/25 21:17:27 polyformal_sp Exp $
  */
 
 require_once('../include-locations.inc');
@@ -333,6 +333,29 @@ if ( $rst ) {
   $rst->close();
 }
 
+/*********************************/
+/*** Include the sidebar boxes ***/
+
+// make sure $sidebar_rows_top is defined
+if ( !isset($sidebar_rows_top) ) {
+  $sidebar_rows_top = '';
+}
+
+//call the sidebar top hook
+$sidebar_rows_top = do_hook_function('opportunity_some_sidebar_top', $sidebar_rows_top);
+
+// make sure $sidebar_rows_bottom is defined
+if ( !isset($sidebar_rows_bottom) ) {
+  $sidebar_rows_bottom = '';
+}
+
+//call the sidebar bottom hook
+$sidebar_rows_bottom = do_hook_function('opportunity_some_sidebar_bottom', $sidebar_rows_bottom);
+
+
+/** End of the sidebar includes **/
+/*********************************/
+
 $page_title = _("Opportunities");
 start_page($page_title, true, $msg);
 
@@ -510,6 +533,9 @@ $con->close();
         <!-- right column //-->
     <div id="Sidebar">
 
+        <!-- top sidebar plugins //-->
+        <?php echo $sidebar_rows_top; ?>
+ 
         <!-- recently viewed companies //-->
     <div id="Recent" class="noprint">
         <table class=widget cellspacing=1 width="100%">
@@ -525,6 +551,8 @@ $con->close();
             <?php  echo $recently_viewed_table_rows; ?>
         </table>
     </div>
+        <!-- bottom sidebar plugins //-->
+        <?php echo $sidebar_rows_bottom; ?>
     </div>
 </div>
 
@@ -573,6 +601,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.71  2008/07/25 21:17:27  polyformal_sp
+ * mailto: full name, patch from https://sourceforge.net/tracker/index.php?func=detail&aid=1898592&group_id=88850&atid=588130
+ * missing sidebar_hooks, patch from http://sourceforge.net/tracker/index.php?func=detail&aid=2018568&group_id=88850&atid=588130
+ *
  * Revision 1.70  2008/05/05 13:28:28  randym56
  * Fixed Owner selection bug; added date entered and last modified and CRM Status to selectable column layouts; added CRM Status to selection critera.
  *

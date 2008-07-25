@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.152 2008/05/24 20:34:23 randym56 Exp $
+ * $Id: one.php,v 1.153 2008/07/25 21:17:26 polyformal_sp Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -318,9 +318,12 @@ if ($division_id) $new_contact_location.= "&division_id=$division_id";
         global $contact_id;
         $contact_id = $row['contact_id'];
 
+        // build contact's full name for using with mailto: 
+        $contact_fullname = trim(join(' ', array_reverse(explode(',',strip_tags($row['name'])))));
+        
         $row['work_phone'] = get_formatted_phone($con, $address_id, $row['work_phone']);
         $row['cell_phone'] = get_formatted_phone($con, $address_id, $row['cell_phone']);
-        $row['email'] = "<a href='mailto:{$row['email']}' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&company_id=$company_id&contact_id={$row['contact_id']}&email=true&return_url=/companies/one.php%3Fcompany_id=$company_id&activity_title=email%20to%20{$row['first_names']}%20{$row['last_name']}&&activity_description=Sent%20via%20desktop%20client'\" >" . htmlspecialchars($row['email']) . '</a>';
+        $row['email'] = "<a href='mailto:{$contact_fullname} <{$row['email']}>' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&company_id=$company_id&contact_id={$row['contact_id']}&email=true&return_url=/companies/one.php%3Fcompany_id=$company_id&activity_title=email%20to%20{$row['first_names']}%20{$row['last_name']}&&activity_description=Sent%20via%20desktop%20client'\" >" . htmlspecialchars($row['email']) . '</a>';
 
         return $row;
     }
@@ -796,6 +799,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.153  2008/07/25 21:17:26  polyformal_sp
+ * mailto: full name, patch from https://sourceforge.net/tracker/index.php?func=detail&aid=1898592&group_id=88850&atid=588130
+ * missing sidebar_hooks, patch from http://sourceforge.net/tracker/index.php?func=detail&aid=2018568&group_id=88850&atid=588130
+ *
  * Revision 1.152  2008/05/24 20:34:23  randym56
  * changed pretty_name to display_html in company view
  *
