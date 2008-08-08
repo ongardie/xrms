@@ -47,7 +47,7 @@ body {
 }
 	#navline a {
 		color: #000066;
-		background-color: #6699CC;
+		background-color: #99BBDD;
 		font-weight: 900;
 		text-decoration: none;
 		padding: 0.2em 0.5em;
@@ -61,24 +61,12 @@ body {
     padding: 6px 4px;
     margin: 4px;
     background-color: #ffff99;
-    border: 1px solid #ddd;
+    border: 1px solid #999999;
 }
-
-input.button {
-    color: #000066;
-    background-color: #CCDDFF;
-    font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
-    border: 1px solid #000066;
-    margin: 0px 2px;
-    padding: 1px;
-}
-	input.button:hover {
-		background-color: #E8E8E8;
-	}
 
 table.widget {
     background-color: #e1e1e1;
+    border: 1px solid #999999;
 }
 	table.widget th,
 	table.widget td {
@@ -124,9 +112,6 @@ table.widget {
 	}
 	table.widget .scheduled_activity {
 	/*     background-color: #eef; */
-	}
-	table.widget  {
-		background-color: #bbb;
 	}
 	table.widget .widget_label {
 		background-color: #f0f0f0;
@@ -283,13 +268,6 @@ table.widget .widget_label {
     padding: 1px 1px 1px 1px;
 }
 
-form,
-img,
-input,
-select,
-textarea {
-    margin: 3px;
-}
 table.widget_content {
     margin: 2px;
 }
@@ -304,6 +282,10 @@ table.widget .sublabel {
     padding-top: 4px;
 }
 
+input,
+select {
+    margin: 3px;
+}
 
 .non_uploaded_file a {
     color: #990000; /* should match the color for non_uploaded_file above */

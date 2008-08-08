@@ -6,6 +6,8 @@
  */
 @import url(../blueengine/blueengine.css);
 
+/** Include the Calendar widget CSS again because FF3 forgets about it **/
+@import url(../../js/jscalendar/calendar-blue.css);
 
 /**
  * Change margin/width for sidebar on the left
