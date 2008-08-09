@@ -1,0 +1,6 @@
+INSTALL INSTRUCTIONS - View before turning on
+
+You must obtain an valid key for your domain from 
+http://www.google.com/apis/maps/signup.html
+enter the key in setup.php
+$google_maps_apikey='...'
