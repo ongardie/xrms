@@ -8,7 +8,7 @@
  *
  * @author Randy Martinsen
  *
- * $Id: updateto2.1.php,v 1.3 2008/02/27 02:00:20 randym56 Exp $
+ * $Id: updateto2.1.php,v 1.4 2008/08/14 14:59:50 randym56 Exp $
  */
 
 // where do we include from
@@ -122,7 +122,7 @@ if ($rst->EOF) {
         $sql ="INSERT INTO user_preferences
         (user_id,user_preference_type_id,user_preference_value,user_preference_status,user_preference_modified_on,user_preference_created_by,
                 user_preference_modified_by)
-        VALUES (0,24,'orders@budgetworks.com','a',now(),0,0)";
+        VALUES (0,24,'you@yourmail.com','a',now(),0,0)";
     $rst = $con->execute($sql);
         }
 
@@ -188,6 +188,9 @@ start_page($page_title, true, $msg);
 end_page();
 /**
  * $Log: updateto2.1.php,v $
+ * Revision 1.4  2008/08/14 14:59:50  randym56
+ * Fixed system e-mail add.
+ *
  * Revision 1.3  2008/02/27 02:00:20  randym56
  * Set version to 1.99.3
  *
