@@ -43,9 +43,10 @@ body {
     background-color: #E8E8E8;
     border-top: 1px solid #999999;
     border-bottom: 1px solid #999999;
-    padding: 8px;
+    padding: 0.25em 0.75em;
 }
 	#navline a {
+		line-height: 2.25em;
 		color: #000066;
 		background-color: #99BBDD;
 		font-weight: 900;
