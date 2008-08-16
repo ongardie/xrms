@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.187 2008/01/30 21:34:40 gpowers Exp $
+ * $Id: utils-misc.php,v 1.188 2008/08/16 02:48:21 randym56 Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -96,7 +96,7 @@ function session_startup () {
  * @param string $action - optionally specify what action to check user permission for (defaults to Read)
  * @return integer user_id of the logged in user
  */
-function session_check($c_role='', $action='Read', $check_user_permission=false) {
+function session_check($c_role='', $action='Read', $check_user_permission=false, $redirect="/private/home.php?msg=noperm") {
 
     global $http_site_root;
     global $xrms_system_id;
@@ -263,10 +263,14 @@ function add_audit_item(&$con, $user_id, $audit_item_type, $on_what_table, $on_w
  * @return string  $company_name
  */
 function fetch_company_name($con, $company_id) {
-    if(!$con || !$company_id)
-        return false;
-    else
-        return $con->GetOne('SELECT company_name FROM companies WHERE company_id='.$company_id);
+
+    $rst_company_name = $con->execute("select company_name from companies where company_id = $company_id");
+    if ($rst_company_name) {
+        $company_name = $rst_company_name->fields['company_name'];
+        $rst_company_name->close();
+    }
+
+    return $company_name;
 }
 
 
@@ -782,18 +786,21 @@ function get_country_from_address($con, $address_id) {
  */
  function get_phone_format_from_country($con, $country_id) {
     if (!$country_id OR !$con) return false;
+/* code removed by randym -> was causing problems with selecting formats from countries and displaying them correctly
     $func_name='get_phone_format_from_country';
+
     $params=array($country_id);
     if (function_cache_bool($func_name, $params)) {
 //        echo "<pre>"; print_r($_SESSION); echo "</pre>";
         return function_cache_get($func_name, $params);
     }
+*/	
     $sql = "select countries.phone_format FROM countries WHERE country_id=$country_id";
     $rst=$con->execute($sql);
     if (!$rst) { db_error_handler($con, $sql);  return false; }
     if (!$rst->EOF) {
         $phone_format=$rst->fields['phone_format'];
-        function_cache_set($func_name, $params, $phone_format, false);
+ //       function_cache_set($func_name, $params, $phone_format, false);
         return $phone_format;
     }
     return false;
@@ -813,6 +820,7 @@ function get_country_from_address($con, $address_id) {
  * @return string $phone_to_display
  */
 function get_formatted_phone ($con, $address_id, $phone, $country_id=false) {
+	$phone = get_formatted_phone_by_address ($con, $address_id, $phone, $country_id);
     return $phone;
     //get_formatted_phone_by_country($con, $address_id, $phone, $country_id=false);
 }
@@ -826,7 +834,9 @@ function get_formatted_phone_by_address ($con, $address_id, $phone, $country_id=
         $country_id=get_country_from_address($con, $address_id);
     }
     if (!$country_id) {
-    $country_id = $default_country_id;
+	// turned off default because it truncates other countries phone numbers if longer than 10 digits.
+    //$country_id = $default_country_id;
+	return $phone;
     }
 
     $expression=get_phone_format_from_country($con, $country_id);
@@ -905,7 +915,7 @@ function clean_phone_fields(&$fields, $phone_fields) {
  *
  * Cleans many fields in array of phone field formatting strings, taking an array by reference and modifying its contents
  * according to the system preference phone_fax_number_clean.
- * 
+ *
  * @param array $array to modify and clean the phone fields in (by references)
  * @param array $array of array_keys in the first array which correspond to phone fields
  *
@@ -976,7 +986,7 @@ function clean_phone_number_for_db($phone_number_in) {
 	}
 	else {
 	 	// failsafe behaviour of this function - as per xrms default...
-	 	return preg_replace("/[^\d]/", '', $phone_number_in);		
+	 	return preg_replace("/[^\d]/", '', $phone_number_in);
 	}
 }
 
@@ -1017,14 +1027,14 @@ function get_company_addresses($con, $company_id=false) {
     if (!$company_id)
         return false;
 
-    $sql = "SELECT address_id 
-            FROM addresses 
+    $sql = "SELECT address_id
+            FROM addresses
             WHERE on_what_table = 'companies' 
 	      AND on_what_id=$company_id 
 	      AND address_record_status='a'";
     $addresses = $con->GetCol($sql);
-    
-    if ($addresses === false) { 
+
+    if ($addresses === false) {
         db_error_handler($con, $sql);
         return false;
     } elseif (empty($addresses)) {
@@ -1059,6 +1069,7 @@ function get_formatted_address (&$con,$address_id=false, $company_id=false, $sin
     $sql .= "where a.address_id=$address_id ";
     $sql .= 'and a.country_id=c.country_id ';
     $sql .= 'and c.address_format_string_id=afs.address_format_string_id';
+    $sql .= "and a.address_record_status='a'";
     $rst = $con->execute($sql);
 
     if ($rst) {
@@ -2094,6 +2105,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.188  2008/08/16 02:48:21  randym56
+ * Update phone format - missing reference discovered by gopherit, and introduced to CVS after v1.87.  Also removed cache code from country phone format lookup search - was interfering with country phone format lookup.
+ *
  * Revision 1.187  2008/01/30 21:34:40  gpowers
  * - changed GMT offset to Timezone
  * - not tested on multiple platforms
@@ -2247,7 +2261,7 @@ require_once($include_directory . 'utils-database.php');
  *
  * Revision 1.141  2005/07/11 16:00:09  braverock
  * - update session cache unset to resolve hang bug in some environments
- *   credit miguel Gonçalves (mig77) for the problem report and resolution
+ *   credit miguel Gonalves (mig77) for the problem report and resolution
  *
  * Revision 1.140  2005/07/08 19:25:22  jswalter
  *  - added 'random_string()' for central method to create secure  passwords and file names
