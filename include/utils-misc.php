@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.188 2008/08/16 02:48:21 randym56 Exp $
+ * $Id: utils-misc.php,v 1.189 2008/08/26 09:46:07 braverock Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -1068,7 +1068,7 @@ function get_formatted_address (&$con,$address_id=false, $company_id=false, $sin
     $sql .= 'from addresses a, address_format_strings afs, countries c ';
     $sql .= "where a.address_id=$address_id ";
     $sql .= 'and a.country_id=c.country_id ';
-    $sql .= 'and c.address_format_string_id=afs.address_format_string_id';
+    $sql .= 'and c.address_format_string_id=afs.address_format_string_id ';
     $sql .= "and a.address_record_status='a'";
     $rst = $con->execute($sql);
 
@@ -2105,6 +2105,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.189  2008/08/26 09:46:07  braverock
+ * - add missing space to sql
+ *
  * Revision 1.188  2008/08/16 02:48:21  randym56
  * Update phone format - missing reference discovered by gopherit, and introduced to CVS after v1.87.  Also removed cache code from country phone format lookup search - was interfering with country phone format lookup.
  *
