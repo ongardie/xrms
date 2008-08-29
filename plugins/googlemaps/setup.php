@@ -1,12 +1,12 @@
 <?php
 /*
 *
-* xing plugin
+* googlemaps plugin
 * by Stefan Pampel <stefan.pampel@polyformal.de> 
 * polyformal ( http://www.polyformal.de/ )
 * (c) 2007 (GNU GPL - see ../../COPYING)
 * 
-* $Id: setup.php,v 1.1 2008/08/09 14:13:26 randym56 Exp $
+* $Id: setup.php,v 1.2 2008/08/29 14:51:45 polyformal_sp Exp $
 *
 * This plugin allows show the location of the selected company in the sidebar
 * within google maps.
@@ -24,7 +24,7 @@ function xrms_plugin_init_googlemaps () {
     
 function googlemaps () {
     global $con, $contact_id, $sidebar, $company_id, $company_name, $my_company_id;
-	$google_maps_apikey ="ABQIAAAAB0zjRnMEpKe6vamz2SKl4xQu4nSd9P7liTVaIVaMzn0q7SrjURTURy_xHpA5-CI0i3xikWBCNPiuFA";
+	$google_maps_apikey ="";
     $sql = "select * from addresses inner join countries on addresses.country_id=countries.country_id where company_id=". $company_id;
     $rst = $con->execute($sql);
     if ($rst) {
@@ -130,6 +130,9 @@ if (window.attachEvent) {
 }
 /*
  * $Log: setup.php,v $
+ * Revision 1.2  2008/08/29 14:51:45  polyformal_sp
+ * midify xing to googlemaps in comments (mistype)
+ *
  * Revision 1.1  2008/08/09 14:13:26  randym56
  * Added to core XRMS
  *
