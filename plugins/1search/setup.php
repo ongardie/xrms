@@ -4,7 +4,7 @@
  * Search plugin for XRMS
  * Copyright (c) 2007 Glenn Powers <glenn@net127.com>
  *
- * $Id: setup.php,v 1.1 2007/12/10 17:53:03 gpowers Exp $
+ * $Id: setup.php,v 1.2 2008/08/30 16:25:39 polyformal_sp Exp $
  */
 
 function xrms_plugin_init_1search() {
@@ -143,7 +143,7 @@ function liveSearchStart() {
 function liveSearchDoSearch() {
 
 	if (typeof liveSearchRoot == \"undefined\") {
-		liveSearchRoot = \"/xrms/plugins/1search\";
+		liveSearchRoot = \"". $http_site_root ."/plugins/1search\";
 	}
 	if (typeof liveSearchRootSubDir == \"undefined\") {
 		liveSearchRootSubDir = \"\";
