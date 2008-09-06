@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.83 2007/02/06 18:57:55 braverock Exp $
+ * $Id: edit-2.php,v 1.84 2008/09/06 23:13:36 randym56 Exp $
  */
 
 //include required files
@@ -376,8 +376,25 @@ if (!empty($email_to)) {
 
     $objSMTP->sendMsg ();
     $errors = $objSMTP->getErrors();
-    if(!empty($errors))
-	trigger_error('SMTP errors: '.$errors, E_USER_WARNING);
+    if ((!empty($errors)) and ($errors <> "No Errors Generated."))
+	trigger_error('SMTP errors: '.$errors, E_USER_WARNING); else
+		{
+		//add activity record to user who received the e-mail
+		$sql_insert_activity = "insert into activities set
+                        activity_type_id = '3',
+                        user_id = $user_id,
+                        company_id = $company_id,
+                        contact_id = $contact_id,
+                        activity_title = 'Email: Activity Sent To Another User',
+                        activity_description = 'User: {$email_to} -> $output',
+                        entered_at = ".$con->dbtimestamp(mktime()).",
+                        scheduled_at = ".$con->dbtimestamp(mktime()).",
+                        ends_at = ".$con->dbtimestamp(mktime()).",
+                        entered_by = $session_user_id,
+						activity_status = 'c'";
+
+		$con->execute($sql_insert_activity);
+		}
 }
 
 $con->close();
@@ -398,6 +415,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.84  2008/09/06 23:13:36  randym56
+ * Added activity to contact/company record when sending e-mail copy of activity to another user.
+ *
  * Revision 1.83  2007/02/06 18:57:55  braverock
  * - fix include directory
  *
