@@ -13,46 +13,65 @@
 
 
 /** ----------
- * LAYOUT ADJUSTMENTS - to accomodate new font dimentions
+ * LAYOUT ADJUSTMENTS
  */
+ 
 #Main #Sidebar {
-    margin: 0px;
+	margin: 0px;
+}
+#xrms_calendar {
+	width: 100%;
+}
+#xrms_calendar table.widget .widget_content,
+#xrms_calendar table.widget .widget_content_today,
+#xrms_calendar table.widget .widget_content_alt2 {
+	padding: 0;
+	margin: 0;
 }
 
+#xrms_calendar table.widget .widget_content .right,
+#xrms_calendar table.widget .widget_content_today .right,
+#xrms_calendar table.widget .widget_content_alt2 .right {
+	padding: 0 0.2em;
+}
+
+#xrms_calendar table.widget .widget_content_today {
+	background-color: #F8F8F8;
+}
 
 /** ----------
  * blueengine styles
  */
 
 body {
-    background-color: #CCDDFF;
-    margin: 4px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
+	background-color: #CCDDFF;
+	margin: 4px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
 }
 
 #page_header {
-    color: #333366;
-    font-size: 14px;
-    font-weight: bold;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: #333366;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
 #navline {
-    color: #E8E8E8;
-    background-color: #E8E8E8;
-    border-top: 1px solid #999999;
-    border-bottom: 1px solid #999999;
-    padding: 0.25em 0.75em;
+	color: #E8E8E8; 
+	background-color: #E8E8E8; 
+	border-top: 1px solid #999999; 
+	border-bottom: 1px solid #999999; 
+	padding: 0.25em 0.75em; 
 }
 	#navline a {
-		line-height: 2.25em;
-		color: #000066;
-		background-color: #99BBDD;
-		font-weight: 900;
-		text-decoration: none;
-		padding: 0.2em 0.5em;
-		border: 1px solid #000066;
+		line-height: 2.25em; 
+		color: #000066; 
+		background-color: #99BBDD; 
+		font-weight: 900; 
+		text-decoration: none; 
+		padding: 0.2em 0.5em; 
+		border: 1px solid #000066; 
 	}
 	#navline a:hover {
 		background-color: #CCDDFF;
@@ -128,6 +147,13 @@ table.widget {
 		.overdue_activity a:hover, .closed_activity a:hover {
 			color: rgb(240,184,47);
 		}
+
+#xrms_calendar table.widget .widget_content {
+    padding: 0;
+}
+#xrms_calendar table.widget .widget_content table {
+    background-color: #f0f0f0;
+}
 
 
 /** ----------
