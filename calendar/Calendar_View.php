@@ -4,7 +4,7 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.11 2008/01/29 19:48:10 gpowers Exp $
+ * $Id: Calendar_View.php,v 1.12 2008/09/11 14:31:50 randym56 Exp $
  */
 
 global $include_directory;
@@ -74,14 +74,14 @@ class CalendarView {
             }
         }
 
-        // echo "calendar date is $calendar_start_date";
+        //echo "calendar date is $calendar_start_date";
         $this->con                  = $con;
         $this->form_name            = $form_name;
         $this->calendar_date_field  = $calendar_date_field;
         $this->start_date           = $calendar_start_date;
         $this->calendar_type        = $calendar_type;
         $this->display_mode         = $calendar_display_mode;
-   
+
     }
 
     /**
@@ -98,9 +98,9 @@ class CalendarView {
     *
     * @param string the starting date (any day of the week)
     * @param string the day of the week ('Mon','Tuesday',etc)
-    * @return string the first Monday of the week before
+    * @return string the first Sunday of the week before
     */
-    function GetWeekStart($date, $day = 'Monday') {
+    function GetWeekStart($date, $day = 'Sunday') {
         if (!isset($set_weekstart_default))
             $set_weekstart_default = 'Sunday';
 
@@ -155,13 +155,13 @@ function Render($activity_data) {
 
         case 'month':
 
-            // display starts on monday, not necessarily the 1st
-            $visible_start_date = $this->GetWeekStart($this->start_date, 'Monday');
+            // display starts on Sunday, not necessarily the 1st
+            $visible_start_date = $this->GetWeekStart($this->start_date, 'Sunday');
 
             $current_month = date('m', strtotime($this->start_date));
 
             $widget = '';
-            $week_count = 5;
+            $week_count = 7;
 
             if($visible_start_date != $this->start_date) {
                 $days_offset = (strtotime($this->start_date) - strtotime($visible_start_date)) / 86400;
@@ -226,10 +226,10 @@ function Render($activity_data) {
                         $td_class .= 'widget_content';
                     }
 
-                    $widget .= "<td class=\"$td_class\" width=105 height=105>
+                    $widget .= "<td class=\"$td_class\" width=14.4% height=105>
                                 <table width=\"100%\" border=0 cellspacing=0 cellpadding=1>
                                     <tr><td class=\"$td_class right\">" . date('j', $day_start_time) . "</td></tr>
-                                    <tr><td class=\"$td_class\" valign=top width=105>$events_rows</td></tr>
+                                    <tr><td class=\"$td_class\" valign=top width=14.4%>$events_rows</td></tr>
                                 </table></td>";
 
                 }
@@ -242,7 +242,7 @@ function Render($activity_data) {
             for ($i=0; $i<7; $i++) {
                 $day = date('D',  strtotime("+$i days  $visible_start_date "));
 
-                $days_header .= "<td width=\"105\" class=\"center widget_content\">$day</td>";
+                $days_header .= "<td width=\"14.4%\" class=\"center widget_content\">$day</td>";
             }
             $days_header .= "</tr>";
 
@@ -282,15 +282,15 @@ function Render($activity_data) {
         // week
         case 'week':
             $widget = '';
-            $start_hour = '8:00:00';
-            $end_hour = '22:00:00';
+            $start_hour = '00:00:00';
+            $end_hour = '23:59:59';
             $slice_length_minutes = '30';
 
             $start_time = strtotime(date('Y-m-d', strtotime($this->start_date)) . ' ' . $start_hour);
             $end_time = strtotime(date('Y-m-d', strtotime($this->start_date)) . ' ' . $end_hour);
 
-            // echo "start time is $start_time aka " . date('Y-m-d H:i', $start_time) . "<br>";
-            // echo "end time is $end_time aka " . date('Y-m-d H:i', $end_time) . "<br>";
+            //echo "start time is $start_time aka " . date('Y-m-d H:i', $start_time) . "<br>";
+            //echo "end time is $end_time aka " . date('Y-m-d H:i', $end_time) . "<br>";
 
             $days_header .= '<tr>';
             $days_header .= '<td class=widget_content_alt>&nbsp;</td>';
@@ -349,9 +349,9 @@ function Render($activity_data) {
 
             // render the week
             for($i=0; $i<(($end_time - $start_time)/($slice_length_minutes * 60)); $i++) {
-
+           
                 $current_time = $start_time + $i*$slice_length_minutes*60;
-                // echo date('Y-m-d H:i', $current_time) . '<br>';
+                //echo date('Y-m-d H:i', $current_time) . '<br>';
                 $widget .= '<tr>';
 
                 $widget .= '<td class=widget_content_alt>' . date('H:i', $current_time) . '</td>';
@@ -447,17 +447,17 @@ function Render($activity_data) {
                <tr>
                 <td class=\"widget_label center\">
                     <input class=button type=button value=\""._("Previous Week")."\" onclick=\"javascript:calendar_previous_week();\">
-                    <!--
+                    
                     <input class=button type=button value=\""._("Previous Day")."\" onclick=\"javascript:calendar_previous_day();\">
-                    -->
+                    
                 </td>
                 <td class=\"widget_label center\">
                  $display_date
                 </td>
                 <td class=\"widget_label center\">
-                    <!--
+                    
                     <input class=button type=button value=\""._("Next Day")."\" onclick=\"javascript:calendar_next_day();\">
-                    -->
+                    
                     <input class=button type=button value=\""._("Next Week")."\" onclick=\"javascript:calendar_next_week();\">
                 </td>
                </tr>
@@ -481,6 +481,7 @@ function Render($activity_data) {
                 <tr>
                     <td colspan=30 class='widget_header'>"._("Calendar")."</td>
                 </tr>
+		$view_mode_buttons
                 $calendar_nav
                 $widget
                 $view_mode_buttons
@@ -637,7 +638,7 @@ function GetCalendarSQLOffset() {
 
     // special case for month view...
     if('month' == $this->calendar_type) {
-        $adjusted_start_date = CalendarView::GetWeekStart($this->start_date, 'Monday');
+        $adjusted_start_date = CalendarView::GetWeekStart($this->start_date, 'Sunday');
 
         $calendar_view_start =  (strtotime($adjusted_start_date) - time()) / 86400;
         $calendar_view_end = (strtotime("$adjusted_start_date +6 weeks") - time()) / 86400;
@@ -662,6 +663,14 @@ function GetCalendarSQLOffset() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.12  2008/09/11 14:31:50  randym56
+* Bug fixes:
+* Change column width of cells from 105 to 14.4% (contribution by gopherit)
+* Change week to start on Sunday instead of Monday - was causing activity/day match failures.
+* Added calendar select types to top of calendar as well as bottom
+* Fixed problems with moving to next month or from previous month
+* Added function to move to/from next/previous days.
+*
 * Revision 1.11  2008/01/29 19:48:10  gpowers
 * - added year to calendar view by week to reduce user confusion
 *
