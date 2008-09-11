@@ -4,7 +4,7 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.12 2008/09/11 14:31:50 randym56 Exp $
+ * $Id: Calendar_View.php,v 1.13 2008/09/11 17:00:41 randym56 Exp $
  */
 
 global $include_directory;
@@ -221,7 +221,7 @@ function Render($activity_data) {
                     if($current_month != date('m', $day_start_time)) {
                         $td_class .= 'widget_content_alt2';
                     } elseif(date('Y-m-d') == date('Y-m-d', $day_start_time)) {
-                        $td_class .= 'widget_content_alt';
+                        $td_class .= 'widget_content_today';
                     } else {
                         $td_class .= 'widget_content';
                     }
@@ -663,6 +663,9 @@ function GetCalendarSQLOffset() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.13  2008/09/11 17:00:41  randym56
+* Add new class: widget_content_today (contribution by gopherit)
+*
 * Revision 1.12  2008/09/11 14:31:50  randym56
 * Bug fixes:
 * Change column width of cells from 105 to 14.4% (contribution by gopherit)
