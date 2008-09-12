@@ -26,7 +26,7 @@
  *      #login-box - centered login form
  *      #ContentFullWidth large container, no sidebar
  *
- * $Id: layout.css,v 1.9 2008/09/11 17:02:03 randym56 Exp $
+ * $Id: layout.css,v 1.10 2008/09/12 13:04:26 randym56 Exp $
  */
 body {
     margin: 0px;
@@ -70,7 +70,7 @@ body {
 #xrms_calendar{
 /*    position: relative;*/
 	float: left;
-    width: 100%%;
+    width: 100%;
     min-width: 12em;
     z-index: 4;         /* Content above Sidebar */
     margin: 0px;
