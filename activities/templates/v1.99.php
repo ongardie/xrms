@@ -1,4 +1,9 @@
 <?php
+/**
+ * Edit the details for a single Activity
+ *
+ * $Id: v1.99.php,v 1.2 2008/09/17 12:45:53 randym56 Exp $
+ */
 
 // set thread_id to activity_id if it's not set already.
 if(!$thread_id) {
@@ -366,32 +371,6 @@ function logTime() {
 }
 </script>
 
-<?php if (get_user_preference($con, $user_id, "html_activity_notes") == 'y') { ?>
-<script language="javascript" type="text/javascript" src="<?PHP echo $http_site_root;?>/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-<script language="javascript" type="text/javascript">
-        tinyMCE.init({
-                mode : "textareas",
-                theme : "advanced",
-                plugins : "table,emotions,iespell,insertdatetime,preview,print,paste,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras",
-                theme_advanced_buttons1_add : "fontselect,fontsizeselect",
-                theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,separator,forecolor,backcolor",
-                theme_advanced_buttons3_add_before : "tablecontrols,separator",
-                theme_advanced_buttons3_add : "iespell,print,fullscreen",
-                theme_advanced_toolbar_location : "top",
-                theme_advanced_toolbar_align : "left",
-                plugin_insertdate_dateFormat : "%Y-%m-%d",
-                plugin_insertdate_timeFormat : "%H:%M:%S",
-                extended_valid_elements : "hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]",
-                theme_advanced_resize_horizontal : false,
-                theme_advanced_resizing : true,
-                nonbreaking_force_tab : true,
-                apply_source_formatting : true,
-                fix_table_elements : true,
-                convert_urls : true
-        });
-</script>
-<?php } ?>
-
 <div id="Main">
 
     <div id="Content">
@@ -486,9 +465,16 @@ function logTime() {
                 <?php if($print_view) {
                         echo htmlspecialchars(nl2br(trim($activity_description)));
                         echo "<input type=hidden name=activity_description value=\"" . htmlspecialchars(nl2br(trim($activity_description))) . "\">\n";
-                      } else { ?>
-                        <textarea rows=10 cols=70 name=activity_description><?php  echo htmlspecialchars(trim($activity_description)); ?></textarea>
-                <?php }  ?>
+                      } else { 
+						if (get_user_preference($con, $user_id, "html_activity_notes") == 'y') {
+							$oFCKeditor = new FCKeditor('activity_description') ;
+							$oFCKeditor->BasePath	= $fckeditor_location_url;
+							$oFCKeditor->Value		= $activity_description ;
+							$oFCKeditor->Height		= '300';
+							$oFCKeditor->Create() ;
+							}  else {?>
+                            <textarea rows=10 cols=70 name=activity_description><?php  echo htmlspecialchars(trim($activity_description)); ?></textarea>
+                <?php } } ?>
                 </td>
             </tr>
             <?php
@@ -703,6 +689,10 @@ function logTime() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.2  2008/09/17 12:45:53  randym56
+ * - Replaced TinyMCE with FCKEditor for GUI interface.
+ * - Relocated FCKEditor in XRMS core from include folder to js folder
+ *
  * Revision 1.1  2008/01/30 21:11:47  gpowers
  * - directory for storing activity templates
  *
