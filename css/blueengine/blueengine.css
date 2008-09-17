@@ -19,25 +19,6 @@
 #Main #Sidebar {
 	margin: 0px;
 }
-#xrms_calendar {
-	width: 100%;
-}
-#xrms_calendar table.widget .widget_content,
-#xrms_calendar table.widget .widget_content_today,
-#xrms_calendar table.widget .widget_content_alt2 {
-	padding: 0;
-	margin: 0;
-}
-
-#xrms_calendar table.widget .widget_content .right,
-#xrms_calendar table.widget .widget_content_today .right,
-#xrms_calendar table.widget .widget_content_alt2 .right {
-	padding: 0 0.2em;
-}
-
-#xrms_calendar table.widget .widget_content_today {
-	background-color: #F8F8F8;
-}
 
 /** ----------
  * blueengine styles
@@ -48,10 +29,18 @@ body {
 	margin: 4px;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
+	color: #333333;
+}
+a, a:link {
+	color: #334499;
+	text-decoration: none;
+}
+a:hover {
+	color: #FF9933;
 }
 
 #page_header {
-	color: #333366;
+	color: #333399;
 	font-size: 14px;
 	font-weight: bold;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -59,19 +48,19 @@ body {
 
 #navline {
 	color: #E8E8E8; 
-	background-color: #E8E8E8; 
+	background-color: #E8E8E8;
 	border-top: 1px solid #999999; 
 	border-bottom: 1px solid #999999; 
 	padding: 0.25em 0.75em; 
 }
 	#navline a {
 		line-height: 2.25em; 
-		color: #000066; 
+		color: #333399; 
 		background-color: #99BBDD; 
 		font-weight: 900; 
 		text-decoration: none; 
 		padding: 0.2em 0.5em; 
-		border: 1px solid #000066; 
+		border: 1px solid #6666CC; 
 	}
 	#navline a:hover {
 		background-color: #CCDDFF;
@@ -80,17 +69,22 @@ body {
 #msg {
     padding: 6px 4px;
     margin: 4px;
-    background-color: #ffff99;
+    background-color: #FFFF99;
     border: 1px solid #999999;
 }
 
 table.widget {
-    background-color: #e1e1e1;
-    border: 1px solid #999999;
+	background-color: #e1e1e1;
+	border: 1px solid #999999;
+	/* border-spacing: 0 1px; *//* Remove vertical lines in tables */
 }
 	table.widget th,
 	table.widget td {
 		background-color: #fff;
+		color: #333333;
+	}
+	table.widget .sublabel {
+		color: #666666;
 	}
 	table.widget .widget_header {
 		background-color: #e8e8e8;
@@ -102,11 +96,9 @@ table.widget {
 	table.widget .widget_content_alt, .widget_content_graph,
 	table.widget .widget_content_market2 {
 		background-color: #FFFFFF;
-		color: #000;
 	}
 	table.widget .widget_content {
 		background-color: #FFFFFF;
-		color: #000;
 	}
 	table.widget .widget_label_center,
 	table.widget .widget_label_center .widget_content,
@@ -120,65 +112,89 @@ table.widget {
 	}
 	table.widget .widget_content_alt {
 		background-color: #F8F8F8;
-		color: #000;
 	}
 	table.widget .widget_content_alt2 {
 		background-color: #fff;
-		color: #000;
 	}
 	table.widget .closed_activity,
 		.closed_activity a {
-		color: #666;
+		color: #666666;
 	}
 	table.widget .scheduled_activity {
-	/*     background-color: #eef; */
 	}
 	table.widget .widget_label {
 		background-color: #f0f0f0;
 	}
 	table.widget .non_uploaded_file,
 	table.widget .overdue_activity {
-		color: #990000;
-		background-color: #FFFF99;
+		background-color: #FFFFBB;
 	}
-		.overdue_activity a {
-			color: #990000;
+		.non_uploaded_file a, .overdue_activity a {
+			color: #AA3322;
 		}
 		.overdue_activity a:hover, .closed_activity a:hover {
-			color: rgb(240,184,47);
+			color: #FF9933;
 		}
 
-#xrms_calendar table.widget .widget_content {
-    padding: 0;
-}
-#xrms_calendar table.widget .widget_content table {
-    background-color: #f0f0f0;
+input.button {
+	color: #333333;
 }
 
-
-/** ----------
- * FOREGROUND COLORS - black by default (body)
- */
-body {
-    color: #000;
-}
-table.widget td {
-    color: #999;
-}
-table.widget .sublabel {
-    color: #999;
-}
 #loginbar,
 #loginbar a {
-    color: gray;
+	color: #666666;
 }
-table.widget .widget_header,
-/*table.widget .overdue_activity,*/
-table.widget .non_uploaded_file  {
-  color: #000;
+#xrms_calendar table.widget .widget_content table {
+	background-color: #f0f0f0;
 }
+#xrms_calendar table.widget .widget_content,
+#xrms_calendar table.widget .widget_content_today,
+#xrms_calendar table.widget .widget_content_alt2 {
+	padding: 0;
+	margin: 0;
+}
+#xrms_calendar table.widget .widget_content .right,
+#xrms_calendar table.widget .widget_content_today .right,
+#xrms_calendar table.widget .widget_content_alt2 .right {
+	padding: 0 0.2em;
+}
+
+#xrms_calendar table.widget .widget_content_today {
+	background-color: #F8F8F8;
+}
+
+td.widget_label a {
+		color: #333399; 
+		background-color: #99BBDD; 
+		font-weight: 900; 
+		text-decoration: none; 
+		padding: 0 0.4em; 
+		border: 1px solid #6666CC; 
+	}
+	td.widget_label a:hover {
+		background-color: #CCDDFF;
+	}
+	td.widget_label code {
+		color: #333399; 
+		background-color: #E8E8E8; 
+		padding: 0 0.4em; 
+		border: 1px solid #6666CC;
+	}
+	td.widget_label a code {
+		background: transparent;
+		border: 0;
+		padding: 0;
+	}
+	td.widget_label b {
+		color: #333399; 
+		background-color: #CCDDFF; 
+		font-weight: 900; 
+		padding: 0em 0.4em; 
+		border: 1px solid #6666CC;
+	}
+
 table.widget .widget_content_graph {
-  color: #fff;
+	color: #FFFFFF;
 }
 
 
@@ -239,10 +255,6 @@ ul.mktree li ul li ul li ul li ul li,
     font-size: 10px;
 }
 
-table.widget td {
-    color: #333;
-}
-
 /** Trident specific bolding of top li in an mktree view **/
 ul.mktree li {
     font-weight: bold;
@@ -255,21 +267,6 @@ li a.liSelected {
 ul.mktree li.liOpen    .bullet { background: url(../../img/minus-basic.png)  center left no-repeat; }
 ul.mktree li.liClosed  .bullet { background: url(../../img/plus-basic.png)   center left no-repeat; }
 ul.mktree li.liBullet  .bullet { background: url(../../img/bullet-basic.png) center left no-repeat; }
-
-/** --------
- * ANCHOR TAGS - colors/decorations
- */
-a {
-    text-decoration: underline;
-    color: #073771;
-}
-a:hover {
-    text-decoration: underline;
-    color: rgb(240,184,47);
-}
-a:link {
-    text-decoration: underline;
-}
 
 
 /**
@@ -314,9 +311,6 @@ select {
     margin: 3px;
 }
 
-.non_uploaded_file a {
-    color: #990000; /* should match the color for non_uploaded_file above */
-}
 
 #PagerRestore {
     padding: 8px 0 0 0;
