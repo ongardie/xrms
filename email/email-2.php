@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.27 2007/10/27 01:36:33 randym56 Exp $
+* $Id: email-2.php,v 1.28 2008/09/17 12:29:33 randym56 Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -14,6 +14,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-files.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+include($fckeditor_location . 'fckeditor.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -296,37 +297,6 @@ myField.value += myValue;
 }
 }
 </script>
-<script language="javascript" type="text/javascript" src="<?PHP echo $http_site_root;?>/include/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-<script language="javascript" type="text/javascript">
-        tinyMCE.init({
-                mode : "textareas",
-                theme : "advanced",
-                plugins : "style,layer,table,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras",
-                theme_advanced_buttons1_add : "fontselect,fontsizeselect",
-                theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,separator,forecolor,backcolor,advsearchreplace",
-                theme_advanced_buttons2_add_before: "cut,copy,paste,pastetext,pasteword,separator,search,replace,separator",
-                theme_advanced_buttons3_add_before : "tablecontrols,separator",
-                theme_advanced_buttons3_add : "emotions,iespell,media,advhr,separator,print,separator,ltr,rtl,separator,fullscreen",
-                theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,|,visualchars,nonbreaking",
-                theme_advanced_toolbar_location : "top",
-                theme_advanced_toolbar_align : "left",
-                content_css : "example_advanced.css",
-            plugin_insertdate_dateFormat : "%Y-%m-%d",
-            plugin_insertdate_timeFormat : "%H:%M:%S",
-                extended_valid_elements : "hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]",
-                external_link_list_url : "example_link_list.js",
-                external_image_list_url : "example_image_list.js",
-                flash_external_list_url : "example_flash_list.js",
-                media_external_list_url : "example_media_list.js",
-                file_browser_callback : "fileBrowserCallBack",
-                theme_advanced_resize_horizontal : false,
-                theme_advanced_resizing : true,
-                nonbreaking_force_tab : true,
-                apply_source_formatting : true,
-                                fix_table_elements : true,
-                convert_urls : false
-        });
-</script>
 
 <div id="Main">
 
@@ -419,10 +389,13 @@ myField.value += myValue;
           <br />
         </td>
         <td class="widget_content_form_element">
-          <textarea class="monospace"
-                      name="email_template_body"
-                      id="email_template_body" rows="30"
-                      cols="100"><?php echo $email_template_body ?></textarea>
+<?php
+$oFCKeditor = new FCKeditor('email_template_body') ;
+$oFCKeditor->BasePath	= $fckeditor_location_url;
+$oFCKeditor->Value		= $email_template_body ;
+$oFCKeditor->Height		= '300';
+$oFCKeditor->Create() ;
+?>
         </td>
       </tr>
       <tr>
@@ -536,6 +509,10 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.28  2008/09/17 12:29:33  randym56
+* - Replaced TinyMCE with FCKEditor for GUI interface.
+* - Relocated FCKEditor in XRMS core from include folder to js folder
+*
 * Revision 1.27  2007/10/27 01:36:33  randym56
 * 1. Fixed BCC (was not working at all)
 * 2. Added the function to put custom fields for user sending the email (if the user has a related contact record).
