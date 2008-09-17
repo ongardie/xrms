@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.144 2008/01/30 21:17:31 gpowers Exp $
+ * $Id: one.php,v 1.145 2008/09/17 12:26:51 randym56 Exp $
  */
 
 //include required files
@@ -16,6 +16,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'confgoto.php');
 require_once('../activities/activities-widget.php');
+include($fckeditor_location . 'fckeditor.php');
 
 //get session
 $session_user_id = session_check();
@@ -88,6 +89,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.145  2008/09/17 12:26:51  randym56
+ * Replaced TinyMCE with FCKEditor for GUI interface.
+ *
  * Revision 1.144  2008/01/30 21:17:31  gpowers
  * - added support for activity templates
  * - large chunk of code moved to activities/templates/v1.99.php
