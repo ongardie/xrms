@@ -170,30 +170,30 @@
     if ($row['directory_server']) {
         $contact_profile            .= "Directory Server: " . $row['directory_server'] . "\n";
     }
-    $contact_email       = $row['e-mail_address'];
-    if ($row['e-mail_type']) {
-        $contact_profile            .= "E-Mail Type: " . $row['e-mail_type'] . "\n";
+    $contact_email       = $row['email_address'];
+    if ($row['email_type']) {
+        $contact_profile            .= "E-Mail Type: " . $row['email_type'] . "\n";
     }
-    if ($row['e-mail_display_name']) {
-        $contact_profile            .= "E-Mail Display Name: " . $row['e-mail_display_name'] . "\n";
+    if ($row['email_display_name']) {
+        $contact_profile            .= "E-Mail Display Name: " . $row['email_display_name'] . "\n";
     }
-    if ($row['e-mail_2_address']) {
-        $contact_profile            .= "E-Mail 2 Address: " . $row['e-mail_2_address'] . "\n";
+    if ($row['email_2_address']) {
+        $contact_profile            .= "E-Mail 2 Address: " . $row['email_2_address'] . "\n";
     }
-    if ($row['e-mail_2_type']) {
-        $contact_profile            .= "E-Mail 2 Type: " . $row['e-mail_2_type'] . "\n";
+    if ($row['email_2_type']) {
+        $contact_profile            .= "E-Mail 2 Type: " . $row['email_2_type'] . "\n";
     }
-    if ($row['e-mail_2_display_name']) {
-        $contact_profile            .= "E-Mail 2 Display Name: " . $row['e-mail_2_display_name'] . "\n";
+    if ($row['email_2_display_name']) {
+        $contact_profile            .= "E-Mail 2 Display Name: " . $row['email_2_display_name'] . "\n";
     }
-    if ($row['e-mail_3_address']) {
-        $contact_profile            .= "E-Mail 3 Address: " . $row['e-mail_3_address'] . "\n";
+    if ($row['email_3_address']) {
+        $contact_profile            .= "E-Mail 3 Address: " . $row['email_3_address'] . "\n";
     }
-    if ($row['e-mail_3_type']) {
-        $contact_profile            .= "E-Mail 3 Type: " . $row['e-mail_3_type'] . "\n";
+    if ($row['email_3_type']) {
+        $contact_profile            .= "E-Mail 3 Type: " . $row['email_3_type'] . "\n";
     }
-    if ($row['e-mail_3_display_name']) {
-        $contact_profile            .= "E-Mail 3 Display Name: " . $row['e-mail_3_display_name'] . "\n";
+    if ($row['email_3_display_name']) {
+        $contact_profile            .= "E-Mail 3 Display Name: " . $row['email_3_display_name'] . "\n";
     }
     if ($row['gender'] != "Unspecified") {
         $contact_profile            .= "Gender: " . $row['gender'] . "\n";
@@ -262,6 +262,9 @@
 
 /**
  * $Log: import-template-outlook.php,v $
+ * Revision 1.5  2008/09/21 15:17:56  randym56
+ * Adjusted e-mail to email in all cases because CSVtoArray in utils-misc.php had changed to accomodate Outlook CSV files.
+ *
  * Revision 1.4  2004/07/10 11:51:06  braverock
  * - cleaned up assignments for outlook phone import
  *   - resolves SF bug 951241 based on contributor suggestions
