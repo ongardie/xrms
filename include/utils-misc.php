@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.189 2008/08/26 09:46:07 braverock Exp $
+ * $Id: utils-misc.php,v 1.190 2008/09/21 19:36:10 randym56 Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -323,7 +323,6 @@ function pretty_filesize($file_size) {
  *
  * @return array   $result         array in the form of rows with keys and values
  *
- * @todo to support MS Outlook import, revise the $keys array to rtrim,strtolower, and str_replace space with underscore
  */
 function CSVtoArray($file, $hasFieldNames = false, $delimiter = ',', $enclosure='') {
     $result_arr = Array();
@@ -2105,6 +2104,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.190  2008/09/21 19:36:10  randym56
+ * Remove todo comments about CSVtoArray for Outlook - changes are made
+ *
  * Revision 1.189  2008/08/26 09:46:07  braverock
  * - add missing space to sql
  *
