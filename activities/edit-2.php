@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.84 2008/09/06 23:13:36 randym56 Exp $
+ * $Id: edit-2.php,v 1.85 2008/09/27 18:11:20 randym56 Exp $
  */
 
 //include required files
@@ -22,6 +22,8 @@ require_once($include_directory . 'utils-opportunities.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
+$con = get_xrms_dbconnection();
+//$con->debug = 1;
 
 // POST'ed in data
 $arr_vars = array (
@@ -43,12 +45,15 @@ $arr_vars = array (
                    'on_what_table' => arr_vars_POST ,
                    'on_what_id' => arr_vars_POST ,
                    'company_id' => arr_vars_POST ,
+                   'division_id' => arr_vars_POST ,
                    'email_to' => arr_vars_POST ,
                    'table_name' => arr_vars_POST ,
                    'table_status_id' => arr_vars_POST ,
                    'thread_id' => arr_vars_POST ,
                    'address_id' => arr_vars_POST ,
                    'followup_from_id' => arr_vars_POST ,
+		   'associate_activities' => arr_vars_POST ,
+                   'activity_recurrence_id' => arr_vars_POST ,
 
                    // optionally posted data
                    'opportunity_description' => arr_vars_POST_UNDEF ,
@@ -139,9 +144,6 @@ if ($scheduled_at > $ends_at) {
 $ends_at_string = date('Y-m-d H:i:s',$ends_at);
 
 
-$con = get_xrms_dbconnection();
-//$con->debug = 1;
-
 //get the existing activity record for use later in the script
 $activity = get_activity($con, $activity_id);
 
@@ -153,8 +155,8 @@ if (!$contact_id OR $contact_id==0) {
 }
 
 // if it's closed but wasn't before, update the closed_at timestamp
-$completed_at = ($activity_status == 'c') && ($current_activity_status != 'c') ? time() : 'NULL';
-$completed_by= ($activity_status == 'c') && ($current_activity_status != 'c') ? $session_user_id : 'NULL';
+$completed_at = ($activity_status == 'c') && ($current_activity_status != 'c') ? time() : NULL;
+$completed_by= ($activity_status == 'c') && ($current_activity_status != 'c') ? $session_user_id : NULL;
 
 //check to see if we need to associate with an opportunity or case
 if ($associate_activities == true ) {
@@ -391,7 +393,7 @@ if (!empty($email_to)) {
                         scheduled_at = ".$con->dbtimestamp(mktime()).",
                         ends_at = ".$con->dbtimestamp(mktime()).",
                         entered_by = $session_user_id,
-						activity_status = 'c'";
+			activity_status = 'c'";
 
 		$con->execute($sql_insert_activity);
 		}
@@ -401,7 +403,6 @@ $con->close();
 
 
 if ($followup) {
-
     header ('Location: '.$http_site_root."/activities/new-2.php?user_id=$session_user_id&activity_type_id=$activity_type_id&on_what_id=$on_what_id&contact_id=$contact_id&on_what_table=$on_what_table&company_id=$company_id&user_id=$user_id&activity_title=".htmlspecialchars( _("Follow-up") . ' ' . $activity_title ) .  "&company_id=$company_id&activity_status=o&on_what_status=$old_status&return_url=$return_url&thread_id=$thread_id&followup_from_id=$activity_id&followup=true" );
 } elseif($saveandnext) {
     header("Location: browse-next.php?activity_id=$activity_id");
@@ -415,6 +416,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.85  2008/09/27 18:11:20  randym56
+ * Took quote marks off NULL settings for completed_by, and completed_at to allow saving changes.
+ *
  * Revision 1.84  2008/09/06 23:13:36  randym56
  * Added activity to contact/company record when sending e-mail copy of activity to another user.
  *
