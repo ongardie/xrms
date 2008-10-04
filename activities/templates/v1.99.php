@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.2 2008/09/17 12:45:53 randym56 Exp $
+ * $Id: v1.99.php,v 1.3 2008/10/04 08:30:56 metamedia Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -23,6 +23,13 @@ if (!strlen($completed_at)) {
         }
     }
 } // end time rationalization on uncompleted activities
+
+//function get_activity() uses 'as' in the SQL for a few columns
+//so the variable names set in activities/one.php
+//are not all the same as the DB column names.
+//=>we need the following assignments
+$on_what_id = $activity_on_what_id;
+$on_what_table = $activity_on_what_table;
 
 if($on_what_table == 'opportunities') {
     $sql = "select o.probability
@@ -689,6 +696,9 @@ function logTime() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.3  2008/10/04 08:30:56  metamedia
+ * function get_activity() uses 'as' in the SQL for a few columns so the variable names set in activities/one.php are not all the same as the DB column names =>we need some variable assigments to ensure this script does what is expected of it.
+ *
  * Revision 1.2  2008/09/17 12:45:53  randym56
  * - Replaced TinyMCE with FCKEditor for GUI interface.
  * - Relocated FCKEditor in XRMS core from include folder to js folder
