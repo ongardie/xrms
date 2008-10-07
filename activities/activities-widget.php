@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.61 2008/01/30 21:08:41 gpowers Exp $
+* $Id: activities-widget.php,v 1.62 2008/10/07 16:43:22 metamedia Exp $
 */
 
 global $include_directory;
@@ -623,7 +623,7 @@ function GetInitialCalendarDate($calendar_range, $before_after, $search_date) {
             case 'week':
                 // align it to the week's start day (e.g. Monday)
                 if(empty($initial_calendar_date)) {
-                    $initial_calendar_date = CalendarView::GetWeekStart($start_date, 'Monday');
+                    $initial_calendar_date = CalendarView::GetWeekStart($search_date, 'Monday');
                 } else {
                     $initial_calendar_date = CalendarView::GetWeekStart($initial_calendar_date, 'Monday');
                 }
@@ -942,6 +942,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.62  2008/10/07 16:43:22  metamedia
+* BUG FIX: The default week view, in Calendar View, was showing as the first week 1970, rather than the current week.
+*
 * Revision 1.61  2008/01/30 21:08:41  gpowers
 * - added $rst check
 * - formatted HTML
