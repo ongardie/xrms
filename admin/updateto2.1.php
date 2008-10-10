@@ -8,7 +8,7 @@
  *
  * @author Randy Martinsen
  *
- * $Id: updateto2.1.php,v 1.4 2008/08/14 14:59:50 randym56 Exp $
+ * $Id: updateto2.1.php,v 1.5 2008/10/10 00:29:48 randym56 Exp $
  */
 
 // where do we include from
@@ -163,6 +163,14 @@ if ($rst->EOF) {
         set_admin_preference($con, $html_activity_notes, 'n');
     }
 
+$sql = "SELECT * FROM addresses";
+	$rst = $con->execute($sql);
+	if (!$rst->fields['on_what_table']) {
+	$sql = "ALTER TABLE addresses CHANGE company_id on_what_id INTEGER;";
+	$rst = $con->execute($sql);
+	$sql = "ALTER TABLE addresses ADD COLUMN on_what_table VARCHAR(100) DEFAULT 'companies' AFTER address_id;";
+	$rst = $con->execute($sql);
+	}
 
 //FINAL STEP SET XRMS VERSION IN PREFERENCES TABLE
 set_admin_preference($con, 'xrms_version', '1.99.3');
@@ -188,6 +196,9 @@ start_page($page_title, true, $msg);
 end_page();
 /**
  * $Log: updateto2.1.php,v $
+ * Revision 1.5  2008/10/10 00:29:48  randym56
+ * Added addresses table change to accomodate code changes by  developer ongardie
+ *
  * Revision 1.4  2008/08/14 14:59:50  randym56
  * Fixed system e-mail add.
  *
