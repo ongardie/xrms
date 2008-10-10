@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.51 2006/12/29 07:22:26 ongardie Exp $
+ * $Id: one.php,v 1.52 2008/10/10 20:03:19 metamedia Exp $
  */
 
 //include required files
@@ -121,6 +121,10 @@ require_once("../files/sidebar.php");
 
 //include the notes sidebar
 require_once("../notes/sidebar.php");
+
+//include the Cases Relationship
+$relationships = array('cases' => $case_id);
+require_once("../relationships/sidebar.php");
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -283,6 +287,9 @@ start_page($page_title, true, $msg);
 
         <!-- files //-->
         <?php echo $file_rows; ?>
+        
+        <!-- case relationships //-->
+        <?php echo $relationship_link_rows; ?>
 
     </div>
 </div>
@@ -301,6 +308,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.52  2008/10/10 20:03:19  metamedia
+ * Added relationships sidebar. Now case-case relationships can be created, edited and displayed (if they are set up with the administration tool).
+ *
  * Revision 1.51  2006/12/29 07:22:26  ongardie
  * - Added several case hooks.
  *
