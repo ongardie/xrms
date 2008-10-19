@@ -6,7 +6,7 @@
  *
  * @todo Add ability to ctreate a Sales Opportunity for a new company
  *
- * $Id: new.php,v 1.24 2006/12/17 10:51:59 jnhayart Exp $
+ * $Id: new.php,v 1.25 2008/10/19 17:16:35 randym56 Exp $
  */
 
 /* Include required files */
@@ -242,7 +242,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><?php echo $country_menu ?> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right_91px><?php echo _("Override Address"); ?></td>
+                <td class=widget_label_right><?php echo _("Override Address"); ?></td>
                 <td class=widget_content_form_element><textarea rows=5 cols=40 name=address_body></textarea><br>
                   <input type="checkbox" name="use_pretty_address"> <?php echo _('Use'); ?>
                 </td>
@@ -340,6 +340,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.25  2008/10/19 17:16:35  randym56
+ * Removed obsolete CSS tag widget_label_right_91px
+ *
  * Revision 1.24  2006/12/17 10:51:59  jnhayart
  * Add centalized build_company_source_menu
  *
