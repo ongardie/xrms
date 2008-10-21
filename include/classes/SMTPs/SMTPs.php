@@ -32,11 +32,11 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.23 $
+   * @version $Revision: 1.24 $
    * @copyright copyright information
    * @license GNU General Public Licence
    *
-   * $Id: SMTPs.php,v 1.23 2008/03/30 19:00:37 randym56 Exp $
+   * $Id: SMTPs.php,v 1.24 2008/10/21 18:45:48 randym56 Exp $
    *
    **/
 
@@ -1944,12 +1944,12 @@ class SMTPs
 					$content .= "\r\n--" . $this->_getBoundary() . "\r\n"
                              . 'Content-Type: ' . $_content['mimeType'] . '; '
                              . 'charset="' . $this->getCharSet() . '"';
-                    $content .= ( $type == 'html') ? '; name="HTML Part"' : '';
+                    //$content .= ( $type == 'html') ? '; name="HTML Part"' : '';
                     $content .=  "\r\n";
                     $content .= 'Content-Transfer-Encoding: ';
 					//db: begin  content-transfer-encodig set as quoted printable does not works fine, changed to 8 bit
-                    //$content .= ( $type == 'html') ? 'quoted-printable' : $this->getTransEncodeType();
-					$content .= ( $type == 'html') ? '8 bit' : $this->getTransEncodeType();
+                    $content .= ( $type == 'html') ? 'quoted-printable' : $this->getTransEncodeType();
+		    //$content .= ( $type == 'html') ? '8 bit' : $this->getTransEncodeType();
 					//db: end
                     $content .=  "\r\n"
                              . 'Content-Disposition: inline'  . "\r\n"
@@ -2399,6 +2399,9 @@ class SMTPs
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.24  2008/10/21 18:45:48  randym56
+  * Fixed HTML body to display rather than wrapped as HTML Part.htm when attaching files.
+  *
   * Revision 1.23  2008/03/30 19:00:37  randym56
   * Contribution from dbaudone (dbaudone) - 2008-03-28 18:22
   * fixes some problems in sending html mail messages with attachments:
