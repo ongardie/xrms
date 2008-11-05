@@ -1,0 +1,4 @@
+With this plugin you can query contacts in xing.com. You need an account to search people within the xing.com network. Xing is similar to linkedin.com or other business networks.
+
+Note:
+From older releases of this plugins you can remove [xrms_root]/contacts/xing.php
