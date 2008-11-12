@@ -8,7 +8,7 @@
  * @author Beth Macknik
  * @package XRMS_API
  *
- * $Id: utils-database.php,v 1.32 2007/05/15 23:17:30 ongardie Exp $
+ * $Id: utils-database.php,v 1.33 2008/11/12 10:12:27 bschimpf Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -588,7 +588,7 @@ function __record_add_update ( $_objCon, $_strTableName, $_identifier, $_aryData
         // UPDATE record
         if ( $_recordSet && ( $_recordSet->RecordCount() != 0 ) )
         {
-            $updateSQL = $_objCon->GetUpdateSQL($_recordSet, $_aryData, true, true, ADODB_FORCE_NULLS);
+            $updateSQL = $_objCon->GetUpdateSQL($_recordSet, $_aryData, $_magic_quotes, true, ADODB_FORCE_NULL);
 
             if ( $rs =& $_objCon->Execute($updateSQL) )
             {
@@ -632,7 +632,7 @@ function __record_add_update ( $_objCon, $_strTableName, $_identifier, $_aryData
             * @access private
             * @static
             */
-            $sql = $_objCon->GetInsertSQL($_strTableName, $_aryData, true);
+            $sql = $_objCon->GetInsertSQL($_strTableName, $_aryData, $_magic_quotes);
 
            /**
             * Record Set of found data
@@ -1270,6 +1270,9 @@ function drop_table($con, $table_name, &$upgrade_msgs) {
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.33  2008/11/12 10:12:27  bschimpf
+ * corrected two bugs in magic quote and NULL value handling
+ *
  * Revision 1.32  2007/05/15 23:17:30  ongardie
  * - Addresses now associate with on_what_table, on_what_id instead of company_id.
  *
