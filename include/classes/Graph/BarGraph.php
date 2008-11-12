@@ -6,7 +6,7 @@
 *	creating bar charts.
 *
 *	@author daturaarutad
-*	$Id: BarGraph.php,v 1.8 2005/04/22 20:55:23 daturaarutad Exp $
+*	$Id: BarGraph.php,v 1.9 2008/11/12 10:24:00 bschimpf Exp $
 */
 
 
@@ -283,7 +283,7 @@ function DisplayCSIM($url, $filename, $map_name, $border = 0) {
 	$this->graph->Stroke($filename);
 
 	$ret =  $this->graph->GetHTMLImageMap($map_name);
-	$ret .= "<img src=\"$url\" usemap=\"$map_name\" border=0>";
+	$ret .= "<img src=\"$url\" usemap=\"#$map_name\" border=0>";
 	return $ret;
 }
 
@@ -291,6 +291,9 @@ function DisplayCSIM($url, $filename, $map_name, $border = 0) {
 
 /**
 * $Log: BarGraph.php,v $
+* Revision 1.9  2008/11/12 10:24:00  bschimpf
+* - repaired behaviour of imagemap for FF and IE7+
+*
 * Revision 1.8  2005/04/22 20:55:23  daturaarutad
 * moved configuration of graph_info to include/jpgraph-config.php
 *
