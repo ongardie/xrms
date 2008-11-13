@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.43 2007/10/30 02:33:43 randym56 Exp $
+ * $Id: some.php,v 1.44 2008/11/13 08:57:21 metamedia Exp $
  */
 
 require_once('../include-locations.inc');
@@ -52,7 +52,7 @@ arr_vars_get_all ( $arr_vars );
 arr_vars_session_set ( $arr_vars );
 
 
-$sql = "SELECT " . $con->Concat("'<a href=\"one.php?case_id='", "ca.case_id", "'\">'", "ca.case_title", "'</a>'") . " AS case_name, c.company_name AS company, u.username AS owner, cat.case_type_pretty_name AS type, cap.case_priority_pretty_name AS priority, cas.case_status_pretty_name AS status, " . $con->SQLDate('Y-m-d', 'ca.due_at') . " AS due ";
+$sql = "SELECT ca.case_id as id," . $con->Concat("'<a href=\"one.php?case_id='", "ca.case_id", "'\">'", "ca.case_title", "'</a>'") . " AS case_name, c.company_name AS company, u.username AS owner, cat.case_type_pretty_name AS type, cap.case_priority_pretty_name AS priority, cas.case_status_pretty_name AS status, " . $con->SQLDate('Y-m-d', 'ca.due_at') . " AS due ";
 
 if ($case_category_id > 0) {
     $from = "from companies c, cases ca, case_types cat, case_priorities cap, case_statuses cas, users u, entity_category_map ecm ";
@@ -95,9 +95,26 @@ if (strlen($user_id) > 0) {
     $where .= " and ca.user_id = $user_id";
 }
 
-if (strlen($case_status_id) > 0) {
+if ($case_status_id > 0) {
     $criteria_count++;
     $where .= " and ca.case_status_id = $case_status_id";
+}
+elseif ($case_status_id < 0) {
+    $criteria_count++;
+    switch ($case_status_id) {
+	   case -2:
+            $comparison = "<> 'o'";
+            break;
+       case -3:
+            $comparison = "= 'r'";
+            break;
+       case -4:
+            $comparison = "= 'u'";
+            break;
+       default:
+       	    $comparison = "= 'o'";
+    }
+    $where .= " and cas.status_open_indicator $comparison ";
 }
 
 if (strlen($case_id) > 0 and is_numeric($case_id)) {
@@ -187,10 +204,26 @@ if (strlen($recently_viewed_table_rows) == 0) {
 $user_menu = get_user_menu($con, $user_id, $blank_user=true, $fieldname='user_id', $truncate=true);
 
 $sql2 = "select " . $con->concat('case_type_pretty_name',$con->qstr(' - '), 'case_status_pretty_name') .", case_status_id from case_statuses JOIN case_types ON case_statuses.case_type_id=case_types.case_type_id where case_status_record_status = 'a' order by case_statuses.case_type_id, sort_order";
-$rst = $con->execute($sql2);
-if (!$rst) { db_error_handler($con, $sql2); }
-$case_status_menu = $rst->getmenu2('case_status_id', $case_status_id, true);
-$rst->close();
+
+$case_status_array = $con->GetAssoc($sql2);
+if ($case_status_array) {
+    $special_options_array = array(_("All") => 0, 
+                                _("All Open") => -1, 
+                                _("All Closed") => -2,
+                                _("All Closed/Resolved") => -3,
+                                _("All Closed/Unresolved") => -4
+                             );
+    $menu_array = array_merge($special_options_array, $case_status_array);
+    $case_status_menu = "<select name='case_status_id'>\n";
+    foreach($menu_array as $key => $value) {
+        $selected = $case_status_id==$value?" SELECTED":"";
+        $case_status_menu .=  "<option value='$value'$selected>$key</option>\n";
+    }
+    $case_status_menu .= '</select>';
+}
+else {
+    $case_status_menu = "DB ERROR";
+}
 
 $sql2 = "select case_type_pretty_name, case_type_id from case_types where case_type_record_status = 'a' order by case_type_pretty_name";
 $rst = $con->execute($sql2);
@@ -317,6 +350,7 @@ $priority_query_list = "select " . $con->Concat("cap.case_priority_pretty_name",
 $priority_query_select = $sql . ' AND cap.case_priority_id = XXX-value-XXX';
 
 $columns = array();
+$columns[] = array('name' => '#', 'index_sql' => 'id');
 $columns[] = array('name' => _('Case'), 'index_sql' => 'case_name', 'sql_sort_column' => 'ca.case_title', 'type' => 'url');
 $columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'group_query_list' => $company_query_list, 'group_query_select' => $company_query_select);
 $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner', 'group_query_list' => $owner_query_list, 'group_query_select' => $owner_query_select);
@@ -410,6 +444,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.44  2008/11/13 08:57:21  metamedia
+ * 1) Extra options in Case Status select (All, All Open, All Closed etc)
+ * 2) Case ID as column in pager output.
+ *
  * Revision 1.43  2007/10/30 02:33:43  randym56
  * - Changed "Mail Merge" to be "eMail Merge" to separate from "Snail Mail Merge"
  *
