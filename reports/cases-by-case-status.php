@@ -3,7 +3,7 @@
  *
  * Cases by case status report.
  *
- * $Id: cases-by-case-status.php,v 1.11 2006/01/02 23:46:52 vanmer Exp $
+ * $Id: cases-by-case-status.php,v 1.12 2008/11/13 09:42:35 metamedia Exp $
  */
 
 require_once('../include-locations.inc');
@@ -18,6 +18,7 @@ require_once($include_directory . 'classes/Graph/BarGraph.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
+$hide_closed_cases = $_POST['hide_closed_cases'];
 
 $page_title = _("Cases by Status");
 start_page($page_title, true, $msg);
@@ -25,10 +26,14 @@ start_page($page_title, true, $msg);
 $con = get_xrms_dbconnection();
 // $con->debug = 1;
 
+if (strlen($hide_closed_cases) > 0) {
+	$checked_hide_closed_cases = "checked";
+	$hide_closed_cases = true;
+}
+else $hide_closed_cases = false;
 
-
-
-$map_and_graph = GetCasesByCaseStatusGraph($con);
+$caseTypesArray = getCaseTypesArray($con);
+$map_and_graph = GetCasesByCaseStatusGraph($con, $hide_closed_cases, $caseTypesArray);
 
 ?>
 
@@ -36,7 +41,7 @@ $map_and_graph = GetCasesByCaseStatusGraph($con);
 
 <div id="Main">
     <div id="ContentFullWidth">
-
+    <form method=POST>
         <table class=widget cellspacing=1>
             <tr>
                 <th class=widget_header><?php echo _("Cases by Status"); ?></th>
@@ -46,8 +51,26 @@ $map_and_graph = GetCasesByCaseStatusGraph($con);
 					<?php echo $map_and_graph; ?>
                 </td>
             </tr>
+            <tr>
+            <td><?php echo _("Exclude Closed Cases"); ?>:
+			    <input type=checkbox name=hide_closed_cases value="true" <?php echo $checked_hide_closed_cases; ?>>
+            </td>
+            </tr>
+            <tr>
+            <td>Choose Case Types to Display: 
+                <?php foreach ($caseTypesArray as $caseTypeID => $caseType): ?>
+                <input type=checkbox name=caseType_<?php echo $caseTypeID?> value="true" <?php echo $caseType['checked']?>>
+                <?php echo $caseType['name'] ?>
+                <?php endforeach ?>
+            </td>
+            </tr>
+            <tr>
+             <td>
+                <input class=button name='submit' type='submit' value='<?php echo _("Change Graph"); ?>'>
+            </td>
+            </tr>
         </table>
-
+    </form>
     </div>
 
 </div>
@@ -56,12 +79,57 @@ $map_and_graph = GetCasesByCaseStatusGraph($con);
 
 end_page();
 
+function getCaseTypesArray($con) {
+	
+	$sql = <<<SQL
+    SELECT case_type_id, case_type_pretty_plural as name, 1 as draw, 'CHECKED' as checked
+    FROM case_types
+    WHERE case_type_record_status = 'a'
+    ORDER BY case_type_id
+SQL;
 
-function GetCasesByCaseStatusGraph($con) {
+#	echo "<pre>$sql</pre>";
+	$caseTypesArray = $con->GetAssoc($sql);
+	
+	if ($caseTypesArray) {
+		foreach($caseTypesArray as $caseTypeID => $caseType) {
+			
+		  if (isset($_POST["caseType_$caseTypeID"])) {
+		      $caseTypesArray[$caseTypeID]['checked'] = 'checked';
+		      $caseTypesArray[$caseTypeID]['draw'] = 1;
+		  }
+		  elseif (isset($_POST['submit'])) {
+		      $caseTypesArray[$caseTypeID]['checked'] = '';
+		      $caseTypesArray[$caseTypeID]['draw'] = 0;
+		  }
+		}
+	}
+	
+	return $caseTypesArray;
+}
+
+function GetCasesByCaseStatusGraph($con, $hide_closed_cases, $caseTypesArray) {
     global $http_site_root, $tmp_export_directory, $session_user_id;
 
-
-	$sql1 = "select case_status_id, case_status_pretty_plural from case_statuses where case_status_record_status = 'a'";
+	$sql1 = <<<SQL
+	SELECT case_status_id, case_status_pretty_plural 
+	FROM case_statuses 
+	WHERE case_status_record_status = 'a'
+SQL;
+    $draw = array();
+	foreach ($caseTypesArray as $caseTypeID => $caseType) {
+	   if($caseType['draw'] == 1) {
+	       $draw[] = $caseTypeID;  	
+		}
+	}
+	if (count($draw) > 0)
+        $sql1 .= "\n AND case_type_id in (".implode($draw,',').")";
+	
+	if ($hide_closed_cases) $sql1 .= "\n AND status_open_indicator = 'o'";
+	
+	$sql1 .= "\n ORDER BY case_type_id, sort_order";
+	#echo "<pre>$sql1</pre>";
+	
 	$rst1 = $con->execute($sql1);
 	$case_status_count = $rst1->recordcount();
 	$graph_legend_array = array();
@@ -69,37 +137,35 @@ function GetCasesByCaseStatusGraph($con) {
 	$array_of_case_count_values = array();
 	$total_case_count = 0;
 	
-	while (!$rst1->EOF) {
+	    $sql2 = <<<SQL
+	    SELECT case_status_id, count(*) AS case_count 
+	    FROM cases 
+	    WHERE case_record_status = 'a'
+	    GROUP BY case_status_id
+SQL;
+#echo "<pre>$sql2</pre>";
+
+	$typeCountArray = $con->GetAssoc($sql2);
 	
-	    $sql2 = "SELECT count(*) AS case_count 
-	    from cases 
-	    where case_status_id = " . $rst1->fields['case_status_id'] . " 
-	    and case_record_status = 'a'";
-	    $rst2 = $con->execute($sql2);
-	
-	    if ($rst2) {
-	        $case_count = $rst2->fields['case_count'];
-	        $rst2->close();
-	    }
-	
-	    if (!$case_count) {
-	        $case_count = 0;
-	    }
+    while (!$rst1->EOF) {
+        $statusID = $rst1->fields['case_status_id'];	
+	    $case_count = $typeCountArray[$statusID];
+	    if (!$case_count) $case_count = 0;
 	    $total_case_count += $case_count;
 	    array_push($array_of_case_count_values, $case_count);
 	    array_push($graph_legend_array, $rst1->fields['case_status_pretty_plural']);
-		array_push($graph_url_array, $http_site_root . '/cases/some.php?cases_case_status_id=' . $rst1->fields['case_status_id']);
+		array_push($graph_url_array, $http_site_root . '/cases/some.php?cases_case_status_id=' . $statusID);
 	
 	    $rst1->movenext();
 	}
-	
-	
 	
 	$graph_info = array();
 	$graph_info['size_class']   = 'main';
 	$graph_info['graph_type']   = 'single_bar';
 	$graph_info['data']         = $array_of_case_count_values;
 	$graph_info['x_labels']     = $graph_legend_array;
+	$graph_info['xaxis_label_angle'] = 30;
+	$graph_info['xaxis_font_size'] = 7;
 	$graph_info['graph_title']  = $title;
 	$graph_info['csim_targets'] = $graph_url_array;
 	
@@ -115,6 +181,12 @@ function GetCasesByCaseStatusGraph($con) {
 
 /**
  * $Log: cases-by-case-status.php,v $
+ * Revision 1.12  2008/11/13 09:42:35  metamedia
+ * Added "Change Graph" feature. Users can now:
+ *
+ * 1) Hide or show closed cases, and
+ * 2) Choose which case types to graph.
+ *
  * Revision 1.11  2006/01/02 23:46:52  vanmer
  * - changed to use centralized dbconnection function
  *
