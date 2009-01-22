@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-activities.php,v 1.33 2008/01/30 21:33:09 gpowers Exp $
+ * $Id: utils-activities.php,v 1.34 2009/01/22 20:43:20 randym56 Exp $
 
  */
 
@@ -99,6 +99,14 @@ function add_activity($con, $activity_data, $participants=false, $magic_quotes=f
     //  * Checks to make sure that '$ends_at' is defined
     //  * Checks that '$ends_at' is defined as a date *after* '$scheduled_at'
     $rec['ends_at']          = ($ends_at) ? (($scheduled_at > $ends_at) ? $rec['scheduled_at'] : strtotime($ends_at)) : $rec['scheduled_at'];
+
+    // if recurring actvity = get start and end times to set them correctly in recurring activities
+    if ($activity_recurrence_id > 0) {
+    	$sql = "SELECT a.scheduled_at, a.ends_at from activities_recurrence r LEFT JOIN activities a on r.activity_id=a.activity_id WHERE r.activity_recurrence_id='$activity_recurrence_id'";
+    	$rst_act = $con->execute($sql);
+    	$rec['scheduled_at'] = $rec['scheduled_at'] + (strtotime($rst_act->fields['scheduled_at'])-strtotime(substr($rst_act->fields['scheduled_at'],0,10)));
+    	$rec['ends_at'] = $rec['ends_at'] + (strtotime($rst_act->fields['ends_at'])-strtotime(substr($rst_act->fields['ends_at'],0,10)));
+    	}
 
     // If this is not defined, then pull it from $session_user_id
     $rec['user_id']          = ($user_id)        ? $user_id        : $session_user_id;
@@ -776,6 +784,9 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.34  2009/01/22 20:43:20  randym56
+  * Fixed bug in recurring activities - set start/end times the same as original activity
+  *
   * Revision 1.33  2008/01/30 21:33:09  gpowers
   * - updated sql to prevent clobbering of on_what_table and on_what_id
   *
