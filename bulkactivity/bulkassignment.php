@@ -3,7 +3,7 @@
   *
   * bulkassignment.
   *
-  * $Id: bulkassignment.php,v 1.5 2007/10/19 18:31:34 randym56 Exp $
+  * $Id: bulkassignment.php,v 1.6 2009/01/22 23:48:28 randym56 Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -82,22 +82,24 @@
 
 
   $array_of_companies = array();
-      $from=$_SESSION["search_sql"]["from"];
-      //var_dump($_SESSION["search_sql"]);
-      $where=$_SESSION["search_sql"]["where"];
-      $order_by=$_SESSION["search_sql"]["order"];
-      $from.=" LEFT JOIN contacts cont on cont.company_id=c.company_id ";
-      $sql="SELECT c.company_id ".$from.$where.$order_by;
-	  $rst = $con->execute($sql);
 
-      if ($rst) {
-        while (!$rst->EOF) {
-          array_push($array_of_companies, $rst->fields['company_id']);
-          $rst->movenext();
-        }
-      } else {
-        db_error_handler ($con, $sql);
-      }
+  $from=$_SESSION["search_sql"]["from"];
+  //var_dump($_SESSION["search_sql"]);   exit;
+  $where=$_SESSION["search_sql"]["where"];
+  $order_by=$_SESSION["search_sql"]["order"];
+  //$from.=" LEFT JOIN contacts cont on cont.company_id=c.company_id ";
+  $sql="SELECT c.company_id ".$from.$where.$order_by;
+  //echo $sql; exit;
+  $rst = $con->execute($sql);
+
+  if ($rst) {
+    while (!$rst->EOF) {
+      array_push($array_of_companies, $rst->fields['company_id']);
+      $rst->movenext();
+    }
+  } else {
+    db_error_handler ($con, $sql);
+  }
 
   $_SESSION['array_of_companies'] = serialize($array_of_companies);
 
@@ -115,13 +117,13 @@
         c.company_id, u.username, i.industry_pretty_name,
         addr.province as "province", addr.city as "city", co.country_name as "country"';
 
-  $sql .= " from companies c, users u, industries i, addresses addr, countries co, company_types ct
-  where  c.user_id = u.user_id
-  and addr.address_id = c.default_primary_address
-  and co.country_id = addr.country_id
-  and c.company_type_id = ct.company_type_id
-  and c.industry_id = i.industry_id
-  and c.company_id in ($imploded_companies)
+  $sql .= " from companies c
+  LEFT JOIN users u ON c.user_id = u.user_id
+  LEFT JOIN industries i ON c.industry_id = i.industry_id
+  LEFT JOIN addresses addr ON addr.address_id = c.default_primary_address
+  LEFT JOIN countries co ON co.country_id = addr.country_id
+  LEFT JOIN company_types ct ON c.company_type_id = ct.company_type_id
+  where c.company_id in ($imploded_companies)
   and company_record_status = 'a' order by c.company_name asc";
 
   //echo $sql; exit;
@@ -253,6 +255,9 @@ end_page();
 
  /**
   * $Log: bulkassignment.php,v $
+  * Revision 1.6  2009/01/22 23:48:28  randym56
+  * Rewrite of SQL statement starting line 115. Used LEFT JOIN statements rather than WHERE statements so that all company records that matched in /companies/some.php will appear.
+  *
   * Revision 1.5  2007/10/19 18:31:34  randym56
   * - Fixed bugs preventing bulk updates to companies
   *
