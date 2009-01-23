@@ -10,7 +10,7 @@
  * @author Justin Cooper
  *
  *
- * $Id: recurrence_sidebar.php,v 1.6 2006/01/02 21:23:18 vanmer Exp $
+ * $Id: recurrence_sidebar.php,v 1.7 2009/01/23 01:02:20 randym56 Exp $
  */
 
 
@@ -25,7 +25,10 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
     
 getGlobalVar($activity_id, 'activity_id');
-getGlobalVar($msg, 'msg'); 
+if (!$activity_id) $activity_id = isset($_GET['activity_id']) ? $_GET['activity_id'] : $_POST['activity_id'];
+getGlobalVar($activity_recurrence_id, 'activity_recurrence_id');
+if (!$activity_recurrence_id) $activity_recurrence_id = isset($_GET['activity_recurrence_id']) ? $_GET['activity_recurrence_id'] : $_POST['activity_recurrence_id'];
+getGlobalVar($msg, 'msg');
 getGlobalVar($return_url, 'return_url');
 if(!$return_url) $return_url='/activities/some.php';
 
@@ -42,7 +45,8 @@ if(!isset($activity_id)){
 // try to locate the AR record and set the values from that
 $con = get_xrms_dbconnection();
 
-$sql = "SELECT * FROM activities_recurrence where activity_id=$activity_id";
+if ($activity_recurrence_id) $sql = "SELECT * FROM activities_recurrence where activity_recurrence_id=$activity_recurrence_id";
+  else $sql = "SELECT * FROM activities_recurrence where activity_id=$activity_id";
 
 $rst = $con->execute($sql);
 
@@ -51,7 +55,7 @@ if($rst) {
 	
 		$rec = $rst->fetchrow();
 
-		$activity_recurrence_id	= $rec['activity_recurrence_id'];
+//		$activity_recurrence_id	= $rec['activity_recurrence_id'];
 		$end_count 				= $rec['end_count'];
 		$end_datetime 			= $rec['end_datetime'];
 		$period					= $rec['period'];
@@ -183,6 +187,9 @@ function get_select_options_months($month_offset = null) {
 
 $return_url="/activities/one.php?activity_id=$activity_id";
 
+//create delete button conditions
+$to_url = 'delete_recurrence.php?activity_recurrence_id='.$activity_recurrence_id;
+
 $recurrence_block = "
 <!-- Begin Recurrence Widget -->
 <div id=\"Main\">
@@ -300,6 +307,7 @@ $recurrence_block = "
 			($activity_recurrence_id ? 
 			"<input type=submit value=\""._("Update Recurring Activity")."\" class=button name=btEditRecurring>" :
 			"<input type=submit value=\""._("Add New Recurring Activity")."\" class=button name=btAddRecurring>") . "
+			<input class=button type=button value=\""._("Delete Open Series")."\" onclick=\"javascript:location.href='".$to_url."';\">
 		</td>
 	</tr>
 
@@ -318,6 +326,9 @@ end_page();
 
 /**
  * $Log: recurrence_sidebar.php,v $
+ * Revision 1.7  2009/01/23 01:02:20  randym56
+ * - Update to allow for deleting recurring entries - fix date-time problems with new activities
+ *
  * Revision 1.6  2006/01/02 21:23:18  vanmer
  * - changed to use centralized database connection function
  *
