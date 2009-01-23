@@ -3,7 +3,7 @@
   *
   * bulkassignment.
   *
-  * $Id: bulkassignment.php,v 1.6 2009/01/22 23:48:28 randym56 Exp $
+  * $Id: bulkassignment.php,v 1.7 2009/01/23 00:19:31 randym56 Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -241,7 +241,7 @@
             </tr>
             <?php  echo $contact_rows ?>
             <tr>
-                <td class="widget_content_form_element" colspan="6">
+                <td class="widget_content_form_element" colspan="7">
                     <input type="submit" class="button" value="<?php echo _("Continue"); ?>">
                 </td>
             </tr>
@@ -255,6 +255,9 @@ end_page();
 
  /**
   * $Log: bulkassignment.php,v $
+  * Revision 1.7  2009/01/23 00:19:31  randym56
+  * Fix form format
+  *
   * Revision 1.6  2009/01/22 23:48:28  randym56
   * Rewrite of SQL statement starting line 115. Used LEFT JOIN statements rather than WHERE statements so that all company records that matched in /companies/some.php will appear.
   *
