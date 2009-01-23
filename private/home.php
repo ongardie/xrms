@@ -5,7 +5,7 @@
  * @todo make the user's home page configurable,
  *       to create a 'personal dashboard'
  *
- * $Id: home.php,v 1.77 2008/02/14 13:36:51 randym56 Exp $
+ * $Id: home.php,v 1.78 2009/01/23 00:43:35 randym56 Exp $
  */
 
 // include the common files
@@ -14,7 +14,7 @@ require_once('../include-locations.inc');
 //BASIC CHECKS FOR CONFIGURATION
 if ($include_directory == "/full/path/to/xrms/include/") {
     $path=realpath('..');
-    $msg=_("Please read the README file and configure your include-locations.inc file, in directory") ." $path";
+    $msg= "Please read the README file and configure your include-locations.inc file, in directory: ".$path;
 //    $redirect="../login.php?msg=$msg";
 //    Header("Location: $redirect");
     echo $msg;
@@ -248,6 +248,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.78  2009/01/23 00:43:35  randym56
+ * Fixed error that appears in Windows environment when include_directory is not setup
+ *
  * Revision 1.77  2008/02/14 13:36:51  randym56
  * Fixed bug in $search_terms
  *
