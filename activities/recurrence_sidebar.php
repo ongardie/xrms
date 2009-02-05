@@ -10,7 +10,7 @@
  * @author Justin Cooper
  *
  *
- * $Id: recurrence_sidebar.php,v 1.7 2009/01/23 01:02:20 randym56 Exp $
+ * $Id: recurrence_sidebar.php,v 1.8 2009/02/05 23:04:44 randym56 Exp $
  */
 
 
@@ -31,6 +31,8 @@ if (!$activity_recurrence_id) $activity_recurrence_id = isset($_GET['activity_re
 getGlobalVar($msg, 'msg');
 getGlobalVar($return_url, 'return_url');
 if(!$return_url) $return_url='/activities/some.php';
+
+//echo $activity_recurrence_id; exit;
 
 global $http_site_root;
     
@@ -326,6 +328,12 @@ end_page();
 
 /**
  * $Log: recurrence_sidebar.php,v $
+ * Revision 1.8  2009/02/05 23:04:44  randym56
+ * - Bug fixes and updates in several scripts. Prep for new release.
+ * - Added ability to set $datetime_format in vars.php
+ * - TODO: put $datetime_format in setup table rather than vars.php
+ * - TODO: fix javascript bugs in /activities/templates/v1.99.php
+ *
  * Revision 1.7  2009/01/23 01:02:20  randym56
  * - Update to allow for deleting recurring entries - fix date-time problems with new activities
  *

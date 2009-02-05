@@ -4,7 +4,7 @@
 *
 * @author Justin Cooper
 *
-* $Id: edit_activity_recurrence.php,v 1.8 2006/01/02 21:23:18 vanmer Exp $
+* $Id: edit_activity_recurrence.php,v 1.9 2009/02/05 23:04:44 randym56 Exp $
 */
 
 
@@ -61,6 +61,8 @@ GetGlobalVar($end_count, 'end_count');
 GetGlobalVar($end_datetime, 'end_datetime');
 
 global $http_site_root;
+global $datetime_format;
+
 
 if ($btCancel==_("Cancel")) {
     //Cancelling, go back to return url immediately
@@ -239,19 +241,28 @@ if ($activity_id) {
 
 	// now, insert all the activities and their participants
 	
+	// if recurring actvity = get start and end times to set them correctly in recurring activities
+	if ($activity_recurrence_id > 0) {
+		$sql = "SELECT a.scheduled_at, a.ends_at from activities_recurrence r LEFT JOIN activities a on r.activity_id=a.activity_id WHERE r.activity_recurrence_id='$activity_recurrence_id'";
+		$rst_act = $con->execute($sql);
+		$sched_at_plus_time = (strtotime($rst_act->fields['scheduled_at'])-strtotime(substr($rst_act->fields['scheduled_at'],0,10)));
+		}
+
 	$activity_length = strtotime($activity['ends_at']) - strtotime($activity['scheduled_at']);
+
+//echo 'ends at: '.$activity['ends_at'].'<br>scheduled at: '.$activity['scheduled_at']; exit;
 
 	foreach($activities_to_add as $add_datetime) {
 
 		//$activity['activity_id'] = null;
 		unset($activity['activity_id']);
-		$activity['scheduled_at'] = date('Y-m-d H:i:s', $add_datetime);
+		$activity['scheduled_at'] = date($datetime_format, $add_datetime + $sched_at_plus_time);
 		$activity['activity_recurrence_id'] = $activity_recurrence_id;
 
 		//echo "adding at {$activity['scheduled_at']}<br>";
 
 		if($activity_length) {
-			$activity['ends_at'] = date('Y-m-d H:i:s', strtotime("+$activity_length seconds {$activity['scheduled_at']}"));
+			$activity['ends_at'] = date($datetime_format, strtotime("+$activity_length seconds {$activity['scheduled_at']}"));
 		} else {
 			$activity['ends_at'] = $activity['scheduled_at'];
 		}
@@ -267,6 +278,12 @@ Header("Location:{$http_site_root}$return_url&msg=$msg");
 
 /*
  * $Log: edit_activity_recurrence.php,v $
+ * Revision 1.9  2009/02/05 23:04:44  randym56
+ * - Bug fixes and updates in several scripts. Prep for new release.
+ * - Added ability to set $datetime_format in vars.php
+ * - TODO: put $datetime_format in setup table rather than vars.php
+ * - TODO: fix javascript bugs in /activities/templates/v1.99.php
+ *
  * Revision 1.8  2006/01/02 21:23:18  vanmer
  * - changed to use centralized database connection function
  *

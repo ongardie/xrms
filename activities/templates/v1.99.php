@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.3 2008/10/04 08:30:56 metamedia Exp $
+ * $Id: v1.99.php,v 1.4 2009/02/05 23:05:16 randym56 Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -10,6 +10,8 @@ if(!$thread_id) {
     $thread_id = $activity_id;
 }
 
+
+/*
 //check for uncompleted activity with equal start and end times
 if (!strlen($completed_at)) {
     //check if ends_at is in the past
@@ -23,6 +25,7 @@ if (!strlen($completed_at)) {
         }
     }
 } // end time rationalization on uncompleted activities
+*/
 
 //function get_activity() uses 'as' in the SQL for a few columns
 //so the variable names set in activities/one.php
@@ -53,12 +56,14 @@ if ($on_what_table == 'opportunities') {
 } elseif ($on_what_table == 'cases') {
     $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
     $sql = "select case_title as attached_to_name from cases where case_id = $on_what_id";
+/*
 } elseif ($on_what_table) {
     $attached_to_link = "<a href='$http_site_root" . table_one_url($on_what_table, $on_what_id) . "'>";
     $singular=make_singular($on_what_table);
     $name_field=$con->Concat(implode(", ' ' , ", table_name($on_what_table)));
     $on_what_field=$singular.'_id';
     $sql = "select $name_field as attached_to_name from $on_what_table WHERE $on_what_field = $on_what_id";
+*/	
 } else {
     $attached_to_link = "N/A";
     $sql = "select * from companies where 1 = 2";
@@ -143,6 +148,18 @@ if ($company_id) {
     if ($rst) {
         $contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
         $rst->close();
+    } else {
+        db_error_handler ($con, $sql);
+    }
+
+	//get division menu
+	$sql = "SELECT division_name, division_id FROM company_division WHERE company_id = $company_id ORDER BY division_name";
+	$rst = $con->execute($sql);
+    if ($rst) {
+		if ($rst->RecordCount() > 0) {
+			$division_menu = $rst->getmenu2('division_id', $division_id, true);
+			$rst->close();
+		} else $division_id = false;
     } else {
         db_error_handler ($con, $sql);
     }
@@ -344,6 +361,16 @@ start_page($page_title, true, $msg);
 // load confGoTo.js
 confGoTo_includes();
 
+//set java date time values based on $datetime_format
+if ($datetime_format == 'Y-m-d H:i:s') {
+	$java_timeformat = "%Y-%m-%d %H:%M"; 
+	$java_timevalue = '24';
+	}
+	else {
+	$java_timeformat = "%Y-%m-%d %I:%M %p";
+	$java_timevalue = '12';
+	}		
+
 ?>
 
 <script language="JavaScript" type="text/javascript">
@@ -376,6 +403,7 @@ function logTime() {
 
     return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
 }
+
 </script>
 
 <div id="Main">
@@ -396,8 +424,11 @@ function logTime() {
         <input type=hidden name=thread_id value="<?php  echo $thread_id; ?>">
         <input type=hidden name=followup_from_id value="<?php  echo $followup_from_id; ?>">
         <input type=hidden name=email_to value="<?php  echo $email_to; ?>">
+        <input type=hidden name=associate_activities value="<?php  echo $associate_activities; ?>">
+		<input type=hidden name=activity_recurrence_id value="<?php echo $activity_recurrence_id; ?>">
+
         <table class=widget cellspacing=1>
-                <?php echo $activity_content_top; ?>
+        <?php echo $activity_content_top; ?>
             <tr>
                 <td class=widget_header colspan=2><?php echo _("About This Activity"); ?> <?php echo ($save_and_next) ? "(<input onclick=\"var input = prompt('Jump to', ''); if(input != null && input != '') document.location.href='browse-next.php?activity_id=" . $activity_id . "&pos=' + (input);\" type=button class=button value=" . $_SESSION['pos'] . ">/" . count($_SESSION['next_to_check']) . ")": "" ; ?></td>
             </tr>
@@ -407,6 +438,16 @@ function logTime() {
                     <?php echo '<a href="../companies/one.php?company_id='.$company_id.'">'.$company_name; ?></a>
                 </td>
             </tr>
+            <?php if ($division_menu) { ?>
+            <tr>
+                <td class=widget_label_right><?php echo _("Division"); ?></td>
+                <td class=widget_content>
+                    <?php
+                        echo $division_menu;
+                    ?>
+                </td>
+            </tr>
+            <?php } ?>
             <tr>
                 <td class=widget_label_right><?php echo _("Contact"); ?></td>
                 <input type=hidden name=add_participant>
@@ -511,7 +552,7 @@ function logTime() {
                 <td class=widget_content_form_element>
                     <?php
                         //Remember to call update_daylight_savings($con);
-                        echo gmdate('Y-m-d H:i:s', $local_time);
+                        echo gmdate($datetime_format, $local_time);
                     ?>
                 </td>
             </tr>
@@ -537,7 +578,7 @@ function logTime() {
             <tr>
                 <td class=widget_label_right><?php echo _("Scheduled End"); ?></td>
                 <td class=widget_content_form_element>
-                    <input type=text ID="f_date_d" name=ends_at value="<?php  echo $ends_at; ?>">
+                    <input type=text ID="f_date_d" name=ends_at value="<?php  echo $ends_at; ?>" onFocus="CheckDate()">
                     <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
                 </td>
             </tr>
@@ -673,29 +714,45 @@ function logTime() {
 
     Calendar.setup({
         inputField     :    "f_date_c",      // id of the input field
-        ifFormat       :    "%Y-%m-%d %H:%M:%S",       // format of the input field
+        ifFormat       :    "<? echo $java_timeformat; ?>",       // format of the input field
         showsTime      :    true,            // will display a time selector
+		timeFormat	   :    value="<? echo $java_timevalue; ?>",  //12 or 24
         button         :    "f_trigger_c",   // trigger for the calendar (button ID)
         singleClick    :    false,           // double-click mode
         step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
-        align          :    "Bl"           // alignment (defaults to "Bl")
+        align          :    "T1"           // alignment (defaults to "Bl")
     });
-</script>
-<script type="text/javascript">
+
     Calendar.setup({
         inputField     :    "f_date_d",      // id of the input field
-        ifFormat       :    "%Y-%m-%d %H:%M:%S",       // format of the input field
+        ifFormat       :    "<? echo $java_timeformat; ?>",       // format of the input field
         showsTime      :    true,            // will display a time selector
+		timeFormat	   :    value="<? echo $java_timevalue; ?>",  //12 or 24
         button         :    "f_trigger_d",   // trigger for the calendar (button ID)
         singleClick    :    false,           // double-click mode
         step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
-        align          :    "Bl"           // alignment (defaults to "Bl")
+        align          :    "Tl"           // alignment (defaults to "Bl")
     });
+
+    function CheckDate() 
+        {
+        if (document.activity_data.ends_at.value < document.activity_data.scheduled_at.value) 
+            {
+        	document.activity_data.ends_at.value = document.activity_data.scheduled_at.value; 
+            }       
+    };
+
 </script>
 
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.4  2009/02/05 23:05:16  randym56
+ * - Bug fixes and updates in several scripts. Prep for new release.
+ * - Added ability to set $datetime_format in vars.php
+ * - TODO: put $datetime_format in setup table rather than vars.php
+ * - TODO: fix javascript bugs in /activities/templates/v1.99.php
+ *
  * Revision 1.3  2008/10/04 08:30:56  metamedia
  * function get_activity() uses 'as' in the SQL for a few columns so the variable names set in activities/one.php are not all the same as the DB column names =>we need some variable assigments to ensure this script does what is expected of it.
  *

@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.62 2008/10/07 16:43:22 metamedia Exp $
+* $Id: activities-widget.php,v 1.63 2009/02/05 23:04:44 randym56 Exp $
 */
 
 global $include_directory;
@@ -45,6 +45,7 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
                              $default_sort = null, $instance='') {
 
     global $http_site_root;
+    global $datetime_format;
 
     // acl filtering
     $list=acl_get_list($session_user_id, 'Read', false, 'activities');
@@ -80,7 +81,6 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
     getGlobalVar($search_date, 'search_date');
     getGlobalVar($start_end, 'start_end');
     getGlobalVar($completed, 'completed');
-
 
     // selects the columns this user is interested in
     $pager_id='ActivitiesPager'.$form_name.$instance;
@@ -183,8 +183,8 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
         . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"$http_site_root/contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, cont.first_names, cont.last_name, "
         . "'$return_url' as return_url, "
         . $con->substr."(activity_description, 1, $description_substring_length)"."AS description_brief, "
-        . $con->SQLDate('Y-m-d H:i:s','a.scheduled_at') . " AS scheduled, "
-        . $con->SQLDate('Y-m-d H:i:s','a.ends_at') . " AS due, "
+        . $con->SQLDate($datetime_format,'a.scheduled_at') . " AS scheduled, "
+        . $con->SQLDate($datetime_format,'a.ends_at') . " AS due, "
         . "u.username AS owner, u.user_id, a.activity_id, activity_status, a.on_what_table, a.on_what_id, "
         // these fields are pulled in to speed up the pager sorting (using sql_sort_column)
         . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, cp.case_priority_pretty_name, rt.resolution_short_name ";
@@ -298,6 +298,11 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
     if (strlen($search_terms['completed']) > 0 and $search_terms['completed'] != "all") {
         $criteria_count++;
         $where .= " and a.activity_status = " . $con->qstr($search_terms['completed'], get_magic_quotes_gpc());
+    }
+
+    if (strlen($search_terms['description']) > 0) {
+        $criteria_count++;
+        $where .= " and a.activity_description like " . $con->qstr('%' . $search_terms['description'] . '%', get_magic_quotes_gpc());
     }
 
     if (strlen($search_terms['company_type_id']) > 0) {
@@ -653,6 +658,7 @@ function GetInitialCalendarDate($calendar_range, $before_after, $search_date) {
 function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_table, $on_what_id, $company_id, $contact_id) {
 
     global $http_site_root;
+    global $datetime_format;
 
     //ensure that user has create activity permission
     $table='activities';
@@ -725,6 +731,8 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
             <!-- activities //-->
             <form name=\"$form_name\" action=\"$http_site_root/activities/new-2.php\" method=post>
             <input type=hidden name=return_url value=\"$return_url\">
+	    <input type=hidden name=on_what_table value=\"$on_what_table\">
+	    <input type=hidden name=on_what_id value=\"$on_what_id\">
             $hidden
             <input type=hidden name=activity_status value=\"o\">
             <table class=widget cellspacing=1>
@@ -747,7 +755,7 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
                     ($contact_menu ? "<td class=widget_content_form_element>$contact_menu</td>" : "") ."
 
                     <td class=widget_content_form_element>
-                        <input type=text size=16 ID=\"f_date_start_activity\" name=scheduled_at value=\"" . date('Y-m-d H:i') . "\">
+                        <input type=text size=16 ID=\"f_date_start_activity\" name=scheduled_at value=\"" . date($datetime_format,time()) . "\">
                         <img ID=\"f_trigger_start_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" . "Start<br>
                         <input type=text size=16 ID=\"f_date_new_activity\" name=ends_at onFocus=\"CheckDate()\">
                         <img ID=\"f_trigger_new_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" . "End</td>
@@ -756,14 +764,25 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
 //                        render_create_button(_("Done"),'button',"javascript: markComplete();") . "
                         render_create_button(_("Add"),'submit', false, false, false, 'activities') . "<br>" .
                         render_create_button(_("Done"),'button',"javascript: markComplete();", false, false, 'activities') . "<td>\n". "
-                </tr>
+                </tr>";
+
+	if ($datetime_format == 'Y-m-d H:i:s') {
+		$java_timeformat = "%Y-%m-%d %H:%M";
+		$java_timevalue = '24';
+		}
+		else {
+		$java_timeformat = "%Y-%m-%d %I:%M %p";
+		$java_timevalue = '12';
+		}
+	    $ret .= "
             </table>
             </form>
             <script language=\"JavaScript\" type=\"text/javascript\">
                     Calendar.setup({
                     inputField     :    \"f_date_start_activity\",      // id of the input field
-                    ifFormat       :    \"%Y-%m-%d %H:%M:%S\",       // format of the input field
+                    ifFormat       :    \"".$java_timeformat."\",       // format of the input field
                     showsTime      :    true,            // will display a time selector
+		    timeFormat	   :    value=\"".$java_timevalue."\",  //12 or 24
                     button         :    \"f_trigger_start_activity\",   // trigger for the calendar (button ID)
                     singleClick    :    false,           // double-click mode
                     step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
@@ -771,20 +790,24 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
                 });
                     Calendar.setup({
                     inputField     :    \"f_date_new_activity\",      // id of the input field
-                    ifFormat       :    \"%Y-%m-%d %H:%M:%S\",       // format of the input field
+                    ifFormat       :    \"".$java_timeformat."\",       // format of the input field
                     showsTime      :    true,            // will display a time selector
+		    timeFormat	   :    value=\"".$java_timevalue."\",  //12 or 24
                     button         :    \"f_trigger_new_activity\",   // trigger for the calendar (button ID)
                     singleClick    :    false,           // double-click mode
                     step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
                     align          :    \"Bl\"           // alignment (defaults to \"Bl\")
                 });
-                function CheckDate() 
-                        {
-                        if (document.$form_name.ends_at.value < document.$form_name.scheduled_at.value) 
-                                {
-                        document.$form_name.ends_at.value = document.$form_name.scheduled_at.value; 
-                                }       
-                }
+
+    		function CheckDate()
+				{
+				var ends_at = Date.parse(document.$form_name.ends_at.value);
+				var starts_at = Date.parse(document.$form_name.scheduled_at.value);
+				if (ends_at < starts_at) or (isNaN(ends_at))
+					{
+      				document.$form_name.ends_at.value = document.$form_name.scheduled_at.value;
+					}
+    			}
             </script>
     ";
     return $ret;
@@ -942,6 +965,12 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.63  2009/02/05 23:04:44  randym56
+* - Bug fixes and updates in several scripts. Prep for new release.
+* - Added ability to set $datetime_format in vars.php
+* - TODO: put $datetime_format in setup table rather than vars.php
+* - TODO: fix javascript bugs in /activities/templates/v1.99.php
+*
 * Revision 1.62  2008/10/07 16:43:22  metamedia
 * BUG FIX: The default week view, in Calendar View, was showing as the first week 1970, rather than the current week.
 *

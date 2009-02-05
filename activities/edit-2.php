@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.85 2008/09/27 18:11:20 randym56 Exp $
+ * $Id: edit-2.php,v 1.86 2009/02/05 23:04:44 randym56 Exp $
  */
 
 //include required files
@@ -141,8 +141,8 @@ if ($scheduled_at > $ends_at) {
    $ends_at = $scheduled_at;
 }
 
-$ends_at_string = date('Y-m-d H:i:s',$ends_at);
-
+$ends_at_string = date($datetime_format,$ends_at);
+$starts_at_string = date($datetime_format,$scheduled_at); 
 
 //get the existing activity record for use later in the script
 $activity = get_activity($con, $activity_id);
@@ -358,6 +358,7 @@ if (!empty($email_to)) {
     $output .= " <a href=\"" . full_http_site_root() . "/activities/one.php?activity_id=" . $activity_id . "\">" . htmlspecialchars($activity_title) . "</a>";
     $output .= "\n<br>" . _("Activity Type") . ": " .  $activity_type;
     $output .= "\n<br>" . _("Owner") . ": " .  $username;
+    $output .= "\n<br>" . _("Scheduled Start") . ": " . $starts_at_string; //line added by Randy 6/15/07
     $output .= "\n<br>" . _("Scheduled End") . ": " . $ends_at_string;
     $output .= "\n<br>" . _("Company") . ": " . $company_name;
     $output .= "\n<br>" . _("Contact") . ": " . $contact_name . "<br>\n";
@@ -407,7 +408,7 @@ if ($followup) {
 } elseif($saveandnext) {
     header("Location: browse-next.php?activity_id=$activity_id");
 } elseif($recurrence) {
-    header("Location: recurrence_sidebar.php?activity_id=$activity_id");
+    header("Location: recurrence_sidebar.php?activity_id=$activity_id&activity_recurrence_id=$activity_recurrence_id");
 } elseif($print_view) {
     header("Location: " . $http_site_root . $return_url . "&print_view=true");
 } else {
@@ -416,6 +417,12 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.86  2009/02/05 23:04:44  randym56
+ * - Bug fixes and updates in several scripts. Prep for new release.
+ * - Added ability to set $datetime_format in vars.php
+ * - TODO: put $datetime_format in setup table rather than vars.php
+ * - TODO: fix javascript bugs in /activities/templates/v1.99.php
+ *
  * Revision 1.85  2008/09/27 18:11:20  randym56
  * Took quote marks off NULL settings for completed_by, and completed_at to allow saving changes.
  *

@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.145 2008/09/17 12:26:51 randym56 Exp $
+ * $Id: one.php,v 1.146 2009/02/05 23:04:44 randym56 Exp $
  */
 
 //include required files
@@ -53,30 +53,43 @@ if ((!$activity_rst) || ($activity_rst->EOF)) {
     exit;
 }
 
-//set recurrance id
-$recurrance_sql = "SELECT activity_recurrence_id FROM activities_recurrence where activity_id='" . $activity_id . "'";
-$recurrence_rst=$con->execute($recurrance_sql);
-    if (!$recurrence_rst) db_error_handler($con, $recurrance_sql);
+if ($activity_rst) {
+    //set recurrence id
+    $on_what_table = $activity_rst->fields['on_what_table'];
+    $recurrence_sql = "SELECT activity_recurrence_id FROM activities_recurrence where activity_id='" . $activity_id . "'";
+    $recurrence_rst=$con->execute($recurrence_sql);
+    if (!$recurrence_rst) { db_error_handler($con, $recurrence_sql); }
     if ($recurrence_rst->fields['activity_recurrence_id']) {
         $activity_rst->fields['activity_recurrence_id'] = $recurrence_rst->fields['activity_recurrence_id'];
-    }
+	$activity_recurrence_id = $recurrence_rst->fields['activity_recurrence_id'];
+    } //end recurrence processing
+//echo $activity_recurrence_id; exit;
 
 
 
-// Instantiating variables for each activity field, so that  fields
-// are accessible to plugin code without an extra read from database.
-foreach ($activity_rst->fields as $activity_field => $activity_field_value ) {
-    $$activity_field = $activity_field_value;
+	// Instantiating variables for each activity field, so that  fields
+	// are accessible to plugin code without an extra read from database.
+	foreach ($activity_rst->fields as $activity_field => $activity_field_value ) {
+	    $$activity_field = $activity_field_value;
+		}
+
+	//format dates and times
+	$entered_at = date($datetime_format, strtotime($activity_rst->fields['entered_at']));
+	$last_modified_at = date($datetime_format, strtotime($activity_rst->fields['last_modified_at']));
+	$scheduled_at = date($datetime_format, strtotime($activity_rst->fields['scheduled_at']));
+	$ends_at = date($datetime_format, strtotime($activity_rst->fields['ends_at']));
+    $local_time = calculate_time_zone_time($con, $activity_rst->fields['daylight_savings_id'], $rst->fields['gmt_offset']);
+
+	//close result set
+	$activity_rst->close();
+} else {
+    // add to $msg
 }
 
-//format dates and times
-$entered_at = date($datetime_format, strtotime($activity_rst->fields['entered_at']));
-$last_modified_at = date($datetime_format, strtotime($activity_rst->fields['last_modified_at']));
-$scheduled_at = date($datetime_format, strtotime($activity_rst->fields['scheduled_at']));
-$ends_at = date($datetime_format, strtotime($activity_rst->fields['ends_at']));
-
-//close result set
-$activity_rst->close();
+// set thread_id to activity_id if it's not set already.
+if(!$thread_id) {
+    $thread_id = $activity_id;
+}
 
 //activity template
 //this should be a system or user preference
@@ -89,6 +102,12 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.146  2009/02/05 23:04:44  randym56
+ * - Bug fixes and updates in several scripts. Prep for new release.
+ * - Added ability to set $datetime_format in vars.php
+ * - TODO: put $datetime_format in setup table rather than vars.php
+ * - TODO: fix javascript bugs in /activities/templates/v1.99.php
+ *
  * Revision 1.145  2008/09/17 12:26:51  randym56
  * Replaced TinyMCE with FCKEditor for GUI interface.
  *
