@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: contacts_one.php,v 1.2 2005/03/21 13:40:57 maulani Exp $
+ * $Id: contacts_one.php,v 1.3 2009/02/05 23:13:53 randym56 Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -519,7 +519,7 @@ function markComplete() {
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element>&nbsp;</td>
                 <td colspan=2 class=widget_content_form_element>
-                    <input type=text ID="f_date_c" name=scheduled_at value="<?php  echo date('Y-m-d H:i:s'); ?>">
+                    <input type=text ID="f_date_c" name=scheduled_at value="<?php  echo date($datetime_format); ?>">
                     <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
                     <input class=button type=submit value="<?php echo _("Add"); ?>">
                     <input class=button type=button onclick="javascript: markComplete();" value="<?php echo _("Done"); ?>">
@@ -586,6 +586,11 @@ end_page();
 
 /**
  * $Log: contacts_one.php,v $
+ * Revision 1.3  2009/02/05 23:13:53  randym56
+ * - Bug fixes and updates in several scripts. Prep for new release.
+ * - Added ability to set $datetime_format in vars.php
+ * - TODO: put $datetime_format in setup table rather than vars.php
+ *
  * Revision 1.2  2005/03/21 13:40:57  maulani
  * - Remove redundant code by centralizing common user menu call
  *

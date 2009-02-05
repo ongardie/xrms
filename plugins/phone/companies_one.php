@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: companies_one.php,v 1.4 2007/10/30 03:20:16 randym56 Exp $
+ * $Id: companies_one.php,v 1.5 2009/02/05 23:13:53 randym56 Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -694,7 +694,7 @@ function openNewsWindow() {
                 <td class=widget_content_form_element><?php echo $contact_menu; ?></td>
                 <td class=widget_content_form_element>&nbsp;</td>
                 <td colspan=2 class=widget_content_form_element>
-                    <input type=text ID="f_date_d" name=scheduled_at value="<?php  echo date('Y-m-d H:i:s'); ?>">
+                    <input type=text ID="f_date_d" name=scheduled_at value="<?php  echo date($datetime_format); ?>">
                     <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../../img/cal.gif">
                     <input class=button type=submit value="<?php echo _("Add"); ?>">
                     <input class=button type=button onclick="javascript: markComplete();" value="<?php echo _("Done"); ?>">
@@ -764,6 +764,11 @@ end_page();
 
 /**
  * $Log: companies_one.php,v $
+ * Revision 1.5  2009/02/05 23:13:53  randym56
+ * - Bug fixes and updates in several scripts. Prep for new release.
+ * - Added ability to set $datetime_format in vars.php
+ * - TODO: put $datetime_format in setup table rather than vars.php
+ *
  * Revision 1.4  2007/10/30 03:20:16  randym56
  * - Changed "Mail Merge" to be "eMail Merge" to separate from "Snail Mail Merge"
  *

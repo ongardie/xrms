@@ -14,13 +14,14 @@ function xrms_plugin_init_opportunitynotes() {
 function opportunitynotes() {
     global $save_and_next;
     global $activity_id;
+	global $datetime_format;
     $output = "";
     
     if(date('l', time() + 172800) == "Saturday" or date('l', time() + 172800) == "Sunday") {
-        $new_time = date('Y-m-d H:i:s', strtotime("first Monday"));
+        $new_time = date($datetime_format, strtotime("first Monday"));
     }
     else {
-        $new_time = date('Y-m-d H:i:s', time() + 172800);
+        $new_time = date($datetime_format, time() + 172800);
     }
     
     $buttons = array();
