@@ -4,7 +4,7 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.13 2008/09/11 17:00:41 randym56 Exp $
+ * $Id: Calendar_View.php,v 1.14 2009/02/05 23:06:41 randym56 Exp $
  */
 
 global $include_directory;
@@ -126,6 +126,7 @@ class CalendarView {
 function Render($activity_data) {
 
     global $http_site_root;
+	global $datetime_format;
 
     $events = $this->BuildDailyEvents($activity_data);
 
@@ -320,7 +321,7 @@ function Render($activity_data) {
                         // count how many events occur during this time slot
                         foreach($events[$day_of_week] as $event_key => $event) {
                             if(strtotime($event['ends_at']) == strtotime($event['scheduled_at'])) {
-                                $event['ends_at'] = date('Y-m-d H:i:s',strtotime($event['ends_at'])+1);
+                                $event['ends_at'] = date($datetime_format,strtotime($event['ends_at'])+1);
                             }
                             // if it ends before the slot starts or starts after the slot ends we don't want it
                             if(strtotime($event['ends_at']) <= $slot_start || strtotime($event['scheduled_at']) >= $slot_end) {
@@ -663,6 +664,11 @@ function GetCalendarSQLOffset() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.14  2009/02/05 23:06:41  randym56
+* - Bug fixes and updates in several scripts. Prep for new release.
+* - Added ability to set $datetime_format in vars.php
+* - TODO: put $datetime_format in setup table rather than vars.php
+*
 * Revision 1.13  2008/09/11 17:00:41  randym56
 * Add new class: widget_content_today (contribution by gopherit)
 *

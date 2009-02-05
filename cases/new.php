@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.25 2007/12/12 17:50:49 gpowers Exp $
+ * $Id: new.php,v 1.26 2009/02/05 23:07:12 randym56 Exp $
  */
 
 require_once('../include-locations.inc');
@@ -166,7 +166,7 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_label_right><?php echo _("Due By"); ?></td>
                 <td class=widget_content_form_element>
-                    <input type=text ID="f_date_d" name=due_at value="<?php  echo date('Y-m-d H:i:s'); ?>">
+                    <input type=text ID="f_date_d" name=due_at value="<?php  echo date($datetime_format); ?>">
                     <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
                 </td>
             </tr>
@@ -239,6 +239,11 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.26  2009/02/05 23:07:12  randym56
+ * - Bug fixes and updates in several scripts. Prep for new release.
+ * - Added ability to set $datetime_format in vars.php
+ * - TODO: put $datetime_format in setup table rather than vars.php
+ *
  * Revision 1.25  2007/12/12 17:50:49  gpowers
  * - changed to allow quotes in casse titles
  *

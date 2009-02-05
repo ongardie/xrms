@@ -4,7 +4,7 @@
  *
  * @author Justin Cooper
  *
- * $Id: utils-recurrence.php,v 1.4 2008/04/08 17:18:23 randym56 Exp $
+ * $Id: utils-recurrence.php,v 1.5 2009/02/05 23:07:58 randym56 Exp $
  */
 
 
@@ -53,6 +53,7 @@ function build_recurring_activities_list($start_datetime, $end_datetime, $end_co
     global $period_to_span;
     global $days_of_week_long;
     global $months_of_year;
+	global $datetime_format;
 
 
     $activities_list 	= array();
@@ -61,15 +62,15 @@ function build_recurring_activities_list($start_datetime, $end_datetime, $end_co
 
 	if(!$offset) return false;
 
-    $current_time 		= strtotime($start_datetime); 
+    $current_time 		= strtotime($start_datetime);
 	$start_time			= strtotime($start_datetime);
 	$end_time			= strtotime($end_datetime);
 	$finished 			= false;
 
-    //for($current_time = $starttime; $current_time <= $endtime; $current_time = strtotime(date('Y-m-d H:i:s', $current_time). " +1 $offset")) 
+    //for($current_time = $starttime; $current_time <= $endtime; $current_time = strtotime(date($datetime_format, $current_time). " +1 $offset"))
 	while(!$finished) {
 
-        $current_date = date('Y-m-d H:i:s', $current_time);
+        $current_date = date($datetime_format, $current_time);
 
 		$loop_count++;
 
@@ -79,7 +80,7 @@ function build_recurring_activities_list($start_datetime, $end_datetime, $end_co
 			if($current_day == 0 || $current_day == 6) {
 				$loop_count--;
 				//echo "skipping $current_day $current_date setting loop to $loop_count<br>";
-				$current_time = strtotime(date('Y-m-d H:i:s', $current_time) . " +1 $offset");
+				$current_time = strtotime(date($datetime_format, $current_time) . " +1 $offset");
 				continue;
 			}
 		}
@@ -120,7 +121,7 @@ function build_recurring_activities_list($start_datetime, $end_datetime, $end_co
                     break;
 
                 case 'monthly3':
-                    // Recur on the D business day of the month 
+                    // Recur on the D business day of the month
 					// Note: highest value for D is 40 (8 weeks == 56 days)
 
 					$day_count = 0;
@@ -195,7 +196,7 @@ function build_recurring_activities_list($start_datetime, $end_datetime, $end_co
 				$finished = true;
 			}
 		}
-		$current_time = strtotime(date('Y-m-d H:i:s', $current_time) . " +1 $offset");
+		$current_time = strtotime(date($datetime_format, $current_time) . " +1 $offset");
     }
 
     // delete the first one (if it is the same time as starttime) because that is the original activity and we don't want to duplicate it.
@@ -209,9 +210,14 @@ function build_recurring_activities_list($start_datetime, $end_datetime, $end_co
 }
 
 
- 
+
  /**
   * $Log: utils-recurrence.php,v $
+  * Revision 1.5  2009/02/05 23:07:58  randym56
+  * - Bug fixes and updates in several scripts. Prep for new release.
+  * - Added ability to set $datetime_format in vars.php
+  * - TODO: put $datetime_format in setup table rather than vars.php
+  *
   * Revision 1.4  2008/04/08 17:18:23  randym56
   * Bug fix to add correct start time to weekly and monthly recurring activities
   *
