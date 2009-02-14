@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.146 2009/02/05 23:04:44 randym56 Exp $
+ * $Id: one.php,v 1.147 2009/02/14 18:02:32 randym56 Exp $
  */
 
 //include required files
@@ -38,6 +38,8 @@ if (!$activity_id) {
 //open database connection
 $con = get_xrms_dbconnection();
 //$con->debug = 1;
+
+$datetime_format = set_datetime_format($con);
 
 //update recent activities
 update_recent_items($con, $session_user_id, "activities", $activity_id);
@@ -102,6 +104,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.147  2009/02/14 18:02:32  randym56
+ * - Update $datetime_format - removed from vars.php - installed with updateto2.1.php into system/user prefs
+ *
  * Revision 1.146  2009/02/05 23:04:44  randym56
  * - Bug fixes and updates in several scripts. Prep for new release.
  * - Added ability to set $datetime_format in vars.php

@@ -8,7 +8,7 @@
  *
  * @author Randy Martinsen
  *
- * $Id: updateto2.1.php,v 1.5 2008/10/10 00:29:48 randym56 Exp $
+ * $Id: updateto2.1.php,v 1.6 2009/02/14 18:01:47 randym56 Exp $
  */
 
 // where do we include from
@@ -172,6 +172,15 @@ $sql = "SELECT * FROM addresses";
 	$rst = $con->execute($sql);
 	}
 
+//add new datetime_format option for displaying different formats system selectable
+    $datetime_format=add_user_preference_type($con, 'datetime_format', "Date and Time format", "Allows selection of different date/time formats", false, true, 'select');
+    add_preference_option($con, $datetime_format, 'Y-m-d H:i:s', 'YYYY-MM-DD (24 hour clock = HH-mm-ss)');
+    add_preference_option($con, $datetime_format, 'Y-m-d h:i a', 'YYYY-MM-DD (12 hour clock am/pm = hh-mm xm)');
+    $ret=get_admin_preference($con, $datetime_format);
+    if (!$ret) {
+        set_admin_preference($con, $datetime_format, 'Y-m-d h:i a', 'datetime_format');
+    }
+
 //FINAL STEP SET XRMS VERSION IN PREFERENCES TABLE
 set_admin_preference($con, 'xrms_version', '1.99.3');
 
@@ -196,6 +205,9 @@ start_page($page_title, true, $msg);
 end_page();
 /**
  * $Log: updateto2.1.php,v $
+ * Revision 1.6  2009/02/14 18:01:47  randym56
+ * - Update $datetime_format - removed from vars.php - installed with updateto2.1.php into system/user prefs
+ *
  * Revision 1.5  2008/10/10 00:29:48  randym56
  * Added addresses table change to accomodate code changes by  developer ongardie
  *

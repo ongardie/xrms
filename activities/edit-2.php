@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.86 2009/02/05 23:04:44 randym56 Exp $
+ * $Id: edit-2.php,v 1.87 2009/02/14 18:02:32 randym56 Exp $
  */
 
 //include required files
@@ -128,6 +128,7 @@ if (!$scheduled_at) {
     $scheduled_at = strtotime(date('Y-m-d'));
 }
 
+$datetime_format = set_datetime_format($con);
 // set ends_at to current time if it is empty
 if (!$ends_at) {
     $ends_at = date('Y-m-d H:i:s');
@@ -142,7 +143,7 @@ if ($scheduled_at > $ends_at) {
 }
 
 $ends_at_string = date($datetime_format,$ends_at);
-$starts_at_string = date($datetime_format,$scheduled_at); 
+$starts_at_string = date($datetime_format,$scheduled_at);
 
 //get the existing activity record for use later in the script
 $activity = get_activity($con, $activity_id);
@@ -417,6 +418,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.87  2009/02/14 18:02:32  randym56
+ * - Update $datetime_format - removed from vars.php - installed with updateto2.1.php into system/user prefs
+ *
  * Revision 1.86  2009/02/05 23:04:44  randym56
  * - Bug fixes and updates in several scripts. Prep for new release.
  * - Added ability to set $datetime_format in vars.php

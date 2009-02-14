@@ -12,7 +12,7 @@ if ( !defined('IN_XRMS') )
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.45 2008/09/17 12:28:33 randym56 Exp $
+ * $Id: vars.php,v 1.46 2009/02/14 18:01:16 randym56 Exp $
  */
 
 /**
@@ -297,10 +297,5 @@ $use_self_contacts = false;
 //global $include_directory;
 $fckeditor_location = $xrms_file_root . '/js/fckeditor/';
 $fckeditor_location_url = $http_site_root . '/js/fckeditor/';
-
-//date and time formats
-$date_format = 'Y-m-d';
-$time_format = 'h:i a';
-$datetime_format = $date_format . " " . $time_format;
 
 //?>

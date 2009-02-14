@@ -4,7 +4,7 @@
 *
 * @author Justin Cooper
 *
-* $Id: edit_activity_recurrence.php,v 1.9 2009/02/05 23:04:44 randym56 Exp $
+* $Id: edit_activity_recurrence.php,v 1.10 2009/02/14 18:02:32 randym56 Exp $
 */
 
 
@@ -61,7 +61,7 @@ GetGlobalVar($end_count, 'end_count');
 GetGlobalVar($end_datetime, 'end_datetime');
 
 global $http_site_root;
-global $datetime_format;
+$datetime_format = 'Y-m-d H:i:s'; // Must be set to standard DB format or this function will not calculate time properly
 
 
 if ($btCancel==_("Cancel")) {
@@ -278,6 +278,9 @@ Header("Location:{$http_site_root}$return_url&msg=$msg");
 
 /*
  * $Log: edit_activity_recurrence.php,v $
+ * Revision 1.10  2009/02/14 18:02:32  randym56
+ * - Update $datetime_format - removed from vars.php - installed with updateto2.1.php into system/user prefs
+ *
  * Revision 1.9  2009/02/05 23:04:44  randym56
  * - Bug fixes and updates in several scripts. Prep for new release.
  * - Added ability to set $datetime_format in vars.php
