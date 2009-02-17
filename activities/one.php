@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.147 2009/02/14 18:02:32 randym56 Exp $
+ * $Id: one.php,v 1.148 2009/02/17 01:38:09 randym56 Exp $
  */
 
 //include required files
@@ -39,7 +39,7 @@ if (!$activity_id) {
 $con = get_xrms_dbconnection();
 //$con->debug = 1;
 
-$datetime_format = set_datetime_format($con);
+$datetime_format = set_datetime_format($con, $session_user_id);
 
 //update recent activities
 update_recent_items($con, $session_user_id, "activities", $activity_id);
@@ -104,6 +104,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.148  2009/02/17 01:38:09  randym56
+ * - Patch to allow for individual user to change datetime_format views
+ *
  * Revision 1.147  2009/02/14 18:02:32  randym56
  * - Update $datetime_format - removed from vars.php - installed with updateto2.1.php into system/user prefs
  *

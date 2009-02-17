@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.5 2009/02/14 18:03:32 randym56 Exp $
+ * $Id: v1.99.php,v 1.6 2009/02/17 01:38:37 randym56 Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -361,7 +361,7 @@ start_page($page_title, true, $msg);
 // load confGoTo.js
 confGoTo_includes();
 
-$datetime_format = set_datetime_format($con);
+$datetime_format = set_datetime_format($con, $session_user_id);
                     
 //set java date time values based on $datetime_format
 if ($datetime_format == 'Y-m-d H:i:s') {
@@ -749,6 +749,9 @@ function logTime() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.6  2009/02/17 01:38:37  randym56
+ * - Patch to allow for individual user to change datetime_format views
+ *
  * Revision 1.5  2009/02/14 18:03:32  randym56
  * - Update $datetime_format - removed from vars.php - installed with updateto2.1.php into system/user prefs
  *

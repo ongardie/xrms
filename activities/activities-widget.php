@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.64 2009/02/14 18:02:32 randym56 Exp $
+* $Id: activities-widget.php,v 1.65 2009/02/17 01:38:09 randym56 Exp $
 */
 
 global $include_directory;
@@ -45,7 +45,7 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
                              $default_sort = null, $instance='') {
 
     global $http_site_root;
-    $datetime_format = set_datetime_format($con);
+    $datetime_format = set_datetime_format($con, $session_user_id);
 
     // acl filtering
     $list=acl_get_list($session_user_id, 'Read', false, 'activities');
@@ -658,7 +658,7 @@ function GetInitialCalendarDate($calendar_range, $before_after, $search_date) {
 function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_table, $on_what_id, $company_id, $contact_id) {
 
     global $http_site_root;
-    $datetime_format = set_datetime_format($con);
+    $datetime_format = set_datetime_format($con, $session_user_id);
 
     //ensure that user has create activity permission
     $table='activities';
@@ -965,6 +965,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.65  2009/02/17 01:38:09  randym56
+* - Patch to allow for individual user to change datetime_format views
+*
 * Revision 1.64  2009/02/14 18:02:32  randym56
 * - Update $datetime_format - removed from vars.php - installed with updateto2.1.php into system/user prefs
 *

@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.87 2009/02/14 18:02:32 randym56 Exp $
+ * $Id: edit-2.php,v 1.88 2009/02/17 01:38:09 randym56 Exp $
  */
 
 //include required files
@@ -128,7 +128,7 @@ if (!$scheduled_at) {
     $scheduled_at = strtotime(date('Y-m-d'));
 }
 
-$datetime_format = set_datetime_format($con);
+$datetime_format = set_datetime_format($con, $session_user_id);
 // set ends_at to current time if it is empty
 if (!$ends_at) {
     $ends_at = date('Y-m-d H:i:s');
@@ -418,6 +418,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.88  2009/02/17 01:38:09  randym56
+ * - Patch to allow for individual user to change datetime_format views
+ *
  * Revision 1.87  2009/02/14 18:02:32  randym56
  * - Update $datetime_format - removed from vars.php - installed with updateto2.1.php into system/user prefs
  *

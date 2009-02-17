@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.27 2009/02/14 18:03:03 randym56 Exp $
+ * $Id: new.php,v 1.28 2009/02/17 01:39:07 randym56 Exp $
  */
 
 require_once('../include-locations.inc');
@@ -100,7 +100,7 @@ if ( $rst && !$rst->EOF ) {
 
 $case_status_menu = $rst->getmenu2('case_status_id', $case_status_id, false);
 
-$datetime_format = set_datetime_format($con);
+$datetime_format = set_datetime_format($con, $session_user_id);
 
 $rst->close();
 $con->close();
@@ -241,6 +241,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.28  2009/02/17 01:39:07  randym56
+ * - Patch to allow for individual user to change datetime_format views
+ *
  * Revision 1.27  2009/02/14 18:03:03  randym56
  * - Update $datetime_format - removed from vars.php - installed with updateto2.1.php into system/user prefs
  *

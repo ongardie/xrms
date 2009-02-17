@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.191 2009/02/14 18:01:16 randym56 Exp $
+ * $Id: utils-misc.php,v 1.192 2009/02/17 01:37:35 randym56 Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -2085,15 +2085,20 @@ function array_intersect_key_2($arr1, $arr2) {
    return $res;
 };
 
-function set_datetime_format($con) {
+function set_datetime_format($con,$user_id=0) {
 	//date and time formats
 //$con->debug = 1;
 	$sql_find_type = "SELECT user_preference_type_id FROM user_preference_types WHERE user_preference_name = 'datetime_format'";
 	$rst = $con->execute($sql_find_type);
 	$type_id = $rst->fields['user_preference_type_id'];
-	$sql_datetime_format = "SELECT * FROM user_preferences WHERE user_preference_type_id='$type_id'";
+	$sql_datetime_format = "SELECT * FROM user_preferences WHERE user_preference_type_id='$type_id' AND user_id = '$user_id'";
 	$rst_datetime_format = $con->execute($sql_datetime_format);
 	$datetime_format = $rst_datetime_format->fields['user_preference_value'];
+	if (!$datetime_format) {
+		$sql_datetime_format = "SELECT * FROM user_preferences WHERE user_preference_type_id='$type_id' AND user_id = '0'";
+		$rst_datetime_format = $con->execute($sql_datetime_format);
+		$datetime_format = $rst_datetime_format->fields['user_preference_value'];
+		}
 	if (!$datetime_format) $datetime_format = 'Y-m-d H:i:s';
 	return $datetime_format;
 	}
@@ -2115,6 +2120,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.192  2009/02/17 01:37:35  randym56
+ * - Patch to allow for individual user to change datetime_format views
+ *
  * Revision 1.191  2009/02/14 18:01:16  randym56
  * - Update $datetime_format - removed from vars.php - installed with updateto2.1.php into system/user prefs
  *
