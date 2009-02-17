@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.50 2006/09/30 18:13:52 braverock Exp $
+ * $Id: new-2.php,v 1.51 2009/02/17 11:31:55 randym56 Exp $
  */
 
 //where do we include from
@@ -71,6 +71,10 @@ if ($followup) {
         $scheduled_at = date('Y-m-d', strtotime('+1 week') );
     }
 }
+
+//convert scheduled_at and ends_at to be Y-m-d H:i:s format before comparing and storing in the DB
+$ends_at = date('Y-m-d H:i:s',strtotime($ends_at));
+$scheduled_at = date('Y-m-d H:i:s',strtotime($scheduled_at));
 
 if (!$ends_at) {
     $ends_at = $scheduled_at;
@@ -206,6 +210,9 @@ if ($activity_status == 'c') { //now send them back where they came from
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.51  2009/02/17 11:31:55  randym56
+ *- Fixed bug in adding new activity using AM/PM time - needs to be converted to 24h before compare and store in db.
+ *
  *Revision 1.50  2006/09/30 18:13:52  braverock
  *- remove default of scheduled/ends_at as these are done in activities api
  *
