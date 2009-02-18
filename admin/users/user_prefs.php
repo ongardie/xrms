@@ -5,7 +5,7 @@
  * Administration screen for managing user preferences
  *
  *
- * $Id: user_prefs.php,v 1.5 2006/07/17 06:10:53 vanmer Exp $
+ * $Id: user_prefs.php,v 1.6 2009/02/18 17:53:30 randym56 Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -51,7 +51,7 @@ else {
                    getGlobalVar($preference_value, $user_preference_name);
                    if ($preference_value OR ($preference_value!=get_user_preference($con, $user_id, $user_preference_type_id))) {
 //                        echo "set_user_preference($con,$user_id,  $user_preference_type_id, $preference_value);";
-                      $ret=set_user_preference($con,$user_id,  $user_preference_type_id, $preference_value);
+                      $ret=set_user_preference($con,$user_id,  $user_preference_type_id, $preference_value, $user_preference_name);
                       if (!$ret) $msg.=_("Failed to set preference value for preference") . ' ' .$user_preference_name;
                    }
                 }
