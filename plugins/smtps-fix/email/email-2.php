@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.1 2008/03/15 16:54:31 randym56 Exp $
+* $Id: email-2.php,v 1.2 2009/03/21 15:18:16 randym56 Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -308,7 +308,7 @@ function InsertHTML($_text)
             </tr>
             <tr> 
               <td> 
-                <?PHP echo _($company_singular_title) . "<BR>" . $companies_menu; ?>
+                <?PHP echo _("Company") . "<BR>" . $companies_menu; ?>
               </td>
               <td><a href="javascript:void(0);" onClick="InsertHTML('{'+document.forms[0].companies_fields.value+'}');"><?php echo _("Add");?></a> 
 			  </td>
@@ -456,6 +456,9 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.2  2009/03/21 15:18:16  randym56
+* Revert $company_singular_title back to "Company" to fix language bug
+*
 * Revision 1.1  2008/03/15 16:54:31  randym56
 * Updated SMTPs to allow for individual user SMTP addressing - requires installation and activation of mcrypt in PHP - follow README.txt instructions
 *

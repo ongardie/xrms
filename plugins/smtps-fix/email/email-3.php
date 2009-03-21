@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.1 2008/03/15 16:54:31 randym56 Exp $
+ * $Id: email-3.php,v 1.2 2009/03/21 15:18:16 randym56 Exp $
  */
 
 
@@ -147,7 +147,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class="widget_label">&nbsp;</td>
-                <td class="widget_label"><?php echo _($company_singular_title); ?></td>
+                <td class="widget_label"><?php echo _("Company"); ?></td>
                 <td class="widget_label"><?php echo _("Owner"); ?></td>
                 <td class="widget_label"><?php echo _("Contact"); ?></td>
                 <td class="widget_label"><?php echo _("E-Mail"); ?></td>
@@ -188,6 +188,9 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.2  2009/03/21 15:18:16  randym56
+ * Revert $company_singular_title back to "Company" to fix language bug
+ *
  * Revision 1.1  2008/03/15 16:54:31  randym56
  * Updated SMTPs to allow for individual user SMTP addressing - requires installation and activation of mcrypt in PHP - follow README.txt instructions
  *

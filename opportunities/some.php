@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.71 2008/07/25 21:17:27 polyformal_sp Exp $
+ * $Id: some.php,v 1.72 2009/03/21 15:14:31 randym56 Exp $
  */
 
 require_once('../include-locations.inc');
@@ -379,7 +379,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Opportunity Name"); ?></td>
-                <td class=widget_label><?php echo _($company_singular_title); ?></td>
+                <td class=widget_label><?php echo _("Company"); ?></td>
                 <td class=widget_label><?php echo _("Open/Closed/All"); ?></td>
                 <td class=widget_label><?php echo _("Campaigns"); ?></td>
                 <td class=widget_label><?php echo _("Type"); ?></td>
@@ -544,7 +544,7 @@ $con->close();
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Opportunity"); ?></td>
-                <td class=widget_label><?php echo _($company_singular_title); ?></td>
+                <td class=widget_label><?php echo _("Company"); ?></td>
                 <td class=widget_label><?php echo _("Plan"); ?></td>
                 <td class=widget_label><?php echo _("Close Date"); ?></td>
             </tr>
@@ -601,6 +601,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.72  2009/03/21 15:14:31  randym56
+ * Revert $company_singular_title back to "Company" to fix language bug
+ *
  * Revision 1.71  2008/07/25 21:17:27  polyformal_sp
  * mailto: full name, patch from https://sourceforge.net/tracker/index.php?func=detail&aid=1898592&group_id=88850&atid=588130
  * missing sidebar_hooks, patch from http://sourceforge.net/tracker/index.php?func=detail&aid=2018568&group_id=88850&atid=588130
