@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.65 2009/02/17 01:38:09 randym56 Exp $
+* $Id: activities-widget.php,v 1.66 2009/03/23 07:59:02 polyformal_sp Exp $
 */
 
 global $include_directory;
@@ -740,16 +740,16 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
                     <td class=widget_header colspan=9>". _("New Activity") . "</td>
                 </tr>
                 <tr>
-                    <td class=widget_label>" . _("Summary/Notes") . "</td>
+                    <td class=widget_label>" . _("Summary, Notes") . "</td>
                     <td class=widget_label>" . _("User") . "</td>
                     <td class=widget_label>" . _("Type") . "</td> ".
                     ($contact_menu ? "<td class=widget_label>" . _("Contact") . "</td>" : "") ."
-                    <td class=widget_label>" . _("Scheduled Start/End") . "</td>
+                    <td class=widget_label>" . _("Scheduled Start, End") . "</td>
                     <td class=widget_label>" . _(" ") . "</td>
                 </tr>
                 <tr>
-                    <td class=widget_content_form_element><input type=text name=activity_title>Summary<br>
-                                          <input type=text name=activity_description>Notes</td>
+                    <td class=widget_content_form_element><input type=text name=activity_title>"._("Summary")."<br>
+                                          <input type=text name=activity_description>"._("Notes")."</td>
                     <td class=widget_content_form_element>$user_menu</td>
                     <td class=widget_content_form_element>$activity_type_menu</td>" .
                     ($contact_menu ? "<td class=widget_content_form_element>$contact_menu</td>" : "") ."
@@ -965,6 +965,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.66  2009/03/23 07:59:02  polyformal_sp
+* removed / (slash) because of translation issues
+*
 * Revision 1.65  2009/02/17 01:38:09  randym56
 * - Patch to allow for individual user to change datetime_format views
 *
