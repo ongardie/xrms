@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.23 2006/07/25 19:56:16 vanmer Exp $
+ * $Id: install.php,v 1.24 2009/04/07 07:28:29 gopherit Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -143,8 +143,12 @@ if ($xrms_db_dbname == "your_mysql_database") {
 }
 
 // has a web root url been set?
+/**
+ * TODO: This check is of no value because the vars.php default for
+ * $http_site_root is "/xrms" which works with a non-customized installation.
+ */
 if ($http_site_root == "http://www.yoursitename.com/xrms") {
-    // Oops!  The database username does not have a valid value
+    // Oops!  The http site root does not have a valid value
     // Now instruct the user in how to set this value
     $problem = 'The http site root variable has not been set.<BR><BR>';
     $problem .= 'Please open the vars.php file which is located ';
@@ -237,11 +241,17 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 
 
 // can we make a database connection?
+/*
+ * This test was giving a false negative since get_xrms_dbconnection() returns
+ * an ADOdb object and is never null.  Modified to check for an actual ADOdb
+ * error message instead.
+ */
 $con = get_xrms_dbconnection();
-if (!$con) {
+if ($con->_errorMsg) {
     // Oops!  We do not have a valid database connection
+    $problem = 'SQL ERROR: '.$con->_errorMsg.'</br></br>';
     // Now instruct the user in how to fix this problem
-    $problem = 'We cannot connect to the database.  Check the database ';
+    $problem .= 'We cannot connect to the database.  Check the database ';
     $problem .= 'parameters in include/vars.php to make sure they are correct.';
     $problem .= 'Also make sure the database is running and can accept a connection ';
     $problem .= 'from this server. <BR><BR>';
@@ -326,6 +336,9 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.24  2009/04/07 07:28:29  gopherit
+ *Test on line 241 was giving a false negative since get_xrms_dbconnection() returns an ADOdb object and is never null.  Modified to check for an actual ADOdb error message instead.
+ *
  *Revision 1.23  2006/07/25 19:56:16  vanmer
  *- changed to use full path to XML file for install
  *
