@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.25 2006/12/05 11:30:17 jnhayart Exp $
+ * $Id: one.php,v 1.26 2009/04/09 06:29:06 gopherit Exp $
  */
 
 //include required files
@@ -150,7 +150,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php echo _("Change Date"); ?></td>
                 <td class=widget_content_form_element>
                     <input type=text ID="f_date_c" name=file_entered_at value="<?php  echo $file_info['entered_at']; ?>">
-                    <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
+                    <img ID="f_trigger_c" style="CURSOR: pointer" border=0 src="../img/cal.gif">
                 </td>
             </tr>
             <tr>
@@ -222,6 +222,9 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.26  2009/04/09 06:29:06  gopherit
+ *Changed CSS "CURSOR: hand" to "CURSOR: pointer".  "hand" is largely unsupported outside of IE and "pointer" is universally supported in all browsers except <= IE 5.5.
+ *
  *Revision 1.25  2006/12/05 11:30:17  jnhayart
  *localisation of java string
  *

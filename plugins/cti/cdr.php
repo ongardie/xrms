@@ -4,7 +4,7 @@
  *
  * Search for and View a list of calls
  *
- * $Id: cdr.php,v 1.2 2006/01/02 23:52:14 vanmer Exp $
+ * $Id: cdr.php,v 1.3 2009/04/09 06:30:39 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -146,14 +146,14 @@ arr_vars_session_set ( $arr_vars );
                     </td>
                     <td class=widget_content>
                         <input type=text ID="f_date_a" name="date_start" size=12 value="<?php echo $date_start; ?>">
-                        <img ID="f_trigger_a" style="CURSOR: hand" border=0 src="../../img/cal.gif" alt="">
+                        <img ID="f_trigger_a" style="CURSOR: pointer" border=0 src="../../img/cal.gif" alt="">
                     </td>
                     <td class="widget_label">
                         <?php echo _("End Date"); ?>
                     </td>
                     <td class=widget_content>
                         <input type=text ID="f_date_b" name="date_end" size=12 value="<?php echo $date_end; ?>">
-                        <img ID="f_trigger_b" style="CURSOR: hand" border=0 src="../../img/cal.gif" alt="">
+                        <img ID="f_trigger_b" style="CURSOR: pointer" border=0 src="../../img/cal.gif" alt="">
                     </td>
                 </tr>
                 <tr>
@@ -370,6 +370,9 @@ end_page();
 
 /**
  * $Log: cdr.php,v $
+ * Revision 1.3  2009/04/09 06:30:39  gopherit
+ * Changed CSS "CURSOR: hand" to "CURSOR: pointer".  "hand" is largely unsupported outside of IE and "pointer" is universally supported in all browsers except <= IE 5.5.
+ *
  * Revision 1.2  2006/01/02 23:52:14  vanmer
  * - changed to use centralized dbconnection function
  *

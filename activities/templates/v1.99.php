@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.6 2009/02/17 01:38:37 randym56 Exp $
+ * $Id: v1.99.php,v 1.7 2009/04/09 06:27:33 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -574,14 +574,14 @@ function logTime() {
                 <td class=widget_content_form_element>
                     <?php jscalendar_includes(); ?>
                     <input type=text ID="f_date_c" name=scheduled_at value="<?php  echo $scheduled_at; ?>">
-                    <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
+                    <img ID="f_trigger_c" style="CURSOR: pointer" border=0 src="../img/cal.gif">
                 </td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Scheduled End"); ?></td>
                 <td class=widget_content_form_element>
                     <input type=text ID="f_date_d" name=ends_at value="<?php  echo $ends_at; ?>" onFocus="CheckDate()">
-                    <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
+                    <img ID="f_trigger_d" style="CURSOR: pointer" border=0 src="../img/cal.gif">
                 </td>
             </tr>
             <tr>
@@ -749,6 +749,9 @@ function logTime() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.7  2009/04/09 06:27:33  gopherit
+ * Changed CSS "CURSOR: hand" to "CURSOR: pointer".  "hand" is largely unsupported outside of IE and "pointer" is universally supported in all browsers except <= IE 5.5.
+ *
  * Revision 1.6  2009/02/17 01:38:37  randym56
  * - Patch to allow for individual user to change datetime_format views
  *

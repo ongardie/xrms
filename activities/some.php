@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.129 2007/12/10 22:36:20 gpowers Exp $
+ * $Id: some.php,v 1.130 2009/04/09 06:27:04 gopherit Exp $
  */
 
 // handle includes
@@ -308,7 +308,7 @@ start_page($page_title, true, $msg);
                         <option value="on"<?php if ($before_after == "on") { print " selected"; } ?>><?php echo _("On"); ?></option>
                     </select>
                     <input type=text ID="f_date_d" name="search_date" size=12 value="<?php  echo $search_date; ?>">
-                    <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif" alt="">
+                    <img ID="f_trigger_d" style="CURSOR: pointer" border=0 src="../img/cal.gif" alt="">
                 </td>
                 <td class=widget_content_form_element>
                     <?php  echo $type_menu; ?>
@@ -522,6 +522,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.130  2009/04/09 06:27:04  gopherit
+ * Changed CSS "CURSOR: hand" to "CURSOR: pointer".  "hand" is largely unsupported outside of IE and "pointer" is universally supported in all browsers except <= IE 5.5.
+ *
  * Revision 1.129  2007/12/10 22:36:20  gpowers
  * - removed extra whitespace
  *
