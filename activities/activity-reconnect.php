@@ -189,11 +189,12 @@ start_page($page_title, true, $msg);
 ?>
 
 <div id="Main">
-<div id="Sidebar">
-    &nbsp;
-</div>
-<div id="Content">
-    <?php echo $body_content; ?>
+    <div id="Sidebar">
+        &nbsp;
+    </div>
+    <div id="Content">
+        <?php echo $body_content; ?>
+    </div>
 </div>
 <?php
 end_page();
@@ -207,6 +208,9 @@ function GetEntityPagerData($row) {
 
 /**
  * $Log: activity-reconnect.php,v $
+ * Revision 1.6  2009/04/09 06:09:13  gopherit
+ * Missing <div id="Main"> closure on line 198
+ *
  * Revision 1.5  2008/01/30 21:10:06  gpowers
  * - added functionality to transfer activities to other entities. worksforme
  *
