@@ -10,7 +10,7 @@ if (!strlen($completed_at)) {
     //check if ends_at is in the past
     if (strtotime($ends_at)<time()) {
         //check if start and end time are equal
-        if ($ends_at=$scheduled_at) {
+        if ($ends_at==$scheduled_at) {
            //clear $ends_at
            $ends_at='';
            // hopefully the user will pick an ends_at time in the UI
