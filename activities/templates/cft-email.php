@@ -46,7 +46,7 @@ function logTime() {
 <script type="text/javascript" src="../js/tabcontent.js">
 
 /***********************************************
-* Tab Content script v2.0- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
+* Tab Content script v2.0- ï¿½ Dynamic Drive DHTML code library (www.dynamicdrive.com)
 * This notice MUST stay intact for legal use
 * Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
 ***********************************************/
@@ -73,7 +73,7 @@ function logTime() {
             <input type=hidden name=thread_id value="<?php  echo $thread_id; ?>">
             <input type=hidden name=followup_from_id value="<?php  echo $followup_from_id; ?>">
             <input type=hidden name=email_to value="<?php  echo $email_to; ?>">
-                
+        </form>
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>
