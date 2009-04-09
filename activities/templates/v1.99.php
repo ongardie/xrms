@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.7 2009/04/09 06:27:33 gopherit Exp $
+ * $Id: v1.99.php,v 1.8 2009/04/09 06:56:29 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -437,7 +437,7 @@ function logTime() {
             <tr>
                 <td class=widget_label_right><?php echo _("Company"); ?></td>
                 <td class=widget_content>
-                    <?php echo '<a href="../companies/one.php?company_id='.$company_id.'">'.$company_name; ?></a>
+                    <?php echo '<a href="../companies/one.php?company_id='.$company_id.'">'.$company_name.'</a>'; ?>
                 </td>
             </tr>
             <?php if ($division_menu) { ?>
@@ -749,6 +749,9 @@ function logTime() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.8  2009/04/09 06:56:29  gopherit
+ * Moved </a> tag inside echo() on line 440 for tag match consistency.
+ *
  * Revision 1.7  2009/04/09 06:27:33  gopherit
  * Changed CSS "CURSOR: hand" to "CURSOR: pointer".  "hand" is largely unsupported outside of IE and "pointer" is universally supported in all browsers except <= IE 5.5.
  *
