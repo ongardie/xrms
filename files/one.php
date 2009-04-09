@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.26 2009/04/09 06:29:06 gopherit Exp $
+ * $Id: one.php,v 1.27 2009/04/09 06:39:04 gopherit Exp $
  */
 
 //include required files
@@ -126,7 +126,7 @@ start_page($page_title, true, $msg);
                     <?php echo _("Attached to"); ?>
                     <?php  echo $table_singular ?>
                 </td>
-                <td class=clear><a href="<?php  echo $http_site_root?>/<?php  echo $on_what_table?>/one.php?<?php  echo $table_singular?>_id=<?php echo $on_what_id; ?>"><?php echo $attached_to_name; ?></td>
+                <td class=clear><a href="<?php  echo $http_site_root?>/<?php  echo $on_what_table?>/one.php?<?php  echo $table_singular?>_id=<?php echo $on_what_id; ?>"><?php echo $attached_to_name; ?></a>
                 </td>
             </tr>
             <tr>
@@ -222,6 +222,9 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.27  2009/04/09 06:39:04  gopherit
+ *Fixed <td> and <a> tag mismatch on line 129.
+ *
  *Revision 1.26  2009/04/09 06:29:06  gopherit
  *Changed CSS "CURSOR: hand" to "CURSOR: pointer".  "hand" is largely unsupported outside of IE and "pointer" is universally supported in all browsers except <= IE 5.5.
  *
