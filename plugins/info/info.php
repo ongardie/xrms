@@ -2,7 +2,7 @@
 /**
  * The main page for the info plugin
  *
- * $Id: info.php,v 1.5 2005/02/11 13:53:01 braverock Exp $
+ * $Id: info.php,v 1.6 2009/04/14 07:14:06 gopherit Exp $
  */
 
 // include the common files
@@ -82,6 +82,7 @@ start_page($info_heading);
               }
       }
       ?>
+    </table>
   </div>
 
 </div>
@@ -95,6 +96,9 @@ end_page();
 
 /**
  * $Log: info.php,v $
+ * Revision 1.6  2009/04/14 07:14:06  gopherit
+ * Fixed missing </table> around line 85.
+ *
  * Revision 1.5  2005/02/11 13:53:01  braverock
  * - add phpdoc
  * - remove references to server_info and replace with just info
