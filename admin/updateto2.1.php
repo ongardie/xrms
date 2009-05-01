@@ -8,7 +8,7 @@
  *
  * @author Randy Martinsen
  *
- * $Id: updateto2.1.php,v 1.6 2009/02/14 18:01:47 randym56 Exp $
+ * $Id: updateto2.1.php,v 1.7 2009/05/01 16:43:51 gopherit Exp $
  */
 
 // where do we include from
@@ -181,6 +181,10 @@ $sql = "SELECT * FROM addresses";
         set_admin_preference($con, $datetime_format, 'Y-m-d h:i a', 'datetime_format');
     }
 
+// Change gmt_offset field type in the users table.  Was INT, changed to VARCHAR(50) to allow storage of Region/Locale data
+$sql = "ALTER TABLE users CHANGE gmt_offset gmt_offset VARCHAR(50) NOT NULL DEFAULT '0'";
+$rst = $con->execute($sql);
+
 //FINAL STEP SET XRMS VERSION IN PREFERENCES TABLE
 set_admin_preference($con, 'xrms_version', '1.99.3');
 
@@ -205,6 +209,9 @@ start_page($page_title, true, $msg);
 end_page();
 /**
  * $Log: updateto2.1.php,v $
+ * Revision 1.7  2009/05/01 16:43:51  gopherit
+ * Change gmt_offset field type in the users table.  Was INT, changed to VARCHAR(50) to allow storage of Region/Locale data
+ *
  * Revision 1.6  2009/02/14 18:01:47  randym56
  * - Update $datetime_format - removed from vars.php - installed with updateto2.1.php into system/user prefs
  *
