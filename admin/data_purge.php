@@ -51,7 +51,7 @@ $tables_array[] = 'industries';
 $tables_array[] = 'notes';
 $tables_array[] = 'opportunities';
 $tables_array[] = 'opportunity_statuses';
-$tables_array[] = 'opportunitity_types';
+$tables_array[] = 'opportunity_types';
 $tables_array[] = 'relationships';
 $tables_array[] = 'users';
 $tables_array[] = 'user_preferences';
@@ -83,6 +83,9 @@ end_page();
 
 /**
  * $Log: data_purge.php,v $
+ * Revision 1.2  2009/06/04 16:00:12  gopherit
+ * Fixed misspelled table name 'opportunity_types' on line 54.
+ *
  * Revision 1.1  2008/02/19 23:28:00  randym56
  * Purge all records from all files that contain {table_singular}_record_status = 'd'
  *
