@@ -2,7 +2,7 @@
 /**
  * Shared activity pager functions
  *
- * $Id: activities-pager-functions.php,v 1.9 2006/04/05 00:53:52 vanmer Exp $
+ * $Id: activities-pager-functions.php,v 1.10 2009/06/05 11:26:06 gopherit Exp $
  */
 
 /**
@@ -38,7 +38,7 @@ function GetActivitiesPagerData($row) {
 	 	$row['title'] = "<a href=\"../activities/one.php?activity_id={$row['activity_id']}&amp;return_url={$row['return_url']}\">{$row['activity_title']}</a>";
 	}
 
-	// Query for the About field
+// Query for the About field
     if ($row['on_what_table'] == 'opportunities') {
         $row['activity_about'] = "<a href='$http_site_root/opportunities/one.php?opportunity_id={$row['on_what_id']}'>";
         $sql2 = "select opportunity_title as attached_to_name
@@ -65,11 +65,19 @@ function GetActivitiesPagerData($row) {
             $rst2->close();
         }
     }
+
+    // Call the activities_pager_row hook
+    $plugin_modified_row = do_hook_function('activities_pager_row', $row);
+    $row = $plugin_modified_row ? $plugin_modified_row : $row;
+
     return $row;
 }
 
 /**
  * $Log: activities-pager-functions.php,v $
+ * Revision 1.10  2009/06/05 11:26:06  gopherit
+ * Added the activities_pager_row hook on lines 68-72 to allow the modification of activity row data by plugins.
+ *
  * Revision 1.9  2006/04/05 00:53:52  vanmer
  * - change values passed into javascript popup to correctly come out as UTF-8 characters
  *
