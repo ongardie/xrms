@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.105 2009/07/27 04:46:40 gopherit Exp $
+ * $Id: one.php,v 1.106 2009/07/28 16:14:58 gopherit Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -301,13 +301,16 @@ function openMsnSession(strIMAddress) {
 
                                             // Call the email plugin hook for creating a new message
                                             $email_plugin_link = do_hook_function('create_email_link', $contact_id);
-                                            
+
                                             if ($email_plugin_link)
                                                 echo $email_plugin_link;
                                             else {
-                                                echo '<a href="mailto:'. htmlspecialchars ($first_names, ENT_QUOTES) .' '. htmlspecialchars($last_name, ENT_QUOTES) .' <'. $email .'>" '
-                                                    . "onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$contact_id&contact_id=$contact_id&company_id=$company_id&email=$email&activity_title=email to $first_names $last_name&activity_description=Sent via desktop client&return_url=/contacts/one.php?contact_id=$contact_id'\">";
-                                            }
+                                                echo '<a href=\'mailto:'. htmlspecialchars ($first_names, ENT_QUOTES) .' '. htmlspecialchars($last_name, ENT_QUOTES) .' <'. $email .'>\' '
+                                                    .'onclick="location.href=\'../activities/new-2.php?user_id='. $session_user_id
+                                                    .'&activity_type_id=3&on_what_id='. $contact_id .'&contact_id='. $contact_id
+                                                    .'&company_id='. $company_id .'&email='. $email .'&activity_title=email to '. addslashes($first_names)
+                                                    .' '. addslashes($last_name) .'&activity_description=Sent via desktop client&return_url=/contacts/one.php?contact_id='. $contact_id .'\'">';
+                                             }
                                             echo "$email</a>";
                                         ?>
                                     </td>
@@ -519,6 +522,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.106  2009/07/28 16:14:58  gopherit
+ * Previous fix on lines 308-312 of escaping quotes in names such as O'Maley was incomplete.  Quote escaping was necessary for the parameters passed to /activities/new-2.php as well.  All is well now.
+ *
  * Revision 1.105  2009/07/27 04:46:40  gopherit
  * Added the create_email_link hook on lines 300-312 to allow an email plugins to supply a different link to author a new email message.  Also, added escaping of single quotes on line 308 of the javascript mailto parameter to preven names such as O'Maley breaking the link.
  *
