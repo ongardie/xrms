@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.26 2008/07/25 21:17:27 polyformal_sp Exp $
+ * $Id: sidebar.php,v 1.27 2009/07/28 16:27:52 gopherit Exp $
  */
 
 $new_cell_phone         = isset($_GET['cell_phone']) ? $_GET['cell_phone'] : false;
@@ -145,10 +145,10 @@ if ( $contact_id ) {
 
         if ($rst->fields['email']) {
             // build contact's full name for using with mailto: 
-            $contact_fullname= $rst->fields['first_names']  ." ". $rst->fields['last_name'];
+            $contact_fullname= htmlspecialchars ($first_names, ENT_QUOTES) .' '. htmlspecialchars($last_name, ENT_QUOTES);
             
             $contact_block .= "<tr>\n\t\t<td class=widget_content>"
-                            . "<a href='mailto:". $contact_fullname." <" . $rst->fields['email'].">' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$contact_id&contact_id=$contact_id&company_id=$company_id&email=$email&activity_title=email to $first_names $last_name&activity_description=Sent via desktop client&return_url=/contacts/one.php?contact_id=$contact_id'\">"
+                            . "<a href='mailto:". $contact_fullname." <" . $rst->fields['email'].">' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$contact_id&contact_id=$contact_id&company_id=$company_id&email=$email&activity_title=email to ". addslashes($first_names) .' '. addslashes($last_name) ."&activity_description=Sent via desktop client&return_url=/contacts/one.php?contact_id=$contact_id'\">"
                             . $rst->fields['email'] . "</a></td>\n\t</tr>";
         }
         else {
@@ -224,6 +224,9 @@ $contact_block .= "
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.27  2009/07/28 16:27:52  gopherit
+ * Fixed escaping quotes in names such as O'Maley for the mailto links on lines 148 & 151.
+ *
  * Revision 1.26  2008/07/25 21:17:27  polyformal_sp
  * mailto: full name, patch from https://sourceforge.net/tracker/index.php?func=detail&aid=1898592&group_id=88850&atid=588130
  * missing sidebar_hooks, patch from http://sourceforge.net/tracker/index.php?func=detail&aid=2018568&group_id=88850&atid=588130
