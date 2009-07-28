@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.51 2009/02/17 11:31:55 randym56 Exp $
+ * $Id: new-2.php,v 1.52 2009/07/28 14:50:36 gopherit Exp $
  */
 
 //where do we include from
@@ -73,8 +73,8 @@ if ($followup) {
 }
 
 //convert scheduled_at and ends_at to be Y-m-d H:i:s format before comparing and storing in the DB
-$ends_at = date('Y-m-d H:i:s',strtotime($ends_at));
-$scheduled_at = date('Y-m-d H:i:s',strtotime($scheduled_at));
+if ($ends_at) $ends_at = date('Y-m-d H:i:s',strtotime($ends_at));
+if ($scheduled_at) $scheduled_at = date('Y-m-d H:i:s',strtotime($scheduled_at));
 
 if (!$ends_at) {
     $ends_at = $scheduled_at;
@@ -210,6 +210,9 @@ if ($activity_status == 'c') { //now send them back where they came from
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.52  2009/07/28 14:50:36  gopherit
+ *Fixed lines 76 & 77 responsible for the bug whereby clicking on a contact's email address in /contacts/one.php logged the email sent via the user's desktop client as dated on Dec 31, 1970, etc. (udate = 0)
+ *
  *Revision 1.51  2009/02/17 11:31:55  randym56
  *- Fixed bug in adding new activity using AM/PM time - needs to be converted to 24h before compare and store in db.
  *
@@ -356,7 +359,7 @@ if ($activity_status == 'c') { //now send them back where they came from
  *- fixed multiple bugs with date-time formatting in activities
  *- correctly use dbtimestamp() date() and strtotime() fns
  *- add support for $default_followup_time config var
- *  - fixes SF bug  949779 reported by miguel Gonçalves (mig77)
+ *  - fixes SF bug  949779 reported by miguel Gonï¿½alves (mig77)
  *
  *Revision 1.9  2004/05/04 15:13:21  maulani
  *- Database connection object was called before being created.  Reorganized
