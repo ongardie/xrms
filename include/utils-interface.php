@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.111 2007/05/15 23:17:30 ongardie Exp $
+ * $Id: utils-interface.php,v 1.112 2009/07/29 05:47:00 gopherit Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -1149,9 +1149,40 @@ function render_tree_list($data, $topclass='', $id=false) {
     return $ret;
 }
 
+/**
+ *
+ * Creates an email link and provides a plugin hook for that link
+ *
+ * @param integer $contact_id specifying the contact_id of the contact being emailed
+ * @param integer $company_id specifying the company_id of the contact being emailed
+ * @param string $first_names specifying the first names of the contact being emailed
+ * @param string $last_name specifying the last name of the contact being emailed
+ * @param string $email specifying the email address of the contact being emailed
+ * @param integer $session_user_id specifying the user_id of the user sending the email
+ * @return string of the email link itself
+ */
+function render_email_link($contact_id, $company_id, $first_names, $last_name, $email, $session_user_id) {
+
+    // Call the email plugin hook for creating an email link
+    $email_link = do_hook_function('create_email_link', $contact_id);
+
+    if (!$email_link) {
+        $email_link = '<a href=\'mailto:'. htmlspecialchars ($first_names, ENT_QUOTES) .' '. htmlspecialchars($last_name, ENT_QUOTES) .' <'. $email .'>\' '
+            .'onclick="location.href=\'../activities/new-2.php?user_id='. $session_user_id
+            .'&activity_type_id=3&on_what_id='. $contact_id .'&contact_id='. $contact_id
+            .'&company_id='. $company_id .'&email='. $email .'&activity_title=email to '. addslashes($first_names)
+            .' '. addslashes($last_name) .'&activity_description=Sent via desktop client&return_url=/contacts/one.php?contact_id='. $contact_id .'\'">';
+     }
+    $email_link .= $email .'</a>';
+
+    return $email_link;
+}
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.112  2009/07/29 05:47:00  gopherit
+ * Added centralized function render_email_link() for providing email links.  Includes a plugin hook for standardized implementation throughout XRMS.
+ *
  * Revision 1.111  2007/05/15 23:17:30  ongardie
  * - Addresses now associate with on_what_table, on_what_id instead of company_id.
  *
