@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.153 2008/07/25 21:17:26 polyformal_sp Exp $
+ * $Id: one.php,v 1.154 2009/07/30 17:15:50 gopherit Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -323,7 +323,7 @@ if ($division_id) $new_contact_location.= "&division_id=$division_id";
         
         $row['work_phone'] = get_formatted_phone($con, $address_id, $row['work_phone']);
         $row['cell_phone'] = get_formatted_phone($con, $address_id, $row['cell_phone']);
-        $row['email'] = "<a href='mailto:{$contact_fullname} <{$row['email']}>' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&company_id=$company_id&contact_id={$row['contact_id']}&email=true&return_url=/companies/one.php%3Fcompany_id=$company_id&activity_title=email%20to%20{$row['first_names']}%20{$row['last_name']}&&activity_description=Sent%20via%20desktop%20client'\" >" . htmlspecialchars($row['email']) . '</a>';
+        $row['email'] = render_email_link($contact_id, $company_id, $row['first_names'], $row['last_name'], $row['email'], $session_user_id);
 
         return $row;
     }
@@ -799,6 +799,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.154  2009/07/30 17:15:50  gopherit
+ * Switched to centralized function render_email_link() on line 326
+ *
  * Revision 1.153  2008/07/25 21:17:26  polyformal_sp
  * mailto: full name, patch from https://sourceforge.net/tracker/index.php?func=detail&aid=1898592&group_id=88850&atid=588130
  * missing sidebar_hooks, patch from http://sourceforge.net/tracker/index.php?func=detail&aid=2018568&group_id=88850&atid=588130
@@ -936,7 +939,7 @@ end_page();
  *
  * Revision 1.114  2005/06/21 12:37:56  braverock
  * - fix activities 'Done' button
- *   patch provided by Jean-Noël Hayart
+ *   patch provided by Jean-Noï¿½l Hayart
  *
  * Revision 1.113  2005/06/06 18:39:25  vanmer
  * - changed to only show division relationships when scoped to division
