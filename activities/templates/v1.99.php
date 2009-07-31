@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.8 2009/04/09 06:56:29 gopherit Exp $
+ * $Id: v1.99.php,v 1.9 2009/07/31 15:37:52 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -108,7 +108,16 @@ $sql = "SELECT activity_type_pretty_name, activity_type_id
         ORDER BY sort_order, activity_type_pretty_name";
 $rst = $con->execute($sql);
 if (!$rst) { db_error_handler($con, $sql); }
-$activity_type_menu = $rst->getmenu2('activity_type_id', $activity_type_id, false);
+
+// Call the activity type menu plugin hook
+$plugin_parameters = array ('activity_id'      => $activity_id,
+                            'activity_type_id' => $activity_type_id);
+$activity_type_menu = do_hook_function ('activity_type_menu', $plugin_parameters);
+
+if (!$activity_type_menu) {
+    $activity_type_menu = $rst->getmenu2('activity_type_id', $activity_type_id, false);
+}
+// Close the activity type record set
 $rst->close();
 
 //get priority type menu
@@ -749,6 +758,9 @@ function logTime() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.9  2009/07/31 15:37:52  gopherit
+ * Implemented the acitivity_type_menu plugin hook on lines 111-120.
+ *
  * Revision 1.8  2009/04/09 06:56:29  gopherit
  * Moved </a> tag inside echo() on line 440 for tag match consistency.
  *
