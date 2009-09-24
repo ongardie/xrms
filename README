@@ -1,7 +1,7 @@
 XRMS CRM - README
 
 =============================================================
-/** $Id: README,v 1.33 2008/08/18 08:00:26 bschimpf Exp $ **/
+/** $Id: README,v 1.34 2009/09/24 18:25:59 gopherit Exp $ **/
 
 ========================
 SUMMARY
@@ -315,7 +315,7 @@ Brian Peterson    braverock      Project Coordinator
 
 Andrew            s-t            Developer
 Olivier Colonna   obac           Developer
-Miguel Gonçalves  mig77          Developer
+Miguel Gonï¿½alves  mig77          Developer
 Justin Cooper     daturaarutad   Developer
 Francis Crossen   fcrossen       Developer
 Keith Edmunds                    Developer
@@ -337,12 +337,13 @@ David Gaya        myelocyte      Developer
 Randy Martinsen	  randym56       Developer
 Stefan Pampel     polyformal_sp  Developer
 Bjoern Rafreider  bschimpf	 Developer
+Ivaylo Boiadjiev  gopherit       Developer
 
 Brunno Barrera                   Translator - Spanish
 Alan Baghumian                   Translator - Farsi
 Sebastian Becker                 Translator - German
-Özgür Çaycý                      Translator - Turkish
-Miguel Gonçalves                 Translator - Portuguese
+ï¿½zgï¿½r ï¿½aycï¿½                      Translator - Turkish
+Miguel Gonï¿½alves                 Translator - Portuguese
 Roberto Durrer                   Translator - Brazilian Portuguese
 John Fawcett                     Translator - Italian
 Jean-Noel Hayart                 Translator - French
@@ -354,7 +355,7 @@ Giacomo Nardone                  Translator - Italian
 Bert-Jan van Rein                Translator - Dutch
 Daniel Rodriguez                 Translator - Spanish
 Eugene N Shylaev                 Translator - Russian
-Kristóf Tóth                     Translator - Hungarian
+Kristï¿½f Tï¿½th                     Translator - Hungarian
 Yi Yang                          Translator - Chinese
 Jun Bao Wu                       Translator - Chinese
 
@@ -369,6 +370,9 @@ please let us know.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.34  2009/09/24 18:25:59  gopherit
+ * Added my name to the list of developers: Ivaylo Boiadjiev
+ *
  * Revision 1.33  2008/08/18 08:00:26  bschimpf
  * added my name (bschimpf) to the list of developers
  *
