@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.77 2008/07/25 21:17:27 polyformal_sp Exp $
+ * $Id: some.php,v 1.78 2009/11/11 15:44:50 gopherit Exp $
  */
 
 //include the standard files
@@ -670,6 +670,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.78  2009/11/11 15:44:50  gopherit
+ * Removed trailing whitespace
+ *
  * Revision 1.77  2008/07/25 21:17:27  polyformal_sp
  * mailto: full name, patch from https://sourceforge.net/tracker/index.php?func=detail&aid=1898592&group_id=88850&atid=588130
  * missing sidebar_hooks, patch from http://sourceforge.net/tracker/index.php?func=detail&aid=2018568&group_id=88850&atid=588130
