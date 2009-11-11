@@ -16,7 +16,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.15 2006/12/03 11:12:39 jnhayart Exp $
+ * $Id: sidebar.php,v 1.16 2009/11/11 17:32:15 gopherit Exp $
  */
 
 // add company information block on sidebar
@@ -39,7 +39,7 @@ if ($rst) {
     $url = $rst->fields['url'];
 
     $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-                   . '<a href="../companies/one.php?company_id=' . $company_id . '">'
+                   . '<a href="'. $http_site_root .'/companies/one.php?company_id=' . $company_id . '">'
                    . $rst->fields['company_name'] . "</a></td>\n\t</tr>"
                    . "\n\t<tr>\n\t\t<td class=widget_content>"
                    . get_formatted_address ($con, $rst->fields['default_primary_address'])
@@ -90,6 +90,9 @@ $company_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.16  2009/11/11 17:32:15  gopherit
+ * Switched to an $http_site_root based URI to enable plugins to call the sidebar script.
+ *
  * Revision 1.15  2006/12/03 11:12:39  jnhayart
  * Add string localisation
  *

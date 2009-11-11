@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.28 2009/07/29 15:47:26 gopherit Exp $
+ * $Id: sidebar.php,v 1.29 2009/11/11 17:32:36 gopherit Exp $
  */
 
 $new_cell_phone         = isset($_GET['cell_phone']) ? $_GET['cell_phone'] : false;
@@ -135,7 +135,7 @@ if ( $contact_id ) {
         // build contact_block
         //
         $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-                            . '<a href="../contacts/one.php?contact_id=' . $contact_id . '">'
+                            . '<a href="'. $http_site_root .'/contacts/one.php?contact_id=' . $contact_id . '">'
                             . $rst->fields['first_names'] . " " . $rst->fields['last_name'] . "</a></td>\n\t</tr>";
         if ( $rst->fields['address_id'] != $default_primary_address ) {
             $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
@@ -220,6 +220,9 @@ $contact_block .= "
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.29  2009/11/11 17:32:36  gopherit
+ * Switched to an $http_site_root based URI to enable plugins to call the sidebar script.
+ *
  * Revision 1.28  2009/07/29 15:47:26  gopherit
  * Switched to centralized function render_email_link() on lines 147 - 150
  *
