@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.78 2009/11/11 15:44:50 gopherit Exp $
+ * $Id: some.php,v 1.79 2009/11/11 17:05:14 gopherit Exp $
  */
 
 //include the standard files
@@ -72,7 +72,7 @@ arr_vars_session_set ( $arr_vars );
 $sql = "SELECT " .
     $con->Concat($con->qstr('<a href="one.php?contact_id='), "cont.contact_id", $con->qstr('">'), "cont.last_name", "', '", "cont.first_names", $con->qstr('</a>')) . " AS name," .
     $con->Concat($con->qstr('<a id="'), "c.company_name",  $con->qstr('" href="../companies/one.php?company_id='), "c.company_id", $con->qstr('">'), "c.company_name", $con->qstr('</a>')) . " AS company,".
-    "company_code, title, description, u.username, cont.email, cont.work_phone, cont.cell_phone, cont.contact_id, cont.last_name, cont.first_names, c.company_name";
+    "company_code, title, description, u.username, cont.email, cont.address_id, cont.work_phone, cont.cell_phone, cont.contact_id, cont.last_name, cont.first_names, c.company_name";
 
 $from = " from contacts cont, companies c, users u ";
 
@@ -670,6 +670,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.79  2009/11/11 17:05:14  gopherit
+ * Added the contact.address_id in the SQL on line 75.  Without it, the GUP_Pager callback function could not calculate the correct phone number format to use.
+ *
  * Revision 1.78  2009/11/11 15:44:50  gopherit
  * Removed trailing whitespace
  *
