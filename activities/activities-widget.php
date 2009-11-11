@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.66 2009/03/23 07:59:02 polyformal_sp Exp $
+* $Id: activities-widget.php,v 1.67 2009/11/11 21:03:25 gopherit Exp $
 */
 
 global $include_directory;
@@ -737,33 +737,47 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
             <input type=hidden name=activity_status value=\"o\">
             <table class=widget cellspacing=1>
                 <tr>
-                    <td class=widget_header colspan=9>". _("New Activity") . "</td>
+                    <td class=widget_header colspan=6>". _("New Activity") . "</td>
                 </tr>
-                <tr>
-                    <td class=widget_label>" . _("Summary, Notes") . "</td>
-                    <td class=widget_label>" . _("User") . "</td>
-                    <td class=widget_label>" . _("Type") . "</td> ".
-                    ($contact_menu ? "<td class=widget_label>" . _("Contact") . "</td>" : "") ."
-                    <td class=widget_label>" . _("Scheduled Start, End") . "</td>
-                    <td class=widget_label>" . _(" ") . "</td>
-                </tr>
-                <tr>
-                    <td class=widget_content_form_element><input type=text name=activity_title>"._("Summary")."<br>
-                                          <input type=text name=activity_description>"._("Notes")."</td>
-                    <td class=widget_content_form_element>$user_menu</td>
-                    <td class=widget_content_form_element>$activity_type_menu</td>" .
-                    ($contact_menu ? "<td class=widget_content_form_element>$contact_menu</td>" : "") ."
 
+                <tr>
+                    <td class=widget_content_form_element></td>
+                    <td class=widget_content_form_element>" . _("User") .":&nbsp;". $user_menu ."</td>\n
+                    <td class=widget_content_form_element>" . _("Type") .":&nbsp;". $activity_type_menu ."</td>\n
+                    <td class=widget_content_form_element>" . _("Contact") .":&nbsp;". $contact_menu ."</td>\n
+                    <td class=widget_content_form_element style='text-align: right; vertical-align: middle;' rowspan=2>".
+                        _("Start")
+                        ."&nbsp;<input type=text size=16 ID=\"f_date_start_activity\" name=scheduled_at value=\"" . date($datetime_format,time()) . "\">
+                        <img ID=\"f_trigger_start_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">&nbsp;&nbsp;&nbsp;
+                        <br />".
+                        _("End")
+                        ."&nbsp;<input type=text size=16 ID=\"f_date_new_activity\" name=ends_at onFocus=\"CheckDate()\">
+                        <img ID=\"f_trigger_new_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">&nbsp;&nbsp;&nbsp;
+                    </td>\n
+                </tr>
+
+                <tr>
                     <td class=widget_content_form_element>
-                        <input type=text size=16 ID=\"f_date_start_activity\" name=scheduled_at value=\"" . date($datetime_format,time()) . "\">
-                        <img ID=\"f_trigger_start_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" . "Start<br>
-                        <input type=text size=16 ID=\"f_date_new_activity\" name=ends_at onFocus=\"CheckDate()\">
-                        <img ID=\"f_trigger_new_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" . "End</td>
-                    <td>\n".
+                        " . _("Summary") . "
+                    </td>
+                    <td class=widget_content_form_element colspan=3>
+                        <input type=text name=activity_title size=80>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class= widget_content_form_element>"._("Notes")."</td>
+                    <td class= widget_content_form_element colspan=3>
+                          <textarea name=activity_description cols='60' rows='3'></textarea>
+                    </td>
+                    <td class= widget_content_form_element style='text-align: center; vertical-align: middle;'>
+                        <input type='checkbox' name='activity_status' value='c' />" . _("Completed") ."<br /><br />".
 //                        render_create_button(_("Add")) .
 //                        render_create_button(_("Done"),'button',"javascript: markComplete();") . "
-                        render_create_button(_("Add"),'submit', false, false, false, 'activities') . "<br>" .
-                        render_create_button(_("Done"),'button',"javascript: markComplete();", false, false, 'activities') . "<td>\n". "
+//                        render_create_button(_("Add Pending"),'submit', false, false, false, 'activities')
+                        render_create_button(_("Add Activity"),'submit', false, false, false, 'activities') . "
+                    </td>\n
+
                 </tr>";
 
 	if ($datetime_format == 'Y-m-d H:i:s') {
@@ -965,6 +979,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.67  2009/11/11 21:03:25  gopherit
+* Refactored the Activities Widget to make it more user friendly.
+*
 * Revision 1.66  2009/03/23 07:59:02  polyformal_sp
 * removed / (slash) because of translation issues
 *
