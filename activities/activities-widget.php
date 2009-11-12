@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.67 2009/11/11 21:03:25 gopherit Exp $
+* $Id: activities-widget.php,v 1.68 2009/11/12 23:13:39 gopherit Exp $
 */
 
 global $include_directory;
@@ -768,7 +768,7 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
                 <tr>
                     <td class= widget_content_form_element>"._("Notes")."</td>
                     <td class= widget_content_form_element colspan=3>
-                          <textarea name=activity_description cols='60' rows='3'></textarea>
+                          <textarea name=activity_description cols='80' rows='3'></textarea>
                     </td>
                     <td class= widget_content_form_element style='text-align: center; vertical-align: middle;'>
                         <input type='checkbox' name='activity_status' value='c' />" . _("Completed") ."<br /><br />".
@@ -979,6 +979,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.68  2009/11/12 23:13:39  gopherit
+* A tweak of the <input> and <textarea> properties.
+*
 * Revision 1.67  2009/11/11 21:03:25  gopherit
 * Refactored the Activities Widget to make it more user friendly.
 *
