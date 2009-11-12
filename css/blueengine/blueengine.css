@@ -215,7 +215,7 @@ table.widget .widget_content_graph {
 input,
 input.button,
 select,
-tetarea,
+textarea,
 ul.mktree li,
 ul.mktree li ul li,
 table.widget .small,
@@ -233,6 +233,10 @@ table.widget .widget_content_form_element,
 table.widget .widget_content_form_element_center,
 table.widget input.button {
     font-size: 11px;
+}
+input,
+textarea {
+    font-family: Arial, Helvetica, sans-serif;
 }
 #Sidebar table.widget {
     font-size: 10px;
@@ -307,6 +311,7 @@ table.widget .sublabel {
 }
 
 input,
+textarea,
 select {
     margin: 3px;
 }
