@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.52 2009/07/28 14:50:36 gopherit Exp $
+ * $Id: new-2.php,v 1.53 2009/12/04 16:10:29 gopherit Exp $
  */
 
 //where do we include from
@@ -23,6 +23,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-activities.php');
 require_once($include_directory . 'utils-opportunities.php');
+require_once($include_directory . 'utils-preferences.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
@@ -177,6 +178,11 @@ if($thread_id) $rec['thread_id']         = $thread_id;
 if($followup_from_id) $rec['followup_from_id'] = $followup_from_id;
 if($address_id) $rec['address_id']         = $address_id;
 
+// Check to see if we need to convert the activity_description to HTML
+if (get_user_preference($con, $user_id, "html_activity_notes") == 'y') {
+    $rec['activity_description'] = nl2br($rec['activity_description']);
+}
+
 $magic_quotes=get_magic_quotes_gpc();
 //add activity using API
 $activity_id = add_activity($con, $rec, false, $magic_quotes);
@@ -210,6 +216,9 @@ if ($activity_status == 'c') { //now send them back where they came from
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.53  2009/12/04 16:10:29  gopherit
+ *Convert the activity description NL's to <br />'s  if the user preference calls for HTML activity notes.
+ *
  *Revision 1.52  2009/07/28 14:50:36  gopherit
  *Fixed lines 76 & 77 responsible for the bug whereby clicking on a contact's email address in /contacts/one.php logged the email sent via the user's desktop client as dated on Dec 31, 1970, etc. (udate = 0)
  *
