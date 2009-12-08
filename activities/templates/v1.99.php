@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.9 2009/07/31 15:37:52 gopherit Exp $
+ * $Id: v1.99.php,v 1.10 2009/12/08 14:01:21 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -63,7 +63,7 @@ if ($on_what_table == 'opportunities') {
     $name_field=$con->Concat(implode(", ' ' , ", table_name($on_what_table)));
     $on_what_field=$singular.'_id';
     $sql = "select $name_field as attached_to_name from $on_what_table WHERE $on_what_field = $on_what_id";
-*/	
+*/
 } else {
     $attached_to_link = "N/A";
     $sql = "select * from companies where 1 = 2";
@@ -371,16 +371,16 @@ start_page($page_title, true, $msg);
 confGoTo_includes();
 
 $datetime_format = set_datetime_format($con, $session_user_id);
-                    
+
 //set java date time values based on $datetime_format
 if ($datetime_format == 'Y-m-d H:i:s') {
-	$java_timeformat = "%Y-%m-%d %H:%M"; 
+	$java_timeformat = "%Y-%m-%d %H:%M";
 	$java_timevalue = '24';
 	}
 	else {
 	$java_timeformat = "%Y-%m-%d %I:%M %p";
 	$java_timevalue = '12';
-	}		
+	}
 
 ?>
 
@@ -524,7 +524,7 @@ function logTime() {
                 <?php if($print_view) {
                         echo htmlspecialchars(nl2br(trim($activity_description)));
                         echo "<input type=hidden name=activity_description value=\"" . htmlspecialchars(nl2br(trim($activity_description))) . "\">\n";
-                      } else { 
+                      } else {
 						if (get_user_preference($con, $user_id, "html_activity_notes") == 'y') {
 							$oFCKeditor = new FCKeditor('activity_description') ;
 							$oFCKeditor->BasePath	= $fckeditor_location_url;
@@ -646,7 +646,9 @@ function logTime() {
                         }
 
 
-                        echo render_delete_button(_("Delete"),'button',"javascript:location.href='delete.php?activity_id=$activity_id$save_and_next&return_url=".urlencode($return_url)."'", false, false, 'activities',$activity_id);
+                        echo render_delete_button(_("Delete"),'button',"javascript: if (confirm('You are about to delete this activity.\\n\\nDo you wish to proceed?\\n\\n'))
+                                                                            location.href='delete.php?activity_id=$activity_id$save_and_next&return_url=".urlencode($return_url)."'",
+                                 false, false, 'activities',$activity_id);
                     ?>
 
                 </td>
@@ -745,12 +747,12 @@ function logTime() {
         align          :    "Tl"           // alignment (defaults to "Bl")
     });
 
-    function CheckDate() 
+    function CheckDate()
         {
-        if (document.activity_data.ends_at.value < document.activity_data.scheduled_at.value) 
+        if (document.activity_data.ends_at.value < document.activity_data.scheduled_at.value)
             {
-        	document.activity_data.ends_at.value = document.activity_data.scheduled_at.value; 
-            }       
+        	document.activity_data.ends_at.value = document.activity_data.scheduled_at.value;
+            }
     };
 
 </script>
@@ -758,6 +760,9 @@ function logTime() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.10  2009/12/08 14:01:21  gopherit
+ * Added activity 'Delete' confirmation prompt.
+ *
  * Revision 1.9  2009/07/31 15:37:52  gopherit
  * Implemented the acitivity_type_menu plugin hook on lines 111-120.
  *
