@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.113 2009/12/15 16:04:26 gopherit Exp $
+ * $Id: utils-interface.php,v 1.114 2009/12/15 18:49:43 gopherit Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -869,17 +869,19 @@ function render_button($text='Edit', $type='submit', $onclick=false, $name=false
  * @return string  $activity_type_menu the html menu to display
  */
 function get_activity_type_menu($con, $activity_type_id='', $fieldname='activity_type_id', $blank_type=false) {
-    // create menu of activity types
+    // Create menu of activity types
     $sql = "SELECT activity_type_pretty_name, activity_type_id
-            FROM activity_types
-            WHERE activity_type_record_status = 'a'
-            ORDER BY sort_order, activity_type_pretty_name";
-    $rst = $con->execute($sql);
-    if ($rst) {
-        //$activity_type_menu = $rst->getmenu2($fieldname, $activity_type_id, $blank_type, false,0, 'style="font-size: x-small; border: outset; width: 80px;"');
-        $activity_type_menu = $rst->getmenu2($fieldname, $activity_type_id, $blank_type, false,0, 'style="font-size: x-small; width: 80px; height: 20px;"');
-        $rst->close();
-    }
+                FROM activity_types
+                WHERE activity_type_record_status = 'a'
+                ORDER BY sort_order, activity_type_pretty_name";
+        $rst = $con->execute($sql);
+        if ($rst) {
+            //$activity_type_menu = $rst->getmenu2($fieldname, $activity_type_id, $blank_type, false,0, 'style="font-size: x-small; border: outset; width: 80px;"');
+            $activity_type_menu = $rst->getmenu2($fieldname, $activity_type_id, $blank_type, false,0, 'style="font-size: x-small; width: 80px; height: 20px;"');
+            $rst->close();
+        } else {
+            db_error_handler($con, $sql);
+        }
     return $activity_type_menu;
 }
 
@@ -1180,6 +1182,9 @@ function render_email_link($contact_id, $company_id, $first_names, $last_name, $
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.114  2009/12/15 18:49:43  gopherit
+ * Implemented db_error_handler in the get_activity_menu() function around line 883.
+ *
  * Revision 1.113  2009/12/15 16:04:26  gopherit
  * Removed trailing whitespace.
  *
