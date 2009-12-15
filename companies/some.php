@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.90 2008/07/25 21:17:26 polyformal_sp Exp $
+ * $Id: some.php,v 1.91 2009/12/15 16:04:26 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -1088,6 +1088,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.91  2009/12/15 16:04:26  gopherit
+ * Removed trailing whitespace.
+ *
  * Revision 1.90  2008/07/25 21:17:26  polyformal_sp
  * mailto: full name, patch from https://sourceforge.net/tracker/index.php?func=detail&aid=1898592&group_id=88850&atid=588130
  * missing sidebar_hooks, patch from http://sourceforge.net/tracker/index.php?func=detail&aid=2018568&group_id=88850&atid=588130
@@ -1102,7 +1105,7 @@ end_page();
  * Hide non functional buttons.
  *
  * Revision 1.86  2007/09/17 14:41:18  myelocyte
- * - Fixed bug "[ 1725698 ] advanced search profile not working", with patch provided by Björn (bschimpf)
+ * - Fixed bug "[ 1725698 ] advanced search profile not working", with patch provided by Bjï¿½rn (bschimpf)
  *
  * Revision 1.85  2007/05/02 14:58:41  fcrossen
  * - changed search by phone number. Now accounts for idd_prefix and phone_fax_number_clean system preferences

@@ -6,7 +6,7 @@
  *
  * @todo Add ability to ctreate a Sales Opportunity for a new company
  *
- * $Id: new.php,v 1.25 2008/10/19 17:16:35 randym56 Exp $
+ * $Id: new.php,v 1.26 2009/12/15 16:04:26 gopherit Exp $
  */
 
 /* Include required files */
@@ -340,6 +340,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.26  2009/12/15 16:04:26  gopherit
+ * Removed trailing whitespace.
+ *
  * Revision 1.25  2008/10/19 17:16:35  randym56
  * Removed obsolete CSS tag widget_label_right_91px
  *

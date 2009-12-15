@@ -40,7 +40,7 @@
  *
  * @example GUP_Pager.doc.7.php Another pager example showing Caching
  *
- * $Id: GUP_Pager.php,v 1.51 2007/12/10 17:41:12 gpowers Exp $
+ * $Id: GUP_Pager.php,v 1.52 2009/12/15 16:04:27 gopherit Exp $
  */
 
 
@@ -1275,6 +1275,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.52  2009/12/15 16:04:27  gopherit
+ * Removed trailing whitespace.
+ *
  * Revision 1.51  2007/12/10 17:41:12  gpowers
  * - Changes for Export Pager to Google Spreadsheet
  * - saved 'pager_id' as SESSION var

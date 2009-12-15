@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.192 2009/02/17 01:37:35 randym56 Exp $
+ * $Id: utils-misc.php,v 1.193 2009/12/15 16:04:26 gopherit Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -2120,6 +2120,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.193  2009/12/15 16:04:26  gopherit
+ * Removed trailing whitespace.
+ *
  * Revision 1.192  2009/02/17 01:37:35  randym56
  * - Patch to allow for individual user to change datetime_format views
  *

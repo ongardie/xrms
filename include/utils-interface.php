@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.112 2009/07/29 05:47:00 gopherit Exp $
+ * $Id: utils-interface.php,v 1.113 2009/12/15 16:04:26 gopherit Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -1180,6 +1180,9 @@ function render_email_link($contact_id, $company_id, $first_names, $last_name, $
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.113  2009/12/15 16:04:26  gopherit
+ * Removed trailing whitespace.
+ *
  * Revision 1.112  2009/07/29 05:47:00  gopherit
  * Added centralized function render_email_link() for providing email links.  Includes a plugin hook for standardized implementation throughout XRMS.
  *
