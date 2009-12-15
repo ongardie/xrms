@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.68 2009/11/12 23:13:39 gopherit Exp $
+* $Id: activities-widget.php,v 1.69 2009/12/15 14:36:27 gopherit Exp $
 */
 
 global $include_directory;
@@ -676,8 +676,13 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
 
     // create menu of users
     $user_menu = get_user_menu($con, $session_user_id, $blank_user=false, $fieldname='user_id', $truncate=true);
+    // Create menu of users for the follow-up activity
+    $followup_user_menu = get_user_menu($con, $session_user_id, $blank_user=false, $fieldname='followup_user_id', $truncate=true);
 
+    // Create activity type menu
     $activity_type_menu=get_activity_type_menu($con);
+    // Create activity type menu for the follow-up activity
+    $followup_activity_type_menu=get_activity_type_menu($con, '', 'followup_activity_type_id');
 
     // create menu of contacts
     if($company_id) {
@@ -698,6 +703,8 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
         if ($rst) {
 
             $contact_menu = $rst->getmenu2('contact_id', $contact_id, true, false, 0, 'style="font-size: x-small; width: 80px; height: 20px;"');
+            $rst->MoveFirst();
+            $followup_contact_menu = $rst->getmenu2('followup_contact_id', $contact_id, true, false, 0, 'style="font-size: x-small; width: 80px; height: 20px;"');
 
             $rst->close();
         } else {
@@ -718,23 +725,13 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
         $hidden .= "<input type=hidden name=contact_id value=\"$contact_id\">";
     }
 
-    $ret = "
-    <script language=\"JavaScript\" type=\"text/javascript\">
-    <!--
-    function markComplete() {
-        document.$form_name.activity_status.value = \"c\";
-        document.$form_name.submit();
-    }
-    //-->
-    </script>
-
-            <!-- activities //-->
-            <form name=\"$form_name\" action=\"$http_site_root/activities/new-2.php\" method=post>
+    $ret = "<!-- activities //-->
+            <form name=\"$form_name\" action=\"$http_site_root/activities/new&followup.php\" method=post>
             <input type=hidden name=return_url value=\"$return_url\">
 	    <input type=hidden name=on_what_table value=\"$on_what_table\">
 	    <input type=hidden name=on_what_id value=\"$on_what_id\">
             $hidden
-            <input type=hidden name=activity_status value=\"o\">
+            <input type=hidden id=toggle_activity_status name=activity_status value=\"o\">
             <table class=widget cellspacing=1>
                 <tr>
                     <td class=widget_header colspan=6>". _("New Activity") . "</td>
@@ -742,43 +739,74 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
 
                 <tr>
                     <td class=widget_content_form_element></td>
-                    <td class=widget_content_form_element>" . _("User") .":&nbsp;". $user_menu ."</td>\n
+                    <td class=widget_content_form_element>" . _("User") .":&nbsp;\n".
+                        $user_menu ."\n
+                    </td>\n
                     <td class=widget_content_form_element>" . _("Type") .":&nbsp;". $activity_type_menu ."</td>\n
                     <td class=widget_content_form_element>" . _("Contact") .":&nbsp;". $contact_menu ."</td>\n
-                    <td class=widget_content_form_element style='text-align: right; vertical-align: middle;' rowspan=2>".
+                    <td class=widget_content_form_element>".
                         _("Start")
-                        ."&nbsp;<input type=text size=16 ID=\"f_date_start_activity\" name=scheduled_at value=\"" . date($datetime_format,time()) . "\">
-                        <img ID=\"f_trigger_start_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">&nbsp;&nbsp;&nbsp;
-                        <br />".
+                        ."&nbsp;<input type=text size=16 ID=\"activity_start_date\" name=scheduled_at value=\"" . date($datetime_format,time()) . "\">
+                        <img ID=\"activity_start_date_trigger\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">
+                        </td>\n
+                        <td class=widget_content_form_element>".
                         _("End")
-                        ."&nbsp;<input type=text size=16 ID=\"f_date_new_activity\" name=ends_at onFocus=\"CheckDate()\">
-                        <img ID=\"f_trigger_new_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">&nbsp;&nbsp;&nbsp;
+                        ."&nbsp;<input type=text size=16 ID=\"activity_end_date\" name=ends_at onFocus=\"CheckDate()\">
+                        <img ID=\"activity_end_date_trigger\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">
                     </td>\n
                 </tr>
 
                 <tr>
-                    <td class=widget_content_form_element>
-                        " . _("Summary") . "
-                    </td>
-                    <td class=widget_content_form_element colspan=3>
+                    <td class=widget_content_form_element>" . _("Summary") . "</td>\n
+                    <td class=widget_content_form_element colspan=5>
                         <input type=text name=activity_title size=80>
                     </td>
                 </tr>
 
                 <tr>
                     <td class= widget_content_form_element>"._("Notes")."</td>
-                    <td class= widget_content_form_element colspan=3>
-                          <textarea name=activity_description cols='80' rows='3'></textarea>
+                    <td class= widget_content_form_element colspan=4>
+                          <textarea name=activity_description cols='80' rows='5'></textarea>
                     </td>
-                    <td class= widget_content_form_element style='text-align: center; vertical-align: middle;'>
-                        <input type='checkbox' name='activity_status' value='c' />" . _("Completed") ."<br /><br />".
-//                        render_create_button(_("Add")) .
-//                        render_create_button(_("Done"),'button',"javascript: markComplete();") . "
-//                        render_create_button(_("Add Pending"),'submit', false, false, false, 'activities')
-                        render_create_button(_("Add Activity"),'submit', false, false, false, 'activities') . "
+                    <td class='widget_content_form_element' style='padding-left: 2em; vertical-align: middle;'>
+                        <input type='checkbox' id='completed_chkbx' name='activity_status' value='c' onclick=\"
+                            toggle_disabled('sch_fup_chkbx');
+                            \" />" . _("Completed") ."<br /><br />
+                            <input type='checkbox' name='new_and_followup' id='sch_fup_chkbx' value='true' onclick=\"
+                                toggle_disabled('completed_chkbx');
+                                js_toggle_activity_status();
+                                toggle_disabled('add_activity');
+                                toggle_visibility('sch_fup_tr_1');
+                                toggle_visibility('sch_fup_tr_2');
+                                \" disabled='disabled'/>" . _("Schedule Followup") ."<br /><br />".
+                        render_create_button(_("Add Activity"),'submit', false, false, 'add_activity', 'activities') . "
                     </td>\n
+                </tr>\n";
 
-                </tr>";
+   $ret .= "<tr id='sch_fup_tr_1' style='display:none;'>\n
+                <td class=widget_content_form_element rowspan=2>Followup</td>\n
+                <td class=widget_content_form_element>" . _("User") .":&nbsp;". $followup_user_menu ."</td>\n
+                <td class=widget_content_form_element>" . _("Type") .":&nbsp;". $followup_activity_type_menu ."</td>\n
+                <td class=widget_content_form_element>" . _("Contact") .":&nbsp;". $followup_contact_menu ."</td>\n
+                <td class=widget_content_form_element>".
+                    _("Start")
+                    ."&nbsp;<input type=text size=16 ID=\"followup_activity_start_date\" name=followup_scheduled_at value=\"" . date($datetime_format,time()) . "\">
+                    <img ID=\"followup_activity_start_date_trigger\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">
+                    </td>\n
+                    <td class=widget_content_form_element>".
+                    _("End")
+                    ."&nbsp;<input type=text size=16 ID=\"followup_activity_end_date\" name=followup_ends_at onFocus=\"CheckFollowupDate()\">
+                    <img ID=\"followup_activity_end_date_trigger\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">
+                </td>\n
+            </tr>\n
+            <tr id='sch_fup_tr_2' style='display:none;'>\n
+                <td class=widget_content_form_element colspan=2>
+                    <input type='checkbox' name='followup_transfer_notes' value='true' checked/>" . _("Transfer Activity Notes") ."
+                </td>
+                <td class=widget_content_form_element colspan=3 style='text-align: center;'>".
+                    render_create_button(_("Add Activity and Schedule Followup"),'submit', false, false, 'add_activity_and_fup', 'activities') ."
+                </td>
+            </tr>\n";
 
 	if ($datetime_format == 'Y-m-d H:i:s') {
 		$java_timeformat = "%Y-%m-%d %H:%M";
@@ -793,24 +821,44 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
             </form>
             <script language=\"JavaScript\" type=\"text/javascript\">
                     Calendar.setup({
-                    inputField     :    \"f_date_start_activity\",      // id of the input field
+                    inputField     :    \"activity_start_date\",      // id of the input field
                     ifFormat       :    \"".$java_timeformat."\",       // format of the input field
                     showsTime      :    true,            // will display a time selector
 		    timeFormat	   :    value=\"".$java_timevalue."\",  //12 or 24
-                    button         :    \"f_trigger_start_activity\",   // trigger for the calendar (button ID)
+                    button         :    \"activity_start_date_trigger\",   // trigger for the calendar (button ID)
                     singleClick    :    false,           // double-click mode
                     step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
                     align          :    \"TL\"           // alignment (defaults to \"Bl\")
                 });
                     Calendar.setup({
-                    inputField     :    \"f_date_new_activity\",      // id of the input field
+                    inputField     :    \"activity_end_date\",      // id of the input field
                     ifFormat       :    \"".$java_timeformat."\",       // format of the input field
                     showsTime      :    true,            // will display a time selector
 		    timeFormat	   :    value=\"".$java_timevalue."\",  //12 or 24
-                    button         :    \"f_trigger_new_activity\",   // trigger for the calendar (button ID)
+                    button         :    \"activity_end_date_trigger\",   // trigger for the calendar (button ID)
                     singleClick    :    false,           // double-click mode
                     step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
-                    align          :    \"Bl\"           // alignment (defaults to \"Bl\")
+                    align          :    \"TL\"           // alignment (defaults to \"Bl\")
+                });
+                    Calendar.setup({
+                    inputField     :    \"followup_activity_start_date\",      // id of the input field
+                    ifFormat       :    \"".$java_timeformat."\",       // format of the input field
+                    showsTime      :    true,            // will display a time selector
+		    timeFormat	   :    value=\"".$java_timevalue."\",  //12 or 24
+                    button         :    \"followup_activity_start_date_trigger\",   // trigger for the calendar (button ID)
+                    singleClick    :    false,           // double-click mode
+                    step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+                    align          :    \"TL\"           // alignment (defaults to \"Bl\")
+                });
+                    Calendar.setup({
+                    inputField     :    \"followup_activity_end_date\",      // id of the input field
+                    ifFormat       :    \"".$java_timeformat."\",       // format of the input field
+                    showsTime      :    true,            // will display a time selector
+		    timeFormat	   :    value=\"".$java_timevalue."\",  //12 or 24
+                    button         :    \"followup_activity_end_date_trigger\",   // trigger for the calendar (button ID)
+                    singleClick    :    false,           // double-click mode
+                    step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+                    align          :    \"TL\"           // alignment (defaults to \"Bl\")
                 });
 
     		function CheckDate()
@@ -822,6 +870,42 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
       				document.$form_name.ends_at.value = document.$form_name.scheduled_at.value;
 					}
     			}
+
+    		function CheckFollowupDate()
+				{
+				var ends_at = Date.parse(document.$form_name.followup_ends_at.value);
+				var starts_at = Date.parse(document.$form_name.followup_scheduled_at.value);
+				if (ends_at < starts_at) or (isNaN(ends_at))
+					{
+      				document.$form_name.followup_ends_at.value = document.$form_name.followup_scheduled_at.value;
+					}
+    			}
+
+                function toggle_visibility(id) {
+                    var e = document.getElementById(id);
+                    if(e.style.display != 'none')
+                        e.style.display = 'none';
+                    else
+                        e.style.display = '';
+                }
+
+                function toggle_disabled(id) {
+                    var e = document.getElementById(id);
+                    if(e.disabled)
+                        e.disabled = false;
+                    else
+                        e.disabled = 'disabled';
+                }
+
+                function js_toggle_activity_status() {
+                    var e = document.getElementById('toggle_activity_status');
+                    if(e.value != 'c')
+                        e.value = 'c';
+                    else
+                        e.value = 'o';
+                }
+
+
             </script>
     ";
     return $ret;
@@ -979,6 +1063,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.69  2009/12/15 14:36:27  gopherit
+* Added functionality to the 'New Activity' widget to enable creating a followup activity at the time a new completed activity is entered.
+*
 * Revision 1.68  2009/11/12 23:13:39  gopherit
 * A tweak of the <input> and <textarea> properties.
 *
