@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.10 2009/12/08 14:01:21 gopherit Exp $
+ * $Id: v1.99.php,v 1.11 2009/12/15 18:56:28 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -101,24 +101,16 @@ if (get_system_parameter($con, 'Display Item Technical Details') == 'y') {
     $history_text = '';
 }
 
-//get activity type menu
-$sql = "SELECT activity_type_pretty_name, activity_type_id
-        FROM activity_types
-        WHERE activity_type_record_status = 'a'
-        ORDER BY sort_order, activity_type_pretty_name";
-$rst = $con->execute($sql);
-if (!$rst) { db_error_handler($con, $sql); }
-
 // Call the activity type menu plugin hook
 $plugin_parameters = array ('activity_id'      => $activity_id,
-                            'activity_type_id' => $activity_type_id);
+                            'activity_type_id' => $activity_type_id,
+                            'fieldname'        => 'activity_type_id');
 $activity_type_menu = do_hook_function ('activity_type_menu', $plugin_parameters);
 
+// In the absence of activity type menu plugin data, create the standard activity type menu
 if (!$activity_type_menu) {
-    $activity_type_menu = $rst->getmenu2('activity_type_id', $activity_type_id, false);
+    $activity_type_menu = get_activity_type_menu($con, $activity_type_id);
 }
-// Close the activity type record set
-$rst->close();
 
 //get priority type menu
 $sql = "SELECT case_priority_pretty_name,case_priority_id
@@ -760,6 +752,10 @@ function logTime() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.11  2009/12/15 18:56:28  gopherit
+ * Switched to centralized get_activity_menu() function around line 112.
+ * Revised the activity_type_menu plugin hook to include the 'fieldname' parameter.
+ *
  * Revision 1.10  2009/12/08 14:01:21  gopherit
  * Added activity 'Delete' confirmation prompt.
  *
