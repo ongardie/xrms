@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.69 2009/12/15 14:36:27 gopherit Exp $
+* $Id: activities-widget.php,v 1.70 2009/12/15 18:57:52 gopherit Exp $
 */
 
 global $include_directory;
@@ -680,9 +680,28 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
     $followup_user_menu = get_user_menu($con, $session_user_id, $blank_user=false, $fieldname='followup_user_id', $truncate=true);
 
     // Create activity type menu
-    $activity_type_menu=get_activity_type_menu($con);
+    // Call the activity type menu plugin hook
+    $plugin_parameters = array ('activity_id'      => $activity_id,
+                                'activity_type_id' => $activity_type_id,
+                                'fieldname'        => 'activity_type_id');
+    $activity_type_menu = do_hook_function ('activity_type_menu', $plugin_parameters);
+
+    // In the absence of activity type menu plugin data, create the standard activity type menu
+    if (!$activity_type_menu) {
+        $activity_type_menu = get_activity_type_menu($con);
+    }
+
     // Create activity type menu for the follow-up activity
-    $followup_activity_type_menu=get_activity_type_menu($con, '', 'followup_activity_type_id');
+    // Call the activity type menu plugin hook
+    $plugin_parameters = array ('activity_id'      => $activity_id,
+                                'activity_type_id' => $activity_type_id,
+                                'fieldname'        => 'followup_activity_type_id');
+    $followup_activity_type_menu = do_hook_function ('activity_type_menu', $plugin_parameters);
+
+    // In the absence of activity type menu plugin data, create the standard activity type menu
+    if (!$followup_activity_type_menu) {
+        $followup_activity_type_menu=get_activity_type_menu($con, '', 'followup_activity_type_id');
+    }
 
     // create menu of contacts
     if($company_id) {
@@ -1063,6 +1082,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.70  2009/12/15 18:57:52  gopherit
+* Implemented the activity_type_menu plugin hooks for both the activity and the followup activity type menus.
+*
 * Revision 1.69  2009/12/15 14:36:27  gopherit
 * Added functionality to the 'New Activity' widget to enable creating a followup activity at the time a new completed activity is entered.
 *
