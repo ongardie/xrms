@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.53 2009/12/04 16:10:29 gopherit Exp $
+ * $Id: new-2.php,v 1.54 2010/01/04 23:14:53 gopherit Exp $
  */
 
 //where do we include from
@@ -174,7 +174,12 @@ $rec['on_what_id']       = ($on_what_id > 0) ? $on_what_id : 0;
 $rec['scheduled_at']     = $scheduled_at; //activity scheduled *start* time
 $rec['ends_at']          = $ends_at;      //activity anticipated *end* time
 
-if($thread_id) $rec['thread_id']         = $thread_id;
+// Set the thread_id, if possible
+if($thread_id)
+    $rec['thread_id']         = $thread_id;
+elseif ($activity_id)
+    $rec['thread_id']         = $activity_id;
+
 if($followup_from_id) $rec['followup_from_id'] = $followup_from_id;
 if($address_id) $rec['address_id']         = $address_id;
 
@@ -190,6 +195,17 @@ if (!$activity_id) {
     $msg=urlencode(_("Failed to add activity"));
     header("Location: " . $http_site_root . $return_url."&msg=$msg");
     exit();
+}
+
+// If we could not set the thread_id before, we can certainly do it now
+if (!$rec['thread_id']) {
+    $tmp = $con->qstr($activity_id);
+    $sql = "UPDATE activities SET thread_id = $tmp WHERE activity_id = $tmp";
+    $rst = $con->execute($sql);
+    if (!$rst) {
+        db_error_handler($con, $ins);
+        exit();
+    }
 }
 
 //if this is a mailto link, try to open the user's default mail application
@@ -216,6 +232,9 @@ if ($activity_status == 'c') { //now send them back where they came from
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.54  2010/01/04 23:14:53  gopherit
+ *Added threading for the newly created activity and its follow-up.
+ *
  *Revision 1.53  2009/12/04 16:10:29  gopherit
  *Convert the activity description NL's to <br />'s  if the user preference calls for HTML activity notes.
  *
