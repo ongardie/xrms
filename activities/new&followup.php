@@ -204,7 +204,12 @@ $rec['on_what_id']       = ($on_what_id > 0) ? $on_what_id : 0;
 $rec['scheduled_at']     = $scheduled_at; //activity scheduled *start* time
 $rec['ends_at']          = $ends_at;      //activity anticipated *end* time
 
-if($thread_id) $rec['thread_id']         = $thread_id;
+// Set the thread_id, if possible
+if($thread_id)
+    $rec['thread_id']         = $thread_id;
+elseif ($activity_id)
+    $rec['thread_id']         = $activity_id;
+
 if($followup_from_id) $rec['followup_from_id'] = $followup_from_id;
 if($address_id) $rec['address_id']         = $address_id;
 
@@ -222,6 +227,17 @@ if (!$activity_id) {
     exit();
 }
 
+// If we could not set the thread_id before, we can certainly do it now
+if (!$rec['thread_id']) {
+    $tmp = $con->qstr($activity_id);
+    $sql = "UPDATE activities SET thread_id = $tmp WHERE activity_id = $tmp";
+    $rst = $con->execute($sql);
+    if (!$rst) {
+        db_error_handler($con, $ins);
+        exit();
+    }
+}
+
 // Insert the followup activity
 if ($new_and_followup) {
     $followup_rec = $rec;
@@ -233,6 +249,7 @@ if ($new_and_followup) {
     $followup_rec['activity_status'] = 'o';
     $followup_rec['activity_title'] = _('Follow Up') .' '. $activity_title;
     if (!$followup_transfer_notes) $followup_rec['activity_description'] = '';
+    $followup_rec['thread_id'] = $activity_id;
     $followup_rec['followup_from_id'] = $activity_id;
 
     $followup_activity_id = add_activity($con, $followup_rec, false, $magic_quotes);
