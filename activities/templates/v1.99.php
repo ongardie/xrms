@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.11 2009/12/15 18:56:28 gopherit Exp $
+ * $Id: v1.99.php,v 1.12 2010/01/05 18:59:23 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -433,86 +433,98 @@ function logTime() {
         <table class=widget cellspacing=1>
         <?php echo $activity_content_top; ?>
             <tr>
-                <td class=widget_header colspan=2><?php echo _("About This Activity"); ?> <?php echo ($save_and_next) ? "(<input onclick=\"var input = prompt('Jump to', ''); if(input != null && input != '') document.location.href='browse-next.php?activity_id=" . $activity_id . "&pos=' + (input);\" type=button class=button value=" . $_SESSION['pos'] . ">/" . count($_SESSION['next_to_check']) . ")": "" ; ?></td>
+                <td class=widget_header colspan=4><?php echo _("About This Activity"); ?> <?php echo ($save_and_next) ? "(<input onclick=\"var input = prompt('Jump to', ''); if(input != null && input != '') document.location.href='browse-next.php?activity_id=" . $activity_id . "&pos=' + (input);\" type=button class=button value=" . $_SESSION['pos'] . ">/" . count($_SESSION['next_to_check']) . ")": "" ; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Company"); ?></td>
-                <td class=widget_content>
-                    <?php echo '<a href="../companies/one.php?company_id='.$company_id.'">'.$company_name.'</a>'; ?>
-                </td>
-            </tr>
-            <?php if ($division_menu) { ?>
-            <tr>
-                <td class=widget_label_right><?php echo _("Division"); ?></td>
+                <td class=widget_label_right><?php echo _("Attached to"); ?></td>
                 <td class=widget_content>
                     <?php
-                        echo $division_menu;
+                        echo _("Company" .': ');
+                        echo '<a href="../companies/one.php?company_id='.$company_id.'">'.$company_name.'</a>';
+                        if ($division_menu) {
+                            echo ',&nbsp;'. _("Division") .': ';
+                            echo $division_menu;
+                        }
                     ?>
                 </td>
-            </tr>
-            <?php } ?>
-            <tr>
-                <td class=widget_label_right><?php echo _("Contact"); ?></td>
-                <input type=hidden name=add_participant>
-                <input type=hidden name=remove_participant>
-                <input type=hidden name=mailmerge_participant>
                 <td class=widget_content>
+                    <input type=hidden name=add_participant>
+                    <input type=hidden name=remove_participant>
+                    <input type=hidden name=mailmerge_participant>
                     <?php
+                        echo _("Contact") .': ';
                         echo $contact_menu;
                     ?>
                 </td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Attached To"); ?></td>
                 <td class=widget_content>
                     <input type=hidden name=change_attachment>
-                    <?php  echo $attached_to_link;
+                    <?php
+                        echo _("About") .': ';
+                        echo $attached_to_link;
                         if ($table_name != "Attached To") {
-                            echo " &nbsp; " . _("Status") . " &nbsp; ";
+                            echo '<br />' . _("Status") . ': ';
                             echo $table_menu;
                         }
-                    ?><br>
-                </td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Activity Type"); ?></td>
-                <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Activity Priority"); ?></td>
-                <td class=widget_content_form_element><?php  echo $activity_priority_menu; ?></td>
-            </tr>
-           <?php
-                if($on_what_table == 'opportunities') {
-           ?>
-           <tr>
-                <td class=widget_label_right><?php echo _("Probability") . "&nbsp;" . _("(%)"); ?></td>
-                <td class=widget_content_form_element>
-                <select name=probability>
-                    <?php
-                        for($i = 0; $i <= 100; $i += 10) {
-                            echo "\n\t\t<option value=\"$i\" ".$probability[$i]."> $i %";
-                        };
                     ?>
-                </select>
                 </td>
             </tr>
-            <?php
-                } //end if on_what_table=opportunities check
-            ?>
+
+            <tr>
+                <td class=widget_label_right><?php echo _("Details"); ?></td>
+                <td class=widget_content>
+                    <?php
+                        echo _("Activity Type") .': ';
+                        echo $activity_type_menu;
+                    ?>
+                </td>
+                <td class=widget_content>
+                    <?php
+                        echo _("Activity Priority") .': ';
+                        echo $activity_priority_menu;
+
+                        if($on_what_table == 'opportunities') {
+                            echo _("Probability") . "&nbsp;" . _("(%) <select name=probability>");
+                            for($i = 0; $i <= 100; $i += 10) {
+                                echo "\n\t\t<option value=\"$i\" ".$probability[$i]."> $i %";
+                            };
+                            echo "</select>";
+                        } //end if on_what_table=opportunities check
+                    ?>
+                </td>
+                <td class=widget_content>
+                    <?php
+                        echo _("Owner") .': ';
+                        echo $user_menu;
+                    ?>
+                </td>
+            </tr>
+
             <tr>
                 <td class=widget_label_right><?php echo _("Summary"); ?></td>
                 <td class=widget_content_form_element>
-                    <input type=text size=50 name=activity_title value="<?php  echo htmlspecialchars(trim($activity_title)); ?>">
+                    <input type=text size=45 name=activity_title value="<?php  echo htmlspecialchars(trim($activity_title)); ?>">
+                </td>
+                <td class=widget_content_form_element>
+                    <?php
+                        echo _("Start") .': ';
+                        jscalendar_includes();
+                    ?>
+                    <input type=text ID="f_date_c" name=scheduled_at value="<?php  echo $scheduled_at; ?>">
+                    <img ID="f_trigger_c" style="CURSOR: pointer" border=0 src="../img/cal.gif" alt="Scheduled Start">
+                </td>
+                <td class=widget_content_form_element>
+                    <?php echo _("End") .': '; ?>
+                    <input type=text ID="f_date_d" name=ends_at value="<?php  echo $ends_at; ?>" onFocus="CheckDate()">
+                    <img ID="f_trigger_d" style="CURSOR: pointer" border=0 src="../img/cal.gif" alt="Scheduled End">
                 </td>
             </tr>
+
             <tr>
-                <td class=widget_label_right><?php echo _("Owner"); ?></td>
-                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Activity Notes"); ?></td>
-                <td class=widget_content_form_element>
+                <td class=widget_label_right>
+                    <?php echo _("Activity") .'<br />'; ?>
+                    <?php echo _("Notes"); ?>
+                </td>
+                <td class=widget_content_form_element colspan="3">
                 <?php if($print_view) {
                         echo htmlspecialchars(nl2br(trim($activity_description)));
                         echo "<input type=hidden name=activity_description value=\"" . htmlspecialchars(nl2br(trim($activity_description))) . "\">\n";
@@ -521,91 +533,85 @@ function logTime() {
 							$oFCKeditor = new FCKeditor('activity_description') ;
 							$oFCKeditor->BasePath	= $fckeditor_location_url;
 							$oFCKeditor->Value		= $activity_description ;
-							$oFCKeditor->Height		= '300';
+							$oFCKeditor->Height		= '200';
+                                                        $oFCKeditor->ToolbarSet         = 'Basic';
 							$oFCKeditor->Create() ;
 							}  else {?>
                             <textarea rows=10 cols=70 name=activity_description><?php  echo htmlspecialchars(trim($activity_description)); ?></textarea>
                 <?php } } ?>
                 </td>
             </tr>
-            <?php
-            if($on_what_table == 'opportunities') {
-            ?>
-            <tr>
-                <td class=widget_label_right><?php echo _("Opportunity Notes"); ?></td>
-                <td class=widget_content_form_element>
-                    <textarea rows=10 cols=70 name=opportunity_description><?php  echo htmlspecialchars(trim($opportunity_description)); ?></textarea><br>
-                    <input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="var new_message = prompt('<?php echo addslashes(_("Enter Note")); ?>', ''); document.forms[0].opportunity_description.value =
-                        logTime() + '<?php echo " " . _("By") . " " . $_SESSION['username']; ?>: ' + new_message + '\n' + document.forms[0].opportunity_description.value; document.forms[0].return_url.value = '<?php echo current_page() . '&fill_user'; ?>'; document.forms[0].submit();">
-                    <?php do_hook('opportunity_notes_buttons'); ?>
-                </td>
-            </tr>
-            <?php } if($location_menu) { ?>
-            <tr>
-                <td class=widget_label_right><?php echo _("Location"); ?></td>
-                <td class=widget_content_form_element>
-                    <?php
-                        echo $location_menu;
-                    ?>
-                </td>
-            </tr>
-            <?php } if($local_time) { ?>
-            <tr>
-                <td class=widget_label_right><?php echo _("Local Time"); ?></td>
-                <td class=widget_content_form_element>
-                    <?php
-                        //Remember to call update_daylight_savings($con);
-                        echo gmdate($datetime_format, $local_time);
-                    ?>
-                </td>
-            </tr>
+            <?php if($on_what_table == 'opportunities') { ?>
+                <tr>
+                    <td class=widget_label_right><?php echo _("Opportunity Notes"); ?></td>
+                    <td class=widget_content_form_element colspan="3">
+                        <textarea rows=10 cols=70 name=opportunity_description><?php  echo htmlspecialchars(trim($opportunity_description)); ?></textarea><br>
+                        <input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="var new_message = prompt('<?php echo addslashes(_("Enter Note")); ?>', ''); document.forms[0].opportunity_description.value =
+                            logTime() + '<?php echo " " . _("By") . " " . $_SESSION['username']; ?>: ' + new_message + '\n' + document.forms[0].opportunity_description.value; document.forms[0].return_url.value = '<?php echo current_page() . '&fill_user'; ?>'; document.forms[0].submit();">
+                        <?php do_hook('opportunity_notes_buttons'); ?>
+                    </td>
+                </tr>
+            <?php } ?>
+
+            <?php if($location_menu) { ?>
+                <tr>
+                    <td class=widget_label_right><?php echo _("Location"); ?></td>
+                    <td class=widget_content_form_element colspan="3">
+                        <?php
+                            echo $location_menu;
+                            if($local_time) {
+                                echo _("Local Time");
+                                //Remember to call update_daylight_savings($con);
+                                echo gmdate($datetime_format, $local_time);
+                            }
+                        ?>
+                    </td>
+                </tr>
             <?php } ?>
             <tr>
-                <td class=widget_label_right><?php echo _("Entered By"); ?></td>
-                <td class=widget_content_form_element><?php echo $entered_by_username.' '._("on").' '.$entered_at; ?></td>
-            </tr>
-            <?php if ($last_modified_by) { ?>
-            <tr>
-                <td class=widget_label_right><?php echo _("Last Modified By"); ?></td>
-                <td class=widget_content_form_element><?php echo $last_modified_by_username.' '._("on").' '.$last_modified_at; ?></td>
-            </tr>
-           <?php } ?>
-            <tr>
-                <td class=widget_label_right><?php echo _("Scheduled Start"); ?></td>
+                <td class=widget_label_right><?php echo _("Internal"); ?></td>
+
                 <td class=widget_content_form_element>
-                    <?php jscalendar_includes(); ?>
-                    <input type=text ID="f_date_c" name=scheduled_at value="<?php  echo $scheduled_at; ?>">
-                    <img ID="f_trigger_c" style="CURSOR: pointer" border=0 src="../img/cal.gif">
+                    <?php
+                        echo _("Entered by") ." $entered_by_username ". _("on"). " $entered_at";
+                    ?>
+                </td>
+
+                <td class=widget_content_form_element>
+                    <?php
+                        if ($last_modified_by) {
+                            echo _("Last modified by") ." $last_modified_by_username ". _("on"). " $last_modified_at";
+                        }
+                    ?>
+                </td>
+                <td class=widget_content_form_element>
+                    <?php
+                        echo _("Email This To") .': ';
+                        echo $user_email_menu;
+                    ?>
                 </td>
             </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Scheduled End"); ?></td>
-                <td class=widget_content_form_element>
-                    <input type=text ID="f_date_d" name=ends_at value="<?php  echo $ends_at; ?>" onFocus="CheckDate()">
-                    <img ID="f_trigger_d" style="CURSOR: pointer" border=0 src="../img/cal.gif">
-                </td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Email This To"); ?></td>
-                 <td class=widget_content_form_element><?php  echo $user_email_menu; ?></td>
-            </tr>
+
             <tr>
                 <td class=widget_label_right><?php echo _("Completed?"); ?></td>
-                <td class=widget_content_form_element><input type=checkbox id=activity_completed name=activity_status value='on' <?php if ($activity_status == 'c') {print "checked";}; ?>>
+                <td class=widget_content_form_element colspan="3"><input type=checkbox id=activity_completed name=activity_status value='on' <?php if ($activity_status == 'c') {print "checked";}; ?>>
                     <?php if ($completed_by) echo _("by").' '.$completed_by_username; if ($completed_at AND ($completed_at!='0000-00-00 00:00:00')) echo ' '._("on").' '. $completed_at; ?>
                 </td>
             </tr>
-            <tr id='resolution_type' >
-                <td class=widget_label_right><?php echo _("Resolution Type"); ?></td>
-                <td class=widget_content_form_element>
-                    <?php echo $activity_resolution_type_menu; ?>
-                </td>
+            
+            <tr id="resolution_type">
+                <td class=widget_label_right><?php echo _("Resolution"); ?></td>
+                <td class=widget_content_form_element colspan="3"><?php echo $activity_resolution_type_menu; ?></td>
             </tr>
+            
             <tr id='resolution_reason' >
-                <td class=widget_label_right><?php echo _("Resolution Description"); ?></td>
-                <td class=widget_content_form_element>
+                <td class=widget_label_right>
+                        <?php echo _("Resolution") .'<br />'; ?>
+                        <?php echo _("Description"); ?>
+                </td>
+                <td class=widget_content_form_element colspan="3">
                 <!-- db: begin  the following satement must to be written as single line to avoid bad display behaviour of the resolution description field content//-->
-                    <textarea rows=10 cols=70 id=resolution_description name=resolution_description><?php echo htmlspecialchars(trim($resolution_description)); ?></textarea>
+                    <textarea rows=5 cols=70 id=resolution_description name=resolution_description><?php echo htmlspecialchars(trim($resolution_description)); ?></textarea>
                 </td>
             </tr>
             <?php
@@ -613,7 +619,7 @@ function logTime() {
                 echo $activity_inline_rows;
             ?>
             <tr>
-                <td class=widget_content_form_element colspan=2>
+                <td class=widget_content_form_element colspan=4>
                     <?php
 
                         echo render_edit_button(_("Save Changes"),'submit',false,'save', false,'activities',$activity_id);
@@ -752,6 +758,9 @@ function logTime() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.12  2010/01/05 18:59:23  gopherit
+ * Restructured the activity editing form from a usability perspective: increased its horizontal density and shortened it vertically to minimize having to scroll the form when working with it.
+ *
  * Revision 1.11  2009/12/15 18:56:28  gopherit
  * Switched to centralized get_activity_menu() function around line 112.
  * Revised the activity_type_menu plugin hook to include the 'fieldname' parameter.
