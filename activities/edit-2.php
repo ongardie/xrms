@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.88 2009/02/17 01:38:09 randym56 Exp $
+ * $Id: edit-2.php,v 1.89 2010/01/06 22:31:58 gopherit Exp $
  */
 
 //include required files
@@ -418,6 +418,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.89  2010/01/06 22:31:58  gopherit
+ * Removed trailing whitespace.
+ *
  * Revision 1.88  2009/02/17 01:38:09  randym56
  * - Patch to allow for individual user to change datetime_format views
  *
@@ -713,7 +716,7 @@ if ($followup) {
  * - fixed multiple bugs with date-time formatting in activities
  * - correctly use dbtimestamp() date() and strtotime() fns
  * - add support for $default_followup_time config var
- *   - fixes SF bug  949779 reported by miguel Gonçalves (mig77)
+ *   - fixes SF bug  949779 reported by miguel Gonï¿½alves (mig77)
  *
  * Revision 1.8  2004/04/27 16:29:34  gpowers
  * added support for activity emails.
