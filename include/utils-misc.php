@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.193 2009/12/15 16:04:26 gopherit Exp $
+ * $Id: utils-misc.php,v 1.194 2010/01/11 22:27:23 gopherit Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -1062,7 +1062,7 @@ function get_formatted_address (&$con,$address_id=false, $company_id=false, $sin
         $address_id=fetch_default_address($con, $company_id);
     }
     if (!$address_id) return false;
-    $sql = "select a.address_body, a.line1, a.line2, a.city, a.province, a.postal_code, a.use_pretty_address, ";
+    $sql = "select a. address_name, a.address_body, a.line1, a.line2, a.city, a.province, a.postal_code, a.use_pretty_address, ";
     $sql .= 'afs.address_format_string, c.country_name, c.iso_code2 ';
     $sql .= 'from addresses a, address_format_strings afs, countries c ';
     $sql .= "where a.address_id=$address_id ";
@@ -1073,6 +1073,7 @@ function get_formatted_address (&$con,$address_id=false, $company_id=false, $sin
 
     if ($rst) {
         $address_body = $rst->fields['address_body'];
+        $GLOBALS["address_name"] = $address_name = $rst->fields['address_name'];
         $GLOBALS["line1"] = $line1 = $rst->fields['line1'];
         $GLOBALS["line2"] = $line2 = $rst->fields['line2'];
         $GLOBALS["city"] = $city = $rst->fields['city'];
@@ -1102,20 +1103,23 @@ function get_formatted_address (&$con,$address_id=false, $company_id=false, $sin
         } else {
             //create our single line address
             $address_array=array();
-            if ($line1) { $address_array[]=$line1; }
 
-            if ($city) { $address_array[]=$city; }
+            if ($address_name) { $address_array[]=$address_name; }
 
-            if ($province) { $address_array[]=$province; }
-
-            if ($country_name) { $address_array[]=$country; }
-
-           if (count($address_array)>0) {
+            if ($use_pretty_address == 't') {
+                $address_array[] = str_replace("\n", "", $address_body);
+            } else {
+                if ($line1) { $address_array[]=$line1; }
+                if ($city) { $address_array[]=$city; }
+                if ($province) { $address_array[]=$province; }
+                if ($country_name) { $address_array[]=$country; }
+            }
+            if (count($address_array)>0) {
                 $address_to_display=implode(", ",$address_array);
-           } else {
+            } else {
                 $address_to_display = '';
-           }
-           //end single line address processing
+            }
+            //end single line address processing
         }
     } else {
         // database error, return some useful information.
@@ -2120,6 +2124,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.194  2010/01/11 22:27:23  gopherit
+ * Added the address name in get_formatted_address() around line 1059.  Also, added the address body for formatted addresses.  Otherwise, formatted addresses ended up displaying blank lines in the selection box.
+ *
  * Revision 1.193  2009/12/15 16:04:26  gopherit
  * Removed trailing whitespace.
  *
