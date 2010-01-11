@@ -76,32 +76,28 @@ if ($email) { $activity_status = 'c'; };
 // Default activty duration, in seconds
 $default_activity_duration = 900;
 
-// @TODO: Move the $default_followup_time setting to the system preferences.
-// In fact the needed default_followup_time value is unclear.  If it is an
-// offset it will need to be added to the current time for this to work.
-// Try to figure out the followup time.  We'll need that if a followup time is not set
-$followup_time = (isset($default_followup_time) && $default_followup_time) ? strotime($default_followup_time) : strtotime('+1 week');
-
 // Convert all times to unix timestamps, perform sanity check on the values
 // or set them, if not passed-in.  Remove all guesswork!
 $scheduled_at = strtotime($scheduled_at);
-
-// The following check for legacy purposes only.  We won't need it in the
-// new&followup case but we will leave it here in case the activites/new-2.php
-// is later integrated into this script.
-if ($followup)
-    $scheduled_at = $followup_time;
-else
-    $scheduled_at = $scheduled_at ? $scheduled_at : strtotime("now");
+$scheduled_at = $scheduled_at ? $scheduled_at : strtotime("now");
 
 $ends_at = strtotime($ends_at);
-$ends_at = ($ends_at && ($ends_at >= $scheduled_at)) ? $ends_at : $scheduled_at + $default_activity_duration;
+// No activity lasts zero time!
+$ends_at = ($ends_at && ($ends_at > $scheduled_at)) ? $ends_at : $scheduled_at + $default_activity_duration;
 
 if ($new_and_followup) {
+
+    // @TODO: Move the $default_followup_time setting to the system preferences.
+    // It is validated in several places in XRMS yet it is defined nowhere.
+    // It is a good idea, so we leave it and assume it is an offset in seconds.
+
+    // Try to figure out the followup time.  We'll need that if a followup time is not set
+    $followup_time = (isset($default_followup_time) && $default_followup_time) ?  $scheduled_at + $default_followup_time : $scheduled_at + 604800;
+
     $followup_scheduled_at = strtotime($followup_scheduled_at);
-    $followup_scheduled_at = ($followup_scheduled_at && ($followup_scheduled_at >= $scheduled_at)) ? $followup_scheduled_at : $followup_time;
+    $followup_scheduled_at = ($followup_scheduled_at && ($followup_scheduled_at > $scheduled_at)) ? $followup_scheduled_at : $followup_time;
     $followup_ends_at = strtotime($followup_ends_at);
-    $followup_ends_at = ($followup_ends_at && ($followup_ends_at >= $followup_scheduled_at)) ? $followup_ends_at : $followup_scheduled_at + $default_activity_duration;
+    $followup_ends_at = ($followup_ends_at && ($followup_ends_at > $followup_scheduled_at)) ? $followup_ends_at : $followup_scheduled_at + $default_activity_duration;
 }
 
 //make our database connection
@@ -247,8 +243,8 @@ if ($new_and_followup) {
     $followup_rec['scheduled_at'] = $followup_scheduled_at;
     $followup_rec['ends_at'] = $followup_ends_at;
     $followup_rec['activity_status'] = 'o';
-    $followup_rec['activity_title'] = _('Follow Up') .' '. $activity_title;
-    if (!$followup_transfer_notes) $followup_rec['activity_description'] = '';
+    $followup_rec['activity_title'] = _('Follow-up') .' '. $activity_title;
+    if (!$followup_transfer_notes) $followup_rec['activity_description'] = NULL;
     $followup_rec['thread_id'] = $activity_id;
     $followup_rec['followup_from_id'] = $activity_id;
 
