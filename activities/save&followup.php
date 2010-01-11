@@ -244,10 +244,6 @@ if ($associate_activities == true ) {
 
 $rec = array();
 $rec['activity_type_id']     = $activity_type_id;
-//use new contact ID here to update contact with newly set ID
-$rec['contact_id']           = $new_contact_id;
-$rec['activity_title']       = trim($activity_title);
-$rec['activity_description'] = trim($activity_description);
 if(empty($user_id)) {
     // If the user ID was empty
     // then we're going to assume that the current user has taken over the activity.
@@ -255,6 +251,11 @@ if(empty($user_id)) {
 } else {
     $rec['user_id']          = $user_id;
 }
+$rec['division_id']          = $division_id;
+//use new contact ID here to update contact with newly set ID
+$rec['contact_id']           = $new_contact_id;
+$rec['activity_title']       = trim($activity_title);
+$rec['activity_description'] = trim($activity_description);
 $rec['last_modified_by']     = $session_user_id;
 $rec['last_modified_at']     = date($datetime_format,time());
 $rec['scheduled_at']         = $scheduled_at;

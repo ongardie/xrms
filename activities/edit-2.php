@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.89 2010/01/06 22:31:58 gopherit Exp $
+ * $Id: edit-2.php,v 1.90 2010/01/11 22:49:40 gopherit Exp $
  */
 
 //include required files
@@ -227,20 +227,20 @@ if ($associate_activities == true ) {
 
 $rec = array();
 $rec['activity_type_id']     = $activity_type_id;
-//use new contact ID here to update contact with newly set ID
-$rec['contact_id']           = $new_contact_id;
-$rec['activity_title']       = trim($activity_title);
-$rec['activity_description'] = trim($activity_description);
 if(empty($user_id)) {
     // If the user ID was empty
     // then we're going to assume that the current user has taken over the activity.
     $rec['user_id']          = $session_user_id;
-}
-else {
+} else {
     $rec['user_id']          = $user_id;
 }
+$rec['division_id']          = $division_id;
+//use new contact ID here to update contact with newly set ID
+$rec['contact_id']           = $new_contact_id;
+$rec['activity_title']       = trim($activity_title);
+$rec['activity_description'] = trim($activity_description);
 $rec['last_modified_by']     = $session_user_id;
-$rec['last_modified_at']     = time();
+$rec['last_modified_at']     = date($datetime_format,time());
 $rec['scheduled_at']         = $scheduled_at;
 $rec['ends_at']              = $ends_at;
 $rec['completed_at']         = $completed_at;
@@ -418,6 +418,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.90  2010/01/11 22:49:40  gopherit
+ * Fixed bug where the division_id field was not being stored in the database when an activity is saved.
+ *
  * Revision 1.89  2010/01/06 22:31:58  gopherit
  * Removed trailing whitespace.
  *
