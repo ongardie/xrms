@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.13 2010/01/11 18:49:13 gopherit Exp $
+ * $Id: v1.99.php,v 1.14 2010/01/11 20:10:27 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -530,24 +530,31 @@ function logTime() {
 
             <tr>
                 <td class=widget_label_right>
-                    <?php echo _("Activity") .'<br />'; ?>
-                    <?php echo _("Notes"); ?>
+                    <?php echo _("Activity") .'<br />'. _("Notes"); ?>
                 </td>
-                <td class=widget_content_form_element colspan="3">
-                <?php if($print_view) {
-                        echo htmlspecialchars(nl2br(trim($activity_description)));
-                        echo "<input type=hidden name=activity_description value=\"" . htmlspecialchars(nl2br(trim($activity_description))) . "\">\n";
-                      } else {
-                            if (get_user_preference($con, $user_id, "html_activity_notes") == 'y') {
-                                    $oFCKeditor = new FCKeditor('activity_description') ;
-                                    $oFCKeditor->BasePath	= $fckeditor_location_url;
-                                    $oFCKeditor->Value		= $activity_description ;
-                                    $oFCKeditor->Height		= '200';
-                                    $oFCKeditor->ToolbarSet         = 'Basic';
-                                    $oFCKeditor->Create() ;
-                                    }  else {?>
+                <td class=widget_content colspan="3">
+                <?php
+                    if($print_view) {
+                        if (get_user_preference($con, $user_id, "html_activity_notes") == 'y') {
+                            echo trim($activity_description);
+                        } else {
+                            echo htmlspecialchars(nl2br(trim($activity_description)));
+                        }
+                        echo "<input type=hidden name=activity_description value=\"" . trim($activity_description) . "\">\n";
+                    } else {
+                        if (get_user_preference($con, $user_id, "html_activity_notes") == 'y') {
+                            $oFCKeditor = new FCKeditor('activity_description') ;
+                            $oFCKeditor->BasePath	= $fckeditor_location_url;
+                            $oFCKeditor->Value		= trim($activity_description) ;
+                            $oFCKeditor->Height		= '200';
+                            $oFCKeditor->ToolbarSet         = 'Basic';
+                            $oFCKeditor->Create() ;
+                        } else {
+                            ?>
                             <textarea rows=10 cols=70 name=activity_description><?php  echo htmlspecialchars(trim($activity_description)); ?></textarea>
-                <?php } } ?>
+                            <?php
+                        }
+                    } ?>
                 </td>
             </tr>
             <?php if($on_what_table == 'opportunities') { ?>
@@ -851,6 +858,9 @@ function logTime() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.14  2010/01/11 20:10:27  gopherit
+ * Fixed an issue with the HTML activity notes where switching to 'Print View' and back doubled up the <br /> tags.
+ *
  * Revision 1.13  2010/01/11 18:49:13  gopherit
  * Further compacted the form for editing activities and improved the 'Schedule Followup' functionality.
  *
