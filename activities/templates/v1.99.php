@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.12 2010/01/05 18:59:23 gopherit Exp $
+ * $Id: v1.99.php,v 1.13 2010/01/11 18:49:13 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -413,7 +413,7 @@ function logTime() {
 
     <div id="Content">
 
-        <form action=edit-2.php method=post class="print" name=activity_data>
+        <form action=save&followup.php method=post class="print" name=activity_data>
         <input type=hidden name=return_url value="<?php  echo $return_url; ?>">
         <input type=hidden name=current_activity_status value="<?php  echo $activity_status; ?>">
         <input type=hidden name=activity_status value="<?php  echo $activity_status; ?>">
@@ -431,23 +431,26 @@ function logTime() {
 		<input type=hidden name=activity_recurrence_id value="<?php echo $activity_recurrence_id; ?>">
 
         <table class=widget cellspacing=1>
-        <?php echo $activity_content_top; ?>
+            <?php echo $activity_content_top; ?>
+
             <tr>
                 <td class=widget_header colspan=4><?php echo _("About This Activity"); ?> <?php echo ($save_and_next) ? "(<input onclick=\"var input = prompt('Jump to', ''); if(input != null && input != '') document.location.href='browse-next.php?activity_id=" . $activity_id . "&pos=' + (input);\" type=button class=button value=" . $_SESSION['pos'] . ">/" . count($_SESSION['next_to_check']) . ")": "" ; ?></td>
             </tr>
+
             <tr>
                 <td class=widget_label_right><?php echo _("Attached to"); ?></td>
-                <td class=widget_content>
+                <td class=widget_content_form_element>
                     <?php
                         echo _("Company" .': ');
                         echo '<a href="../companies/one.php?company_id='.$company_id.'">'.$company_name.'</a>';
                         if ($division_menu) {
-                            echo ',&nbsp;'. _("Division") .': ';
+                            echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'. _("Division") .': ';
                             echo $division_menu;
                         }
                     ?>
                 </td>
-                <td class=widget_content>
+
+                <td class=widget_content_form_element>
                     <input type=hidden name=add_participant>
                     <input type=hidden name=remove_participant>
                     <input type=hidden name=mailmerge_participant>
@@ -456,13 +459,14 @@ function logTime() {
                         echo $contact_menu;
                     ?>
                 </td>
-                <td class=widget_content>
+
+                <td class=widget_content_form_element>
                     <input type=hidden name=change_attachment>
                     <?php
                         echo _("About") .': ';
                         echo $attached_to_link;
                         if ($table_name != "Attached To") {
-                            echo '<br />' . _("Status") . ': ';
+                            echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . _("Status") . ': ';
                             echo $table_menu;
                         }
                     ?>
@@ -471,13 +475,14 @@ function logTime() {
 
             <tr>
                 <td class=widget_label_right><?php echo _("Details"); ?></td>
-                <td class=widget_content>
+                <td class=widget_content_form_element>
                     <?php
                         echo _("Activity Type") .': ';
                         echo $activity_type_menu;
                     ?>
                 </td>
-                <td class=widget_content>
+
+                <td class=widget_content_form_element>
                     <?php
                         echo _("Activity Priority") .': ';
                         echo $activity_priority_menu;
@@ -491,7 +496,8 @@ function logTime() {
                         } //end if on_what_table=opportunities check
                     ?>
                 </td>
-                <td class=widget_content>
+
+                <td class=widget_content_form_element>
                     <?php
                         echo _("Owner") .': ';
                         echo $user_menu;
@@ -501,9 +507,11 @@ function logTime() {
 
             <tr>
                 <td class=widget_label_right><?php echo _("Summary"); ?></td>
+
                 <td class=widget_content_form_element>
                     <input type=text size=45 name=activity_title value="<?php  echo htmlspecialchars(trim($activity_title)); ?>">
                 </td>
+
                 <td class=widget_content_form_element>
                     <?php
                         echo _("Start") .': ';
@@ -512,6 +520,7 @@ function logTime() {
                     <input type=text ID="f_date_c" name=scheduled_at value="<?php  echo $scheduled_at; ?>">
                     <img ID="f_trigger_c" style="CURSOR: pointer" border=0 src="../img/cal.gif" alt="Scheduled Start">
                 </td>
+
                 <td class=widget_content_form_element>
                     <?php echo _("End") .': '; ?>
                     <input type=text ID="f_date_d" name=ends_at value="<?php  echo $ends_at; ?>" onFocus="CheckDate()">
@@ -529,14 +538,14 @@ function logTime() {
                         echo htmlspecialchars(nl2br(trim($activity_description)));
                         echo "<input type=hidden name=activity_description value=\"" . htmlspecialchars(nl2br(trim($activity_description))) . "\">\n";
                       } else {
-						if (get_user_preference($con, $user_id, "html_activity_notes") == 'y') {
-							$oFCKeditor = new FCKeditor('activity_description') ;
-							$oFCKeditor->BasePath	= $fckeditor_location_url;
-							$oFCKeditor->Value		= $activity_description ;
-							$oFCKeditor->Height		= '200';
-                                                        $oFCKeditor->ToolbarSet         = 'Basic';
-							$oFCKeditor->Create() ;
-							}  else {?>
+                            if (get_user_preference($con, $user_id, "html_activity_notes") == 'y') {
+                                    $oFCKeditor = new FCKeditor('activity_description') ;
+                                    $oFCKeditor->BasePath	= $fckeditor_location_url;
+                                    $oFCKeditor->Value		= $activity_description ;
+                                    $oFCKeditor->Height		= '200';
+                                    $oFCKeditor->ToolbarSet         = 'Basic';
+                                    $oFCKeditor->Create() ;
+                                    }  else {?>
                             <textarea rows=10 cols=70 name=activity_description><?php  echo htmlspecialchars(trim($activity_description)); ?></textarea>
                 <?php } } ?>
                 </td>
@@ -568,52 +577,95 @@ function logTime() {
                     </td>
                 </tr>
             <?php } ?>
+
             <tr>
                 <td class=widget_label_right><?php echo _("Internal"); ?></td>
 
-                <td class=widget_content_form_element>
+                <td class=widget_content_form_element colspan="2">
+                    <input type=checkbox id=activity_completed name=activity_status value='on' <?php if ($activity_status == 'c') {print "checked";}; ?>>Completed
                     <?php
-                        echo _("Entered by") ." $entered_by_username ". _("on"). " $entered_at";
-                    ?>
+                        // Quick and dirty permission check
+                        if (render_create_button(_("Schedule Followup"),'submit',false,'followup')) { ?>
+                            <span id='completed_controls'>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type='checkbox' name='followup' id='followup' value='true'
+                                       onclick="toggle_checked_disabled('followup_transfer_notes');"
+                                       <?php if ($activity_status != 'c') echo "checked"; ?>/>
+                                <?php echo _("Schedule Followup"); ?>
+
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type='checkbox' name='followup_transfer_notes' id='followup_transfer_notes' value='true'
+                                    <?php
+                                        if ($activity_status != 'c') echo "checked";
+                                        else echo "disabled='disabled'"
+                                    ?>
+                                />
+                                <?php echo _("Transfer Activity Notes"); ?>
+
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type='checkbox' name='resolved' value='true' id='resolved' onclick='toggle_resolution_row();'
+                                        <?php if ($activity_resolution_type_id || $resolution_description) echo 'checked'; ?>
+                                />
+                                <?php echo _("Resolution"); ?>
+
+                            </span>
+                        <?php } ?>
                 </td>
 
-                <td class=widget_content_form_element>
-                    <?php
-                        if ($last_modified_by) {
-                            echo _("Last modified by") ." $last_modified_by_username ". _("on"). " $last_modified_at";
-                        }
-                    ?>
-                </td>
                 <td class=widget_content_form_element>
                     <?php
                         echo _("Email This To") .': ';
                         echo $user_email_menu;
                     ?>
                 </td>
+
+            </tr>
+
+            <tr id="resolution_row"
+                <?php if (!($activity_resolution_type_id || $resolution_description))
+                    echo "style='display: none;'";
+                ?>>
+
+                <td class=widget_label_right>
+                    <?php echo _("Resolution");
+                    ?>
+                </td>
+
+                <td class=widget_content_form_element colspan="3">
+                    <?php
+                        echo _("Resolution Type") .': ';
+                        echo $activity_resolution_type_menu .'<br />';
+                    ?>
+                    <!-- db: begin  the following satement must to be written as single line to avoid bad display behaviour of the resolution description field content//-->
+                    <textarea rows=5 cols=80 id=resolution_description name=resolution_description><?php echo htmlspecialchars(trim($resolution_description)); ?></textarea>
+                </td>
             </tr>
 
             <tr>
-                <td class=widget_label_right><?php echo _("Completed?"); ?></td>
-                <td class=widget_content_form_element colspan="3"><input type=checkbox id=activity_completed name=activity_status value='on' <?php if ($activity_status == 'c') {print "checked";}; ?>>
-                    <?php if ($completed_by) echo _("by").' '.$completed_by_username; if ($completed_at AND ($completed_at!='0000-00-00 00:00:00')) echo ' '._("on").' '. $completed_at; ?>
-                </td>
-            </tr>
-            
-            <tr id="resolution_type">
-                <td class=widget_label_right><?php echo _("Resolution"); ?></td>
-                <td class=widget_content_form_element colspan="3"><?php echo $activity_resolution_type_menu; ?></td>
-            </tr>
-            
-            <tr id='resolution_reason' >
-                <td class=widget_label_right>
-                        <?php echo _("Resolution") .'<br />'; ?>
-                        <?php echo _("Description"); ?>
-                </td>
+                <td class=widget_label_right><?php echo _("Tracker"); ?></td>
+
                 <td class=widget_content_form_element colspan="3">
-                <!-- db: begin  the following satement must to be written as single line to avoid bad display behaviour of the resolution description field content//-->
-                    <textarea rows=5 cols=70 id=resolution_description name=resolution_description><?php echo htmlspecialchars(trim($resolution_description)); ?></textarea>
+                    <div style="width: 50%; float: left;">
+                        <?php
+                            echo _("Entered by") ." $entered_by_username ". _("on"). " $entered_at";
+                        ?>
+                    </div>
+                    <div style="width: 50%; float: left;">
+                        <?php
+                            if ($last_modified_by) {
+                                echo _("Last modified by") ." $last_modified_by_username ". _("on"). " $last_modified_at";
+                            }
+                        ?>
+                    </div>
+                    <?php
+                        if ($completed_by) {
+                            echo "<br />". _("Completed by").' '.$completed_by_username;
+                            if ($completed_at AND ($completed_at!='0000-00-00 00:00:00')) echo ' '._("on").' '. $completed_at;
+                        }
+                    ?>
                 </td>
             </tr>
+
             <?php
                 //add the inline data added by plugin(s)
                 echo $activity_inline_rows;
@@ -621,22 +673,22 @@ function logTime() {
             <tr>
                 <td class=widget_content_form_element colspan=4>
                     <?php
-
                         echo render_edit_button(_("Save Changes"),'submit',false,'save', false,'activities',$activity_id);
 
                         if($save_and_next) {
+                            echo '&nbsp;&nbsp;';
                             echo '<input class=button type=submit name="saveandnext" value="'._("Save and Next").'"';
                             $save_and_next="&save_and_next=true";
                         }
 
-                        echo render_create_button(_("Schedule Followup"),'submit',false,'followup');
-
+                        echo '&nbsp;&nbsp;&nbsp;&nbsp;';
                         if($activity_recurrence_id) {
                             echo render_edit_button(_("Edit Recurrence"),'submit',false,'recurrence');
                         } else {
                             echo render_edit_button(_("Create Recurrence"),'submit',false,'recurrence');
                         }
 
+                        echo '&nbsp;&nbsp;&nbsp;&nbsp;';
                         if($print_view) {
                             echo render_edit_button(_("Edit View"),'submit','javascript:document.activity_data.return_url.value=\''."/activities/one.php?activity_id=$activity_id$save_and_next&return_url=".urlencode($return_url)."".'\'','edit_view', false,'activities',$activity_id);
                         } else {
@@ -644,6 +696,7 @@ function logTime() {
                         }
 
 
+                        echo '&nbsp;&nbsp;&nbsp;&nbsp;';
                         echo render_delete_button(_("Delete"),'button',"javascript: if (confirm('You are about to delete this activity.\\n\\nDo you wish to proceed?\\n\\n'))
                                                                             location.href='delete.php?activity_id=$activity_id$save_and_next&return_url=".urlencode($return_url)."'",
                                  false, false, 'activities',$activity_id);
@@ -695,32 +748,72 @@ function logTime() {
 </div>
 
 <script type="text/javascript">
-    var old_description='';
-    var old_type='';
-    function HideResolutionFields() {
-        old_type=document.getElementById('activity_resolution_type_id').value;
-        old_description=document.getElementById('resolution_description').value;
+    var old_followup_checked                    = '';
+    var old_followup_transfer_notes_checked     = '';
+    var old_followup_transfer_notes_disabled    = '';
+    var old_resolved_checked                    = '';
+    var old_resolution_type                     = '';
+    var old_resolution_description              = '';
+    var old_resolution_row_display              = '';
 
-        document.getElementById('resolution_type').style.display='none';
-        document.getElementById('resolution_reason').style.display='none';
-        document.getElementById('activity_resolution_type_id').value='';
-        document.getElementById('resolution_description').value='';
+    function HideCompletedControls() {
+        old_followup_checked                    = document.getElementById('followup').checked;
+        old_followup_transfer_notes_checked     = document.getElementById('followup_transfer_notes').checked;
+        old_followup_transfer_notes_disabled    = document.getElementById('followup_transfer_notes').disabled;
+        old_resolved_checked                    = document.getElementById('resolved').checked;
+        old_resolution_type                     = document.getElementById('activity_resolution_type_id').value;
+        old_resolution_description              = document.getElementById('resolution_description').value;
+        old_resolution_row_display              = document.getElementById('resolution_row').style.display;
 
-        document.getElementById('activity_completed').onclick=ShowResolutionFields;
+        document.getElementById('resolution_row').style.display         = 'none';
+        document.getElementById('activity_resolution_type_id').value    = '';
+        document.getElementById('resolution_description').value         = '';
+
+        document.getElementById('activity_completed').onclick           = ShowCompletedControls;
+        document.getElementById('completed_controls').style.display     = 'none';
+        document.getElementById('followup').checked                     = false;
+        document.getElementById('followup_transfer_notes').checked      = false;
+        document.getElementById('followup_transfer_notes').disabled     = 'disabled';
+        document.getElementById('resolved').checked                     = false;
     }
-    function ShowResolutionFields() {
-        document.getElementById('resolution_type').style.display='';
-        document.getElementById('resolution_reason').style.display='';
-        document.getElementById('activity_resolution_type_id').value=old_type;
-        document.getElementById('resolution_description').value=old_description;
 
-        document.getElementById('activity_completed').onclick=HideResolutionFields;
+    function ShowCompletedControls() {
+        document.getElementById('activity_completed').onclick           = HideCompletedControls;
+        document.getElementById('completed_controls').style.display     = '';
+        document.getElementById('resolution_row').style.display         = old_resolution_row_display;
+
+        document.getElementById('followup').checked                     = old_followup_checked;
+        document.getElementById('followup_transfer_notes').checked      = old_followup_transfer_notes_checked;
+        document.getElementById('followup_transfer_notes').disabled     = old_followup_transfer_notes_disabled;
+        document.getElementById('resolved').checked                     = old_resolved_checked;
+        document.getElementById('activity_resolution_type_id').value    = old_resolution_type;
+        document.getElementById('resolution_description').value         = old_resolution_description;
+    }
+
+    function toggle_checked_disabled(id) {
+        var e = document.getElementById(id);
+        if(e.disabled) {
+            e.disabled = false;
+            e.checked = 'checked';
+        } else {
+            e.disabled = 'disabled';
+            e.checked = false;
+        }
+    }
+
+    function toggle_resolution_row() {
+        var e = document.getElementById('resolution_row');
+        if(e.style.display != 'none') {
+            e.style.display = 'none';
+        } else {
+            e.style.display = '';
+        }
     }
 
     if (!document.getElementById('activity_completed').checked) {
-        HideResolutionFields();
+        HideCompletedControls();
     } else {
-        document.getElementById('activity_completed').onclick=HideResolutionFields;
+        document.getElementById('activity_completed').onclick=HideCompletedControls;
     }
 
     Calendar.setup({
@@ -758,6 +851,9 @@ function logTime() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.13  2010/01/11 18:49:13  gopherit
+ * Further compacted the form for editing activities and improved the 'Schedule Followup' functionality.
+ *
  * Revision 1.12  2010/01/05 18:59:23  gopherit
  * Restructured the activity editing form from a usability perspective: increased its horizontal density and shortened it vertically to minimize having to scroll the form when working with it.
  *
