@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.130 2009/04/09 06:27:04 gopherit Exp $
+ * $Id: some.php,v 1.131 2010/01/12 21:40:07 gopherit Exp $
  */
 
 // handle includes
@@ -234,7 +234,7 @@ add_audit_item($con, $session_user_id, 'searched', 'activities', '', 4);
 //debug
 //echo htmlentities($sql).'<br>';
 
-$page_title = _("Open Activities");
+$page_title = _("Activities");
 start_page($page_title, true, $msg);
 
 ?>
@@ -522,6 +522,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.131  2010/01/12 21:40:07  gopherit
+ * Modified page titles for uniformity.
+ *
  * Revision 1.130  2009/04/09 06:27:04  gopherit
  * Changed CSS "CURSOR: hand" to "CURSOR: pointer".  "hand" is largely unsupported outside of IE and "pointer" is universally supported in all browsers except <= IE 5.5.
  *

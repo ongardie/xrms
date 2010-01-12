@@ -5,7 +5,7 @@
  * Users who do not have admin privileges can update their own
  * user record and password.
  *
- * $Id: self.php,v 1.19 2008/01/30 21:24:22 gpowers Exp $
+ * $Id: self.php,v 1.20 2010/01/12 21:40:07 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -45,7 +45,7 @@ $user_preferences_table=get_user_preferences_table($con);
 require_once('user_roles_sidebar.php');
 $sidebar_rows = $user_role_sidebar . $sidebar_rows;
 
-$page_title = _("One User") . " : " . "$first_names $last_name";
+$page_title = _("Preferences") . " : " . "$first_names $last_name";
 start_page($page_title, true, $msg);
 
 ?>
@@ -116,6 +116,9 @@ end_page();
 
 /**
  *$Log: self.php,v $
+ *Revision 1.20  2010/01/12 21:40:07  gopherit
+ *Modified page titles for uniformity.
+ *
  *Revision 1.19  2008/01/30 21:24:22  gpowers
  *- Changed GMT Offset to Timezone
  *- Added link to list of Timezones

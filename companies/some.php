@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.91 2009/12/15 16:04:26 gopherit Exp $
+ * $Id: some.php,v 1.92 2010/01/12 21:40:07 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -540,7 +540,7 @@ $sidebar_rows_bottom = do_hook_function('company_some_sidebar_bottom', $sidebar_
 /** End of the sidebar includes **/
 /*********************************/
 
-$page_title = _("Search Companies");
+$page_title = _("Companies");
 start_page($page_title, true, $msg);
 
 if ($advanced_search) $field_columns=1;
@@ -1088,6 +1088,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.92  2010/01/12 21:40:07  gopherit
+ * Modified page titles for uniformity.
+ *
  * Revision 1.91  2009/12/15 16:04:26  gopherit
  * Removed trailing whitespace.
  *
