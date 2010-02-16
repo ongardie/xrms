@@ -18,7 +18,7 @@
  * If you are debugging a really thorny problem, you may want to uncomment the second
  * error_reporting line and sort through the Notices.
  *
- * $Id: include-locations.inc,v 1.20 2006/03/16 00:35:16 vanmer Exp $
+ * $Id: include-locations.inc,v 1.21 2010/02/16 18:53:46 gopherit Exp $
  */
 
 //
@@ -33,6 +33,9 @@ if (!defined('IN_XRMS')) {
 // include trailing slash in path
 $include_directory = "/full/path/to/xrms/include/";
 
+// If we are going to go anywhere near the database, harden XRMS first
+require_once($include_directory . 'protect.php');
+
 // Report all errors except E_NOTICE
 // This is the default value set in php.ini
 error_reporting(E_ALL ^E_NOTICE);
@@ -42,6 +45,9 @@ error_reporting(E_ALL ^E_NOTICE);
 
 /**
  * $Log: include-locations.inc,v $
+ * Revision 1.21  2010/02/16 18:53:46  gopherit
+ * Included /include/protect.php file to provide some additional security measures for XRMS.
+ *
  * Revision 1.20  2006/03/16 00:35:16  vanmer
  * - added better notes and a more easily understood example for the include path
  *
