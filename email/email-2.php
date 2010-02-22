@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.28 2008/09/17 12:29:33 randym56 Exp $
+* $Id: email-2.php,v 1.29 2010/02/22 23:29:58 gopherit Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -129,108 +129,62 @@ else
     $_SESSION['attachment_list'] = $attach_list;
 
     }
-/* following code commented out by Randy and replaced at line 178 below
-    $rst->close();
-}
 
-//add fields menu for custom emails
-$con = get_xrms_dbconnection();
-$i=0;
-$sql="SHOW COLUMNS FROM contacts";
-$rst_fields=$con->execute($sql);
-$contacts_menu.="<select name=\"contacts_fields\">\n";
-$arr=$rst_fields->GetRows();
-/*
-I had to do it the way below because this way doesnt work....
-$contacts_menu.=$rst_fields->GetMenu("companies_fields");
-*/
+    //add fields menu for custom emails
+    $i=0;
+    $sql="SHOW COLUMNS FROM contacts";
+    $rst_fields=$con->execute($sql);
+    $contacts_menu.="<select name=\"contacts_fields\">\n";
+    $arr=$rst_fields->GetRows();
+    /*
+    I had to do it the way below because this way doesnt work....
+    $contacts_menu.=$rst_fields->GetMenu("companies_fields");
+    */
+    while ($i <$rst_fields->RecordCount()) {
+                            $contacts_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>\n";
+                            $i++;
+    }
+    $contacts_menu.="</select>";
+    $i=0;
 
-/*
-while ($i <$rst_fields->RecordCount()) {
-                $contacts_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
-                $i++;
-}
-$contacts_menu.="</select>";
-$i=0;
+    $sql="SHOW COLUMNS FROM companies";
+    $rst_fields=$con->execute($sql);
+    $companies_menu.="<select name=\"companies_fields\">\n";
+    $arr=$rst_fields->GetRows();
+    while ($i <$rst_fields->RecordCount()) {
+                            $companies_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>\n";
+                            $i++;
+    }
+    $companies_menu.="</select>";
+    $i=0;
 
-$sql="SHOW COLUMNS FROM companies";
-$rst_fields=$con->execute($sql);
-$companies_menu.="<select name=\"companies_fields\">\n";
-$arr=$rst_fields->GetRows();
-while ($i <$rst_fields->RecordCount()) {
-                $companies_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
-                $i++;
-}
-$companies_menu.="</select>";
-$i=0;
-
-$sql="SHOW COLUMNS FROM addresses";
-$rst_fields=$con->execute($sql);
-$addresses_menu.="<select name=\"addresses_fields\">\n";
-$arr=$rst_fields->GetRows();
-while ($i <$rst_fields->RecordCount()) {
-                $addresses_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
-                $i++;
-}
-$addresses_menu.="</select>";
-
-*/
-
-
-        //add fields menu for custom emails
-        $i=0;
-        $sql="SHOW COLUMNS FROM contacts";
-        $rst_fields=$con->execute($sql);
-        $contacts_menu.="<select name=\"contacts_fields\">\n";
-        $arr=$rst_fields->GetRows();
-        /*
-        I had to do it the way below because this way doesnt work....
-        $contacts_menu.=$rst_fields->GetMenu("companies_fields");
-        */
-        while ($i <$rst_fields->RecordCount()) {
-                                $contacts_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
-                                $i++;
-        }
-        $contacts_menu.="</select>";
-        $i=0;
-
-        $sql="SHOW COLUMNS FROM companies";
-        $rst_fields=$con->execute($sql);
-        $companies_menu.="<select name=\"companies_fields\">\n";
-        $arr=$rst_fields->GetRows();
-        while ($i <$rst_fields->RecordCount()) {
-                                $companies_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
-                                $i++;
-        }
-        $companies_menu.="</select>";
-        $i=0;
-
-        $sql="SHOW COLUMNS FROM addresses";
-        $rst_fields=$con->execute($sql);
-        $addresses_menu.="<select name=\"addresses_fields\">\n";
-        $arr=$rst_fields->GetRows();
-        while ($i <$rst_fields->RecordCount()) {
-                                $addresses_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
-                                $i++;
-        }
-        $addresses_menu.="</select>";
+    $sql="SHOW COLUMNS FROM addresses";
+    $rst_fields=$con->execute($sql);
+    $addresses_menu.="<select name=\"addresses_fields\">\n";
+    $arr=$rst_fields->GetRows();
+    while ($i <$rst_fields->RecordCount()) {
+                            $addresses_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>\n";
+                            $i++;
+    }
+    $addresses_menu.="</select>";
 
     $rst->close();
+    $con->close();
 
-        $user_menu = "<select name=\"user_fields\">\n";
-        $user_menu .= "<option value=\"user_first_names\">user_first_names</option>\n";
-        $user_menu .= "<option value=\"user_last_name\">user_last_name</option>\n";
-        $user_menu .= "<option value=\"user_title\">user_title</option>\n";
-        $user_menu .= "<option value=\"user_company_name\">user_company_name</option>\n";
-        $user_menu .= "<option value=\"user_email\">user_email</option>\n";
-        $user_menu .= "<option value=\"user_phone\">user_phone</option>\n";
-        $user_menu .= "<option value=\"user_fax\">user_fax</option>\n";
-        $user_menu .= "<option value=\"user_cell\">user_cell</option>\n";
-        $user_menu .= "<option value=\"user_custom1\">user_custom1</option>\n";
-        $user_menu .= "<option value=\"user_custom2\">user_custom2</option>\n";
-        $user_menu .= "<option value=\"user_custom3\">user_custom3</option>\n";
-        $user_menu .= "<option value=\"user_custom4\">user_custom4</option>\n";
-        $user_menu .= "</select>";
+    $user_menu = "<select name=\"user_fields\">\n";
+    $user_menu .= "<option value=\"user_first_names\">user_first_names</option>\n";
+    $user_menu .= "<option value=\"user_last_name\">user_last_name</option>\n";
+    $user_menu .= "<option value=\"user_title\">user_title</option>\n";
+    $user_menu .= "<option value=\"user_company_name\">user_company_name</option>\n";
+    $user_menu .= "<option value=\"user_email\">user_email</option>\n";
+    $user_menu .= "<option value=\"user_phone\">user_phone</option>\n";
+    $user_menu .= "<option value=\"user_fax\">user_fax</option>\n";
+    $user_menu .= "<option value=\"user_cell\">user_cell</option>\n";
+    $user_menu .= "<option value=\"user_custom1\">user_custom1</option>\n";
+    $user_menu .= "<option value=\"user_custom2\">user_custom2</option>\n";
+    $user_menu .= "<option value=\"user_custom3\">user_custom3</option>\n";
+    $user_menu .= "<option value=\"user_custom4\">user_custom4</option>\n";
+    $user_menu .= "</select>";
 }
 
 
@@ -353,31 +307,26 @@ myField.value += myValue;
       <tr>
         <td class="widget_content_form_element">
           <table width="75%" border="1" cellpadding="2">
+
             <tr>
-              <td>
-                <?PHP echo _("Contact") . "<BR>" . $contacts_menu; ?>
-              </td>
-              <td><a href="javascript:void(0);" onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].contacts_fields.value+'}');"><?php echo _("Add");?></a></td>
+              <td><?PHP echo _("Contact") . "<BR>" . $contacts_menu; ?></td>
+              <td><a href="javascript:void(0);" onClick="FCKeditorAPI.GetInstance('email_template_body').InsertHtml('{'+document.forms[0].contacts_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
+
             <tr>
-              <td>
-                <?PHP echo _("Household") . "<BR>" . $companies_menu; ?>
-              </td>
-              <td><a href="javascript:void(0);" onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].companies_fields.value+'}');"><?php echo _("Add");?></a>
-                          </td>
+              <td><?PHP echo _("Company") . "<BR>" . $companies_menu; ?></td>
+              <td><a href="javascript:void(0);" onClick="FCKeditorAPI.GetInstance('email_template_body').InsertHtml('{'+document.forms[0].companies_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
+
             <tr>
-              <td>
-                <?PHP echo _("Addresse") . "<BR>" . $addresses_menu; ?>
-              </td>
-              <td><a href="javascript:void(0);" onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].addresses_fields.value+'}');"><?php echo _("Add");?></a></td>
+              <td><?PHP echo _("Address") . "<BR>" . $addresses_menu; ?></td>
+              <td><a href="javascript:void(0);" onClick="FCKeditorAPI.GetInstance('email_template_body').InsertHtml('{'+document.forms[0].addresses_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
+
 <?php if ($my_company_id > 0) { //only show if company ID is set in /include/vars.php?>
             <tr>
-              <td>
-                <?PHP echo _("User") . "<BR>" . $user_menu; ?>
-              </td>
-              <td><a href="javascript:void(0);" onClick="tinyMCE.execInstanceCommand('email_template_body','mceInsertContent',true,'{'+document.forms[0].user_fields.value+'}');"><?php echo _("Add");?></a></td>
+              <td><?PHP echo _("User") . "<BR>" . $user_menu; ?></td>
+              <td><a href="javascript:void(0);" onClick="FCKeditorAPI.GetInstance('email_template_body').InsertHtml('{'+document.forms[0].user_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
 <?php } ?>
             <tr>
@@ -509,6 +458,9 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.29  2010/02/22 23:29:58  gopherit
+* Fixed: The eMail Merge template editing interface was not updated to reflect the switch to FCKEditor.  See Bug artifact #2956781.
+*
 * Revision 1.28  2008/09/17 12:29:33  randym56
 * - Replaced TinyMCE with FCKEditor for GUI interface.
 * - Relocated FCKEditor in XRMS core from include folder to js folder
