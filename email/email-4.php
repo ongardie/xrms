@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.38 2008/05/29 14:10:54 randym56 Exp $
+* $Id: email-4.php,v 1.39 2010/02/24 22:33:51 gopherit Exp $
 *
 * @todo use a more secure method than 'unlink' to delete files after sending them
 */
@@ -24,75 +24,72 @@ $msg = $_GET['msg'];
 $optout = $_POST['optout'];
 
 // check to see if we sent this message already
-if ( $_SESSION['email_sent'] === false )
-{
+if ( $_SESSION['email_sent'] === false ) {
 
-$array_of_contacts = $_POST['array_of_contacts'];
+    $array_of_contacts = $_POST['array_of_contacts'];
 
-$sender_name = unserialize($_SESSION['sender_name']);
-$sender_address = unserialize($_SESSION['sender_address']);
-$bcc_address = unserialize($_SESSION['bcc_address']);
-$email_template_title = unserialize($_SESSION['email_template_title']);
-$email_template_body = unserialize($_SESSION['email_template_body']);
+    $sender_name = unserialize($_SESSION['sender_name']);
+    $sender_address = unserialize($_SESSION['sender_address']);
+    $bcc_address = unserialize($_SESSION['bcc_address']);
+    $email_template_title = unserialize($_SESSION['email_template_title']);
+    $email_template_body = unserialize($_SESSION['email_template_body']);
 
-$uploadDir = $GLOBALS['file_storage_directory'];
-$attachment_list = $_SESSION['attachment_list'];
+    $uploadDir = $GLOBALS['file_storage_directory'];
+    $attachment_list = $_SESSION['attachment_list'];
 
-// Loop through entire FILES list and atache them to the message
-if ( $attachment_list )
-{
-        foreach ( $attachment_list as $_ugly => $_file )
-        {
-                if ( $_file == '' )
-                continue;
+    // Loop through entire FILES list and atache them to the message
+    if ( $attachment_list ) {
+        foreach ( $attachment_list as $_ugly => $_file ) {
 
-                // Create array to store file data
-                $_fileData[$_file] = array();
+            // Skip blank file entries
+            if ( $_file == '' ) continue;
 
-                // Full path
-                $_fileData[$_file]['path'] = $GLOBALS['file_storage_directory'] . $_ugly;
+            // Create array to store file data
+            $_fileData[$_file] = array();
 
-                // NOTE: comented this out until we figure out why PHP method barfs
-                //    if (!function_exists('mime_content_type')) {
-                // this version of PHP doesn't have the mime functions
-                // compiled in, so load our drop-in replacement function
-                // instead
-                require_once($include_directory . 'mime/mime-array.php');
-                //    }
-                // we need the file's MIME type
-                $_fileData[$_file]['mime'] = mime_content_type_ ( $_file );
+            // Full path
+            $_fileData[$_file]['path'] = $GLOBALS['file_storage_directory'] . $_ugly;
 
-                // we need the file itself
-                $_fileData[$_file]['content'] = getFile($_fileData[$_file]['path']);
+            // NOTE: comented this out until we figure out why PHP method barfs
+            //    if (!function_exists('mime_content_type')) {
+            // this version of PHP doesn't have the mime functions
+            // compiled in, so load our drop-in replacement function
+            // instead
+            require_once($include_directory . 'mime/mime-array.php');
+            //    }
+            // we need the file's MIME type
+            $_fileData[$_file]['mime'] = mime_content_type_ ( $_file );
 
-                // We need the these later
-                $_fileData[$_file]['file_filesystem_name'] = $_ugly;
-                $_fileData[$_file]['size']                 = strlen($_fileData[$_file]['content']);
+            // we need the file itself
+            $_fileData[$_file]['content'] = getFile($_fileData[$_file]['path']);
+
+            // We need the these later
+            $_fileData[$_file]['file_filesystem_name'] = $_ugly;
+            $_fileData[$_file]['size']                 = strlen($_fileData[$_file]['content']);
         }
-}
+    }
 
-$con = get_xrms_dbconnection();
-//$con->debug = 1;
+    $con = get_xrms_dbconnection();
+    //$con->debug = 1;
 
-if (is_array($array_of_contacts)) {
+    if (is_array($array_of_contacts)) {
         $imploded_contacts = implode(',', $array_of_contacts);
-} elseif (is_numeric($array_of_contacts)) {
+    } elseif (is_numeric($array_of_contacts)) {
         $imploded_contacts= $array_of_contacts;
-}else {
-		$page_title = _("Messages Cannot Be Sent");
-		$msg = "WARNING: No array of contacts!";
-		start_page($page_title, true, $msg);
-		end_page();
-		exit;
-}
-// loop through the contacts and send each one a copy of the message
-$sql = "select * from contacts where contact_id in (" . $imploded_contacts . ")";
-$rst = $con->execute($sql);
+    } else {
+        $page_title = _("Messages Cannot Be Sent");
+        $msg = "WARNING: No array of contacts!";
+        start_page($page_title, true, $msg);
+        end_page();
+        exit;
+    }
+    // loop through the contacts and send each one a copy of the message
+    $sql = "select * from contacts where contact_id in (" . $imploded_contacts . ")";
+    $rst = $con->execute($sql);
 
-//$user_contact_id = $_SESSION['user_contact_id'];
+    //$user_contact_id = $_SESSION['user_contact_id'];
 
-
-if ($rst) {
+    if ($rst) {
         // activity Type
         $activity_type_id = get_activity_type($con, 'ETO');
         $activity_type_id = $activity_type_id['activity_type_id'];
@@ -107,226 +104,215 @@ if ($rst) {
         $activity_participant_position_id = current ( $activity_participant_position_id );
         $activity_participant_position_id = $activity_participant_position_id['activity_participant_position_id'];
 
+        $feedback = '<ul>';
+
         require_once ( $include_directory . 'classes/SMTPs/SMTPs.php' );
 
-        while (!$rst->EOF)
-        {
-                //Not quite sure of the purpose of this code...I would have put it into a function instead...Nic Lowe
-                $_email_addr = $rst->fields['email'];
-                $_full_name = '';
-                if ( $rst->fields['first_names'] ){
-                        $_full_name .= $rst->fields['first_names'] . ' ';
-                        $_full_name .= $rst->fields['last_name'];
-                }
-                if ( $_full_name )
-                {
-                        if ( $rst->fields['salutation'] )
-                        $_sal = 'Dear ' . $rst->fields['salutation'] . ' ' . $_full_name . ',' . "\r\n\r\n";
-                        $_email_full = '"' . $_full_name . '" <' . $_email_addr . '>';
-                }
-                else
-                {
-                        $_sal = '';
-                        $_email_full = '<' . $_email_addr . '>';
-                }
+        while (!$rst->EOF) {
+            //Not quite sure of the purpose of this code...I would have put it into a function instead...Nic Lowe
+            $_email_addr = $rst->fields['email'];
+            $_full_name = '';
+            if ( $rst->fields['first_names'] ) {
+                    $_full_name .= $rst->fields['first_names'] .' '. $rst->fields['last_name'];
+            }
+            if ( $_full_name ) {
+                if ( $rst->fields['salutation'] )
+                    $_sal = 'Dear ' . $rst->fields['salutation'] . ' ' . $_full_name . ',' . "\r\n\r\n";
+                    $_email_full = '"' . $_full_name . '" <' . $_email_addr . '>';
+            } else {
+                $_sal = '';
+                $_email_full = '<' . $_email_addr . '>';
+            }
 
-                //here is where we do the mail merge of the variables
-                include_once "mail_merge_functions.inc";
-//echo addslashes($email_template_body); //debug
+            //here is where we do the mail merge of the variables
+            include_once "mail_merge_functions.inc";
+            //echo addslashes($email_template_body); //debug
 
-                // add opt-out message at bottom of e-mail if check box is selected
-                if ($optout=='on') {
+            // add opt-out message at bottom of e-mail if check box is selected
+            if ($optout=='on') {
                 $optout_id = $rst->fields['contact_id'] * 195 / 2 * 1956;
-                $output1=$email_template_body . "<br><center>To unsubscribe from this email newsletter instantly, click this link: <a href=\"" . $http_site_root .              "/email/optout.php?optout_id=" . $optout_id . "&email=" . $_email_addr . "\">UNSUBSCRIBE</a></center>";
-                } else $output1 = $email_template_body;
+                $output1=$email_template_body . "<br /><center>To unsubscribe from this email newsletter instantly, click this link: <a href=\"". $http_site_root . "/email/optout.php?optout_id=". $optout_id ."&email=". $_email_addr ."\">UNSUBSCRIBE</a></center>";
+            } else {
+                $output1 = $email_template_body;
+            }
 
-                        $m=mail_merge_email($email_template_title,$output1,$rst->fields['contact_id'],false);
-                        $msg_subject=$m[0];
-                        $msg_body=$m[1];
+            $m=mail_merge_email($email_template_title,$output1,$rst->fields['contact_id'],false);
+            $msg_subject=$m[0];
+            $msg_body=$m[1];
 
-//echo stripslashes($msg_body); //debug
-                        $objSMTP = new SMTPs ();
-                        $objSMTP->setConfig($include_directory.'classes/SMTPs/SMTPs.ini.php');
-                        $objSMTP->setFrom ( $sender_name . '<' . $sender_address . '>' );
-                        $objSMTP->setSubject ( stripslashes($msg_subject) );
-                        $objSMTP->setTo ( $_email_full );
-                        $objSMTP->setSensitivity(0); //1 = personal
+            //echo stripslashes($msg_body); //debug
+            $objSMTP = new SMTPs ();
+            $objSMTP->setConfig($include_directory.'classes/SMTPs/SMTPs.ini.php');
+            $objSMTP->setFrom ( $sender_name . ' <' . $sender_address . '>' );
+            $objSMTP->setSubject ( stripslashes($msg_subject) );
+            $objSMTP->setTo ( $_email_full );
+            $objSMTP->setSensitivity(0); //1 = personal
 
-                        // If we have any attachements, attach them
-                        if ( $_fileData )
-                        {
-                                // Attach each file in turn
-                                foreach ( $_fileData as $_file => $_data )
-                                {
-                                        // Add the attachments
-                                        $objSMTP->setAttachment ( $_data['content'], $_file, $_data['mime'] );
-                                }
-                        }
-
-                        $output = $msg_body;
-                        if (!$output) $output = ' ';
-
-                        # Text Version
-                        $msg1 = str_replace("<br>", "\n", $output);
-                        $msg1 = str_replace("<p>", "\n\n", $msg1);
-                        $msg1 = str_replace("<BR>", "\n", $msg1);
-                        $msg1 = str_replace("<P>", "\n\n", $msg1);
-                        $msg1 = str_replace("<br />", "\n", $msg1);
-                        $msg1 = str_replace("&nbsp;", " ", $msg1);
-                        $txt = strip_tags($msg1);
-                        //echo "Text: ".$txt."<hr>";
-                        //$objSMTP->setBodyContent ( $txt );
-                        $objSMTP->setBodyContent ($output,'html');
-                        $objSMTP->setTransEncodeType(0); //0=7bit, 1=8bit
-                        $objSMTP->setMD5flag(true);
-                        $objSMTP->setSensitivity(0); //0=none
-                        $objSMTP->setPriority(3); //3=normal
-
-                        //this line of code sends the message to the SMTP server
-                        $mail_result=$objSMTP->sendMsg ();
-
-                        //the $mail_result variable checks to see whether it went or not..
-                        if($mail_result){
-                                $feedback .= "<li>". $rst->fields['email'] ."</li>";
-                        }else{
-                                $feedback .= "<font color=red><li>FAILED:". $rst->fields['email'] .":".$objSMTP->getErrors()."</li></font>";
-                        }
-
-                        //add activity - check the to see that the mail worked first before you add the activity though........
-                        // Create "activity" log
-                        if($mail_result){
-                        $activity_data['contact_id']           = $rst->fields['contact_id']; // the contact this activity related to
-                        $activity_data['activity_type_id']     = $activity_type_id;  // is pulled from activity_type table
-                        $activity_data['company_id']           = $rst->fields['company_id']; // which company is this activity related to
-                        $activity_data['activity_title']       = 'eMail: ' . $msg_subject;
-                        $activity_data['activity_description'] = 'Bulk email sent';
-                        $activity_data['activity_status']      = 'c';         // Closed status
-                        $activity_data['completed_bol']        = true;           // activity is completed
-
-                        $participants = array( 'contact_id' => $rst->fields['contact_id'],'activity_participant_position_id' => $activity_participant_position_id);
-
-                        //this line adds the activity..
-                        if ( $activity_id = add_activity($con, $activity_data, $participants ) )
-                        {
-                                // Loop through the attched files, if any
-                                // and add them to the FILES table
-                                //.....this big and nested and seemingly complex code could be better done in a separate function...Nic Lowe..
-                                if ( $_fileData )
-                                {
-                                        foreach ( $_fileData as $_file => $data )
-                                        {
-                                                // Create new RECORD array '$rec' for SQL INSERT
-                                                $rec = array();
-
-                                                // File data
-                                                $rec['file_filesystem_name']   = $_file;
-                                                $rec['file_name']              = $_file;
-                                                $rec['file_size']              = $_fileData[$_file]['size'];
-                                                $rec['file_type']              = $_fileData[$_file]['mime'];
-
-                                                // These values, if not defined, will be set by default values defined within the Database
-                                                // Therefore they do not need to be created within this array for RECORD insertion
-                                                $rec['on_what_table'] = 'activities';
-                                                $rec['on_what_id']    = $activity_id;
-
-                                                // Add record to FILES table
-                                                if ( $file_id = add_file_record ( $con, $rec ) )
-                                                {
-                                                        // Now we need to UPDATE that same record
-                                                        // We need to RENAME the 'file_filesystem_name' name with the record ID
-                                                        // and a random string for a "secure" file name
-                                                        $rec = array();
-                                                        $rec['file_id']              = $file_id;
-                                                        $rec['file_filesystem_name'] = $file_id . '_' . random_string ( 24 );
-
-                                                        if ( $_results = modify_file_record( $con, $rec ) )
-                                                        {
-                                                                // Write the contents out to disk
-                                                                $_fullPath = $GLOBALS['file_storage_directory'] . $rec['file_filesystem_name'];
-                                                                $fp = fopen  ($_fullPath, 'w+b');
-                                                                fputs  ($fp, $_fileData[$_file]['content'] );
-                                                                fclose ($fp);
-                                                        }
-                                                }
-                                        }
-                                }
-                        }
+            // If we have any attachements, attach them
+            if ( $_fileData ) {
+                // Attach each file in turn
+                foreach ( $_fileData as $_file => $_data ) {
+                    // Add the attachments
+                    $objSMTP->setAttachment ( $_data['content'], $_file, $_data['mime'] );
                 }
-                //Move to the next record in the contact data array you passed this script
-                $rst->movenext();
-        }
-// END WHILE email addesses
+            }
 
-if ($bcc_address) {
-//send only one copy of a bulk mail to the BCC to prevent multiple BCCs
-        $objSMTP = new SMTPs ();
-        $objSMTP->setConfig($include_directory.'classes/SMTPs/SMTPs.ini.php');
-        $objSMTP->setFrom ( $sender_name . '<' . $sender_address . '>' );
-        $msg_subject = "BCC: ".$msg_subject;
-        $objSMTP->setSubject ( stripslashes($msg_subject) );
-        $objSMTP->setTo ( $bcc_address );
-        $objSMTP->setSensitivity(0); //1 = personal
+            $output = $msg_body;
+            if (!$output) $output = ' ';
 
-        // If we have any attachements, attach them
-        if ( $_fileData )
-        {
-                        // Attach each file in turn
-                        foreach ( $_fileData as $_file => $_data )
-                        {
-                                        // Add the attachments
-                                        $objSMTP->setAttachment ( $_data['content'], $_file, $_data['mime'] );
+            # Text Version
+            $msg1 = str_replace("<br>", "\n", $output);
+            $msg1 = str_replace("<p>", "\n\n", $msg1);
+            $msg1 = str_replace("<BR>", "\n", $msg1);
+            $msg1 = str_replace("<P>", "\n\n", $msg1);
+            $msg1 = str_replace("<br />", "\n", $msg1);
+            $msg1 = str_replace("&nbsp;", " ", $msg1);
+            $txt = strip_tags($msg1);
+            //echo "Text: ".$txt."<hr>";
+            //$objSMTP->setBodyContent ( $txt );
+            $objSMTP->setBodyContent ($output,'html');
+            $objSMTP->setTransEncodeType(0); //0=7bit, 1=8bit
+            $objSMTP->setMD5flag(true);
+            $objSMTP->setSensitivity(0); //0=none
+            $objSMTP->setPriority(3); //3=normal
+
+            //this line of code sends the message to the SMTP server
+            $mail_result=$objSMTP->sendMsg ();
+
+            //the $mail_result variable checks to see whether it went or not..
+            if ($mail_result) {
+                    $feedback .= "<li>". $rst->fields['email'] ."</li>";
+            } else {
+                    $feedback .= "<font color=red><li>FAILED:". $rst->fields['email'] .":".$objSMTP->getErrors()."</li></font>";
+            }
+
+            //add activity - check the to see that the mail worked first before you add the activity though........
+            // Create "activity" log
+            if ($mail_result) {
+                $activity_data['contact_id']           = $rst->fields['contact_id']; // the contact this activity related to
+                $activity_data['activity_type_id']     = $activity_type_id;  // is pulled from activity_type table
+                $activity_data['company_id']           = $rst->fields['company_id']; // which company is this activity related to
+                $activity_data['activity_title']       = 'eMail: ' . $msg_subject;
+                $activity_data['activity_description'] = 'Bulk email sent';
+                $activity_data['activity_status']      = 'c';         // Closed status
+                $activity_data['completed_bol']        = true;           // activity is completed
+
+                $participants = array( 'contact_id' => $rst->fields['contact_id'],'activity_participant_position_id' => $activity_participant_position_id);
+
+                //this line adds the activity..
+                if ( $activity_id = add_activity($con, $activity_data, $participants ) ) {
+                    // Loop through the attched files, if any
+                    // and add them to the FILES table
+                    //.....this big and nested and seemingly complex code could be better done in a separate function...Nic Lowe..
+                    if ( $_fileData ) {
+                        foreach ( $_fileData as $_file => $data ) {
+                            // Create new RECORD array '$rec' for SQL INSERT
+                            $rec = array();
+
+                            // File data
+                            $rec['file_filesystem_name']   = $_file;
+                            $rec['file_name']              = $_file;
+                            $rec['file_size']              = $_fileData[$_file]['size'];
+                            $rec['file_type']              = $_fileData[$_file]['mime'];
+
+                            // These values, if not defined, will be set by default values defined within the Database
+                            // Therefore they do not need to be created within this array for RECORD insertion
+                            $rec['on_what_table'] = 'activities';
+                            $rec['on_what_id']    = $activity_id;
+
+                            // Add record to FILES table
+                            if ( $file_id = add_file_record ( $con, $rec ) ) {
+                                // Now we need to UPDATE that same record
+                                // We need to RENAME the 'file_filesystem_name' name with the record ID
+                                // and a random string for a "secure" file name
+                                $rec = array();
+                                $rec['file_id']              = $file_id;
+                                $rec['file_filesystem_name'] = $file_id . '_' . random_string ( 24 );
+
+                                if ( $_results = modify_file_record( $con, $rec ) ) {
+                                    // Write the contents out to disk
+                                    $_fullPath = $GLOBALS['file_storage_directory'] . $rec['file_filesystem_name'];
+                                    $fp = fopen  ($_fullPath, 'w+b');
+                                    fputs  ($fp, $_fileData[$_file]['content'] );
+                                    fclose ($fp);
+                                }
+                            }
                         }
+                    }
+                }
+            }
+            //Move to the next record in the contact data array you passed this script
+            $rst->movenext();
+
+        } // END WHILE email addesses
+
+        if ($bcc_address) {
+            //send only one copy of a bulk mail to the BCC to prevent multiple BCCs
+            $objSMTP = new SMTPs ();
+            $objSMTP->setConfig($include_directory.'classes/SMTPs/SMTPs.ini.php');
+            $objSMTP->setFrom ( $sender_name . '<' . $sender_address . '>' );
+            $msg_subject = "BCC: ".$msg_subject;
+            $objSMTP->setSubject ( stripslashes($msg_subject) );
+            $objSMTP->setTo ( $bcc_address );
+            $objSMTP->setSensitivity(0); //1 = personal
+
+            // If we have any attachements, attach them
+            if ( $_fileData ) {
+                // Attach each file in turn
+                foreach ( $_fileData as $_file => $_data ) {
+                    // Add the attachments
+                    $objSMTP->setAttachment ( $_data['content'], $_file, $_data['mime'] );
+                }
+            }
+
+            $output = $msg_body;
+            if (!$output) $output = ' ';
+
+            # Text Version
+            $msg1 = str_replace("<br>", "\n", $output);
+            $msg1 = str_replace("<p>", "\n\n", $msg1);
+            $msg1 = str_replace("<BR>", "\n", $msg1);
+            $msg1 = str_replace("<P>", "\n\n", $msg1);
+            $msg1 = str_replace("<br />", "\n", $msg1);
+            $msg1 = str_replace("&nbsp;", " ", $msg1);
+            $txt = strip_tags($msg1);
+            //echo "Text: ".$txt."<hr>";
+            //$objSMTP->setBodyContent ( $txt );
+            $objSMTP->setBodyContent ($output,'html');
+            $objSMTP->setTransEncodeType(0); //0=7bit, 1=8bit
+            $objSMTP->setMD5flag(true);
+            $objSMTP->setSensitivity(0); //0=none
+            $objSMTP->setPriority(3); //3=normal
+
+            //this line of code sends the message to the SMTP server
+            $mail_result=$objSMTP->sendMsg ();
         }
 
-        $output = $msg_body;
-        if (!$output) $output = ' ';
+    $rst->close();
 
-        # Text Version
-        $msg1 = str_replace("<br>", "\n", $output);
-        $msg1 = str_replace("<p>", "\n\n", $msg1);
-        $msg1 = str_replace("<BR>", "\n", $msg1);
-        $msg1 = str_replace("<P>", "\n\n", $msg1);
-        $msg1 = str_replace("<br />", "\n", $msg1);
-        $msg1 = str_replace("&nbsp;", " ", $msg1);
-        $txt = strip_tags($msg1);
-        //echo "Text: ".$txt."<hr>";
-        //$objSMTP->setBodyContent ( $txt );
-        $objSMTP->setBodyContent ($output,'html');
-        $objSMTP->setTransEncodeType(0); //0=7bit, 1=8bit
-        $objSMTP->setMD5flag(true);
-        $objSMTP->setSensitivity(0); //0=none
-        $objSMTP->setPriority(3); //3=normal
+    // Set our flag to indiate this message has been sent already
+    $_SESSION['email_sent'] = true;
 
-        //this line of code sends the message to the SMTP server
-        $mail_result=$objSMTP->sendMsg ();
-        }
-
-$rst->close();
-
-// Set our flag to indiate this message has been sent already
-$_SESSION['email_sent'] = true;
-
-$feedback .= "<BR><hr /><sample><strong>Subject:</strong></sample><BR>".nl2br(htmlspecialchars($email_template_title))."<BR><BR><sample><strong>Body:</strong></sample><BR>".nl2br(htmlspecialchars($email_template_body));
+    $feedback .= "</ul><br /><hr /><samp><strong>Subject:</strong></samp><BR>".nl2br(htmlspecialchars($email_template_title))."<br /><br /><samp><strong>Body:</strong></samp><BR>".nl2br(htmlspecialchars($email_template_body));
 
 
-}
-// Failed to create contact list
-else
-{
-                        db_error_handler($con, $sql);
-}
+    } else {
+    // Failed to create contact list
+        db_error_handler($con, $sql);
+    }
 
-if ( $attachment_list ) {
+    if ( $attachment_list ) {
         foreach ( $attachment_list as $_file1 ){
-                $old_fullPath = $GLOBALS['file_storage_directory'] . $_file1;
-                /** @todo eventually unlink should be replaced by a more secure method **/
-                unlink ($old_fullPath);
+            $old_fullPath = $GLOBALS['file_storage_directory'] . $_file1;
+            /** @todo eventually unlink should be replaced by a more secure method **/
+            unlink ($old_fullPath);
         }
-}
+    }
 
-$con->close();
+    $con->close();
+
 } else { // Message has been sent already!
-$feedback = '<p /><b>' . _("This email message has already been sent") . '.</b>';
+    $feedback = '<p /><b>' . _("This email message has already been sent") . '.</b>';
 }
 
 
@@ -390,6 +376,9 @@ end_page();
 // =============================================================
 /**
 * $Log: email-4.php,v $
+* Revision 1.39  2010/02/24 22:33:51  gopherit
+* Cleaned up and reorganized the script code.  More can be done in that regard yet.
+*
 * Revision 1.38  2008/05/29 14:10:54  randym56
 * clean up no-contacts error message
 *
