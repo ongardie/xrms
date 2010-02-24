@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.24 2010/02/24 18:20:29 gopherit Exp $
+ * $Id: email-3.php,v 1.25 2010/02/24 18:25:18 gopherit Exp $
  */
 
 
@@ -188,6 +188,9 @@ start_page($page_title, true, $msg);
                         <input type=button value="Uncheck All" onClick="uncheckAll()">&nbsp;
                         <input type=button value="Switch All" onClick="switchAll()">
                     </td>
+                </tr>
+
+                <tr>
                     <td class="widget_content_form_element" colspan="6">
                         <font color="#FF0000"><strong>NOTE: Selecting more than 10 contacts may take a <u>long time</u>... Please be patient - DO NOT REFRESH or Click Send more than ONE TIME or you may send mail multiple times to the same contacts.</strong></font>
                     </td>
@@ -212,6 +215,9 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.25  2010/02/24 18:25:18  gopherit
+ * Oops... Submitted older file version with a missing <tr> tag.  All good now.
+ *
  * Revision 1.24  2010/02/24 18:20:29  gopherit
  * Fixed: Added JavaScript for the 'Check All', 'Uncheck All' and 'Switch All' buttons functionality.  See Bug artifact #2958093.
  *
