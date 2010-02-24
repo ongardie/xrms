@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.23 2007/10/27 01:36:49 randym56 Exp $
+ * $Id: email-3.php,v 1.24 2010/02/24 18:20:29 gopherit Exp $
  */
 
 
@@ -117,7 +117,7 @@ if ($rst) {
         $contact_rows .= '<td class="widget_content">' . $rst->fields['username'] . '</td>';
         $contact_rows .= '<td class="widget_content">' . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</td>';
         $contact_rows .= '<td class="widget_content">' . $rst->fields['email'] . '</td>';
-                                $contact_rows .= '<td class="widget_content"><a href="email_merge_preview.php?contact_id='.$rst->fields['contact_id'].'&company_id='.$rst->fields['company_id'].'" target=_blank>Preview</a></td>';
+        $contact_rows .= '<td class="widget_content"><a href="email_merge_preview.php?contact_id='.$rst->fields['contact_id'].'&company_id='.$rst->fields['company_id'].'" target=_blank>Preview</a></td>';
         $contact_rows .= "</tr>\n";
         $rst->movenext();
     }
@@ -137,35 +137,62 @@ start_page($page_title, true, $msg);
 
 ?>
 
+<script type="text/javascript"><!--
+
+    function checkAll() {
+        for (i = 1; i < <?php echo $_x; ?>; i++)
+            document.getElementById('array_of_contacts_' + i).checked = true ;
+    }
+
+    function uncheckAll() {
+        for (i = 1; i < <?php echo $_x; ?>; i++)
+            document.getElementById('array_of_contacts_' + i).checked = false ;
+    }
+    function switchAll() {
+        for (i = 1; i < <?php echo $_x; ?>; i++)
+            if (document.getElementById('array_of_contacts_' + i).checked == true)
+                document.getElementById('array_of_contacts_' + i).checked = false;
+            else
+                document.getElementById('array_of_contacts_' + i).checked = true ;
+    }
+//--></script>
+
+
 <div id="Main">
     <div id="Content">
-
         <form action="email-4.php" method="post" name="sendmail">
-        <table class="widget" cellspacing="1">
-            <tr>
-                <td class=widget_header colspan=6><?php echo _("Confirm Recipients"); ?></td>
-            </tr>
-            <tr>
-                <td class="widget_label">&nbsp;</td>
-                <td class="widget_label"><?php echo _("Household"); ?></td>
-                <td class="widget_label"><?php echo _("Owner"); ?></td>
-                <td class="widget_label"><?php echo _("Contact"); ?></td>
-                <td class="widget_label"><?php echo _("E-Mail"); ?></td>
-                                                                <td class="widget_label"><?php echo _("Preview"); ?></td>
-            </tr>
-            <?php  echo $contact_rows ?>
-            <tr>
-              <td class="widget_content_form_element" colspan="6">
-                    <input type="submit" class="button" value="<?php echo _("Continue"); ?>">&nbsp;
-                                        <?php if ($show_opt_out) {?>
-                                        <input type="checkbox" name="optout">Opt-Out Message?&nbsp;
-                                        <?php } ?>
-                                        <input type=button value="Check All" onClick="checkAll('sendmail','array_of_contacts_',<?php echo $count; ?>)">&nbsp;
-                                        <input type=button value="Uncheck All" onClick="uncheckAll('sendmail','array_of_contacts_',<?php echo $count; ?>)">&nbsp;
-                                        <input type=button value="Switch All" onClick="switchAll('sendmail','array_of_contacts_',<?php echo $count; ?>)"> <br>
-                                <font color="#FF0000"><strong>NOTE: Selecting more than 10 contacts may take a <u>long time</u>... Please be patient - DO NOT REFRESH or Click Send more than ONE TIME or you may send mail multiple times to the same contacts.            </strong></font><strong>    </strong></td>
-            </tr>
-        </table>
+            <table class="widget" cellspacing="1">
+
+                <tr>
+                    <td class=widget_header colspan=6><?php echo _("Confirm Recipients"); ?></td>
+                </tr>
+
+                <tr>
+                    <td class="widget_label">&nbsp;</td>
+                    <td class="widget_label"><?php echo _("Company"); ?></td>
+                    <td class="widget_label"><?php echo _("Owner"); ?></td>
+                    <td class="widget_label"><?php echo _("Contact"); ?></td>
+                    <td class="widget_label"><?php echo _("E-Mail"); ?></td>
+                    <td class="widget_label"><?php echo _("Preview"); ?></td>
+                </tr>
+
+                <?php  echo $contact_rows ?>
+
+                <tr>
+                    <td class="widget_content_form_element" colspan="6">
+                        <input type="submit" class="button" value="<?php echo _("Continue"); ?>">&nbsp;
+                            <?php if ($show_opt_out) {?>
+                                <input type="checkbox" name="optout"><?php echo _("Opt-Out Message"); ?>?&nbsp;
+                            <?php } ?>
+                        <input type=button value="Check All" onClick="checkAll()">&nbsp;
+                        <input type=button value="Uncheck All" onClick="uncheckAll()">&nbsp;
+                        <input type=button value="Switch All" onClick="switchAll()">
+                    </td>
+                    <td class="widget_content_form_element" colspan="6">
+                        <font color="#FF0000"><strong>NOTE: Selecting more than 10 contacts may take a <u>long time</u>... Please be patient - DO NOT REFRESH or Click Send more than ONE TIME or you may send mail multiple times to the same contacts.</strong></font>
+                    </td>
+                </tr>
+            </table>
         </form>
 
     </div>
@@ -185,6 +212,9 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.24  2010/02/24 18:20:29  gopherit
+ * Fixed: Added JavaScript for the 'Check All', 'Uncheck All' and 'Switch All' buttons functionality.  See Bug artifact #2958093.
+ *
  * Revision 1.23  2007/10/27 01:36:49  randym56
  * 1. Fixed BCC (was not working at all)
  * 2. Added the function to put custom fields for user sending the email (if the user has a related contact record).
