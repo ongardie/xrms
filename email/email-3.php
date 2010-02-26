@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.25 2010/02/24 18:25:18 gopherit Exp $
+ * $Id: email-3.php,v 1.26 2010/02/26 19:45:32 gopherit Exp $
  */
 
 
@@ -132,6 +132,12 @@ if ($rst_opt_out->fields['user_preference_value'] == 'y') $show_opt_out = true; 
 
 $con->close();
 
+// Provide a hook to allow plugins to use their own bulk mailer scripts
+// rather than the built-in SMTP.
+$bulk_mailer = do_hook_function('bulk_mailer', $http_site_root);
+if (!$bulk_mailer)
+    $bulk_mailer = "email-4.php";
+
 $page_title = _("Confirm Recipients");
 start_page($page_title, true, $msg);
 
@@ -160,7 +166,7 @@ start_page($page_title, true, $msg);
 
 <div id="Main">
     <div id="Content">
-        <form action="email-4.php" method="post" name="sendmail">
+        <form action="<?php echo $bulk_mailer; ?>" method="post" name="sendmail">
             <table class="widget" cellspacing="1">
 
                 <tr>
@@ -215,6 +221,9 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.26  2010/02/26 19:45:32  gopherit
+ * Provided a 'bulk_mailer' hook to allow plugins to use their own bulk mailer scripts rather than the built-in SMTP.
+ *
  * Revision 1.25  2010/02/24 18:25:18  gopherit
  * Oops... Submitted older file version with a missing <tr> tag.  All good now.
  *
