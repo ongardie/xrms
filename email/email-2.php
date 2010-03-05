@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.29 2010/02/22 23:29:58 gopherit Exp $
+* $Id: email-2.php,v 1.30 2010/03/05 19:25:03 gopherit Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -18,12 +18,13 @@ include($fckeditor_location . 'fckeditor.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
+$return_url = $_GET['return_url'];
 
     //Turn $_POST array into variables
     extract($_POST);
 
-if ( $_POST['act'] == 'add' )
-{
+if ( $_POST['act'] == 'add' ) {
+
     require_once $include_directory . 'classes/File/file_upload.php';
 
     // Create new Class
@@ -71,9 +72,8 @@ if ( $_POST['act'] == 'add' )
     // now prep array for passing around
     $_SESSION['attachment_list'] = $attach_list;
 
-}
-else if ( $_POST['act'] == 'del' )
-{
+} else if ( $_POST['act'] == 'del' ) {
+
     // get attached files list to remove
     $attachedFile = $_POST['attachedFile'];
 
@@ -84,13 +84,13 @@ else if ( $_POST['act'] == 'del' )
     foreach ( $attachedFile as $_killFile )
     {
         unset ( $attach_list[$_killFile] );
+        unlink ($file_storage_directory . $_killFile);
     }
 
     // now prep array for passing around
     $_SESSION['attachment_list'] = $attach_list;
 }
-else
-{
+
     $email_template_id = (strlen($_POST['email_template_id']) > 0) ? $_POST['email_template_id'] : $_GET['email_template_id'];
 
     $con = get_xrms_dbconnection();
@@ -185,8 +185,6 @@ else
     $user_menu .= "<option value=\"user_custom3\">user_custom3</option>\n";
     $user_menu .= "<option value=\"user_custom4\">user_custom4</option>\n";
     $user_menu .= "</select>";
-}
-
 
 function createFileList ()
 {
@@ -233,28 +231,29 @@ function nextPage( $_where, $_what )
 </script>
 <script>
 function insertAtCursor(myField, myValue) {
-//IE support
-if (document.selection) {
-myField.focus();
-sel = document.selection.createRange();
-sel.text = myValue;
-}
-//MOZILLA/NETSCAPE support
-else if (myField.selectionStart || myField.selectionStart == '0') {
-var startPos = myField.selectionStart;
-var endPos = myField.selectionEnd;
-myField.value = myField.value.substring(0, startPos)
-+ myValue
-+ myField.value.substring(endPos, myField.value.length);
-} else {
-myField.value += myValue;
-}
+
+    //IE support
+    if (document.selection) {
+        myField.focus();
+        sel = document.selection.createRange();
+        sel.text = myValue;
+    }
+    //MOZILLA/NETSCAPE support
+    else if (myField.selectionStart || myField.selectionStart == '0') {
+        var startPos = myField.selectionStart;
+        var endPos = myField.selectionEnd;
+        myField.value = myField.value.substring(0, startPos)
+        + myValue
+        + myField.value.substring(endPos, myField.value.length);
+    } else {
+        myField.value += myValue;
+    }
 }
 </script>
 
 <div id="Main">
 
-<form action="email-2.php"
+<form action="email-2.php?return_url=<?php echo $return_url; ?>"
       method="POST"
       enctype="multipart/form-data"
       name="mainForm"
@@ -289,7 +288,7 @@ myField.value += myValue;
 <td class=widget_content_form_element><input type=text name="sender_address" size=50 value="<?php echo $sender_name ?>"><?php echo $required_indicator; ?></td>
 </tr>
 <tr>
-<td class=widget_label_right width="1%" nowrap><?php echo _("Bcc"); ?>:</td>
+<td class=widget_label_right width="1%" nowrap><?php echo _("Control Copy to"); ?>:</td>
 <td class=widget_content_form_element><input type=text name="bcc_address" size=50 value=""></td>
 </tr>
       <tr>
@@ -362,7 +361,7 @@ $oFCKeditor->Create() ;
                    name="go"
                    id="go"
                    value="<?php echo _("Add"); ?>"
-                   onclick="javascript: nextPage( 'email-2.php', 'add' );" />
+                   onclick="javascript: nextPage( 'email-2.php?return_url=<?php echo $return_url; ?>', 'add' );" />
         </td>
       </tr>
       <?php
@@ -379,7 +378,7 @@ if ( $attach_list )
                    name="go"
                    id="go"
                    value="<?php echo _("Delete Selected"); ?>"
-                   onclick="javascript: nextPage( 'email-2.php', 'del' );" />
+                   onclick="javascript: nextPage( 'email-2.php?return_url=<?php echo $return_url; ?>', 'del' );" />
         </td>
       </tr>
       <?php } ?>
@@ -395,15 +394,15 @@ if ( $attach_list )
           <input type="button"
                    class="button"
                    value="<?php echo _("Continue"); ?>"
-                   onclick="javascript: nextPage( 'email-3.php' );" />
+                   onclick="javascript: nextPage( 'email-3.php?return_url=<?php echo $return_url; ?>' );" />
           <input type="button"
                    class="button"
                    value="<?php echo _("Update Template"); ?>"
-                   onclick="javascript: nextPage( 'update-template.php' );" />
+                   onclick="javascript: nextPage( 'update-template.php?return_url=<?php echo $return_url; ?>' );" />
           <input type="button"
                    class="button"
                    value="<?php echo _("Save as New Template"); ?>"
-                   onclick="javascript: nextPage( 'save-as-new-template.php' );" />
+                   onclick="javascript: nextPage( 'save-as-new-template.php?return_url=<?php echo $return_url; ?>' );" />
         </td>
       </tr>
     </table>
@@ -458,6 +457,10 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.30  2010/03/05 19:25:03  gopherit
+* FIXED: Adding an attachment caused the custom fields options to the left of the email body to disappear at page reload (see bug artifact #2964363).
+* Also, added handling for the return_url parameter.
+*
 * Revision 1.29  2010/02/22 23:29:58  gopherit
 * Fixed: The eMail Merge template editing interface was not updated to reflect the switch to FCKEditor.  See Bug artifact #2956781.
 *
