@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email_merge_preview.php,v 1.1 2006/10/26 08:57:56 niclowe Exp $
+ * $Id: email_merge_preview.php,v 1.2 2010/03/05 17:54:53 gopherit Exp $
  */
 
 
@@ -27,30 +27,23 @@ start_page($page_title, true, $msg);
 
 <div id="Main">
     <div id="Content">
-<?
-						include_once "mail_merge_functions.inc";
-						$prev_email_template_title=unserialize($_SESSION['email_template_title']);
-    				$prev_email_template_body= unserialize($_SESSION['email_template_body']);
-						//echo $email_template_title;exit;
-						$m=mail_merge_email($prev_email_template_title,$prev_email_template_body,$contact_id,$address_id="");
-?><samp><strong>Subject</strong></samp><br />
+        <?
+            include_once "mail_merge_functions.inc";
+            $prev_email_template_title=unserialize($_SESSION['email_template_title']);
+            $prev_email_template_body= unserialize($_SESSION['email_template_body']);
+            //echo $email_template_title;exit;
+            $m=mail_merge_email($prev_email_template_title,$prev_email_template_body,$contact_id,$address_id="");
+        ?>
 
-					<?	echo nl2br($m[0]);?><br />
-<br />
+        <samp><strong>Subject</strong></samp><br />
+        <? echo $m[0];?><br /><br />
 
-<samp><strong>Body</strong></samp><br />
-
-				<?		echo nl2br($m[1]);?>
-
+        <samp><strong>Body</strong></samp><br />
+        <? echo $m[1];?>
     </div>
 
-        <!-- right column //-->
-    <div id="Sidebar">
-
-        &nbsp;
-
-    </div>
-
+    <!-- right column //-->
+    <div id="Sidebar">&nbsp;</div>
 </div>
 
 <?php
@@ -59,6 +52,9 @@ end_page();
 
 /**
  * $Log: email_merge_preview.php,v $
+ * Revision 1.2  2010/03/05 17:54:53  gopherit
+ * FIXED: The script assumed a text-only template and rendered HTML templates with nl2br() which resulted in extra line feeds.
+ *
  * Revision 1.1  2006/10/26 08:57:56  niclowe
  * -added custom field to mail merge
  * -added error trapping for emails that fail silently (or appear to have worked)
