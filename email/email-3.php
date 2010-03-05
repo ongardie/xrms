@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.27 2010/03/05 19:39:26 gopherit Exp $
+ * $Id: email-3.php,v 1.28 2010/03/05 20:22:00 gopherit Exp $
  */
 
 
@@ -193,7 +193,9 @@ start_page($page_title, true, $msg);
 
                 <tr>
                     <td class="widget_content_form_element" colspan="6">
-                        <input type="submit" class="button" value="<?php echo _("Continue"); ?>">&nbsp;
+                        <input type="submit" class="button" id="submitOnce" value="<?php echo _("Continue"); ?>" onclick="javascript:
+                            document.getElementById('submitOnce').disabled = true;
+                            document.sendmail.submit();">&nbsp;
                             <?php if ($show_opt_out) {?>
                                 <input type="checkbox" name="optout"><?php echo _("Opt-Out Message"); ?>?&nbsp;
                             <?php } ?>
@@ -205,7 +207,7 @@ start_page($page_title, true, $msg);
 
                 <tr>
                     <td class="widget_content_form_element" colspan="6">
-                        <font color="#FF0000"><strong>NOTE: Selecting more than 10 contacts may take a <u>long time</u>... Please be patient - DO NOT REFRESH or Click Send more than ONE TIME or you may send mail multiple times to the same contacts.</strong></font>
+                        <font color="#FF0000"><strong>NOTE: Selecting more than 10 contacts may take a <u>long time</u>... Please be patient - DO NOT REFRESH THIS PAGE or you may send mail multiple times to the same contacts.</strong></font>
                     </td>
                 </tr>
             </table>
@@ -228,6 +230,9 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.28  2010/03/05 20:22:00  gopherit
+ * Added JavaScript to prevent the user from initiating the eMailMerge send function more than once by repeatedly clicking on 'Continue'.
+ *
  * Revision 1.27  2010/03/05 19:39:26  gopherit
  * FIXED: eMailMerge templates which contain quotes ended up having the quotes escaped with backslashes when the email was finally sent - magic_quotes and HTTP POST issue.  (see bug artifact #2964308).
  * Also, added handling for the return_url parameter.
