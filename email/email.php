@@ -3,7 +3,7 @@
   *
   * Email.
   *
-  * $Id: email.php,v 1.16 2006/01/30 18:10:44 niclowe Exp $
+  * $Id: email.php,v 1.17 2010/03/05 18:16:35 gopherit Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -16,6 +16,7 @@
 
   $session_user_id = session_check();
   $msg = $_GET['msg'];
+  $return_url = $_GET['return_url'];
 
   $scope = $_GET['scope'];
 
@@ -163,7 +164,7 @@
 <div id="Main">
     <div id="Content">
 
-        <form action=email-2.php method=post>
+        <form action="email-2.php?return_url=<?php echo $return_url; ?>" method=post>
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=20><?php echo _("E-Mail Templates"); ?></td>
@@ -196,6 +197,9 @@
 
   /**
   * $Log: email.php,v $
+  * Revision 1.17  2010/03/05 18:16:35  gopherit
+  * Added handling for the return_url parameter.
+  *
   * Revision 1.16  2006/01/30 18:10:44  niclowe
   * fixed bug where search of companies returned a NULL record ruining the sql in email-3.php
   *
