@@ -10,6 +10,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
+$return_url = $_GET['return_url'];
 
 $email_template_title = $_POST['email_template_title'];
 $email_template_body = $_POST['email_template_body'];
@@ -29,6 +30,6 @@ $email_template_id = $con->insert_id();
 
 $con->close();
 
-header("Location: email-2.php?email_template_id=$email_template_id");
+header("Location: email-2.php?email_template_id=$email_template_id&msg=saved&return_url=$return_url");
 
 ?>

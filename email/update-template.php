@@ -2,7 +2,7 @@
 /**
  * ave Updated Email Template to the database
  *
- * $Id: update-template.php,v 1.6 2006/04/18 15:36:48 braverock Exp $
+ * $Id: update-template.php,v 1.7 2010/03/05 21:09:17 gopherit Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -14,6 +14,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
+$return_url = $_GET['return_url'];
 
 $email_template_id = $_POST['email_template_id'];
 $email_template_title = (strlen($_POST['email_template_title']) > 0) ? $_POST['email_template_title'] : _("Template").'&nbsp;'.$email_template_id;
@@ -33,10 +34,13 @@ $con->execute($upd);
 
 $con->close();
 
-header("Location: email-2.php?email_template_id=$email_template_id&msg=saved");
+header("Location: email-2.php?email_template_id=$email_template_id&msg=saved&return_url=$return_url");
 
 /**
  * $Log: update-template.php,v $
+ * Revision 1.7  2010/03/05 21:09:17  gopherit
+ * FIXED: The return_url parameter was being lost in the eMail Merge script chain starting from /email/email.php
+ *
  * Revision 1.6  2006/04/18 15:36:48  braverock
  * - localize Template for i18n
  * - add phpdoc
