@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.30 2010/03/05 19:25:03 gopherit Exp $
+* $Id: email-2.php,v 1.31 2010/03/05 21:21:27 gopherit Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -300,7 +300,7 @@ function insertAtCursor(myField, myValue) {
                    name="email_template_title"
                    id="email_template_title"
                    size="50"
-                   value="<?php echo $email_template_title ?>" />
+                   value="<?php echo htmlspecialchars($email_template_title) ?>" />
         </td>
       </tr>
       <tr>
@@ -457,6 +457,9 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.31  2010/03/05 21:21:27  gopherit
+* Forgot to convert the quotes of the email_template_title so that double quotes won't mess up the string.
+*
 * Revision 1.30  2010/03/05 19:25:03  gopherit
 * FIXED: Adding an attachment caused the custom fields options to the left of the email body to disappear at page reload (see bug artifact #2964363).
 * Also, added handling for the return_url parameter.
