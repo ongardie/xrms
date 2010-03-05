@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.39 2010/02/24 22:33:51 gopherit Exp $
+* $Id: email-4.php,v 1.40 2010/03/05 20:59:22 gopherit Exp $
 *
 * @todo use a more secure method than 'unlink' to delete files after sending them
 */
@@ -21,6 +21,7 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 
 $msg = $_GET['msg'];
+$return_url = $_GET['return_url'];
 $optout = $_POST['optout'];
 
 // check to see if we sent this message already
@@ -335,30 +336,35 @@ start_page($page_title, true, $msg);
                     <?php echo $feedback;?>
                 </td>
             </tr>
-<?php
-// Loop through the attched files, if any
-// and add display them
-if ( $_fileData )
-{
-?>
+
+            <?php
+                // Loop through the attched files, if any, and add display them
+                if ( $_fileData ) { ?>
+                <tr>
+                    <td class="widget_header">
+                        <?php echo _("Attached Files"); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="widget_content">
+                        <?php
+                            foreach ( $_fileData as $_file => $data )
+                            {
+                                echo '&nbsp;&nbsp;&nbsp; * ' . $_file . '<br />';
+                            }
+                        ?>
+                    </td>
+                </tr>
+            <?php } ?>
+
             <tr>
-                <td class="widget_header">
-                    <?php echo _("Attached Files"); ?>
+                <td class=widget_content_form_element>
+                <form action="<?php echo $http_site_root . $return_url; ?>" method="POST">
+                    <input class=button value="<?php echo _('Close') ?>" type="submit">
+                </form>
                 </td>
             </tr>
-          <tr>
-                <td class="widget_content">
-<?php
-                foreach ( $_fileData as $_file => $data )
-                {
-                        echo '&nbsp;&nbsp;&nbsp; * ' . $_file . '<br />';
-                }
-?>
-                </td>
-            </tr>
-<?php
-}
-?>        </table>
+        </table>
     </div>
 
     <!-- right column //-->
@@ -376,6 +382,9 @@ end_page();
 // =============================================================
 /**
 * $Log: email-4.php,v $
+* Revision 1.40  2010/03/05 20:59:22  gopherit
+* Added "Close" button to return the user where they came from.
+*
 * Revision 1.39  2010/02/24 22:33:51  gopherit
 * Cleaned up and reorganized the script code.  More can be done in that regard yet.
 *
