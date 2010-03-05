@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.26 2010/02/26 19:45:32 gopherit Exp $
+ * $Id: email-3.php,v 1.27 2010/03/05 19:39:26 gopherit Exp $
  */
 
 
@@ -17,6 +17,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
+$return_url = $_GET['return_url'];
 
     // Set our flag to indiate this message has not been sent yet
     $_SESSION['email_sent'] = false;
@@ -63,6 +64,12 @@ if ( $_FILES['attach']['error'] == 0 )
     $attachment_list = $_SESSION['attachment_list'];
     $attachment_list[$objUpFile->getFilename()] = $objUpFile->getFilename();
     $_SESSION['attachment_list'] = $attachment_list;
+}
+
+// Get rid of annoying magic_quote slash junk
+if (get_magic_quotes_gpc()) {
+    $email_template_title = stripslashes($email_template_title);
+    $email_template_body = stripslashes($email_template_body);
 }
 
 $_SESSION['sender_name'] = serialize($sender_name);
@@ -134,9 +141,9 @@ $con->close();
 
 // Provide a hook to allow plugins to use their own bulk mailer scripts
 // rather than the built-in SMTP.
-$bulk_mailer = do_hook_function('bulk_mailer', $http_site_root);
+$bulk_mailer = do_hook_function('bulk_mailer', $return_url);
 if (!$bulk_mailer)
-    $bulk_mailer = "email-4.php";
+    $bulk_mailer = "email-4.php?return_url=$return_url";
 
 $page_title = _("Confirm Recipients");
 start_page($page_title, true, $msg);
@@ -221,6 +228,10 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.27  2010/03/05 19:39:26  gopherit
+ * FIXED: eMailMerge templates which contain quotes ended up having the quotes escaped with backslashes when the email was finally sent - magic_quotes and HTTP POST issue.  (see bug artifact #2964308).
+ * Also, added handling for the return_url parameter.
+ *
  * Revision 1.26  2010/02/26 19:45:32  gopherit
  * Provided a 'bulk_mailer' hook to allow plugins to use their own bulk mailer scripts rather than the built-in SMTP.
  *
