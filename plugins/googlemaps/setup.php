@@ -6,7 +6,7 @@
 * polyformal ( http://www.polyformal.de/ )
 * (c) 2007 (GNU GPL - see ../../COPYING)
 * 
-* $Id: setup.php,v 1.3 2008/10/07 08:57:24 polyformal_sp Exp $
+* $Id: setup.php,v 1.4 2010/03/10 22:59:56 gopherit Exp $
 *
 * This plugin allows show the location of the selected company in the sidebar
 * within google maps.
@@ -157,7 +157,7 @@ if (window.attachEvent) {
 </table>
 ';
     // return the result
-   return $sidebar_rows_bottom.=$sidebar_string.$sql;
+   return $sidebar_rows_bottom .= $sidebar_string;
       }//EOF if
 }
 
@@ -179,6 +179,9 @@ function get_gm_address($sql) {
 }
 /*
  * $Log: setup.php,v $
+ * Revision 1.4  2010/03/10 22:59:56  gopherit
+ * Fixed: Bug Artifact #2968294: googlemaps Plugin Outputs SQL Query Code in Sidebar.
+ *
  * Revision 1.3  2008/10/07 08:57:24  polyformal_sp
  * updated to recent version, fix sql statements to on_what_* layout
  *
