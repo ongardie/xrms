@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.31 2010/03/05 21:21:27 gopherit Exp $
+* $Id: email-2.php,v 1.32 2010/03/11 15:22:25 gopherit Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -288,8 +288,8 @@ function insertAtCursor(myField, myValue) {
 <td class=widget_content_form_element><input type=text name="sender_address" size=50 value="<?php echo $sender_name ?>"><?php echo $required_indicator; ?></td>
 </tr>
 <tr>
-<td class=widget_label_right width="1%" nowrap><?php echo _("Control Copy to"); ?>:</td>
-<td class=widget_content_form_element><input type=text name="bcc_address" size=50 value=""></td>
+<td class=widget_label_right width="1%" nowrap><?php echo _("Send Control Copy to"); ?>:</td>
+<td class=widget_content_form_element><input type=text name="bcc_address" size=50 value="<?php echo htmlspecialchars($bcc_address); ?>"></td>
 </tr>
       <tr>
         <td class="widget_label_right" width="1%" nowrap>
@@ -457,6 +457,9 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.32  2010/03/11 15:22:25  gopherit
+* Fixed: Upon attaching a file, the Control Copy (formerly Bcc) address was being lost when the page is reloaded.
+*
 * Revision 1.31  2010/03/05 21:21:27  gopherit
 * Forgot to convert the quotes of the email_template_title so that double quotes won't mess up the string.
 *
