@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.14 2010/01/11 20:10:27 gopherit Exp $
+ * $Id: v1.99.php,v 1.15 2010/03/12 20:11:07 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -428,7 +428,7 @@ function logTime() {
         <input type=hidden name=followup_from_id value="<?php  echo $followup_from_id; ?>">
         <input type=hidden name=email_to value="<?php  echo $email_to; ?>">
         <input type=hidden name=associate_activities value="<?php  echo $associate_activities; ?>">
-		<input type=hidden name=activity_recurrence_id value="<?php echo $activity_recurrence_id; ?>">
+        <input type=hidden name=activity_recurrence_id value="<?php echo $activity_recurrence_id; ?>">
 
         <table class=widget cellspacing=1>
             <?php echo $activity_content_top; ?>
@@ -688,11 +688,22 @@ function logTime() {
                             $save_and_next="&save_and_next=true";
                         }
 
-                        echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-                        if($activity_recurrence_id) {
-                            echo render_edit_button(_("Edit Recurrence"),'submit',false,'recurrence');
+                        // Call the activity_recurrence_button plugin hook
+                        $plugin_parameters = array ('activity_id'      => $activity_id,
+                                                    'activity_type_id' => $activity_type_id);
+                        $recurrence_button = do_hook_function ('activity_recurrence_button', $plugin_parameters);
+
+                        if (isset($recurrence_button)) {
+                            // We will leave providing a spacer to the plugin in case the plugin needs to provide no button at all!
+                            echo $recurrence_button;
                         } else {
-                            echo render_edit_button(_("Create Recurrence"),'submit',false,'recurrence');
+                            // In the absence of activity_recurrence_button plugin data, create the standard recurrence buttons
+                            echo '&nbsp;&nbsp;&nbsp;&nbsp;'; // spacer
+                            if($activity_recurrence_id) {
+                                echo render_edit_button(_("Edit Recurrence"),'submit',false,'recurrence');
+                            } else {
+                                echo render_edit_button(_("Create Recurrence"),'submit',false,'recurrence');
+                            }
                         }
 
                         echo '&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -858,6 +869,9 @@ function logTime() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.15  2010/03/12 20:11:07  gopherit
+ * New Hook: activity_recurrence_button to allow plugins to modify the "Create Recurrence"/"Edit Recurrence" buttons.
+ *
  * Revision 1.14  2010/01/11 20:10:27  gopherit
  * Fixed an issue with the HTML activity notes where switching to 'Print View' and back doubled up the <br /> tags.
  *
