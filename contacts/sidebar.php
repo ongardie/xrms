@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.29 2009/11/11 17:32:36 gopherit Exp $
+ * $Id: sidebar.php,v 1.30 2010/03/17 16:14:05 gopherit Exp $
  */
 
 $new_cell_phone         = isset($_GET['cell_phone']) ? $_GET['cell_phone'] : false;
@@ -203,23 +203,39 @@ if ( $contact_id ) {
     }
 } // if ( $contact_id ) ...
 
-$contact_block .= "
-    <tr>
-        <td class=widget_content colspan=5>
-            <form action=\"../activities/activity-reconnect.php\" method=\"POST\">
-                       <input type=hidden name=activity_id value=$activity_id>
-                       <input type=hidden name=on_what_entity value=contact>
-                       <input type=hidden name=return_url value=\"" . urlencode($return_url) . "\">
-                " . render_edit_button(_("Transfer Activity"),'submit',
-                    'javascript:document.activity_data.return_url.value=\''.'/activities/activity-reconnect.php'.'\'',
-                    'edit_view', false,'activities',$activity_id) . "
-            </form>
-        </td>
-    </tr>
-</table>";
+// Call the transfer_activity_button plugin hook
+$plugin_parameters = array ('activity_id'       => $activity_id,
+                            'on_what_entity'    => 'contact',
+                            'return_url'        => $return_url);
+$transfer_activity_button = do_hook_function ('transfer_activity_button', $plugin_parameters);
+
+if (isset($transfer_activity_button)) {
+
+    $contact_block .= $transfer_activity_button;
+
+} else {
+
+    $contact_block .= "
+        <tr>
+            <td class=widget_content colspan=5>
+                <form action=\"../activities/activity-reconnect.php\" method=\"POST\">
+                           <input type=hidden name=activity_id value=$activity_id>
+                           <input type=hidden name=on_what_entity value=contact>
+                           <input type=hidden name=return_url value=\"" . urlencode($return_url) . "\">
+                    " . render_edit_button(_("Transfer Activity"),'submit',
+                        'javascript:document.activity_data.return_url.value=\''.'/activities/activity-reconnect.php'.'\'',
+                        'edit_view', false,'activities',$activity_id) . "
+                </form>
+            </td>
+        </tr>";
+}
+$contact_block .= "</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.30  2010/03/17 16:14:05  gopherit
+ * New Hook: transfer_activity_button to allow plugins to modify the "Transfer Activity" button.
+ *
  * Revision 1.29  2009/11/11 17:32:36  gopherit
  * Switched to an $http_site_root based URI to enable plugins to call the sidebar script.
  *
