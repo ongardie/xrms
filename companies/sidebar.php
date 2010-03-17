@@ -16,7 +16,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.16 2009/11/11 17:32:15 gopherit Exp $
+ * $Id: sidebar.php,v 1.17 2010/03/17 15:35:11 gopherit Exp $
  */
 
 // add company information block on sidebar
@@ -69,7 +69,7 @@ if ($rst) {
     	}
 
         $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-	                   . "<a href=\"" . $url . "\" target=\"_new\">" . _("Web Site") . "</a></td>\n\t</tr>";
+	                   . "<a href=\"$url\" target=\"_new\">$url</a></td>\n\t</tr>";
     }
 
   } // if ( !$rst->EOF ) ...
@@ -90,6 +90,9 @@ $company_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.17  2010/03/17 15:35:11  gopherit
+ * Replaced the text "Web Site" with the actual text of the URL.
+ *
  * Revision 1.16  2009/11/11 17:32:15  gopherit
  * Switched to an $http_site_root based URI to enable plugins to call the sidebar script.
  *
