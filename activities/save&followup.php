@@ -11,6 +11,7 @@ require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'utils-preferences.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-activities.php');
 require_once($include_directory . 'utils-workflow.php');
@@ -373,52 +374,67 @@ if (!empty($email_to)) {
         $email_return=urlencode('/activities/some.php');
     }
 
-    $output = _("Activity");
-    $output .= " <a href=\"" . full_http_site_root() . "/activities/one.php?activity_id=" . $activity_id . "\">" . htmlspecialchars($activity_title) . "</a>";
+    $output = _("Activity") .": <a href=\"" . full_http_site_root() . "/activities/one.php?activity_id=" . $activity_id . "\">" . htmlspecialchars($activity_title) . "</a>";
     $output .= "\n<br>" . _("Activity Type") . ": " .  $activity_type;
     $output .= "\n<br>" . _("Owner") . ": " .  $username;
     $output .= "\n<br>" . _("Scheduled Start") . ": " . $starts_at_string; //line added by Randy 6/15/07
     $output .= "\n<br>" . _("Scheduled End") . ": " . $ends_at_string;
     $output .= "\n<br>" . _("Company") . ": " . $company_name;
     $output .= "\n<br>" . _("Contact") . ": " . $contact_name . "<br>\n";
-    $output .= "\n<br>" . _("Activity Notes") . ": <br>\n" .  htmlspecialchars($activity_description);
+
+    if (get_user_preference($con, $user_id, "html_activity_notes") == 'y') {
+        $tmp = trim($activity_description);
+    } else {
+        $tmp = htmlspecialchars(nl2br(trim($activity_description)));
+    }
+
+    $output .= "\n<hr>". _("Activity Notes") .": <br>\n".  $tmp;
 
     $from_email_address = $con->GetOne('SELECT email FROM users WHERE user_id=?', $session_user_id);
     if (!$from_email_address)
          $from_email_address = get_system_parameter($con, "Sender Email Address");
 
-    require_once $include_directory . 'classes/SMTPs/SMTPs.php';
-    $objSMTP = new SMTPs ();
-    $objSMTP->setConfig( $include_directory . 'classes/SMTPs/SMTPs.ini.php');
+    // Provide the activity_mailer hook to allow plugins to use an alternative email and logging script
+    $tmp = array();
+    $tmp['from'] = $from_email_address;
+    $tmp['to'] = $email_to;
+    $tmp['subject'] = _("Updated Activity") . ": " . $activity_title;
+    $tmp['body_html'] = $output;
+    $activity_mailer = do_hook_function('activity_mailer', $tmp);
+    if (!$activity_mailer) {
 
-    $objSMTP->setFrom ( $from_email_address  );
-    $objSMTP->setSubject ( _("Updated Activity") . " " . $activity_title );
-    $objSMTP->setTo ( $email_to );
-    $objSMTP->setBodyContent ( $output, 'html');
+        require_once $include_directory . 'classes/SMTPs/SMTPs.php';
+        $objSMTP = new SMTPs ();
+        $objSMTP->setConfig( $include_directory . 'classes/SMTPs/SMTPs.ini.php');
 
-    $objSMTP->sendMsg ();
-    $errors = $objSMTP->getErrors();
-    if ((!empty($errors)) and ($errors <> "No Errors Generated."))
-	trigger_error('SMTP errors: '.$errors, E_USER_WARNING); else
-		{
-		//add activity record to user who received the e-mail
-		$sql_insert_activity = "insert into activities set
-                        activity_type_id = '3',
-                        user_id = $user_id,
-                        company_id = $company_id,
-                        contact_id = $contact_id,
-                        activity_title = 'Email: Activity Sent To Another User',
-                        activity_description = 'User: {$email_to} -> $output',
-                        entered_at = ".$con->dbtimestamp(mktime()).",
-                        scheduled_at = ".$con->dbtimestamp(mktime()).",
-                        ends_at = ".$con->dbtimestamp(mktime()).",
-                        entered_by = $session_user_id,
-			activity_status = 'c'";
+        $objSMTP->setFrom ( $from_email_address  );
+        $objSMTP->setSubject ( _("Updated Activity") . ": " . $activity_title );
+        $objSMTP->setTo ( $email_to );
+        $objSMTP->setBodyContent ( $output, 'html');
 
-		$con->execute($sql_insert_activity);
-		}
+        $objSMTP->sendMsg ();
+        $errors = $objSMTP->getErrors();
+        if ((!empty($errors)) and ($errors <> "No Errors Generated."))
+            trigger_error('SMTP errors: '.$errors, E_USER_WARNING); else
+                    {
+                    //add activity record to user who received the e-mail
+                    $sql_insert_activity = "insert into activities set
+                            activity_type_id = '3',
+                            user_id = $user_id,
+                            company_id = $company_id,
+                            contact_id = $contact_id,
+                            activity_title = 'Email: Activity Sent To Another User',
+                            activity_description = 'User: {$email_to} -> $output',
+                            entered_at = ".$con->dbtimestamp(mktime()).",
+                            scheduled_at = ".$con->dbtimestamp(mktime()).",
+                            ends_at = ".$con->dbtimestamp(mktime()).",
+                            entered_by = $session_user_id,
+                            activity_status = 'c'";
+
+                    $con->execute($sql_insert_activity);
+                    }
+    }
 }
-
 
 if ($followup) {
     $followup_rec = $rec;
