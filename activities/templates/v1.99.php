@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.15 2010/03/12 20:11:07 gopherit Exp $
+ * $Id: v1.99.php,v 1.16 2010/03/25 02:09:41 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -403,10 +403,16 @@ function logTime() {
     var minute = (mm < 10) ? '0' + mm : mm;
     var s = date.getSeconds();
     var second = (s < 10) ? '0' + s : s;
-
+    
     return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
 }
 
+function getNow(elementID) {
+    var result;
+    result = logTime();
+    document.getElementById(elementID).value = result;
+    CheckDate();
+}
 </script>
 
 <div id="Main">
@@ -439,12 +445,16 @@ function logTime() {
 
             <tr>
                 <td class=widget_label_right><?php echo _("Attached to"); ?></td>
+
                 <td class=widget_content_form_element>
                     <?php
-                        echo _("Company" .': ');
-                        echo '<a href="../companies/one.php?company_id='.$company_id.'">'.$company_name.'</a>';
+                        echo _("Company") .': <a href="../companies/one.php?company_id='.$company_id.'">'.$company_name.'</a>';
+                    ?>
+                </td>
+                <td class=widget_content_form_element>
+                    <?php
+                        echo _("Division") .': ';
                         if ($division_menu) {
-                            echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'. _("Division") .': ';
                             echo $division_menu;
                         }
                     ?>
@@ -459,16 +469,32 @@ function logTime() {
                         echo $contact_menu;
                     ?>
                 </td>
+            </tr>
+
+            <tr>
+                <td class=widget_label_right><?php echo _("About"); ?></td>
 
                 <td class=widget_content_form_element>
                     <input type=hidden name=change_attachment>
+                    <?php echo $attached_to_link; ?>
+                </td>
+                <td class=widget_content_form_element>
                     <?php
-                        echo _("About") .': ';
-                        echo $attached_to_link;
                         if ($table_name != "Attached To") {
-                            echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . _("Status") . ': ';
+                            echo _("Status") . ': ';
                             echo $table_menu;
                         }
+                    ?>
+                </td>
+                <td class=widget_content_form_element>
+                    <?php
+                        if($on_what_table == 'opportunities') {
+                            echo _("Probability") . "&nbsp;" . _("(%) <select name=probability>");
+                            for($i = 0; $i <= 100; $i += 10) {
+                                echo "\n\t\t<option value=\"$i\" ".$probability[$i]."> $i %";
+                            };
+                            echo "</select>";
+                        } //end if on_what_table=opportunities check
                     ?>
                 </td>
             </tr>
@@ -486,14 +512,6 @@ function logTime() {
                     <?php
                         echo _("Activity Priority") .': ';
                         echo $activity_priority_menu;
-
-                        if($on_what_table == 'opportunities') {
-                            echo _("Probability") . "&nbsp;" . _("(%) <select name=probability>");
-                            for($i = 0; $i <= 100; $i += 10) {
-                                echo "\n\t\t<option value=\"$i\" ".$probability[$i]."> $i %";
-                            };
-                            echo "</select>";
-                        } //end if on_what_table=opportunities check
                     ?>
                 </td>
 
@@ -518,13 +536,21 @@ function logTime() {
                         jscalendar_includes();
                     ?>
                     <input type=text ID="f_date_c" name=scheduled_at value="<?php  echo $scheduled_at; ?>">
-                    <img ID="f_trigger_c" style="CURSOR: pointer" border=0 src="../img/cal.gif" alt="Scheduled Start">
+                    &nbsp;
+                    <img ID="f_trigger_c" style="CURSOR: pointer" border=0 src="../img/cal.gif" alt="<?php  echo _('Scheduled Start'); ?>">
+                    &nbsp;
+                    <img style="CURSOR: pointer" border=0 src="../img/calendar_time_icon.gif" alt="<?php  echo _('Start Now'); ?>"
+                         onclick="getNow('f_date_c');">
                 </td>
 
                 <td class=widget_content_form_element>
                     <?php echo _("End") .': '; ?>
                     <input type=text ID="f_date_d" name=ends_at value="<?php  echo $ends_at; ?>" onFocus="CheckDate()">
-                    <img ID="f_trigger_d" style="CURSOR: pointer" border=0 src="../img/cal.gif" alt="Scheduled End">
+                    &nbsp;
+                    <img ID="f_trigger_d" style="CURSOR: pointer" border=0 src="../img/cal.gif" alt="<?php  echo _('Scheduled End'); ?>">
+                    &nbsp;
+                    <img style="CURSOR: pointer" border=0 src="../img/calendar_time_icon.gif" alt="<?php  echo _('End Now'); ?>"
+                         onclick="getNow('f_date_d');">
                 </td>
             </tr>
 
@@ -532,7 +558,7 @@ function logTime() {
                 <td class=widget_label_right>
                     <?php echo _("Activity") .'<br />'. _("Notes"); ?>
                 </td>
-                <td class=widget_content colspan="3">
+                <td class=widget_content_form_element colspan="3">
                 <?php
                     if($print_view) {
                         if (get_user_preference($con, $user_id, "html_activity_notes") == 'y') {
@@ -551,7 +577,7 @@ function logTime() {
                             $oFCKeditor->Create() ;
                         } else {
                             ?>
-                            <textarea rows=10 cols=70 name=activity_description><?php  echo htmlspecialchars(trim($activity_description)); ?></textarea>
+                            <textarea rows=10 cols=70 style="width: 98%;" name=activity_description><?php  echo htmlspecialchars(trim($activity_description)); ?></textarea>
                             <?php
                         }
                     } ?>
@@ -559,9 +585,9 @@ function logTime() {
             </tr>
             <?php if($on_what_table == 'opportunities') { ?>
                 <tr>
-                    <td class=widget_label_right><?php echo _("Opportunity Notes"); ?></td>
+                    <td class=widget_label_right><?php echo _("Opportunity") .'<br />'. _("Notes"); ?></td>
                     <td class=widget_content_form_element colspan="3">
-                        <textarea rows=10 cols=70 name=opportunity_description><?php  echo htmlspecialchars(trim($opportunity_description)); ?></textarea><br>
+                        <textarea rows=10 cols=70 style="width: 98%;" name=opportunity_description><?php  echo htmlspecialchars(trim($opportunity_description)); ?></textarea><br>
                         <input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="var new_message = prompt('<?php echo addslashes(_("Enter Note")); ?>', ''); document.forms[0].opportunity_description.value =
                             logTime() + '<?php echo " " . _("By") . " " . $_SESSION['username']; ?>: ' + new_message + '\n' + document.forms[0].opportunity_description.value; document.forms[0].return_url.value = '<?php echo current_page() . '&fill_user'; ?>'; document.forms[0].submit();">
                         <?php do_hook('opportunity_notes_buttons'); ?>
@@ -644,7 +670,7 @@ function logTime() {
                         echo $activity_resolution_type_menu .'<br />';
                     ?>
                     <!-- db: begin  the following satement must to be written as single line to avoid bad display behaviour of the resolution description field content//-->
-                    <textarea rows=5 cols=80 id=resolution_description name=resolution_description><?php echo htmlspecialchars(trim($resolution_description)); ?></textarea>
+                    <textarea rows=5 cols=80  style="width: 99%;" id=resolution_description name=resolution_description><?php echo htmlspecialchars(trim($resolution_description)); ?></textarea>
                 </td>
             </tr>
 
@@ -774,6 +800,8 @@ function logTime() {
     var old_resolution_description              = '';
     var old_resolution_row_display              = '';
 
+    var activity_duration = <?php echo strtotime($ends_at) - strtotime($scheduled_at) ?>;
+
     function HideCompletedControls() {
         old_followup_checked                    = document.getElementById('followup').checked;
         old_followup_transfer_notes_checked     = document.getElementById('followup_transfer_notes').checked;
@@ -834,34 +862,49 @@ function logTime() {
         document.getElementById('activity_completed').onclick=HideCompletedControls;
     }
 
+    function CheckDuration(cal) {
+        var date = cal.date;
+        var time = date.getTime();
+        var field = cal.params.inputField;
+
+        // If the user modified the $scheduled_at time
+        if (field == document.getElementById("f_date_c")) {
+            // Offset the $ends_at time by the activity duration, in miliseconds
+            field = document.getElementById("f_date_d");
+            time += activity_duration * 1000;
+        }
+        var date2 = new Date(time);
+        field.value = date2.print("%Y-%m-%d %H:%M");
+    }
+
     Calendar.setup({
         inputField     :    "f_date_c",      // id of the input field
         ifFormat       :    "<? echo $java_timeformat; ?>",       // format of the input field
         showsTime      :    true,            // will display a time selector
-		timeFormat	   :    value="<? echo $java_timevalue; ?>",  //12 or 24
+        timeFormat     :    value="<? echo $java_timevalue; ?>",  //12 or 24
         button         :    "f_trigger_c",   // trigger for the calendar (button ID)
         singleClick    :    false,           // double-click mode
         step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
-        align          :    "T1"           // alignment (defaults to "Bl")
+        align          :    "T1",           // alignment (defaults to "Bl")
+        onUpdate       :    CheckDuration
     });
 
     Calendar.setup({
         inputField     :    "f_date_d",      // id of the input field
         ifFormat       :    "<? echo $java_timeformat; ?>",       // format of the input field
         showsTime      :    true,            // will display a time selector
-		timeFormat	   :    value="<? echo $java_timevalue; ?>",  //12 or 24
+        timeFormat     :    value="<? echo $java_timevalue; ?>",  //12 or 24
         button         :    "f_trigger_d",   // trigger for the calendar (button ID)
         singleClick    :    false,           // double-click mode
         step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
-        align          :    "Tl"           // alignment (defaults to "Bl")
+        align          :    "Tl",           // alignment (defaults to "Bl")
+        onUpdate       :    CheckDuration
     });
 
-    function CheckDate()
-        {
-        if (document.activity_data.ends_at.value < document.activity_data.scheduled_at.value)
-            {
-        	document.activity_data.ends_at.value = document.activity_data.scheduled_at.value;
-            }
+    function CheckDate() {
+        if (document.activity_data.ends_at.value < document.activity_data.scheduled_at.value) {
+            document.activity_data.ends_at.value = document.activity_data.scheduled_at.value;
+        }
     };
 
 </script>
@@ -869,6 +912,11 @@ function logTime() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.16  2010/03/25 02:09:41  gopherit
+ * - Modified UI layout to make cleaner and easier to work with, particularly with opportunities.
+ * - Provided “Start Now”/”End Now” stopwatch buttons next to the "Start" and "End" fields.
+ * - Enabled activity to automatically preserve its duration when the "Start" date/time is changed (the End time changes in sync).  Duration can still be freely modified with the "End" date/time (Start time does not change).
+ *
  * Revision 1.15  2010/03/12 20:11:07  gopherit
  * New Hook: activity_recurrence_button to allow plugins to modify the "Create Recurrence"/"Edit Recurrence" buttons.
  *
