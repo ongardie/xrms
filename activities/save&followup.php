@@ -460,9 +460,8 @@ if ($followup) {
     $con->close();
 
     if (!$followup_activity_id) {
-        var_dump($followup_rec);
-//        $msg=urlencode(_("Failed to add followup activity"));
-//        header("Location: " . $http_site_root . $return_url."&msg=$msg");
+        $msg=urlencode(_("Failed to add followup activity"));
+        header("Location: " . $http_site_root . $return_url."&msg=$msg");
         exit();
     }
     
