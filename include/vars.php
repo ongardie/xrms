@@ -12,7 +12,7 @@ if ( !defined('IN_XRMS') )
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.46 2009/02/14 18:01:16 randym56 Exp $
+ * $Id: vars.php,v 1.47 2010/03/26 21:31:15 gopherit Exp $
  */
 
 /**
@@ -290,12 +290,5 @@ $use_php_iconv = false;
  *
  */
 $use_self_contacts = false;
-
-/**
- * fckeditor - Defines the location of the FCKEditor code
- */
-//global $include_directory;
-$fckeditor_location = $xrms_file_root . '/js/fckeditor/';
-$fckeditor_location_url = $http_site_root . '/js/fckeditor/';
 
 //?>

@@ -2,10 +2,10 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.148 2009/02/17 01:38:09 randym56 Exp $
+ * $Id: one.php,v 1.149 2010/03/26 21:31:15 gopherit Exp $
  */
 
-//include required files
+// Include required files
 require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -16,7 +16,6 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'confgoto.php');
 require_once('../activities/activities-widget.php');
-include($fckeditor_location . 'fckeditor.php');
 
 //get session
 $session_user_id = session_check();
@@ -38,6 +37,11 @@ if (!$activity_id) {
 //open database connection
 $con = get_xrms_dbconnection();
 //$con->debug = 1;
+
+// We should only load the CKEditor if we need it
+if (get_user_preference($con, $session_user_id, "html_activity_notes") == 'y') {
+    require_once($include_directory . 'ckeditor-loader.php');
+}
 
 $datetime_format = set_datetime_format($con, $session_user_id);
 
@@ -104,6 +108,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.149  2010/03/26 21:31:15  gopherit
+ * - Upgraded the WYSIWYG editor to the latest stable version (3.2) of CKEditor (formerly FCKEditor).
+ * - Created a default CKEditor Toolbar to suit XRMS's general Activity editing purposes.
+ * - Provided a configuration file for the CKEditor: /include/ckeditor-config.php through which the editor can be customized per installation.
+ *
  * Revision 1.148  2009/02/17 01:38:09  randym56
  * - Patch to allow for individual user to change datetime_format views
  *

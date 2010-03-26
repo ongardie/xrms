@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.16 2010/03/25 02:09:41 gopherit Exp $
+ * $Id: v1.99.php,v 1.17 2010/03/26 21:31:15 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -569,12 +569,9 @@ function getNow(elementID) {
                         echo "<input type=hidden name=activity_description value=\"" . trim($activity_description) . "\">\n";
                     } else {
                         if (get_user_preference($con, $user_id, "html_activity_notes") == 'y') {
-                            $oFCKeditor = new FCKeditor('activity_description') ;
-                            $oFCKeditor->BasePath	= $fckeditor_location_url;
-                            $oFCKeditor->Value		= trim($activity_description) ;
-                            $oFCKeditor->Height		= '200';
-                            $oFCKeditor->ToolbarSet         = 'Basic';
-                            $oFCKeditor->Create() ;
+                            $oCKeditor = new CKeditor() ;
+                            $oCKeditor->basePath = $ckeditor_location_url;
+                            $oCKeditor->editor('activity_description', trim($activity_description), $ckeditor_config) ;
                         } else {
                             ?>
                             <textarea rows=10 cols=70 style="width: 98%;" name=activity_description><?php  echo htmlspecialchars(trim($activity_description)); ?></textarea>
@@ -912,9 +909,14 @@ function getNow(elementID) {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.17  2010/03/26 21:31:15  gopherit
+ * - Upgraded the WYSIWYG editor to the latest stable version (3.2) of CKEditor (formerly FCKEditor).
+ * - Created a default CKEditor Toolbar to suit XRMS's general Activity editing purposes.
+ * - Provided a configuration file for the CKEditor: /include/ckeditor-config.php through which the editor can be customized per installation.
+ *
  * Revision 1.16  2010/03/25 02:09:41  gopherit
  * - Modified UI layout to make cleaner and easier to work with, particularly with opportunities.
- * - Provided “Start Now”/”End Now” stopwatch buttons next to the "Start" and "End" fields.
+ * - Provided ï¿½Start Nowï¿½/ï¿½End Nowï¿½ stopwatch buttons next to the "Start" and "End" fields.
  * - Enabled activity to automatically preserve its duration when the "Start" date/time is changed (the End time changes in sync).  Duration can still be freely modified with the "End" date/time (Start time does not change).
  *
  * Revision 1.15  2010/03/12 20:11:07  gopherit
