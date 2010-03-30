@@ -6,7 +6,7 @@
  *
  * @author Randy Martinsen
  *
- * $Id: one_email_template.php,v 1.10 2008/09/17 12:30:18 randym56 Exp $
+ * $Id: one_email_template.php,v 1.11 2010/03/30 21:38:43 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -17,7 +17,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-files.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
-include($fckeditor_location . 'fckeditor.php');
+require_once($include_directory . 'ckeditor-loader.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -294,19 +294,19 @@ function InsertHTML($_text)
               <td>
                 <?PHP echo _("Contact") . "<BR>" . $contacts_menu; ?>
               </td>
-              <td><a href="javascript:void(0);" onClick="InsertHTML('{'+document.forms[0].contacts_fields.value+'}');"><?php echo _("Add");?></a></td>
+              <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].contacts_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
             <tr>
               <td>
                 <?PHP echo _("Company") . "<BR>" . $companies_menu; ?>
               </td>
-              <td><a href="javascript:void(0);" onClick="InsertHTML('{'+document.forms[0].companies_fields.value+'}');"><?php echo _("Add");?></a></td>
+              <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].companies_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
             <tr>
               <td>
                 <?PHP echo _("Addresses") . "<BR>" . $addresses_menu; ?>
               </td>
-              <td><a href="javascript:void(0);" onClick="InsertHTML('{'+document.forms[0].addresses_fields.value+'}');"><?php echo _("Add");?></a></td>
+              <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].addresses_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
             <tr>
               <td colspan="2">Click 'Add' to add the custom field to your mail
@@ -317,11 +317,11 @@ function InsertHTML($_text)
         </td>
         <td class="widget_content_form_element">
 <?php
-$oFCKeditor = new FCKeditor('email_template_body') ;
-$oFCKeditor->BasePath	= $fckeditor_location_url; //$http_site_root.'/include/fckeditor/' ;
-$oFCKeditor->Value		= $email_template_body ;
-$oFCKeditor->Height		= '300';
-$oFCKeditor->Create() ;
+$oCKeditor = new CKeditor() ;
+$oCKeditor->basePath = $ckeditor_location_url;
+// Override default CKEditor height
+$ckeditor_config['height']  = '300';
+$oCKeditor->editor('email_template_body', $email_template_body, $ckeditor_config) ;
 ?>
         </td>
       </tr>
@@ -409,6 +409,9 @@ end_page();
 
 /**
  * $Log: one_email_template.php,v $
+ * Revision 1.11  2010/03/30 21:38:43  gopherit
+ * - Upgraded the WYSIWYG editor to the latest stable version (3.2) of CKEditor (formerly FCKEditor).
+ *
  * Revision 1.10  2008/09/17 12:30:18  randym56
  * - Replaced TinyMCE with FCKEditor for GUI interface.
  * - Relocated FCKEditor in XRMS core from include folder to js folder

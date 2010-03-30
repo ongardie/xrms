@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.32 2010/03/11 15:22:25 gopherit Exp $
+* $Id: email-2.php,v 1.33 2010/03/30 21:38:34 gopherit Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -14,7 +14,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-files.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
-include($fckeditor_location . 'fckeditor.php');
+require_once($include_directory . 'ckeditor-loader.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -309,23 +309,23 @@ function insertAtCursor(myField, myValue) {
 
             <tr>
               <td><?PHP echo _("Contact") . "<BR>" . $contacts_menu; ?></td>
-              <td><a href="javascript:void(0);" onClick="FCKeditorAPI.GetInstance('email_template_body').InsertHtml('{'+document.forms[0].contacts_fields.value+'}');"><?php echo _("Add");?></a></td>
+              <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].contacts_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
 
             <tr>
               <td><?PHP echo _("Company") . "<BR>" . $companies_menu; ?></td>
-              <td><a href="javascript:void(0);" onClick="FCKeditorAPI.GetInstance('email_template_body').InsertHtml('{'+document.forms[0].companies_fields.value+'}');"><?php echo _("Add");?></a></td>
+              <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].companies_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
 
             <tr>
               <td><?PHP echo _("Address") . "<BR>" . $addresses_menu; ?></td>
-              <td><a href="javascript:void(0);" onClick="FCKeditorAPI.GetInstance('email_template_body').InsertHtml('{'+document.forms[0].addresses_fields.value+'}');"><?php echo _("Add");?></a></td>
+              <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].addresses_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
 
 <?php if ($my_company_id > 0) { //only show if company ID is set in /include/vars.php?>
             <tr>
               <td><?PHP echo _("User") . "<BR>" . $user_menu; ?></td>
-              <td><a href="javascript:void(0);" onClick="FCKeditorAPI.GetInstance('email_template_body').InsertHtml('{'+document.forms[0].user_fields.value+'}');"><?php echo _("Add");?></a></td>
+              <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].user_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
 <?php } ?>
             <tr>
@@ -338,11 +338,11 @@ function insertAtCursor(myField, myValue) {
         </td>
         <td class="widget_content_form_element">
 <?php
-$oFCKeditor = new FCKeditor('email_template_body') ;
-$oFCKeditor->BasePath	= $fckeditor_location_url;
-$oFCKeditor->Value		= $email_template_body ;
-$oFCKeditor->Height		= '300';
-$oFCKeditor->Create() ;
+$oCKeditor = new CKeditor() ;
+$oCKeditor->basePath = $ckeditor_location_url;
+// Override default CKEditor height
+$ckeditor_config['height']  = '300';
+$oCKeditor->editor('email_template_body', $email_template_body, $ckeditor_config) ;
 ?>
         </td>
       </tr>
@@ -457,6 +457,9 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.33  2010/03/30 21:38:34  gopherit
+* - Upgraded the WYSIWYG editor to the latest stable version (3.2) of CKEditor (formerly FCKEditor).
+*
 * Revision 1.32  2010/03/11 15:22:25  gopherit
 * Fixed: Upon attaching a file, the Control Copy (formerly Bcc) address was being lost when the page is reloaded.
 *
