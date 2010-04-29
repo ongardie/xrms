@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.29 2006/08/20 17:13:41 braverock Exp $
+ * $Id: login-2.php,v 1.30 2010/04/29 23:23:25 gopherit Exp $
  */
 require_once('include-locations.inc');
 
@@ -31,7 +31,7 @@ if (!$connectiontest) {
              . _("Have the administrator check the database parameters in vars.php to make sure they are correct.")
              . _("Also make sure the database is running and can accept a connection from this server.")
              . '<BR><BR>';
-    $title = _("Test Results");
+    $title = _("Database Connection Failure");
 
         echo <<<EOQ
         <!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
@@ -160,6 +160,9 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.30  2010/04/29 23:23:25  gopherit
+ * Fixed wrong page title upon database failure.
+ *
  * Revision 1.29  2006/08/20 17:13:41  braverock
  * fixed https://sourceforge.net/tracker/index.php?func=detail&aid=1507233&group_id=88850&atid=588128
  * credit Olivier Macchioni
