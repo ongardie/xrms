@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.90 2010/01/11 22:49:40 gopherit Exp $
+ * $Id: edit-2.php,v 1.91 2010/05/05 18:28:51 gopherit Exp $
  */
 
 //include required files
@@ -240,7 +240,7 @@ $rec['contact_id']           = $new_contact_id;
 $rec['activity_title']       = trim($activity_title);
 $rec['activity_description'] = trim($activity_description);
 $rec['last_modified_by']     = $session_user_id;
-$rec['last_modified_at']     = date($datetime_format,time());
+$rec['last_modified_at']     = time();
 $rec['scheduled_at']         = $scheduled_at;
 $rec['ends_at']              = $ends_at;
 $rec['completed_at']         = $completed_at;
@@ -418,6 +418,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.91  2010/05/05 18:28:51  gopherit
+ * Fixed: Wrong "last modified" Date, bug item #2974290. Last modified date was not storing properly in the database when a 12-hour (am/pm) clock was used.  Fiix provided by helpfull1961@sourceforge.net
+ *
  * Revision 1.90  2010/01/11 22:49:40  gopherit
  * Fixed bug where the division_id field was not being stored in the database when an activity is saved.
  *
