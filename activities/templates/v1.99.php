@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.17 2010/03/26 21:31:15 gopherit Exp $
+ * $Id: v1.99.php,v 1.18 2010/05/05 22:17:20 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -157,10 +157,10 @@ if ($company_id) {
 	$sql = "SELECT division_name, division_id FROM company_division WHERE company_id = $company_id ORDER BY division_name";
 	$rst = $con->execute($sql);
     if ($rst) {
-		if ($rst->RecordCount() > 0) {
-			$division_menu = $rst->getmenu2('division_id', $division_id, true);
-			$rst->close();
-		} else $division_id = false;
+        if ($rst->RecordCount() > 0) {
+            $division_menu = $rst->getmenu2('division_id', $division_id, true);
+            $rst->close();
+        } else $division_id = false;
     } else {
         db_error_handler ($con, $sql);
     }
@@ -909,6 +909,9 @@ function getNow(elementID) {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.18  2010/05/05 22:17:20  gopherit
+ * Added calculation of the division_id of a newly created activity.  If the activity is to be associated with a case or opportunity, the new activity will inherit its division_id from there.  If not, it will inherit from the division_id of the contact.
+ *
  * Revision 1.17  2010/03/26 21:31:15  gopherit
  * - Upgraded the WYSIWYG editor to the latest stable version (3.2) of CKEditor (formerly FCKEditor).
  * - Created a default CKEditor Toolbar to suit XRMS's general Activity editing purposes.

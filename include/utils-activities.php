@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-activities.php,v 1.35 2009/02/05 23:07:58 randym56 Exp $
+ * $Id: utils-activities.php,v 1.36 2010/05/05 22:17:20 gopherit Exp $
 
  */
 
@@ -120,6 +120,7 @@ function add_activity($con, $activity_data, $participants=false, $magic_quotes=f
     if ($on_what_table)        { $rec['on_what_table']        = $on_what_table; }
     if ($on_what_id > 0)       { $rec['on_what_id']           = $on_what_id; }
     if ($company_id > 0)       { $rec['company_id']           = $company_id; }
+    if ($division_id > 0)      { $rec['division_id']          = $division_id; }
     if ($contact_id > 0)       { $rec['contact_id']           = $contact_id; }
     if ($address_id > 0)       { $rec['address_id']           = $address_id; }
     if ($activity_recurrence_id > 0) { $rec['activity_recurrence_id']           = $activity_recurrence_id; }
@@ -776,6 +777,9 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.36  2010/05/05 22:17:20  gopherit
+  * Added calculation of the division_id of a newly created activity.  If the activity is to be associated with a case or opportunity, the new activity will inherit its division_id from there.  If not, it will inherit from the division_id of the contact.
+  *
   * Revision 1.35  2009/02/05 23:07:58  randym56
   * - Bug fixes and updates in several scripts. Prep for new release.
   * - Added ability to set $datetime_format in vars.php

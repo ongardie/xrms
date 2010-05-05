@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.61 2008/07/25 21:17:27 polyformal_sp Exp $
+ * $Id: one.php,v 1.62 2010/05/05 22:17:20 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -79,7 +79,7 @@ if ( $opportunity_data ) {
     $work_phone = get_formatted_phone($con, $contact_data['address_id'], $contact_data['work_phone']);
     $work_phone_ext = $contact_data['work_phone_ext'];
     if (trim($work_phone_ext)) {
-            $work_phone = $work_phone . '&nbsp;' . _("x") . $work_phone_ext;
+            $work_phone = $work_phone .'&nbsp;'. _("x") .'&nbsp;'. $work_phone_ext;
     }
     $email = $contact_data['email'];
 
@@ -423,6 +423,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.62  2010/05/05 22:17:20  gopherit
+ * Added calculation of the division_id of a newly created activity.  If the activity is to be associated with a case or opportunity, the new activity will inherit its division_id from there.  If not, it will inherit from the division_id of the contact.
+ *
  * Revision 1.61  2008/07/25 21:17:27  polyformal_sp
  * mailto: full name, patch from https://sourceforge.net/tracker/index.php?func=detail&aid=1898592&group_id=88850&atid=588130
  * missing sidebar_hooks, patch from http://sourceforge.net/tracker/index.php?func=detail&aid=2018568&group_id=88850&atid=588130

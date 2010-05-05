@@ -125,7 +125,7 @@ if ($associate_activities == true ) {
         $arr_count = 0;
 
         //get active case ids for this company
-        $case_sql = "SELECT c.case_id
+        $case_sql = "SELECT c.case_id, c.division_id
                      FROM cases c
                      LEFT JOIN case_statuses cs ON (c.case_status_id = cs.case_status_id)
                      WHERE c.company_id = $company_id
@@ -135,9 +135,13 @@ if ($associate_activities == true ) {
         if ($case_rst) {
             if ($case_rst->RecordCount()>=1){
                 while (!$case_rst->EOF) {
-                    $case_arr[]=$case_rst->fields['case_id'];
+                    $case_arr[]['case_id']=$case_rst->fields['case_id'];
+                    $case_arr[]['division_id']=$case_rst->fields['division_id'];
                     $case_rst->movenext();
                     $arr_count++;
+                    // There is no need to go through all the records
+                    // since we are only interested in the data if there is only one
+                    if ($arr_count > 1) break;
                 }
             }
             $case_rst->close();
@@ -146,7 +150,7 @@ if ($associate_activities == true ) {
         }
 
         //get active opportunity ids for this company
-        $opp_sql = "SELECT o.opportunity_id
+        $opp_sql = "SELECT o.opportunity_id, o.division_id
                     FROM opportunities o
                     LEFT JOIN opportunity_statuses os ON (o.opportunity_status_id = os.opportunity_status_id)
                     WHERE o.company_id = $company_id
@@ -156,9 +160,13 @@ if ($associate_activities == true ) {
         if ($opp_rst) {
             if ($opp_rst->RecordCount()>=1){
                 while (!$opp_rst->EOF) {
-                    $opp_arr[]=$opp_rst->fields['opportunity_id'];
+                    $opp_arr[]['opportunity_id']=$opp_rst->fields['opportunity_id'];
+                    $opp_arr[]['division_id']=$opp_rst->fields['division_id'];
                     $opp_rst->movenext();
                     $arr_count++;
+                    // There is no need to go through all the records
+                    // since we are only interested in the data if there is only one
+                    if ($arr_count > 1) break;
                 }
             }
             $opp_rst->close();
@@ -172,20 +180,38 @@ if ($associate_activities == true ) {
             if (count($case_arr)){
                 //echo '<pre>'.print_r($case_arr).'</pre>';
                 $on_what_table = 'cases';
-                $on_what_id    = $case_arr[0];
+                $on_what_id    = $case_arr[0]['case_id'];
+                $division_id   = $case_arr[0]['division_id'];
             }
             if (count($opp_arr)){
                 //echo '<pre>'.print_r($opp_arr).'</pre>';
                 $on_what_table = 'opportunities';
-                $on_what_id    = $opp_arr[0];
+                $on_what_id    = $opp_arr[0]['opportunity_id'];
+                $division_id   = $opp_arr[0]['division_id'];
             }
         }
     } //end empty on_what_table check
 } // end associate code
 
+
+// If we have not been able to set the division_id from cases or opportunities,
+// we should try to set it from the contact record
+if (!$division_id) {
+    // If no division has been assigned to this activity, assume the division id of the contact, if any
+    $tmp_sql = "SELECT division_id FROM contacts WHERE contact_id = $contact_id LIMIT 1";
+    $tmp_rst = $con->execute($tmp_sql);
+    if ($tmp_rst) {
+        $division_id = $tmp_rst->fields['division_id'];
+    } else {
+        db_error_handler ($con, $tmp_sql);
+    }
+}
+
+
 //set up the data record
 $rec['user_id']          = (strlen($user_id) > 0) ? $user_id : $session_user_id;
 $rec['company_id']       = ($company_id > 0) ? $company_id : 0;
+$rec['division_id']      = ($division_id > 0) ? $division_id : 0;
 $rec['contact_id']       = ($contact_id > 0) ? $contact_id : 0;
 $rec['activity_type_id'] = ($activity_type_id > 0) ? $activity_type_id : 0;
 $rec['activity_priority_id'] = ($activity_priority_id > 0) ? $activity_priority_id : 0;
