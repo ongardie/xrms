@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.18 2010/05/05 22:17:20 gopherit Exp $
+ * $Id: v1.99.php,v 1.19 2010/05/06 20:11:05 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -413,13 +413,25 @@ function getNow(elementID) {
     document.getElementById(elementID).value = result;
     CheckDate();
 }
+
+function validate() {
+
+    if ( document.activity_data.contact_id.selectedIndex == 0 ) {
+        alert('<?php echo addslashes(_("You must assign this activity to a contact.")); ?>');
+        document.activity_data.contact_id.focus();
+        return false;
+    } else {
+        return true;
+    }
+}
+
 </script>
 
 <div id="Main">
 
     <div id="Content">
 
-        <form action=save&followup.php method=post class="print" name=activity_data>
+        <form action=save&followup.php method=post class="print" name=activity_data onsubmit="return validate();">
         <input type=hidden name=return_url value="<?php  echo $return_url; ?>">
         <input type=hidden name=current_activity_status value="<?php  echo $activity_status; ?>">
         <input type=hidden name=activity_status value="<?php  echo $activity_status; ?>">
@@ -909,6 +921,9 @@ function getNow(elementID) {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.19  2010/05/06 20:11:05  gopherit
+ * Added Javascript validation to prevent the creation or saving of activities without them being assigned to a contact.
+ *
  * Revision 1.18  2010/05/05 22:17:20  gopherit
  * Added calculation of the division_id of a newly created activity.  If the activity is to be associated with a case or opportunity, the new activity will inherit its division_id from there.  If not, it will inherit from the division_id of the contact.
  *

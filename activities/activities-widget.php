@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.70 2009/12/15 18:57:52 gopherit Exp $
+* $Id: activities-widget.php,v 1.71 2010/05/06 20:11:05 gopherit Exp $
 */
 
 global $include_directory;
@@ -721,7 +721,7 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
         $rst = $con->execute($sql);
         if ($rst) {
 
-            $contact_menu = $rst->getmenu2('contact_id', $contact_id, true, false, 0, 'style="font-size: x-small; width: 80px; height: 20px;"');
+            $contact_menu = $rst->getmenu2('contact_id', $contact_id, true, false, 0, 'id="contact_id" style="font-size: x-small; width: 80px; height: 20px;"');
             $rst->MoveFirst();
             $followup_contact_menu = $rst->getmenu2('followup_contact_id', $contact_id, true, false, 0, 'style="font-size: x-small; width: 80px; height: 20px;"');
 
@@ -745,7 +745,7 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
     }
 
     $ret = "<!-- activities //-->
-            <form name=\"$form_name\" action=\"$http_site_root/activities/new&followup.php\" method=post>
+            <form name=\"$form_name\" action=\"$http_site_root/activities/new&followup.php\" method=post onsubmit=\"return validate();\">
             <input type=hidden name=return_url value=\"$return_url\">
 	    <input type=hidden name=on_what_table value=\"$on_what_table\">
 	    <input type=hidden name=on_what_id value=\"$on_what_id\">
@@ -924,6 +924,16 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
                         e.value = 'o';
                 }
 
+                function validate() {
+
+                    if ( document.$form_name.contact_id.selectedIndex == 0 ) {
+                        alert('". addslashes(_('You must assign this activity to a contact.')) ."');
+                        document.$form_name.contact_id.focus();
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
 
             </script>
     ";
@@ -1082,6 +1092,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.71  2010/05/06 20:11:05  gopherit
+* Added Javascript validation to prevent the creation or saving of activities without them being assigned to a contact.
+*
 * Revision 1.70  2009/12/15 18:57:52  gopherit
 * Implemented the activity_type_menu plugin hooks for both the activity and the followup activity type menus.
 *
