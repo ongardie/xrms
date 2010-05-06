@@ -196,7 +196,7 @@ if ($associate_activities == true ) {
 
 // If we have not been able to set the division_id from cases or opportunities,
 // we should try to set it from the contact record
-if (!$division_id) {
+if (!$division_id && $contact_id) {
     // If no division has been assigned to this activity, assume the division id of the contact, if any
     $tmp_sql = "SELECT division_id FROM contacts WHERE contact_id = $contact_id LIMIT 1";
     $tmp_rst = $con->execute($tmp_sql);
