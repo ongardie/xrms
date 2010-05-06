@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.19 2010/05/06 20:11:05 gopherit Exp $
+ * $Id: v1.99.php,v 1.20 2010/05/06 21:21:48 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -70,14 +70,15 @@ if ($on_what_table == 'opportunities') {
 }
 $rst = $con->execute($sql);
 if ($rst) {
-    $attached_to_name = $rst->fields['attached_to_name'];
-    $attached_to_link .= $attached_to_name . "</a>";
-    $rst->close();
+    if (!$rst->EOF) {
+        $attached_to_name = $rst->fields['attached_to_name'];
+        $attached_to_link .= $attached_to_name . "</a>";
+        $rst->close();
+    }
 } else {
     db_error_handler($con,$sql);
 }
 // end attached_to processing
-
 
 $show_blank = (get_system_parameter($con, 'Allow Unassigned Activities') == "y" ? true : false);
 $user_menu = get_user_menu($con, $user_id, $show_blank, 'user_id', false);
@@ -483,33 +484,35 @@ function validate() {
                 </td>
             </tr>
 
-            <tr>
-                <td class=widget_label_right><?php echo _("About"); ?></td>
+            <?php if($attached_to_link != "N/A") { ?>
+                <tr>
+                    <td class=widget_label_right><?php echo _("About"); ?></td>
 
-                <td class=widget_content_form_element>
-                    <input type=hidden name=change_attachment>
-                    <?php echo $attached_to_link; ?>
-                </td>
-                <td class=widget_content_form_element>
-                    <?php
-                        if ($table_name != "Attached To") {
-                            echo _("Status") . ': ';
-                            echo $table_menu;
-                        }
-                    ?>
-                </td>
-                <td class=widget_content_form_element>
-                    <?php
-                        if($on_what_table == 'opportunities') {
-                            echo _("Probability") . "&nbsp;" . _("(%) <select name=probability>");
-                            for($i = 0; $i <= 100; $i += 10) {
-                                echo "\n\t\t<option value=\"$i\" ".$probability[$i]."> $i %";
-                            };
-                            echo "</select>";
-                        } //end if on_what_table=opportunities check
-                    ?>
-                </td>
-            </tr>
+                    <td class=widget_content_form_element>
+                        <input type=hidden name=change_attachment>
+                        <?php echo $attached_to_link; ?>
+                    </td>
+                    <td class=widget_content_form_element>
+                        <?php
+                            if ($table_name != "Attached To") {
+                                echo _("Status") . ': ';
+                                echo $table_menu;
+                            }
+                        ?>
+                    </td>
+                    <td class=widget_content_form_element>
+                        <?php
+                            if($on_what_table == 'opportunities') {
+                                echo _("Probability") . "&nbsp;" . _("(%) <select name=probability>");
+                                for($i = 0; $i <= 100; $i += 10) {
+                                    echo "\n\t\t<option value=\"$i\" ".$probability[$i]."> $i %";
+                                };
+                                echo "</select>";
+                            } //end if on_what_table=opportunities check
+                        ?>
+                    </td>
+                </tr>
+            <?php } ?>
 
             <tr>
                 <td class=widget_label_right><?php echo _("Details"); ?></td>
@@ -921,6 +924,9 @@ function validate() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.20  2010/05/06 21:21:48  gopherit
+ * Removed the 'About' table row in /activities/one.php if an activity is not attached to anything.  Had to fix some malformatted HTML as well.
+ *
  * Revision 1.19  2010/05/06 20:11:05  gopherit
  * Added Javascript validation to prevent the creation or saving of activities without them being assigned to a contact.
  *

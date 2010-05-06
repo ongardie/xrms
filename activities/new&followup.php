@@ -269,7 +269,7 @@ if ($new_and_followup) {
     $followup_rec['scheduled_at'] = $followup_scheduled_at;
     $followup_rec['ends_at'] = $followup_ends_at;
     $followup_rec['activity_status'] = 'o';
-    $followup_rec['activity_title'] = _('Follow-up') .' '. $activity_title;
+    $followup_rec['activity_title'] = '> '. $activity_title;
     if (!$followup_transfer_notes) $followup_rec['activity_description'] = NULL;
     $followup_rec['thread_id'] = $activity_id;
     $followup_rec['followup_from_id'] = $activity_id;
