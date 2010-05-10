@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: attachment_sidebar.php,v 1.6 2010/05/06 21:21:48 gopherit Exp $
+ * $Id: attachment_sidebar.php,v 1.7 2010/05/10 15:17:18 gopherit Exp $
  */
 
 $buttons="<input type=button class=button name=change_attachment onclick=\"changeAttachment()\"  value=\""._("Change Attachment")."\">";
@@ -24,49 +24,50 @@ if ($on_what_table AND $on_what_id) {
     $singular=make_singular($on_what_table);
     $name_field=$con->Concat(implode(", ' ' , ", table_name($on_what_table)));
     $on_what_field=$singular.'_id';
+
     $sql = "select $name_field as attached_to_name from $on_what_table WHERE $on_what_field = $on_what_id";
+    $rst = $con->execute($sql);
+    if ($rst) {
+        $attached_to_name = $rst->fields['attached_to_name'];
+        $rst->close();
+    } else { db_error_handler($con, $sql); }
+    $attached_to_link .= $attached_to_name . "</a>\n";
+
     if (!$activity_template_id) {
         $buttons.='<input type=button class=button value="'._("Detach") . '" onclick=changeAttachment(\'detach\')>';
     } else { $buttons=''; }
+
 } else {
     $attached_to_link = "N/A";
-    $sql = "select * from companies where 1 = 2";
 }
 
-$rst = $con->execute($sql); 
-
-if ($rst) {
-    if (!$rst->EOF) {
-        $attached_to_name = $rst->fields['attached_to_name'];
-        $attached_to_link .= $attached_to_name . "</a>\n";
-        $rst->close();
-        if ($attached_to_name <> NULL) {
-           $related_block .= "\n" . '<div id="related">
-                            <table class="widget" cellspacing="1">
-                                <tr>
-                                    <td class="widget_header">' . _("Attached To") . ' ' . _(ucfirst($singular)) .'</td>
-                                </tr>' . "\n";
-      } else {
-           $related_block.='<div id="related">
-                            <table class="widget" cellspacing="1">
-                                <tr>
-                                    <td class="widget_header">'._("Attached To") . ' ' .'</td>
-                                </tr>'."\n";
-      }
-        $related_block.="\n<tr>\n\t<td class=widget_content>$attached_to_link</td>\n</tr>\n";
-        $related_block.="\n<tr>
-            <td class=widget_content_form_element>
-                $buttons
-            </td>
-        </tr>\n";
-        $related_block.="\n\t</table>\n</div>\n";
-    }
-} else { db_error_handler($con, $sql); }
+if ($attached_to_name <> NULL) {
+    $related_block .= "\n" . '<div id="related">
+                     <table class="widget" cellspacing="1">
+                         <tr>
+                             <td class="widget_header">' . _("Attached To") . ' ' . _(ucfirst($singular)) .'</td>
+                         </tr>' . "\n";
+} else {
+    $related_block.='<div id="related">
+                     <table class="widget" cellspacing="1">
+                         <tr>
+                             <td class="widget_header">'._("Attached To") . ' ' .'</td>
+                         </tr>'."\n";
+}
+$related_block.="\n<tr>\n\t<td class=widget_content>$attached_to_link</td>\n</tr>\n";
+if ($buttons) {
+    $related_block.="\n<tr>
+        <td class=widget_content_form_element>
+            $buttons
+        </td>
+    </tr>\n";
+}
+$related_block.="\n\t</table>\n</div>\n";
 
 /**
   * $Log: attachment_sidebar.php,v $
-  * Revision 1.6  2010/05/06 21:21:48  gopherit
-  * Removed the 'About' table row in /activities/one.php if an activity is not attached to anything.  Had to fix some malformatted HTML as well.
+  * Revision 1.7  2010/05/10 15:17:18  gopherit
+  * FIXED: Bugs item #2999088 where the "Change Attachment"/"Detach" buttons were not showing.  Oranized and cleaned up the /activities/attachment_sidebar.php code.
   *
   * Revision 1.5  2005/09/29 14:48:40  vanmer
   * - changed to allow detach of activity from association with another entity
