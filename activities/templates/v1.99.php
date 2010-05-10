@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.20 2010/05/06 21:21:48 gopherit Exp $
+ * $Id: v1.99.php,v 1.21 2010/05/10 15:17:42 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -381,11 +381,11 @@ if ($datetime_format == 'Y-m-d H:i:s') {
 
 function changeAttachment(attachAction) {
    if (!attachAction) {
-      document.forms[0].change_attachment.value='true';
-      document.forms[0].submit();
+      document.activity_data.change_attachment.value='true';
+      document.activity_data.submit();
    } else if (attachAction=='detach') {
-      document.forms[0].change_attachment.value='detach';
-      document.forms[0].submit();
+      document.activity_data.change_attachment.value='detach';
+      document.activity_data.submit();
    }
 }
 
@@ -484,12 +484,13 @@ function validate() {
                 </td>
             </tr>
 
+            <input type=hidden name=change_attachment>
+
             <?php if($attached_to_link != "N/A") { ?>
                 <tr>
                     <td class=widget_label_right><?php echo _("About"); ?></td>
 
                     <td class=widget_content_form_element>
-                        <input type=hidden name=change_attachment>
                         <?php echo $attached_to_link; ?>
                     </td>
                     <td class=widget_content_form_element>
@@ -924,6 +925,9 @@ function validate() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.21  2010/05/10 15:17:42  gopherit
+ * Fixed the changeAttachment JavaScript call in /activities/templates/v1.99.php.
+ *
  * Revision 1.20  2010/05/06 21:21:48  gopherit
  * Removed the 'About' table row in /activities/one.php if an activity is not attached to anything.  Had to fix some malformatted HTML as well.
  *
