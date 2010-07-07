@@ -2,7 +2,7 @@
 /**
  * Add an address
  *
- * $Id: add-address.php,v 1.20 2006/08/20 20:04:10 braverock Exp $
+ * $Id: add-address.php,v 1.21 2010/07/07 20:43:30 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -43,7 +43,7 @@ $con = get_xrms_dbconnection();
 $rec = array();
 $rec['company_id'] = $company_id;
 $rec['country_id'] = $country_id;
-if (strlen(trim($address_name)>0) { $rec['address_name'] = $address_name; }
+if (strlen(trim($address_name)>0)) { $rec['address_name'] = $address_name; }
 $rec['line1'] = $line1;
 $rec['line2'] = $line2;
 $rec['city'] = $city;
@@ -90,6 +90,9 @@ header("Location: addresses.php?msg=address_added&company_id=$company_id");
 
 /**
  * $Log: add-address.php,v $
+ * Revision 1.21  2010/07/07 20:43:30  gopherit
+ * Missing closing bracket
+ *
  * Revision 1.20  2006/08/20 20:04:10  braverock
  * - add trim of address_name to try to keep from creating blank names
  *
