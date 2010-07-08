@@ -330,7 +330,8 @@ if (!empty($email_to)) {
 
     //get current username
     if($user_id) {
-        $sql = "select username from users where user_id = $user_id";
+//        $sql = "select username from users where user_id = $user_id";
+        $sql = "SELECT ". $con->Concat("first_names", "' '", "last_name") ." AS username FROM users WHERE user_id = $user_id";
         $rst = $con->SelectLimit($sql, 1, 0);
         if ($rst) { $username = $rst->fields['username']; }
         $rst->close();
@@ -338,14 +339,17 @@ if (!empty($email_to)) {
 
     if ($company_id) {
         //get current company name and phone
-        $sql = "select company_name, phone from companies where company_id = $company_id";
+        $sql = "SELECT company_name, default_primary_address, phone FROM companies WHERE company_id = $company_id";
         $rst = $con->SelectLimit($sql, 1, 0);
         if ($rst) {
             $company_name = $rst->fields['company_name'];
             $company_phone = $rst->fields['phone'];
+            $company_phone = get_formatted_phone($con, $rst->fields['default_primary_address'], $rst->fields['phone']);
             $rst->close();
         }
     }
+
+    $company_address = get_formatted_address($con, $address_id, $company_id, true);
 
     $sql = "select activity_type_pretty_name from activity_types where activity_type_id = $activity_type_id";
     $rst = $con->SelectLimit($sql, 1, 0);
@@ -355,18 +359,24 @@ if (!empty($email_to)) {
     }
 
     //get data for generated email
-    $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name, work_phone FROM contacts WHERE contact_id = $contact_id";
+    $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name,
+                work_phone, work_phone_ext, cell_phone, home_phone, fax, address_id
+                FROM contacts WHERE contact_id = $contact_id";
     $rst = $con->SelectLimit($sql, 1, 0);
     if ($rst) {
-        $contact_name = $rst->fields['contact_name'];
-        $contact_phone = $rst->fields['work_phone'];
+        $contact_name           = $rst->fields['contact_name'];
+        $contact_work_phone     = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']);
+        $contact_work_phone_ext = $rst->fields['work_phone_ext'];
+        $contact_cell_phone     = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['cell_phone']);
+        $contact_home_phone     = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['home_phone']);
+        $contact_fax            = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['fax']);
         $rst->close();
     }
 
     if ($activity_status == 'o') {
-        $activity_status_long = "Open";
+        $activity_status_long = _('Open');
     } elseif ($activity_status == 'c') {
-        $activity_status_long = "Closed";
+        $activity_status_long = _('Closed');
     }
     if ($company_id) {
         $email_return=urlencode('/companies/one.php?company_id='.$company_id);
@@ -374,13 +384,49 @@ if (!empty($email_to)) {
         $email_return=urlencode('/activities/some.php');
     }
 
-    $output = _("Activity") .": <a href=\"" . full_http_site_root() . "/activities/one.php?activity_id=" . $activity_id . "\">" . htmlspecialchars($activity_title) . "</a>";
-    $output .= "\n<br>" . _("Activity Type") . ": " .  $activity_type;
-    $output .= "\n<br>" . _("Owner") . ": " .  $username;
-    $output .= "\n<br>" . _("Scheduled Start") . ": " . $starts_at_string; //line added by Randy 6/15/07
-    $output .= "\n<br>" . _("Scheduled End") . ": " . $ends_at_string;
-    $output .= "\n<br>" . _("Company") . ": " . $company_name;
-    $output .= "\n<br>" . _("Contact") . ": " . $contact_name . "<br>\n";
+    // Hard coding styles is hardly optimal but we need a self-contained document that we can send by email
+    // and <style> tags are not recognized by some email clients
+    $output =   '<a style="font-size: 150%; font-weight: bold;" href="'. full_http_site_root() .'/activities/one.php?activity_id='. $activity_id .'">'. htmlspecialchars($activity_title) .'</a><br />'.
+                '<span style="font-size: 120%; font-weight: bold;">'. $activity_type .' '. $contact_name .', '. $company_name .'</span><br />';
+    if ($company_address) {
+        $output .= $company_address .'<br />';
+    }
+    $output .= '<br />';
+
+    $output .=  '<table style="width: 100%; border: 0; border-spacing: 0; border-collapse: collapse; text-align: left;">'.
+                    '<tr>'.
+                        '<td style="vertical-align: top; width: 20ex;">' . _("Work Phone") .':</td>'.
+                        '<td style="font-weight: bold;">'. $contact_work_phone;
+                        if ($contact_work_phone_ext)
+                            $output .= ' x '. $contact_work_phone_ext;
+    $output .=  '</td></tr>';
+
+    if ($contact_cell_phone) {
+        $output .=  '<tr>'.
+                        '<td style="vertical-align: top; width: 20ex;">'. _("Cell Phone") .':</td>'.
+                        '<td style="font-weight: bold;">'. $contact_cell_phone .
+                        '</td>'.
+                    '</tr>';
+    }
+
+    if ($contact_home_phone) {
+        $output .=  '<tr>'.
+                        '<td style="vertical-align: top; width: 20ex;">'. _("Home Phone") .':</td>'.
+                        '<td style="font-weight: bold;">'. $contact_home_phone .
+                        '</td>'.
+                    '</tr>';
+    }
+
+    if ($contact_fax) {
+        $output .=  '<tr>'.
+                        '<td style="vertical-align: top; width: 20ex;">'. _("Fax") .':</td>'.
+                        '<td style="font-weight: bold;">'. $contact_fax .
+                        '</td>'.
+                    '</tr>';
+    }
+
+    $output .=  '</table>'.
+            '<hr>';
 
     if (get_user_preference($con, $user_id, "html_activity_notes") == 'y') {
         $tmp = trim($activity_description);
@@ -388,7 +434,29 @@ if (!empty($email_to)) {
         $tmp = htmlspecialchars(nl2br(trim($activity_description)));
     }
 
-    $output .= "\n<hr>". _("Activity Notes") .": <br>\n".  $tmp;
+    $output .=  '<table style="width: 100%; border: 0; border-spacing: 0; border-collapse: collapse; text-align: left;">'.
+                    '<tr>'.
+                        '<td style="vertical-align: top; width: 20ex;">'. _("Activity Notes") .':</td>'.
+                        '<td>'. $tmp .'</td>'.
+                    '</tr>'.
+                '</table>'.
+            '<hr>';
+
+    $output .=  '<table style="width: 100%; border: 0; border-spacing: 0; border-collapse: collapse; text-align: left;">'.
+                    '<tr>'.
+                        '<td style="vertical-align: top; width: 20ex;">&nbsp;</td>'.
+                        '<td>'.
+                            '<span style="font-weight: bold;">'. _('Status') .':</span> '. $activity_status_long .'&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;'.
+                            '<span style="font-weight: bold;">'. _('Owner') .':</span> '. $username .'&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;'.
+                            '<span style="font-weight: bold;">'. _('Start') .':</span> '. $starts_at_string .'&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;'.
+                            '<span style="font-weight: bold;">'. _('End') .':</span> '. $ends_at_string .
+                        '</td>'.
+                    '</tr>'.
+                '</table>'.
+            '<hr>';
+
+//    echo $output;
+//    exit;
 
     $from_email_address = $con->GetOne('SELECT email FROM users WHERE user_id=?', $session_user_id);
     if (!$from_email_address)
@@ -400,6 +468,7 @@ if (!empty($email_to)) {
     $tmp['to'] = $email_to;
     $tmp['subject'] = _("Updated Activity") . ": " . $activity_title;
     $tmp['body_html'] = $output;
+
     $activity_mailer = do_hook_function('activity_mailer', $tmp);
     if (!$activity_mailer) {
 
@@ -450,7 +519,7 @@ if ($followup) {
     $followup_rec['activity_status'] = 'o';
     $followup_rec['resolution_description'] = NULL;
     $followup_rec['activity_resolution_type_id'] = NULL;
-    $followup_rec['activity_title'] = _('Follow-Up') .' '. $activity_title;
+    $followup_rec['activity_title'] = '> '. $activity_title;
     $followup_rec['on_what_status'] = $old_status;
     if (!$followup_transfer_notes) $followup_rec['activity_description'] = NULL;
     if (!$followup_rec['thread_id']) $followup_rec['thread_id'] = $activity_id;
