@@ -19,16 +19,14 @@ $ckeditor_config['toolbar'] = array (
             'Link', 'Unlink', '-',
             'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', '-',
             'Find', 'Replace', 'SelectAll', 'RemoveFormat', '-',
-            'SpellChecker', 'Source', 'ShowBlocks', 'Maximize'),
+            'Source', 'ShowBlocks', 'Maximize'),
     array ( 'Format', 'Bold', 'Italic', 'Underline', '-',
             'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote', '-',
             'Cut', 'Paste', 'PasteText', 'PasteFromWord', '-',
             'Undo', 'Redo')
             // Unused toolbar buttons:
-            // 'Copy', 'Strike', 'Subscript', 'Superscript', 'Preview', 'Print', 'Scayt',
+            // 'Copy', 'Strike', 'Subscript', 'Superscript', 'Preview', 'Print', 'Scayt', 'SpellChecker',
             // 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField',
             // 'Anchor', 'Image', 'Flash', 'PageBreak', 'Styles', 'Font', 'FontSize', 'TextColor', 'BGColor', 'About'
 );
-
-
 ?>
