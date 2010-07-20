@@ -22,18 +22,14 @@ if (@ ini_get('register_globals')) {
 $sanitizetags = array (
     '@<script[^>]*?>.*?</script>@si',
     '@%3Cscript[^>]*?%3E.*?%3C/script%3E@si',
-    '@">@si'
-// The following possible masks have not been tested thoroughly for XRMS and
-// are left here for future reference/expansion of the tests.
-//  ,
-//    '@&#(\d+);@e',
-//    '@\[\[(.*?)\]\]@si',
-//    '@\[!(.*?)!\]@si',
-//    '@\[\~(.*?)\~\]@si',
-//    '@\[\((.*?)\)\]@si',
-//    '@{{(.*?)}}@si',
-//    '@\[\+(.*?)\+\]@si',
-//    '@\[\*(.*?)\*\]@si'
+    '@&#(\d+);@e',
+    '@\[\[(.*?)\]\]@si',
+    '@\[!(.*?)!\]@si',
+    '@\[\~(.*?)\~\]@si',
+    '@\[\((.*?)\)\]@si',
+    '@{{(.*?)}}@si',
+    '@\[\+(.*?)\+\]@si',
+    '@\[\*(.*?)\*\]@si'
 );
 if (!function_exists('sanitize_gpc')) {
     function sanitize_gpc(&$target, $sanitizetags, $limit= 3) {
