@@ -3,7 +3,7 @@
  *
  * Email 2.
  *
- * $Id: one-template.php,v 1.4 2006/12/05 11:29:29 jnhayart Exp $
+ * $Id: one-template.php,v 1.5 2010/07/20 17:41:50 gopherit Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -40,7 +40,7 @@ $rst->close();
 
 $con->close();
 
-$page_title = _("Edit Message");
+$page_title = _("Edit Template");
 start_page($page_title, true, $msg);
 
 ?>
@@ -48,15 +48,13 @@ start_page($page_title, true, $msg);
 <script language="javascript">
 
 function updateTemplate() {
-    document.forms[1].email_template_title.value = document.forms[0].email_template_title.value;
-    document.forms[1].email_template_body.value = document.forms[0].email_template_body.value;
-    document.forms[1].submit();
+    document.forms[0].action = "update-template.php";
+    document.forms[0].submit();
 }
 
 function saveAsNewTemplate() {
-    document.forms[2].email_template_title.value = document.forms[0].email_template_title.value;
-    document.forms[2].email_template_body.value = document.forms[0].email_template_body.value;
-    document.forms[2].submit();
+    document.forms[0].action = "save-as-new-template.php";
+    document.forms[0].submit();
 }
 
 </script>
@@ -64,38 +62,49 @@ function saveAsNewTemplate() {
 <div id="Main">
     <div id="Content">
 
-        <form action=email-3.php onsubmit="javascript: return validate();" method=post>
-		<table class=widget cellspacing=1>
-			<tr>
-				<td class=widget_header colspan=2><?php echo _("Edit Message"); ?> - <?php  echo $email_template_title ?></td>
-			</tr>
-			<tr>
-                		<td class=widget_label_right width="1%" nowrap><?php echo _("From"); ?>:</td>
-				<td class=widget_content_form_element><input type=text name="sender_name" size=50 value=""><?php echo $required_indicator; ?></td>
-			</tr>
-			<tr>
-                		<td class=widget_label_right width="1%" nowrap><?php echo _("Reply to"); ?>:</td>
-				<td class=widget_content_form_element><input type=text name="sender_address" size=50 value=""><?php echo $required_indicator; ?></td>
-			</tr>
-			<tr>
-                		<td class=widget_label_right width="1%" nowrap><?php echo _("Bcc"); ?>:</td>
-				<td class=widget_content_form_element><input type=text name="bcc_address" size=50 value=""></td>
-			</tr>
-			<tr>
-                		
-			<tr>
-                <td class=widget_label_right width="1%" nowrap><?php echo _("Subject"); ?>:</td>
-				<td class=widget_content_form_element><input type=text name=email_template_title size=50 value="<?php  echo $email_template_title ?>"></td>
-			</tr>
-			<tr>
-				<td class=widget_content_form_element colspan=2><textarea class=monospace rows=20 cols=80 name=email_template_body><?php  echo $email_template_body ?></textarea></td>
-			</tr>
-			<tr>
-				<td class=widget_content_form_element colspan=2><input class=button onclick="javascript: updateTemplate();" type=button value="<?php echo _("Update Template"); ?>"> <input class=button type=button onclick="javascript: saveAsNewTemplate();" value="<?php echo _("Save as New Template"); ?>"></td>
-			</tr>
-		</table>
-        </form>
+        <form action="email-3.php" enctype="text/html" onsubmit="javascript: return validate();" method="post">
+            <?php if ($email_template_id) {
+                echo '<input type="hidden" name="email_template_id" value="'. $email_template_id .'">';
+            } ?>
 
+            <table class=widget cellspacing=1>
+                <tr>
+                    <td class=widget_header colspan=2><?php echo _("Edit Template"); ?> - <?php  echo $email_template_title ?></td>
+                </tr>
+
+                <tr>
+                    <td class=widget_label_right width="1%" nowrap><?php echo _("From"); ?>:</td>
+                    <td class=widget_content_form_element><input type=text name="sender_name" size=50 value=""><?php echo $required_indicator; ?></td>
+                </tr>
+
+                <tr>
+                    <td class=widget_label_right width="1%" nowrap><?php echo _("Reply to"); ?>:</td>
+                    <td class=widget_content_form_element><input type=text name="sender_address" size=50 value=""><?php echo $required_indicator; ?></td>
+                </tr>
+
+                <tr>
+                    <td class=widget_label_right width="1%" nowrap><?php echo _("Bcc"); ?>:</td>
+                    <td class=widget_content_form_element><input type=text name="bcc_address" size=50 value=""></td>
+                </tr>
+
+                <tr>
+                    <td class=widget_label_right width="1%" nowrap><?php echo _("Subject"); ?>:</td>
+                    <td class=widget_content_form_element><input type=text name=email_template_title size=50 value="<?php  echo $email_template_title ?>"></td>
+                </tr>
+
+                <tr>
+                    <td class=widget_label_right width="1%" nowrap><?php echo _("Body"); ?>:</td>
+                    <td class=widget_content_form_element><textarea class=monospace rows=20 cols=80 name="email_template_body"><?php  echo $email_template_body ?></textarea></td>
+                </tr>
+
+                <tr>
+                    <td class=widget_content_form_element colspan=2>
+                        <input class=button onclick="javascript: updateTemplate();" type=button value="<?php echo _("Update Template"); ?>">
+                        <input class=button type=button onclick="javascript: saveAsNewTemplate();" value="<?php echo _("Save as New Template"); ?>">
+                    </td>
+                </tr>
+            </table>
+        </form>
     </div>
 
         <!-- right column //-->
@@ -106,17 +115,6 @@ function saveAsNewTemplate() {
     </div>
 
 </div>
-
-<form action=update-template.php method=post>
-<input type=hidden name=email_template_id value="<?php  echo $email_template_id ?>">
-<input type=hidden name=email_template_title>
-<input type=hidden name=email_template_body>
-</form>
-
-<form action=save-as-new-template.php method=post>
-<input type=hidden name=email_template_title>
-<input type=hidden name=email_template_body>
-</form>
 
 <script language=javascript type="text/javascript" >
 
@@ -159,6 +157,9 @@ end_page();
 
 /**
  * $Log: one-template.php,v $
+ * Revision 1.5  2010/07/20 17:41:50  gopherit
+ * Cleaned up HTML and Javascript.
+ *
  * Revision 1.4  2006/12/05 11:29:29  jnhayart
  * correct localisation for java string
  *
