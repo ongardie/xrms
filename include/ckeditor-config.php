@@ -15,18 +15,23 @@ $ckeditor_config['height']  = '150';
 // Available skins are 'kama', 'office2003' and 'v2'
 $ckeditor_config['skin']    = 'office2003';
 $ckeditor_config['toolbar'] = array (
-    array ( 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-',
+
+    array ( 'Bold', 'Italic', 'Underline', 'Format', 'TextColor', 'BGColor', '-',
             'Link', 'Unlink', '-',
+            'NumberedList', 'BulletedList', '-',
+            'Outdent', 'Indent', 'Blockquote', '-',
+            'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'),
+
+    array ( 'Copy', 'Cut', 'Paste', 'PasteText', 'PasteFromWord', '-',
             'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', '-',
-            'Find', 'Replace', 'SelectAll', 'RemoveFormat', '-',
-            'Source', 'ShowBlocks', 'Maximize'),
-    array ( 'Format', 'Bold', 'Italic', 'Underline', '-',
-            'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote', '-',
-            'Cut', 'Paste', 'PasteText', 'PasteFromWord', '-',
+            'Find', 'Replace', '-',
+            'SelectAll', 'ShowBlocks', 'RemoveFormat', '-',
+            'Maximize', 'Source', '-',
             'Undo', 'Redo')
+    
             // Unused toolbar buttons:
-            // 'Copy', 'Strike', 'Subscript', 'Superscript', 'Preview', 'Print', 'Scayt', 'SpellChecker',
+            // 'FontSize', 'Strike', 'Subscript', 'Superscript', 'Preview', 'Print', 'Scayt', 'SpellChecker',
             // 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField',
-            // 'Anchor', 'Image', 'Flash', 'PageBreak', 'Styles', 'Font', 'FontSize', 'TextColor', 'BGColor', 'About'
+            // 'Anchor', 'Image', 'Flash', 'PageBreak', 'Styles', 'Font', 'About'
 );
 ?>
