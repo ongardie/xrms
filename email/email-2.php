@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.33 2010/03/30 21:38:34 gopherit Exp $
+* $Id: email-2.php,v 1.34 2010/07/23 13:32:53 gopherit Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -342,6 +342,11 @@ $oCKeditor = new CKeditor() ;
 $oCKeditor->basePath = $ckeditor_location_url;
 // Override default CKEditor height
 $ckeditor_config['height']  = '300';
+// Insert the Font, Image and CreateDiv buttons in the CKEdtior Toolbar
+$ckeditor_config['toolbar'][0] = array_merge(array_slice($ckeditor_config['toolbar'][0], 0 , 3), array('Font'), array_slice($ckeditor_config['toolbar'][0],  3));
+$ckeditor_config['toolbar'][1] = array_merge(array_slice($ckeditor_config['toolbar'][1], 0 , 10), array('Image'), array_slice($ckeditor_config['toolbar'][1],  10));
+$ckeditor_config['toolbar'][1] = array_merge(array_slice($ckeditor_config['toolbar'][1], 0 , 6), array('CreateDiv'), array_slice($ckeditor_config['toolbar'][1], 6));
+
 $oCKeditor->editor('email_template_body', $email_template_body, $ckeditor_config) ;
 ?>
         </td>
@@ -457,6 +462,9 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.34  2010/07/23 13:32:53  gopherit
+* Added the Font, Image and CreateDiv buttons to the CKEditor Toolbar for editing email templates.
+*
 * Revision 1.33  2010/03/30 21:38:34  gopherit
 * - Upgraded the WYSIWYG editor to the latest stable version (3.2) of CKEditor (formerly FCKEditor).
 *
