@@ -2,7 +2,7 @@
 /**
  * Shared activity pager functions
  *
- * $Id: activities-pager-functions.php,v 1.10 2009/06/05 11:26:06 gopherit Exp $
+ * $Id: activities-pager-functions.php,v 1.11 2010/07/29 16:07:38 gopherit Exp $
  */
 
 /**
@@ -33,9 +33,12 @@ function GetActivitiesPagerData($row) {
 		// for some reason, if the first char of description is a newline, the JS breaks...
 		$row['description_brief'] = str_replace("\n", "", $row['description_brief']);
 		$row['description_brief'] = str_replace("\r", "", $row['description_brief']);
-   		$row['title'] = "<a href=\"../activities/one.php?activity_id={$row['activity_id']}&amp;return_url={$row['return_url']}\" onmouseover=\"return escape('" . htmlentities(addslashes($row['description_brief']),ENT_COMPAT,'UTF-8') . "')\" >{$row['activity_title']}</a>";
+   		$row['title'] = "<a href=\"../activities/one.php?activity_id={$row['activity_id']}&amp;return_url={$row['return_url']}\" onmouseover=\"return escape('".
+                                htmlentities(addslashes($row['description_brief']),ENT_COMPAT,'UTF-8') ."')\" >".
+                                htmlentities($row['activity_title'],ENT_COMPAT,'UTF-8'). "</a>";
 	} else {
-	 	$row['title'] = "<a href=\"../activities/one.php?activity_id={$row['activity_id']}&amp;return_url={$row['return_url']}\">{$row['activity_title']}</a>";
+	 	$row['title'] = "<a href=\"../activities/one.php?activity_id={$row['activity_id']}&amp;return_url={$row['return_url']}\">".
+                                htmlentities($row['activity_title'],ENT_COMPAT,'UTF-8'). "</a>";
 	}
 
 // Query for the About field
@@ -75,6 +78,9 @@ function GetActivitiesPagerData($row) {
 
 /**
  * $Log: activities-pager-functions.php,v $
+ * Revision 1.11  2010/07/29 16:07:38  gopherit
+ * Fixed Bug Artifact #3036636: Special Chars Issue with Activity Listings
+ *
  * Revision 1.10  2009/06/05 11:26:06  gopherit
  * Added the activities_pager_row hook on lines 68-72 to allow the modification of activity row data by plugins.
  *
