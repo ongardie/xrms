@@ -2,7 +2,7 @@
 /**
  * Save Updated Email Template to the database
  *
- * $Id: update-template.php,v 1.1 2008/09/13 14:39:12 randym56 Exp $
+ * $Id: update-template.php,v 1.2 2010/08/06 22:12:56 gopherit Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -26,7 +26,7 @@ $sql = "SELECT * FROM email_templates WHERE email_template_id = $email_template_
 $rst = $con->execute($sql);
 
 $rec = array();
-$rec['email_template_title'] = addslashes($email_template_title);
+$rec['email_template_title'] = $email_template_title;
 $rec['email_template_body'] = $email_template_body;
 
 if ($type == 'update') {
@@ -51,6 +51,9 @@ header("Location: email_template_list.php?email_template_id=$email_template_id&m
 
 /**
  * $Log: update-template.php,v $
+ * Revision 1.2  2010/08/06 22:12:56  gopherit
+ * Updated the Administrative email template editing functionality to mirror the eMailMerge editing scripts: added user fields, additional CKEditor buttons and fixed a quote escaping bug.
+ *
  * Revision 1.1  2008/09/13 14:39:12  randym56
  * Added delete and save-as-new functions
  *

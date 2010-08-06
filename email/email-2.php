@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.34 2010/07/23 13:32:53 gopherit Exp $
+* $Id: email-2.php,v 1.35 2010/08/06 22:12:57 gopherit Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -322,12 +322,13 @@ function insertAtCursor(myField, myValue) {
               <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].addresses_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
 
-<?php if ($my_company_id > 0) { //only show if company ID is set in /include/vars.php?>
-            <tr>
-              <td><?PHP echo _("User") . "<BR>" . $user_menu; ?></td>
-              <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].user_fields.value+'}');"><?php echo _("Add");?></a></td>
-            </tr>
-<?php } ?>
+            <?php if ($my_company_id > 0) { //only show if company ID is set in /include/vars.php?>
+                <tr>
+                  <td><?PHP echo _("User") . "<BR>" . $user_menu; ?></td>
+                  <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].user_fields.value+'}');"><?php echo _("Add");?></a></td>
+                </tr>
+            <?php } ?>
+
             <tr>
               <td colspan="2">Click 'Add' to add the custom field to your mail
                 merge. You can also use these fields in the SUBJECT line too -
@@ -337,18 +338,18 @@ function insertAtCursor(myField, myValue) {
           <br />
         </td>
         <td class="widget_content_form_element">
-<?php
-$oCKeditor = new CKeditor() ;
-$oCKeditor->basePath = $ckeditor_location_url;
-// Override default CKEditor height
-$ckeditor_config['height']  = '300';
-// Insert the Font, Image and CreateDiv buttons in the CKEdtior Toolbar
-$ckeditor_config['toolbar'][0] = array_merge(array_slice($ckeditor_config['toolbar'][0], 0 , 3), array('Font'), array_slice($ckeditor_config['toolbar'][0],  3));
-$ckeditor_config['toolbar'][1] = array_merge(array_slice($ckeditor_config['toolbar'][1], 0 , 10), array('Image'), array_slice($ckeditor_config['toolbar'][1],  10));
-$ckeditor_config['toolbar'][1] = array_merge(array_slice($ckeditor_config['toolbar'][1], 0 , 6), array('CreateDiv'), array_slice($ckeditor_config['toolbar'][1], 6));
+            <?php
+                $oCKeditor = new CKeditor() ;
+                $oCKeditor->basePath = $ckeditor_location_url;
+                // Override default CKEditor height
+                $ckeditor_config['height']  = '300';
+                // Insert the Font, Image and CreateDiv buttons in the CKEdtior Toolbar
+                $ckeditor_config['toolbar'][0] = array_merge(array_slice($ckeditor_config['toolbar'][0], 0 , 3), array('Font'), array_slice($ckeditor_config['toolbar'][0],  3));
+                $ckeditor_config['toolbar'][1] = array_merge(array_slice($ckeditor_config['toolbar'][1], 0 , 10), array('Image'), array_slice($ckeditor_config['toolbar'][1],  10));
+                $ckeditor_config['toolbar'][1] = array_merge(array_slice($ckeditor_config['toolbar'][1], 0 , 6), array('CreateDiv'), array_slice($ckeditor_config['toolbar'][1], 6));
 
-$oCKeditor->editor('email_template_body', $email_template_body, $ckeditor_config) ;
-?>
+                $oCKeditor->editor('email_template_body', $email_template_body, $ckeditor_config) ;
+            ?>
         </td>
       </tr>
       <tr>
@@ -462,6 +463,9 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.35  2010/08/06 22:12:57  gopherit
+* Updated the Administrative email template editing functionality to mirror the eMailMerge editing scripts: added user fields, additional CKEditor buttons and fixed a quote escaping bug.
+*
 * Revision 1.34  2010/07/23 13:32:53  gopherit
 * Added the Font, Image and CreateDiv buttons to the CKEditor Toolbar for editing email templates.
 *

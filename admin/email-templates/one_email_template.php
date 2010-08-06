@@ -6,7 +6,7 @@
  *
  * @author Randy Martinsen
  *
- * $Id: one_email_template.php,v 1.11 2010/03/30 21:38:43 gopherit Exp $
+ * $Id: one_email_template.php,v 1.12 2010/08/06 22:12:57 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -272,7 +272,7 @@ function InsertHTML($_text)
         <td class="widget_header" colspan="2">
           <?php echo _("Edit Message"); ?>
           -
-          <?php echo $email_template_title ?>
+          <?php echo htmlspecialchars($email_template_title) ?>
         </td>
       </tr>
       <tr>
@@ -284,30 +284,41 @@ function InsertHTML($_text)
                    name="email_template_title"
                    id="email_template_title"
                    size="50"
-                   value="<?php echo $email_template_title ?>" />
+                   value="<?php echo htmlspecialchars($email_template_title) ?>" />
         </td>
       </tr>
       <tr>
         <td class="widget_content_form_element">
           <table width="75%" border="1" cellpadding="2">
+
             <tr>
               <td>
                 <?PHP echo _("Contact") . "<BR>" . $contacts_menu; ?>
               </td>
               <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].contacts_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
+
             <tr>
               <td>
                 <?PHP echo _("Company") . "<BR>" . $companies_menu; ?>
               </td>
               <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].companies_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
+
             <tr>
               <td>
                 <?PHP echo _("Addresses") . "<BR>" . $addresses_menu; ?>
               </td>
               <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].addresses_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
+
+            <?php if ($my_company_id > 0) { //only show if company ID is set in /include/vars.php?>
+                <tr>
+                  <td><?PHP echo _("User") . "<BR>" . $user_menu; ?></td>
+                  <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].user_fields.value+'}');"><?php echo _("Add");?></a></td>
+                </tr>
+            <?php } ?>
+
             <tr>
               <td colspan="2">Click 'Add' to add the custom field to your mail
                 merge. You can also use these fields in the SUBJECT line also.</td>
@@ -316,13 +327,18 @@ function InsertHTML($_text)
           <br />
         </td>
         <td class="widget_content_form_element">
-<?php
-$oCKeditor = new CKeditor() ;
-$oCKeditor->basePath = $ckeditor_location_url;
-// Override default CKEditor height
-$ckeditor_config['height']  = '300';
-$oCKeditor->editor('email_template_body', $email_template_body, $ckeditor_config) ;
-?>
+            <?php
+                $oCKeditor = new CKeditor() ;
+                $oCKeditor->basePath = $ckeditor_location_url;
+                // Override default CKEditor height
+                $ckeditor_config['height']  = '300';
+                // Insert the Font, Image and CreateDiv buttons in the CKEdtior Toolbar
+                $ckeditor_config['toolbar'][0] = array_merge(array_slice($ckeditor_config['toolbar'][0], 0 , 3), array('Font'), array_slice($ckeditor_config['toolbar'][0],  3));
+                $ckeditor_config['toolbar'][1] = array_merge(array_slice($ckeditor_config['toolbar'][1], 0 , 10), array('Image'), array_slice($ckeditor_config['toolbar'][1],  10));
+                $ckeditor_config['toolbar'][1] = array_merge(array_slice($ckeditor_config['toolbar'][1], 0 , 6), array('CreateDiv'), array_slice($ckeditor_config['toolbar'][1], 6));
+
+                $oCKeditor->editor('email_template_body', $email_template_body, $ckeditor_config) ;
+            ?>
         </td>
       </tr>
       <tr>
@@ -409,6 +425,9 @@ end_page();
 
 /**
  * $Log: one_email_template.php,v $
+ * Revision 1.12  2010/08/06 22:12:57  gopherit
+ * Updated the Administrative email template editing functionality to mirror the eMailMerge editing scripts: added user fields, additional CKEditor buttons and fixed a quote escaping bug.
+ *
  * Revision 1.11  2010/03/30 21:38:43  gopherit
  * - Upgraded the WYSIWYG editor to the latest stable version (3.2) of CKEditor (formerly FCKEditor).
  *
