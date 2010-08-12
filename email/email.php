@@ -3,7 +3,7 @@
   *
   * Email.
   *
-  * $Id: email.php,v 1.17 2010/03/05 18:16:35 gopherit Exp $
+  * $Id: email.php,v 1.18 2010/08/12 15:21:18 gopherit Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -140,7 +140,7 @@
       $checked = ($counter == 1) ? ' checked' : '';
       $tablerows .= '<tr>';
       $tablerows .= "<td class=widget_content_form_element><input type=radio name=email_template_id value=" . $rst->fields['email_template_id'] . $checked . "></td>";
-      $tablerows .= '<td class=widget_content><a href=one-template.php?email_template_id=' . $rst->fields['email_template_id'] . '>' . $rst->fields['email_template_title'] . '</a></td>';
+      $tablerows .= '<td class=widget_content><a href=one-template.php?email_template_id='. $rst->fields['email_template_id'] .'&return_url='. $return_url .'>'. $rst->fields['email_template_title'] . '</a></td>';
       $tablerows .= '</tr>';
       $rst->movenext();
     }
@@ -197,6 +197,9 @@
 
   /**
   * $Log: email.php,v $
+  * Revision 1.18  2010/08/12 15:21:18  gopherit
+  * Fixed Bug Artifact ID: 3043687.  Also, multiple improvements: added new sets of merge fields, thoroughly revised the mail_merge_functions and updated all email template editing scripts to reflect the new functionality.
+  *
   * Revision 1.17  2010/03/05 18:16:35  gopherit
   * Added handling for the return_url parameter.
   *

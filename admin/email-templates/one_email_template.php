@@ -6,7 +6,7 @@
  *
  * @author Randy Martinsen
  *
- * $Id: one_email_template.php,v 1.12 2010/08/06 22:12:57 gopherit Exp $
+ * $Id: one_email_template.php,v 1.13 2010/08/12 15:21:18 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -23,13 +23,13 @@ $session_user_id = session_check();
 $msg = $_GET['msg'];
 $form_action = $_GET['form_action'];
 
-$save_button = "Save";
+$save_button = _("Save");
 
     //Turn $_POST array into variables
     extract($_POST);
 
-if ( $_POST['act'] == 'add' )
-{
+if ( $_POST['act'] == 'add' ) {
+
     require_once $include_directory . 'classes/File/file_upload.php';
 
     // Create new Class
@@ -77,9 +77,8 @@ if ( $_POST['act'] == 'add' )
     // now prep array for passing around
     $_SESSION['attachment_list'] = $attach_list;
 
-}
-else if ( $_POST['act'] == 'del' )
-{
+} else if ( $_POST['act'] == 'del' ) {
+
     // get attached files list to remove
     $attachedFile = $_POST['attachedFile'];
 
@@ -122,7 +121,8 @@ else
     $files_data['on_what_id']       = $email_template_id;
 
     // Get pre-attached files for this template
-    if ( $file_sidebar_rst = get_file_records( $con, $files_data ) )
+    $file_sidebar_rst = get_file_records( $con, $files_data );
+    if ( $file_sidebar_rst )
     {
         while (!$file_sidebar_rst->EOF)
         {
@@ -140,58 +140,48 @@ else
 	$i=0;
 	$sql="SHOW COLUMNS FROM contacts";
 	$rst_fields=$con->execute($sql);
-	$contacts_menu.="<select name=\"contacts_fields\">\n";
+        $contact_menu.="<select name=\"contact_fields\">\n";
+        $user_menu.="<select name=\"user_fields\">\n";
 	$arr=$rst_fields->GetRows();
 	/*
 	I had to do it the way below because this way doesnt work....
 	$contacts_menu.=$rst_fields->GetMenu("companies_fields");
 	*/
 	while ($i <$rst_fields->RecordCount()) {
-				$contacts_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
+                            $contact_menu.='<option value="contact_'.$arr[$i]["Field"].'">'.$arr[$i]["Field"]."</option>\n";
+                            $user_menu.='<option value="user_'.$arr[$i]["Field"].'">'.$arr[$i]["Field"]."</option>\n";
 				$i++;
 	}
-	$contacts_menu.="</select>";
+        $contact_menu.="</select>";
+        $user_menu.="</select>";
 	$i=0;
 
 	$sql="SHOW COLUMNS FROM companies";
 	$rst_fields=$con->execute($sql);
-	$companies_menu.="<select name=\"companies_fields\">\n";
+        $contact_company_menu.="<select name=\"contact_company_fields\">\n";
+        $user_company_menu.="<select name=\"user_company_fields\">\n";
 	$arr=$rst_fields->GetRows();
 	while ($i <$rst_fields->RecordCount()) {
-				$companies_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
+                            $contact_company_menu.='<option value="contact_company_'.$arr[$i]["Field"].'">'.$arr[$i]["Field"]."</option>\n";
+                            $user_company_menu.='<option value="user_company_'.$arr[$i]["Field"].'">'.$arr[$i]["Field"]."</option>\n";
 				$i++;
 	}
-	$companies_menu.="</select>";
+        $contact_company_menu.="</select>";
+        $user_company_menu.="</select>";
 	$i=0;
 
 	$sql="SHOW COLUMNS FROM addresses";
 	$rst_fields=$con->execute($sql);
-	$addresses_menu.="<select name=\"addresses_fields\">\n";
+        $contact_address_menu.="<select name=\"contact_address_fields\">\n";
+        $user_address_menu.="<select name=\"user_address_fields\">\n";
 	$arr=$rst_fields->GetRows();
 	while ($i <$rst_fields->RecordCount()) {
-				$addresses_menu.="<option value=".$arr[$i]["Field"].">".$arr[$i]["Field"]."</option>";
+                            $contact_address_menu.='<option value="contact_address_'.$arr[$i]["Field"].'">'.$arr[$i]["Field"]."</option>\n";
+                            $user_address_menu.='<option value="user_address_'.$arr[$i]["Field"].'">'.$arr[$i]["Field"]."</option>\n";
 				$i++;
 	}
-	$addresses_menu.="</select>";
-
-//    $rst->close();
-
-	$user_menu = "<select name=\"user_fields\">\n";
-	$user_menu .= "<option value=\"user_first_names\">user_first_names</option>\n";
-	$user_menu .= "<option value=\"user_last_name\">user_last_name</option>\n";
-	$user_menu .= "<option value=\"user_title\">user_title</option>\n";
-	$user_menu .= "<option value=\"user_company_name\">user_company_name</option>\n";
-	$user_menu .= "<option value=\"user_email\">user_email</option>\n";
-	$user_menu .= "<option value=\"user_phone\">user_phone</option>\n";
-	$user_menu .= "<option value=\"user_fax\">user_fax</option>\n";
-	$user_menu .= "<option value=\"user_cell\">user_cell</option>\n";
-	$user_menu .= "<option value=\"user_custom1\">user_custom1</option>\n";
-	$user_menu .= "<option value=\"user_custom2\">user_custom2</option>\n";
-	$user_menu .= "<option value=\"user_custom3\">user_custom3</option>\n";
-	$user_menu .= "<option value=\"user_custom4\">user_custom4</option>\n";
-	$user_menu .= "</select>";
-}
-
+        $contact_address_menu.="</select>";
+        $user_address_menu.="</select>";
 
 function createFileList ()
 {
@@ -218,7 +208,7 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<script language="javascript">
+<script type="text/javascript"  language="javascript">
 
 
 function nextPage( $_where, $_what )
@@ -292,24 +282,18 @@ function InsertHTML($_text)
           <table width="75%" border="1" cellpadding="2">
 
             <tr>
-              <td>
-                <?PHP echo _("Contact") . "<BR>" . $contacts_menu; ?>
-              </td>
-              <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].contacts_fields.value+'}');"><?php echo _("Add");?></a></td>
+              <td><?PHP echo _("Contact") . "<BR>" . $contact_menu; ?></td>
+              <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].contact_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
 
             <tr>
-              <td>
-                <?PHP echo _("Company") . "<BR>" . $companies_menu; ?>
-              </td>
-              <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].companies_fields.value+'}');"><?php echo _("Add");?></a></td>
+              <td><?PHP echo _("Contact Company") . "<BR>" . $contact_company_menu; ?></td>
+              <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].contact_company_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
 
             <tr>
-              <td>
-                <?PHP echo _("Addresses") . "<BR>" . $addresses_menu; ?>
-              </td>
-              <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].addresses_fields.value+'}');"><?php echo _("Add");?></a></td>
+              <td><?PHP echo _("Contact Address") . "<BR>" . $contact_address_menu; ?></td>
+              <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].contact_address_fields.value+'}');"><?php echo _("Add");?></a></td>
             </tr>
 
             <?php if ($my_company_id > 0) { //only show if company ID is set in /include/vars.php?>
@@ -317,14 +301,25 @@ function InsertHTML($_text)
                   <td><?PHP echo _("User") . "<BR>" . $user_menu; ?></td>
                   <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].user_fields.value+'}');"><?php echo _("Add");?></a></td>
                 </tr>
+
+                <tr>
+                  <td><?PHP echo _("User Company") . "<BR>" . $user_company_menu; ?></td>
+                  <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].user_company_fields.value+'}');"><?php echo _("Add");?></a></td>
+                </tr>
+
+                <tr>
+                  <td><?PHP echo _("User Address") . "<BR>" . $user_address_menu; ?></td>
+                  <td><a href="javascript:void(0);" onClick="CKEDITOR.instances.email_template_body.insertHtml('{'+document.forms[0].user_address_fields.value+'}');"><?php echo _("Add");?></a></td>
+                </tr>
+
             <?php } ?>
 
             <tr>
               <td colspan="2">Click 'Add' to add the custom field to your mail
-                merge. You can also use these fields in the SUBJECT line also.</td>
+                merge. You can also use these fields in the SUBJECT line too -
+                just copy-&gt;paste them into it.<BR></td>
             </tr>
           </table>
-          <br />
         </td>
         <td class="widget_content_form_element">
             <?php
@@ -387,7 +382,7 @@ if ( $attach_list )
                    id="email_template_id"
                    value="<?php echo $email_template_id ?>" />
 	<?php if ($form_action == "edit") {
-		$save_button = "Save as New Template"; ?>
+		$save_button = _("Save as New Template"); ?>
           <input type="button"
                    class="button"
                    value="<?php echo _("Update Template"); ?>"
@@ -420,11 +415,14 @@ if ( $attach_list )
 </div></div>
 
 <?php
-
+}
 end_page();
 
 /**
  * $Log: one_email_template.php,v $
+ * Revision 1.13  2010/08/12 15:21:18  gopherit
+ * Fixed Bug Artifact ID: 3043687.  Also, multiple improvements: added new sets of merge fields, thoroughly revised the mail_merge_functions and updated all email template editing scripts to reflect the new functionality.
+ *
  * Revision 1.12  2010/08/06 22:12:57  gopherit
  * Updated the Administrative email template editing functionality to mirror the eMailMerge editing scripts: added user fields, additional CKEditor buttons and fixed a quote escaping bug.
  *

@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.40 2010/03/05 20:59:22 gopherit Exp $
+* $Id: email-4.php,v 1.41 2010/08/12 15:21:18 gopherit Exp $
 *
 * @todo use a more secure method than 'unlink' to delete files after sending them
 */
@@ -138,8 +138,8 @@ if ( $_SESSION['email_sent'] === false ) {
             }
 
             $m=mail_merge_email($email_template_title,$output1,$rst->fields['contact_id'],false);
-            $msg_subject=$m[0];
-            $msg_body=$m[1];
+            $msg_subject    = $m['subject'];
+            $msg_body       = $m['body'];
 
             //echo stripslashes($msg_body); //debug
             $objSMTP = new SMTPs ();
@@ -382,6 +382,9 @@ end_page();
 // =============================================================
 /**
 * $Log: email-4.php,v $
+* Revision 1.41  2010/08/12 15:21:18  gopherit
+* Fixed Bug Artifact ID: 3043687.  Also, multiple improvements: added new sets of merge fields, thoroughly revised the mail_merge_functions and updated all email template editing scripts to reflect the new functionality.
+*
 * Revision 1.40  2010/03/05 20:59:22  gopherit
 * Added "Close" button to return the user where they came from.
 *

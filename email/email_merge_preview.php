@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email_merge_preview.php,v 1.2 2010/03/05 17:54:53 gopherit Exp $
+ * $Id: email_merge_preview.php,v 1.3 2010/08/12 15:21:18 gopherit Exp $
  */
 
 
@@ -27,7 +27,7 @@ start_page($page_title, true, $msg);
 
 <div id="Main">
     <div id="Content">
-        <?
+        <?php
             include_once "mail_merge_functions.inc";
             $prev_email_template_title=unserialize($_SESSION['email_template_title']);
             $prev_email_template_body= unserialize($_SESSION['email_template_body']);
@@ -36,10 +36,10 @@ start_page($page_title, true, $msg);
         ?>
 
         <samp><strong>Subject</strong></samp><br />
-        <? echo $m[0];?><br /><br />
+        <?php echo $m['subject'];?><br /><br />
 
         <samp><strong>Body</strong></samp><br />
-        <? echo $m[1];?>
+        <?php echo $m['body'];?>
     </div>
 
     <!-- right column //-->
@@ -52,6 +52,9 @@ end_page();
 
 /**
  * $Log: email_merge_preview.php,v $
+ * Revision 1.3  2010/08/12 15:21:18  gopherit
+ * Fixed Bug Artifact ID: 3043687.  Also, multiple improvements: added new sets of merge fields, thoroughly revised the mail_merge_functions and updated all email template editing scripts to reflect the new functionality.
+ *
  * Revision 1.2  2010/03/05 17:54:53  gopherit
  * FIXED: The script assumed a text-only template and rendered HTML templates with nl2br() which resulted in extra line feeds.
  *
