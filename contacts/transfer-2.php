@@ -2,7 +2,7 @@
 /**
  * Transfer a Contact to Another Company
  *
- * $Id: transfer-2.php,v 1.14 2010/08/17 18:40:16 gopherit Exp $
+ * $Id: transfer-2.php,v 1.15 2010/08/17 22:09:04 gopherit Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -28,25 +28,25 @@ $rst = $con->execute($sql);
 $contact_name = $rst->fields['first_names'] . ' ' . $rst->fields['last_name'];
 $company_id =  $rst->fields['company_id'];
 
-if(eregi("[a-zA-Z]", $company_name)) {
-    $sql = "select company_name, company_id from companies where company_name like ". $con->qstr(company_search_string($company_name),get_magic_quotes_gpc()) . " and company_record_status = 'a' order by company_name";
+if($company_name) {
+    $sql = "SELECT company_name, company_id FROM companies
+            WHERE company_name LIKE ". $con->qstr(company_search_string($company_name),get_magic_quotes_gpc()) . " AND company_record_status = 'a' ORDER BY company_name";
+    $company_name_rst = $con->execute($sql);
+} else {
+    $sql = "SELECT company_name, company_id FROM companies WHERE company_id = " . $company_id . " AND company_record_status = 'a'";
 }
-else {
-    $sql = "select company_name, company_id from companies where company_id = " . $company_name . " and company_record_status = 'a'";
-}
-$rst = $con->execute($sql);
 
-if($rst->rowcount()) {
-    $company_menu = $rst->getmenu2('company_id', false, false);
+if($company_name_rst && $company_name_rst->rowcount()) {
+    $company_menu = $company_name_rst->getmenu2('company_id', false, false);
     $company_menu .= "&nbsp; <input type=button class=button value='More Info' onclick='document.forms[0].company_id.value=document.forms[1].company_id.options[document.forms[1].company_id.selectedIndex].value; document.forms[0].submit();'>";
-}
-$rst->close();
-
-$con->close();
-if (!$company_menu) {
-    $company_name=urlencode($company_name);
-    Header("Location: transfer.php?company_name=$company_name&contact_id=$contact_id&msg=".urlencode("No Companies Found, please try another search"));
-    exit;
+    $company_name_rst->close();
+    $con->close();
+} else {
+    if (!$company_menu) {
+        $company_name=urlencode($company_name);
+        Header("Location: transfer.php?company_name=$company_name&contact_id=$contact_id&msg=".urlencode(_("No Companies Found, please try another search")));
+        exit;
+    }
 }
 $page_title = $contact_name . " - " . _("Transfer to Another Company");
 start_page($page_title, true, $msg);
@@ -100,6 +100,9 @@ end_page();
 
 /**
  * $Log: transfer-2.php,v $
+ * Revision 1.15  2010/08/17 22:09:04  gopherit
+ * Fixed Bug Artifact # 3047297: /contacts/transfer-2.php dies when the search string of the company we are looking to transfer to is blank or contains non-alpha characters.
+ *
  * Revision 1.14  2010/08/17 18:40:16  gopherit
  * Minor interface improvements
  *
