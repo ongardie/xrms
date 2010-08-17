@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.92 2010/01/12 21:40:07 gopherit Exp $
+ * $Id: some.php,v 1.93 2010/08/17 19:46:20 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -41,6 +41,7 @@ getGlobalVar($not_country, 'not_country');
 getGlobalVar($not_industry, 'not_industry');
 getGlobalVar($not_source, 'not_source');
 getGlobalVar($not_crm, 'not_crm');
+getGlobalVar($not_company_type, 'not_company_type');
 getGlobalVar($not_name, 'not_name');
 getGlobalVar($not_name, 'not_legal_name');
 getGlobalVar($not_phone, 'not_phone');
@@ -187,6 +188,14 @@ if (strlen($crm_status_id) > 0) {
     $where .= " and c.crm_status_id <> $crm_status_id \n";
   else
     $where .= " and c.crm_status_id = $crm_status_id \n";
+}
+
+if (strlen($company_type_id) > 0) {
+    $criteria_count++;
+  if ($not_company_type)
+    $where .= " and c.company_type_id <> $company_type_id \n";
+  else
+    $where .= " and c.company_type_id = $company_type_id \n";
 }
 
 if (strlen($industry_id) > 0) {
@@ -497,6 +506,9 @@ if($advanced_search) {
     // crm_status_menu
     $crm_status_menu = build_crm_status_menu($con, $crm_status_id, true);
 
+    // company_type_menu
+    $company_type_menu = build_company_type_menu($con, $company_type_id, true);
+
     // company_source_menu
     $sql2 = "select company_source_pretty_name, company_source_id from company_sources where company_source_record_status = 'a' order by company_source_pretty_name";
     $company_source_menu = check_and_get($con,$sql2,'company_source_id',$company_source_id);
@@ -714,6 +726,16 @@ if (!$advanced_search) {
                       else   { echo ' <input type=checkbox name="not_crm" value=1>';}?>
                 <?php  echo $crm_status_menu; ?></td>
             </tr>
+
+            <tr>
+                <td class=widget_label_right><?php echo _("Company Type"); ?></td>
+                <td class=widget_content_form_element>
+                <?php echo _("!")?>
+                <?php if ($not_company_type) { echo ' <input type=checkbox name="not_company_type" value=1 checked>'; }
+                      else   { echo ' <input type=checkbox name="not_company_type" value=1>';}?>
+                <?php  echo $company_type_menu; ?></td>
+            </tr>
+
             <tr>
                 <td class=widget_label_right>
                 <?php echo _("Company Source"); ?></td>
@@ -1088,6 +1110,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.93  2010/08/17 19:46:20  gopherit
+ * Minor improvement: added company type to advanced search criteria.
+ *
  * Revision 1.92  2010/01/12 21:40:07  gopherit
  * Modified page titles for uniformity.
  *
