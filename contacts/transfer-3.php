@@ -2,7 +2,7 @@
 /**
  * Database updates for transfer contact
  *
- * $Id: transfer-3.php,v 1.7 2006/01/02 23:00:00 vanmer Exp $
+ * $Id: transfer-3.php,v 1.8 2010/08/17 18:40:16 gopherit Exp $
  */
 
 
@@ -20,7 +20,7 @@ $new_company_id = $_POST['company_id'];
 $old_company_id = $_POST['old_company_id'];
 $contact_id = $_POST['contact_id'];
 
-$everywhere = (isset($_POST['everywhere'])) ? $_POST['everywhere'] : '';
+$everywhere = (isset($_POST['everywhere'])) ? TRUE : FALSE;
 
 $con = get_xrms_dbconnection();
 // $con->debug = 1;
@@ -91,6 +91,9 @@ function add_contact_company_history($con, $contact_id, $company_id) {
 }
 /**
  * $Log: transfer-3.php,v $
+ * Revision 1.8  2010/08/17 18:40:16  gopherit
+ * Minor interface improvements
+ *
  * Revision 1.7  2006/01/02 23:00:00  vanmer
  * - changed to use centralized dbconnection function
  *

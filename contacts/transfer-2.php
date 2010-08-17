@@ -2,7 +2,7 @@
 /**
  * Transfer a Contact to Another Company
  *
- * $Id: transfer-2.php,v 1.13 2006/01/02 23:00:00 vanmer Exp $
+ * $Id: transfer-2.php,v 1.14 2010/08/17 18:40:16 gopherit Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -63,17 +63,20 @@ start_page($page_title, true, $msg);
         <input type=hidden name=contact_id value=<?php echo $contact_id; ?>>
         <input type=hidden name=old_company_id value=<?php echo $company_id; ?>>
         <table class=widget cellspacing=1>
+
             <tr>
                 <td class=widget_header colspan=2><?php echo _("Transfer to Another Company"); ?></td>
             </tr>
+
             <tr>
-                <td class=widget_content><?php  echo ($company_menu) ? $company_menu : _("No companies found"); ?></a></td>
+                <td class=widget_content><?php  echo ($company_menu) ? $company_menu : _("No companies found"); ?></td>
             </tr>
+
             <tr>
                 <td class=widget_content_form_element colspan=2>
                     <?php if($company_menu) { ?>
-                          <input class=button type=submit name=save value="<?php echo _("Save"); ?>"> 
-                          <input class=button type=submit name=everywhere value="<?php echo _("Save and Update All Records"); ?>">
+                        <input type="checkbox" name=everywhere /><font color="#FF0000"><strong><?php echo _("Also transfer all records attached to this contact to the new company"); ?></strong></font>&nbsp;&nbsp;
+                        <input class=button type=submit name=save value="<?php echo _("Save"); ?>">
                     <?php } ?>
                 </td>
             </tr>
@@ -97,6 +100,9 @@ end_page();
 
 /**
  * $Log: transfer-2.php,v $
+ * Revision 1.14  2010/08/17 18:40:16  gopherit
+ * Minor interface improvements
+ *
  * Revision 1.13  2006/01/02 23:00:00  vanmer
  * - changed to use centralized dbconnection function
  *
