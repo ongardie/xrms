@@ -2,7 +2,7 @@
 /**
  * Edit address for a company or contact
  *
- * $Id: one-address.php,v 1.16 2008/01/29 22:38:13 gpowers Exp $
+ * $Id: one-address.php,v 1.17 2010/08/17 18:55:53 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -29,13 +29,13 @@ getGlobalVar($address_type, 'address_type');
 getGlobalVar($use_pretty_address, 'use_pretty_address');
 getGlobalVar($msg, 'msg');
 
+$_POST['country_id']=$default_country_id;
+
     if ($company_id) {
         switch ($form_action) {
             case 'new':
                 $page_title = _("New Business Address");
                 $_POST['address_type']='commercial';
-				global $default_country_id;
-                $_POST['country_id']=$default_country_id;
             break;
             case 'edit':
                 $page_title=_("Edit Business Address");
@@ -168,17 +168,18 @@ getGlobalVar($msg, 'msg');
 ?>
 
 <div id="Main">
-<div id="Sidebar">
-    &nbsp;
-</div>
-<div id="Content">
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=30% valign=top>
-					<?php echo $template_form_html; ?>
-        </td>
-    </tr>
-</table>
+
+    <div id="Sidebar">&nbsp;</div>
+
+    <div id="Content">
+        <table border=0 cellpadding=0 cellspacing=0 width=100%>
+            <tr>
+                <td class=lcol width=30% valign=top>
+                    <?php echo $template_form_html; ?>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 <?php
 switch ($form_action) {
@@ -233,6 +234,9 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.17  2010/08/17 18:55:53  gopherit
+ * Minor improvement: when a new home address was being created, it did not default to the default country id.
+ *
  * Revision 1.16  2008/01/29 22:38:13  gpowers
  * - updated for consistancy with companies/addresses.php
  *
