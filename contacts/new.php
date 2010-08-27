@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.50 2007/10/30 03:16:33 randym56 Exp $
+ * $Id: new.php,v 1.51 2010/08/27 20:34:37 gopherit Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -131,6 +131,8 @@ if ( isset($company_id) ) {
 if ( !isset($address_menu) ) {
    $address_menu = '';
 }
+
+$address_name = $address_name ? $address_name : _('Main');
 
 // build salutation menu
 if ( !isset($salutation) ) {
@@ -326,7 +328,7 @@ start_page($page_title, true, $msg);
         <table class=widget cellspacing=1><tr><td colspan=2 class=widget_header><?php echo _("Home Address"); ?></td></tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Address Name"); ?></td>
-                <td class=widget_content_form_element><input type=text size=30 name=address_name value="<?php echo $address_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text size=30 name=address_name value="<?php echo $address_name; ?>"><?php echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Line 1"); ?></td>
@@ -381,6 +383,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.51  2010/08/27 20:34:37  gopherit
+ * Fixed Bug Artifact #3053549: Creating or Updating an Address Allows Blank Address Names
+ *
  * Revision 1.50  2007/10/30 03:16:33  randym56
  * - Added email opt-in radio button for contacts search function
  *

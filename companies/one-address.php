@@ -2,7 +2,7 @@
 /**
  * Edit address for a company or contact
  *
- * $Id: one-address.php,v 1.17 2010/08/17 18:55:53 gopherit Exp $
+ * $Id: one-address.php,v 1.18 2010/08/27 20:34:37 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -30,6 +30,17 @@ getGlobalVar($use_pretty_address, 'use_pretty_address');
 getGlobalVar($msg, 'msg');
 
 $_POST['country_id']=$default_country_id;
+
+// Ensure that the address_name is not blank and makes some sense
+if ( !strlen(trim($_POST['address_name'])) || $_POST['address_name'] == _('Main') ) {
+    if ( strlen($_POST['city']) ) {
+        $_POST['address_name'] = $_POST['city'];
+        if ( strlen($_POST['line1']) )
+            $_POST['address_name'] .= " - ". $_POST['line1'];
+    } else {
+        $_POST['address_name'] = _("Main");
+    }
+}
 
     if ($company_id) {
         switch ($form_action) {
@@ -234,6 +245,9 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.18  2010/08/27 20:34:37  gopherit
+ * Fixed Bug Artifact #3053549: Creating or Updating an Address Allows Blank Address Names
+ *
  * Revision 1.17  2010/08/17 18:55:53  gopherit
  * Minor improvement: when a new home address was being created, it did not default to the default country id.
  *

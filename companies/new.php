@@ -6,7 +6,7 @@
  *
  * @todo Add ability to ctreate a Sales Opportunity for a new company
  *
- * $Id: new.php,v 1.26 2009/12/15 16:04:26 gopherit Exp $
+ * $Id: new.php,v 1.27 2010/08/27 20:34:36 gopherit Exp $
  */
 
 /* Include required files */
@@ -215,7 +215,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Address Name"); ?></td>
-                <td class=widget_content_form_element><input type=text name=address_name size=30 value="Main"> <?php echo $required_indicator; ?></td>
+                <td class=widget_content_form_element><input type=text name=address_name size=30 value="<?php echo _("Main"); ?>"> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Line 1"); ?></td>
@@ -340,6 +340,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.27  2010/08/27 20:34:36  gopherit
+ * Fixed Bug Artifact #3053549: Creating or Updating an Address Allows Blank Address Names
+ *
  * Revision 1.26  2009/12/15 16:04:26  gopherit
  * Removed trailing whitespace.
  *

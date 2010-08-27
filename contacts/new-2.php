@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.41 2007/05/15 23:17:30 ongardie Exp $
+ * $Id: new-2.php,v 1.42 2010/08/27 20:34:37 gopherit Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -80,7 +80,19 @@ if (!$home_address_id) {
         $rec['province'] = $province;
         $rec['postal_code'] = $postal_code;
         $rec['address_type'] = $address_type;
+
+        // Ensure that the address_name is not blank and makes some sense
         $rec['address_name'] = $address_name;
+        if ( !strlen(trim($address_name)) || ($address_name) == _('Main') ) {
+            if ( strlen($city) ) {
+                $rec['address_name'] = $city;
+                if ( strlen($line1) )
+                    $rec['address_name'] .= " - ". $line1;
+            } else {
+                $rec['address_name'] = _("Main");
+            }
+        }
+
         $rec['address_body'] = $address_body;
         $rec['use_pretty_address'] = $use_pretty_address;
         $tbl = 'addresses';
@@ -205,6 +217,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.42  2010/08/27 20:34:37  gopherit
+ * Fixed Bug Artifact #3053549: Creating or Updating an Address Allows Blank Address Names
+ *
  * Revision 1.41  2007/05/15 23:17:30  ongardie
  * - Addresses now associate with on_what_table, on_what_id instead of company_id.
  *

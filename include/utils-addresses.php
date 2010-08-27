@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @author Brian Peterson
  *
- * $Id: utils-addresses.php,v 1.14 2007/06/28 04:35:44 niclowe Exp $
+ * $Id: utils-addresses.php,v 1.15 2010/08/27 20:34:37 gopherit Exp $
  *
  */
 
@@ -83,16 +83,11 @@ function add_update_address($con, $address_data, $return_recordset = false, $_ma
     if ( ! $address_info ) {
         $address_info['address_id'] = 1;
         $address_info['primarykey'] = $_primary_key;
-
         return $address_info;
-    } elseif (
-        ! $address_info['line1'] &&
-        ! $address_info['city']
-    ) {
+    } elseif ( ! $address_info['line1'] && ! $address_info['city'] ) {
         //useless address, so set to unknown
         $address_info['address_id'] = 1;
         $address_info['primarykey'] = $_primary_key;
-
     }
 
     //if this is an unknown address, just return
@@ -125,12 +120,22 @@ function add_update_address($con, $address_data, $return_recordset = false, $_ma
         }
     } //end country checks
 
+    // Ensure that the address_name is not blank and makes some sense
+    if ( !strlen(trim($address_info['address_name'])) || $address_info['address_name'] == _('Main') ) {
+        if ( strlen($address_info['city']) ) {
+            $address_info['address_name'] = $address_info['city'];
+            if ( strlen($address_info['line1']) )
+                $address_info['address_name'] .= " - ". $address_info['line1'];
+        } else {
+            $address_info['address_name'] = _("Main");
+        }
+    }
 
     if ( $address_info['address_id'] )
     {
       // If we have a record ID, we don't need to find the record (as we have it)
       // it just needs to be updated.
-      $_retVal = __record_update ( $con, $_table_name, $_primay_key, $address_info, $_magic_quotes, $_return_recordset, $_deleteRecord );
+      $_retVal = __record_update ( $con, $_table_name, $_primary_key, $address_info, $_magic_quotes, $_return_recordset, $_deleteRecord );
     } else {
         // Need to see if this address exists already
         // Prep array for "search", only on these fields
@@ -157,40 +162,20 @@ function add_update_address($con, $address_data, $return_recordset = false, $_ma
         }
 
         // What's the primary key for this data set
-        $_primay_key = $found_data['primarykey'];
-
-        // Define address name if one is not already defined
-        if ( $address_info['address_name'] = _("Main") ) {
-            //clear the 'Main' address... bad convention
-            $address_info['address_name'] = '';
-            //NOTE: this is still messy, and needs cleaning up
-        }
-        if ( $found_data['address_name'] = _("Main") ) {
-            //clear the 'Main' address... bad convention
-            $found_data['address_name'] = '';
-            //NOTE: this is still messy, and needs cleaning up
-        }
-
-        if ( ( ! strlen(trim($address_info['address_name']))>0 ) && ( ! strlen(trim($found_data['address_name']))>0 ) ) {
-            if (strlen($address_info['city'])) {
-                $address_info['address_name'] = $address_info['city']." - ".$address_info['line1'];
-            } else {
-                $address_info['address_name'] = _("Main");
-            }
-        }
+        $_primary_key = $found_data['primarykey'];
 
         // If this address exists already
-        if ( $found_data[$_primay_key] )
+        if ( $found_data[$_primary_key] )
         {
 
             // We found it, so pull record ID
-            $address_info[$_primay_key] = $found_data[$_primay_key];
+            $address_info[$_primary_key] = $found_data[$_primary_key];
 
-            $_retVal = __record_update ( $con, $_table_name, $_primay_key, $address_info, $_magic_quotes, $_return_recordset, $_deleteRecord );
+            $_retVal = __record_update ( $con, $_table_name, $_primary_key, $address_info, $_magic_quotes, $_return_recordset, $_deleteRecord );
 
             if ( $_retVal[$_primary_key] == 0 )
             {
-                $_retVal[$_primary_key] = $found_data[$_primay_key];
+                $_retVal[$_primary_key] = $found_data[$_primary_key];
                 $_retVal['primarykey'] = $_primary_key;
             }
         } else { // This is a new addresses
@@ -414,6 +399,9 @@ function pull_address_fields ( $array_data )
 /**********************************************************************/
  /**
  * $Log: utils-addresses.php,v $
+ * Revision 1.15  2010/08/27 20:34:37  gopherit
+ * Fixed Bug Artifact #3053549: Creating or Updating an Address Allows Blank Address Names
+ *
  * Revision 1.14  2007/06/28 04:35:44  niclowe
  * fixed bug in find_address function that meant it sent an where array to _record_find .
  * Also $_table_name wasnt dimensioned..
@@ -446,7 +434,7 @@ function pull_address_fields ( $array_data )
  * Revision 1.7  2006/04/21 22:56:25  braverock
  * - clean up error checking
  *
- * Revision 1.6  2006/04/21 22:03:36  braverock
+ * Revision 1.6 ï¿½2006/04/21 22:03:36 ï¿½braverock
  * - update add_address and update_address API to more closely match contacts and companies API
  *
  * Revision 1.5  2006/04/21 21:37:38  braverock
