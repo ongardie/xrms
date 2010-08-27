@@ -2,7 +2,7 @@
 /**
  * Shared activity pager functions
  *
- * $Id: activities-pager-functions.php,v 1.11 2010/07/29 16:07:38 gopherit Exp $
+ * $Id: activities-pager-functions.php,v 1.12 2010/08/27 22:57:26 gopherit Exp $
  */
 
 /**
@@ -33,12 +33,15 @@ function GetActivitiesPagerData($row) {
 		// for some reason, if the first char of description is a newline, the JS breaks...
 		$row['description_brief'] = str_replace("\n", "", $row['description_brief']);
 		$row['description_brief'] = str_replace("\r", "", $row['description_brief']);
-   		$row['title'] = "<a href=\"../activities/one.php?activity_id={$row['activity_id']}&amp;return_url={$row['return_url']}\" onmouseover=\"return escape('".
-                                htmlentities(addslashes($row['description_brief']),ENT_COMPAT,'UTF-8') ."')\" >".
-                                htmlentities($row['activity_title'],ENT_COMPAT,'UTF-8'). "</a>";
+                $tooltip = strip_tags($row['description_brief']);
+                $js_tooltip = addslashes($tooltip);
+   		$row['title'] = "<a href=\"../activities/one.php?activity_id={$row['activity_id']}&amp;return_url={$row['return_url']}\"
+                                    title=\"$tooltip\"
+                                    onmouseover=\"return escape('$js_tooltip');\" >".
+                                    htmlentities($row['activity_title'],ENT_COMPAT). "</a>";
 	} else {
 	 	$row['title'] = "<a href=\"../activities/one.php?activity_id={$row['activity_id']}&amp;return_url={$row['return_url']}\">".
-                                htmlentities($row['activity_title'],ENT_COMPAT,'UTF-8'). "</a>";
+                                    htmlentities($row['activity_title'],ENT_COMPAT). "</a>";
 	}
 
 // Query for the About field
@@ -78,6 +81,10 @@ function GetActivitiesPagerData($row) {
 
 /**
  * $Log: activities-pager-functions.php,v $
+ * Revision 1.12  2010/08/27 22:57:26  gopherit
+ * Fixed Bug Artifact #3050280: Umlaut Problems with Update activities-pager-functions.php.
+ * Added title attribute to the activity description link to allow for HTML activity description tooltips but the JS tooltip does not work consistently yet - need a cross-browser solution.
+ *
  * Revision 1.11  2010/07/29 16:07:38  gopherit
  * Fixed Bug Artifact #3036636: Special Chars Issue with Activity Listings
  *
