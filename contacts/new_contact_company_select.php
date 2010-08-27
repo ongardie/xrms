@@ -47,7 +47,7 @@ switch ($company_select_action) {
     case 'showCompanies':
         $con = get_xrms_dbconnection();
         if (!$company_name) {
-            $msg="Please include a search phrase";
+            $msg= _('Please include a search phrase');
             Header("Location: new_contact_company_select.php?company_select_action=newCompanySearch&msg=$msg&return_url=$return_url");
         }
         $header_text=_("Select a company or create a").'&nbsp;<a href="../companies/new.php">'._("New Company").'</a>';
@@ -72,7 +72,7 @@ switch ($company_select_action) {
         $body_content.= _("Company").": <input type=text name=company_name>";
         $body_content.="<input type=hidden name=company_select_action  value='showCompanies'>";
         $body_content.="<input type=hidden name=return_url  value='$return_url'>";
-        $body_content.="<input type=button class=button name=btNewContact value=\""._("Search") ."\">";
+        $body_content.="<input type=submit class=button name=btNewContact value=\""._("Search") ."\">";
         $body_content.="<input type=button class=button name=btNewCompany onclick=\"javascript: location.href='../companies/new.php';\"   value=\""._("New Company") ."\">";
         $body_content.="<input type=button class=button name=btNoCompany onclick=\"javascript: location.href='new.php?company_id=1';\" value=\"" . _("Create Contact without a Company") . "\">";
         // $body_content.="<input type=submit class=button name=btCancel value=\""._("Cancel") ."\">";
@@ -108,6 +108,9 @@ end_page();
 
 /*
  * $Log: new_contact_company_select.php,v $
+ * Revision 1.10  2010/08/27 19:48:51  gopherit
+ * Search button was not set to submit the form.
+ *
  * Revision 1.9  2008/01/30 21:26:51  gpowers
  * - added "
  *
