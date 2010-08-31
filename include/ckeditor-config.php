@@ -14,6 +14,7 @@ $ckeditor_config            = array();
 $ckeditor_config['height']  = '150';
 // Available skins are 'kama', 'office2003' and 'v2'
 $ckeditor_config['skin']    = 'office2003';
+$ckeditor_config['entities_additional'] = '';
 $ckeditor_config['toolbar'] = array (
 
     array ( 'Bold', 'Italic', 'Underline', 'Format', 'TextColor', 'BGColor', '-',

@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.36 2010/08/12 15:21:18 gopherit Exp $
+* $Id: email-2.php,v 1.37 2010/08/31 18:11:26 gopherit Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -204,7 +204,7 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<script language="javascript">
+<script type="text/javascript"  language="javascript">
 
 
 function nextPage( $_where, $_what )
@@ -240,7 +240,7 @@ function nextPage( $_where, $_what )
         <td class="widget_header" colspan="2">
           <?php echo _("Edit Message"); ?>
           -
-          <?php echo $email_template_title ?>
+          <?php echo htmlspecialchars($email_template_title, ENT_QUOTES) ?>
         </td>
       </tr>
       <tr>
@@ -273,7 +273,7 @@ function nextPage( $_where, $_what )
                    name="email_template_title"
                    id="email_template_title"
                    size="50"
-                   value="<?php echo htmlspecialchars($email_template_title) ?>" />
+                   value="<?php echo htmlspecialchars($email_template_title, ENT_QUOTES) ?>" />
         </td>
       </tr>
       <tr>
@@ -447,6 +447,9 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.37  2010/08/31 18:11:26  gopherit
+* Fixed Bug Artifact #3056891: CKEditor Eats Single Quotes
+*
 * Revision 1.36  2010/08/12 15:21:18  gopherit
 * Fixed Bug Artifact ID: 3043687.  Also, multiple improvements: added new sets of merge fields, thoroughly revised the mail_merge_functions and updated all email template editing scripts to reflect the new functionality.
 *

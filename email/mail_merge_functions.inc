@@ -42,8 +42,8 @@ function htmlquotes($svalue){
  * If you pass it a bad contact id, it will return FALSE for both.
 */
 function mail_merge_email($subject,$body,$contact_id="",$address_id="") {
-    $mm['subject']=mail_merge_text($subject,$contact_id,$address_id);
-    $mm['body']=mail_merge_text($body,$contact_id,$address_id);
+    $mm['subject']  = mail_merge_text($subject, $contact_id, $address_id);
+    $mm['body']     = mail_merge_text($body, $contact_id, $address_id);
 
     return $mm;
 }
