@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email_merge_preview.php,v 1.3 2010/08/12 15:21:18 gopherit Exp $
+ * $Id: email_merge_preview.php,v 1.4 2010/08/31 17:55:20 gopherit Exp $
  */
 
 
@@ -34,12 +34,33 @@ start_page($page_title, true, $msg);
             //echo $email_template_title;exit;
             $m=mail_merge_email($prev_email_template_title,$prev_email_template_body,$contact_id,$address_id="");
         ?>
+        <table class=widget cellspacing=1>
 
-        <samp><strong>Subject</strong></samp><br />
-        <?php echo $m['subject'];?><br /><br />
+            <tr>
+                <td class=widget_header colspan=2><?php echo _('eMail Merge Preveiw'); ?></td>
+            </tr>
 
-        <samp><strong>Body</strong></samp><br />
-        <?php echo $m['body'];?>
+            <tr>
+                <td class=widget_label_right><?php echo _("Subject"); ?></td>
+                <td class=widget_content_form_element><strong>
+                    <?php
+                        if ($m['subject'])
+                            echo $m['subject'];
+                        else
+                            echo '['. _('No Subject') .']';
+                    ?>
+                    </strong>
+                </td>
+            </tr>
+
+            <tr>
+                <td class=widget_label_right><?php echo _("Body"); ?></td>
+                <td class=widget_content_form_element>
+                    <?php echo $m['body']; ?>
+                </td>
+            </tr>
+
+        </table>
     </div>
 
     <!-- right column //-->
@@ -52,6 +73,9 @@ end_page();
 
 /**
  * $Log: email_merge_preview.php,v $
+ * Revision 1.4  2010/08/31 17:55:20  gopherit
+ * Prettied up the Mail Merge Preview output.
+ *
  * Revision 1.3  2010/08/12 15:21:18  gopherit
  * Fixed Bug Artifact ID: 3043687.  Also, multiple improvements: added new sets of merge fields, thoroughly revised the mail_merge_functions and updated all email template editing scripts to reflect the new functionality.
  *
