@@ -40,7 +40,7 @@
  *
  * @example GUP_Pager.doc.7.php Another pager example showing Caching
  *
- * $Id: GUP_Pager.php,v 1.52 2009/12/15 16:04:27 gopherit Exp $
+ * $Id: GUP_Pager.php,v 1.53 2010/08/31 19:25:46 gopherit Exp $
  */
 
 
@@ -582,7 +582,7 @@ class GUP_Pager {
             $this->AbsolutePage = $this->curr_page;
             $this->LastPageNo     = (int)((count($this->data) + $this->rows - 1) / $this->rows);
             $this->AtFirstPage     = (1 == $this->curr_page);
-            $this->AtLastPage     = ($this->LastPageNo <= 1);
+            $this->AtLastPage     = ($this->LastPageNo <= $this->curr_page);
 
             $this->PrintDebug("clause A");
             $this->start_data_row = ($this->curr_page -1) * $this->rows;
@@ -1275,6 +1275,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.53  2010/08/31 19:25:46  gopherit
+ * Fixed Bug Artifact #3056911: Sidebar Files Pager Pages Past the Last Page
+ *
  * Revision 1.52  2009/12/15 16:04:27  gopherit
  * Removed trailing whitespace.
  *
