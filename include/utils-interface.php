@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.114 2009/12/15 18:49:43 gopherit Exp $
+ * $Id: utils-interface.php,v 1.115 2010/09/15 13:24:29 gopherit Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -346,12 +346,11 @@ function start_page($page_title = '', $show_navbar = true, $msg = '', $show_topn
 /**
  * function render_nav_line
  *
- * This function closes off the page structure.
+ * This function renders the 'Logged in as' and the navigation line at the top
+ * of a standard XRMS page
  *
- * This function also contains the end_page hook to allow
- * for adding stuff to the page footer via a hook.
- *
- * Any common page footer would end this.
+ * This function also contains the loginbar and menuline hooks to allow
+ * for adding stuff to the top header via hooks.
  */
 function render_nav_line() {
     $session_username = $_SESSION['username'];
@@ -1182,6 +1181,9 @@ function render_email_link($contact_id, $company_id, $first_names, $last_name, $
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.115  2010/09/15 13:24:29  gopherit
+ * Fixed wrong function description for render_nav_line()
+ *
  * Revision 1.114  2009/12/15 18:49:43  gopherit
  * Implemented db_error_handler in the get_activity_menu() function around line 883.
  *
