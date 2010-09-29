@@ -2,7 +2,7 @@
 /**
  * Edit address for a company or contact
  *
- * $Id: one-address.php,v 1.18 2010/08/27 20:34:37 gopherit Exp $
+ * $Id: one-address.php,v 1.19 2010/09/29 21:21:02 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -29,7 +29,7 @@ getGlobalVar($address_type, 'address_type');
 getGlobalVar($use_pretty_address, 'use_pretty_address');
 getGlobalVar($msg, 'msg');
 
-$_POST['country_id']=$default_country_id;
+$_POST['country_id'] = $_POST['country_id'] ? $_POST['country_id'] : $default_country_id;
 
 // Ensure that the address_name is not blank and makes some sense
 if ( !strlen(trim($_POST['address_name'])) || $_POST['address_name'] == _('Main') ) {
@@ -245,6 +245,9 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.19  2010/09/29 21:21:02  gopherit
+ * Fixed Bug Artifact #3076134 - Editing an address fails to update the country_id.  Overlooked POST value check.
+ *
  * Revision 1.18  2010/08/27 20:34:37  gopherit
  * Fixed Bug Artifact #3053549: Creating or Updating an Address Allows Blank Address Names
  *
