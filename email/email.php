@@ -3,7 +3,7 @@
   *
   * Email.
   *
-  * $Id: email.php,v 1.18 2010/08/12 15:21:18 gopherit Exp $
+  * $Id: email.php,v 1.19 2010/09/29 19:14:43 gopherit Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -140,7 +140,9 @@
       $checked = ($counter == 1) ? ' checked' : '';
       $tablerows .= '<tr>';
       $tablerows .= "<td class=widget_content_form_element><input type=radio name=email_template_id value=" . $rst->fields['email_template_id'] . $checked . "></td>";
-      $tablerows .= '<td class=widget_content><a href=one-template.php?email_template_id='. $rst->fields['email_template_id'] .'&return_url='. $return_url .'>'. $rst->fields['email_template_title'] . '</a></td>';
+      $tablerows .= '<td class=widget_content>'. $rst->fields['email_template_title'] . '</td>';
+      $tablerows .= '<td class=widget_content style="width: 1%;"><input type="button" class="button" value="'. _('Edit template') .'" onclick="javascript: location.href=\'one-template.php?email_template_id='. $rst->fields['email_template_id'] .'&return_url='. $return_url .'\'"></td>';
+//          <a href=one-template.php?email_template_id='. $rst->fields['email_template_id'] .'&return_url='. $return_url .' target="_blank">'. _('Edit template') .'</a></td>';
       $tablerows .= '</tr>';
       $rst->movenext();
     }
@@ -167,29 +169,30 @@
         <form action="email-2.php?return_url=<?php echo $return_url; ?>" method=post>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=20><?php echo _("E-Mail Templates"); ?></td>
+                <td class=widget_header colspan=3><?php echo _("Select E-Mail Template"); ?></td>
             </tr>
+
             <tr>
                 <td class=widget_label width=1%>&nbsp;</td>
-                <td class=widget_label><?php echo _("Template"); ?></td>
+                <td class=widget_label colspan=2><?php echo _("Template"); ?></td>
             </tr>
+
             <?php  echo $tablerows ?>
+
             <tr>
-<?php if ($show_continue) { ?> <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Continue"); ?>"></td> <?php } ?>
-  </tr>
-  </table>
-  </form>
+                <?php if ($show_continue) { ?> <td class=widget_content_form_element colspan=3><input class=button type=submit value="<?php echo _("Continue"); ?>"></td> <?php } ?>
+            </tr>
+        </table>
+        </form>
 
-  </div>
+    </div>
 
-  <!-- right column //-->
-  <div id="Sidebar">
+    <!-- right column //-->
+    <div id="Sidebar">
+        &nbsp;
+    </div>
 
-  &nbsp;
-
-  </div>
-
-  </div>
+</div>
 
 <?php
 
@@ -197,6 +200,9 @@
 
   /**
   * $Log: email.php,v $
+  * Revision 1.19  2010/09/29 19:14:43  gopherit
+  * Moved the link to edit templates into a button to the right to clue users in that they should click the radio button if they only want to select a template.
+  *
   * Revision 1.18  2010/08/12 15:21:18  gopherit
   * Fixed Bug Artifact ID: 3043687.  Also, multiple improvements: added new sets of merge fields, thoroughly revised the mail_merge_functions and updated all email template editing scripts to reflect the new functionality.
   *
