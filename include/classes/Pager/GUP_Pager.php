@@ -40,7 +40,7 @@
  *
  * @example GUP_Pager.doc.7.php Another pager example showing Caching
  *
- * $Id: GUP_Pager.php,v 1.53 2010/08/31 19:25:46 gopherit Exp $
+ * $Id: GUP_Pager.php,v 1.54 2010/09/30 15:59:23 gopherit Exp $
  */
 
 
@@ -880,7 +880,7 @@ END;
             }
 
             if($this->data[$i]['Pager_TD_CSS_All_Rows']) {
-                $render_data['rows'][$i]['Pager_TD_CSS_All_Rows'] .= ' ' . $this->data[$i]['Pager_TD_CSS_All_Rows'];
+                $render_data['rows'][$render_data_row_count]['Pager_TD_CSS_All_Rows'] .= ' ' . $this->data[$i]['Pager_TD_CSS_All_Rows'];
             }
 
             if($this->numeric_index) {
@@ -1275,6 +1275,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.54  2010/09/30 15:59:23  gopherit
+ * Fixed Bug Artifact #3077112 - Duplicate (empty) Pager rows when adding 'Pager_TD_CSS_All_Rows' => 'overdue_activity ' to select rows (array data source).
+ *
  * Revision 1.53  2010/08/31 19:25:46  gopherit
  * Fixed Bug Artifact #3056911: Sidebar Files Pager Pages Past the Last Page
  *
