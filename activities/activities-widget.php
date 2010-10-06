@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.71 2010/05/06 20:11:05 gopherit Exp $
+* $Id: activities-widget.php,v 1.72 2010/10/06 13:16:21 gopherit Exp $
 */
 
 global $include_directory;
@@ -653,12 +653,11 @@ function GetInitialCalendarDate($calendar_range, $before_after, $search_date) {
 
 
 /**
-* This function renders the new activities widget that is displayed al over XRMS
+* This function renders the new activities widget that is displayed all over XRMS
 */
 function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_table, $on_what_id, $company_id, $contact_id) {
 
     global $http_site_root;
-    $datetime_format = set_datetime_format($con, $session_user_id);
 
     //ensure that user has create activity permission
     $table='activities';
@@ -667,6 +666,20 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
     $ret=check_object_permission($session_user_id, $object, $action, $table);
     if (!$ret) return '';
 
+    // Setup all the time defaults
+    $datetime_format = set_datetime_format($con, $session_user_id);
+    // @TODO: Move the default_activity_duration and default_followup_time
+    // to the system/user preferences
+    // Default activity duration 15 mins (900 seconds)
+    // Default followup time 1 week (604800 seconds)
+    $default_activity_duration = 900;
+    $default_followup_time = 604800;
+
+    $base_time              = time();
+    $scheduled_at           = date($datetime_format, $base_time);
+    $ends_at                = date($datetime_format, $base_time + $default_activity_duration);
+    $followup_scheduled_at  = date($datetime_format, $base_time + $default_followup_time);
+    $followup_ends_at       = date($datetime_format, $base_time + $default_followup_time + $default_activity_duration);
 
     $form_name = 'NewActivity';
 
@@ -753,39 +766,39 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
             <input type=hidden id=toggle_activity_status name=activity_status value=\"o\">
             <table class=widget cellspacing=1>
                 <tr>
-                    <td class=widget_header colspan=6>". _("New Activity") . "</td>
+                    <td class=widget_header colspan=5>". _("New Activity") . "</td>
                 </tr>
 
                 <tr>
                     <td class=widget_content_form_element></td>
-                    <td class=widget_content_form_element>" . _("User") .":&nbsp;\n".
-                        $user_menu ."\n
-                    </td>\n
                     <td class=widget_content_form_element>" . _("Type") .":&nbsp;". $activity_type_menu ."</td>\n
                     <td class=widget_content_form_element>" . _("Contact") .":&nbsp;". $contact_menu ."</td>\n
                     <td class=widget_content_form_element>".
                         _("Start")
-                        ."&nbsp;<input type=text size=16 ID=\"activity_start_date\" name=scheduled_at value=\"" . date($datetime_format,time()) . "\">
+                        ."&nbsp;<input type=text size=16 ID=\"activity_start_date\" name=scheduled_at value=\"" . $scheduled_at . "\">
                         <img ID=\"activity_start_date_trigger\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">
                         </td>\n
                         <td class=widget_content_form_element>".
                         _("End")
-                        ."&nbsp;<input type=text size=16 ID=\"activity_end_date\" name=ends_at onFocus=\"CheckDate()\">
+                        ."&nbsp;<input type=text size=16 ID=\"activity_end_date\" name=ends_at value=\"" . $ends_at . "\" onFocus=\"CheckDate()\">
                         <img ID=\"activity_end_date_trigger\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">
                     </td>\n
                 </tr>
 
                 <tr>
                     <td class=widget_content_form_element>" . _("Summary") . "</td>\n
-                    <td class=widget_content_form_element colspan=5>
+                    <td class=widget_content_form_element colspan=3>
                         <input type=text name=activity_title size=80>
                     </td>
+                    <td class=widget_content_form_element>" . _("User") .":&nbsp;\n".
+                        $user_menu ."\n
+                    </td>\n
                 </tr>
 
                 <tr>
                     <td class= widget_content_form_element>"._("Notes")."</td>
-                    <td class= widget_content_form_element colspan=4>
-                          <textarea name=activity_description cols='80' rows='5'></textarea>
+                    <td class= widget_content_form_element colspan=3>
+                          <textarea name=activity_description cols='80' rows='5' style='width: 98%;'></textarea>
                     </td>
                     <td class='widget_content_form_element' style='padding-left: 2em; vertical-align: middle;'>
                         <input type='checkbox' id='completed_chkbx' name='activity_status' value='c' onclick=\"
@@ -803,25 +816,25 @@ function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_tabl
                 </tr>\n";
 
    $ret .= "<tr id='sch_fup_tr_1' style='display:none;'>\n
-                <td class=widget_content_form_element rowspan=2>Followup</td>\n
-                <td class=widget_content_form_element>" . _("User") .":&nbsp;". $followup_user_menu ."</td>\n
+                <td class=widget_content_form_element rowspan=2>". _('Followup') ."</td>\n
                 <td class=widget_content_form_element>" . _("Type") .":&nbsp;". $followup_activity_type_menu ."</td>\n
                 <td class=widget_content_form_element>" . _("Contact") .":&nbsp;". $followup_contact_menu ."</td>\n
                 <td class=widget_content_form_element>".
                     _("Start")
-                    ."&nbsp;<input type=text size=16 ID=\"followup_activity_start_date\" name=followup_scheduled_at value=\"" . date($datetime_format,time()) . "\">
+                    ."&nbsp;<input type=text size=16 ID=\"followup_activity_start_date\" name=followup_scheduled_at value=\"" . $followup_scheduled_at . "\">
                     <img ID=\"followup_activity_start_date_trigger\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">
                     </td>\n
                     <td class=widget_content_form_element>".
                     _("End")
-                    ."&nbsp;<input type=text size=16 ID=\"followup_activity_end_date\" name=followup_ends_at onFocus=\"CheckFollowupDate()\">
+                    ."&nbsp;<input type=text size=16 ID=\"followup_activity_end_date\" name=followup_ends_at value=\"" . $followup_ends_at . "\"onFocus=\"CheckFollowupDate()\">
                     <img ID=\"followup_activity_end_date_trigger\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">
                 </td>\n
             </tr>\n
             <tr id='sch_fup_tr_2' style='display:none;'>\n
-                <td class=widget_content_form_element colspan=2>
+                <td class=widget_content_form_element>
                     <input type='checkbox' name='followup_transfer_notes' value='true' checked/>" . _("Transfer Activity Notes") ."
                 </td>
+                <td class=widget_content_form_element>" . _("User") .":&nbsp;". $followup_user_menu ."</td>\n
                 <td class=widget_content_form_element colspan=3 style='text-align: center;'>".
                     render_create_button(_("Add Activity and Schedule Followup"),'submit', false, false, 'add_activity_and_fup', 'activities') ."
                 </td>
@@ -1092,6 +1105,11 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.72  2010/10/06 13:16:21  gopherit
+* A couple of tweaks:
+* * Implemented default_activity_duration and default_followup_time
+* * Adjusted UI to fit on a 1024/768 screen
+*
 * Revision 1.71  2010/05/06 20:11:05  gopherit
 * Added Javascript validation to prevent the creation or saving of activities without them being assigned to a contact.
 *
