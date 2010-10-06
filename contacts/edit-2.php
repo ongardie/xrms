@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.37 2007/05/02 11:22:49 fcrossen Exp $
+ * $Id: edit-2.php,v 1.38 2010/10/06 22:14:36 gopherit Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -105,7 +105,7 @@ $rec['title'] = $title;
 $rec['description'] = $description;
 $rec['email'] = $email;
 $rec['work_phone'] = $work_phone;
-$rec['work_phone_ext'] =$work_phone_ext;
+$rec['work_phone_ext'] = (int)$work_phone_ext;
 $rec['cell_phone'] = $cell_phone;
 $rec['home_phone'] = $home_phone;
 $rec['fax'] = $fax;
@@ -148,6 +148,9 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.38  2010/10/06 22:14:36  gopherit
+ * Fixed Bug Artifact #3082531 - Contact non-numeric work phone extension breaks XRMS.
+ *
  * Revision 1.37  2007/05/02 11:22:49  fcrossen
  * - call to clean_phone_number_for_db() moved to API functions
  *

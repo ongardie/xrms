@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.42 2010/08/27 20:34:37 gopherit Exp $
+ * $Id: new-2.php,v 1.43 2010/10/06 22:14:06 gopherit Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -137,7 +137,7 @@ $rec['description'] = $description;
 $rec['email'] = $email;
 $rec['email_status']=$email_status;
 $rec['work_phone'] = $work_phone;
-$rec['work_phone_ext'] = $work_phone_ext;
+$rec['work_phone_ext'] = (int)$work_phone_ext;
 $rec['cell_phone'] = $cell_phone;
 $rec['home_phone'] = $home_phone;
 $rec['fax'] = $fax;
@@ -217,6 +217,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.43  2010/10/06 22:14:06  gopherit
+ * Fixed Bug Artifact #3082531 - Contact non-numeric work phone extension breaks XRMS.
+ *
  * Revision 1.42  2010/08/27 20:34:37  gopherit
  * Fixed Bug Artifact #3053549: Creating or Updating an Address Allows Blank Address Names
  *
