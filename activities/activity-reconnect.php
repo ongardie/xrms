@@ -110,7 +110,7 @@ $body_content = "
 switch ($reconnect_action) {
     case 'showTypeSearch':
     default:
-        $page_title="Re-Attach Activity";
+        $page_title=_('Change Activity Attachment');
     break;
     case 'showSelectEntity':
         require_once ($include_directory . 'classes/Pager/Pager_Columns.php');
@@ -129,6 +129,9 @@ switch ($reconnect_action) {
         if (($restrict_string1)&&($on_what_table <> 'campaigns')) {
            $sql .= " AND company_id IN (SELECT company_id FROM companies WHERE company_name LIKE ". $con->qstr("%$restrict_string1%") . ")";
         }
+
+        // Restrict search to active records only
+        $sql .= ' AND '. $entity_singular ."_record_status = 'a'";
 
         $columns=array();
         $columns[] = array('name' => _("Select"), 'index_sql' => 'on_what_id', 'sql_sort_column' => $on_what_field);
@@ -173,7 +176,7 @@ TILLEND;
         }
             $ret=update_activity($con, $rec, $activity_id);
             if ($ret) {
-                $msg=urlencode(_("Successfully re-attached activity"));
+                $msg=urlencode(_("Successfully attached activity"));
                 $return_url="$http_site_root/activities/one.php?activity_id=$activity_id&msg=$msg";
             } else {
                 $msg=urlencode(_("Failed to update activity"));
@@ -208,6 +211,10 @@ function GetEntityPagerData($row) {
 
 /**
  * $Log: activity-reconnect.php,v $
+ * Revision 1.7  2010/10/06 21:43:58  gopherit
+ * * Fixed Bug Artifact #3082506 - activity-reconnect.php Allows Attaching to Deleted Records
+ * * Minor change in confusing message/page title wording.
+ *
  * Revision 1.6  2009/04/09 06:09:13  gopherit
  * Missing <div id="Main"> closure on line 198
  *
