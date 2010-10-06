@@ -8,7 +8,7 @@
  *
  * @author Randy Martinsen
  *
- * $Id: updateto2.1.php,v 1.7 2009/05/01 16:43:51 gopherit Exp $
+ * $Id: updateto2.1.php,v 1.8 2010/10/06 16:35:59 gopherit Exp $
  */
 
 // where do we include from
@@ -175,7 +175,7 @@ $sql = "SELECT * FROM addresses";
 //add new datetime_format option for displaying different formats system selectable
     $datetime_format=add_user_preference_type($con, 'datetime_format', "Date and Time format", "Allows selection of different date/time formats", false, true, 'select');
     add_preference_option($con, $datetime_format, 'Y-m-d H:i:s', 'YYYY-MM-DD (24 hour clock = HH-mm-ss)');
-    add_preference_option($con, $datetime_format, 'Y-m-d h:i a', 'YYYY-MM-DD (12 hour clock am/pm = hh-mm xm)');
+    add_preference_option($con, $datetime_format, 'Y-m-d h:i A', 'YYYY-MM-DD (12 hour clock AM/PM = hh-mm XM)');
     $ret=get_admin_preference($con, $datetime_format);
     if (!$ret) {
         set_admin_preference($con, $datetime_format, 'Y-m-d h:i a', 'datetime_format');
@@ -209,6 +209,12 @@ start_page($page_title, true, $msg);
 end_page();
 /**
  * $Log: updateto2.1.php,v $
+ * Revision 1.8  2010/10/06 16:35:59  gopherit
+ * Fixed Bug Artifacts:
+ * * 3082298 - Inconsistent Date/Time Formatting
+ * * 3082300 - Followup Activity Type
+ * * 3082302 - Editing Activiies Wipes the completed_at/completed_by fields
+ *
  * Revision 1.7  2009/05/01 16:43:51  gopherit
  * Change gmt_offset field type in the users table.  Was INT, changed to VARCHAR(50) to allow storage of Region/Locale data
  *

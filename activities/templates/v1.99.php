@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.21 2010/05/10 15:17:42 gopherit Exp $
+ * $Id: v1.99.php,v 1.22 2010/10/06 16:35:59 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -365,9 +365,9 @@ confGoTo_includes();
 
 $datetime_format = set_datetime_format($con, $session_user_id);
 
-//set java date time values based on $datetime_format
+//set JavaScript date time format based on $datetime_format
 if ($datetime_format == 'Y-m-d H:i:s') {
-	$java_timeformat = "%Y-%m-%d %H:%M";
+	$java_timeformat = "%Y-%m-%d %H:%M:%S";
 	$java_timevalue = '24';
 	}
 	else {
@@ -389,8 +389,7 @@ function changeAttachment(attachAction) {
    }
 }
 
-function logTime() {
-    var date = new Date();
+function formatTime(date) {
     var d = date.getDate();
     var day = (d < 10) ? '0' + d : d;
     var m = date.getMonth() + 1;
@@ -404,14 +403,37 @@ function logTime() {
     var minute = (mm < 10) ? '0' + mm : mm;
     var s = date.getSeconds();
     var second = (s < 10) ? '0' + s : s;
-    
-    return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+
+    if (<?php echo "'$datetime_format'" ?> == 'Y-m-d H:i:s')
+        return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+    else {
+
+        var am_pm = '';
+
+        if (hour > 12) {
+            hour = ((hour-12) < 10) ? '0' + String(hour-12) : String(hour-12);
+            am_pm = 'PM';
+        } else
+            am_pm = 'AM';
+
+        return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ' ' + am_pm;
+    }
+
+}
+
+function logTime() {
+    var date = new Date();
+    return formatTime(date);
 }
 
 function getNow(elementID) {
-    var result;
-    result = logTime();
-    document.getElementById(elementID).value = result;
+    var date = new Date();
+    date = formatTime(date);
+    document.getElementById(elementID).value = date;
+
+    if (elementID == 'f_date_c')
+        document.getElementById('f_date_d').value = date;
+    
     CheckDate();
 }
 
@@ -555,7 +577,7 @@ function validate() {
                     &nbsp;
                     <img ID="f_trigger_c" style="CURSOR: pointer" border=0 src="../img/cal.gif" alt="<?php  echo _('Scheduled Start'); ?>">
                     &nbsp;
-                    <img style="CURSOR: pointer" border=0 src="../img/calendar_time_icon.gif" alt="<?php  echo _('Start Now'); ?>"
+                    <img style="CURSOR: pointer" border=0 src="../img/calendar_time_icon.gif" alt="<?php  echo _('Start Now'); ?>" title="<?php  echo _('Start Now'); ?>"
                          onclick="getNow('f_date_c');">
                 </td>
 
@@ -565,7 +587,7 @@ function validate() {
                     &nbsp;
                     <img ID="f_trigger_d" style="CURSOR: pointer" border=0 src="../img/cal.gif" alt="<?php  echo _('Scheduled End'); ?>">
                     &nbsp;
-                    <img style="CURSOR: pointer" border=0 src="../img/calendar_time_icon.gif" alt="<?php  echo _('End Now'); ?>"
+                    <img style="CURSOR: pointer" border=0 src="../img/calendar_time_icon.gif" alt="<?php  echo _('End Now'); ?>" title="<?php  echo _('End Now'); ?>"
                          onclick="getNow('f_date_d');">
                 </td>
             </tr>
@@ -705,8 +727,13 @@ function validate() {
                     </div>
                     <?php
                         if ($completed_by) {
-                            echo "<br />". _("Completed by").' '.$completed_by_username;
-                            if ($completed_at AND ($completed_at!='0000-00-00 00:00:00')) echo ' '._("on").' '. $completed_at;
+                            echo '<input type=hidden name="completed_by" value="'. $completed_by .'">';
+                            echo "<br />". _('Completed by').' '.$completed_by_username;
+
+                            if ($completed_at AND ($completed_at!='0000-00-00 00:00:00')) {
+                            echo '<input type=hidden name="completed_at" value="'. $completed_at .'">';
+                                echo ' '._('on').' '. $completed_at;
+                            }
                         }
                     ?>
                 </td>
@@ -887,14 +914,15 @@ function validate() {
             time += activity_duration * 1000;
         }
         var date2 = new Date(time);
-        field.value = date2.print("%Y-%m-%d %H:%M");
+        field.value = formatTime(date2);
+            // date2.print("%Y-%m-%d %H:%M");
     }
 
     Calendar.setup({
         inputField     :    "f_date_c",      // id of the input field
-        ifFormat       :    "<? echo $java_timeformat; ?>",       // format of the input field
+        ifFormat       :    "<?php echo $java_timeformat; ?>",       // format of the input field
         showsTime      :    true,            // will display a time selector
-        timeFormat     :    value="<? echo $java_timevalue; ?>",  //12 or 24
+        timeFormat     :    value="<?php echo $java_timevalue; ?>",  //12 or 24
         button         :    "f_trigger_c",   // trigger for the calendar (button ID)
         singleClick    :    false,           // double-click mode
         step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
@@ -904,9 +932,9 @@ function validate() {
 
     Calendar.setup({
         inputField     :    "f_date_d",      // id of the input field
-        ifFormat       :    "<? echo $java_timeformat; ?>",       // format of the input field
+        ifFormat       :    "<?php echo $java_timeformat; ?>",       // format of the input field
         showsTime      :    true,            // will display a time selector
-        timeFormat     :    value="<? echo $java_timevalue; ?>",  //12 or 24
+        timeFormat     :    value="<?php echo $java_timevalue; ?>",  //12 or 24
         button         :    "f_trigger_d",   // trigger for the calendar (button ID)
         singleClick    :    false,           // double-click mode
         step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
@@ -925,6 +953,12 @@ function validate() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.22  2010/10/06 16:35:59  gopherit
+ * Fixed Bug Artifacts:
+ * * 3082298 - Inconsistent Date/Time Formatting
+ * * 3082300 - Followup Activity Type
+ * * 3082302 - Editing Activiies Wipes the completed_at/completed_by fields
+ *
  * Revision 1.21  2010/05/10 15:17:42  gopherit
  * Fixed the changeAttachment JavaScript call in /activities/templates/v1.99.php.
  *

@@ -54,6 +54,8 @@ $arr_vars = array (
                    'activity_recurrence_id' => arr_vars_POST ,
 
                    // optionally posted data
+                   'completed_at' => arr_vars_POST_UNDEF ,
+                   'completed_by' => arr_vars_POST_UNDEF ,
                    'opportunity_description' => arr_vars_POST_UNDEF ,
                    'probability' => arr_vars_POST_UNDEF ,
                    // These fields may be set if the user wants to schedule a
@@ -173,9 +175,15 @@ if (!$contact_id OR $contact_id==0) {
     $contact_id=$activity['contact_id'];
 }
 
-// if it's closed but wasn't before, update the completed_at timestamp
-$completed_at = ($activity_status == 'c') && ($current_activity_status != 'c') ? time() : NULL;
-$completed_by= ($activity_status == 'c') && ($current_activity_status != 'c') ? $session_user_id : NULL;
+// if it's closed but wasn't before, update the completed_at and completed_by
+if (($activity_status == 'c') && ($current_activity_status != 'c')) {
+    $completed_at = time();
+    $completed_by = $session_user_id;
+} // if the activity is not completed, NULL out the completed_at and completed_by
+elseif (($activity_status != 'c')) {
+    $completed_at = NULL;
+    $completed_by = NULL;
+}
 
 //check to see if we need to associate with an opportunity or case
 if ($associate_activities == true ) {
@@ -510,7 +518,26 @@ if ($followup) {
     // We'll leave the following checks in for a possible future enhancement of the UI
     // to resemble the functionality of /activities/activities-widget.php
     if ($followup_user_id) $followup_rec['user_id'] = $followup_user_id;
-    if ($followup_activity_type_id) $followup_rec['activity_type_id'] = $followup_activity_type_id;
+    // If no followup_activity_id is passed in, fetch the first one according to
+    // sort order/activity_type_pretty_name
+
+    if ($followup_activity_type_id) {
+        $followup_rec['activity_type_id'] = $followup_activity_type_id;
+    } else {
+        $sql = "SELECT activity_type_id
+                FROM activity_types
+                WHERE activity_type_record_status = 'a'
+                ORDER BY sort_order, activity_type_pretty_name
+                LIMIT 1";
+        $rst = $con->execute($sql);
+        if ($rst) {
+             $followup_rec['activity_type_id'] = $rst->fields['activity_type_id'];
+            $rst->close();
+        } else {
+            db_error_handler($con, $sql);
+        }
+    }
+
     if ($followup_contact_id) $followup_rec['contact_id'] = $followup_contact_id;
 
     $followup_rec['company_id'] = $company_id;
