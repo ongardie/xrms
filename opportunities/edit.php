@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.33 2006/12/18 12:03:56 jnhayart Exp $
+ * $Id: edit.php,v 1.34 2010/10/12 22:06:14 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -167,7 +167,7 @@ confGoTo_includes();
 
 <?php jscalendar_includes(); ?>
 
-    <script language=JavaScript>
+<script type="text/javascript" language="JavaScript">
     <!--
         function restrictByOpportunityType() {
             opportunity_title=document.getElementById('opportunity_title');
@@ -195,7 +195,7 @@ function logTime() {
 
     return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
 }
-    </script>
+</script>
 
 <div id="Main">
     <div id="Content">
@@ -220,7 +220,7 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Division"); ?></td>
-                <td class=widget_content_form_element><?php  echo $division_menu; ?></a></td>
+                <td class=widget_content_form_element><?php  echo $division_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Contact"); ?></td>
@@ -271,7 +271,7 @@ function logTime() {
 
                 <td class=widget_content_form_element>
                     <input type=text ID="f_date_c" name=close_at value="<?php  echo $close_at; ?>">
-                    <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
+                    <img ID="f_trigger_c" style="CURSOR: pointer;" border=0 title="<?php echo _('Closing Date'); ?>" alt="<?php echo _('Closing Date'); ?>" src="../img/cal.gif">
                 </td>
             </tr>
             <tr>
@@ -361,6 +361,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.34  2010/10/12 22:06:14  gopherit
+ * Minor HTML fixes.
+ *
  * Revision 1.33  2006/12/18 12:03:56  jnhayart
  * Remove limitation of Open Campaign in menu
  * Cause it's possible to edit opp on "closed" campaign
@@ -370,7 +373,7 @@ end_page();
  *
  * Revision 1.31  2006/11/14 20:12:03  braverock
  * - special handling for unknown company
- *   based on patches by fcrossen
+ * ï¿½ based on patches by fcrossen
  *
  * Revision 1.30  2006/08/23 21:23:42  jnhayart
  * change java display for localisation

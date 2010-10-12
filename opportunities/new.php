@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.24 2007/01/09 02:39:17 ongardie Exp $
+ * $Id: new.php,v 1.25 2010/10/12 22:06:52 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -147,7 +147,7 @@ start_page($page_title, true, $msg);
 
 <?php jscalendar_includes(); ?>
 
-    <script language=JavaScript>
+<script type="text/javascript" language="JavaScript">
     <!--
         function restrictByOpportunityType() {
             opportunity_title=document.getElementById('opportunity_title');
@@ -157,7 +157,7 @@ start_page($page_title, true, $msg);
             location.href = 'new.php?company_id=<?php echo $company_id; ?>&opportunity_title='+ opportunity_title.value +'&division_id='+division.value + '&contact_id=' + contact.value + '&opportunity_type_id=' + select.value;
         }
      //-->
-    </script>
+</script>
 
 <div id="Main">
     <div id="Content">
@@ -174,7 +174,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Division"); ?></td>
-                <td class=widget_content_form_element><?php  echo $division_menu; ?></a></td>
+                <td class=widget_content_form_element><?php  echo $division_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Contact"); ?></td>
@@ -223,7 +223,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php echo _("Close Date"); ?></td>
                 <td class=widget_content_form_element>
                     <input type=text ID="f_date_c" name=close_at value="<?php  echo date('Y-m-d'); ?>">
-                    <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
+                    <img ID="f_trigger_c" style="CURSOR: pointer;" border=0 title="<?php echo _('Closing Date'); ?>" alt="<?php echo _('Closing Date'); ?>" src="../img/cal.gif">
                 </td>
             </tr>
             <tr>
@@ -294,6 +294,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.25  2010/10/12 22:06:52  gopherit
+ * Minor HTML fixes.
+ *
  * Revision 1.24  2007/01/09 02:39:17  ongardie
  * - If there's no opportunity status available for this opportunity type, point user to administration.
  * - Improved similar functionality for cases also by passing acase_type_id, aopportunity_type_id in GET requests.
@@ -306,7 +309,7 @@ end_page();
  *
  * Revision 1.21  2006/11/14 20:12:03  braverock
  * - special handling for unknown company
- *   based on patches by fcrossen
+ * ï¿½ based on patches by fcrossen
  *
  * Revision 1.20  2006/11/13 16:05:35  braverock
  * - change the way the opportunity type and opportunity status dropdowns are selected
