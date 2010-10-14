@@ -1869,7 +1869,7 @@
     </field>
     <field name="opportunity_status_long_desc" type="C" size="255"/>
     <data>
-      <row><f>1</f><f>1</f><f>1</f><f>o</f><f>New</f><f>New</f><f>New</f><f>a</f><f></f></row>
+      <row><f>1</f><f>1</f><f>1</f><f>o</f><f>NEW</f><f>New</f><f>New</f><f>New</f><f>a</f><f></f></row>
       <row><f>2</f><f>1</f><f>2</f><f>o</f><f>PRE</f><f>Preliminaries</f><f>Preliminaries</f><f>Preliminaries</f><f>a</f><f></f></row>
       <row><f>3</f><f>1</f><f>3</f><f>o</f><f>DIS</f><f>Discussion</f><f>Discussion</f><f>Discussion</f><f>a</f><f></f></row>
       <row><f>4</f><f>1</f><f>4</f><f>o</f><f>NEG</f><f>Negotiation</f><f>Negotiation</f><f>Negotiation</f><f>a</f><f></f></row>
