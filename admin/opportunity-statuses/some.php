@@ -5,7 +5,7 @@
  *
  * @todo modify all opportunity status uses to use a sort order
  *
- * $Id: some.php,v 1.16 2007/11/14 22:31:30 randym56 Exp $
+ * $Id: some.php,v 1.17 2010/10/14 20:01:12 gopherit Exp $
  */
 
 //include required XRMS common files
@@ -112,92 +112,104 @@ start_page($page_title);
 
 ?>
 
-    <script language=JavaScript>
-    <!--
-        function restrictByOppType() {
-            select=document.getElementById('aopportunity_type_id');
-            location.href = 'some.php?aopportunity_type_id=' + select.value;
-        }
-     //-->
-    </script>
+<script type="text/javascript" language="JavaScript">
+<!--
+    function restrictByOppType() {
+        select=document.getElementById('aopportunity_type_id');
+        location.href = 'some.php?aopportunity_type_id=' + select.value;
+    }
+ //-->
+</script>
 
 <div id="Main">
-   <div id="Content">
-                <table class=widget classpacing=1>
-                    <tr>
-                        <td class=widget_header><?php echo _("Opportunity Type"); ?></td>
-                    </tr>
-                    <tr>
-                        <td class=widget_content><?php echo $type_menu; ?></td>
-                    </tr>
-                </table>
-
-   <form action=../sort.php method=post>
+    <div id="Content">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=7><?php echo _("Opportunity Statuses"); ?></td>
+                <td class=widget_header><?php echo _("Opportunity Type"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Short Name"); ?></td>
-                <td class=widget_label><?php echo _("Full Name"); ?></td>
-                <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
-                <td class=widget_label><?php echo _("Display HTML"); ?></td>
-                <td class=widget_label><?php echo _("Open Status"); ?></td>
-                <td class=widget_label width=50%><?php echo _("Description"); ?></td>
-                <td class=widget_label width=15%><?php echo _("Move"); ?></td>
+                <td class=widget_content><?php echo $type_menu; ?></td>
             </tr>
-            <?php  echo $table_rows; ?>
         </table>
-   </form>
 
-   </div>
+        <form action=../sort.php method=post>
+             <table class=widget cellspacing=1>
+                 <tr>
+                     <td class=widget_header colspan=7><?php echo _("Opportunity Statuses"); ?></td>
+                 </tr>
+                 <tr>
+                     <td class=widget_label><?php echo _("Short Name"); ?></td>
+                     <td class=widget_label><?php echo _("Full Name"); ?></td>
+                     <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
+                     <td class=widget_label><?php echo _("Display HTML"); ?></td>
+                     <td class=widget_label><?php echo _("Open Status"); ?></td>
+                     <td class=widget_label width=50%><?php echo _("Description"); ?></td>
+                     <td class=widget_label width=15%><?php echo _("Move"); ?></td>
+                 </tr>
+                 <?php  echo $table_rows; ?>
+             </table>
+        </form>
 
-   <!-- right column //-->
-   <div id="Sidebar">
+    </div>
 
-       <form action=new-2.php method=post>
-            <input type=hidden name=opportunity_type_id value="<?php echo $aopportunity_type_id; ?>">
-       <table class=widget cellspacing=1>
-           <tr>
-               <td class=widget_header colspan=2><?php echo _("Add New Opportunity Status"); ?></td>
-           </tr>
-           <tr>
-               <td class=widget_label_right><?php echo _("Short Name"); ?></td>
-               <td class=widget_content_form_element><input type=text name=opportunity_status_short_name size=10></td>
-           </tr>
-           <tr>
-               <td class=widget_label_right><?php echo _("Full Name"); ?></td>
-               <td class=widget_content_form_element><input type=text name=opportunity_status_pretty_name size=20></td>
-           </tr>
-           <tr>
-               <td class=widget_label_right><?php echo _("Full Plural Name"); ?></td>
-               <td class=widget_content_form_element><input type=text name=opportunity_status_pretty_plural size=20></td>
-           </tr>
-           <tr>
-               <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
-               <td class=widget_content_form_element><input type=text name=opportunity_status_display_html size=30></td>
-           </tr>
-           <tr>
-               <td class=widget_label_right><?php echo _("Description"); ?></td>
-               <td class=widget_content_form_element><input type=text size=30 name=opportunity_status_long_desc value="<?php  echo $opportunity_status_long_desc; ?>"></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Open Status"); ?></td>
-                <td class=widget_content_form_element>
-                <select name="status_open_indicator">
-                    <option value="o"  selected ><?php echo _("Open"); ?>
-                    <option value="w"           ><?php echo _("Closed/Won"); ?>
-                    <option value="l"           ><?php echo _("Closed/Lost"); ?>
-                </select>
-                </td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
-            </tr>
-      </table>
-      </form>
+    <!-- right column //-->
+    <div id="Sidebar">
 
-   </div>
+        <?php // If we have no opportunity_type_id, skip the opportunity status form
+            if ($aopportunity_type_id) { ?>
+
+            <form action=new-2.php method=post>
+
+                <input type=hidden name=opportunity_type_id value="<?php echo $aopportunity_type_id; ?>">
+
+                <table class=widget cellspacing=1>
+                    <tr>
+                        <td class=widget_header colspan=2><?php echo _("Add New Opportunity Status"); ?></td>
+                    </tr>
+
+                    <tr>
+                        <td class=widget_label_right><?php echo _("Short Name"); ?></td>
+                        <td class=widget_content_form_element><input type=text name=opportunity_status_short_name size=10></td>
+                    </tr>
+
+                    <tr>
+                        <td class=widget_label_right><?php echo _("Full Name"); ?></td>
+                        <td class=widget_content_form_element><input type=text name=opportunity_status_pretty_name size=20></td>
+                    </tr>
+
+                    <tr>
+                        <td class=widget_label_right><?php echo _("Full Plural Name"); ?></td>
+                        <td class=widget_content_form_element><input type=text name=opportunity_status_pretty_plural size=20></td>
+                    </tr>
+
+                    <tr>
+                        <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
+                        <td class=widget_content_form_element><input type=text name=opportunity_status_display_html size=30></td>
+                    </tr>
+
+                    <tr>
+                        <td class=widget_label_right><?php echo _("Description"); ?></td>
+                        <td class=widget_content_form_element><input type=text size=30 name=opportunity_status_long_desc value="<?php  echo $opportunity_status_long_desc; ?>"></td>
+                    </tr>
+
+                    <tr>
+                        <td class=widget_label_right><?php echo _("Open Status"); ?></td>
+                        <td class=widget_content_form_element>
+                            <select name="status_open_indicator">
+                                <option value="o"  selected ><?php echo _("Open"); ?>
+                                <option value="w"           ><?php echo _("Closed/Won"); ?>
+                                <option value="l"           ><?php echo _("Closed/Lost"); ?>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
+                    </tr>
+                </table>
+            </form>
+        <?php } ?>
+    </div>
 </div>
 
 <?php
@@ -206,6 +218,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.17  2010/10/14 20:01:12  gopherit
+ * Fixed Bug Artifact #3087640 - Opportunity Statuses Not Attached to an Opportunity Type
+ *
  * Revision 1.16  2007/11/14 22:31:30  randym56
  * Removed confusing terms
  *
