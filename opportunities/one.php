@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.62 2010/05/05 22:17:20 gopherit Exp $
+ * $Id: one.php,v 1.63 2010/10/14 22:02:05 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -310,7 +310,7 @@ function markComplete() {
                                 <tr>
                                     <td class=sublabel><?php echo _("E-Mail"); ?></td>
                                     <td class=clear>
-                                        <a href='mailto:<?php echo $email . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$opportunity_id&contact_id=$contact_id&on_what_table=opportunities&activity_title=email RE: $opportunity_title&company_id=$company_id&email=true&return_url=/opportunities/one.php?opportunity_id=$opportunity_id'\" >" . htmlspecialchars($email); ?></a>
+                                        <?php echo render_email_link($contact_id, $company_id, $first_names, $last_name, $email, $session_user_id); ?>
                                     </td>
                                 </tr>
                                 <tr>
@@ -361,9 +361,9 @@ function markComplete() {
             </tr>
         </table>
 
-<?php
-    //place the plug-in hook before the Activities
-    do_hook ('opportunity_detail');
+        <?php
+            //place the plug-in hook before the Activities
+            do_hook ('opportunity_detail');
 ?>
 
 
@@ -371,13 +371,13 @@ function markComplete() {
         <!-- activities //-->
         <?php echo $new_activity_widget; ?>
 
-        <form name="<?php echo $form_name; ?>" method=post>
+        <form action="one.php?opportunity_id=<?php echo $opportunity_id; ?>" name="<?php echo $form_name; ?>" method=post>
             <?php
-                // activity pager
-                echo $pager_columns_selects;
-                echo $activities_widget['content'];
-                echo $activities_widget['sidebar'];
-                echo $activities_widget['js'];
+            // activity pager
+            echo $pager_columns_selects;
+            echo $activities_widget['content'];
+            echo $activities_widget['sidebar'];
+            echo $activities_widget['js'];
             ?>
         </form>
 
@@ -423,6 +423,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.63  2010/10/14 22:02:05  gopherit
+ * Switched the contact email link to be provided by the centralized render_email_link() function.
+ *
  * Revision 1.62  2010/05/05 22:17:20  gopherit
  * Added calculation of the division_id of a newly created activity.  If the activity is to be associated with a case or opportunity, the new activity will inherit its division_id from there.  If not, it will inherit from the division_id of the contact.
  *
