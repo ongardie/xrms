@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.72 2009/03/21 15:14:31 randym56 Exp $
+ * $Id: some.php,v 1.73 2010/10/14 19:30:28 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -377,6 +377,7 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_header colspan=5><?php echo _("Search Criteria"); ?></td>
             </tr>
+
             <tr>
                 <td class=widget_label><?php echo _("Opportunity Name"); ?></td>
                 <td class=widget_label><?php echo _("Company"); ?></td>
@@ -384,6 +385,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_label><?php echo _("Campaigns"); ?></td>
                 <td class=widget_label><?php echo _("Type"); ?></td>
             </tr>
+
             <tr>
                 <td class=widget_content_form_element><input type=text name="opportunity_title" size=20 value="<?php  echo $opportunity_title; ?>"></td>
                 <td class=widget_content_form_element><input type=text name="company_name" size=20 value="<?php  echo $company_name; ?>"></td>
@@ -397,7 +399,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><?php echo $campaign_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $opportunity_type_menu; ?></td>
             </tr>
-            </tr>
+
             <tr>
                 <td class=widget_label><?php echo _("Owner"); ?></td>
                 <td class=widget_label><?php echo _("Plan"); ?></td>
@@ -405,6 +407,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_label><?php echo _("Category"); ?></td>
                 <td class=widget_label><?php echo _("Close Date"); ?></td>
             </tr>
+
             <tr>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element>
@@ -425,9 +428,10 @@ start_page($page_title, true, $msg);
                         <option value="on"<?php if ($before_after == "on") { print " selected"; } ?>><?php echo _("On"); ?></option>
                     </select>
                     <input type=text ID="f_date_d" name="search_date" size=12 value="<?php  echo $search_date; ?>">
-                    <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif" alt="">
+                    <img ID="f_trigger_d" style="CURSOR: pointer;" border=0 src="../img/cal.gif" alt="">
                 </td>
             </tr>
+
             <tr>
                 <td class=widget_label colspan="3"><?php echo _("Saved Searches"); ?></td>
                 <td class=widget_label colspan="2"><?php echo _("Search Title"); ?></td>
@@ -445,6 +449,7 @@ start_page($page_title, true, $msg);
                     ?>
                 </td>
             </tr>
+
             <tr>
                 <td class=widget_content_form_element colspan=5><input class=button type=submit value="<?php echo _("Search"); ?>"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>"> </td>
             </tr>
@@ -601,6 +606,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.73  2010/10/14 19:30:28  gopherit
+ * Minor HTML fixes.
+ *
  * Revision 1.72  2009/03/21 15:14:31  randym56
  * Revert $company_singular_title back to "Company" to fix language bug
  *
@@ -624,7 +632,7 @@ end_page();
  * - added marking of overdue opportunites in red, like activities
  * - added extra columns and groupability on the opportunites pager
  * - added ability to hide closed opportunities
- * - Thanks to Jean-Noël HAYART for providing this patch
+ * - Thanks to Jean-Noï¿½l HAYART for providing this patch
  *
  * Revision 1.65  2006/01/02 23:29:27  vanmer
  * - changed to use centralized dbconnection function
