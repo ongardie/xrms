@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.116 2010/10/20 20:24:23 gopherit Exp $
+ * $Id: utils-interface.php,v 1.117 2010/10/20 21:28:30 gopherit Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -1186,7 +1186,7 @@ function render_email_link($contact_id, $company_id, $first_names, $last_name, $
  * @param string  $select_name          prepend the name of each HTML element to return
  * @return string the HTML of the time period controls
  */
-function render_time_period_controls ($time_period_length, $select_name) {
+function render_time_period_controls ($time_period_length, $select_name, $html_attributes='') {
 
     $days = (int)($time_period_length / 86400);
     $rem = $time_period_length - $days * 86400;
@@ -1196,9 +1196,15 @@ function render_time_period_controls ($time_period_length, $select_name) {
 
     $minutes = (int)($rem / 60);
 
-    $selector  = '<input type="text" maxlength="4" style="text-align: right; width: 2em; padding: 0;" name="'. $select_name .'_days" value="'. $days .'"/>'. _('days') .'&nbsp;&nbsp;';
-    $selector .= '<input type="text" maxlength="2" style="text-align: right; width: 2em; padding: 0;" name="'. $select_name .'_hours" value="'. $hours .'"/>'. _('hrs') .'&nbsp;&nbsp;';
-    $selector .= '<input type="text" maxlength="3" style="text-align: right; width: 2em; padding: 0;" name="'. $select_name .'_minutes" value="'. $minutes .'"/>'. _('mins');
+    // Ensure lack of spacing does not trip us up
+    if ($html_attributes) $html_attributes = ' '. $html_attributes .' ';
+
+    $selector  = '<input type="text" maxlength="4" style="text-align: right; width: 2em; padding: 0;" name="'
+        . $select_name .'_days" value="'. $days .'"'. $html_attributes .'/>'. _('days') .'&nbsp;&nbsp;';
+    $selector .= '<input type="text" maxlength="2" style="text-align: right; width: 2em; padding: 0;" name="'
+        . $select_name .'_hours" value="'. $hours .'"'. $html_attributes .'/>'. _('hrs') .'&nbsp;&nbsp;';
+    $selector .= '<input type="text" maxlength="3" style="text-align: right; width: 2em; padding: 0;" name="'
+        . $select_name .'_minutes" value="'. $minutes .'"'. $html_attributes .'/>'. _('mins');
 
     return $selector;
 }
@@ -1206,6 +1212,9 @@ function render_time_period_controls ($time_period_length, $select_name) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.117  2010/10/20 21:28:30  gopherit
+ * Added the optional $html_attributes parameter to the render_time_period_controls() method to allow adding HTML attributes.
+ *
  * Revision 1.116  2010/10/20 20:24:23  gopherit
  * Introduced the render_time_period_controls() method for modifying a time period.
  *
