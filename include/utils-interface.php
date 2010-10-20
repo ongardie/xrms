@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.115 2010/09/15 13:24:29 gopherit Exp $
+ * $Id: utils-interface.php,v 1.116 2010/10/20 20:24:23 gopherit Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -1179,8 +1179,36 @@ function render_email_link($contact_id, $company_id, $first_names, $last_name, $
     return $email_link;
 }
 
+/*
+ * Creates a set of selectors for modifying a time period
+ * 
+ * @param integer $time_period_length   measured in seconds
+ * @param string  $select_name          prepend the name of each HTML element to return
+ * @return string the HTML of the time period controls
+ */
+function render_time_period_controls ($time_period_length, $select_name) {
+
+    $days = (int)($time_period_length / 86400);
+    $rem = $time_period_length - $days * 86400;
+
+    $hours = (int)($rem / 3600);
+    $rem = $rem - $hours * 3600;
+
+    $minutes = (int)($rem / 60);
+
+    $selector  = '<input type="text" maxlength="4" style="text-align: right; width: 2em; padding: 0;" name="'. $select_name .'_days" value="'. $days .'"/>'. _('days') .'&nbsp;&nbsp;';
+    $selector .= '<input type="text" maxlength="2" style="text-align: right; width: 2em; padding: 0;" name="'. $select_name .'_hours" value="'. $hours .'"/>'. _('hrs') .'&nbsp;&nbsp;';
+    $selector .= '<input type="text" maxlength="3" style="text-align: right; width: 2em; padding: 0;" name="'. $select_name .'_minutes" value="'. $minutes .'"/>'. _('mins');
+
+    return $selector;
+}
+
+
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.116  2010/10/20 20:24:23  gopherit
+ * Introduced the render_time_period_controls() method for modifying a time period.
+ *
  * Revision 1.115  2010/09/15 13:24:29  gopherit
  * Fixed wrong function description for render_nav_line()
  *
