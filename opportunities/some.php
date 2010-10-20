@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.73 2010/10/14 19:30:28 gopherit Exp $
+ * $Id: some.php,v 1.74 2010/10/20 14:35:07 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -52,7 +52,6 @@ $arr_vars = array ( // local var name       // session variable name
            'industry_id'             => array ( 'industry_id', arr_vars_GET_SESSION ),
            'before_after'            => array ( 'before_after', arr_vars_GET_SESSION ),
            'search_date'             => array ( 'search_date', arr_vars_GET_SESSION ),
-           'hide_closed'             => array ( 'hide_closed', arr_vars_SESSION ),
            'open_closed'             => array ( 'open_closed', arr_vars_SESSION ),
            'crm_status_id'           => array ( 'crm_status_id', arr_vars_SESSION ),
            );
@@ -107,20 +106,10 @@ $where .= "and c.crm_status_id = crst.crm_status_id ";
 if (($open_closed <= '') or (!$open_closed)) $open_closed = 'a';
 //echo $open_closed; exit;
 
-if ($open_closed == 'a') $where .= "and opportunity_record_status = 'a' ";
-if ($open_closed == 'c') $where .= "and opportunity_record_status = 'c' ";
-if ($open_closed == 'all') $where .= "and opportunity_record_status <> 'd' ";
+if ($open_closed == 'a') $where .= "AND os.status_open_indicator IN ('o', 'g') ";
+if ($open_closed == 'c') $where .= "AND os.status_open_indicator IN ('w', 'l') ";
+
 $criteria_count = 1;
-
-
-//echo $where; exit;
-
-// Begin Add JNH
-if ( $hide_closed )
-{
-    $where .= " AND os.status_open_indicator in ('o','g') ";
-}
-// end Add JNH
 
 if($campaign_id) {
     $where .= " AND opp.campaign_id = '$campaign_id'";
@@ -380,47 +369,23 @@ start_page($page_title, true, $msg);
 
             <tr>
                 <td class=widget_label><?php echo _("Opportunity Name"); ?></td>
-                <td class=widget_label><?php echo _("Company"); ?></td>
-                <td class=widget_label><?php echo _("Open/Closed/All"); ?></td>
-                <td class=widget_label><?php echo _("Campaigns"); ?></td>
                 <td class=widget_label><?php echo _("Type"); ?></td>
-            </tr>
-
-            <tr>
-                <td class=widget_content_form_element><input type=text name="opportunity_title" size=20 value="<?php  echo $opportunity_title; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="company_name" size=20 value="<?php  echo $company_name; ?>"></td>
-                <td class=widget_content_form_element>
-                        <select name="open_closed">
-                        <option value="a"<?php if($open_closed == 'a') { print " selected"; }?>><?php echo _("Open Only"); ?></option>
-                        <option value="c"<?php if($open_closed == 'c') { print " selected"; }?>><?php echo _("Closed Only"); ?></option>
-                        <option value="all"<?php if($open_closed == 'all') { print " selected"; }?>><?php echo _("All Ops."); ?></option>
-                    </select>
-                </td>
-                <td class=widget_content_form_element><?php echo $campaign_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $opportunity_type_menu; ?></td>
-            </tr>
-
-            <tr>
-                <td class=widget_label><?php echo _("Owner"); ?></td>
-                <td class=widget_label><?php echo _("Plan"); ?></td>
-                <td class=widget_label><?php echo _("CRM Status"); ?></td>
-                <td class=widget_label><?php echo _("Category"); ?></td>
+                <td class=widget_label><?php echo _("Open/Closed/All"); ?></td>
+                <td class=widget_label><?php echo _("Opportunity Status"); ?></td>
                 <td class=widget_label><?php echo _("Close Date"); ?></td>
             </tr>
 
             <tr>
-                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
+                <td class=widget_content_form_element><input type=text name="opportunity_title" size=20 value="<?php  echo $opportunity_title; ?>"></td>
+                <td class=widget_content_form_element><?php  echo $opportunity_type_menu; ?></td>
                 <td class=widget_content_form_element>
-                    <?php  echo $opportunity_status_menu; ?>
-                    <input name="hide_closed" type=checkbox <?php
-                        if ($hide_closed) {
-                            echo "checked=\"true\"";
-                        }
-                        echo ">" . _("Hide Closed");
-                    ?>
+                        <select name="open_closed">
+                        <option value="a"<?php if($open_closed == 'a') { print " selected"; }?>><?php echo _("Open Only"); ?></option>
+                        <option value="c"<?php if($open_closed == 'c') { print " selected"; }?>><?php echo _("Closed Only"); ?></option>
+                        <option value="all"<?php if($open_closed == 'all') { print " selected"; }?>><?php echo _("All"); ?></option>
+                    </select>
                 </td>
-                <td class=widget_content_form_element><?php  echo $crm_status_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $opportunity_category_menu; ?></td>
+                <td class=widget_content_form_element><?php  echo $opportunity_status_menu; ?></td>
                 <td class=widget_content_form_element>
                     <select name="before_after">
                         <option value=""<?php if (!$before_after) { print " selected"; } ?>><?php echo _("Before"); ?></option>
@@ -430,6 +395,22 @@ start_page($page_title, true, $msg);
                     <input type=text ID="f_date_d" name="search_date" size=12 value="<?php  echo $search_date; ?>">
                     <img ID="f_trigger_d" style="CURSOR: pointer;" border=0 src="../img/cal.gif" alt="">
                 </td>
+            </tr>
+
+            <tr>
+                <td class=widget_label><?php echo _("Company"); ?></td>
+                <td class=widget_label><?php echo _("Company CRM Status"); ?></td>
+                <td class=widget_label><?php echo _("Owner"); ?></td>
+                <td class=widget_label><?php echo _("Category"); ?></td>
+                <td class=widget_label><?php echo _("Campaign"); ?></td>
+            </tr>
+
+            <tr>
+                <td class=widget_content_form_element><input type=text name="company_name" size=20 value="<?php  echo $company_name; ?>"></td>
+                <td class=widget_content_form_element><?php echo $crm_status_menu; ?></td>
+                <td class=widget_content_form_element><?php echo $user_menu; ?></td>
+                <td class=widget_content_form_element><?php echo $opportunity_category_menu; ?></td>
+                <td class=widget_content_form_element><?php echo $campaign_menu; ?></td>
             </tr>
 
             <tr>
@@ -494,7 +475,7 @@ $columns[] = array('name' => _('Opportunity Size'), 'index_sql' => 'opportunity_
 $columns[] = array('name' => _('Probability'), 'index_sql' => 'prob', 'css_classname' => 'right');
 $columns[] = array('name' => _('Weighted Size'), 'index_sql' => 'weighted_size', 'subtotal' => true, 'css_classname' => 'right');
 //$columns[] = array('name' => _('Type'), 'index_sql' => 'type', 'group_query_list' => $type_query_list, 'group_query_select' => $type_query_select);
-$columns[] = array('name' => _('Plan'), 'index_sql' => 'status', 'group_query_list' => $status_query_list, 'group_query_select' => $status_query_select);
+$columns[] = array('name' => _('Status'), 'index_sql' => 'status', 'group_query_list' => $status_query_list, 'group_query_select' => $status_query_select);
 //$columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date', 'sql_sort_column' => 'close_at');
 //JNH
 $columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date', 'sql_sort_column' => 'close_at', 'default_sort' => 'asc');
@@ -606,6 +587,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.74  2010/10/20 14:35:07  gopherit
+ * * Fixed Bug Artifact #3091310 - Wrong filtering for Open/Closed/All Opportunities
+ * * Removed redundant "Hide Closed" checkbox
+ * * Rearranged the search criteria in what seems to be a more logical grouping ;)
+ *
  * Revision 1.73  2010/10/14 19:30:28  gopherit
  * Minor HTML fixes.
  *
