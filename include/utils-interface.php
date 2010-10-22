@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.117 2010/10/20 21:28:30 gopherit Exp $
+ * $Id: utils-interface.php,v 1.118 2010/10/22 17:54:41 gopherit Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -1186,8 +1186,10 @@ function render_email_link($contact_id, $company_id, $first_names, $last_name, $
  * @param string  $select_name          prepend the name of each HTML element to return
  * @return string the HTML of the time period controls
  */
-function render_time_period_controls ($time_period_length, $select_name, $html_attributes='') {
+function render_time_period_controls ($time_period_length, $enabled=false, $select_name='', $html_attributes='') {
 
+    $time_period_length = (isset($time_period_length)) ? $time_period_length : 0;
+    
     $days = (int)($time_period_length / 86400);
     $rem = $time_period_length - $days * 86400;
 
@@ -1196,15 +1198,23 @@ function render_time_period_controls ($time_period_length, $select_name, $html_a
 
     $minutes = (int)($rem / 60);
 
-    // Ensure lack of spacing does not trip us up
-    if ($html_attributes) $html_attributes = ' '. $html_attributes .' ';
+    $disabled = $enabled ? '' : 'disabled="disabled" ';
 
-    $selector  = '<input type="text" maxlength="4" style="text-align: right; width: 2em; padding: 0;" name="'
-        . $select_name .'_days" value="'. $days .'"'. $html_attributes .'/>'. _('days') .'&nbsp;&nbsp;';
-    $selector .= '<input type="text" maxlength="2" style="text-align: right; width: 2em; padding: 0;" name="'
-        . $select_name .'_hours" value="'. $hours .'"'. $html_attributes .'/>'. _('hrs') .'&nbsp;&nbsp;';
-    $selector .= '<input type="text" maxlength="3" style="text-align: right; width: 2em; padding: 0;" name="'
-        . $select_name .'_minutes" value="'. $minutes .'"'. $html_attributes .'/>'. _('mins');
+    if ($enabled && isset($select_name)) {
+        $select_name_days   = 'name"'. $select_name .'_days' .'" ';
+        $select_name_hrs    = 'name"'. $select_name .'_hrs' .'" ';
+        $select_name_mins   = 'name"'. $select_name .'_mins' .'" ';
+    }
+
+    // Ensure lack of spacing does not trip us up
+    if ($html_attributes) $html_attributes .= ' ';
+
+    $selector  = '<input type="text" maxlength="4" style="text-align: right; width: 2em; padding: 0;" '
+        . $select_name_days .'value="'. $days .'" '. $disabled . $html_attributes .'/>'. _('days') .'&nbsp;&nbsp;';
+    $selector .= '<input type="text" maxlength="2" style="text-align: right; width: 2em; padding: 0;" '
+        . $select_name_hrs .'value="'. $hours .'" '. $disabled . $html_attributes .'/>'. _('hrs') .'&nbsp;&nbsp;';
+    $selector .= '<input type="text" maxlength="3" style="text-align: right; width: 2em; padding: 0;" '
+        . $select_name_mins .'value="'. $minutes .'" '. $disabled . $html_attributes .'/>'. _('mins');
 
     return $selector;
 }
@@ -1212,6 +1222,9 @@ function render_time_period_controls ($time_period_length, $select_name, $html_a
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.118  2010/10/22 17:54:41  gopherit
+ * For the render_time_period_controls() method, added the optional $enabled parameter to allow creation of disabled controls and made the $select_name parameter optional.
+ *
  * Revision 1.117  2010/10/20 21:28:30  gopherit
  * Added the optional $html_attributes parameter to the render_time_period_controls() method to allow adding HTML attributes.
  *
