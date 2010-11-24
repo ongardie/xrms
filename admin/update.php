@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: update.php,v 1.113 2006/10/18 18:15:37 braverock Exp $
+ * $Id: update.php,v 1.114 2010/11/24 21:31:14 gopherit Exp $
  */
 
 // where do we include from
@@ -53,9 +53,12 @@ $dict = NewDataDictionary( $con );
 //CHECK FOR VERSION HERE, REDIRECT TO OLD UPDATE IF VERSION IS NOT CORRECT
 $ret=get_admin_preference($con, 'xrms_version');
 $allow_old_upgrade=true;
-if ((!$ret OR $ret=='1.0' OR $ret=='1.99' OR $ret=='1.99.1' OR $ret=='1.99.2') AND $allow_old_upgrade) {
+
+$versions = array('1.0', '1.99', '1.99.1', '1.99.2', '1.99.3', '1.99.4');
+
+if ((!$ret OR in_array($ret, $versions)) AND $allow_old_upgrade) {
     $con->close();
-    Header('Location: updateto2.0.php');
+    Header('Location: updateto1.99.2.php');
     exit();
 }
 
@@ -174,6 +177,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.114  2010/11/24 21:31:14  gopherit
+ * Set update.php to go through all database update scripts for database versions above 1.99.2.
+ *
  * Revision 1.113  2006/10/18 18:15:37  braverock
  * - remove double output of $msg
  *
@@ -320,7 +326,7 @@ end_page();
  *
  * Revision 1.71  2005/04/28 15:39:28  braverock
  * - fixed alter table command for work_phone_ext
- *   patch supplied by Miguel Gonçalves (mig77)
+ *   patch supplied by Miguel Gonï¿½alves (mig77)
  *
  * Revision 1.70  2005/04/26 18:33:55  gpowers
  * - changed contacts.work_phone_ext to NOT null default '' to match other columns in table
