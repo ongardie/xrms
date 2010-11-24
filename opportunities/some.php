@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.74 2010/10/20 14:35:07 gopherit Exp $
+ * $Id: some.php,v 1.75 2010/11/24 20:02:26 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -193,8 +193,8 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
     } else { $where .= ' AND 1 = 2 '; }
 }
 
-
-
+// Filter out deleted opportunity records
+$where .= " AND opportunity_record_status != 'd' ";
 
 $sql .= $from . $where;
 
@@ -587,6 +587,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.75  2010/11/24 20:02:26  gopherit
+ * FIXED Bug ID: 3117809 - The query now filters out opportunities with an 'opportunity_record_status' of 'd'.
+ *
  * Revision 1.74  2010/10/20 14:35:07  gopherit
  * * Fixed Bug Artifact #3091310 - Wrong filtering for Open/Closed/All Opportunities
  * * Removed redundant "Hide Closed" checkbox
