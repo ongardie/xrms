@@ -4,7 +4,7 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.23 2007/12/13 17:06:09 randym56 Exp $
+ * $Id: one.php,v 1.24 2010/11/24 22:38:34 gopherit Exp $
  */
 
 //include required common files
@@ -42,21 +42,28 @@ if ($rst) {
     $rst->close();
 }
 
+// Set the datetime_format and the JavaScript date time format
+$datetime_format = set_datetime_format($con, $session_user_id);
+if ($datetime_format == 'Y-m-d H:i:s') {
+	$java_timeformat = "%Y-%m-%d %H:%M:%S";
+	$java_timevalue = '24';
+	}
+	else {
+	$java_timeformat = "%Y-%m-%d %I:%M %p";
+	$java_timevalue = '12';
+	}
+
 $table_name = "opportunity_statuses";
 
 // list of all activity templates connected to this opportunity
-$sql_activity_templates="select activity_title,
-                                duration,
-                                                                fixed_date,
-                                activity_template_id,
-                                activity_type_pretty_name, activity_templates.sort_order, role_name
-                         from activity_types,
-                              activity_templates LEFT OUTER JOIN Role on Role.role_id = activity_templates.role_id
-                         where on_what_id=$opportunity_status_id
-                                and on_what_table='$table_name'
-                                and activity_templates.activity_type_id=activity_types.activity_type_id
-                                and activity_template_record_status='a'
-                                order by activity_templates.sort_order";
+$sql_activity_templates = "SELECT activity_title, start_delay, duration, fixed_date, activity_template_id, activity_type_pretty_name, activity_templates.sort_order, role_name
+                            FROM activity_types, activity_templates
+                            LEFT OUTER JOIN Role on Role.role_id = activity_templates.role_id
+                            WHERE on_what_id=$opportunity_status_id
+                            AND on_what_table='$table_name'
+                            AND activity_templates.activity_type_id=activity_types.activity_type_id
+                            AND activity_template_record_status='a'
+                            ORDER BY activity_templates.sort_order";
 
 $classname = 'open_activity';
 
@@ -64,12 +71,15 @@ $classname = 'open_activity';
 $rst = $con->execute($sql_activity_templates);
 //make activity_templates table in HTML
 if ($rst) {
-    //get first record count and last record count
-    $cnt = 1;
+    // get the numbers of rows
     $maxcnt = $rst->rowcount();
+    $i = 1;
     while (!$rst->EOF) {
         $sort_order = $rst->fields['sort_order'];
-                if ($rst->fields['fixed_date']>'') $fixed_date = date("Y-m-d", strtotime($rst->fields['fixed_date'])); else $fixed_date='';
+        if ($rst->fields['fixed_date']>'')
+            $fixed_date =  date($datetime_format, strtotime($rst->fields['fixed_date']));
+        else
+            $fixed_date='';
         $activity_rows .= '<tr>';
         $activity_rows .= "<td class='$classname'>"
             . "<a href='$http_site_root/admin/activity-templates/edit.php?activity_template_id="
@@ -77,30 +87,30 @@ if ($rst) {
             . $opportunity_status_id . "&return_url=/admin/opportunity-statuses/one.php?opportunity_status_id="
             . $opportunity_status_id . "'>"
             . $rst->fields['activity_title'] . '</a></td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['duration'] . '</td>';
-                $activity_rows .= '<td class=' . $classname . '>' . $fixed_date . '</td>';
+        $activity_rows .= '<td class=' . $classname . '>'. render_time_period_controls($rst->fields['start_delay']) . '</td>';
+        $activity_rows .= '<td class=' . $classname . '>' . $fixed_date . '</td>';
+        $activity_rows .= '<td class=' . $classname . '>'. render_time_period_controls($rst->fields['duration']) .'</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>'. $rst->fields['role_name'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>'
                 . '<table width=100% cellpadding=0 border=0 cellspacing=0>'
                 . '<tr><td>' . $sort_order . '</td>'
                 . '<td align=right>';
-        if ($sort_order != $cnt) {
+        if ($i > 1) {
             $activity_rows .= '<a href="' . $http_site_root
-            . '/admin/sort.php?allowMultiple=1&direction=up&sort_order='
-            . $sort_order . '&table_name=opportunity_status&on_what_id=' . $opportunity_status_id
-            . '&return_url=/admin/opportunity-statuses/one.php?opportunity_status_id='
-            . $opportunity_status_id . '&activity_template=1">up</a> &nbsp; ';
+                . '/admin/sort.php?table_name=opportunity_status&sort_order='. $sort_order .'&direction=up'
+                . '&on_what_id=' . $opportunity_status_id .'&resort_id='. $rst->fields['activity_template_id'] .'&activity_template=1'
+                . '&return_url=/admin/opportunity-statuses/one.php?opportunity_status_id='. $opportunity_status_id .'">'. _('up') .'</a> &nbsp; ';
         }
-        if ($sort_order != $maxcnt) {
+        if ($i < $maxcnt) {
             $activity_rows .= '<a href="' . $http_site_root
-            . '/admin/sort.php?allowMultiple=1&direction=down&sort_order='
-            . $sort_order . '&table_name=opportunity_status&on_what_id=' . $opportunity_status_id
-            . '&return_url=/admin/opportunity-statuses/one.php?opportunity_status_id='
-            . $opportunity_status_id . '&activity_template=1">down</a>';
+                . '/admin/sort.php?table_name=opportunity_status&sort_order='. $sort_order .'&direction=down'
+                . '&on_what_id=' . $opportunity_status_id .'&resort_id='. $rst->fields['activity_template_id'] .'&activity_template=1'
+                . '&return_url=/admin/opportunity-statuses/one.php?opportunity_status_id='. $opportunity_status_id .'">'. _('down') .'</a> &nbsp; ';
         }
         $activity_rows .= '</td></tr></table></td></tr>';
         $rst->movenext();
+        $i++;
     }
     $rst->close();
 } else {
@@ -125,7 +135,6 @@ start_page($page_title);
 ?>
 
 <div id="Main">
-    <div id="Content">
 
         <form action=edit-2.php method=post>
         <input type=hidden name=opportunity_status_id value="<?php  echo $opportunity_status_id; ?>">
@@ -165,7 +174,12 @@ start_page($page_title);
                 </td>
             </tr>
              <tr>
-              <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>">
+              <td class=widget_content_form_element colspan=2>
+                  <input class=button type=submit value="<?php echo _("Save Changes"); ?>">
+                  &nbsp;
+                  <input class="button" type="button" onclick="location.href='some.php?aopportunity_type_id=<?php echo $aopportunity_type_id; ?>';" value="<?php echo _('Cancel'); ?>">
+                  &nbsp;
+                  <input class=button type=submit value="<?php echo _("Delete"); ?>" onclick="return confirm_delete();" />
              </tr>
 
         </table>
@@ -177,33 +191,55 @@ start_page($page_title);
         <input type=hidden name=on_what_table value="<?php echo $table_name; ?>">
 
         <table class=widget cellspacing=1>
+
             <tr>
-                <td class=widget_header colspan=6><?php echo _("Link Workflow Activity To Opportunity Status"); ?></td>
+                <td class=widget_header colspan=7><?php echo _("Workflow Activity Templates"); ?></td>
             </tr>
+
             <tr>
                 <td class=widget_label><?php echo _("Title"); ?></td>
-                <td class=widget_label><?php echo _("Duration"); ?><br> <?php echo _("(defaults to days)"); ?></td>
-                                <td class=widget_label><?php echo _("Fixed Date"); ?><br> <?php echo _("(Duration MUST = 0)"); ?></td>
+                <td class=widget_label><?php echo _("Delay Start By"); ?></td>
+                <td class=widget_label><?php echo _("Fixed Date"); ?></td>
+                <td class=widget_label><?php echo _("Duration"); ?></td>
                 <td class=widget_label><?php echo _("Type"); ?></td>
                 <td class=widget_label><?php echo _("Role"); ?></td>
-                <td class=widget_label colspan=2 width="20%"><?php echo _("Sort Order"); ?></td>
+                <td class=widget_label width="20%"><?php echo _("Sort Order"); ?></td>
+            </tr>
+
             <tr>
                 <td class=widget_content_form_element><input type=text size=30 name="title"></td>
-                <td class=widget_content_form_element><input type=text name="duration"></td>
-                                <td class=widget_contect_form_element><input type=text size=16 ID="f_date_activity" name="fixed_date">
-                        <img ID="f_trigger_activity" style="CURSOR: hand" border=0 src="../../img/cal.gif"></td>
+                <td class=widget_content_form_element>
+                    <?php echo render_time_period_controls (0, 'start_delay', TRUE, 'onchange="validate_reset_fixed();"'); ?>
+                </td>
+                <td class=widget_content_form_element>
+                    <span style="white-space: nowrap;">
+                        <input type=text size=16 ID="f_date_activity" name="fixed_date" onchange="validate_reset_delay();">
+                        <img alt="<?php echo _('Fixed Date'); ?>" title="<?php echo _('Select fixed date'); ?>"
+                             ID="f_trigger_activity" style="CURSOR: pointer" border=0 src="../../img/cal.gif">
+                    </span>
+                </td>
+                <td class=widget_content_form_element>
+                    <?php
+                        // Should switch this to default_activity_duration
+                        echo render_time_period_controls (900, 'duration', TRUE);
+                    ?>
+                </td>
                 <td class=widget_content_form_element>
                     <?php
                         echo $activity_type_menu;
                     ?>
                 </td>
                 <td class=widget_content_form_element><?php echo $role_menu; ?></td>
-                <td class=widget_content_form_element colspan=2>
+                <td class=widget_content_form_element>
                     <input type=text size=2 name="sort_order">
-                    &nbsp;
-                    <input class=button type=submit value="<?php echo _("Add"); ?>">
+                    <input class=button type=submit value="<?php echo _("Add New"); ?>">
                 </td>
             </tr>
+
+            <tr>
+                <td class="widget_header" colspan="7"><?php echo _("Templates Currently Linked to This Opportunity Status"); ?></td>
+            </tr>
+
             <?php
                 if (!is_null($activity_rows)) {
                     echo $activity_rows;
@@ -213,47 +249,69 @@ start_page($page_title);
                     echo "\t</tr>\n";
                 }
             ?>
-
+            
         </table>
         </form>
-            <script language="JavaScript" type="text/javascript">
-                    Calendar.setup({
-                    inputField     :    "f_date_activity",      // id of the input field
-                    ifFormat       :    "%Y-%m-%d",       // format of the input field
-                    showsTime      :    true,            // will display a time selector
-                    button         :    "f_trigger_activity",   // trigger for the calendar (button ID)
-                    singleClick    :    false,           // double-click mode
-                    step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
-                    align          :    "TL"           // alignment (defaults to \"Bl\")
-                });
-                        </script>
 
+        <script language="JavaScript" type="text/javascript">
+            Calendar.setup({
+                inputField     :    "f_date_activity",      // id of the input field
+                ifFormat       :    "<?php echo $java_timeformat; ?>",       // format of the input field
+                showsTime      :    true,            // will display a time selector
+                timeFormat     :    value="<?php echo $java_timevalue; ?>",  //12 or 24
+                button         :    "f_trigger_activity",   // trigger for the calendar (button ID)
+                singleClick    :    false,           // double-click mode
+                step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+                align          :    "TL"           // alignment (defaults to \"Bl\")
+            });
 
-    </div>
+            function validate_reset_delay() {
+                if ((document.forms[1].fixed_date.value > '') &&
+                    ((document.forms[1].start_delay_days.value > 0)
+                    || (document.forms[1].start_delay_hrs.value > 0)
+                    || (document.forms[1].start_delay_mins.value > 0))) {
+                    var answer = confirm('<?php echo addslashes(_('You cannot select a Delay Start By and a Fixed Date at the same time.')) .'\n\n'. addslashes(_('Would you like to clear the Delay Start By values?')); ?>');
+                    if (answer) {
+                        document.forms[1].start_delay_days.value = 0;
+                        document.forms[1].start_delay_hrs.value = 0;
+                        document.forms[1].start_delay_mins.value = 0;
+                    } else {
+                        document.forms[1].f_date_activity.value = '';
+                    }
+                }
+            }
+
+            function validate_reset_fixed() {
+                if ((document.forms[1].fixed_date.value > '') &&
+                    ((document.forms[1].start_delay_days.value > 0)
+                    || (document.forms[1].start_delay_hrs.value > 0)
+                    || (document.forms[1].start_delay_mins.value > 0))) {
+                    var answer = confirm('<?php echo addslashes(_('You cannot select a Delay Start By and a Fixed Date at the same time.')) .'\n\n'. addslashes(_('Would you like to clear the Fixed Date value?')); ?>');
+                    if (answer) {
+                        document.forms[1].f_date_activity.value = '';
+                    } else {
+                        document.forms[1].start_delay_days.value = 0;
+                        document.forms[1].start_delay_hrs.value = 0;
+                        document.forms[1].start_delay_mins.value = 0;
+                    }
+                }
+            }
+
+            function confirm_delete() {
+                 var answer = confirm('<?php echo addslashes(_('Delete Opportunity Status?')) .'\n\n'. addslashes(_('WARNING: This action CANNOT be undone!')); ?>');
+                 if (answer) {
+                     document.forms[0].action = 'delete.php';
+                     document.forms[0].submit();
+                     return true;
+                 } else {
+                     return false;
+                 }
+             }
+        </script>
+
 
 
     <!-- right column //-->
-    <div id="Sidebar">
-
-        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Opportunity Status?")); ?>');">
-        <input type=hidden name=opportunity_status_id value="<?php  echo $opportunity_status_id; ?>">
-        <input type=hidden name=aopportunity_type_id value="<?php  echo $aopportunity_type_id; ?>">
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header colspan=4><?php echo _("Delete Opportunity Status"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content>
-                <?php echo _("Click the button below to permanently remove this item."); ?>
-                <p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
-                <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
-                </td>
-            </tr>
-        </table>
-        </form>
-
-    </div>
-
 
 </div>
 
@@ -263,6 +321,13 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.24  2010/11/24 22:38:34  gopherit
+ * Revised the interface for creating and sorting Activity Templates attached to an Opportunity:
+ * - provided support for the new start_delay field which allows workflow activities to have gaps between them, measured in seconds by start_delay
+ * - finished the fixed_date functionality which lay dormant in the code base until now
+ * - fixed the datetime format of the fixed_date input
+ * - eliminated the now deprecated allowMultiple parameter in links pointing to /admin/sort.php and revised the link presence calculation which was buggy
+ *
  * Revision 1.23  2007/12/13 17:06:09  randym56
  * Bug fix to add back Save button
  *
@@ -279,9 +344,9 @@ end_page();
  * - Added two input fields for two new fields in table:
  * - table: opportunity_statuses
  * - fields added:
- *    status_workflow_type (integer: used for resolution types –> End=0, Repeat=1, or Goto=2)
- *    workflow_goto (used to enter the name of another opportunity status – I plan to make this
- *         a dropdown lookup from the opportunity_statuses table, but for now it’s free-form).
+ *    status_workflow_type (integer: used for resolution types ï¿½> End=0, Repeat=1, or Goto=2)
+ *    workflow_goto (used to enter the name of another opportunity status ï¿½ I plan to make this
+ *         a dropdown lookup from the opportunity_statuses table, but for now itï¿½s free-form).
  *
  * Revision 1.18  2006/12/29 06:48:56  ongardie
  * - Don't allow blank on activities type drop-down.
