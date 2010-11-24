@@ -6,7 +6,7 @@
  * @author Brad Marshall
  * @author Brian Peterson
  *
- * $Id: workflow-activities.php,v 1.17 2008/10/21 06:49:12 metamedia Exp $
+ * $Id: workflow-activities.php,v 1.18 2010/11/24 22:28:48 gopherit Exp $
  *
  * @todo To extend and internationalize activity template substitution,
  *       we would need to add a table to the database that would hold
@@ -28,11 +28,14 @@ if ( !defined('IN_XRMS') )
 
 //this page is now deprecated, and should not be used.  This function call is here to allow backward compability
 
-add_workflow_activities($con, $on_what_table_template, $on_what_id_template, $on_what_table, $on_what_id, $company_id, $contact_id, $template_sort_order);
+add_workflow_activity($con, $on_what_table_template, $on_what_id_template, $on_what_table, $on_what_id, $company_id, $contact_id, $template_sort_order);
 
 
 /**
  * $Log: workflow-activities.php,v $
+ * Revision 1.18  2010/11/24 22:28:48  gopherit
+ * Switched from the old add_workflow_activities() to the new add_workflow_activity() method.
+ *
  * Revision 1.17  2008/10/21 06:49:12  metamedia
  * Ensure that script cannot execute in isolation. Done to reduce risk of remote file include injection if php_register_globals is ON
  *

@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-opportunities.php,v 1.5 2006/11/06 18:44:41 jnhayart Exp $
+ * $Id: utils-opportunities.php,v 1.6 2010/11/24 22:29:08 gopherit Exp $
  *
  */
 
@@ -194,7 +194,7 @@ function add_update_opportunity($con, $opportunity_info, $_return_data = false, 
     if ($add_workflow_activities) {
         $on_what_id_template = $opportunity_data['opportunity_status_id'];
         $on_what_table_template = "opportunity_statuses";
-        add_workflow_activities($con, $on_what_table_template, $on_what_id_template, 'opportunities',$opportunity_id, $opportunity_data['company_id'], $opportunity_data['contact_id']);
+        add_workflow_activity($con, $on_what_table_template, $on_what_id_template, 'opportunities',$opportunity_id, $opportunity_data['company_id'], $opportunity_data['contact_id']);
     }
     // Set audit trail
     add_audit_item($con, $session_user_id, $audit_type, $_table_name, $opportunity_id, 1);
@@ -428,6 +428,9 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-opportunities.php,v $
+ * Revision 1.6  2010/11/24 22:29:08  gopherit
+ * Switched from the old add_workflow_activities() to the new add_workflow_activity() method.
+ *
  * Revision 1.5  2006/11/06 18:44:41  jnhayart
  * Add Hook when deleted opportunity
  *
