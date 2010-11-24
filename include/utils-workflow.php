@@ -6,7 +6,7 @@
  * @author Brian Peterson
  * @author Aaron van Meerten
  *
- * $Id: utils-workflow.php,v 1.5 2007/02/13 16:14:20 braverock Exp $
+ * $Id: utils-workflow.php,v 1.6 2010/11/24 22:27:15 gopherit Exp $
  *
  * @todo To extend and internationalize activity template substitution,
  *       we would need to add a table to the database that would hold
@@ -140,6 +140,142 @@ function add_workflow_activities($con, $on_what_table_template, $on_what_id_temp
             $rec = array();
             $rec['activity_type_id'] = $activity_type_id;
             $rec['activity_description'] = addslashes($default_text);
+            $rec['ends_at'] = $ends_at;
+            $rec['user_id'] = $user_id;
+            $rec['activity_template_id']=$activity_template_id;
+            $rec['company_id'] = $company_id;
+            $rec['contact_id'] = $contact_id;
+            $rec['on_what_table'] = $on_what_table;
+            $rec['on_what_id'] = $on_what_id;
+            $rec['on_what_status'] = $on_what_id_template;
+            $rec['activity_title'] = addslashes($activity_title);
+            $rec['entered_at'] = time();
+            $rec['entered_by'] = $user_id;
+            $rec['last_modified_at'] = time();
+            $rec['last_modified_by'] = $user_id;
+            //$rec['scheduled_at'] = time();
+            $rec['activity_status'] = 'o';
+            $rec['activity_record_status'] = $activity_record_status;
+//            print_r($rec);
+    //    $con->debug=true;
+            add_activity($con, $rec);
+    /*
+            $tbl = 'activities';
+            $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+            $ins_rst=$con->execute($ins);
+            if (!$ins_rst) { db_error_handler($con, $sql); }
+    //        echo "INSERTED ". $con->Insert_ID();
+    */
+            do_hook_function('workflow_addition', $activity_template_id);
+
+        }
+    }
+}
+
+// This is a revised version of the add_workflow_activities() method.  The old
+// method has been kept for backward compatibility where it is still being called.
+// The new method adds start_delay time before the start time of an activity and changes
+// the interpretation of the activity duration time for activity_templates from days to seconds.
+//
+function add_workflow_activity($con, $on_what_table_template, $on_what_id_template, $on_what_table, $on_what_id, $company_id, $contact_id, $template_sort_order=1) {
+    if (!$template_sort_order) { $template_sort_order=1; }
+
+    $activity_templates=find_activity_template($con, $on_what_table_template, $on_what_id_template, $template_sort_order);
+
+    //generates insert statement to add activities to the current list
+    $cnt = 0;
+    if(empty($activity_record_status)) {
+        $activity_record_status = 'a';
+    }
+    if ($activity_templates) {
+        foreach ($activity_templates AS $template_info) {
+
+            //get the field values from the next record in the query
+            $activity_template_id =$template_info['activity_template_id'];
+            $activity_type_id = $template_info['activity_type_id'];
+            $activity_title = $template_info['activity_title'];
+            $default_text = $template_info['default_text'];
+            $activity_description = $template_info['activity_description'];
+            $start_delay = $template_info['start_delay'];
+            $fixed_date = $template_info['fixed_date'];
+            // @TODO: No idea why duration is stored as varchar(20) in the database!
+            // Let's make sure we get a clean integer value!
+            $duration = (int)$template_info['duration'];
+            $activity_template_role_id = $template_info['role_id'];
+
+            // Calculate scheduled_at and ends_at, based on the fixed_date or current time
+            // start_delay is in seconds and duration is now also in seconds!
+            // @TODO: It would be better if scheduled_at time is based on the
+            // ends_at time of the previous activity in the workflow instead
+            // of the current date.  A user may have forgotten to mark an
+            // activity as completed on time but the start_delay time should
+            // ideally have been incurred from the moment the activity was
+            // really completed, not from the moment the user finally marks
+            // it so.
+            
+            if ($fixed_date > '') {
+                $tmp = strtotime($fixed_date);
+            } else {
+                $tmp = time() + $start_delay;
+            }
+            $scheduled_at = date('Y-m-d H:i:s', $tmp);
+            $ends_at = date('Y-m-d H:i:s', $tmp + $duration);
+
+            /**
+            * Do variable substitution on the Activity Title in an Activity Template
+            *
+            * @todo Move variable substitutions for actvity templates into a user-definable table.
+            */
+            if (strpos($activity_title, 'company_name')) {
+                $company_data=get_company($con, $company_id);
+                $company_name=$company_data['company_name'];
+                if ($company_name) {
+                    $activity_title = str_replace('company_name',$company_name,$activity_title);
+                }
+            }
+            if (strpos($activity_title, 'contact_name')) {
+                // get the contact name for variable substitution
+                $contact_data=get_contact($con, $contact_id);
+                if ($contact_data) {
+                    $contact_name=$contact_data['first_names'] . " " . $contact_data['last_name'];
+                    if ($contact_name) {
+                        $activity_title = str_replace('contact_name',$contact_name,$activity_title);
+                    }
+                }
+            }
+
+            $activity_type_data=get_activity_type($con, false, false, $activity_type_id);
+            if ($activity_type_data) {
+                $activity_type_name=$activity_type_data['activity_type_short_name'];
+                switch ($activity_type_name) {
+                    //handle internal activity type
+                    case 'INT':
+                    break;
+
+                    //handle process activity type (instantiate new entity)
+                    case 'PRO':
+                        $entity=$template_info['workflow_entity'];
+                        $entity_type=$template_info['workflow_entity_type'];
+                        $ret=add_process_entity($con, $entity, $entity_type, $activity_title, $activity_description, $company_id, $contact_id, $on_what_table, $on_what_id);
+                    break;
+
+                    //process system activities here
+                    case 'SYS':
+                        $ret=do_hook_function('workflow_system', $template_info);
+                    break;
+
+                    default:
+                    break;
+                }
+            }
+
+            $user_id=get_least_busy_user_in_role($con, $activity_template_role_id, strtotime($ends_at));
+            if (!$user_id) $user_id=$session_user_id;
+            //save to database
+            $rec = array();
+            $rec['activity_type_id'] = $activity_type_id;
+            $rec['activity_description'] = addslashes($default_text);
+            $rec['scheduled_at'] = $scheduled_at;
             $rec['ends_at'] = $ends_at;
             $rec['user_id'] = $user_id;
             $rec['activity_template_id']=$activity_template_id;
@@ -346,7 +482,7 @@ function add_process_entity($con, $entity, $entity_type, $title, $description, $
     $on_what_table_template = "{$singular_entity}_statuses";
     $on_what_id_template = $status;
 
-    add_workflow_activities($con, $on_what_table_template, $on_what_id_template, $on_what_table,$on_what_id, $company_id, $contact_id);
+    add_workflow_activity($con, $on_what_table_template, $on_what_id_template, $on_what_table,$on_what_id, $company_id, $contact_id);
 
     return $entity_id;
 }
@@ -411,7 +547,7 @@ function workflow_activity_completed($con, $on_what_table, $on_what_id, $activit
                     $on_what_table_template = $on_what_singular .  "_statuses";
                     $on_what_id_template = $table_status_id;
                     //run the add_workflow_activities  to actually make the update
-                    add_workflow_activities($con, $on_what_table_template, $on_what_id_template, $on_what_table, $on_what_id, $company_id, $contact_id, $template_sort_order);
+                    add_workflow_activity($con, $on_what_table_template, $on_what_id_template, $on_what_table, $on_what_id, $company_id, $contact_id, $template_sort_order);
                     //don't allow the status to be changed, since we just added workflow activities
                     $allow_change_status=false;
                 }
@@ -518,6 +654,12 @@ function workflow_activity_completed($con, $on_what_table, $on_what_id, $activit
 /**
  *
  * $Log: utils-workflow.php,v $
+ * Revision 1.6  2010/11/24 22:27:15  gopherit
+ * Implemented the add_workflow_activity() method to replace the add_workflow_activities().  The old method has been left temporarily since it is still being used by the Cases functionality.  The new method:
+ * - adds start_delay time before the start time of an activity to allow for time gaps between activities
+ * - changes the interpretation of the activity duration time for activity_templates from days to seconds
+ * - implements the fixed_date option for activity templates which has been sitting dormant in the code until now
+ *
  * Revision 1.5  2007/02/13 16:14:20  braverock
  * - restore functionality to not auto-advance to a closed workflow state
  *   patches provided by "Mark Hobbs" <mark[dot]hobbs[at]diginus[dot]com>
