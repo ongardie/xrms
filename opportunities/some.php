@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.75 2010/11/24 20:02:26 gopherit Exp $
+ * $Id: some.php,v 1.76 2010/11/24 21:15:27 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -226,15 +226,22 @@ if( $rst AND $rst->RowCount() ) {
 /********** SAVED SEARCH ENDS ****/
 
 
-$sql_recently_viewed = "select * from recent_items r, companies c, opportunities opp, opportunity_statuses os
-where r.user_id = $session_user_id
-and r.on_what_table = 'opportunities'
-and r.recent_action = ''
-and c.company_id = opp.company_id
-and opp.opportunity_status_id = os.opportunity_status_id
-and r.on_what_id = opp.opportunity_id
-and opportunity_record_status = 'a'
-order by r.recent_item_timestamp desc";
+$sql_recently_viewed = "SELECT  opp.opportunity_id,
+                                opp.opportunity_title,
+                                c.company_name,
+                                os.opportunity_status_pretty_name,
+                                opp.close_at,
+                                MAX(r.recent_item_timestamp) AS lasttime
+                        FROM recent_items r, companies c, opportunities opp, opportunity_statuses os
+                        WHERE r.user_id = $session_user_id
+                        AND r.on_what_table = 'opportunities'
+                        AND r.recent_action = ''
+                        AND c.company_id = opp.company_id
+                        AND opp.opportunity_status_id = os.opportunity_status_id
+                        AND r.on_what_id = opp.opportunity_id
+                        AND opportunity_record_status = 'a'
+                        GROUP BY opportunity_id
+                        ORDER BY lasttime DESC";
 
 $recently_viewed_table_rows = '';
 $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
@@ -587,6 +594,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.76  2010/11/24 21:15:27  gopherit
+ * FIXED Bug ID: 3117829 The Recently Viewed list now lists opportunities only once, sorted by the time they were last viewed.
+ *
  * Revision 1.75  2010/11/24 20:02:26  gopherit
  * FIXED Bug ID: 3117809 - The query now filters out opportunities with an 'opportunity_record_status' of 'd'.
  *
