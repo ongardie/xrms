@@ -2,7 +2,7 @@
 /**
  * Manage activity templates
  *
- * $Id: edit.php,v 1.12 2006/12/05 11:09:59 jnhayart Exp $
+ * $Id: edit.php,v 1.13 2010/11/24 22:41:57 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -22,6 +22,17 @@ getGlobalVar($msg, 'msg');
 
 $con = get_xrms_dbconnection();
 
+// Set the datetime_format and the JavaScript date time format
+$datetime_format = set_datetime_format($con, $session_user_id);
+if ($datetime_format == 'Y-m-d H:i:s') {
+	$java_timeformat = "%Y-%m-%d %H:%M:%S";
+	$java_timevalue = '24';
+	}
+	else {
+	$java_timeformat = "%Y-%m-%d %I:%M %p";
+	$java_timevalue = '12';
+	}
+
 $sql = "select * from activity_templates where activity_template_id = $activity_template_id";
 
 $rst = $con->execute($sql);
@@ -30,8 +41,13 @@ if ($rst) {
 
     $activity_title = $rst->fields['activity_title'];
     $activity_description = $rst->fields['activity_description'];
-        $default_text = $rst->fields['default_text'];
+    $default_text = $rst->fields['default_text'];
     $activity_type_id = $rst->fields['activity_type_id'];
+    $start_delay = $rst->fields['start_delay'];
+    if ($rst->fields['fixed_date']>'')
+        $fixed_date =  date($datetime_format, strtotime($rst->fields['fixed_date']));
+    else
+        $fixed_date='';
     $duration = $rst->fields['duration'];
     $role_id = $rst->fields['role_id'];
     $sort_order = $rst->fields['sort_order'];
@@ -73,87 +89,94 @@ start_page($page_title, true, $msg);
 
 ?>
 <div id="Main">
-    <div id="Content">
+    <form action=edit-2.php method=post name=activity_template_form>
+    <input type=hidden name=activity_template_id value="<?php  echo $activity_template_id; ?>">
+    <input type=hidden name=on_what_table value="<?php echo $on_what_table; ?>">
+    <input type=hidden name=on_what_id value="<?php echo $on_what_id; ?>">
+    <input type=hidden name=return_url value="<?php echo $return_url; ?>">
+    <table class=widget cellspacing=1>
+        <tr>
+            <td class=widget_header colspan=4><?php echo _("Edit Activity Template Information"); ?></td>
+        </tr>
 
-        <form action=edit-2.php method=post name=activity_template_form>
-        <input type=hidden name=activity_template_id value="<?php  echo $activity_template_id; ?>">
-        <input type=hidden name=return_url value="<?php echo $return_url; ?>">
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header colspan=4><?php echo _("Edit Activity Template Information"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Title"); ?></td>
-                <td class=widget_content_form_element><input type=text size=40 name="activity_title" value="<?php echo $activity_title; ?>"></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Duration"); ?></td>
-                <td class=widget_content_form_element><input type=text size=10 name="duration" value="<?php echo $duration; ?>"></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Type"); ?></td>
-                <td class=widget_content_form_element><?php echo $activity_type_menu; ?></td>
-            </tr>
-            <tr id=entity_selection>
-                <td class=widget_label_right><?php echo _("Workflow Entity"); ?></td>
-                <td class=widget_content_form_element><?php echo $workflow_entity_menu.$workflow_entity_type_hidden; ?></td>
-            </tr>
-<?php foreach ($workflow_entity_type_menus as $type_entity => $type_menu) { ?>
+        <tr>
+            <td class=widget_label_right><?php echo _("Title"); ?></td>
+            <td class=widget_content_form_element><input type=text size=40 name="activity_title" value="<?php echo $activity_title; ?>"></td>
+        </tr>
+
+        <tr>
+            <td class=widget_label_right><?php echo _("Delay Start By"); ?></td>
+            <td class=widget_content_form_element>
+                <?php echo render_time_period_controls ($start_delay, 'start_delay', TRUE, 'onchange="validate_reset_fixed();"'); ?>
+            </td>
+        </tr>
+
+        <tr>
+            <td class=widget_label_right><?php echo _("Fixed Date"); ?></td>
+            <td class=widget_content_form_element>
+                <span style="white-space: nowrap;">
+                    <input type=text size=16 ID="f_date_activity" name="fixed_date" onchange="validate_reset_delay();" value="<?php echo $fixed_date; ?>" />
+                    <img alt="<?php echo _('Fixed Date'); ?>" title="<?php echo _('Select fixed date'); ?>"
+                         ID="f_trigger_activity" style="CURSOR: pointer" border=0 src="../../img/cal.gif">
+                </span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class=widget_label_right><?php echo _("Duration"); ?></td>
+            <td class=widget_content_form_element>
+                <?php echo render_time_period_controls ($duration, 'duration', TRUE); ?>
+            </td>
+        </tr>
+
+        <tr>
+            <td class=widget_label_right><?php echo _("Type"); ?></td>
+            <td class=widget_content_form_element><?php echo $activity_type_menu; ?></td>
+        </tr>
+
+        <tr id=entity_selection>
+            <td class=widget_label_right><?php echo _("Workflow Entity"); ?></td>
+            <td class=widget_content_form_element><?php echo $workflow_entity_menu.$workflow_entity_type_hidden; ?></td>
+        </tr>
+
+        <?php foreach ($workflow_entity_type_menus as $type_entity => $type_menu) { ?>
             <tr id=entity_type_selection_<?php echo $type_entity; ?>>
                 <td class=widget_label_right><?php echo _("Workflow Entity Type"); ?></td>
                 <td class=widget_content_form_element><?php echo $type_menu; ?></td>
             </tr>
-<?php } ?>
-            <tr>
-                <td class=widget_label_right><?php echo _("Role"); ?></td>
-                <td class=widget_content_form_element><?php echo $role_menu; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right_166px><?php echo _("Description"); ?></td>
-                <td class=widget_content_form_element><textarea rows=8 cols=100 name="activity_description"><?php echo $activity_description ?></textarea></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right_166px><?php echo _("Default Text"); ?></td>
-                <td class=widget_content_form_element><textarea rows=8 cols=100 name="default_text"><?php echo $default_text; ?></textarea></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Sort Order"); ?></td>
-                <td class=widget_content_form_element><input type=text size=2 name="sort_order" value='<?php echo $sort_order; ?>'></td>
-            </tr>
-            <tr>
-                <td class=widget_content colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
-            </tr>
-        </table>
-        </form>
+        <?php } ?>
 
-    </div>
+        <tr>
+            <td class=widget_label_right><?php echo _("Role"); ?></td>
+            <td class=widget_content_form_element><?php echo $role_menu; ?></td>
+        </tr>
 
-        <!-- right column //-->
-    <div id="Sidebar">
+        <tr>
+            <td class=widget_label_right><?php echo _("Description"); ?></td>
+            <td class=widget_content_form_element><textarea rows=8 cols=100 name="activity_description"><?php echo $activity_description ?></textarea></td>
+        </tr>
 
-    <form action=delete.php method=post>
-        <input type=hidden name=activity_template_id value="<?php  echo $activity_template_id; ?>" onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Activity Template?")); ?>');">
-    <input type=hidden name=on_what_table value="<?php echo $on_what_table; ?>">
-    <input type=hidden name=on_what_id value="<?php echo $on_what_id; ?>">
-    <input type=hidden name=return_url value="<?php echo $return_url; ?>">
-        <table class=widget cellspacing=1>
-             <tr>
-                <td class=widget_header colspan=4><?php echo _("Delete Activity Template"); ?></td>
-             </tr>
-             <tr>
-                   <td class=widget_content>
-                   <?php echo _("Click the button below to permanently remove this item.")
-                            . '<p>'
-                            . _("Note: This action CANNOT be undone!")
-                            . '</p>';
-                   ?>
-                    <p><input class=button type=submit value="<?php echo _("Delete"); ?>">
-                   </td>
-             </tr>
-        </table>
-        </form>
+        <tr>
+            <td class=widget_label_right><?php echo _("Default Text"); ?></td>
+            <td class=widget_content_form_element><textarea rows=8 cols=100 name="default_text"><?php echo $default_text; ?></textarea></td>
+        </tr>
 
-    </div>
+        <tr>
+            <td class=widget_label_right><?php echo _("Sort Order"); ?></td>
+            <td class=widget_content_form_element><input type=text size=2 name="sort_order" value='<?php echo $sort_order; ?>'></td>
+        </tr>
+
+        <tr>
+            <td class=widget_content colspan=2>
+                <input class=button type=submit value="<?php echo _("Save Changes"); ?>">
+                  &nbsp;
+                  <input class="button" type="button" onclick="location.href='<?php echo $http_site_root . $return_url; ?>';" value="<?php echo _('Cancel'); ?>">
+                &nbsp;
+                <input class=button type=submit value="<?php echo _("Delete"); ?>" onclick="return confirm_delete();" />
+            </td>
+        </tr>
+    </table>
+    </form>
 </div>
 
 
@@ -215,6 +238,60 @@ document.getElementById('entity_type_selection_<?php echo $workflow_entity; ?>')
 document.getElementById('entity_type_selection_<?php echo $workflow_entity; ?>').selectedIndex=<?php echo $workflow_entity_type; ?>;
 <?php } ?>
 
+Calendar.setup({
+    inputField     :    "f_date_activity",      // id of the input field
+    ifFormat       :    "<?php echo $java_timeformat; ?>",       // format of the input field
+    showsTime      :    true,            // will display a time selector
+    timeFormat     :    value="<?php echo $java_timevalue; ?>",  //12 or 24
+    button         :    "f_trigger_activity",   // trigger for the calendar (button ID)
+    singleClick    :    false,           // double-click mode
+    step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+    align          :    "TL"           // alignment (defaults to \"Bl\")
+});
+
+function validate_reset_delay() {
+    if ((document.forms[0].fixed_date.value > '') &&
+        ((document.forms[0].start_delay_days.value > 0)
+        || (document.forms[0].start_delay_hrs.value > 0)
+        || (document.forms[0].start_delay_mins.value > 0))) {
+        var answer = confirm('<?php echo addslashes(_('You cannot select a Delay Start By and a Fixed Date at the same time.')) .'\n\n'. addslashes(_('Would you like to clear the Delay Start By values?')); ?>');
+        if (answer) {
+            document.forms[0].start_delay_days.value = 0;
+            document.forms[0].start_delay_hrs.value = 0;
+            document.forms[0].start_delay_mins.value = 0;
+        } else {
+            document.forms[0].f_date_activity.value = '';
+        }
+    }
+}
+
+function validate_reset_fixed() {
+    if ((document.forms[0].fixed_date.value > '') &&
+        ((document.forms[0].start_delay_days.value > 0)
+        || (document.forms[0].start_delay_hrs.value > 0)
+        || (document.forms[0].start_delay_mins.value > 0))) {
+        var answer = confirm('<?php echo addslashes(_('You cannot select a Delay Start By and a Fixed Date at the same time.')) .'\n\n'. addslashes(_('Would you like to clear the Fixed Date value?')); ?>');
+        if (answer) {
+            document.forms[0].f_date_activity.value = '';
+        } else {
+            document.forms[0].start_delay_days.value = 0;
+            document.forms[0].start_delay_hrs.value = 0;
+            document.forms[0].start_delay_mins.value = 0;
+        }
+    }
+}
+
+function confirm_delete() {
+     var answer = confirm('<?php echo addslashes(_('Delete Opportunity Status?')) .'\n\n'. addslashes(_('WARNING: This action CANNOT be undone!')); ?>');
+     if (answer) {
+         document.forms[0].action = 'delete.php';
+         document.forms[0].submit();
+         return true;
+     } else {
+         return false;
+     }
+ }
+
 //-->
 </script>
 
@@ -226,6 +303,12 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.13  2010/11/24 22:41:57  gopherit
+ * Revised the interface for editing Activity Templates attached to an Opportunity:
+ * - provided support for the new start_delay field which allows workflow activities to have gaps between them, measured in seconds by start_delay
+ * - finished the fixed_date functionality which lay dormant in the code base until now
+ * - fixed the datetime format of the fixed_date input
+ *
  * Revision 1.12  2006/12/05 11:09:59  jnhayart
  * Add cosmetics display, and control localisation
  *
