@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.44 2008/11/13 08:57:21 metamedia Exp $
+ * $Id: some.php,v 1.45 2010/11/25 19:09:32 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -170,15 +170,22 @@ if( $rst AND $rst->RowCount() ) {
 
 
 
-$sql_recently_viewed = "select * from recent_items r, companies c, cases ca, case_statuses cas
-where r.user_id = $session_user_id
-and r.on_what_table = 'cases'
-and r.recent_action = ''
-and c.company_id = ca.company_id
-and ca.case_status_id = cas.case_status_id
-and r.on_what_id = ca.case_id
-and case_record_status = 'a'
-order by r.recent_item_timestamp desc";
+$sql_recently_viewed = "SELECT  ca.case_id,
+                                ca.case_title,
+                                c.company_name,
+                                cas.case_status_pretty_name,
+                                ca.due_at,
+                                MAX(r.recent_item_timestamp) AS lasttime
+                        FROM recent_items r, companies c, cases ca, case_statuses cas
+                        WHERE r.user_id = $session_user_id
+                        AND r.on_what_table = 'cases'
+                        AND r.recent_action = ''
+                        AND c.company_id = ca.company_id
+                        AND ca.case_status_id = cas.case_status_id
+                        AND r.on_what_id = ca.case_id
+                        AND case_record_status = 'a'
+                        GROUP BY case_id
+                        ORDER BY lasttime DESC";
 
 $recently_viewed_table_rows = '';
 
@@ -444,6 +451,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.45  2010/11/25 19:09:32  gopherit
+ * FIXED Bug ID: 3118709 The Recently Viewed list now lists cases only once, sorted by the time they were last viewed.
+ *
  * Revision 1.44  2008/11/13 08:57:21  metamedia
  * 1) Extra options in Case Status select (All, All Open, All Closed etc)
  * 2) Case ID as column in pager output.
