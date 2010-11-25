@@ -10,7 +10,7 @@
  * @author Justin Cooper
  *
  *
- * $Id: recurrence_sidebar.php,v 1.8 2009/02/05 23:04:44 randym56 Exp $
+ * $Id: recurrence_sidebar.php,v 1.9 2010/11/25 14:35:45 gopherit Exp $
  */
 
 
@@ -257,7 +257,7 @@ $recurrence_block = "
 	</tr>
 	<!-- Yearly -->
 	<tr>
-		<td rowspan=6> "._('Yearly')."</td>
+		<td rowspan=5> "._('Yearly')."</td>
 		<td colspan=2> "._('Every ')."<input type=\"text\" size=\"2\" name=\"yearly_frequency\" value=\"$yearly_frequency\">"._(' year(s)')."</td>
 	</tr>
 	<tr>
@@ -328,6 +328,9 @@ end_page();
 
 /**
  * $Log: recurrence_sidebar.php,v $
+ * Revision 1.9  2010/11/25 14:35:45  gopherit
+ * Minor HTML fix.
+ *
  * Revision 1.8  2009/02/05 23:04:44  randym56
  * - Bug fixes and updates in several scripts. Prep for new release.
  * - Added ability to set $datetime_format in vars.php
