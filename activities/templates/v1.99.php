@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.22 2010/10/06 16:35:59 gopherit Exp $
+ * $Id: v1.99.php,v 1.23 2010/11/25 15:38:12 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -124,7 +124,7 @@ $activity_priority_menu = $rst->getmenu2('activity_priority_id', $activity_prior
 $rst->close();
 
 
-//get activity type menu
+// Get activity resolution type menu
 $sql = "SELECT resolution_pretty_name, activity_resolution_type_id
         FROM activity_resolution_types
         WHERE resolution_type_record_status = 'a'
@@ -207,15 +207,15 @@ if ($is_linked) {
             $type_field_limit='';
        break;
     }
-    $sql = "select ".$table_name."_id,
-            ".$table_name."_statuses.".$table_name."_status_pretty_name,
-            ".$on_what_table.".".$table_name."_id,
-            ".$on_what_table.".".$table_name."_status_id,
-            ".$table_name."_statuses.".$table_name."_status_id
-            $type_field_limit
-            from ".$table_name."_statuses, ".$on_what_table."
-            where ".$on_what_table.".".$table_name."_id=$on_what_id
-            and ".$on_what_table.".".$table_name."_status_id=".$table_name."_statuses.".$table_name."_status_id";
+    $sql = "SELECT  ".$table_name."_id,
+                    ".$table_name."_statuses.".$table_name."_status_pretty_name,
+                    ".$on_what_table.".".$table_name."_id,
+                    ".$on_what_table.".".$table_name."_status_id,
+                    ".$table_name."_statuses.".$table_name."_status_id
+                    $type_field_limit
+            FROM ".$table_name."_statuses, ".$on_what_table."
+            WHERE ".$on_what_table.".".$table_name."_id=$on_what_id
+            AND ".$on_what_table.".".$table_name."_status_id=".$table_name."_statuses.".$table_name."_status_id";
     $rst = $con->execute($sql);
 
     //If not empty, get pretty name and id
@@ -230,12 +230,12 @@ if ($is_linked) {
     } else db_error_handler($con, $sql);
 
     //generate SQL for status combo box
-    $sql = "select ".$table_name."_status_pretty_name,
-            ".$table_name."_status_id
-            from ".$table_name."_statuses
-            where ".$table_name."_status_record_status='a'
+    $sql = "SELECT  ".$table_name."_status_pretty_name,
+                    ".$table_name."_status_id
+            FROM ".$table_name."_statuses
+            WHERE ".$table_name."_status_record_status='a'
             $type_limit
-            order by sort_order";
+            ORDER BY sort_order";
     $rst = $con->execute($sql);
 
     //create combo box using ADODB getmenu2 function
@@ -336,16 +336,16 @@ if(!empty($on_what_table)) {
 require("../relationships/sidebar.php");
 
 //include the files sidebar
-$ori_on_what_id=$on_what_id;
-$ori_on_what_table=$on_what_table;
-$ori_return_url=$return_url;
+$tmp_on_what_id=$on_what_id;
+$tmp_on_what_table=$on_what_table;
+$tmp_return_url=$return_url;
 $on_what_table='activities';
 $on_what_id=$activity_id;
 $return_url=current_page();
 require_once( '../files/sidebar.php');
-$return_url=$ori_return_url;
-$on_what_table=$ori_on_what_table;
-$on_what_id=$ori_on_what_id;
+$return_url=$tmp_return_url;
+$on_what_table=$tmp_on_what_table;
+$on_what_id=$tmp_on_what_id;
 
 //Add optional tables
 //sending null parameter, expecting return instead of change to passed in reference
@@ -656,16 +656,17 @@ function validate() {
                         if (render_create_button(_("Schedule Followup"),'submit',false,'followup')) { ?>
                             <span id='completed_controls'>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type='checkbox' name='followup' id='followup' value='true'
-                                       onclick="toggle_checked_disabled('followup_transfer_notes');"
-                                       <?php if ($activity_status != 'c') echo "checked"; ?>/>
+                                <input type='checkbox' name='followup' id='followup' value='true' onclick="toggle_checked_disabled('followup_transfer_notes');"
+                                    <?php if ($activity_status != 'c' AND $on_what_table != 'cases' AND $on_what_table != 'opportunities' AND $on_what_table != 'campaigns')
+                                        echo "checked"; ?>/>
                                 <?php echo _("Schedule Followup"); ?>
 
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <input type='checkbox' name='followup_transfer_notes' id='followup_transfer_notes' value='true'
-                                    <?php
-                                        if ($activity_status != 'c') echo "checked";
-                                        else echo "disabled='disabled'"
+                                    <?php if ($activity_status != 'c' AND $on_what_table != 'cases' AND $on_what_table != 'opportunities' AND $on_what_table != 'campaigns')
+                                            echo "checked";
+                                        else
+                                            echo "disabled='disabled'"
                                     ?>
                                 />
                                 <?php echo _("Transfer Activity Notes"); ?>
@@ -953,6 +954,9 @@ function validate() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.23  2010/11/25 15:38:12  gopherit
+ * Removed the default checked value of the 'Schedule Followup' and 'Transfer Activity Notes' checkboxes for activities attached to workflows.  The option still exists but now must be deliberately selected by the user.
+ *
  * Revision 1.22  2010/10/06 16:35:59  gopherit
  * Fixed Bug Artifacts:
  * * 3082298 - Inconsistent Date/Time Formatting
