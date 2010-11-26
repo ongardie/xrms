@@ -1,10 +1,14 @@
 <?php
 /**
-* Manage Case Statuses
+ * Display all the case statuses, and give the user the option to
+ * add new statuses.
 *
-* $Id: some.php,v 1.16 2006/01/02 21:41:51 vanmer Exp $
+ * @todo modify all case status uses to use a sort order
+ *
+* $Id: some.php,v 1.17 2010/11/26 18:30:15 gopherit Exp $
 */
 
+// Include required XRMS common files
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -12,8 +16,10 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
+//check to see if the user is logged in
 $session_user_id = session_check( 'Admin' );
 
+//connect to the database
 $con = get_xrms_dbconnection();
 
 //print_r($_SESSION);
@@ -47,9 +53,27 @@ if ($acase_type_id) {
         while (!$rst->EOF) {
 
             $sort_order = $rst->fields['sort_order'];
-            $table_rows .= '<tr>'
-                        . '<td class=widget_content><a href=one.php?case_status_id=' . $rst->fields['case_status_id'] . '>'
+            $table_rows .= '<tr>';
+            $table_rows .= '<td class=widget_content>' . $rst->fields['case_status_short_name'] .'</td>';
+
+            $table_rows .= '<td class=widget_content><a href=one.php?case_status_id='. $rst->fields['case_status_id'] .'>'
                         . _($rst->fields['case_status_pretty_name']) . '</a></td>';
+
+            $table_rows .= '<td class=widget_content>' . $rst->fields['case_status_pretty_plural'] .'</td>';
+            $table_rows .= '<td class=widget_content>' . $rst->fields['case_status_display_html'] .'</td>';
+
+            $table_rows .= '<td class=widget_content>';
+            $status_open_indicator = $rst->fields['status_open_indicator'];
+            if (($status_open_indicator == "o") or ($status_open_indicator == '')){
+                        $table_rows .= _("Open");
+            }
+            if ($status_open_indicator == "r") {
+                $table_rows .= _("Closed/Resolved");
+            }
+            if ($status_open_indicator == "u") {
+                $table_rows .= _("Closed/Unresolved");
+            }
+                        $table_rows .='</td>';
 
             //add descriptions
             $table_rows .= '<td class=widget_content>'
@@ -75,111 +99,116 @@ if ($acase_type_id) {
         }
         $rst->close();
         if (!$table_rows) {
-            $table_rows='<tr><td colspan=3 class=widget_content>'._("No statuses defined for specified case type") . '</td></tr>';
+            $table_rows='<tr><td colspan=7 class=widget_content>'._("No statuses defined for specified case type") . '</td></tr>';
         }
     }
-} else { $table_rows='<tr><td colspan=3 class=widget_content>'._("Select a case type") . '</td></tr>'; }
+} else { $table_rows='<tr><td colspan=7 class=widget_content>'._("Select a case type") . '</td></tr>'; }
+
 $con->close();
+
 
 $page_title = _("Manage Case Statuses");
 start_page($page_title);
 
 ?>
-    <script language=JavaScript>
-    <!--
-        function restrictByCaseType() {
-            select=document.getElementById('acase_type_id');
-            location.href = 'some.php?acase_type_id=' + select.value;
-        }
+
+<script type="text/javascript" language="JavaScript">
+<!--
+    function restrictByCaseType() {
+        select=document.getElementById('acase_type_id');
+        location.href = 'some.php?acase_type_id=' + select.value;
+    }
      //-->
     </script>
 
 <div id="Main">
    <div id="Content">
-                <table class=widget classpacing=1>
-                    <tr>
-                        <td class=widget_header><?php echo _("Case Type"); ?></td>
+        <table class=widget cellpacing=1>
+            <tr>
+                <td class=widget_header><?php echo _("Case Type"); ?></td>
                     </tr>
                     <tr>
                         <td class=widget_content><?php echo $type_menu; ?></td>
                     </tr>
                 </table>
+
+        <form action=../sort.php method=post>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=3><?php echo _("Case Statuses"); ?></td>
+                <td class=widget_header colspan=7><?php echo _("Case Statuses"); ?></td>
             </tr>
             <tr>
-            <!-- <td class=widget_label><?php echo _("Type"); ?></td> -->
-                <td class=widget_label><?php echo _("Name"); ?></td>
-            <td class=widget_label width=50%><?php echo _("Description"); ?></td>
+                <td class=widget_label><?php echo _("Short Name"); ?></td>
+                <td class=widget_label><?php echo _("Full Name"); ?></td>
+                <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
+                <td class=widget_label><?php echo _("Display HTML"); ?></td>
+                <td class=widget_label><?php echo _("Open Status"); ?></td>
+                <td class=widget_label width=50%><?php echo _("Description"); ?></td>
                 <td class=widget_label width=15%><?php echo _("Move"); ?></td>
             </tr>
             <?php  echo $table_rows; ?>
         </table>
+        </form>
 
    </div>
 
       <!-- right column //-->
    <div id="Sidebar">
 
-<?php if ($acase_type_id) { ?>
-    <form action=new-2.php method=post>
-        <input type=hidden name=case_type_id value="<?php echo $acase_type_id; ?>">
-    <table class=widget cellspacing=1>
-        <tr>
-            <td class=widget_header colspan=2>
-            <?php echo _("Add New Case Status"); ?>
-         </td>
-        </tr>
-        <tr>
-            <td class=widget_label_right>
-            <?php echo _("Short Name"); ?>
-         </td>
-            <td class=widget_content_form_element>
-            <input type=text name=case_status_short_name size=10>
-         </td>
-        </tr>
-        <tr>
-            <td class=widget_label_right>
-            <?php echo _("Full Name"); ?>
-         </td>
-            <td class=widget_content_form_element>
-            <input type=text name=case_status_pretty_name size=20>
-         </td>
-        </tr>
-        <tr>
-            <td class=widget_label_right>
-            <?php echo _("Full Plural Name"); ?>
-         </td>
-            <td class=widget_content_form_element>
-            <input type=text name=case_status_pretty_plural size=20>
-         </td>
-        </tr>
-        <tr>
-            <td class=widget_label_right>
-            <?php echo _("Display HTML"); ?>
-         </td>
-            <td class=widget_content_form_element>
-            <input type=text name=case_status_display_html size=30>
-         </td>
-        </tr>
-      <tr>
-         <td class=widget_label_right>
-            <?php echo _("Description"); ?>
-         </td>
-         <td class=widget_content_form_element>
-            <input type=text size=30 name=case_status_long_desc>
-         </td>
-      </tr>
+    <?php // If we have no case_type_id, skip the case status form
+        if ($acase_type_id) { ?>
 
-        <tr>
-            <td class=widget_content_form_element colspan=2>
-            <input class=button type=submit value="<?php echo _("Add"); ?>">
-         </td>
-        </tr>
-    </table>
-    </form>
-<?php } ?>
+            <form action=new-2.php method=post>
+
+                <input type=hidden name=case_type_id value="<?php echo $acase_type_id; ?>">
+
+            <table class=widget cellspacing=1>
+                <tr>
+                    <td class=widget_header colspan=2><?php echo _("Add New Case Status"); ?></td>
+                </tr>
+
+                <tr>
+                        <td class=widget_label_right><?php echo _("Short Name"); ?></td>
+                        <td class=widget_content_form_element><input type=text name=case_status_short_name size=10></td>
+                </tr>
+
+                <tr>
+                    <td class=widget_label_right><?php echo _("Full Name"); ?></td>
+                    <td class=widget_content_form_element><input type=text name=case_status_pretty_name size=20></td>
+                </tr>
+
+                <tr>
+                    <td class=widget_label_right><?php echo _("Full Plural Name"); ?></td>
+                    <td class=widget_content_form_element><input type=text name=case_status_pretty_plural size=20></td>
+                </tr>
+
+                <tr>
+                    <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
+                    <td class=widget_content_form_element><input type=text name=case_status_display_html size=30></td>
+                </tr>
+
+                <tr>
+                   <td class=widget_label_right><?php echo _("Description"); ?></td>
+                   <td class=widget_content_form_element><input type=text size=30 name=case_status_long_desc></td>
+                </tr>
+
+                <tr>
+                    <td class=widget_label_right><?php echo _("Open Status"); ?></td>
+                    <td class=widget_content_form_element>
+                        <select name="status_open_indicator">
+                            <option value="o"  selected ><?php echo _("Open"); ?>
+                            <option value="r"           ><?php echo _("Closed/Resolved"); ?>
+                            <option value="u"           ><?php echo _("Closed/Unresolved"); ?>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                        <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
+                </tr>
+            </table>
+            </form>
+        <?php } ?>
    </div>
 </div>
 
@@ -189,6 +218,9 @@ end_page();
 
 /**
 * $Log: some.php,v $
+* Revision 1.17  2010/11/26 18:30:15  gopherit
+* FIXED Bug # 3119879  Added missing fields in Open Status selector in /admin/case-statuses/some.php.  Updated the /admin/case-statuses/new-2.php database storage call.
+*
 * Revision 1.16  2006/01/02 21:41:51  vanmer
 * - changed to use centralized dbconnection function
 *
