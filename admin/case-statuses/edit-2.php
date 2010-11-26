@@ -1,11 +1,11 @@
 <?php
 /**
- * Insert the updated information into the database
+ * Save an updated case status to database after editing it.
  *
- * $Id: edit-2.php,v 1.8 2006/01/02 21:41:51 vanmer Exp $
+ * $Id: edit-2.php,v 1.9 2010/11/26 21:22:06 gopherit Exp $
  */
 
-// include required files
+// Include required files
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -15,16 +15,18 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$case_status_id = $_POST['case_status_id'];
+$case_status_id = (int)$_POST['case_status_id'];
 $case_status_short_name = $_POST['case_status_short_name'];
 $case_status_pretty_name = $_POST['case_status_pretty_name'];
 $case_status_pretty_plural = $_POST['case_status_pretty_plural'];
 $case_status_display_html = $_POST['case_status_display_html'];
 $case_status_long_desc = $_POST['case_status_long_desc'];
-$case_type_id = $_POST['case_type_id'];
 $status_open_indicator = $_POST['status_open_indicator'];
+$case_type_id = (int)$_POST['case_type_id'];
 
 $con = get_xrms_dbconnection();
+
+// $con->debug=1;
 
 $sql = "SELECT * FROM case_statuses WHERE case_status_id = $case_status_id";
 $rst = $con->execute($sql);
@@ -37,16 +39,21 @@ $rec['case_status_display_html'] = $case_status_display_html;
 $rec['case_status_long_desc'] = $case_status_long_desc;
 $rec['status_open_indicator'] = $status_open_indicator;
 
-// $con->debug=1;
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
 $con->close();
-if (!$return_url) $return_url="some.php?acase_type_id=$case_type_id";
-header("Location: $return_url");
+
+//go back to the main opportunity status page after updating
+// stay on same $aopportunity_type_id = $_POST['aopportunity_type_id'];
+
+header("Location: some.php?acase_type_id=".$case_type_id);
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.9  2010/11/26 21:22:06  gopherit
+ * Casted $_POST-ed integer values to (int) for increased security.
+ *
  * Revision 1.8  2006/01/02 21:41:51  vanmer
  * - changed to use centralized dbconnection function
  *

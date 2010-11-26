@@ -1,10 +1,11 @@
 <?php
 /**
- * save an updated an opportunity status  to database after editing it.
+ * Save an updated opportunity status to database after editing it.
  *
- * $Id: edit-2.php,v 1.8 2006/12/05 11:10:01 jnhayart Exp $
+ * $Id: edit-2.php,v 1.9 2010/11/26 21:19:14 gopherit Exp $
  */
 
+// Include required files
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -14,14 +15,14 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$opportunity_status_id = $_POST['opportunity_status_id'];
+$opportunity_status_id = (int)$_POST['opportunity_status_id'];
 $opportunity_status_short_name = $_POST['opportunity_status_short_name'];
 $opportunity_status_pretty_name = $_POST['opportunity_status_pretty_name'];
 $opportunity_status_pretty_plural = $_POST['opportunity_status_pretty_plural'];
 $opportunity_status_display_html = $_POST['opportunity_status_display_html'];
 $opportunity_status_long_desc = $_POST['opportunity_status_long_desc'];
 $status_open_indicator = $_POST['status_open_indicator'];
-$aopportunity_type_id = $_POST['aopportunity_type_id'];
+$aopportunity_type_id = (int)$_POST['aopportunity_type_id'];
 
 $con = get_xrms_dbconnection();
 
@@ -50,6 +51,9 @@ header("Location: some.php?aopportunity_type_id=".$aopportunity_type_id);
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.9  2010/11/26 21:19:14  gopherit
+ * Casted $_POST-ed integer values to (int) for increased security.
+ *
  * Revision 1.8  2006/12/05 11:10:01  jnhayart
  * Add cosmetics display, and control localisation
  *
