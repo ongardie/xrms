@@ -8,7 +8,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-cases.php,v 1.7 2006/05/27 20:06:00 ongardie Exp $
+ * $Id: utils-cases.php,v 1.8 2010/11/26 22:27:34 gopherit Exp $
  *
  */
 
@@ -193,7 +193,7 @@ function add_update_case($con, $case_info, $_return_data = false, $_magic_quotes
     if ($add_workflow_activities) {
         $on_what_id_template = $case_data['case_status_id'];
         $on_what_table_template = "case_statuses";
-        add_workflow_activities($con, $on_what_table_template, $on_what_id_template, 'cases',$case_id, $case_data['company_id'], $case_data['contact_id']);
+        add_workflow_activity($con, $on_what_table_template, $on_what_id_template, 'cases',$case_id, $case_data['company_id'], $case_data['contact_id']);
     }
 
     // Set audit trail
@@ -421,6 +421,9 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-cases.php,v $
+ * Revision 1.8  2010/11/26 22:27:34  gopherit
+ * Switched from the old add_workflow_activities() to the new add_workflow_activity() method.
+ *
  * Revision 1.7  2006/05/27 20:06:00  ongardie
  * - Typo in comment.
  *
