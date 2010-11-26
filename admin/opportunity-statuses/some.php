@@ -5,7 +5,7 @@
  *
  * @todo modify all opportunity status uses to use a sort order
  *
- * $Id: some.php,v 1.17 2010/10/14 20:01:12 gopherit Exp $
+ * $Id: some.php,v 1.18 2010/11/26 14:59:58 gopherit Exp $
  */
 
 //include required XRMS common files
@@ -56,7 +56,7 @@ if ($aopportunity_type_id) {
             $table_rows .= '<tr>';
             $table_rows .= '<td class=widget_content>' . $rst->fields['opportunity_status_short_name'] .'</td>';
             
-            $table_rows .= '<td class=widget_content><a href=one.php?opportunity_status_id=' . $rst->fields['opportunity_status_id'] . '&aopportunity_type_id=' . $aopportunity_type_id . '>' 
+            $table_rows .= '<td class=widget_content><a href=one.php?opportunity_status_id='. $rst->fields['opportunity_status_id'] .'>' 
                         . _($rst->fields['opportunity_status_pretty_name']) . '</a></td>';
 
             $table_rows .= '<td class=widget_content>' . $rst->fields['opportunity_status_pretty_plural'] .'</td>';
@@ -218,6 +218,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.18  2010/11/26 14:59:58  gopherit
+ * Eliminated unnecessary $_GET['aopportunity_type_id'] parameter; some code cleanup.
+ *
  * Revision 1.17  2010/10/14 20:01:12  gopherit
  * Fixed Bug Artifact #3087640 - Opportunity Statuses Not Attached to an Opportunity Type
  *
