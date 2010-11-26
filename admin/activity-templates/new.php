@@ -4,7 +4,7 @@
  *
  * @author Brad Marshall
  *
- * $Id: new.php,v 1.11 2010/11/24 22:39:37 gopherit Exp $
+ * $Id: new.php,v 1.12 2010/11/26 21:44:18 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -16,7 +16,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$on_what_id             = $_POST['on_what_id'];
+$on_what_id             = (int)$_POST['on_what_id'];
 $on_what_table          = $_POST['on_what_table'];
 $activity_title         = $_POST['title'];
 $start_delay            = $_POST['start_delay_days'] * 86400 +
@@ -26,8 +26,8 @@ $fixed_date             = $_POST['fixed_date'];
 $duration               = $_POST['duration_days'] * 86400 +
                           $_POST['duration_hrs'] * 3600 +
                           $_POST['duration_mins'] * 60;
-$activity_type_id       = $_POST['activity_type_id'];
-$role_id                = $_POST['role_id'];
+$activity_type_id       = (int)$_POST['activity_type_id'];
+$role_id                = (int)$_POST['role_id'];
 $sort_order             = $_POST['sort_order'];
 
 //set defaults if we didn't get everything we need
@@ -44,15 +44,24 @@ if ($duration == 0) {
 $con = get_xrms_dbconnection();
 //$con->debug = 1;
 
-// Get the last sort_order value, so we can insert the new record after it
-$sql = "SELECT sort_order FROM activity_templates
-        WHERE on_what_id=$on_what_id
-        AND on_what_table='$on_what_table'
-        AND activity_template_record_status = 'a'
-        ORDER BY sort_order DESC";
-$rst = $con->execute($sql);
-$sort_order = $rst->fields['sort_order'] + 1;
-$rst->close();
+// It is useful to have $sort_order as a string so we can validate it here
+if ($sort_order == '') {
+    // Get the last sort_order value, so we can insert the new record after it
+    $sql = "SELECT sort_order FROM activity_templates
+            WHERE on_what_id = $on_what_id
+            AND on_what_table='". $con->qstr($on_what_table)."'
+            AND activity_template_record_status = 'a'
+            ORDER BY sort_order DESC";
+    $rst = $con->execute($sql);
+    if (!$rst) {
+        db_error_handler($con, $sql);
+    } else {
+        $sort_order = $rst->fields['sort_order'] + 1;
+        $rst->close();
+    }
+} else {
+    $sort_order = (int)$sort_order;
+}
 
 //save to database
 $rec = array();
@@ -80,8 +89,6 @@ $return_url="/admin/$on_what_table_url/one.php?{$table_name}_status_id=$on_what_
 $sql = "SELECT activity_type_short_name FROM activity_types WHERE activity_type_id=$activity_type_id";
 $rst=$con->execute($sql);
 
-if (!$rst) { db_error_handler($con, $sql); }
-
 $con->close();
 
 /*
@@ -100,6 +107,9 @@ header("Location: $http_site_root$return_url");
 
 /**
  * $Log: new.php,v $
+ * Revision 1.12  2010/11/26 21:44:18  gopherit
+ * Fixed $sort_order $_POST value being ignored by the store script.
+ *
  * Revision 1.11  2010/11/24 22:39:37  gopherit
  * Revised the store script for creating Templates attached to an Opportunity:
  * - provided support for the new start_delay field which allows workflow activities to have gaps between them, measured in seconds by start_delay
