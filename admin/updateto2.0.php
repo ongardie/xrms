@@ -1,6 +1,6 @@
 <?php
 /**
- * install/update.php - Update the database from a previous version of xrms
+ * install/updateto2.0.php - Update the database from a previous version of xrms
  *
  * When coding this file, it is important that everything only happen after
  * a test.  This file must be non-destructive and only make the changes that
@@ -9,7 +9,7 @@
  * @author Ivaylo Boiadjiev <iboiadjiev@360team.ca>, 360 TEAM Ltd.
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.26 2010/11/24 21:35:39 gopherit Exp $
+ * $Id: updateto2.0.php,v 1.27 2010/11/29 14:10:14 gopherit Exp $
  */
 
 // where do we include from
@@ -36,11 +36,11 @@ $con = get_xrms_dbconnection();
 
 $msg = '';
 
-//make sure that there is a case_priority_score_adjustment column
+//make sure that there is a start_delay column in the activity_templates table
 //should put a test here, but alter table is non-destructive
 $sql = "ALTER TABLE activity_templates ADD start_delay INT NOT NULL AFTER default_text;";
 $rst = $con->execute($sql);
-// end activity_delay
+// end start_delay
 
 // @TODO: FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
 set_admin_preference($con, 'xrms_version', '1.99.4');

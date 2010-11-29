@@ -10,7 +10,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto1.99.2.php,v 1.1 2010/11/24 21:33:44 gopherit Exp $
+ * $Id: updateto1.99.2.php,v 1.2 2010/11/29 14:10:14 gopherit Exp $
  */
 
 // where do we include from
@@ -41,7 +41,7 @@ $msg = '';
 //should put a test here, but alter table is non-destructive
 $sql = "alter table case_priorities add case_priority_score_adjustment int not null after case_priority_display_html";
 $rst = $con->execute($sql);
-// end case_priority_display_html
+// end case_priority_score_adjustment
 
 //make sure that there is a recent_action column
 $sql = "alter table recent_items add recent_action varchar(100) not null after on_what_table";
@@ -54,7 +54,7 @@ $rst = $con->execute($sql);
 //Similiar to opportunity_statuses, 'o' means open, anything else means "completed" for the completed-item report
 $sql = "alter table campaign_statuses add status_open_indicator char(1) not null default \"o\" after campaign_status_id";
 $rst = $con->execute($sql);
-// end
+// end status_open
 
 //set "CLOSED" campaign status_open_indicator to "c"
 //should put a test here, but alter table is non-destructive
@@ -174,7 +174,7 @@ $rst = $con->execute($sql);
 //should put a test here, but alter table is non-destructive
 $sql = "alter table campaign_statuses add status_open_indicator char(1) not null default 'o' after campaign_status_id";
 $rst = $con->execute($sql);
-// end case_priority_display_html
+// end status_open_indicator
 
 //make sure that the contacts table has a division_id filed, since folks with a 12Jan install won't have it
 //should put a test here, but alter table is non-destructive
@@ -4955,6 +4955,9 @@ end_page();
 
 /**
  * $Log: updateto1.99.2.php,v $
+ * Revision 1.2  2010/11/29 14:10:14  gopherit
+ * Fixed the odd comment.
+ *
  * Revision 1.1  2010/11/24 21:33:44  gopherit
  * Renamed the database update scripts to reflect the database version numbers they upgrade to.
  *
