@@ -2,7 +2,7 @@
 /**
  * Manage campaign types
  *
- * $Id: one.php,v 1.11 2007/09/17 21:31:53 myelocyte Exp $
+ * $Id: one.php,v 1.12 2010/11/29 14:45:14 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -69,6 +69,10 @@ start_page($page_title);
 			</tr>
 		</table>
 		</form>
+    </div>
+
+        <!-- right column //-->
+    <div id="Sidebar">
 
 		<form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Campaign Type?")); ?>');">
 		<input type=hidden name=campaign_type_id value="<?php  echo $campaign_type_id; ?>">
@@ -79,19 +83,12 @@ start_page($page_title);
 			<tr>
 				<td class=widget_content>
 				<?php echo _("Click the button below to permanently remove this item."); ?>
-				<p><?php echo _("Note: This action CANNOT be undone!"); ?>
-				<p><input class=button type=submit value="<?php echo _("Delete"); ?>">
+                                    <p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
+                                    <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
 				</td>
 			</tr>
 		</table>
 		</form>
-
-    </div>
-
-        <!-- right column //-->
-    <div id="Sidebar">
-
-		&nbsp;
 
     </div>
 </div>
@@ -102,6 +99,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.12  2010/11/29 14:45:14  gopherit
+ * Moved the 'Delete Campaign Type' box into the sidebar for consistency across the UI.
+ *
  * Revision 1.11  2007/09/17 21:31:53  myelocyte
  * - Fixed bugs: 984168, 984170 and similar bugs not reported
  *    I have added htmlspecialchars function in one.php before all display_html variable is
