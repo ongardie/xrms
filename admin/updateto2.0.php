@@ -9,7 +9,7 @@
  * @author Ivaylo Boiadjiev <iboiadjiev@360team.ca>, 360 TEAM Ltd.
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.27 2010/11/29 14:10:14 gopherit Exp $
+ * $Id: updateto2.0.php,v 1.28 2010/11/29 15:14:47 gopherit Exp $
  */
 
 // where do we include from
@@ -42,8 +42,20 @@ $sql = "ALTER TABLE activity_templates ADD start_delay INT NOT NULL AFTER defaul
 $rst = $con->execute($sql);
 // end start_delay
 
+//make sure that there is a campaign_type_id column in the campaign_statuses table
+//should put a test here, but alter table is non-destructive
+$sql = "ALTER TABLE campaign_statuses ADD campaign_type_id INT NOT NULL AFTER campaign_status_id;";
+$rst = $con->execute($sql);
+// end campaign_type_id
+
+//make sure that there is a campaign_status_long_desc column in the campaign_statuses table
+//should put a test here, but alter table is non-destructive
+$sql = "ALTER TABLE campaign_statuses ADD campaign_status_long_desc VARCHAR(200) AFTER campaign_status_display_html;";
+$rst = $con->execute($sql);
+// end campaign_status_long_desc
+
 // @TODO: FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
-set_admin_preference($con, 'xrms_version', '1.99.4');
+set_admin_preference($con, 'xrms_version', '1.99.5');
 
 do_hook_function('xrms_update', $con);
 
