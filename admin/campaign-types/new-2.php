@@ -1,4 +1,8 @@
 <?php
+/**
+ * Insert a new campaign type into the database
+ *
+ */
 
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
