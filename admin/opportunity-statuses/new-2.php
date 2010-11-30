@@ -2,7 +2,7 @@
 /**
  * Insert a new opportunity status into the database
  *
- * $Id: new-2.php,v 1.10 2006/01/10 08:16:55 gpowers Exp $
+ * $Id: new-2.php,v 1.11 2010/11/30 21:32:57 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -20,24 +20,24 @@ $opportunity_status_pretty_plural = $_POST['opportunity_status_pretty_plural'];
 $opportunity_status_display_html = $_POST['opportunity_status_display_html'];
 $opportunity_status_long_desc = $_POST['opportunity_status_long_desc'];
 $status_open_indicator = $_POST['status_open_indicator'];
-$opportunity_type_id = $_POST['opportunity_type_id'];
+$opportunity_type_id = (int)$_POST['opportunity_type_id'];
 
 //set defaults if we didn't get everything we need
-if (strlen($opportunity_status_pretty_plural) > 0) {
-    $opportunity_status_pretty_plural = $opportunity_status_pretty_plural;
-} else {
+if (strlen($opportunity_status_pretty_plural) == 0) {
     $opportunity_status_pretty_plural = $opportunity_status_pretty_name;
 }
-if (strlen($opportunity_status_display_html) > 0) {
-    $opportunity_status_display_html = $opportunity_status_display_html;
-} else {
+if (strlen($opportunity_status_display_html) == 0) {
     $opportunity_status_display_html = $opportunity_status_pretty_name;
 }
 
 $con = get_xrms_dbconnection();
 
-//get next sort_order value, put it at the bottom of the list
-$sql = "select sort_order from opportunity_statuses where opportunity_status_record_status='a' order by sort_order desc";
+// Get the last sort_order value so we can put the new record at the bottom of the list
+$sql = "SELECT sort_order
+        FROM opportunity_statuses
+        WHERE opportunity_status_record_status='a'
+        AND opportunity_type_id = $opportunity_type_id
+        ORDER BY sort_order DESC";
 $rst = $con->execute($sql);
 $sort_order = $rst->fields['sort_order'] + 1;
 
@@ -58,11 +58,14 @@ $con->execute($ins);
 
 $con->close();
 
-//go back to the main opportunity status page after updating
+// Go back to the main opportunity status page after updating
 header("Location: some.php?aopportunity_type_id=$opportunity_type_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.11  2010/11/30 21:32:57  gopherit
+ * Code cleanup
+ *
  * Revision 1.10  2006/01/10 08:16:55  gpowers
  * - added limiting of opp. statuses by opp. type
  *

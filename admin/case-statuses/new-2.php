@@ -20,23 +20,19 @@ $case_status_pretty_plural = $_POST['case_status_pretty_plural'];
 $case_status_display_html = $_POST['case_status_display_html'];
 $case_status_long_desc = $_POST['case_status_long_desc'];
 $status_open_indicator = $_POST['status_open_indicator'];
-$case_type_id = $_POST['case_type_id'];
+$case_type_id = (int)$_POST['case_type_id'];
 
 //set defaults if we didn't get everything we need
-if (strlen($case_status_pretty_plural) > 0) {
-    $case_status_pretty_plural = $case_status_pretty_plural;
-} else {
+if (strlen($case_status_pretty_plural) == 0) {
     $case_status_pretty_plural = $case_status_pretty_name;
 }
-if (strlen($case_status_display_html) > 0) {
-    $case_status_display_html = $case_status_display_html;
-} else {
-    $case_status_display_html = $opportunity_status_pretty_name;
+if (strlen($case_status_display_html) == 0) {
+    $case_status_display_html = $case_status_pretty_name;
 }
 
 $con = get_xrms_dbconnection();
 
-//get next sort_order value, put it at the bottom of the list
+// Get the last sort_order value so we can put the new record at the bottom of the list
 $sql = "SELECT sort_order
         FROM case_statuses
         WHERE case_status_record_status='a'
