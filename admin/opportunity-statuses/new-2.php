@@ -2,7 +2,7 @@
 /**
  * Insert a new opportunity status into the database
  *
- * $Id: new-2.php,v 1.11 2010/11/30 21:32:57 gopherit Exp $
+ * $Id: new-2.php,v 1.12 2010/11/30 21:40:40 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -63,6 +63,9 @@ header("Location: some.php?aopportunity_type_id=$opportunity_type_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.12  2010/11/30 21:40:40  gopherit
+ * Removed trailing whitespace.
+ *
  * Revision 1.11  2010/11/30 21:32:57  gopherit
  * Code cleanup
  *
