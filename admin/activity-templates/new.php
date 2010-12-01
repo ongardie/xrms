@@ -4,7 +4,7 @@
  *
  * @author Brad Marshall
  *
- * $Id: new.php,v 1.12 2010/11/26 21:44:18 gopherit Exp $
+ * $Id: new.php,v 1.13 2010/12/01 22:14:28 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -49,7 +49,7 @@ if ($sort_order == '') {
     // Get the last sort_order value, so we can insert the new record after it
     $sql = "SELECT sort_order FROM activity_templates
             WHERE on_what_id = $on_what_id
-            AND on_what_table='". $con->qstr($on_what_table)."'
+            AND on_what_table=". $con->qstr($on_what_table)."
             AND activity_template_record_status = 'a'
             ORDER BY sort_order DESC";
     $rst = $con->execute($sql);
@@ -107,6 +107,9 @@ header("Location: $http_site_root$return_url");
 
 /**
  * $Log: new.php,v $
+ * Revision 1.13  2010/12/01 22:14:28  gopherit
+ * Fixed SQL overquoting
+ *
  * Revision 1.12  2010/11/26 21:44:18  gopherit
  * Fixed $sort_order $_POST value being ignored by the store script.
  *
