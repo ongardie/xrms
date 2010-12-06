@@ -2,7 +2,7 @@
 /**
  * Edit the information for a single case
  *
- * $Id: one.php,v 1.12 2006/12/05 11:09:59 jnhayart Exp $
+ * $Id: one.php,v 1.13 2010/12/06 21:56:13 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -64,7 +64,7 @@ start_page($page_title);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
-                <td class=widget_content_form_element><input type=text size=30 name=case_type_display_html value="<?php  echo $case_type_display_html; ?>"></td>
+                <td class=widget_content_form_element><input type=text size=30 name=case_type_display_html value="<?php  echo  htmlspecialchars($case_type_display_html); ?>"></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
@@ -84,8 +84,8 @@ start_page($page_title);
                 </tr>
                 <tr>
                     <td class=widget_content>
-                    <?php echo _("Click the button below to permanently remove this item."); ?>
-                    <p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
+                    <p style="color: red;"><?php echo _("Notice: Deleting this Case Type will also delete ALL Case Statuses attached to it and ALL Activity Templates attached to those Statuses."); ?></p>
+                    <p style="font-weight: bold; color: red;"><?php echo _("WARNING: This action CANNOT be undone!"); ?></p>
                     <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
                     </td>
                 </tr>
@@ -101,6 +101,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.13  2010/12/06 21:56:13  gopherit
+ * Deleting a workflow type now results in not only deleting all its statuses but also deleting all the activity templates attached to those statuses.
+ *
  * Revision 1.12  2006/12/05 11:09:59  jnhayart
  * Add cosmetics display, and control localisation
  *

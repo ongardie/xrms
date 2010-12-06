@@ -2,7 +2,7 @@
 /**
  * delete (set status to 'd') the information for a single opportunity type
  *
- * $Id: delete.php,v 1.3 2006/12/14 17:46:16 fcrossen Exp $
+ * $Id: delete.php,v 1.4 2010/12/06 21:56:13 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -14,10 +14,27 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$opportunity_type_id = $_POST['opportunity_type_id'];
+$opportunity_type_id = (int)$_POST['opportunity_type_id'];
 
 $con = get_xrms_dbconnection();
 
+// Delete all activity templates attached to this opportunity type through
+// the opportunity_statuses_table
+$sql = "UPDATE activity_templates at, opportunity_statuses os
+        SET at.activity_template_record_status = 'd'
+        WHERE at.on_what_table = 'opportunity_statuses'
+        AND at.activity_template_record_status = 'a'
+        AND at.on_what_id IN (SELECT opportunity_status_id
+                                FROM opportunity_statuses os
+                                WHERE os.opportunity_type_id = $opportunity_type_id
+                                AND os.opportunity_status_record_status = 'a')";
+$rst = $con->Execute($sql);
+
+// Delete the child opportunity_statuses
+$sql = "UPDATE opportunity_statuses SET opportunity_status_record_status = 'd' WHERE opportunity_type_id = $opportunity_type_id";
+$rst = $con->execute($sql);
+
+// And delete the opportunity type
 $sql = "SELECT * FROM opportunity_types WHERE opportunity_type_id = $opportunity_type_id";
 $rst = $con->execute($sql);
 
@@ -27,9 +44,6 @@ $rec['opportunity_type_record_status'] = 'd';
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
-// Mark the child opportunity_statuses records as deleted
-$sql = "UPDATE opportunity_statuses SET opportunity_status_record_status = 'd' WHERE opportunity_type_id = $opportunity_type_id";
-$rst = $con->execute($sql);
 
 $con->close();
 
@@ -37,6 +51,9 @@ header("Location: some.php");
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.4  2010/12/06 21:56:13  gopherit
+ * Deleting a workflow type now results in not only deleting all its statuses but also deleting all the activity templates attached to those statuses.
+ *
  * Revision 1.3  2006/12/14 17:46:16  fcrossen
  * - mark child opportunity-status records as deleted when an opportunity-type is deleted
  *

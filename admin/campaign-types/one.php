@@ -2,7 +2,7 @@
 /**
  * Manage campaign types
  *
- * $Id: one.php,v 1.12 2010/11/29 14:45:14 gopherit Exp $
+ * $Id: one.php,v 1.13 2010/12/06 21:56:13 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -20,15 +20,17 @@ $con = get_xrms_dbconnection();
 
 $sql = "select * from campaign_types where campaign_type_id = $campaign_type_id";
 
+//$con->debug=1;
+
 $rst = $con->execute($sql);
 
 if ($rst) {
-	
-	$campaign_type_short_name = $rst->fields['campaign_type_short_name'];
-	$campaign_type_pretty_name = $rst->fields['campaign_type_pretty_name'];
-	$campaign_type_pretty_plural = $rst->fields['campaign_type_pretty_plural'];
-	$campaign_type_display_html = $rst->fields['campaign_type_display_html'];
-	
+
+    $campaign_type_short_name = $rst->fields['campaign_type_short_name'];
+    $campaign_type_pretty_name = $rst->fields['campaign_type_pretty_name'];
+    $campaign_type_pretty_plural = $rst->fields['campaign_type_pretty_plural'];
+    $campaign_type_display_html = $rst->fields['campaign_type_display_html'];
+
 	$rst->close();
 }
 
@@ -42,53 +44,53 @@ start_page($page_title);
 <div id="Main">
     <div id="Content">
 
-		<form action=edit-2.php method=post>
-		<input type=hidden name=campaign_type_id value="<?php  echo $campaign_type_id; ?>">
-		<table class=widget cellspacing=1>
-			<tr>
-				<td class=widget_header colspan=4><?php echo _("Edit Campaign Type Information"); ?></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right><?php echo _("Short Name"); ?></td>
-				<td class=widget_content_form_element><input type=text size=10 name=campaign_type_short_name value="<?php  echo $campaign_type_short_name; ?>"></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right><?php echo _("Full Name"); ?></td>
-				<td class=widget_content_form_element><input type=text size=20 name=campaign_type_pretty_name value="<?php  echo $campaign_type_pretty_name; ?>"></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right><?php echo _("Full Plural"); ?></td>
-				<td class=widget_content_form_element><input type=text size=20 name=campaign_type_pretty_plural value="<?php  echo $campaign_type_pretty_plural; ?>"></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right><?php echo _("Display HTML"); ?></td>
-				<td class=widget_content_form_element><input type=text size=30 name=campaign_type_display_html value="<?php  echo htmlspecialchars($campaign_type_display_html); ?>"></td>
-			</tr>
-			<tr>
-				<td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
-			</tr>
-		</table>
-		</form>
+        <form action=edit-2.php method=post>
+        <input type=hidden name=campaign_type_id value="<?php  echo $campaign_type_id; ?>">
+        <table class=widget cellspacing=1>
+            <tr>
+                <td class=widget_header colspan=4><?php echo _("Edit Campaign Type Information"); ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Short Name"); ?></td>
+                <td class=widget_content_form_element><input type=text size=10 name=campaign_type_short_name value="<?php  echo $campaign_type_short_name; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Full Name"); ?></td>
+                <td class=widget_content_form_element><input type=text size=20 name=campaign_type_pretty_name value="<?php  echo $campaign_type_pretty_name; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Full Plural"); ?></td>
+                <td class=widget_content_form_element><input type=text size=20 name=campaign_type_pretty_plural value="<?php  echo $campaign_type_pretty_plural; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
+                <td class=widget_content_form_element><input type=text size=30 name=campaign_type_display_html value="<?php  echo htmlspecialchars($campaign_type_display_html); ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
+            </tr>
+        </table>
+        </form>
     </div>
 
         <!-- right column //-->
     <div id="Sidebar">
 
-		<form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Campaign Type?")); ?>');">
-		<input type=hidden name=campaign_type_id value="<?php  echo $campaign_type_id; ?>">
-		<table class=widget cellspacing=1>
-			<tr>
-				<td class=widget_header colspan=4><?php echo _("Delete Campaign Type"); ?></td>
-			</tr>
-			<tr>
-				<td class=widget_content>
-				<?php echo _("Click the button below to permanently remove this item."); ?>
-                                    <p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
-                                    <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
-				</td>
-			</tr>
-		</table>
-		</form>
+        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo addslashes(_("Delete Campaign Type?")); ?>');">
+            <input type=hidden name=campaign_type_id value="<?php  echo $campaign_type_id; ?>">
+            <table class=widget cellspacing=1>
+                <tr>
+                    <td class=widget_header colspan=4><?php echo _("Delete Campaign Type"); ?></td>
+                </tr>
+                <tr>
+                    <td class=widget_content>
+                        <p style="color: red;"><?php echo _("Notice: Deleting this Campaign Type will also delete ALL Campaign Statuses attached to it and ALL Activity Templates attached to those Statuses."); ?></p>
+                        <p style="font-weight: bold; color: red;"><?php echo _("WARNING: This action CANNOT be undone!"); ?></p>
+                        <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
+                    </td>
+                </tr>
+            </table>
+        </form>
 
     </div>
 </div>
@@ -99,6 +101,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.13  2010/12/06 21:56:13  gopherit
+ * Deleting a workflow type now results in not only deleting all its statuses but also deleting all the activity templates attached to those statuses.
+ *
  * Revision 1.12  2010/11/29 14:45:14  gopherit
  * Moved the 'Delete Campaign Type' box into the sidebar for consistency across the UI.
  *
@@ -144,4 +149,3 @@ end_page();
  *
  */
 ?>
-

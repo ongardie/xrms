@@ -2,7 +2,7 @@
 /**
  * Edit the information for a single opportunity type
  *
- * $Id: one.php,v 1.4 2007/09/17 21:31:55 myelocyte Exp $
+ * $Id: one.php,v 1.5 2010/12/06 21:56:13 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -80,13 +80,13 @@ start_page($page_title);
             <input type=hidden name=opportunity_type_id value="<?php  echo $opportunity_type_id; ?>">
             <table class=widget cellspacing=1>
                 <tr>
-                    <td class=widget_header colspan=4><?php echo _("Delete opportunity Type"); ?></td>
+                    <td class=widget_header colspan=4><?php echo _("Delete Opportunity Type"); ?></td>
                 </tr>
                 <tr>
                     <td class=widget_content>
-                    <?php echo _("Click the button below to permanently remove this item."); ?>
-                    <p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
-                    <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
+                        <p style="color: red;"><?php echo _("Notice: Deleting this Opportunity Type will also delete ALL Opportunity Statuses attached to it and ALL Activity Templates attached to those Statuses."); ?></p>
+                        <p style="font-weight: bold; color: red;"><?php echo _("WARNING: This action CANNOT be undone!"); ?></p>
+                        <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
                     </td>
                 </tr>
             </table>
@@ -101,6 +101,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.5  2010/12/06 21:56:13  gopherit
+ * Deleting a workflow type now results in not only deleting all its statuses but also deleting all the activity templates attached to those statuses.
+ *
  * Revision 1.4  2007/09/17 21:31:55  myelocyte
  * - Fixed bugs: 984168, 984170 and similar bugs not reported
  *    I have added htmlspecialchars function in one.php before all display_html variable is
