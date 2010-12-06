@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.52 2008/10/10 20:03:19 metamedia Exp $
+ * $Id: one.php,v 1.53 2010/12/06 15:22:56 gopherit Exp $
  */
 
 //include required files
@@ -209,6 +209,7 @@ start_page($page_title, true, $msg);
                             <td width=50% class=clear align=left valign=top>
 
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
+                                    <?php echo $contact_id; ?>
                                 <?php if (($contact_id)&&($contact_id <> 1)) { ?>
                                 <tr>
                                     <td width=1% class=sublabel><?php echo _("Contact"); ?></td>
@@ -220,7 +221,9 @@ start_page($page_title, true, $msg);
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("E-Mail"); ?></td>
-                                    <td class=clear><?php echo "<a href='mailto:$email' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$case_id&contact_id=$contact_id&on_what_table=cases&activity_title=email RE: $case_title&company_id=$company_id&email=$email&return_url=/cases/one.php?case_id=$case_id'\" >" . htmlspecialchars($email); ?></a></td>
+                                    <td class=clear>
+                                        <?php echo render_email_link($contact_id, $company_id, $first_names, $last_name, $email, $session_user_id); ?>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
@@ -308,6 +311,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.53  2010/12/06 15:22:56  gopherit
+ * Switched the contact email link to be provided by the centralized render_email_link() function.
+ *
  * Revision 1.52  2008/10/10 20:03:19  metamedia
  * Added relationships sidebar. Now case-case relationships can be created, edited and displayed (if they are set up with the administration tool).
  *
