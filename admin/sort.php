@@ -5,7 +5,7 @@
  *
  * @author Brad Marshall
  *
- * $Id: sort.php,v 1.9 2010/11/24 21:53:00 gopherit Exp $
+ * $Id: sort.php,v 1.10 2010/12/06 21:28:19 gopherit Exp $
  */
 
 
@@ -69,9 +69,16 @@ if ($table_name == 'activity_resolution_type')
     $fields['record_status'] = 'resolution_type_record_status';
 
 $type_id = false;
-if($on_what_table == 'case_status'){
+
+if($on_what_table == 'campaign_status'){
+	$fields['type'] = 'campaign_type_id';
+	$type_id = (int)$_GET['campaign_type_id'];
+} elseif($on_what_table == 'opportunity_status'){
+	$fields['type'] = 'opportunity_type_id';
+	$type_id = (int)$_GET['opportunity_type_id'];
+} elseif($on_what_table == 'case_status'){
 	$fields['type'] = 'case_type_id';
-	$type_id = $_GET['case_type_id'];
+	$type_id = (int)$_GET['case_type_id'];
 }
 
 // Retrieve a record set which contains the two rows to be swapped.
@@ -86,7 +93,6 @@ if ($type_id) {
 }
 $sql .= ' AND '. $fields['record_status'] .' = "a"'.
         ' ORDER BY '. $fields['sort_order'];
-
 
 $rst = $con->execute($sql);
 if (!$rst) { db_error_handler($con, $currentsql); }
@@ -172,6 +178,9 @@ header ('Location: ' . $http_site_root . $return_url);
 
 /**
  *$Log: sort.php,v $
+ *Revision 1.10  2010/12/06 21:28:19  gopherit
+ *Added $_GET parameters for the correct sorting of opportunity, case and campaign statuses.
+ *
  *Revision 1.9  2010/11/24 21:53:00  gopherit
  *FIXED Bug ID 3117854
  ** the script now assumes that there may always be multiple records with the same sort_order value.  The allowMultiple parameter has been eliminated.
