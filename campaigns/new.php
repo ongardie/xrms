@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of campaigns
  *
- * $Id: new.php,v 1.16 2007/02/20 16:45:18 jnhayart Exp $
+ * $Id: new.php,v 1.17 2010/12/06 15:54:24 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -84,14 +84,14 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php echo _("Starts On"); ?></td>
                 <td class=widget_content_form_element>
                     <input type=text ID="f_date_c" name=starts_at value="<?php  echo date('Y-m-d'); ?>">
-                    <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
+                    <img ID="f_trigger_c" style="CURSOR: pointer" border=0 title="<?php echo _('Starts On'); ?>" alt="<?php echo _('Starts On'); ?>" src="../img/cal.gif">
                 </td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Ends On"); ?></td>
                 <td class=widget_content_form_element>
                     <input type=text ID="f_date_d" name=ends_at value="<?php  echo date('Y-m-d'); ?>">
-                    <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
+                    <img ID="f_trigger_d" style="CURSOR: pointer" border=0 title="<?php echo _('Ends On'); ?>" alt="<?php echo _('Ends On'); ?>" src="../img/cal.gif">
                 </td>
            </tr>
             <tr>
@@ -175,6 +175,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.17  2010/12/06 15:54:24  gopherit
+ * Minor HTML fixes.
+ *
  * Revision 1.16  2007/02/20 16:45:18  jnhayart
  * prevent broken javascript variable after localisation
  *
