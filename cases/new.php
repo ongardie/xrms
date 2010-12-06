@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.28 2009/02/17 01:39:07 randym56 Exp $
+ * $Id: new.php,v 1.29 2010/12/06 15:46:28 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,8 +14,8 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check('','Create');
-
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
+
 $company_id = (array_key_exists('company_id',$_GET) ? $_GET['company_id'] : $_POST['company_id']);
 $division_id = (array_key_exists('division_id',$_GET) ? $_GET['division_id'] : $_POST['division_id']);
 $contact_id = (array_key_exists('contact_id',$_GET) ? $_GET['contact_id'] : $_POST['contact_id']);
@@ -112,7 +112,7 @@ start_page($page_title, true, $msg);
 
 <?php jscalendar_includes(); ?>
 
-    <script language=JavaScript>
+<script type="text/javascript" language="JavaScript">
     <!--
         function restrictByCaseType() {
             case_title=document.getElementById('case_title');
@@ -123,7 +123,6 @@ start_page($page_title, true, $msg);
         }
      //-->
     </script>
-
 
 <div id="Main">
     <div id="Content">
@@ -140,7 +139,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Division"); ?></td>
-                <td class=widget_content_form_element><?php  echo $division_menu; ?></a></td>
+                <td class=widget_content_form_element><?php  echo $division_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Contact"); ?></td>
@@ -169,7 +168,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php echo _("Due By"); ?></td>
                 <td class=widget_content_form_element>
                     <input type=text ID="f_date_d" name=due_at value="<?php  echo date($datetime_format); ?>">
-                    <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
+                    <img ID="f_trigger_d" style="CURSOR: pointer" border=0 title="<?php echo _('Due By'); ?>" alt="<?php echo _('Due By'); ?>" src="../img/cal.gif">
                 </td>
             </tr>
             <tr>
@@ -241,6 +240,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.29  2010/12/06 15:46:28  gopherit
+ * Minor HTML fixes.
+ *
  * Revision 1.28  2009/02/17 01:39:07  randym56
  * - Patch to allow for individual user to change datetime_format views
  *
