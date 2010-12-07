@@ -1,10 +1,11 @@
 <?php
 /**
  * Show and edit the details for a single case status
+ * /admin/case-statuses/one.php
  *
  * Called from admin/case-statuses/some.php
  *
- * $Id: one.php,v 1.18 2010/11/26 21:56:14 gopherit Exp $
+ * $Id: one.php,v 1.19 2010/12/07 22:32:07 gopherit Exp $
  */
 
 // Include required common files
@@ -15,16 +16,14 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-//check to see if we are logged in
+// Check to see if we are logged in
 $session_user_id = session_check( 'Admin' );
 
 $case_status_id = (int)$_GET['case_status_id'];
 
 $con = get_xrms_dbconnection();
 
-$sql = "select * from case_statuses where case_status_id = $case_status_id";
-
-//$con->debug=1;
+$sql = "SELECT * FROM case_statuses WHERE case_status_id = $case_status_id";
 
 $rst = $con->execute($sql);
 
@@ -36,6 +35,7 @@ if ($rst) {
     $case_status_pretty_plural = $rst->fields['case_status_pretty_plural'];
     $case_status_display_html = $rst->fields['case_status_display_html'];
     $case_status_long_desc = $rst->fields['case_status_long_desc'];
+    $sort_order = $rst->fields['sort_order'];
     $rst->close();
 } else {
     db_error_handler ($con,$sql);
@@ -74,7 +74,6 @@ if ($rst) {
     $maxcnt = $rst->rowcount();
     $i = 1;
     while (!$rst->EOF) {
-        $sort_order = $rst->fields['sort_order'];
         if ($rst->fields['fixed_date']>'')
             $fixed_date =  date($datetime_format, strtotime($rst->fields['fixed_date']));
         else
@@ -93,17 +92,17 @@ if ($rst) {
         $activity_rows .= '<td class=' . $classname . '>'. $rst->fields['role_name'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>'
                 . '<table width=100% cellpadding=0 border=0 cellspacing=0>'
-                . '<tr><td>' . $sort_order . '</td>'
+                . '<tr><td>' . $rst->fields['sort_order'] . '</td>'
                 . '<td align=right>';
         if ($i > 1) {
             $activity_rows .= '<a href="'. $http_site_root
-                . '/admin/sort.php?table_name=case_status&sort_order='. $sort_order .'&direction=up'
+                . '/admin/sort.php?table_name=case_status&sort_order='. $rst->fields['sort_order'] .'&direction=up'
                 . '&on_what_id=' . $case_status_id .'&resort_id='. $rst->fields['activity_template_id'] .'&activity_template=1'
                 . '&return_url=/admin/case-statuses/one.php?case_status_id='. $case_status_id .'">'. _('up') .'</a> &nbsp; ';
         }
         if ($i < $maxcnt) {
             $activity_rows .= '<a href="'. $http_site_root
-                . '/admin/sort.php?table_name=case_status&sort_order='. $sort_order .'&direction=down'
+                . '/admin/sort.php?table_name=case_status&sort_order='. $rst->fields['sort_order'] .'&direction=down'
                 . '&on_what_id='. $case_status_id .'&resort_id='. $rst->fields['activity_template_id'] .'&activity_template=1'
                 . '&return_url=/admin/case-statuses/one.php?case_status_id='. $case_status_id .'">'. _('down') .'</a> &nbsp; ';
         }
@@ -159,7 +158,7 @@ start_page($page_title);
 
         <tr>
             <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
-            <td class=widget_content_form_element><input type=text size=60 name=case_status_display_html value="<?php echo $case_status_display_html; ?>"></td>
+            <td class=widget_content_form_element><input type=text size=60 name=case_status_display_html value="<?php echo htmlspecialchars($case_status_display_html); ?>"></td>
         </tr>
 
         <tr>
@@ -179,10 +178,15 @@ start_page($page_title);
         </tr>
 
         <tr>
+            <td class=widget_label_right><?php echo _("Sort Order"); ?></td>
+            <td class=widget_content_form_element><input type=text name=sort_order size=5 value="<?php echo $sort_order; ?>"></td>
+        </tr>
+
+        <tr>
             <td class=widget_content_form_element colspan=2>
                 <input class=button type=submit value="<?php echo _("Save Changes"); ?>">
                 &nbsp;
-                <input class="button" type="button" onclick="location.href='some.php?acase_type_id=<?php echo $case_type_id; ?>';" value="<?php echo _('Cancel'); ?>">
+                <input class="button" type="button" onclick="location.href='some.php?case_type_id=<?php echo $case_type_id; ?>';" value="<?php echo _('Cancel'); ?>">
                 &nbsp;
                 <input class=button type=submit value="<?php echo _("Delete"); ?>" onclick="return confirm_delete();" />
             </td>
@@ -302,7 +306,8 @@ start_page($page_title);
     }
 
     function confirm_delete() {
-         var answer = confirm('<?php echo addslashes(_('Delete Case Status?')) .'\n\n'. addslashes(_('WARNING: This action CANNOT be undone!')); ?>');
+         var answer = confirm('<?php echo addslashes(_("Notice: Deleting this Case Status will also delete ALL Activity Templates attached to it."))
+                                            .'\n\n'. addslashes(_('WARNING: This action CANNOT be undone!'))  .'\n\n'. addslashes(_('Delete Case Status?')); ?>');
          if (answer) {
              document.forms[0].action = 'delete.php';
              document.forms[0].submit();
@@ -319,6 +324,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.19  2010/12/07 22:32:07  gopherit
+ * Exposed the sort order of each workflow status so users can see it and modify it.
+ *
  * Revision 1.18  2010/11/26 21:56:14  gopherit
  * Revised the interface for creating and sorting Activity Templates attached to a Case:
  *  - provided support for the new start_delay field which allows workflow activities to have gaps between them, measured in seconds by start_delay

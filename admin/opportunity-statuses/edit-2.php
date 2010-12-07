@@ -2,7 +2,7 @@
 /**
  * Save an updated opportunity status to database after editing it.
  *
- * $Id: edit-2.php,v 1.9 2010/11/26 21:19:14 gopherit Exp $
+ * $Id: edit-2.php,v 1.10 2010/12/07 22:32:07 gopherit Exp $
  */
 
 // Include required files
@@ -22,14 +22,37 @@ $opportunity_status_pretty_plural = $_POST['opportunity_status_pretty_plural'];
 $opportunity_status_display_html = $_POST['opportunity_status_display_html'];
 $opportunity_status_long_desc = $_POST['opportunity_status_long_desc'];
 $status_open_indicator = $_POST['status_open_indicator'];
-$aopportunity_type_id = (int)$_POST['aopportunity_type_id'];
+$sort_order = $_POST['sort_order'];
 
 $con = get_xrms_dbconnection();
 
-//$con->debug=1;
+// $con->debug = 1;
 
 $sql = "SELECT * FROM opportunity_statuses WHERE opportunity_status_id = $opportunity_status_id";
 $rst = $con->execute($sql);
+
+// It is useful to have $sort_order as a string so we can validate it here
+if ($sort_order == '') {
+    // Get the last sort_order value so we can put the new record at the bottom of the list
+    $sort_order_sql = "SELECT sort_order
+                        FROM opportunity_statuses
+                        WHERE opportunity_status_record_status='a'
+                        AND opportunity_type_id = ". $rst->fields['opportunity_type_id'] ."
+                        AND opportunity_status_id != $opportunity_status_id
+                        ORDER BY sort_order DESC";
+    $sort_order_rst = $con->execute($sort_order_sql);
+    if (!$sort_order_rst) {
+        db_error_handler($con, $sort_order_rst);
+    } else {
+        $sort_order = $sort_order_rst->fields['sort_order'] + 1;
+        $sort_order_rst->close();
+    }
+} else {
+    $sort_order = (int)$sort_order;
+}
+
+// Get the opportunity_type_id so we can send the user back to where they came from
+$opportunity_type_id = $rst->fields['opportunity_type_id'];
 
 $rec = array();
 $rec['opportunity_status_short_name'] = $opportunity_status_short_name;
@@ -38,19 +61,21 @@ $rec['opportunity_status_pretty_plural'] = $opportunity_status_pretty_plural;
 $rec['opportunity_status_display_html'] = $opportunity_status_display_html;
 $rec['opportunity_status_long_desc'] = $opportunity_status_long_desc;
 $rec['status_open_indicator'] = $status_open_indicator;
+$rec['sort_order'] = $sort_order;
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
 $con->close();
 
-//go back to the main opportunity status page after updating
-// stay on same $aopportunity_type_id = $_POST['aopportunity_type_id'];
-
-header("Location: some.php?aopportunity_type_id=".$aopportunity_type_id);
+// Go back to the main opportunity status page after updating
+header("Location: some.php?opportunity_type_id=".$opportunity_type_id);
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.10  2010/12/07 22:32:07  gopherit
+ * Exposed the sort order of each workflow status so users can see it and modify it.
+ *
  * Revision 1.9  2010/11/26 21:19:14  gopherit
  * Casted $_POST-ed integer values to (int) for increased security.
  *
