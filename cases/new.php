@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.29 2010/12/06 15:46:28 gopherit Exp $
+ * $Id: new.php,v 1.30 2010/12/07 22:22:18 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -85,7 +85,7 @@ $rst = $con->execute($sql2);
 //if you dont have a case status set, you wont be able to enter a record.
 if ( $rst->RecordCount() == 0 ) {
 	echo 'There are no case statuses set for this case type - please set case status first 
-	      <a href="../admin/case-statuses/some.php?acase_type_id=', $case_type_id, '">here</a>.';
+	      <a href="../admin/case-statuses/some.php?case_type_id=', $case_type_id, '">here</a>.';
 	exit;
 }
 
@@ -240,6 +240,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.30  2010/12/07 22:22:18  gopherit
+ * Replaced acase_type_id with case_type_id
+ *
  * Revision 1.29  2010/12/06 15:46:28  gopherit
  * Minor HTML fixes.
  *
