@@ -1,12 +1,11 @@
 <?php
 /**
- * Display all the case statuses, and give the user the option to
+ * /admin/case-statuses/some.php
+ * Displays all the case statuses, and gives the user the option to
  * add new statuses.
-*
- * @todo modify all case status uses to use a sort order
  *
-* $Id: some.php,v 1.17 2010/11/26 18:30:15 gopherit Exp $
-*/
+ * $Id: some.php,v 1.18 2010/12/07 22:19:53 gopherit Exp $
+ */
 
 // Include required XRMS common files
 require_once('../../include-locations.inc');
@@ -16,35 +15,35 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-//check to see if the user is logged in
+// Check to see if the user is logged in
 $session_user_id = session_check( 'Admin' );
 
-//connect to the database
+// Connect to the database
 $con = get_xrms_dbconnection();
 
-//print_r($_SESSION);
-getGlobalVar($acase_type_id,'acase_type_id');
+$case_type_id = (int)$_GET['case_type_id'];
 
-$sql = "SELECT case_type_pretty_name,case_type_id
+$sql = "SELECT case_type_pretty_name, case_type_id
         FROM case_types
         WHERE case_type_record_status = 'a'
         ORDER BY case_type_pretty_name";
 $rst = $con->execute($sql);
 if (!$rst) { db_error_handler($con, $sql); }
-else { $type_menu= $rst->getmenu2('acase_type_id',$acase_type_id, true, false, 1, "id=acase_type_id onchange=javascript:restrictByCaseType();"); }
+else { $type_menu= $rst->getmenu2('case_type_id', $case_type_id, true, false, 1, "id=case_type_id onchange=javascript:restrictByType('case_type_id');"); }
 
 
-if ($acase_type_id) {
+if ($case_type_id) {
     $sql = "SELECT *
             FROM case_statuses
-            WHERE case_status_record_status = 'a' AND case_type_id=$acase_type_id
+            WHERE case_type_id = $case_type_id
+            AND case_status_record_status = 'a'
             ORDER BY case_type_id, sort_order";
     $rst = $con->execute($sql);
     if (!$rst) { db_error_handler($con, $sql); }
 
 
     //get first row count and last row count
-    $cnt = 1;
+    $i = 1;
     $maxcnt = $rst->rowcount();
 
     //get rows, place them in table form
@@ -54,55 +53,63 @@ if ($acase_type_id) {
 
             $sort_order = $rst->fields['sort_order'];
             $table_rows .= '<tr>';
-            $table_rows .= '<td class=widget_content>' . $rst->fields['case_status_short_name'] .'</td>';
-
-            $table_rows .= '<td class=widget_content><a href=one.php?case_status_id='. $rst->fields['case_status_id'] .'>'
+            $table_rows .= '<td class=widget_content>'. $rst->fields['case_status_short_name'] .'</td>';
+            
+            $table_rows .= '<td class=widget_content><a href="one.php?case_status_id='. $rst->fields['case_status_id'] .'">'
                         . _($rst->fields['case_status_pretty_name']) . '</a></td>';
 
-            $table_rows .= '<td class=widget_content>' . $rst->fields['case_status_pretty_plural'] .'</td>';
-            $table_rows .= '<td class=widget_content>' . $rst->fields['case_status_display_html'] .'</td>';
+            $table_rows .= '<td class=widget_content>'. $rst->fields['case_status_pretty_plural'] .'</td>';
+            $table_rows .= '<td class=widget_content>'. $rst->fields['case_status_display_html'] .'</td>';
 
             $table_rows .= '<td class=widget_content>';
             $status_open_indicator = $rst->fields['status_open_indicator'];
-            if (($status_open_indicator == "o") or ($status_open_indicator == '')){
-                        $table_rows .= _("Open");
+            if (($status_open_indicator == 'o') or ($status_open_indicator == '')){
+                        $table_rows .= _('Open');
             }
-            if ($status_open_indicator == "r") {
-                $table_rows .= _("Closed/Resolved");
+            if ($status_open_indicator == 'r') {
+                $table_rows .= _('Closed/Resolved');
             }
-            if ($status_open_indicator == "u") {
-                $table_rows .= _("Closed/Unresolved");
+            if ($status_open_indicator == 'u') {
+                $table_rows .= _('Closed/Unresolved');
             }
-                        $table_rows .='</td>';
+            $table_rows .='</td>';
 
-            //add descriptions
+            // Add descriptions
             $table_rows .= '<td class=widget_content>'
                         . htmlspecialchars($rst->fields['case_status_long_desc'])
+                        . '</td>';
+
+            // Add sort order
+            $table_rows .= '<td class=widget_content>'
+                        . $rst->fields['sort_order']
                         . '</td>';
 
             //sets up ordering links in the table
 
             $table_rows .= '<td class=widget_content>';
-            if ($sort_order != $cnt) {
-                $table_rows .= '<a href="' . $http_site_root
-                            . '/admin/sort.php?direction=up&sort_order='
-                            . $sort_order . "&table_name=case_status&case_type_id=$acase_type_id&return_url=/admin/case-statuses/some.php?acase_type_id=$acase_type_id\">"._("up").'</a> &nbsp; ';
+            if ($i > 1) {
+                $table_rows .= '<a href="'. $http_site_root
+                            . '/admin/sort.php?table_name=case_status&sort_order='. $sort_order .'&direction=up'
+                            . '&resort_id='. $rst->fields['case_status_id'] .'&case_type_id='. $case_type_id
+                            . '&return_url=/admin/case-statuses/some.php?case_type_id='. $case_type_id .'">'. _("up") .'</a> &nbsp; ';
             }
-            if ($sort_order != $maxcnt) {
-                $table_rows .= '<a href="' . $http_site_root
-                            . '/admin/sort.php?direction=down&sort_order='
-                            . $sort_order . "&table_name=case_status&case_type_id=$acase_type_id&return_url=/admin/case-statuses/some.php?acase_type_id=$acase_type_id\">"._("down").'</a>';
+            if ($i < $maxcnt) {
+                $table_rows .= '<a href="'. $http_site_root
+                            . '/admin/sort.php?table_name=case_status&sort_order='. $sort_order .'&direction=down'
+                            . '&resort_id='. $rst->fields['case_status_id'] .'&case_type_id='. $case_type_id
+                            . '&return_url=/admin/case-statuses/some.php?case_type_id='. $case_type_id .'">'. _("down") .'</a>';
             }
             $table_rows .= '</td></tr>';
 
             $rst->movenext();
+            $i++;
         }
         $rst->close();
         if (!$table_rows) {
-            $table_rows='<tr><td colspan=7 class=widget_content>'._("No statuses defined for specified case type") . '</td></tr>';
+            $table_rows='<tr><td colspan=8 class=widget_content>'._("No statuses defined for specified case type") . '</td></tr>';
         }
     }
-} else { $table_rows='<tr><td colspan=7 class=widget_content>'._("Select a case type") . '</td></tr>'; }
+} else { $table_rows='<tr><td colspan=8 class=widget_content>'._("Select a case type") . '</td></tr>'; }
 
 $con->close();
 
@@ -114,99 +121,105 @@ start_page($page_title);
 
 <script type="text/javascript" language="JavaScript">
 <!--
-    function restrictByCaseType() {
-        select=document.getElementById('acase_type_id');
-        location.href = 'some.php?acase_type_id=' + select.value;
+    function restrictByType(selectName) {
+        select=document.getElementById(selectName);
+        location.href = 'some.php?' + selectName + '=' + select.value;
     }
-     //-->
-    </script>
+ //-->
+</script>
 
 <div id="Main">
-   <div id="Content">
-        <table class=widget cellpacing=1>
-            <tr>
-                <td class=widget_header><?php echo _("Case Type"); ?></td>
-                    </tr>
-                    <tr>
-                        <td class=widget_content><?php echo $type_menu; ?></td>
-                    </tr>
-                </table>
-
-        <form action=../sort.php method=post>
+    <div id="Content">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=7><?php echo _("Case Statuses"); ?></td>
+                <td class=widget_header><?php echo _("Case Type"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Short Name"); ?></td>
-                <td class=widget_label><?php echo _("Full Name"); ?></td>
-                <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
-                <td class=widget_label><?php echo _("Display HTML"); ?></td>
-                <td class=widget_label><?php echo _("Open Status"); ?></td>
-                <td class=widget_label width=50%><?php echo _("Description"); ?></td>
-                <td class=widget_label width=15%><?php echo _("Move"); ?></td>
+                <td class=widget_content><?php echo $type_menu; ?></td>
             </tr>
-            <?php  echo $table_rows; ?>
         </table>
+
+        <form action=../sort.php method=post>
+            <table class=widget cellspacing=1>
+                <tr>
+                    <td class=widget_header colspan=8><?php echo _("Case Statuses"); ?></td>
+                </tr>
+                <tr>
+                    <td class=widget_label><?php echo _("Short Name"); ?></td>
+                    <td class=widget_label><?php echo _("Full Name"); ?></td>
+                    <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
+                    <td class=widget_label><?php echo _("Display HTML"); ?></td>
+                    <td class=widget_label><?php echo _("Open Status"); ?></td>
+                    <td class=widget_label width=50%><?php echo _("Description"); ?></td>
+                    <td class=widget_label><?php echo _("Sort Order"); ?></td>
+                    <td class=widget_label width=15%><?php echo _("Move"); ?></td>
+                </tr>
+                <?php  echo $table_rows; ?>
+            </table>
         </form>
 
-   </div>
+    </div>
 
-      <!-- right column //-->
-   <div id="Sidebar">
+    <!-- right column //-->
+    <div id="Sidebar">
 
-    <?php // If we have no case_type_id, skip the case status form
-        if ($acase_type_id) { ?>
+        <?php // If we have no case_type_id, skip the new case status form
+            if ($case_type_id) { ?>
 
             <form action=new-2.php method=post>
 
-                <input type=hidden name=case_type_id value="<?php echo $acase_type_id; ?>">
+                <input type="hidden" name="case_type_id" value="<?php echo $case_type_id; ?>">
 
-            <table class=widget cellspacing=1>
-                <tr>
-                    <td class=widget_header colspan=2><?php echo _("Add New Case Status"); ?></td>
-                </tr>
+                <table class=widget cellspacing=1>
+                    <tr>
+                        <td class=widget_header colspan=2><?php echo _("Add New Case Status"); ?></td>
+                    </tr>
 
-                <tr>
+                    <tr>
                         <td class=widget_label_right><?php echo _("Short Name"); ?></td>
                         <td class=widget_content_form_element><input type=text name=case_status_short_name size=10></td>
-                </tr>
+                    </tr>
 
-                <tr>
-                    <td class=widget_label_right><?php echo _("Full Name"); ?></td>
-                    <td class=widget_content_form_element><input type=text name=case_status_pretty_name size=20></td>
-                </tr>
+                    <tr>
+                        <td class=widget_label_right><?php echo _("Full Name"); ?></td>
+                        <td class=widget_content_form_element><input type=text name=case_status_pretty_name size=20></td>
+                    </tr>
 
-                <tr>
-                    <td class=widget_label_right><?php echo _("Full Plural Name"); ?></td>
-                    <td class=widget_content_form_element><input type=text name=case_status_pretty_plural size=20></td>
-                </tr>
+                    <tr>
+                        <td class=widget_label_right><?php echo _("Full Plural Name"); ?></td>
+                        <td class=widget_content_form_element><input type=text name=case_status_pretty_plural size=20></td>
+                    </tr>
 
-                <tr>
-                    <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
-                    <td class=widget_content_form_element><input type=text name=case_status_display_html size=30></td>
-                </tr>
+                    <tr>
+                        <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
+                        <td class=widget_content_form_element><input type=text name=case_status_display_html size=30></td>
+                    </tr>
 
-                <tr>
-                   <td class=widget_label_right><?php echo _("Description"); ?></td>
-                   <td class=widget_content_form_element><input type=text size=30 name=case_status_long_desc></td>
-                </tr>
+                    <tr>
+                        <td class=widget_label_right><?php echo _("Description"); ?></td>
+                        <td class=widget_content_form_element><input type=text size=30 name=case_status_long_desc value="<?php  echo $case_status_long_desc; ?>"></td>
+                    </tr>
 
-                <tr>
-                    <td class=widget_label_right><?php echo _("Open Status"); ?></td>
-                    <td class=widget_content_form_element>
-                        <select name="status_open_indicator">
-                            <option value="o"  selected ><?php echo _("Open"); ?>
-                            <option value="r"           ><?php echo _("Closed/Resolved"); ?>
-                            <option value="u"           ><?php echo _("Closed/Unresolved"); ?>
-                        </select>
-                    </td>
-                </tr>
+                    <tr>
+                        <td class=widget_label_right><?php echo _("Open Status"); ?></td>
+                        <td class=widget_content_form_element>
+                            <select name="status_open_indicator">
+                                <option value="o"  selected ><?php echo _("Open"); ?>
+                                <option value="r"           ><?php echo _("Closed/Resolved"); ?>
+                                <option value="u"           ><?php echo _("Closed/Unresolved"); ?>
+                            </select>
+                        </td>
+                    </tr>
 
-                <tr>
+                    <tr>
+                        <td class=widget_label_right><?php echo _("Sort Order"); ?></td>
+                        <td class=widget_content_form_element><input type=text name=sort_order size=5></td>
+                    </tr>
+
+                    <tr>
                         <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
-                </tr>
-            </table>
+                    </tr>
+                </table>
             </form>
         <?php } ?>
    </div>
@@ -218,6 +231,10 @@ end_page();
 
 /**
 * $Log: some.php,v $
+* Revision 1.18  2010/12/07 22:19:53  gopherit
+* Replaced acase_type_id with opportunity_type_id and pulled its value direction from $_GET.
+* Fixed case status sorting.
+*
 * Revision 1.17  2010/11/26 18:30:15  gopherit
 * FIXED Bug # 3119879  Added missing fields in Open Status selector in /admin/case-statuses/some.php.  Updated the /admin/case-statuses/new-2.php database storage call.
 *
