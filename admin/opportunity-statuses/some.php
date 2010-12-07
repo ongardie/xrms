@@ -1,14 +1,13 @@
 <?php
 /**
- * Display all the opportunity statuses, and give the user the option to
+ * /admin/opportunity-statuses/some.php
+ * Displays all the opportunity statuses, and gives the user the option to
  * add new statuses.
  *
- * @todo modify all opportunity status uses to use a sort order
- *
- * $Id: some.php,v 1.18 2010/11/26 14:59:58 gopherit Exp $
+ * $Id: some.php,v 1.19 2010/12/07 22:18:33 gopherit Exp $
  */
 
-//include required XRMS common files
+// Include required XRMS common files
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -16,35 +15,35 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-//check to see if the user is logged in
+// Check to see if the user is logged in
 $session_user_id = session_check( 'Admin' );
 
-//connect to the database
+// Connect to the database
 $con = get_xrms_dbconnection();
 
-//print_r($_SESSION);
-getGlobalVar($aopportunity_type_id,'aopportunity_type_id');
+$opportunity_type_id = (int)$_GET['opportunity_type_id'];
 
-$sql = "SELECT opportunity_type_pretty_name,opportunity_type_id
+$sql = "SELECT opportunity_type_pretty_name, opportunity_type_id
         FROM opportunity_types
         WHERE opportunity_type_record_status = 'a'
         ORDER BY opportunity_type_pretty_name";
 $rst = $con->execute($sql);
 if (!$rst) { db_error_handler($con, $sql); }
-else { $type_menu= $rst->getmenu2('aopportunity_type_id',$aopportunity_type_id, true, false, 1, "id=aopportunity_type_id onchange=javascript:restrictByOppType();"); }
+else { $type_menu= $rst->getmenu2('opportunity_type_id', $opportunity_type_id, true, false, 1, "id=opportunity_type_id onchange=javascript:restrictByType('opportunity_type_id');"); }
 
 
-if ($aopportunity_type_id) {
+if ($opportunity_type_id) {
     $sql = "SELECT *
             FROM opportunity_statuses
-            WHERE opportunity_status_record_status = 'a' AND opportunity_type_id=$aopportunity_type_id
+            WHERE opportunity_type_id = $opportunity_type_id
+            AND opportunity_status_record_status = 'a'
             ORDER BY opportunity_type_id, sort_order";
     $rst = $con->execute($sql);
     if (!$rst) { db_error_handler($con, $sql); }
 
 
     //get first row count and last row count
-    $cnt = 1;
+    $i = 1;
     $maxcnt = $rst->rowcount();
 
     //get rows, place them in table form
@@ -54,55 +53,63 @@ if ($aopportunity_type_id) {
 
             $sort_order = $rst->fields['sort_order'];
             $table_rows .= '<tr>';
-            $table_rows .= '<td class=widget_content>' . $rst->fields['opportunity_status_short_name'] .'</td>';
+            $table_rows .= '<td class=widget_content>'. $rst->fields['opportunity_status_short_name'] .'</td>';
             
-            $table_rows .= '<td class=widget_content><a href=one.php?opportunity_status_id='. $rst->fields['opportunity_status_id'] .'>' 
+            $table_rows .= '<td class=widget_content><a href="one.php?opportunity_status_id='. $rst->fields['opportunity_status_id'] .'">'
                         . _($rst->fields['opportunity_status_pretty_name']) . '</a></td>';
 
-            $table_rows .= '<td class=widget_content>' . $rst->fields['opportunity_status_pretty_plural'] .'</td>';
-            $table_rows .= '<td class=widget_content>' . $rst->fields['opportunity_status_display_html'] .'</td>';
+            $table_rows .= '<td class=widget_content>'. $rst->fields['opportunity_status_pretty_plural'] .'</td>';
+            $table_rows .= '<td class=widget_content>'. $rst->fields['opportunity_status_display_html'] .'</td>';
 
             $table_rows .= '<td class=widget_content>';
             $status_open_indicator = $rst->fields['status_open_indicator'];
-            if (($status_open_indicator == "o") or ($status_open_indicator == '')){
-                        $table_rows .= _("Open");
+            if (($status_open_indicator == 'o') or ($status_open_indicator == '')){
+                        $table_rows .= _('Open');
             }
-            if ($status_open_indicator == "w") {
-                $table_rows .= _("Closed/Won");
+            if ($status_open_indicator == 'w') {
+                $table_rows .= _('Closed/Won');
             }
-            if ($status_open_indicator == "l") {
-                $table_rows .= _("Closed/Lost");
+            if ($status_open_indicator == 'l') {
+                $table_rows .= _('Closed/Lost');
             }
-                        $table_rows .='</td>';
-                        
-            //add descriptions
+            $table_rows .='</td>';
+
+            // Add descriptions
             $table_rows .= '<td class=widget_content>'
                         . htmlspecialchars($rst->fields['opportunity_status_long_desc'])
+                        . '</td>';
+
+            // Add sort order
+            $table_rows .= '<td class=widget_content>'
+                        . $rst->fields['sort_order']
                         . '</td>';
 
             //sets up ordering links in the table
 
             $table_rows .= '<td class=widget_content>';
-            if ($sort_order != $cnt) {
-                $table_rows .= '<a href="' . $http_site_root
-                            . '/admin/sort.php?direction=up&sort_order='
-                            . $sort_order . "&table_name=opportunity_status&opportunity_type_id=$aopportunity_type_id&return_url=/admin/opportunity-statuses/some.php?aopportunity_type_id=$aopportunity_type_id\">"._("up").'</a> &nbsp; ';
+            if ($i > 1) {
+                $table_rows .= '<a href="'. $http_site_root
+                            . '/admin/sort.php?table_name=opportunity_status&sort_order='. $sort_order .'&direction=up'
+                            . '&resort_id='. $rst->fields['opportunity_status_id'] .'&opportunity_type_id='. $opportunity_type_id
+                            . '&return_url=/admin/opportunity-statuses/some.php?opportunity_type_id='. $opportunity_type_id .'">'. _("up") .'</a> &nbsp; ';
             }
-            if ($sort_order != $maxcnt) {
-                $table_rows .= '<a href="' . $http_site_root
-                            . '/admin/sort.php?direction=down&sort_order='
-                            . $sort_order . "&table_name=opportunity_status&opportunity_type_id=$aopportunity_type_id&return_url=/admin/opportunity-statuses/some.php?aopportunity_type_id=$aopportunity_type_id\">"._("down").'</a>';
+            if ($i < $maxcnt) {
+                $table_rows .= '<a href="'. $http_site_root
+                            . '/admin/sort.php?table_name=opportunity_status&sort_order='. $sort_order .'&direction=down'
+                            . '&resort_id='. $rst->fields['opportunity_status_id'] .'&opportunity_type_id='. $opportunity_type_id
+                            . '&return_url=/admin/opportunity-statuses/some.php?opportunity_type_id='. $opportunity_type_id .'">'. _("down") .'</a>';
             }
             $table_rows .= '</td></tr>';
 
             $rst->movenext();
+            $i++;
         }
         $rst->close();
         if (!$table_rows) {
-            $table_rows='<tr><td colspan=7 class=widget_content>'._("No statuses defined for specified opportunity type") . '</td></tr>';
+            $table_rows='<tr><td colspan=8 class=widget_content>'._("No statuses defined for specified opportunity type") . '</td></tr>';
         }
     }
-} else { $table_rows='<tr><td colspan=7 class=widget_content>'._("Select a opportunity type") . '</td></tr>'; }
+} else { $table_rows='<tr><td colspan=8 class=widget_content>'._("Select an opportunity type") . '</td></tr>'; }
 
 $con->close();
 
@@ -114,9 +121,9 @@ start_page($page_title);
 
 <script type="text/javascript" language="JavaScript">
 <!--
-    function restrictByOppType() {
-        select=document.getElementById('aopportunity_type_id');
-        location.href = 'some.php?aopportunity_type_id=' + select.value;
+    function restrictByType(selectName) {
+        select=document.getElementById(selectName);
+        location.href = 'some.php?' + selectName + '=' + select.value;
     }
  //-->
 </script>
@@ -133,21 +140,22 @@ start_page($page_title);
         </table>
 
         <form action=../sort.php method=post>
-             <table class=widget cellspacing=1>
-                 <tr>
-                     <td class=widget_header colspan=7><?php echo _("Opportunity Statuses"); ?></td>
-                 </tr>
-                 <tr>
-                     <td class=widget_label><?php echo _("Short Name"); ?></td>
-                     <td class=widget_label><?php echo _("Full Name"); ?></td>
-                     <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
-                     <td class=widget_label><?php echo _("Display HTML"); ?></td>
-                     <td class=widget_label><?php echo _("Open Status"); ?></td>
-                     <td class=widget_label width=50%><?php echo _("Description"); ?></td>
-                     <td class=widget_label width=15%><?php echo _("Move"); ?></td>
-                 </tr>
-                 <?php  echo $table_rows; ?>
-             </table>
+            <table class=widget cellspacing=1>
+                <tr>
+                    <td class=widget_header colspan=8><?php echo _("Opportunity Statuses"); ?></td>
+                </tr>
+                <tr>
+                    <td class=widget_label><?php echo _("Short Name"); ?></td>
+                    <td class=widget_label><?php echo _("Full Name"); ?></td>
+                    <td class=widget_label><?php echo _("Full Plural Name"); ?></td>
+                    <td class=widget_label><?php echo _("Display HTML"); ?></td>
+                    <td class=widget_label><?php echo _("Open Status"); ?></td>
+                    <td class=widget_label width=50%><?php echo _("Description"); ?></td>
+                    <td class=widget_label><?php echo _("Sort Order"); ?></td>
+                    <td class=widget_label width=15%><?php echo _("Move"); ?></td>
+                </tr>
+                <?php  echo $table_rows; ?>
+            </table>
         </form>
 
     </div>
@@ -155,12 +163,12 @@ start_page($page_title);
     <!-- right column //-->
     <div id="Sidebar">
 
-        <?php // If we have no opportunity_type_id, skip the opportunity status form
-            if ($aopportunity_type_id) { ?>
+        <?php // If we have no opportunity_type_id, skip the new opportunity status form
+            if ($opportunity_type_id) { ?>
 
             <form action=new-2.php method=post>
 
-                <input type=hidden name=opportunity_type_id value="<?php echo $aopportunity_type_id; ?>">
+                <input type="hidden" name="opportunity_type_id" value="<?php echo $opportunity_type_id; ?>">
 
                 <table class=widget cellspacing=1>
                     <tr>
@@ -204,6 +212,11 @@ start_page($page_title);
                     </tr>
 
                     <tr>
+                        <td class=widget_label_right><?php echo _("Sort Order"); ?></td>
+                        <td class=widget_content_form_element><input type=text name=sort_order size=5></td>
+                    </tr>
+
+                    <tr>
                         <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
                     </tr>
                 </table>
@@ -218,8 +231,12 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.19  2010/12/07 22:18:33  gopherit
+ * Replaced aopportunity_type_id with opportunity_type_id and pulled its value direction from $_GET.
+ * Fixed opportunity status sorting.
+ *
  * Revision 1.18  2010/11/26 14:59:58  gopherit
- * Eliminated unnecessary $_GET['aopportunity_type_id'] parameter; some code cleanup.
+ * Eliminated unnecessary $_GET['opportunity_type_id'] parameter; some code cleanup.
  *
  * Revision 1.17  2010/10/14 20:01:12  gopherit
  * Fixed Bug Artifact #3087640 - Opportunity Statuses Not Attached to an Opportunity Type
