@@ -9,7 +9,7 @@
  * @author Ivaylo Boiadjiev <iboiadjiev@360team.ca>, 360 TEAM Ltd.
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.28 2010/11/29 15:14:47 gopherit Exp $
+ * $Id: updateto2.0.php,v 1.29 2010/12/07 22:24:17 gopherit Exp $
  */
 
 // where do we include from
@@ -36,17 +36,22 @@ $con = get_xrms_dbconnection();
 
 $msg = '';
 
-//make sure that there is a start_delay column in the activity_templates table
-//should put a test here, but alter table is non-destructive
+// Make sure that there is a start_delay column in the activity_templates table
+// Should put a test here, but alter table is non-destructive
 $sql = "ALTER TABLE activity_templates ADD start_delay INT NOT NULL AFTER default_text;";
 $rst = $con->execute($sql);
 // end start_delay
 
-//make sure that there is a campaign_type_id column in the campaign_statuses table
-//should put a test here, but alter table is non-destructive
+// Make sure that there is a campaign_type_id column in the campaign_statuses table
+// Should put a test here, but alter table is non-destructive
 $sql = "ALTER TABLE campaign_statuses ADD campaign_type_id INT NOT NULL AFTER campaign_status_id;";
 $rst = $con->execute($sql);
 // end campaign_type_id
+
+// Make sure that the campaign_type_id in the campaign_statuses table is not a zero value.  If it is, we'll set it at 1
+$sql = "UPDATE campaign_statuses SET campaign_type_id = 1 WHERE campaign_status_record_status = 'a' AND campaign_type_id = 0;";
+$rst = $con->execute($sql);
+// end campaign_type_id non-zero value
 
 //make sure that there is a campaign_status_long_desc column in the campaign_statuses table
 //should put a test here, but alter table is non-destructive
@@ -55,7 +60,7 @@ $rst = $con->execute($sql);
 // end campaign_status_long_desc
 
 // @TODO: FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
-set_admin_preference($con, 'xrms_version', '1.99.5');
+set_admin_preference($con, 'xrms_version', '1.99.6');
 
 do_hook_function('xrms_update', $con);
 
