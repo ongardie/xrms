@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.25 2010/10/12 22:06:52 gopherit Exp $
+ * $Id: new.php,v 1.26 2010/12/07 22:21:43 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -104,7 +104,7 @@ if($opportunity_type_id) {
     $rst = $con->execute($sql2);
     if($rst->RecordCount() == 0) {
         echo 'There are no opportunity statuses set for this opportunity type - please set opportunity status first
-	      <a href="../admin/opportunity-statuses/some.php?aopportunity_type_id=', $opportunity_type_id, '">here</a>.';
+	      <a href="../admin/opportunity-statuses/some.php?opportunity_type_id=', $opportunity_type_id, '">here</a>.';
         exit;
     }
 
@@ -294,6 +294,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.26  2010/12/07 22:21:43  gopherit
+ * Replaced aopportunity_type_id with opportunity_type_id
+ *
  * Revision 1.25  2010/10/12 22:06:52  gopherit
  * Minor HTML fixes.
  *
