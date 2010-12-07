@@ -9,15 +9,18 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$opportunity_status_id = $_POST['opportunity_status_id'];
-$aopportunity_type_id = $_POST['aopportunity_type_id'];
+$opportunity_status_id = (int)$_POST['opportunity_status_id'];
 
 $con = get_xrms_dbconnection();
-//$con->debug = 1;
 
-//lazy delete the selected record
-$sql = "SELECT * FROM opportunity_statuses WHERE opportunity_status_id = $opportunity_status_id";
+// Lazy delete the selected record
+$sql = "SELECT opportunity_type_id, opportunity_status_record_status
+        FROM opportunity_statuses
+        WHERE opportunity_status_id = $opportunity_status_id";
 $rst = $con->execute($sql);
+
+// Get the opportunity_type_id so we can send the user back to where they came from
+$opportunity_type_id = $rst->fields['opportunity_type_id'];
 
 $rec = array();
 $rec['opportunity_status_record_status'] = 'd';
@@ -25,8 +28,11 @@ $rec['opportunity_status_record_status'] = 'd';
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
-//lazy delete all activity templates associated with this status
-$sql = "SELECT * FROM activity_templates WHERE on_what_id = $opportunity_status_id AND on_what_table = 'opportunity_statuses'";
+// Lazy delete all activity templates associated with this status
+$sql = "SELECT activity_template_record_status
+        FROM activity_templates
+        WHERE on_what_table = 'opportunity_statuses'
+        AND on_what_id = $opportunity_status_id";
 $rst = $con->execute($sql);
 
 $rec = array();
@@ -35,14 +41,20 @@ $rec['activity_template_record_status'] = 'd';
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
-//update the sort_order field - re-initialize the values
-$sql = "select opportunity_status_id, sort_order from opportunity_statuses where opportunity_status_record_status='a' order by sort_order";
+// Update the sort_order field - re-initialize the values
+$sql = "SELECT opportunity_status_id, sort_order
+        FROM opportunity_statuses
+        WHERE opportunity_type_id = $opportunity_type_id
+        AND opportunity_status_record_status = 'a'
+        ORDER BY sort_order";
 $rst = $con->execute($sql);
 
 $max = $rst->rowcount();
 for ($i = 1; $i <= $max; $i++) {
     $opportunity_status_id = $rst->fields['opportunity_status_id'];
-    $sql = "SELECT * FROM opportunity_statuses WHERE opportunity_status_id = $opportunity_status_id";
+    $sql = "SELECT sort_order
+            FROM opportunity_statuses
+            WHERE opportunity_status_id = $opportunity_status_id";
     $rst2 = $con->execute($sql);
 
     $rec = array();
@@ -50,13 +62,14 @@ for ($i = 1; $i <= $max; $i++) {
 
     $upd = $con->GetUpdateSQL($rst2, $rec, false, get_magic_quotes_gpc());
     $con->execute($upd);
-    
+
+    $rst2->close();
     $rst->movenext();
 }
 $rst->close();
 
 $con->close();
 
-header("Location: some.php?aopportunity_type_id=".$aopportunity_type_id);
+header("Location: some.php?opportunity_type_id=".$opportunity_type_id);
 
 ?>
