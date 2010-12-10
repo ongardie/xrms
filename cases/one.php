@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.53 2010/12/06 15:22:56 gopherit Exp $
+ * $Id: one.php,v 1.54 2010/12/10 20:47:12 gopherit Exp $
  */
 
 //include required files
@@ -209,7 +209,6 @@ start_page($page_title, true, $msg);
                             <td width=50% class=clear align=left valign=top>
 
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
-                                    <?php echo $contact_id; ?>
                                 <?php if (($contact_id)&&($contact_id <> 1)) { ?>
                                 <tr>
                                     <td width=1% class=sublabel><?php echo _("Contact"); ?></td>
@@ -311,6 +310,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.54  2010/12/10 20:47:12  gopherit
+ * FIXED: Bug #3134567  Forgot to remove a testing piece of code.
+ *
  * Revision 1.53  2010/12/06 15:22:56  gopherit
  * Switched the contact email link to be provided by the centralized render_email_link() function.
  *
