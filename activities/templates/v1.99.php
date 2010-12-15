@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.23 2010/11/25 15:38:12 gopherit Exp $
+ * $Id: v1.99.php,v 1.24 2010/12/15 17:26:37 gopherit Exp $
  */
 
 // set thread_id to activity_id if it's not set already.
@@ -56,6 +56,9 @@ if ($on_what_table == 'opportunities') {
 } elseif ($on_what_table == 'cases') {
     $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
     $sql = "select case_title as attached_to_name from cases where case_id = $on_what_id";
+} elseif ($on_what_table == 'campaigns') {
+    $attached_to_link = "<a href='$http_site_root/campaigns/one.php?campaign_id=$on_what_id'>";
+    $sql = "SELECT campaign_title AS attached_to_name FROM campaigns WHERE campaign_id = $on_what_id";
 /*
 } elseif ($on_what_table) {
     $attached_to_link = "<a href='$http_site_root" . table_one_url($on_what_table, $on_what_id) . "'>";
@@ -195,10 +198,8 @@ $table_status_id = '';
 if ($is_linked) {
     switch ($table_name) {
         case 'case':
-            $type_field="{$table_name}_type_id";
-            $type_field_limit=",{$on_what_table}.$type_field";
-        break;
         case 'opportunity':
+        case 'campaign':
             $type_field="{$table_name}_type_id";
             $type_field_limit=",{$on_what_table}.$type_field";
         break;
@@ -954,6 +955,9 @@ function validate() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.24  2010/12/15 17:26:37  gopherit
+ * Added rendering of the appropriate status combo box for activities linked to campaigns.
+ *
  * Revision 1.23  2010/11/25 15:38:12  gopherit
  * Removed the default checked value of the 'Schedule Followup' and 'Transfer Activity Notes' checkboxes for activities attached to workflows.  The option still exists but now must be deliberately selected by the user.
  *
