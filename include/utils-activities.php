@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-activities.php,v 1.36 2010/05/05 22:17:20 gopherit Exp $
+ * $Id: utils-activities.php,v 1.37 2010/12/15 14:50:06 gopherit Exp $
 
  */
 
@@ -249,94 +249,95 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
     if (!$activity_id AND !$activity_rst) return false;
     if (!$activity_data) return false;
     $ret=array();
+
+    // If no $activity_rst recordset is supplied, retrieve it based on the supplied $activity_id
     if (!$activity_rst) {
         $sql = "SELECT * FROM activities WHERE activity_id=$activity_id";
         $activity_rst=$con->execute($sql);
         if (!$activity_rst) { db_error_handler($con, $activity_sql); return false; }
     }
-        if (!$activity_id) $activity_id=$activity_rst->fields['activity_id'];
+    // If no $activity_id is supplied, retrieve it from the supplied $activity_rst recordset
+    if (!$activity_id) $activity_id=$activity_rst->fields['activity_id'];
 
-        if ($update_default_participant) {
-            if (array_key_exists('contact_id',$activity_data)) {
-//                echo '<pre>'; print_r($activity_data); print_r($activity_rst->fields);
-                if ($activity_data['contact_id']!=$activity_rst->fields['contact_id']) {
-                //contact changed, change default participant
-                if ($activity_rst->fields['contact_id']) {
-                    $activity_participant=get_activity_participants($con, $activity_id, $activity_rst->fields['contact_id'], 1);
-                    if ($activity_participant) {
-                        //get existing default participant, mark it as removed
-                        $participant_data=current($activity_participant);
-                        $activity_participant_id=$participant_data['activity_participant_id'];
-                        $dret=delete_activity_participant($con, $activity_participant_id);
-                        $updated_participant=true;
-                    }
+    // Update the default participant if it has been changed in the $activity_data array
+    if ($update_default_participant) {
+        if (array_key_exists('contact_id',$activity_data)) {
+            if ($activity_data['contact_id']!=$activity_rst->fields['contact_id']) {
+            //contact changed, change default participant
+            if ($activity_rst->fields['contact_id']) {
+                $activity_participant=get_activity_participants($con, $activity_id, $activity_rst->fields['contact_id'], 1);
+                if ($activity_participant) {
+                    //get existing default participant, mark it as removed
+                    $participant_data=current($activity_participant);
+                    $activity_participant_id=$participant_data['activity_participant_id'];
+                    $dret=delete_activity_participant($con, $activity_participant_id);
+                    $updated_participant=true;
                 }
-               }
             }
-            if ($activity_data['contact_id'] AND $activity_data['contact_id']!='NULL') {
-                //new contact for activity is not blank, so add it as the new default participant
-                $activity_participant_id=add_activity_participant($con, $activity_id, $activity_data['contact_id'], 1);
-                $updated_participant=true;
-            }
+           }
         }
-        if (($activity_data['activity_status']=='c') AND ($activity_rst->fields['activity_status']!='c')) {
-            $activity_data['completed_by']=$_SESSION['session_user_id'];
-            $activity_data['completed_at']=time();
-            $completed_activity=true;
+        if ($activity_data['contact_id'] AND $activity_data['contact_id']!='NULL') {
+            //new contact for activity is not blank, so add it as the new default participant
+            $activity_participant_id=add_activity_participant($con, $activity_id, $activity_data['contact_id'], 1);
+            $updated_participant=true;
         }
+    }
 
-        if (($activity_data['activity_status']!='c') AND ($activity_rst->fields['activity_status']=='c')) {
-            $activity_data['completed_by']='NULL';
-            $activity_data['completed_at']='NULL';
-            $completed_activity=false;
-        }
+    // Set completed_by and completed_at if the activity_status was changed
+    if (($activity_data['activity_status']=='c') AND ($activity_rst->fields['activity_status']!='c')) {
+        $activity_data['completed_by']=$_SESSION['session_user_id'];
+        $activity_data['completed_at']=time();
+        $completed_activity=true;
+    }
+    if (($activity_data['activity_status']!='c') AND ($activity_rst->fields['activity_status']=='c')) {
+        $activity_data['completed_by']='NULL';
+        $activity_data['completed_at']='NULL';
+        $completed_activity=false;
+    }
 
+    // update the activity in the database
     $update_sql = $con->getUpdateSQL($activity_rst, $activity_data, false, $magic_quotes);
-
     if ($update_sql) {
         $update_rst=$con->execute($update_sql);
         if (!$update_rst) { db_error_handler($con, $update_sql); return false; }
         $updated_sql=true;
     }
 
+    // Provide the activity_edit_2 and run_on_completed plugin hooks
     $param = array($activity_rst, $activity_data);
     do_hook_function('activity_edit_2', $param);
-    
-    // if it's closed but wasn't before, allow the computer to perform an action if it wants to
+    // Allow optional plugin actions if the activity wasn't closed before but is now
     if($completed_activity) {
             do_hook_function("run_on_completed", $activity_id);
     }
 
-     //DO WORKFLOW STUFF HERE
+    // DO WORKFLOW STUFF HERE if the activity was completed and an activity_template_id was specified
     $activity_template_id = $activity_rst->fields['activity_template_id'];
-    $company_id=$activity_data['company_id'];
-    $contact_id=$activity_data['contact_id'];
-    if (!$company_id) $company_id=$activity_rst->fields['company_id'];
-    if (!$contact_id) $contact_id=$activity_rst->fields['contact_id'];
-
-    $on_what_id=$activity_data['on_what_id'];
-    if (!$on_what_id) {
-        $on_what_id=$activity_rst->fields['on_what_id'];
-    }
-
-    $on_what_table=$activity_data['on_what_table'];
-    if (!$on_what_table) {
-        $on_what_table=$activity_rst->fields['on_what_table'];
-    }
-
     if ($completed_activity && $activity_template_id) {
+        // Ensure we have a company_id, contact_id, on_what_table and on_what_id
+        $company_id=$activity_data['company_id'];
+        $contact_id=$activity_data['contact_id'];
+        $on_what_table=$activity_data['on_what_table'];
+        $on_what_id=$activity_data['on_what_id'];
+        if (!$company_id)       $company_id     = $activity_rst->fields['company_id'];
+        if (!$contact_id)       $contact_id     = $activity_rst->fields['contact_id'];
+        if (!$on_what_id)       $on_what_id     = $activity_rst->fields['on_what_id'];
+        if (!$on_what_table)    $on_what_table  = $activity_rst->fields['on_what_table'];
+
         $ret=workflow_activity_completed($con, $on_what_table, $on_what_id, $activity_template_id, $company_id, $contact_id, $return_url);
+
     } else {
-         //hack to allow related entity status change from activity controlled by workflow activity action
-        //defaults to allowing change unless underlying workflow actions have already happened, in which case do not allow manual status change
+        // hack to allow related entity status change from activity controlled by workflow activity action
+        // defaults to allowing change unless underlying workflow actions have already happened, in which case do not allow manual status change
          $ret['allow_status_change']=true; 
     }
 
-
-    if ($updated_sql OR $updated_participants) {
+    // Leave audit trail if the activity or its participants were updated
+    if ($updated_sql OR $updated_participant) {
          add_audit_item($con, $session_user_id, 'updated', 'activities', $activity_id, 1);
-     }
+    }
 
+    // Report success of the update_activity function
     if (!$ret) $ret=true;
     return $ret;
 }
@@ -777,6 +778,10 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.37  2010/12/15 14:50:06  gopherit
+  * Misnamed variable prevented the update_activity() method to leave an audit trail if the activity participants have been updated.
+  * General code cleanup.
+  *
   * Revision 1.36  2010/05/05 22:17:20  gopherit
   * Added calculation of the division_id of a newly created activity.  If the activity is to be associated with a case or opportunity, the new activity will inherit its division_id from there.  If not, it will inherit from the division_id of the contact.
   *
