@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-activities.php,v 1.37 2010/12/15 14:50:06 gopherit Exp $
+ * $Id: utils-activities.php,v 1.38 2010/12/15 22:50:52 gopherit Exp $
 
  */
 
@@ -324,7 +324,16 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
         if (!$on_what_id)       $on_what_id     = $activity_rst->fields['on_what_id'];
         if (!$on_what_table)    $on_what_table  = $activity_rst->fields['on_what_table'];
 
-        $ret=workflow_activity_completed($con, $on_what_table, $on_what_id, $activity_template_id, $company_id, $contact_id, $return_url);
+        if ($on_what_table == 'campaigns') {
+            // Load only what we need
+            require_once($include_directory . 'utils-campaigns.php');
+            campaign_workflow_activity_completed($con, $on_what_id, $activity_template_id, $company_id, $contact_id);
+            // The campaign status should not be affected by any one individual
+            // activity since a campaign is not likely to be attached to only one contact or company.
+            $ret['allow_status_change'] = FALSE;
+        } else {
+            $ret=workflow_activity_completed($con, $on_what_table, $on_what_id, $activity_template_id, $company_id, $contact_id, $return_url);
+        }
 
     } else {
         // hack to allow related entity status change from activity controlled by workflow activity action
@@ -778,6 +787,9 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.38  2010/12/15 22:50:52  gopherit
+  * Implemented advancing of the campaign workflow on campaign workflow activity completion.
+  *
   * Revision 1.37  2010/12/15 14:50:06  gopherit
   * Misnamed variable prevented the update_activity() method to leave an audit trail if the activity participants have been updated.
   * General code cleanup.
