@@ -8,7 +8,7 @@
  * @author gopherit, Ivaylo Boiadjiev, 360 TEAM Ltd.
  * @package XRMS_API
  *
- * $Id: utils-campaigns.php,v 1.1 2010/12/15 22:52:51 gopherit Exp $
+ * $Id: utils-campaigns.php,v 1.2 2010/12/16 14:25:06 gopherit Exp $
  *
  */
 
@@ -434,7 +434,7 @@ function delete_campaign($con, $campaign_id, $delete_from_database = false)
  *
  * @return boolean                                  Indicates whether the workflow processing operation was successful
  */
-function  campaign_workflow_activity_completed($con, $campaign_id, $activity_template_id, $company_id, $contact_id) {
+function campaign_workflow_activity_completed($con, $campaign_id, $activity_template_id, $company_id, $contact_id) {
 
     // We cannot proceed without any of the parameters so make sure they are all there
     if (!$campaign_id OR !$activity_template_id OR !$company_id OR !$contact_id)
@@ -452,15 +452,14 @@ function  campaign_workflow_activity_completed($con, $campaign_id, $activity_tem
         return FALSE;
     }
 
-
     // Retrieve all the activity templates associated with each campaign status and sort them sequentially
     $activity_templates = array();
     while (!$campaign_statuses_rst->EOF) {
-        $sql = "SELECT activity_template_id
-            FROM activity_templates
-            WHERE on_what_table = 'campaign_statuses'
-            AND on_what_id = ". $campaign_statuses_rst->fields['campaign_status_id'] ."
-            ORDER BY sort_order";
+        $sql = "SELECT activity_template_id, sort_order
+                FROM activity_templates
+                WHERE on_what_table = 'campaign_statuses'
+                AND on_what_id = ". $campaign_statuses_rst->fields['campaign_status_id'] ."
+                ORDER BY sort_order";
         $rst = $con->Execute($sql);
         if (!$rst) {
             db_error_handler($con, $sql);
@@ -468,7 +467,10 @@ function  campaign_workflow_activity_completed($con, $campaign_id, $activity_tem
         }
 
         while (!$rst->EOF) {
-            $activity_templates[] = array( (int)$rst->fields['activity_template_id'], (int)$campaign_statuses_rst->fields['campaign_status_id'] );
+            $activity_templates[] = array(
+                                        (int)$rst->fields['activity_template_id'],
+                                        (int)$campaign_statuses_rst->fields['campaign_status_id'],
+                                        (int)$rst->fields['sort_order']);
             $rst->MoveNext();
         }
         $campaign_statuses_rst->MoveNext();
@@ -482,21 +484,14 @@ function  campaign_workflow_activity_completed($con, $campaign_id, $activity_tem
         elseif ($current_template) {
             $new_template_id = $activity_template[0];
             $new_status_id = $activity_template[1];
+            $new_sort_order = $activity_template[2];
             break;
         }
     }
 
+    // Create the new campaign workflow activity
     if ($new_template_id) {
-        // This is a bit ridiculous but we don't want to rewrite the API right now
-        $sql = "SELECT sort_order
-                FROM activity_templates
-                WHERE activity_template_id = $new_template_id";
-        $rst = $con->Execute($sql);
-        if (!$rst) {
-            db_error_handler($con, $sql);
-            return FALSE;
-        }
-        add_workflow_activity($con, 'campaign_statuses', $new_status_id, 'campaigns', $campaign_id, $company_id, $contact_id, $rst->fields['sort_order']);
+        add_workflow_activity($con, 'campaign_statuses', $new_status_id, 'campaigns', $campaign_id, $company_id, $contact_id, $new_sort_order);
         return TRUE;
 
     } else {
@@ -513,6 +508,9 @@ include_once $include_directory . 'utils-misc.php';
 
  /**
  * $Log: utils-campaigns.php,v $
+ * Revision 1.2  2010/12/16 14:25:06  gopherit
+ * Eliminated an unnecessary SQL query in the campaign_workflow_activity_completed() method.
+ *
  * Revision 1.1  2010/12/15 22:52:51  gopherit
  * Implemented advancing of the campaign workflow on campaign workflow activity completion.
  *
