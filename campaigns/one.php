@@ -2,7 +2,7 @@
 /**
  * View Campaign Details
  *
- * $Id: one.php,v 1.25 2007/01/18 12:52:27 fcrossen Exp $
+ * $Id: one.php,v 1.26 2011/01/14 15:51:28 gopherit Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -199,6 +199,21 @@ start_page($page_title, true, $msg);
         <!-- right column //-->
     <div id="Sidebar">
 
+        <!-- Related Functionality //-->
+        <div class="noprint">
+            <table class=widget cellspacing=1 width="100%">
+                <tr>
+                    <td class=widget_header colspan=2><?php echo _("Options"); ?></td>
+                </tr>
+
+                <tr>
+                    <td class=widget_content>
+                        <a href="./lists/some.php?campaign_id=<?php echo $campaign_id; ?>&return_url=<?php echo $return_url; ?>"><?php echo _("Campaign Lists"); ?></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
         <!-- categories //-->
         <?php echo $category_rows; ?>
 
@@ -226,6 +241,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.26  2011/01/14 15:51:28  gopherit
+ * Implemented the Campaign Lists functionality to allow launching of campaign workflows on lists of contacts created with /contacts/some.php
+ *
  * Revision 1.25  2007/01/18 12:52:27  fcrossen
  *  - show campaign-companies.php in sidebar
  *

@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.38 2007/10/30 02:33:06 randym56 Exp $
+ * $Id: some.php,v 1.39 2011/01/14 15:51:28 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -316,16 +316,23 @@ $pager->Render($system_rows_per_page);
         <!-- right column //-->
     <div id="Sidebar">
 
-        <!-- new campaign //-->
+        <!-- Related Functionality //-->
         <div class="noprint">
-        <table class=widget cellspacing=1 width="100%">
-            <tr>
-                <td class=widget_header colspan=2><?php echo _("Options"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content><a href="new.php"><?php echo _("Add New Campaign"); ?></a></td>
-            </tr>
-        </table>
+            <table class=widget cellspacing=1 width="100%">
+                <tr>
+                    <td class=widget_header colspan=2><?php echo _("Options"); ?></td>
+                </tr>
+
+                <tr>
+                    <td class=widget_content><a href="new.php"><?php echo _("Add New Campaign"); ?></a></td>
+                </tr>
+
+                <tr>
+                    <td class=widget_content>
+                        <a href="./lists/some.php?return_url=/campaigns/some.php"><?php echo _("Campaign Lists"); ?></a>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <!-- recently viewed support items //-->
@@ -383,6 +390,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.39  2011/01/14 15:51:28  gopherit
+ * Implemented the Campaign Lists functionality to allow launching of campaign workflows on lists of contacts created with /contacts/some.php
+ *
  * Revision 1.38  2007/10/30 02:33:06  randym56
  * - Changed "Mail Merge" to be "eMail Merge" to separate from "Snail Mail Merge"
  *

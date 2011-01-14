@@ -9,7 +9,7 @@
  * @author Ivaylo Boiadjiev <iboiadjiev@360team.ca>, 360 TEAM Ltd.
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.29 2010/12/07 22:24:17 gopherit Exp $
+ * $Id: updateto2.0.php,v 1.30 2011/01/14 15:51:28 gopherit Exp $
  */
 
 // where do we include from
@@ -59,8 +59,27 @@ $sql = "ALTER TABLE campaign_statuses ADD campaign_status_long_desc VARCHAR(200)
 $rst = $con->execute($sql);
 // end campaign_status_long_desc
 
+// Create the campaign_list table to store campaign targets
+$sql ="CREATE TABLE campaign_lists (
+                campaign_list_id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                user_id INT(11) NOT NULL,
+                campaign_id INT(11),
+                campaign_list_title VARCHAR(100),
+                campaign_list_description TEXT,
+                target_contact_ids TEXT,
+                list_created_on DATETIME,
+                list_created_by INT(11),
+                list_processing_started_on DATETIME,
+                list_processing_started_by INT(11),
+                list_processing_ended_on DATETIME,
+                campaign_list_record_status CHAR(1) NOT NULL DEFAULT 'a'
+                )";
+//execute
+$rst = $con->execute($sql);
+
+
 // @TODO: FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
-set_admin_preference($con, 'xrms_version', '1.99.6');
+set_admin_preference($con, 'xrms_version', '1.99.7');
 
 do_hook_function('xrms_update', $con);
 
@@ -82,5 +101,13 @@ start_page($page_title, true, $msg);
 
 end_page();
 
+/**
+ * $Log: updateto2.0.php,v $
+ * Revision 1.30  2011/01/14 15:51:28  gopherit
+ * Implemented the Campaign Lists functionality to allow launching of campaign workflows on lists of contacts created with /contacts/some.php
+ *
+ *
+ *
+ */
 
 ?>

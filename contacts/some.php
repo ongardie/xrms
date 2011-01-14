@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.79 2009/11/11 17:05:14 gopherit Exp $
+ * $Id: some.php,v 1.80 2011/01/14 15:51:28 gopherit Exp $
  */
 
 //include the standard files
@@ -553,7 +553,8 @@ $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button";
 if ($show_pager_footer_buttons) $endrows = $endrows . $pager->GetAndUseExportButton() .  "
             <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("eMail Merge")."\">
-            <input type=button class=button onclick=\"javascript: bulkSnailMail();\" value=\""._("Snail Mail Merge")."\">";
+            <input type=button class=button onclick=\"javascript: bulkSnailMail();\" value=\""._("Snail Mail Merge")."\">
+            <input type=button class=button onclick=\"javascript: buildCampaignList();\" value=\""._("Build Campaign List")."\">";
 $endrows = $endrows."</td></tr>\n";
 
 echo $pager_columns_selects;
@@ -635,6 +636,10 @@ function bulkSnailMail() {
     document.forms[0].action = "../snailmail/snailmail.php?scope=contacts";
     document.forms[0].submit();
 }
+function buildCampaignList() {
+    document.forms[0].action = "../campaigns/lists/one.php?return_url=/contacts/some.php";
+    document.forms[0].submit();
+}
 function exportcontacts() {
     document.forms[0].action = "../snailmail/exportcontacts.php?scope=contacts";
     document.forms[0].submit();
@@ -670,6 +675,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.80  2011/01/14 15:51:28  gopherit
+ * Implemented the Campaign Lists functionality to allow launching of campaign workflows on lists of contacts created with /contacts/some.php
+ *
  * Revision 1.79  2009/11/11 17:05:14  gopherit
  * Added the contact.address_id in the SQL on line 75.  Without it, the GUP_Pager callback function could not calculate the correct phone number format to use.
  *
