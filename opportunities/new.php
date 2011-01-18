@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.26 2010/12/07 22:21:43 gopherit Exp $
+ * $Id: new.php,v 1.27 2011/01/18 20:02:43 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -26,26 +26,38 @@ $con = get_xrms_dbconnection();
 
 $company_name = fetch_company_name($con, $company_id);
 
-//generate a contact menu
+// Generate a contact menu
 $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") .
       " AS contact_name, contact_id
         FROM contacts
         WHERE company_id = $company_id ";
-if ($company_id == 1) { //add filter for unknown company
-    $sql .= " AND contact_id = $contact_id";
+if ($company_id == 1) { // add special filter for unknown company
+    $sql .= "AND contact_id = $contact_id ";
 }
-$sql .= " AND contact_record_status = 'a'";
+$sql .= "AND contact_record_status = 'a'";
 $rst = $con->execute($sql);
-$contact_menu = $rst->getmenu2('contact_id', $contact_id, false);
+$contact_menu = $rst->getmenu2('contact_id', $contact_id, false, false, 1, 'id=contact_id');
 $rst->close();
 
-//get a campaign menu
-$sql2 = "select campaign_title, campaign_id from campaigns, campaign_statuses
-         where campaign_record_status = 'a' and
-         campaign_statuses.campaign_status_id = campaigns.campaign_status_id and
-         campaign_statuses.status_open_indicator = 'o'
-         order by campaign_title";
+$user_menu = get_user_menu($con, $session_user_id);
 
+//division menu
+$sql2 = "select division_name, division_id from company_division where company_id=$company_id order by division_name";
+$rst = $con->execute($sql2);
+if($rst) {
+    $division_menu = $rst->getmenu2('division_id', $division_id, true, false, 1, 'id=division_id');
+    $rst->close();
+} else {
+    db_error_handler($con, $sql2);
+}
+
+// Get the campaign menu
+$sql2 = "SELECT campaign_title, campaign_id
+         FROM campaigns, campaign_statuses
+         WHERE campaign_record_status = 'a'
+         AND campaign_statuses.campaign_status_id = campaigns.campaign_status_id
+         AND campaign_statuses.status_open_indicator = 'o'
+         ORDER BY campaign_title";
 $rst = $con->execute($sql2);
 if($rst) {
     $campaign_menu = $rst->getmenu2('campaign_id', false, true);
@@ -54,79 +66,53 @@ if($rst) {
     db_error_handler ($con, $sql2);
 }
 
-//division menu
-$sql2 = "select division_name, division_id from company_division where company_id=$company_id order by division_name";
-$rst = $con->execute($sql2);
-if($rst) {
-    $division_menu = $rst->getmenu2('division_id', $division_id, true);
-    $rst->close();
-} else {
-    db_error_handler($con, $sql2);
-}
-
-$user_menu = get_user_menu($con, $session_user_id);
-
-//get opportunity type menu
-$sql2 = "select opportunity_type_pretty_name, opportunity_type_id from opportunity_types where opportunity_type_record_status = 'a' order by opportunity_type_id";
+// Get opportunity type menu
+$sql2 = "SELECT opportunity_type_pretty_name, opportunity_type_id
+         FROM opportunity_types
+         WHERE opportunity_type_record_status = 'a'
+         ORDER BY opportunity_type_id";
 $rst = $con->execute($sql2);
 
 // defining opportunity_type_id before the call to getmenu2 means that this
 // option will be selected when the menu is generated.
-/*
 if (!$opportunity_type_id) {
     if ( $rst && !$rst->EOF ) {
-    $opportunity_type_id = $rst->fields['opportunity_type_id'];
+        $opportunity_type_id = $rst->fields['opportunity_type_id'];
     } else {
-    $opportunity_type_id = 0;
+        $opportunity_type_id = 0;
     }
 }
-*/
 
-if ($opportunity_type_id ) {
-   $sql3 = "select opportunity_type_pretty_name from opportunity_types where opportunity_type_record_status = 'a' and opportunity_type_id = $opportunity_type_id";
-   $rst = $con->execute($sql3);
-   $opportunity_type = $rst->fields['opportunity_type_pretty_name'];
-   $opportunity_type_menu = "<input type=hidden name=opportunity_type_id value=$opportunity_type_id>".$opportunity_type;
-   $rst->close();
-} else {
-   $opportunity_type_menu = $rst->getmenu2('opportunity_type_id', $opportunity_type_id, false, false, 1, "id=opportunity_type_id onchange=javascript:restrictByOpportunityType();");
-   $rst->close();
+$opportunity_type_menu = $rst->getmenu2('opportunity_type_id', $opportunity_type_id, false, false, 1, "id=opportunity_type_id onchange=javascript:restrictByOpportunityType();");
+$rst->close();
+
+// Get the opportunity status menu
+$sql2 = "SELECT opportunity_status_pretty_name, opportunity_status_id
+         FROM opportunity_statuses
+         WHERE opportunity_status_record_status = 'a'
+         AND opportunity_type_id = $opportunity_type_id
+         ORDER BY sort_order";
+$rst = $con->execute($sql2);
+//if you dont have a case status set, you wont be able to enter a record.
+if($rst->RecordCount() == 0) {
+    echo 'There are no opportunity statuses set for this opportunity type - please set opportunity status first
+        <a href="../admin/opportunity-statuses/some.php?opportunity_type_id=', $opportunity_type_id, '">here</a>.';
+    exit;
 }
 
-//get the opportunity status menu
-if($opportunity_type_id) {
-    $sql2 = "SELECT opportunity_status_pretty_name, opportunity_status_id
-            FROM opportunity_statuses
-            WHERE
-                opportunity_status_record_status = 'a' and
-                opportunity_type_id = $opportunity_type_id
-            ORDER BY sort_order";
-    $rst = $con->execute($sql2);
-    if($rst->RecordCount() == 0) {
-        echo 'There are no opportunity statuses set for this opportunity type - please set opportunity status first
-	      <a href="../admin/opportunity-statuses/some.php?opportunity_type_id=', $opportunity_type_id, '">here</a>.';
-        exit;
-    }
 
-} else {
-    //we need the opportunity statuses for all the opportunity_types
-    $sql2 = "SELECT "
-              . $con->Concat("opportunity_type_pretty_name", "' - '", "opportunity_status_pretty_name") . " AS opportunity_status_str ,
-                opportunity_status_id
-            FROM opportunity_statuses os JOIN opportunity_types ot ON os.opportunity_type_id = ot.opportunity_type_id
-            WHERE
-                opportunity_status_record_status = 'a'
-            ORDER BY os.opportunity_type_id, os.sort_order";
-    $rst = $con->execute($sql2);
-}
+// defining opportunity_status_id before the call to getmenu2 means that this
+// option will be selected when the menu is generated.
 if ( $rst && !$rst->EOF ) {
   $opportunity_status_id = $rst->fields['opportunity_status_id'];
-  $opportunity_status_menu = $rst->getmenu2('opportunity_status_id', $opportunity_status_id, false);
   $rst->close();
 } else {
-  $opportunity_status_id = '';
-  db_error_handler($con,$sql2);
+  $opportunity_status_id = 0;
 }
+
+$opportunity_status_menu = $rst->getmenu2('opportunity_status_id', $opportunity_status_id, false);
+
+$datetime_format = set_datetime_format($con, $session_user_id);
 
 // custom fields PlugIns
 $customs_fields_rows = do_hook_function('opportunity_inline_edit', $customs_fields_rows);
@@ -170,7 +156,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Opportunity Title"); ?></td>
-                <td class=widget_content_form_element><input type=text size=40 name=opportunity_title> <?php echo $required_indicator; ?></td>
+                <td class=widget_content_form_element><input type="text" size="40" name="opportunity_title" id="opportunity_title"> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Division"); ?></td>
@@ -191,7 +177,7 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_label_right><?php echo _("Status"); ?></td>
                 <td class=widget_content_form_element><?php echo $opportunity_status_menu; ?>
-                <a href="#" onclick="javascript:window.open('opportunity-view.php');"><?php echo _("Status Definitions"); ?></a>
+                <a href="opportunity-view.php?opportunity_type_id=<?php echo $opportunity_type_id ?>" target="_blank"><?php echo _("Status Definitions"); ?></a>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Owner"); ?></td>
@@ -294,6 +280,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.27  2011/01/18 20:02:43  gopherit
+ * FIXED: Bug Artifact #3161033 	/opportunities/new.php now only displays the statuses of the selected opportunity type.
+ *
  * Revision 1.26  2010/12/07 22:21:43  gopherit
  * Replaced aopportunity_type_id with opportunity_type_id
  *
