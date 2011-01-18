@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.34 2010/10/12 22:06:14 gopherit Exp $
+ * $Id: edit.php,v 1.35 2011/01/18 22:24:03 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,10 +15,12 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'confgoto.php');
 
 $opportunity_id = isset($_GET['opportunity_id']) ? $_GET['opportunity_id'] : '';
+$opportunity_type_id = (int)$_GET['opportunity_type_id'];
 $on_what_id=$opportunity_id;
-$session_user_id = session_check('','Update');
 
-$msg            = isset($_GET['msg'])  ? $_GET['msg'] : '';
+$session_user_id = session_check('','Update');
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
+
 
 $division_id = (array_key_exists('division_id',$_GET) ? $_GET['division_id'] : '' );
 $contact_id = (array_key_exists('contact_id',$_GET) ? $_GET['contact_id'] : '' );
@@ -111,9 +113,8 @@ if ($company_id == 1) { //filter for unknown company
     $sql .= " AND contact_id = $contact_id ";
 }
 $sql .= " AND contact_record_status = 'a'";
-
 $rst = $con->execute($sql);
-$contact_menu = $rst->getmenu2('contact_id', $contact_id, false);
+$contact_menu = $rst->getmenu2('contact_id', $contact_id, false, false, 1, 'id="contact_id"');
 $rst->close();
 
 $user_menu = get_user_menu($con, $user_id);
@@ -130,11 +131,14 @@ $rst->close();
 //division menu
 $sql2 = "select division_name, division_id from company_division where company_id=$company_id order by division_name";
 $rst = $con->execute($sql2);
-$division_menu = $rst->getmenu2('division_id', $division_id, true);
+$division_menu = $rst->getmenu2('division_id', $division_id, true, false, 1, 'id="division_id"');
 $rst->close();
 
-//opportunity type list
-$sql2 = "select opportunity_type_pretty_name, opportunity_type_id from opportunity_types where opportunity_type_record_status = 'a' order by opportunity_type_id";
+// Opportunity type list
+$sql2 = "SELECT opportunity_type_pretty_name, opportunity_type_id
+         FROM opportunity_types
+         WHERE opportunity_type_record_status = 'a'
+         ORDER BY opportunity_type_id";
 $rst = $con->execute($sql2);
 $opportunity_type_menu = $rst->getmenu2('opportunity_type_id', $opportunity_type_id, false, false, 1, "id=opportunity_type_id onchange=javascript:restrictByOpportunityType();");
 $rst->close();
@@ -212,7 +216,7 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Opportunity Title"); ?></td>
-                <td class=widget_content_form_element><input type=text size=40 name=opportunity_title value="<?php  echo $opportunity_title; ?>"> <?php  echo $required_indicator; ?></td>
+                <td class=widget_content_form_element><input type=text size=40 name="opportunity_title" id="opportunity_title" value="<?php  echo $opportunity_title; ?>"> <?php  echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Company"); ?></td>
@@ -361,6 +365,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.35  2011/01/18 22:24:03  gopherit
+ * FIXED: Bug Artifact #3161127 /opportunities/edit.php now displays only the opportunity statuses of the selected opportunity type.
+ *
  * Revision 1.34  2010/10/12 22:06:14  gopherit
  * Minor HTML fixes.
  *
