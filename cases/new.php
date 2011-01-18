@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.30 2010/12/07 22:22:18 gopherit Exp $
+ * $Id: new.php,v 1.31 2011/01/18 20:04:16 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -26,12 +26,12 @@ $con = get_xrms_dbconnection();
 
 $company_name = fetch_company_name($con, $company_id);
 
-//get menu for contacts
+// Generate a contact menu
 $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") .
       " AS contact_name, contact_id
         FROM contacts
         WHERE company_id = $company_id ";
-if($company_id == 1) { //add special filter for unknown company
+if ($company_id == 1) { // add special filter for unknown company
     $sql .= "AND contact_id = $contact_id ";
 }
 $sql .= "AND contact_record_status = 'a'";
@@ -44,43 +44,55 @@ $user_menu = get_user_menu($con, $session_user_id);
 //division menu
 $sql2 = "select division_name, division_id from company_division where company_id=$company_id order by division_name";
 $rst = $con->execute($sql2);
-$division_menu = $rst->getmenu2('division_id', $division_id, true, false, 1, 'id=division_id');
-$rst->close();
+if($rst) {
+    $division_menu = $rst->getmenu2('division_id', $division_id, true, false, 1, 'id=division_id');
+    $rst->close();
+} else {
+    db_error_handler($con, $sql2);
+}
 
-//get case priority menu
-$sql2 = "select case_priority_pretty_name, case_priority_id from case_priorities where case_priority_record_status = 'a' order by case_priority_id";
+// Get the case priority menu
+$sql2 = "SELECT case_priority_pretty_name, case_priority_id
+         FROM case_priorities
+         WHERE case_priority_record_status = 'a'
+         ORDER BY by case_priority_id";
 $rst = $con->execute($sql2);
 
 // defining case_priority_id before the call to getmenu2 means that this
 // option will be selected when the menu is generated.
 if ( $rst && !$rst->EOF ) {
-  $case_priority_id = $rst->fields['case_priority_id'];
+    $case_priority_id = $rst->fields['case_priority_id'];
+    $case_priority_menu = $rst->getmenu2('case_priority_id', $case_priority_id, false);
+    $rst->close();
 } else {
   $case_priority_id = 0;
 }
-
-$case_priority_menu = $rst->getmenu2('case_priority_id', $case_priority_id, false);
-$rst->close();
-
-//get case name menu
-$sql2 = "select case_type_pretty_name, case_type_id from case_types where case_type_record_status = 'a' order by case_type_id";
+// Get case type menu
+$sql2 = "SELECT case_type_pretty_name, case_type_id
+         FROM case_types
+         WHERE case_type_record_status = 'a'
+         ORDER BY case_type_id";
 $rst = $con->execute($sql2);
 
 // defining case_type_id before the call to getmenu2 means that this
 // option will be selected when the menu is generated.
 if (!$case_type_id) {
     if ( $rst && !$rst->EOF ) {
-    $case_type_id = $rst->fields['case_type_id'];
+        $case_type_id = $rst->fields['case_type_id'];
     } else {
-    $case_type_id = 0;
+        $case_type_id = 0;
     }
 }
 
-$case_type_menu = $rst->getmenu2('case_type_id', $case_type_id, false, false, 1, "id=case_type_id onchange=javascript:restrictByCaseType();");
+$case_type_menu = $rst->getmenu2('case_type_id', $case_type_id, false, false, 1, 'id="case_type_id" onchange="javascript:restrictByCaseType();"');
 $rst->close();
 
-//get case status menu
-$sql2 = "select case_status_pretty_name, case_status_id from case_statuses where case_type_id=$case_type_id AND case_status_record_status = 'a' order by sort_order, case_status_id";
+// Get the case status menu
+$sql2 = "SELECT case_status_pretty_name, case_status_id
+         FROM case_statuses
+         WHERE case_type_id=$case_type_id
+         AND case_status_record_status = 'a'
+         ORDER BY sort_order, case_status_id";
 $rst = $con->execute($sql2);
 //if you dont have a case status set, you wont be able to enter a record.
 if ( $rst->RecordCount() == 0 ) {
@@ -135,7 +147,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Case Title"); ?></td>
-                <td class=widget_content_form_element><input type=text size=40 name=case_title id=case_title value="<?php echo htmlspecialchars(stripslashes($case_title)) ?>"> <?php  echo $required_indicator ?></td>
+                <td class=widget_content_form_element><input type="text" size="40" name="case_title" id="case_title" value="<?php echo htmlspecialchars(stripslashes($case_title)) ?>"> <?php  echo $required_indicator ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Division"); ?></td>
@@ -153,7 +165,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php echo _("Status"); ?></td>
                 <td class=widget_content_form_element>
                     <?php  echo $case_status_menu ?>
-                    <a href="#" onclick="javascript:window.open('case-status-view.php');"><?php echo _("Status Definitions"); ?></a>
+                    <a href="case-status-view.php?case_type_id=<?php echo $case_type_id ?>" target="_blank"><?php echo _("Status Definitions"); ?></a>
                 </td>
             </tr>
             <tr>
@@ -240,6 +252,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.31  2011/01/18 20:04:16  gopherit
+ * General code cleanup.
+ *
  * Revision 1.30  2010/12/07 22:22:18  gopherit
  * Replaced acase_type_id with case_type_id
  *
