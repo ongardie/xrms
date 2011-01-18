@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of campaigns
  *
- * $Id: new.php,v 1.17 2010/12/06 15:54:24 gopherit Exp $
+ * $Id: new.php,v 1.18 2011/01/18 23:14:54 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,34 +13,61 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-// a common function
-function local_get ( $con, $sql, $nam )
-{
-  $rst = $con->execute($sql);
-  if(!$rst) {
-    db_error_handler($con, $sql);
-  }
-  $tmp = $rst->getmenu2($nam, '', false);
-  $rst->close();
-  
-  return $tmp;
-}
 $on_what_table='campaigns';
 $session_user_id = session_check('','Create');
-
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
+
+$campaign_title = (array_key_exists('campaign_title',$_GET) ? $_GET['campaign_title'] : $_POST['campaign_title']);
+$campaign_type_id = (array_key_exists('campaign_type_id',$_GET) ? $_GET['campaign_type_id'] : $_POST['campaign_type_id']);
 
 $con = get_xrms_dbconnection();
 
 $user_menu = get_user_menu($con, $session_user_id);
 
-$campaign_type_menu    = local_get ( $con,
-				     "select campaign_type_pretty_name, campaign_type_id from campaign_types where campaign_type_record_status = 'a' order by campaign_type_pretty_name",
-				  'campaign_type_id' );
+$sql = 'SELECT campaign_type_pretty_name, campaign_type_id
+        FROM campaign_types
+        WHERE campaign_type_record_status = \'a\'
+        ORDER BY campaign_type_pretty_name';
+$rst = $con->execute($sql);
+if($rst) {
+    // defining campaign_type_id before the call to getmenu2 means that this
+    // option will be selected when the menu is generated.
+    if (!$campaign_type_id) {
+        if (!$rst->EOF ) {
+            $campaign_type_id = $rst->fields['campaign_type_id'];
+            $campaign_type_pretty_name = $rst->fields['campaign_type_pretty_name'];
+        } else {
+            echo 'There have been no campaign types defined - please define them first
+                <a href="../admin/campaign-types/some.php">here</a>.';
+            exit;
+        }
+    }
 
-$campaign_status_menu = local_get ( $con,
-				    "select campaign_status_pretty_name, campaign_status_id from campaign_statuses where campaign_status_record_status = 'a' order by campaign_status_id",
-				    'campaign_status_id');
+    $campaign_type_menu = $rst->getmenu2('campaign_type_id', $campaign_type_id, false, false, 1, 'id="campaign_type_id" onchange="javascript:restrictBycampaignType();"');
+    $rst->close();
+} else {
+    db_error_handler($con, $sql);
+}
+
+// Get the campaign status menu
+$sql2 = "SELECT campaign_status_pretty_name, campaign_status_id
+         FROM campaign_statuses
+         WHERE campaign_type_id=$campaign_type_id
+         AND campaign_status_record_status = 'a'
+         ORDER BY sort_order, campaign_status_id";
+$rst = $con->execute($sql2);
+//if you dont have a campaign status set, you wont be able to enter a record.
+if ( $rst AND $rst->RecordCount() == 0 ) {
+	echo _('There are no campaign statuses defined for the campaign type') .' "'. $campaign_type_pretty_name .'".  '.
+             _('Please define those first') .' <a href="../admin/campaign-statuses/some.php?campaign_type_id='. $campaign_type_id .'">'. _('here') .'</a>.';
+	exit;
+} elseif ( !$rst->EOF ) {
+    $campaign_status_id = $rst->fields['campaign_status_id'];
+} else {
+    $campaign_status_id = 0;
+}
+
+$campaign_status_menu = $rst->getmenu2('campaign_status_id', $campaign_status_id, false);
 
 $con->close();
 
@@ -50,6 +77,16 @@ start_page($page_title, true, $msg);
 ?>
 
 <?php jscalendar_includes(); ?>
+
+<script type="text/javascript" language="JavaScript">
+    <!--
+        function restrictBycampaignType() {
+            campaign_title=document.getElementById('campaign_title');
+            select=document.getElementById('campaign_type_id');
+            location.href = 'new.php?campaign_title='+ campaign_title.value + '&campaign_type_id=' + select.value;
+        }
+     //-->
+    </script>
 
 <div id="Main">
     <div id="Content">
@@ -66,7 +103,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Campaign Title"); ?></td>
-                <td class=widget_content_form_element><input type=text size=40 name=campaign_title> <?php  echo $required_indicator ?></td>
+                <td class=widget_content_form_element><input type=text size=40 name="campaign_title" id="campaign_title" value="<?php  echo $campaign_title ?>"> <?php  echo $required_indicator ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Type"); ?></td>
@@ -175,6 +212,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.18  2011/01/18 23:14:54  gopherit
+ * Added the restrictByCampaignType javascript so that only campaign statuses of the selected campaign type are displayed.
+ *
  * Revision 1.17  2010/12/06 15:54:24  gopherit
  * Minor HTML fixes.
  *
