@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.31 2011/01/18 20:04:16 gopherit Exp $
+ * $Id: new.php,v 1.32 2011/01/20 18:58:12 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -55,7 +55,7 @@ if($rst) {
 $sql2 = "SELECT case_priority_pretty_name, case_priority_id
          FROM case_priorities
          WHERE case_priority_record_status = 'a'
-         ORDER BY by case_priority_id";
+         ORDER BY case_priority_id";
 $rst = $con->execute($sql2);
 
 // defining case_priority_id before the call to getmenu2 means that this
@@ -65,8 +65,9 @@ if ( $rst && !$rst->EOF ) {
     $case_priority_menu = $rst->getmenu2('case_priority_id', $case_priority_id, false);
     $rst->close();
 } else {
-  $case_priority_id = 0;
+    $case_priority_id = 0;
 }
+
 // Get case type menu
 $sql2 = "SELECT case_type_pretty_name, case_type_id
          FROM case_types
@@ -131,7 +132,7 @@ start_page($page_title, true, $msg);
             division=document.getElementById('division_id');
             contact=document.getElementById('contact_id');
             select=document.getElementById('case_type_id');
-            location.href = 'new.php?company_id=<?php echo $company_id; ?>&case_title='+ case_title.value +'&division_id='+division.value + '&contact_id=' + contact.value + '&case_type_id=' + select.value;
+            location.href = 'new.php?company_id=<?php echo $company_id; ?>&case_title='+ encodeURIComponent(case_title.value) +'&division_id='+division.value + '&contact_id=' + contact.value + '&case_type_id=' + select.value;
         }
      //-->
     </script>
@@ -155,11 +156,11 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Contact"); ?></td>
-                <td class=widget_content_form_element><?php  echo $contact_menu ?></td>
+                <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Type"); ?></td>
-                <td class=widget_content_form_element><?php  echo $case_type_menu ?></td>
+                <td class=widget_content_form_element><?php  echo $case_type_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Status"); ?></td>
@@ -170,11 +171,11 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Priority"); ?></td>
-                <td class=widget_content_form_element><?php  echo $case_priority_menu ?></td>
+                <td class=widget_content_form_element><?php echo $case_priority_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Owner"); ?></td>
-                <td class=widget_content_form_element><?php  echo $user_menu ?></td>
+                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Due By"); ?></td>
@@ -252,6 +253,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.32  2011/01/20 18:58:12  gopherit
+ * Added encodeURIComponent() in the restrictByCampaignType() function to prevent strings with special characters from breaking the URI.
+ * Fixed errant case priority SQL query.
+ *
  * Revision 1.31  2011/01/18 20:04:16  gopherit
  * General code cleanup.
  *
