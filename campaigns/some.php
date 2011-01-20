@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.39 2011/01/14 15:51:28 gopherit Exp $
+ * $Id: some.php,v 1.40 2011/01/20 22:39:12 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -140,15 +140,21 @@ if( $rst AND $rst->RowCount() ) {
 /********** SAVED SEARCH ENDS ****/
 
 
-$sql_recently_viewed = "select * from recent_items r, campaigns cam, campaign_types camt, campaign_statuses cams
-where r.user_id = $session_user_id
-and cam.campaign_type_id = camt.campaign_type_id
-and cam.campaign_status_id = cams.campaign_status_id
-and r.on_what_table = 'campaigns'
-and r.recent_action = ''
-and r.on_what_id = cam.campaign_id
-and campaign_record_status = 'a'
-order by r.recent_item_timestamp desc";
+$sql_recently_viewed = "SELECT  cam.campaign_id,
+                                cam.campaign_title,
+                                camt.campaign_type_pretty_name,
+                                cams.campaign_status_pretty_name,
+                                MAX(r.recent_item_timestamp) AS lasttime
+                        FROM recent_items r, campaigns cam, campaign_types camt, campaign_statuses cams
+                        WHERE r.user_id = $session_user_id
+                        AND cam.campaign_type_id = camt.campaign_type_id
+                        AND cam.campaign_status_id = cams.campaign_status_id
+                        AND r.on_what_table = 'campaigns'
+                        AND r.recent_action = ''
+                        AND r.on_what_id = cam.campaign_id
+                        AND campaign_record_status = 'a'
+                        GROUP BY campaign_id
+                        ORDER BY lasttime desc";
 
 $recently_viewed_table_rows = '';
 
@@ -390,6 +396,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.40  2011/01/20 22:39:12  gopherit
+ * FIXED Bug Artifact #3163012 	/campaigns/some.php Recent Items now lists only a single entry for each campaign, sorted chronologically by access.
+ *
  * Revision 1.39  2011/01/14 15:51:28  gopherit
  * Implemented the Campaign Lists functionality to allow launching of campaign workflows on lists of contacts created with /contacts/some.php
  *
