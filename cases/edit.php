@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of cases
  *
- * $Id: edit.php,v 1.26 2006/12/29 07:22:26 ongardie Exp $
+ * $Id: edit.php,v 1.27 2011/01/20 19:15:13 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,16 +14,16 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'confgoto.php');
 
-$case_id = $_GET['case_id'];
-$case_type_id=$_GET['case_type_id'];
+$case_id = (int)$_GET['case_id'];
+$case_type_id = (int)$_GET['case_type_id'];
 $on_what_id=$case_id;
 
 $session_user_id = session_check('','Update');
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
-
+getGlobalVar($return_url, 'return_url');
+if (!$return_url) { $return_url="/opportunities/one.php?opportunity_id=$opportunity_id"; }
 $con = get_xrms_dbconnection();
-// $con->debug = 1;
 
 update_recent_items($con, $session_user_id, "cases", $case_id);
 
@@ -33,15 +33,15 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     $company_id = $rst->fields['company_id'];
-    $division_id = $rst->fields['division_id'];
-    $contact_id = $rst->fields['contact_id'];
+    $division_id = array_key_exists('division_id',$_GET) ? $_GET['division_id'] : $rst->fields['division_id'];
+    $contact_id = array_key_exists('contact_id',$_GET) ? $_GET['contact_id'] : $rst->fields['contact_id'];
     $case_status_id = $rst->fields['case_status_id'];
     $case_priority_id = $rst->fields['case_priority_id'];
 
     if (!$case_type_id)  $case_type_id = $rst->fields['case_type_id'];
 
     $user_id = $rst->fields['user_id'];
-    $case_title = $rst->fields['case_title'];
+    $case_title = array_key_exists('case_title',$_GET) ? $_GET['case_title'] : $rst->fields['case_title'];
     $case_description = $rst->fields['case_description'];
     $due_at = $con->userdate($rst->fields['due_at']);
     $rst->close();
@@ -130,7 +130,7 @@ if ($company_id == 1) { //add special filter for unknown company
 }
 $sql .= "AND contact_record_status = 'a'";
 $rst = $con->execute($sql);
-$contact_menu = $rst->getmenu2('contact_id', $contact_id, false);
+$contact_menu = $rst->getmenu2('contact_id', $contact_id, false, false, 1, 'id="contact_id"');
 $rst->close();
 
 $user_menu = get_user_menu($con, $user_id);
@@ -138,7 +138,7 @@ $user_menu = get_user_menu($con, $user_id);
 //division menu
 $sql2 = "select division_name, division_id from company_division where company_id=$company_id order by division_name";
 $rst = $con->execute($sql2);
-$division_menu = $rst->getmenu2('division_id', $division_id, true);
+$division_menu = $rst->getmenu2('division_id', $division_id, true, false, 1, 'id="division_id"');
 $rst->close();
 
 //case priority list
@@ -172,11 +172,14 @@ confGoTo_includes();
 
 <?php jscalendar_includes(); ?>
 
-    <script language=JavaScript>
+<script type="text/javascript" language=JavaScript>
     <!--
         function restrictByCaseType() {
+            case_title=document.getElementById('case_title');
+            division=document.getElementById('division_id');
+            contact=document.getElementById('contact_id');
             select=document.getElementById('case_type_id');
-            location.href = 'edit.php?case_id=<?php echo $case_id; ?>&case_type_id=' + select.value;
+            location.href = 'edit.php?case_id=<?php echo $case_id; ?>&case_title='+ encodeURIComponent(case_title.value) +'&division_id='+ division.value +'&contact_id='+ contact.value +'&case_type_id=' + select.value;
         }
      //-->
     </script>
@@ -196,7 +199,7 @@ confGoTo_includes();
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Case Title"); ?></td>
-                <td class=widget_content_form_element><input type=text size=40 name=case_title value="<?php  echo $case_title; ?>"> <?php  echo $required_indicator; ?></td>
+                <td class=widget_content_form_element><input type=text size=40 name=case_title id ="case_title" value="<?php  echo $case_title; ?>"> <?php  echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Company"); ?></td>
@@ -204,7 +207,7 @@ confGoTo_includes();
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Division"); ?></td>
-                <td class=widget_content_form_element><?php  echo $division_menu; ?></a></td>
+                <td class=widget_content_form_element><?php  echo $division_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Contact"); ?></td>
@@ -236,7 +239,7 @@ confGoTo_includes();
                 <td class=widget_label_right><?php echo _("Due At"); ?></td>
                 <td class=widget_content_form_element>
                     <input type=text ID="f_date_c" name=due_at value="<?php  echo $due_at; ?>">
-                    <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
+                    <img ID="f_trigger_c" style="CURSOR: pointer" alt="<?php echo _("Due At"); ?>" border=0 src="../img/cal.gif">
                 </td>
             </tr>
             <tr>
@@ -317,6 +320,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.27  2011/01/20 19:15:13  gopherit
+ * Added encodeURIComponent() in the restrictByCampaignType() function to prevent strings with special characters from breaking the URI.
+ * Added case_titel, division_id and contact_id as parameters to the restrictByCaseType() function.
+ *
  * Revision 1.26  2006/12/29 07:22:26  ongardie
  * - Added several case hooks.
  *
