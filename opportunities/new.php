@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.27 2011/01/18 20:02:43 gopherit Exp $
+ * $Id: new.php,v 1.28 2011/01/20 18:03:29 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -19,6 +19,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $company_id = (array_key_exists('company_id',$_GET) ? $_GET['company_id'] : $_POST['company_id']);
 $division_id = (array_key_exists('division_id',$_GET) ? $_GET['division_id'] : $_POST['division_id']);
 $contact_id = (array_key_exists('contact_id',$_GET) ? $_GET['contact_id'] : $_POST['contact_id']);
+$campaign_id = (array_key_exists('campaign_id',$_GET) ? $_GET['campaign_id'] : $_POST['campaign_id']);
 $opportunity_type_id = (array_key_exists('opportunity_type_id',$_GET) ? $_GET['opportunity_type_id'] : $_POST['opportunity_type_id']);
 $opportunity_title = (array_key_exists('opportunity_title',$_GET) ? $_GET['opportunity_title'] : $_POST['opportunity_title']);
 
@@ -60,7 +61,7 @@ $sql2 = "SELECT campaign_title, campaign_id
          ORDER BY campaign_title";
 $rst = $con->execute($sql2);
 if($rst) {
-    $campaign_menu = $rst->getmenu2('campaign_id', false, true);
+    $campaign_menu = $rst->getmenu2('campaign_id', $campaign_id, true, false, 1, 'id=campaign_id');
     $rst->close();
 } else {
     db_error_handler ($con, $sql2);
@@ -139,8 +140,9 @@ start_page($page_title, true, $msg);
             opportunity_title=document.getElementById('opportunity_title');
             division=document.getElementById('division_id');
             contact=document.getElementById('contact_id');
+            campaign=document.getElementById('campaign_id');
             select=document.getElementById('opportunity_type_id');
-            location.href = 'new.php?company_id=<?php echo $company_id; ?>&opportunity_title='+ opportunity_title.value +'&division_id='+division.value + '&contact_id=' + contact.value + '&opportunity_type_id=' + select.value;
+            location.href = 'new.php?company_id=<?php echo $company_id; ?>&opportunity_title='+ encodeURIComponent(opportunity_title.value) +'&division_id='+ division.value +'&contact_id='+ contact.value +'&campaign_id='+ campaign.value +'&opportunity_type_id='+ select.value;
         }
      //-->
 </script>
@@ -156,7 +158,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Opportunity Title"); ?></td>
-                <td class=widget_content_form_element><input type="text" size="40" name="opportunity_title" id="opportunity_title"> <?php echo $required_indicator; ?></td>
+                <td class=widget_content_form_element><input type="text" size="40" name="opportunity_title" id="opportunity_title" value="<?php echo $opportunity_title; ?>"> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Division"); ?></td>
@@ -280,6 +282,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.28  2011/01/20 18:03:29  gopherit
+ * Added encodeURIComponent() in the restrictByCampaignType() function to prevent strings with special characters from breaking the URI.
+ * Added campaign_id to the list of parameters passed to the restrictByCampaignType() function.
+ *
  * Revision 1.27  2011/01/18 20:02:43  gopherit
  * FIXED: Bug Artifact #3161033 	/opportunities/new.php now only displays the statuses of the selected opportunity type.
  *
