@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of campaigns
  *
- * $Id: new.php,v 1.18 2011/01/18 23:14:54 gopherit Exp $
+ * $Id: new.php,v 1.19 2011/01/20 17:13:52 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -83,20 +83,15 @@ start_page($page_title, true, $msg);
         function restrictBycampaignType() {
             campaign_title=document.getElementById('campaign_title');
             select=document.getElementById('campaign_type_id');
-            location.href = 'new.php?campaign_title='+ campaign_title.value + '&campaign_type_id=' + select.value;
+            location.href = 'new.php?campaign_title='+ encodeURIComponent(campaign_title.value) + '&campaign_type_id=' + select.value;
         }
      //-->
-    </script>
+</script>
 
 <div id="Main">
     <div id="Content">
 
         <form action=new-2.php onsubmit="javascript: return validate();" method=post>
-<?php
-// company_id is not generated in this script, nor passed in, nor
-// is it used by new-2.php, so, it's hereby deleted.
-//echo '<input type=hidden name=company_id value="'.$company_id.'">';
-?>
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2><?php echo _("Campaign Details"); ?></td>
@@ -153,9 +148,7 @@ start_page($page_title, true, $msg);
         &nbsp;
 
     </div>
-
 </div>
-
 
 <script language="JavaScript" type="text/javascript">
 
@@ -212,6 +205,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.19  2011/01/20 17:13:52  gopherit
+ * Added encodeURIComponent() in the restrictByCampaignType() function to prevent strings with special characters from breaking the URI.
+ *
  * Revision 1.18  2011/01/18 23:14:54  gopherit
  * Added the restrictByCampaignType javascript so that only campaign statuses of the selected campaign type are displayed.
  *
