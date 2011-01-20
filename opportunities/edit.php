@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.35 2011/01/18 22:24:03 gopherit Exp $
+ * $Id: edit.php,v 1.36 2011/01/20 18:36:01 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -22,15 +22,15 @@ $session_user_id = session_check('','Update');
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 
-$division_id = (array_key_exists('division_id',$_GET) ? $_GET['division_id'] : '' );
-$contact_id = (array_key_exists('contact_id',$_GET) ? $_GET['contact_id'] : '' );
-$opportunity_type_id = (array_key_exists('opportunity_type_id',$_GET) ? $_GET['opportunity_type_id'] : '' );
-$opportunity_title = (array_key_exists('opportunity_title',$_GET) ? $_GET['opportunity_title'] : '' );
+$division_id = (array_key_exists('division_id',$_GET) ? $_GET['division_id'] : $_POST['division_id']);
+$contact_id = (array_key_exists('contact_id',$_GET) ? $_GET['contact_id'] : $_POST['contact_id']);
+$campaign_id = (array_key_exists('campaign_id',$_GET) ? $_GET['campaign_id'] : $_POST['campaign_id']);
+$opportunity_type_id = (array_key_exists('opportunity_type_id',$_GET) ? $_GET['opportunity_type_id'] : $_POST['opportunity_type_id']);
+$opportunity_title = (array_key_exists('opportunity_title',$_GET) ? $_GET['opportunity_title'] : $_POST['opportunity_title']);
 
 getGlobalVar($return_url, 'return_url');
 if (!$return_url) { $return_url="/opportunities/one.php?opportunity_id=$opportunity_id"; }
 $con = get_xrms_dbconnection();
-// $con->debug = 1;
 
 update_recent_items($con, $session_user_id, "opportunities", $opportunity_id);
 
@@ -125,7 +125,7 @@ $sql2 = "select campaign_title, campaign_id from campaigns, campaign_statuses
          campaign_statuses.campaign_status_id = campaigns.campaign_status_id 
          order by campaign_title";
 $rst = $con->execute($sql2);
-$campaign_menu = $rst->getmenu2('campaign_id', $campaign_id, true);
+$campaign_menu = $rst->getmenu2('campaign_id', $campaign_id, true, false, 1, 'id=campaign_id');
 $rst->close();
 
 //division menu
@@ -177,8 +177,9 @@ confGoTo_includes();
             opportunity_title=document.getElementById('opportunity_title');
             division=document.getElementById('division_id');
             contact=document.getElementById('contact_id');
+            campaign=document.getElementById('campaign_id');
             select=document.getElementById('opportunity_type_id');
-            location.href = 'new.php?company_id=<?php echo $company_id; ?>&opportunity_title='+ opportunity_title.value +'&division_id='+division.value + '&contact_id=' + contact.value + '&opportunity_type_id=' + select.value;
+            location.href = 'new.php?company_id=<?php echo $company_id; ?>&opportunity_title='+ encodeURIComponent(opportunity_title.value) +'&division_id='+ division.value +'&contact_id='+ contact.value +'&campaign_id='+ campaign.value +'&opportunity_type_id='+ select.value;
         }
      //-->
 function logTime() {
@@ -216,7 +217,7 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Opportunity Title"); ?></td>
-                <td class=widget_content_form_element><input type=text size=40 name="opportunity_title" id="opportunity_title" value="<?php  echo $opportunity_title; ?>"> <?php  echo $required_indicator; ?></td>
+                <td class=widget_content_form_element><input type="text" size="40" name="opportunity_title" id="opportunity_title" value="<?php echo $opportunity_title; ?>"> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Company"); ?></td>
@@ -240,9 +241,8 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Status"); ?></td>
-                <td class=widget_content_form_element><?php  echo $opportunity_status_menu; ?>
-                &nbsp;
-                <a href="#" onclick="javascript:window.open('opportunity-view.php?opportunity_type_id=<?php echo $opportunity_type_id; ?>');"><?php echo _("Status Definitions"); ?></a>
+                <td class=widget_content_form_element><?php echo $opportunity_status_menu; ?>
+                <a href="opportunity-view.php?opportunity_type_id=<?php echo $opportunity_type_id ?>" target="_blank"><?php echo _("Status Definitions"); ?></a>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Owner"); ?></td>
@@ -272,7 +272,6 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Close Date"); ?></td>
-
                 <td class=widget_content_form_element>
                     <input type=text ID="f_date_c" name=close_at value="<?php  echo $close_at; ?>">
                     <img ID="f_trigger_c" style="CURSOR: pointer;" border=0 title="<?php echo _('Closing Date'); ?>" alt="<?php echo _('Closing Date'); ?>" src="../img/cal.gif">
@@ -365,6 +364,11 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.36  2011/01/20 18:36:01  gopherit
+ * Added encodeURIComponent() in the restrictByCampaignType() function to prevent strings with special characters from breaking the URI.
+ * Added campaign_id to the list of parameters passed to the restrictByCampaignType() function.
+ * Minor HTML fixes.
+ *
  * Revision 1.35  2011/01/18 22:24:03  gopherit
  * FIXED: Bug Artifact #3161127 /opportunities/edit.php now displays only the opportunity statuses of the selected opportunity type.
  *
