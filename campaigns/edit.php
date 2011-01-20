@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of campaigns
  *
- * $Id: edit.php,v 1.19 2011/01/20 16:46:53 gopherit Exp $
+ * $Id: edit.php,v 1.20 2011/01/20 22:21:05 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,7 +14,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'confgoto.php');
 
-$campaign_id = $_GET['campaign_id'];
+$campaign_id = (int)$_GET['campaign_id'];
 $session_user_id = session_check('','Update');
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
@@ -32,9 +32,9 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     $campaign_status_id = $rst->fields['campaign_status_id'];
-    $campaign_type_id = $rst->fields['campaign_type_id'];
+    if (!$campaign_type_id) $campaign_type_id = $rst->fields['campaign_type_id'];
     $user_id = $rst->fields['user_id'];
-    $campaign_title = $rst->fields['campaign_title'];
+    if (!$campaign_title) $campaign_title = $rst->fields['campaign_title'];
     $campaign_description = $rst->fields['campaign_description'];
     $starts_at = $con->userdate($rst->fields['starts_at']);
     $ends_at = $con->userdate($rst->fields['ends_at']);
@@ -103,8 +103,9 @@ start_page($page_title, true, $msg);
     <!--
         function restrictBycampaignType() {
             campaign_title=document.getElementById('campaign_title');
+            campaign_id=document.getElementById('campaign_id');
             select=document.getElementById('campaign_type_id');
-            location.href = 'new.php?campaign_title='+ encodeURIComponent(campaign_title.value) + '&campaign_type_id=' + select.value;
+            location.href = 'edit.php?campaign_id=<?php echo $campaign_id; ?>&campaign_title='+ encodeURIComponent(campaign_title.value) + '&campaign_type_id=' + select.value;
         }
      //-->
 </script>
@@ -233,6 +234,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.20  2011/01/20 22:21:05  gopherit
+ * Modified so the opportunity SQL query does not overwrite passed-in parameters.
+ * The javascript restrictByCampaignType() was incorrectly calling new.php instead of edit.php and was missing the campaign_id parameter.
+ *
  * Revision 1.19  2011/01/20 16:46:53  gopherit
  * Added the restrictByCampaignType javascript so that only campaign statuses of the selected campaign type are displayed.
  *
