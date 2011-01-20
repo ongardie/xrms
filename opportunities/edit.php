@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.36 2011/01/20 18:36:01 gopherit Exp $
+ * $Id: edit.php,v 1.37 2011/01/20 22:10:29 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -22,6 +22,7 @@ $session_user_id = session_check('','Update');
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 
+$company_id = (array_key_exists('company_id',$_GET) ? $_GET['company_id'] : $_POST['company_id']);
 $division_id = (array_key_exists('division_id',$_GET) ? $_GET['division_id'] : $_POST['division_id']);
 $contact_id = (array_key_exists('contact_id',$_GET) ? $_GET['contact_id'] : $_POST['contact_id']);
 $campaign_id = (array_key_exists('campaign_id',$_GET) ? $_GET['campaign_id'] : $_POST['campaign_id']);
@@ -42,21 +43,22 @@ and opportunity_id = $opportunity_id";
 $rst = $con->execute($sql);
 
 if ($rst) {
-    $company_id = $rst->fields['company_id'];
-    $division_id = $rst->fields['division_id'];
-    $company_name = $rst->fields['company_name'];
-    $contact_id = $rst->fields['contact_id'];
-    $campaign_id = $rst->fields['campaign_id'];
+    if (!$company_id) $company_id = $rst->fields['company_id'];
+    if (!$division_id) $division_id = $rst->fields['division_id'];
+    if (!$contact_id) $contact_id = $rst->fields['contact_id'];
+    if (!$campaign_id) $campaign_id = $rst->fields['campaign_id'];
     $opportunity_status_id = $rst->fields['opportunity_status_id'];
     if (!$opportunity_type_id) $opportunity_type_id = $rst->fields['opportunity_type_id'];
     $user_id = $rst->fields['user_id'];
-    $opportunity_title = $rst->fields['opportunity_title'];
+    if (!$opportunity_title) $opportunity_title = $rst->fields['opportunity_title'];
     $opportunity_description = $rst->fields['opportunity_description'];
     $size = $rst->fields['size'];
     $probability = $rst->fields['probability'];
     $close_at = $con->userdate($rst->fields['close_at']);
     $rst->close();
 }
+
+$company_name = fetch_company_name($con, $company_id);
 
 $sql = "select c.category_id, category_pretty_name
 from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
@@ -179,7 +181,7 @@ confGoTo_includes();
             contact=document.getElementById('contact_id');
             campaign=document.getElementById('campaign_id');
             select=document.getElementById('opportunity_type_id');
-            location.href = 'new.php?company_id=<?php echo $company_id; ?>&opportunity_title='+ encodeURIComponent(opportunity_title.value) +'&division_id='+ division.value +'&contact_id='+ contact.value +'&campaign_id='+ campaign.value +'&opportunity_type_id='+ select.value;
+            location.href = 'edit.php?company_id=<?php echo $company_id; ?>&opportunity_title='+ encodeURIComponent(opportunity_title.value) +'&division_id='+ division.value +'&contact_id='+ contact.value +'&campaign_id='+ campaign.value +'&opportunity_type_id='+ select.value;
         }
      //-->
 function logTime() {
@@ -364,6 +366,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.37  2011/01/20 22:10:29  gopherit
+ * Modified so the opportunity SQL query does not overwrite passed-in parameters.
+ * The javascript restrictByCampaignType() was incorrectly calling new.php instead of edit.php
+ *
  * Revision 1.36  2011/01/20 18:36:01  gopherit
  * Added encodeURIComponent() in the restrictByCampaignType() function to prevent strings with special characters from breaking the URI.
  * Added campaign_id to the list of parameters passed to the restrictByCampaignType() function.
