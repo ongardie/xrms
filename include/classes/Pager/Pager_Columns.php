@@ -10,7 +10,7 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.29 2006/07/25 19:53:44 vanmer Exp $
+ * $Id: Pager_Columns.php,v 1.30 2011/01/24 18:56:31 gopherit Exp $
  */
 require_once('view_functions.php');
 
@@ -687,7 +687,7 @@ class Pager_Columns {
 		
         $s = $ams->getElementJs(false);
 
-        $renderer =& new HTML_QuickForm_Renderer_Default();
+        $renderer = new HTML_QuickForm_Renderer_Default();
 
         $form_template = <<<END
         <script language="JavaScript" src="{$http_site_root}/js/jsSelect.js"></script>
@@ -756,6 +756,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.30  2011/01/24 18:56:31  gopherit
+ * FIXED: As of PHP 5.3, assigning the return value of new by reference is deprecated.
+ *
  * Revision 1.29  2006/07/25 19:53:44  vanmer
  * - added informative debug output
  *
