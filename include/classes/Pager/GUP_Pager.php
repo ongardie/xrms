@@ -40,7 +40,7 @@
  *
  * @example GUP_Pager.doc.7.php Another pager example showing Caching
  *
- * $Id: GUP_Pager.php,v 1.54 2010/09/30 15:59:23 gopherit Exp $
+ * $Id: GUP_Pager.php,v 1.55 2011/01/24 18:37:32 gopherit Exp $
  */
 
 
@@ -204,8 +204,8 @@ class GUP_Pager {
             $this->PrintDebug("SQL-only mode (no data or callbacks), not using cache");
             $this->use_cached    = false;
         }
-        // don't use the cache if there is no sql and the data is not
-        if(isset($data) && !function_exists($data)) {
+        // don't use the cache if there is no sql and the data is not a string with the name of a callback function
+        if(isset($data) AND !((is_string($data)) AND function_exists($data))) {
             $this->PrintDebug("Data-only mode (no SQL or callbacks), not using cache");
             $this->use_cached    = false;
         }
@@ -1275,6 +1275,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.55  2011/01/24 18:37:32  gopherit
+ * FIXED: function_exists() expects a string which triggers a warning when an array of data is passed in.
+ *
  * Revision 1.54  2010/09/30 15:59:23  gopherit
  * Fixed Bug Artifact #3077112 - Duplicate (empty) Pager rows when adding 'Pager_TD_CSS_All_Rows' => 'overdue_activity ' to select rows (array data source).
  *
