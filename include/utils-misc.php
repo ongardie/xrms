@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.194 2010/01/11 22:27:23 gopherit Exp $
+ * $Id: utils-misc.php,v 1.195 2011/01/24 18:52:39 gopherit Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -1398,7 +1398,7 @@ function current_page($vars = false, $anchor = false) {
 
         //if there is no anchor specified, split CGI parameters into parameters and anchor
         if(!$anchor) {
-            list($parts[1], $anchor) = split('#', $parts[1], 2);
+            list($parts[1], $anchor) = explode('#', $parts[1], 2);
         }
 
         //split the CGI parameters (without anchor tag) into array called parts
@@ -2124,6 +2124,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.195  2011/01/24 18:52:39  gopherit
+ * As of PHP 5.3, split() has been deprecated.
+ *
  * Revision 1.194  2010/01/11 22:27:23  gopherit
  * Added the address name in get_formatted_address() around line 1059.  Also, added the address body for formatted addresses.  Otherwise, formatted addresses ended up displaying blank lines in the selection box.
  *
