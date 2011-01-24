@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.25 2007/05/15 23:17:30 ongardie Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.26 2011/01/24 21:02:58 gopherit Exp $
  */
 
 
@@ -245,7 +245,7 @@
 	* @return string HTML widgets
 	*/
 	function GetForm($current_form_action, $show_submit = true) {
-		$renderer =& new HTML_QuickForm_Renderer_Default();
+		$renderer = new HTML_QuickForm_Renderer_Default();
 
 		$renderer->setFormTemplate($this->form_template);
 		$renderer->setElementTemplate($this->element_template);
@@ -704,6 +704,9 @@ END;
 
 /**
 * $Log: ADOdb_QuickForm.php,v $
+* Revision 1.26  2011/01/24 21:02:58  gopherit
+* FIXED: As of PHP 5.3, assigning the return value of new by reference is deprecated.
+*
 * Revision 1.25  2007/05/15 23:17:30  ongardie
 * - Addresses now associate with on_what_table, on_what_id instead of company_id.
 *
