@@ -4,7 +4,7 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.15 2011/01/24 21:20:50 gopherit Exp $
+ * $Id: Calendar_View.php,v 1.16 2011/01/24 22:41:01 gopherit Exp $
  */
 
 global $include_directory;
@@ -138,7 +138,7 @@ function Render($activity_data) {
 
     $view_mode_buttons = "
             <tr>
-                <td class=widget_label colspan=\"9\">
+                <td class=widget_label_center colspan=\"10\">
                     <input type=\"button\" class=\"button\" onclick=\"javascript:document.{$this->form_name}.activities_widget_type.value='list'; document.{$this->form_name}.submit();\" value=\""._("List View")."\">
                     <input type=\"button\" class=\"button\" onclick=\"javascript:document.{$this->form_name}.calendar_range.value='week'; document.{$this->form_name}.submit();\" value=\""._("Week View")."\">
                     <input type=\"button\" class=\"button\" onclick=\"javascript:document.{$this->form_name}.calendar_range.value='month'; document.{$this->form_name}.submit();\" value=\""._("Month View")."\">" .
@@ -255,16 +255,16 @@ function Render($activity_data) {
              <td colspan=30 class=widget_content>
               <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
                <tr>
-                <td class=\"widget_label center\">
+                <td class=\"widget_label_center\" style=\"width: 33.3%;\">
                     <input class=button type=button value=\"$prev_month_display\" onclick=\"javascript:calendar_previous_month();\">
                     <!--
                     <input class=button type=button value=\""._("Previous Day")."\" onclick=\"javascript:calendar_previous_day();\">
                     -->
                 </td>
-                <td class=\"widget_label center\">
+                <td class=\"widget_label_center\" style=\"width: 33.3%;\">
                  $display_date
                 </td>
-                <td class=\"widget_label center\">
+                <td class=\"widget_label_center\" style=\"width: 33.3%;\">
                     <!--
                     <input class=button type=button value=\""._("Next Day")."\" onclick=\"javascript:calendar_next_day();\">
                     -->
@@ -446,19 +446,15 @@ function Render($activity_data) {
              <td colspan=30 class=widget_content>
               <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
                <tr>
-                <td class=\"widget_label center\">
+                <td class=\"widget_label_center\" style=\"width: 33.3%;\">
                     <input class=button type=button value=\""._("Previous Week")."\" onclick=\"javascript:calendar_previous_week();\">
-                    
                     <input class=button type=button value=\""._("Previous Day")."\" onclick=\"javascript:calendar_previous_day();\">
-                    
                 </td>
-                <td class=\"widget_label center\">
+                <td class=\"widget_label_center\" style=\"width: 33.3%;\">
                  $display_date
                 </td>
-                <td class=\"widget_label center\">
-                    
+                <td class=\"widget_label_center\" style=\"width: 33.3%;\">
                     <input class=button type=button value=\""._("Next Day")."\" onclick=\"javascript:calendar_next_day();\">
-                    
                     <input class=button type=button value=\""._("Next Week")."\" onclick=\"javascript:calendar_next_week();\">
                 </td>
                </tr>
@@ -664,6 +660,9 @@ function GetCalendarSQLOffset() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.16  2011/01/24 22:41:01  gopherit
+* Minor HTML tweaks.
+*
 * Revision 1.15  2011/01/24 21:20:50  gopherit
 * FIXED: As of PHP 5.3, function ereg_replace() is deprecated
 *
