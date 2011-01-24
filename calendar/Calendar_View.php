@@ -4,7 +4,7 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.14 2009/02/05 23:06:41 randym56 Exp $
+ * $Id: Calendar_View.php,v 1.15 2011/01/24 21:20:50 gopherit Exp $
  */
 
 global $include_directory;
@@ -650,9 +650,9 @@ function GetCalendarSQLOffset() {
     }
 
     $offset_start = $this->con->OffsetDate($calendar_view_start);
-    $offset_start = ereg_replace(",",".",$offset_start);
+    $offset_start = preg_replace("|,|",".",$offset_start);
     $offset_end = $this->con->OffsetDate($calendar_view_end);
-    $offset_end = ereg_replace(",",".",$offset_end);
+    $offset_end = preg_replace("|,|",".",$offset_end);
     $offset_sql = "\nAND a.ends_at > $offset_start AND a.scheduled_at < $offset_end";
 
     //echo "GetCalendarSQLOffset $this->calendar_type, $this->start_date range is $calendar_view_start-$calendar_view_end<br>";
@@ -664,6 +664,9 @@ function GetCalendarSQLOffset() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.15  2011/01/24 21:20:50  gopherit
+* FIXED: As of PHP 5.3, function ereg_replace() is deprecated
+*
 * Revision 1.14  2009/02/05 23:06:41  randym56
 * - Bug fixes and updates in several scripts. Prep for new release.
 * - Added ability to set $datetime_format in vars.php
