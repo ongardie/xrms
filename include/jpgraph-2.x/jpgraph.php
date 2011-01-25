@@ -4,7 +4,7 @@
 // Description:	PHP4 Graph Plotting library. Base module.
 // Created: 	2001-01-08
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph.php,v 1.3 2005/04/01 17:13:03 daturaarutad Exp $
+// Ver:		$Id: jpgraph.php,v 1.4 2011/01/25 16:15:24 gopherit Exp $
 //
 // License:	This code is released under QPL 1.0
 // Copyright (C) 2001,2002,2003,2004 Johan Persson Aditus Consulting
@@ -5623,7 +5623,7 @@ class Image {
 
     // Get the specific height for a text string
     function GetTextHeight($txt="",$angle=0) {
-	$tmp = split("\n",$txt);
+	$tmp = explode("\n",$txt);
 	$n = count($tmp);
 	$m=0;
 	for($i=0; $i< $n; ++$i)
@@ -5668,7 +5668,7 @@ class Image {
     // Get actual width of text in absolute pixels
     function GetTextWidth($txt,$angle=0) {
 
-	$tmp = split("\n",$txt);
+	$tmp = explode("\n",$txt);
 	$n = count($tmp);
 	if( $this->font_family <= FF_FONT2+1 ) {
 
@@ -5819,8 +5819,8 @@ class Image {
 	    }
 	}
 	else {
-	    if( ereg("\n",$txt) ) { 
-		$tmp = split("\n",$txt);
+	    if( preg_match("|\n|",$txt) ) {
+		$tmp = explode("\n",$txt);
 		for($i=0; $i < count($tmp); ++$i) {
 		    $w1 = $this->GetTextWidth($tmp[$i]);
 		    if( $paragraph_align=="left" ) {
@@ -5949,7 +5949,7 @@ class Image {
 	    $oy=$y;
 	}
 
-	if( !ereg("\n",$txt) || ($dir>0 && ereg("\n",$txt)) ) {
+	if( !preg_match("|\n|",$txt) || ($dir>0 && preg_match("|\n|",$txt)) ) {
 	    // Format a single line
 
 	    $txt = $this->AddTxtCR($txt);
