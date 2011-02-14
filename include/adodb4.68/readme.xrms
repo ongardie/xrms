@@ -1,0 +1,130 @@
+adodb.inc.php and adodb-lib.inc.php have been patched to allow a "Count Query" to be 
+passed into PageExecute() and CachePageExecute().  The patch is necessary to allow
+queries that contain GROUP BY clauses to be used by the ADOdb/GUP_Pager pager.
+
+The diffs are given below.
+
+
+
+Index: adodb-lib.inc.php
+===================================================================
+RCS file: /cvsroot/xrms/xrms/include/adodb/adodb-lib.inc.php,v
+retrieving revision 1.6
+diff -r1.6 adodb-lib.inc.php
+288c288
+< function _adodb_getcount(&$zthis, $sql,$inputarr=false,$secs2cache=0) 
+---
+> function _adodb_getcount(&$zthis, $sql,$inputarr=false,$secs2cache=0, $countsql='') 
+292,308c292,299
+< 	 if (preg_match("/^\s*SELECT\s+DISTINCT/is", $sql) || preg_match('/\s+GROUP\s+BY\s+/is',$sql)) {
+< 		// ok, has SELECT DISTINCT or GROUP BY so see if we can use a table alias
+< 		// but this is only supported by oracle and postgresql...
+< 		if ($zthis->dataProvider == 'oci8') {
+< 			
+< 			$rewritesql = preg_replace('/(\sORDER\s+BY\s.*)/is','',$sql);
+< 			
+< 			// Allow Oracle hints to be used for query optimization, Chris Wrye
+< 			if (preg_match('#/\\*+.*?\\*\\/#', $sql, $hint)) {
+< 				$rewritesql = "SELECT ".$hint[0]." COUNT(*) FROM (".$rewritesql.")"; 
+< 			} else
+< 				$rewritesql = "SELECT COUNT(*) FROM (".$rewritesql.")"; 
+< 			
+< 		} else if ( $zthis->databaseType == 'postgres' || $zthis->databaseType == 'postgres7')  {
+< 			
+< 			$info = $zthis->ServerInfo();
+< 			if (substr($info['version'],0,3) >= 7.1) { // good till version 999
+---
+> 	if($countsql) {
+> 		$rewritesql = $countsql;
+> 	} else {
+> 		 if (preg_match("/^\s*SELECT\s+DISTINCT/is", $sql) || preg_match('/\s+GROUP\s+BY\s+/is',$sql)) {
+> 			// ok, has SELECT DISTINCT or GROUP BY so see if we can use a table alias
+> 			// but this is only supported by oracle and postgresql...
+> 			if ($zthis->dataProvider == 'oci8') {
+> 				
+310c301,314
+< 				$rewritesql = "SELECT COUNT(*) FROM ($rewritesql) _ADODB_ALIAS_";
+---
+> 				
+> 				// Allow Oracle hints to be used for query optimization, Chris Wrye
+> 				if (preg_match('#/\\*+.*?\\*\\/#', $sql, $hint)) {
+> 					$rewritesql = "SELECT ".$hint[0]." COUNT(*) FROM (".$rewritesql.")"; 
+> 				} else
+> 					$rewritesql = "SELECT COUNT(*) FROM (".$rewritesql.")"; 
+> 				
+> 			} else if ( $zthis->databaseType == 'postgres' || $zthis->databaseType == 'postgres7')  {
+> 				
+> 				$info = $zthis->ServerInfo();
+> 				if (substr($info['version'],0,3) >= 7.1) { // good till version 999
+> 					$rewritesql = preg_replace('/(\sORDER\s+BY\s.*)/is','',$sql);
+> 					$rewritesql = "SELECT COUNT(*) FROM ($rewritesql) _ADODB_ALIAS_";
+> 				}
+311a316,324
+> 		} else { 
+> 			// now replace SELECT ... FROM with SELECT COUNT(*) FROM
+> 			
+> 			$rewritesql = preg_replace(
+> 						'/^\s*SELECT\s.*\s+FROM\s/Uis','SELECT COUNT(*) FROM ',$sql);
+> 			
+> 			// fix by alexander zhukov, alex#unipack.ru, because count(*) and 'order by' fails 
+> 			// with mssql, access and postgresql. Also a good speedup optimization - skips sorting!
+> 			$rewritesql = preg_replace('/(\sORDER\s+BY\s.*)/is','',$rewritesql); 
+313,322c326
+< 	} else { 
+< 		// now replace SELECT ... FROM with SELECT COUNT(*) FROM
+< 		
+< 		$rewritesql = preg_replace(
+< 					'/^\s*SELECT\s.*\s+FROM\s/Uis','SELECT COUNT(*) FROM ',$sql);
+< 		
+< 		// fix by alexander zhukov, alex#unipack.ru, because count(*) and 'order by' fails 
+< 		// with mssql, access and postgresql. Also a good speedup optimization - skips sorting!
+< 		$rewritesql = preg_replace('/(\sORDER\s+BY\s.*)/is','',$rewritesql); 
+< 	}
+---
+> 	}
+376c380
+< 						$inputarr=false, $secs2cache=0) 
+---
+> 						$inputarr=false, $secs2cache=0, $countsql='') 
+388c392
+< 	$qryRecs = _adodb_getcount($zthis,$sql,$inputarr,$secs2cache);
+---
+> 	$qryRecs = _adodb_getcount($zthis,$sql,$inputarr,$secs2cache, $countsql);
+
+
+
+
+
+Index: adodb.inc.php
+===================================================================
+RCS file: /cvsroot/xrms/xrms/include/adodb/adodb.inc.php,v
+retrieving revision 1.14
+diff -r1.14 adodb.inc.php
+2341c2341
+< 	function &PageExecute($sql, $nrows, $page, $inputarr=false, $secs2cache=0) 
+---
+> 	function &PageExecute($sql, $nrows, $page, $inputarr=false, $secs2cache=0, $countsql='') 
+2345c2345
+< 		if ($this->pageExecuteCountRows) $rs =& _adodb_pageexecute_all_rows($this, $sql, $nrows, $page, $inputarr, $secs2cache);
+---
+> 		if ($this->pageExecuteCountRows) $rs =& _adodb_pageexecute_all_rows($this, $sql, $nrows, $page, $inputarr, $secs2cache, $countsql);
+2363c2363
+< 	function &CachePageExecute($secs2cache, $sql, $nrows, $page,$inputarr=false) 
+---
+> 	function &CachePageExecute($secs2cache, $sql, $nrows, $page,$inputarr=false, $countsql='') 
+2371c2371
+< 		$rs =& $this->PageExecute($sql,$nrows,$page,$inputarr,$secs2cache);
+---
+> 		$rs =& $this->PageExecute($sql,$nrows,$page,$inputarr,$secs2cache, $countsql='');
+
+
+/**
+* $Log: readme.xrms,v $
+* Revision 1.1  2011/02/14 17:59:14  gopherit
+* Moved the old ADOdb library (version 4.68) into /include/adodb4.68
+*
+* Revision 1.1  2005/07/07 03:23:38  daturaarutad
+* New file to track XRMS patches to the ADOdb library
+*
+*/
+

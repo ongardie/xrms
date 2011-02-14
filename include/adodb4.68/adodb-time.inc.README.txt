@@ -1,0 +1,4 @@
+As of 7/19/2004, the latest sources for adodb-time.inc.php
+were obtained from:
+
+http://phplens.com/phpeverywhere/adodb_date_library?PHPSESSID=b3ba8cecadd3b3ea996cca3e4f0ff294
