@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: update.php,v 1.116 2011/01/14 15:51:28 gopherit Exp $
+ * $Id: update.php,v 1.117 2011/02/14 17:09:42 gopherit Exp $
  */
 
 // where do we include from
@@ -54,7 +54,7 @@ $dict = NewDataDictionary( $con );
 $ret=get_admin_preference($con, 'xrms_version');
 $allow_old_upgrade=true;
 
-$versions = array('1.0', '1.99', '1.99.1', '1.99.2', '1.99.3', '1.99.4', '1.99.5', '1.99.6');
+$versions = array('1.0', '1.99', '1.99.1', '1.99.2', '1.99.3', '1.99.4', '1.99.5', '1.99.6', '1.99.7');
 
 if ((!$ret OR in_array($ret, $versions)) AND $allow_old_upgrade) {
     $con->close();
@@ -177,6 +177,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.117  2011/02/14 17:09:42  gopherit
+ * Fixed the missing user_preference_name field for the html_activity_notes preference in the user_preferences_table.  Database version 1.99.8
+ *
  * Revision 1.116  2011/01/14 15:51:28  gopherit
  * Implemented the Campaign Lists functionality to allow launching of campaign workflows on lists of contacts created with /contacts/some.php
  *

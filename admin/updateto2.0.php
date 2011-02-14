@@ -9,7 +9,7 @@
  * @author Ivaylo Boiadjiev <iboiadjiev@360team.ca>, 360 TEAM Ltd.
  * @author XRMS Development Team
  *
- * $Id: updateto2.0.php,v 1.30 2011/01/14 15:51:28 gopherit Exp $
+ * $Id: updateto2.0.php,v 1.31 2011/02/14 17:09:42 gopherit Exp $
  */
 
 // where do we include from
@@ -77,9 +77,15 @@ $sql ="CREATE TABLE campaign_lists (
 //execute
 $rst = $con->execute($sql);
 
+// Fix the missing user_preference_name field for the html_activity_notes preference in the user_preferences_table
+$sql = "UPDATE user_preferences up, user_preference_types upt
+        SET up.user_preference_name = 'html_activity_notes'
+        WHERE up.user_preference_type_id = upt.user_preference_type_id
+        AND upt.user_preference_name = 'html_activity_notes'";
+$rst = $con->execute($sql);
 
 // @TODO: FINAL STEP BEFORE WE ARE AT 2.0.0, SET XRMS VERSION TO 2.0.0 IN PREFERENCES TABLE
-set_admin_preference($con, 'xrms_version', '1.99.7');
+set_admin_preference($con, 'xrms_version', '1.99.8');
 
 do_hook_function('xrms_update', $con);
 
@@ -103,6 +109,9 @@ end_page();
 
 /**
  * $Log: updateto2.0.php,v $
+ * Revision 1.31  2011/02/14 17:09:42  gopherit
+ * Fixed the missing user_preference_name field for the html_activity_notes preference in the user_preferences_table.  Database version 1.99.8
+ *
  * Revision 1.30  2011/01/14 15:51:28  gopherit
  * Implemented the Campaign Lists functionality to allow launching of campaign workflows on lists of contacts created with /contacts/some.php
  *
