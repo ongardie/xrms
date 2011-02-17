@@ -3,16 +3,15 @@
 /**
  * functions/decode/ns_4551_1.php
  *
- * Copyright (c) 2004 The SquirrelMail Project Team
- * Licensed under the GNU GPL. For full terms see the file COPYING.
- *
  * This file contains ns_4551-1 decoding function that is needed to read
  * ns_4551-1 encoded mails in non-ns_4551-1 locale.
  *
  * This is the same as ISO-646-NO and is used by some
- * Microsoft programs when sending Norwegian characters 
+ * Microsoft programs when sending Norwegian characters
  *
- * @version $Id: ns_4551_1.php,v 1.1 2004/06/26 14:53:01 braverock Exp $
+ * @copyright 2004-2010 The SquirrelMail Project Team
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version $Id: ns_4551_1.php,v 1.2 2011/02/17 23:20:49 gopherit Exp $
  * @package squirrelmail
  * @subpackage decode
  */
@@ -21,7 +20,7 @@
  * ns_4551_1 decoding function
  *
  * @param string $string
- * @return string 
+ * @return string
  */
 function charset_decode_ns_4551_1 ($string) {
     /*
@@ -33,4 +32,3 @@ function charset_decode_ns_4551_1 ($string) {
      */
     return strtr ($string, "[\\]{|}", "ÆØÅæøå");
 }
-?>

@@ -19,7 +19,7 @@
  * Internally the output character set is used. Other characters are
  * encoded using Unicode entities according to HTML 4.0.
  *
- * @version $Id: i18n.php,v 1.11 2006/05/03 20:45:35 vanmer Exp $
+ * @version $Id: i18n.php,v 1.12 2011/02/17 23:20:49 gopherit Exp $
  * @package xrms
  * @subpackage i18n
  */
@@ -28,6 +28,41 @@ if ( !defined('IN_XRMS') )
 {
   die('Hacking attempt');
   exit;
+}
+
+/**
+ * Tests if string contains 8bit symbols.
+ *
+ * Copyright (c) 1999-2011 The Squirrelmail Project Team
+ * Licensed under the GNU GPL. For full terms see the file COPYING.
+ * Ported for use in XRMS by Ivaylo Boiadjiev
+ *
+ * If charset is not set, function defaults to default_charset.
+ * $default_charset global must be set correctly if $charset is
+ * not used.
+ * @param string $string tested string
+ * @param string $charset charset used in a string
+ * @return bool true if 8bit symbols are detected
+ * @since 1.5.1 and 1.4.4
+ */
+function sq_is8bit($string,$charset='') {
+    global $default_charset;
+
+    if ($charset=='') $charset=$default_charset;
+
+    /**
+     * Don't use \240 in ranges. Sometimes RH 7.2 doesn't like it.
+     * Don't use \200-\237 for iso-8859-x charsets. This ranges
+     * stores control symbols in those charsets.
+     * Use preg_match instead of ereg in order to avoid problems
+     * with mbstring overloading
+     */
+    if (preg_match("/^iso-8859/i",$charset)) {
+        $needle='/\240|[\241-\377]/';
+    } else {
+        $needle='/[\200-\237]|\240|[\241-\377]/';
+    }
+    return preg_match("$needle",$string);
 }
 
 /**
@@ -1011,6 +1046,9 @@ function tag_remove($s)
 
 /**
  * $Log: i18n.php,v $
+ * Revision 1.12  2011/02/17 23:20:49  gopherit
+ * Upgraded the charset encoding and decoding function libraries.  Code taken from Squirrelmail 1.4.21
+ *
  * Revision 1.11  2006/05/03 20:45:35  vanmer
  * - change LC_ALL to LC_MESSAGES when setting locale, in order to only change messages, to avoid issues translating database calls
  *

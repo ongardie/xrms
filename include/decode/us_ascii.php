@@ -3,15 +3,14 @@
 /**
  * functions/decode/us_ascii.php
  *
- * Copyright (c) 2004 The SquirrelMail Project Team
- * Licensed under the GNU GPL. For full terms see the file COPYING.
- *
  * This file contains us-ascii decoding function that is needed to read
  * us-ascii encoded mails in non-us-ascii locale.
  *
  * Function replaces all 8bit symbols with '?' marks
  *
- * @version $Id: us_ascii.php,v 1.1 2004/06/26 14:53:01 braverock Exp $
+ * @copyright 2004-2010 The SquirrelMail Project Team
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version $Id: us_ascii.php,v 1.2 2011/02/17 23:20:49 gopherit Exp $
  * @package squirrelmail
  * @subpackage decode
  */
@@ -23,12 +22,8 @@
  * @return string cleaned string
  */
 function charset_decode_us_ascii ($string) {
-    global $default_charset;
-
-    if (strtolower($default_charset) == 'us-ascii')
-        return $string;
-
-    if (! ereg("[\200-\237]", $string) and ! ereg("[\241-\377]", $string) )
+    // don't do decoding when there are no 8bit symbols
+    if (! sq_is8bit($string,'us-ascii'))
         return $string;
 
     $string = preg_replace("/([\201-\237])/e","'?'",$string);
@@ -39,4 +34,3 @@ function charset_decode_us_ascii ($string) {
     $string = preg_replace("/([\241-\377])/e","'?'",$string);
     return $string;
 }
-?>

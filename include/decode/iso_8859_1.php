@@ -1,14 +1,14 @@
 <?php
+
 /**
  * decode/iso8859-1.php
- *
- * Copyright (c) 2003-2004 The SquirrelMail Project Team
- * Licensed under the GNU GPL. For full terms see the file COPYING.
  *
  * This file contains iso-8859-1 decoding function that is needed to read
  * iso-8859-1 encoded mails in non-iso-8859-1 locale.
  *
- * @version $Id: iso_8859_1.php,v 1.1 2004/06/26 14:53:01 braverock Exp $
+ * @copyright 2003-2010 The SquirrelMail Project Team
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version $Id: iso_8859_1.php,v 1.2 2011/02/17 23:20:49 gopherit Exp $
  * @package squirrelmail
  * @subpackage decode
  */
@@ -19,14 +19,8 @@
  * @return string $string Decoded string
  */
 function charset_decode_iso_8859_1 ($string) {
-    global $default_charset;
-
-    if (strtolower($default_charset) == 'iso-8859-1')
-        return $string;
-
-    /* Only do the slow convert if there are 8-bit characters */
-    /* there is no 0x80-0x9F letters in ISO8859-* */
-    if ( ! ereg("[\241-\377]", $string) )
+    // don't do decoding when there are no 8bit symbols
+    if (! sq_is8bit($string,'iso-8859-1'))
         return $string;
 
     $string = preg_replace("/([\201-\237])/e","'&#' . ord('\\1') . ';'",$string);
@@ -38,4 +32,3 @@ function charset_decode_iso_8859_1 ($string) {
     return $string;
 }
 
-?>
