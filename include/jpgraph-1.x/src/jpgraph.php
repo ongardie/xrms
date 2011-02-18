@@ -4,7 +4,7 @@
 // Description:	PHP4 Graph Plotting library. Base module.
 // Created: 	2001-01-08
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph.php,v 1.3 2005/04/01 17:12:08 daturaarutad Exp $
+// Ver:		$Id: jpgraph.php,v 1.4 2011/02/18 19:45:33 gopherit Exp $
 //
 // License:	This code is released under QPL 1.0
 // Copyright (C) 2001,2002,2003,2004 Johan Persson Aditus Consulting
@@ -5888,7 +5888,7 @@ class Image {
 	    }
 	}
 	else {
-	    if( ereg("\n",$txt) ) { 
+	    if( preg_match("/\n/",$txt) ) {
 		$tmp = split("\n",$txt);
 		for($i=0; $i < count($tmp); ++$i) {
 		    $w1 = $this->GetTextWidth($tmp[$i]);
@@ -6018,7 +6018,7 @@ class Image {
 	    $oy=$y;
 	}
 
-	if( !ereg("\n",$txt) || ($dir>0 && ereg("\n",$txt)) ) {
+	if( !preg_match("/\n/",$txt) || ($dir>0 && preg_match("/\n/",$txt)) ) {
 	    // Format a single line
 
 	    $txt = $this->AddTxtCR($txt);

@@ -1,5 +1,5 @@
 <?php
-//Based on HTML2PDF by Clément Lavoillotte
+//Based on HTML2PDF by Clï¿½ment Lavoillotte
 //Modified by Rick van Buuren
 //Modified by John Fawcett
 require('fpdf.php');
@@ -109,7 +109,7 @@ function WriteHTML($html)
                 $tag=strtoupper(array_shift($a2));
                 $attr=array();
                 foreach($a2 as $v)
-                    if(ereg('^([^=]*)=["\']?([^"\']*)["\']?$',$v,$a3))
+                    if(preg_match('/^([^=]*)=["\']?([^"\']*)["\']?$/',$v,$a3))
                         $attr[strtoupper($a3[1])]=$a3[2];
                 $this->OpenTag($tag,$attr);
             }

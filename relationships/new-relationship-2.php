@@ -84,7 +84,7 @@ else {
 }
 
 
-if(empty($search_on) OR !eregi("[0-9]", $search_on)) {
+if(empty($search_on) OR !preg_match("/[0-9]/i", $search_on)) {
     if(!empty($search_on)) {
         $search_on = $con->qstr("%$search_on%", get_magic_quotes_gpc());
     }
@@ -213,6 +213,9 @@ end_page();
 
 /**
  * $Log: new-relationship-2.php,v $
+ * Revision 1.28  2011/02/18 19:45:33  gopherit
+ * Replaced functions ereg(), eregi(), ereg_replace() and eregi_replace() which have been deprecated as of PHP 5.3
+ *
  * Revision 1.27  2006/06/30 02:05:56  vanmer
  * - changed More Info link to work for all pages, by using table_one_url function to generate target to hit
  *

@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.195 2011/01/24 18:52:39 gopherit Exp $
+ * $Id: utils-misc.php,v 1.196 2011/02/18 19:45:33 gopherit Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -1799,7 +1799,7 @@ function arr_vars_show_ses_vars ( $ary )
          $filename =
          $languages[$squirrelmail_language]['XTRA_CODE']('downloadfilename', $filename, $HTTP_USER_AGENT);
      } else {
-         $filename = ereg_replace('[\\/:\*\?"<>\|;]', '_', str_replace('&nbsp;', ' ', $filename));
+         $filename = preg_replace('@[\\/:\*\?"<>\|;]@', '_', str_replace('&nbsp;', ' ', $filename));
      }
 
      // A Pox on Microsoft and it's Internet Explorer!
@@ -2124,6 +2124,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.196  2011/02/18 19:45:33  gopherit
+ * Replaced functions ereg(), eregi(), ereg_replace() and eregi_replace() which have been deprecated as of PHP 5.3
+ *
  * Revision 1.195  2011/01/24 18:52:39  gopherit
  * As of PHP 5.3, split() has been deprecated.
  *

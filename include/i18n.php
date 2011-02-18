@@ -19,7 +19,7 @@
  * Internally the output character set is used. Other characters are
  * encoded using Unicode entities according to HTML 4.0.
  *
- * @version $Id: i18n.php,v 1.12 2011/02/17 23:20:49 gopherit Exp $
+ * @version $Id: i18n.php,v 1.13 2011/02/18 19:45:33 gopherit Exp $
  * @package xrms
  * @subpackage i18n
  */
@@ -761,7 +761,7 @@ function japanese_charset_xtra() {
             break;
         case 'decodeheader':
             $ret = str_replace("\t", "", $ret);
-            if (eregi('=\\?([^?]+)\\?(q|b)\\?([^?]+)\\?=', $ret))
+            if (preg_match('/=\\?([^?]+)\\?(q|b)\\?([^?]+)\\?=/i', $ret))
                 $ret = @mb_decode_mimeheader($ret);
             $ret = @mb_convert_encoding($ret, 'EUC-JP', 'AUTO');
             break;
@@ -1046,6 +1046,9 @@ function tag_remove($s)
 
 /**
  * $Log: i18n.php,v $
+ * Revision 1.13  2011/02/18 19:45:33  gopherit
+ * Replaced functions ereg(), eregi(), ereg_replace() and eregi_replace() which have been deprecated as of PHP 5.3
+ *
  * Revision 1.12  2011/02/17 23:20:49  gopherit
  * Upgraded the charset encoding and decoding function libraries.  Code taken from Squirrelmail 1.4.21
  *
