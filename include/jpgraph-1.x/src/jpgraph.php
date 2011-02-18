@@ -4,7 +4,7 @@
 // Description:	PHP4 Graph Plotting library. Base module.
 // Created: 	2001-01-08
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph.php,v 1.4 2011/02/18 19:45:33 gopherit Exp $
+// Ver:		$Id: jpgraph.php,v 1.5 2011/02/18 22:22:49 gopherit Exp $
 //
 // License:	This code is released under QPL 1.0
 // Copyright (C) 2001,2002,2003,2004 Johan Persson Aditus Consulting
@@ -2052,6 +2052,7 @@ class Graph {
 		    $rightpos = SIDE_RIGHT;
 		    break;
 		default:
+
 	            JpGRaphError::Raise('Unknown AxisStyle() : '.$this->iAxisStyle);
 	            break;
 	    }
@@ -5692,7 +5693,7 @@ class Image {
 
     // Get the specific height for a text string
     function GetTextHeight($txt="",$angle=0) {
-	$tmp = split("\n",$txt);
+	$tmp = explode("\n",$txt);
 	$n = count($tmp);
 	$m=0;
 	for($i=0; $i< $n; ++$i)
@@ -5737,7 +5738,7 @@ class Image {
     // Get actual width of text in absolute pixels
     function GetTextWidth($txt,$angle=0) {
 
-	$tmp = split("\n",$txt);
+	$tmp = explode("\n",$txt);
 	$n = count($tmp);
 	if( $this->font_family <= FF_FONT2+1 ) {
 
@@ -5889,7 +5890,7 @@ class Image {
 	}
 	else {
 	    if( preg_match("/\n/",$txt) ) {
-		$tmp = split("\n",$txt);
+		$tmp = explode("\n",$txt);
 		for($i=0; $i < count($tmp); ++$i) {
 		    $w1 = $this->GetTextWidth($tmp[$i]);
 		    if( $paragraph_align=="left" ) {
@@ -6094,7 +6095,7 @@ class Image {
 	    $w=$this->GetTextWidth($txt);
 
 	    $y -= $linemargin/2;
-	    $tmp = split("\n",$txt);
+	    $tmp = explode("\n",$txt);
 	    $nl = count($tmp);
 	    $h = $nl * $fh;
 

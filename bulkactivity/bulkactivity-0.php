@@ -3,7 +3,7 @@
   *
   * bulkactivity-0.
   *
-  * $Id: bulkactivity-0.php,v 1.2 2006/12/03 21:17:23 jnhayart Exp $
+  * $Id: bulkactivity-0.php,v 1.3 2011/02/18 22:22:49 gopherit Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -93,9 +93,9 @@
 
     default:
       $search_sql=$_SESSION["search_sql"];
-      list($select, $from) = spliti("FROM", $search_sql,2);//need limit otherwise from_unixtime functions get captured
-      list($from, $orderby) = spliti("order by", $from);
-      list($from, $groupby) = spliti("group by", $from);
+      list($select, $from) = preg_split("/FROM/i", $search_sql,2);//need limit otherwise from_unixtime functions get captured
+      list($from, $orderby) = preg_split("/order by/i", $from);
+      list($from, $groupby) = preg_split("/group by/i", $from);
 
       $sql= "SELECT cont.contact_id FROM ".$from;
       $sql.=" AND cont.contact_id IS NOT NULL ";
@@ -277,6 +277,9 @@ end_page();
 
  /**
   * $Log: bulkactivity-0.php,v $
+  * Revision 1.3  2011/02/18 22:22:49  gopherit
+  * Replaced functions split() and spliti() which have been deprecated as of PHP 5.3
+  *
   * Revision 1.2  2006/12/03 21:17:23  jnhayart
   * translate string to english
   *

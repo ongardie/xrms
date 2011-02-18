@@ -32,11 +32,11 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.1 $
+   * @version $Revision: 1.2 $
    * @copyright copyright information
    * @license GNU General Public Licence
    *
-   * $Id: SMTPs.php,v 1.1 2008/03/15 16:54:31 randym56 Exp $
+   * $Id: SMTPs.php,v 1.2 2011/02/18 22:22:49 gopherit Exp $
    *
    **/
 
@@ -1386,12 +1386,12 @@ class SMTPs
 
                 // Seperate "Real Name" from eMail address
                 $_tmpaddr = null;
-                $_tmpaddr = split ( '\<', $_strAddr );
+                $_tmpaddr = explode ( '\<', $_strAddr );
 
                 // We have a "Real Name" and eMail address
                 if ( count ($_tmpaddr) == 2 )
                 {
-                    $_tmpHost = split ( '@', $_tmpaddr[1] );
+                    $_tmpHost = explode ( '@', $_tmpaddr[1] );
                     $_tmpaddr[0] = trim ( $_tmpaddr[0], ' ">' );
                     $aryHost[$_tmpHost[1]][$_type][$_tmpHost[0]] = $_tmpaddr[0];
                 }
@@ -1401,7 +1401,7 @@ class SMTPs
                     // Strip off the beggining '<'
                     $_strAddr = str_replace ( '<', '', $_strAddr );
 
-                    $_tmpHost = split ( '@', $_strAddr );
+                    $_tmpHost = explode ( '@', $_strAddr );
                     $_tmpHost[0] = trim ( $_tmpHost[0] );
                     $_tmpHost[1] = trim ( $_tmpHost[1] );
 
@@ -2388,6 +2388,9 @@ class SMTPs
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.2  2011/02/18 22:22:49  gopherit
+  * Replaced functions split() and spliti() which have been deprecated as of PHP 5.3
+  *
   * Revision 1.1  2008/03/15 16:54:31  randym56
   * Updated SMTPs to allow for individual user SMTP addressing - requires installation and activation of mcrypt in PHP - follow README.txt instructions
   *

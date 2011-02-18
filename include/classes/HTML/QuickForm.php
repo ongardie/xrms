@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: QuickForm.php,v 1.3 2011/01/24 18:56:32 gopherit Exp $
+// $Id: QuickForm.php,v 1.4 2011/02/18 22:22:49 gopherit Exp $
 
 require_once('PEAR.php');
 require_once('HTML/Common.php');
@@ -941,7 +941,7 @@ class HTML_QuickForm extends HTML_Common {
     function updateElementAttr($elements, $attrs)
     {
         if (is_string($elements)) {
-            $elements = split('[ ]?,[ ]?', $elements);
+            $elements = preg_split('/[ ]*,[ ]*/', $elements);
         }
         foreach (array_keys($elements) as $key) {
             if (is_object($elements[$key]) && is_a($elements[$key], 'HTML_QuickForm_element')) {

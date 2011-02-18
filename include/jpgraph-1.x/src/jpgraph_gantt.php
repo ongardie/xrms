@@ -4,7 +4,7 @@
 // Description:	JpGraph Gantt plot extension
 // Created: 	2001-11-12
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_gantt.php,v 1.1 2005/03/09 23:15:44 daturaarutad Exp $
+// Ver:		$Id: jpgraph_gantt.php,v 1.2 2011/02/18 22:22:49 gopherit Exp $
 //
 // License:	This code is released under QPL 
 // Copyright (c) 2002 Johan Persson
@@ -452,7 +452,7 @@ class GanttGraph extends Graph {
 	    // Setup caption
 	    $a->caption->Set($data[$i][$csimpos-1]);
 
-	    // Check if this activity should have a CSIM target ?
+	    // Check if this activity should have a CSIM targetï¿½?
 	    if( !empty($data[$i][$csimpos]) ) {
 		$a->SetCSIMTarget($data[$i][$csimpos]);
 		$a->SetCSIMAlt($data[$i][$csimpos+1]);
@@ -1560,7 +1560,7 @@ class TextProperty {
 	$aImg->SetFont($this->iFFamily,$this->iFStyle,$this->iFSize);
 	if( is_string($this->iText) ) {
 	    if( strlen($this->iText) == 0 ) return 0;
-	    $tmp = split("\t",$this->iText);
+	    $tmp = explode("\t",$this->iText);
 	    if( count($tmp) <= 1 || !$aUseTabs ) {
 		return $aImg->GetTextWidth($this->iText)+2*$extra_margin;
 	    }
@@ -1683,7 +1683,7 @@ class TextProperty {
 		}
 	    }
 	    else {
-		$tmp = split("\t",$this->iText);
+		$tmp = explode("\t",$this->iText);
 		$n = min(count($tmp),count($aX));
 		for($i=0; $i < $n; ++$i) {
 		    $aImg->StrokeText($aX[$i],$aY,$tmp[$i]);

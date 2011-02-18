@@ -3,7 +3,7 @@
   *
   * Email.
   *
-  * $Id: email.php,v 1.1 2008/03/15 16:54:31 randym56 Exp $
+  * $Id: email.php,v 1.2 2011/02/18 22:22:49 gopherit Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -98,9 +98,9 @@
 
     default:
       $search_sql=$_SESSION["search_sql"];
-      list($select, $from) = spliti("FROM", $search_sql,2);//need limit otherwise from_unixtime functions get captured
-      list($from, $orderby) = spliti("order by", $from);
-      list($from, $groupby) = spliti("group by", $from);
+      list($select, $from) = preg_split("/FROM/i", $search_sql,2);//need limit otherwise from_unixtime functions get captured
+      list($from, $orderby) = preg_split("/order by/i", $from);
+      list($from, $groupby) = preg_split("/group by/i", $from);
 
       $sql= "SELECT cont.contact_id FROM ".$from;
       //added the null statement as a null record ruins email-3.php
@@ -196,6 +196,9 @@
 
   /**
   * $Log: email.php,v $
+  * Revision 1.2  2011/02/18 22:22:49  gopherit
+  * Replaced functions split() and spliti() which have been deprecated as of PHP 5.3
+  *
   * Revision 1.1  2008/03/15 16:54:31  randym56
   * Updated SMTPs to allow for individual user SMTP addressing - requires installation and activation of mcrypt in PHP - follow README.txt instructions
   *
