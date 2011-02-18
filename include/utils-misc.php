@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.196 2011/02/18 19:45:33 gopherit Exp $
+ * $Id: utils-misc.php,v 1.197 2011/02/18 21:07:46 gopherit Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -454,7 +454,6 @@ function xrms_session_register ($var, $name) {
 
     $_SESSION["$name"] = $var;
 
-  session_register("$name");
 }
 
 /**
@@ -471,7 +470,6 @@ function xrms_session_unregister ($name) {
 
     unset($_SESSION[$name]);
 
-    session_unregister("$name");
 }
 
 /**
@@ -2124,6 +2122,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.197  2011/02/18 21:07:46  gopherit
+ * Removed functions session_register() and session_unregister() which have been deprecated as of PHP 5.3
+ *
  * Revision 1.196  2011/02/18 19:45:33  gopherit
  * Replaced functions ereg(), eregi(), ereg_replace() and eregi_replace() which have been deprecated as of PHP 5.3
  *
