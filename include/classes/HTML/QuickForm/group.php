@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: group.php,v 1.2 2005/10/20 16:25:09 daturaarutad Exp $
+// $Id: group.php,v 1.3 2011/02/23 21:51:35 gopherit Exp $
 
 require_once("HTML/QuickForm/element.php");
 
@@ -290,7 +290,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     function toHtml()
     {
         include_once('HTML/QuickForm/Renderer/Default.php');
-        $renderer =& new HTML_QuickForm_Renderer_Default();
+        $renderer = new HTML_QuickForm_Renderer_Default();
         $renderer->setElementTemplate('{element}');
         $this->accept($renderer);
         return $renderer->toHtml();

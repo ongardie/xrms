@@ -18,7 +18,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: RuleRegistry.php,v 1.2 2005/10/20 16:25:09 daturaarutad Exp $
+// $Id: RuleRegistry.php,v 1.3 2011/02/23 21:51:35 gopherit Exp $
 
 /**
 * Registers rule objects and uses them for validation
@@ -115,7 +115,7 @@ class HTML_QuickForm_RuleRegistry
             if (!empty($path)) {
                 include_once($path);
             }
-            $this->_rules[$class] =& new $class();
+            $this->_rules[$class] = new $class();
         }
         $this->_rules[$class]->setName($ruleName);
         return $this->_rules[$class];

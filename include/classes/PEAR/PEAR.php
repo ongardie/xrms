@@ -20,7 +20,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2006 The PHP Group
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id: PEAR.php,v 1.1 2006/01/16 14:37:59 niclowe Exp $
+ * @version    CVS: $Id: PEAR.php,v 1.2 2011/02/23 21:51:35 gopherit Exp $
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 0.1
  */
@@ -554,10 +554,10 @@ class PEAR
             $ec = 'PEAR_Error';
         }
         if ($skipmsg) {
-            $a = &new $ec($code, $mode, $options, $userinfo);
+            $a = new $ec($code, $mode, $options, $userinfo);
             return $a;
         } else {
-            $a = &new $ec($message, $code, $mode, $options, $userinfo);
+            $a = new $ec($message, $code, $mode, $options, $userinfo);
             return $a;
         }
     }

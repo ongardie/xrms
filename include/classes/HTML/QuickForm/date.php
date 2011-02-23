@@ -18,7 +18,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: date.php,v 1.2 2005/10/20 16:25:09 daturaarutad Exp $
+// $Id: date.php,v 1.3 2011/02/23 21:51:35 gopherit Exp $
 
 require_once 'HTML/QuickForm/group.php';
 require_once 'HTML/QuickForm/select.php';
@@ -383,7 +383,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
                             $options = array($this->_options['emptyOptionValue'] => $this->_options['emptyOptionText']) + $options;
                         }
                     }
-                    $this->_elements[] =& new HTML_QuickForm_select($sign, null, $options, $this->getAttributes());
+                    $this->_elements[] = new HTML_QuickForm_select($sign, null, $options, $this->getAttributes());
                 }
             }
         }
@@ -451,7 +451,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
     function toHtml()
     {
         include_once('HTML/QuickForm/Renderer/Default.php');
-        $renderer =& new HTML_QuickForm_Renderer_Default();
+        $renderer = new HTML_QuickForm_Renderer_Default();
         $renderer->setElementTemplate('{element}');
         parent::accept($renderer);
         return $this->_wrap[0] . $renderer->toHtml() . $this->_wrap[1];
