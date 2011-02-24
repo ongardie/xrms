@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.93 2010/08/17 19:46:20 gopherit Exp $
+ * $Id: some.php,v 1.94 2011/02/24 22:55:56 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -71,25 +71,25 @@ $arr_vars = array ( // local var name       // session variable name
                    'city'                => array('city',arr_vars_SESSION),
                    'state'               => array('state',arr_vars_SESSION),
                     'legal_name'         => array('companies_legal_name',arr_vars_SESSION),
-                    'phone_search'              => array ( 'phone_search' , arr_vars_SESSION),
-                    'phone'              => array ( 'companies_phone' , arr_vars_SESSION),
-                    'phone2'             => array ( 'companies_phone2' , arr_vars_SESSION),
-                    'fax'                => array ( 'companies_fax' , arr_vars_SESSION),
-                    'url'                => array ( 'companies_url' , arr_vars_SESSION),
-                    'employees'          => array ( 'companies_employees' , arr_vars_SESSION),
-                    'revenue'            => array ( 'companies_revenue' , arr_vars_SESSION),
-                    'custom1'            => array ( 'companies_custom1' , arr_vars_SESSION),
-                    'custom2'            => array ( 'companies_custom2' , arr_vars_SESSION),
-                    'custom3'            => array ( 'companies_custom3' , arr_vars_SESSION),
-                    'custom4'            => array ( 'companies_custom4' , arr_vars_SESSION),
-                    'profile'            => array ( 'companies_profile' , arr_vars_SESSION),
-                    'address_name'       => array ( 'companies_address_name' , arr_vars_SESSION),
-                    'line1'              => array ( 'companies_line1' , arr_vars_SESSION),
-                    'line2'              => array ( 'companies_line2' , arr_vars_SESSION),
-                    'province'           => array ( 'companies_province' , arr_vars_SESSION),
-                    'postal_code'        => array ( 'companies_postal_code' , arr_vars_SESSION),
-                    'country_id'         => array ( 'companies_country_id' , arr_vars_SESSION),
-                    'address_body'       => array ( 'companies_address_body' , arr_vars_SESSION),
+                    'phone_search'       => array('phone_search' , arr_vars_SESSION),
+                    'phone'              => array('companies_phone' , arr_vars_SESSION),
+                    'phone2'             => array('companies_phone2' , arr_vars_SESSION),
+                    'fax'                => array('companies_fax' , arr_vars_SESSION),
+                    'url'                => array('companies_url' , arr_vars_SESSION),
+                    'employees'          => array('companies_employees' , arr_vars_SESSION),
+                    'revenue'            => array('companies_revenue' , arr_vars_SESSION),
+                    'custom1'            => array('companies_custom1' , arr_vars_SESSION),
+                    'custom2'            => array('companies_custom2' , arr_vars_SESSION),
+                    'custom3'            => array('companies_custom3' , arr_vars_SESSION),
+                    'custom4'            => array('companies_custom4' , arr_vars_SESSION),
+                    'profile'            => array('companies_profile' , arr_vars_SESSION),
+                    'address_name'       => array('companies_address_name' , arr_vars_SESSION),
+                    'line1'              => array('companies_line1' , arr_vars_SESSION),
+                    'line2'              => array('companies_line2' , arr_vars_SESSION),
+                    'province'           => array('companies_province' , arr_vars_SESSION),
+                    'postal_code'        => array('companies_postal_code' , arr_vars_SESSION),
+                    'country_id'         => array('companies_country_id' , arr_vars_SESSION),
+                    'address_body'       => array('companies_address_body' , arr_vars_SESSION),
                    );
 
 getGlobalVar($advanced_search, 'advanced_search'); // = (!empty($_REQUEST['advanced_search'])) ? true : false;
@@ -1110,6 +1110,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.94  2011/02/24 22:55:56  gopherit
+ * Just prettying up some code.
+ *
  * Revision 1.93  2010/08/17 19:46:20  gopherit
  * Minor improvement: added company type to advanced search criteria.
  *
