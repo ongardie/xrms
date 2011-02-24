@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.197 2011/02/18 21:07:46 gopherit Exp $
+ * $Id: utils-misc.php,v 1.198 2011/02/24 23:05:03 gopherit Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -1674,9 +1674,11 @@ function arr_vars_session_get ( $ary )
 // set all session variables
 function arr_vars_session_set ( $ary )
 {
-  foreach ($ary as $key => $value) {
-    $_SESSION["$value[0]"] = $GLOBALS[$key];
-  }
+    foreach ($ary as $key => $value) {
+        if ( isset($GLOBALS[$key]) ) {
+            $_SESSION["$value[0]"] = $GLOBALS[$key];
+        }
+    }
 }
 
 // get all posted variables
@@ -2122,6 +2124,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.198  2011/02/24 23:05:03  gopherit
+ * FIXED Bug Artifact #3191710 Wholesale assignment of values in arr_vars_session_set() led to some unset values being assigned to the $_SESSION extention which triggers the warning.
+ *
  * Revision 1.197  2011/02/18 21:07:46  gopherit
  * Removed functions session_register() and session_unregister() which have been deprecated as of PHP 5.3
  *
