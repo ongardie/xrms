@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.107 2009/07/29 05:48:07 gopherit Exp $
+ * $Id: one.php,v 1.108 2011/02/24 18:01:05 gopherit Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -67,10 +67,16 @@ if ($rst) {
     $work_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']);
     $work_phone_ext = $rst->fields['work_phone_ext'];
     if (trim($work_phone_ext)) {
-            $work_phone_ext_display = '&nbsp;' . _("x") . $work_phone_ext;
+            $work_phone_ext_display = '&nbsp;'. _("x") .'&nbsp;'. $work_phone_ext;
     }
     $cell_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['cell_phone']);
-    $home_phone = get_formatted_phone($con, $rst->fields['home_address_id'], $rst->fields['home_phone']);
+    // If there is no home address, use the work address for phone formatting
+    if ( ! $rst->fiedls['home_address_id']) {
+        $tmp = $rst->fields['address_id'];
+    } else {
+        $tmp = $rst->fields['home_address_id'];
+    }
+    $home_phone = get_formatted_phone($con, $tmp, $rst->fields['home_phone']);
     $fax = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['fax']);
     $entered_at = $con->userdate($rst->fields['entered_at']);
     $last_modified_at = $con->userdate($rst->fields['last_modified_at']);
@@ -507,6 +513,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.108  2011/02/24 18:01:05  gopherit
+ * FIXED Bug Artifact #3191479 - When a contact has a home phone number but no home address, the home phone number formatting now falls back on the format of the work address.
+ *
  * Revision 1.107  2009/07/29 05:48:07  gopherit
  * Switched to centralized function render_email_link() on line 300
  *
