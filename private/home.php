@@ -5,7 +5,7 @@
  * @todo make the user's home page configurable,
  *       to create a 'personal dashboard'
  *
- * $Id: home.php,v 1.78 2009/01/23 00:43:35 randym56 Exp $
+ * $Id: home.php,v 1.79 2011/02/24 18:58:53 gopherit Exp $
  */
 
 // include the common files
@@ -173,9 +173,9 @@ $activities_widget =  GetActivitiesWidget($con, $search_terms, $form_name, _('Se
 //close the database connection, as we are done with it.
 $con->close();
 
-if (!strlen($files_rows) > 0) {
+if (!strlen($file_rows) > 0) {
     // Make sure $file_rows is always defined.
-    $files_rows = "<tr><td class=widget_content colspan=7>" . _("No open files") . "</td></tr>";
+    $file_rows = "<tr><td class=widget_content colspan=7>" . _("No open files") . "</td></tr>";
 }
 
 if (!strlen($activity_rows) > 0) {
@@ -248,6 +248,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.79  2011/02/24 18:58:53  gopherit
+ * Misnamed variable $files_rows.  Changed to $file_rows
+ *
  * Revision 1.78  2009/01/23 00:43:35  randym56
  * Fixed error that appears in Windows environment when include_directory is not setup
  *
