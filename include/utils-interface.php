@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-interface.php,v 1.119 2010/10/22 20:34:08 gopherit Exp $
+ * $Id: utils-interface.php,v 1.120 2011/02/25 19:49:29 gopherit Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -110,10 +110,9 @@ function status_msg($msg) {
 **/
 function http_root_href($url, $text, $title = NULL) {
     global $http_site_root;
-    if ( empty($title) )
+    if ( empty($title) ) {
         $title = $text;
-        $title = _("$title");
-        $text  = _("$text");
+    }
     return '<a title="'.$title.'" href="'.$http_site_root.$url.'">'.$text.'</a>';
 }
 
@@ -1226,6 +1225,9 @@ function render_time_period_controls ($time_period_length, $select_name='', $ena
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.120  2011/02/25 19:49:29  gopherit
+ * FIXED Bug Artifact #1567946 Removed the gettext _() calls.   http_root_href() should not assume that the parameters passed to it to have not been translated.
+ *
  * Revision 1.119  2010/10/22 20:34:08  gopherit
  * Switched the $select_name and $enabled parameters of the render_time_period_controls() function to force developers to supply the $select_name for enabled selectors.
  * Disabled text wrapping for the selector output.
