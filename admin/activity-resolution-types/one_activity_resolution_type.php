@@ -7,7 +7,7 @@
  *
  *
  * @author Aaron van Meerten
- * $Id: one_activity_resolution_type.php,v 1.4 2006/12/10 18:30:29 jnhayart Exp $
+ * $Id: one_activity_resolution_type.php,v 1.5 2011/02/25 22:10:56 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -44,6 +44,7 @@ start_page($page_title);
 
   $view = new ADOdb_QuickForm_View($con, addslashes(_("Activity Resolution Type")));
   $view->SetReturnButton(_("Return to List"), $return_url);
+  $view->EnableDeleteButton();
 
   $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
   $template_form_html = $controller->ProcessAndRenderForm();
@@ -53,17 +54,20 @@ start_page($page_title);
 ?>
 
 <div id="Main">
-<div id="Sidebar">
-    &nbsp;
-</div>
-<div id="Content">
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=30% valign=top>
-					<?php echo $template_form_html; ?>
-        </td>
-    </tr>
-</table>
+
+    <div id="Sidebar">
+        &nbsp;
+    </div>
+
+    <div id="Content">
+        <table border=0 cellpadding=0 cellspacing=0 width=100%>
+            <tr>
+                <td class=lcol width=30% valign=top>
+                                                <?php echo $template_form_html; ?>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 <?php
 
@@ -73,6 +77,9 @@ start_page($page_title);
 
 /**
  * $Log: one_activity_resolution_type.php,v $
+ * Revision 1.5  2011/02/25 22:10:56  gopherit
+ * Added a delete button to the Activity Resolution Type edit form.
+ *
  * Revision 1.4  2006/12/10 18:30:29  jnhayart
  * repair Add New button
  *
