@@ -10,7 +10,7 @@
 	* @author Justin Cooper <justin@braverock.com>
 	* @todo
 	*
-	* $Id: ADOdb_QuickForm_Controller.php,v 1.10 2011/02/25 22:07:59 gopherit Exp $
+	* $Id: ADOdb_QuickForm_Controller.php,v 1.11 2011/02/28 16:06:46 gopherit Exp $
 	*/
 
 
@@ -219,8 +219,11 @@
                         $this->msg = _("Delete Failed");
                     }
 
-                    $this->View->SetNextFormAction();
-                    return $this->View->GetForm($form_action, $show_submit);
+                    // don't display form after delete.
+					//$this->View->InitForm();
+
+	    			//$this->View->SetNextFormAction('create');
+	    			//return $this->View->GetForm($form_action, $show_submit);
                 break;
 
 
