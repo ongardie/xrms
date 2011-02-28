@@ -10,7 +10,7 @@
 	* @author Justin Cooper <justin@braverock.com>
 	* @todo
 	*
-	* $Id: ADOdb_QuickForm_Controller.php,v 1.11 2011/02/28 16:06:46 gopherit Exp $
+	* $Id: ADOdb_QuickForm_Controller.php,v 1.12 2011/02/28 16:07:37 gopherit Exp $
 	*/
 
 
