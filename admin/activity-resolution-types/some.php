@@ -2,7 +2,7 @@
 /**
  * Manage Activity Resolution Types
  *
- * $Id: some.php,v 1.5 2007/10/17 15:06:24 randym56 Exp $
+ * $Id: some.php,v 1.6 2011/02/28 16:36:44 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -15,6 +15,8 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
+getGlobalVar($msg, 'msg');
+
 $con = get_xrms_dbconnection();
 
 $sql = "select * from activity_resolution_types where resolution_type_record_status = 'a' order by sort_order";
@@ -24,7 +26,7 @@ if ($rst) {
         while (!$rst->EOF) {
                 $table_rows .= '<tr>';
                 $table_rows .= '<td class=widget_content>' . $rst->fields['activity_resolution_type_id'] . '</td>';
-                $table_rows .= '<td class=widget_content><a href=one_activity_resolution_type.php?return_url=some.php&form_action=edit&activity_resolution_type_id=' . $rst->fields['activity_resolution_type_id'] . '>' . $rst->fields['resolution_pretty_name'] . '</a></td>';
+                $table_rows .= '<td class=widget_content><a href=one_activity_resolution_type.php?form_action=edit&activity_resolution_type_id='. $rst->fields['activity_resolution_type_id'] .'&return_url=some.php>' . $rst->fields['resolution_pretty_name'] . '</a></td>';
                 $table_rows .= '<td class=widget_content>' . $rst->fields['resolution_short_name'] . '</td>';
                 
         $table_rows .= '<td class=widget_content>';
@@ -44,7 +46,7 @@ if ($rst) {
 $con->close();
 
 $page_title = _("Manage Activity Resolution Types");
-start_page($page_title);
+start_page($page_title, TRUE, $msg);
 
 ?>
 
@@ -79,6 +81,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.6  2011/02/28 16:36:44  gopherit
+ * Minor improvements.
+ *
  * Revision 1.5  2007/10/17 15:06:24  randym56
  * Show ID field to make ACL mods for group members easier and match new docs
  *
