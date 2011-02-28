@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of campaigns
  *
- * $Id: new.php,v 1.19 2011/01/20 17:13:52 gopherit Exp $
+ * $Id: new.php,v 1.20 2011/02/28 23:09:52 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -29,22 +29,33 @@ $sql = 'SELECT campaign_type_pretty_name, campaign_type_id
         WHERE campaign_type_record_status = \'a\'
         ORDER BY campaign_type_pretty_name';
 $rst = $con->execute($sql);
+
 if($rst) {
     // defining campaign_type_id before the call to getmenu2 means that this
     // option will be selected when the menu is generated.
-    if (!$campaign_type_id) {
-        if (!$rst->EOF ) {
-            $campaign_type_id = $rst->fields['campaign_type_id'];
-            $campaign_type_pretty_name = $rst->fields['campaign_type_pretty_name'];
-        } else {
+    if ($rst->EOF ) {
             echo 'There have been no campaign types defined - please define them first
                 <a href="../admin/campaign-types/some.php">here</a>.';
             exit;
+    } else {
+        if ( ! $campaign_type_id) {
+            // If no campaign_type_id was supplied, grab the first one from the result set
+            $campaign_type_id = $rst->fields['campaign_type_id'];
+            $campaign_type_pretty_name = $rst->fields['campaign_type_pretty_name'];
+        } else {
+            // We still do not have a campaignt type pretty name so get it already
+            $sql2 = 'SELECT campaign_type_pretty_name
+                    FROM campaign_types
+                    WHERE campaign_type_id = '. $campaign_type_id .'
+                    AND campaign_type_record_status = \'a\'
+                    LIMIT 1';
+            $rst2 = $con->execute($sql2);
+            $campaign_type_pretty_name = $rst2->fields['campaign_type_pretty_name'];
         }
+        
+        $campaign_type_menu = $rst->getmenu2('campaign_type_id', $campaign_type_id, false, false, 1, 'id="campaign_type_id" onchange="javascript:restrictBycampaignType();"');
+        $rst->close();
     }
-
-    $campaign_type_menu = $rst->getmenu2('campaign_type_id', $campaign_type_id, false, false, 1, 'id="campaign_type_id" onchange="javascript:restrictBycampaignType();"');
-    $rst->close();
 } else {
     db_error_handler($con, $sql);
 }
@@ -205,6 +216,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.20  2011/02/28 23:09:52  gopherit
+ * FIXED Bug Artifact #3190484: The missing campaign statuses error message now correctly shows the campaign_type_pretty_name.
+ *
  * Revision 1.19  2011/01/20 17:13:52  gopherit
  * Added encodeURIComponent() in the restrictByCampaignType() function to prevent strings with special characters from breaking the URI.
  *
