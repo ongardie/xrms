@@ -7,7 +7,7 @@
  *
  *
  * @author Aaron van Meerten
- * $Id: one_activity_resolution_type.php,v 1.5 2011/02/25 22:10:56 gopherit Exp $
+ * $Id: one_activity_resolution_type.php,v 1.6 2011/02/28 16:36:25 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -21,36 +21,72 @@ require_once $include_directory."classes/QuickForm/ADOdb_QuickForm.php";
 $session_user_id = session_check();
 
 
-		// we need this for the companies foreign key lookup
-	  $con = get_xrms_dbconnection();
+// we need this for the companies foreign key lookup
+$con = get_xrms_dbconnection();
 
 
-getGlobalVar($return_url, 'return_url');
 getGlobalVar($activity_resolution_type_id, 'activity_resolution_type_id');
+getGlobalVar($form_action, 'form_action');
+getGlobalVar($return_url, 'return_url');
+getGlobalVar($msg, 'msg');
 
 $page_title = _("Manage Activity Resolution Type");
 
-start_page($page_title);
+// Ensure that the user did not submit a blank resolution_pretty_name
+if (($_POST['btnSubmit'] == 'Create' OR $_POST['btnSubmit'] == 'Update')
+        AND !strlen(trim($_POST['resolution_pretty_name']))) {
+    if ( strlen(trim($_POST['resolution_short_name']))) {
+        $_POST['resolution_pretty_name'] = $_POST['resolution_short_name'];
+    } else {
+        $_POST['resolution_pretty_name'] = _("Default");
+    }
+}
 
 
-  $model = new ADOdb_QuickForm_Model();
-  $model->ReadSchemaFromDB($con, 'activity_resolution_types');
+// Check user delete permission
+if(false !== render_delete_button("Delete",'button',"", false, false, 'activity_resolution_types',$activity_resolution_type_id)) {
+    $delete_enabled = true;
+}
 
-	$model->SetDisplayNames(array('resolution_short_name' => _("Short Name"), 
-   								  'resolution_pretty_name' => _("Pretty Name"), 
-								  'sort_order' => _("Sort Order")));
-                                                                                
+
+$model = new ADOdb_QuickForm_Model();
+
+    $model->ReadSchemaFromDB($con, 'activity_resolution_types');
+    $model->SetDisplayNames(array('resolution_short_name' => _("Short Name"),
+                                                              'resolution_pretty_name' => _("Pretty Name"),
+                                                              'sort_order' => _("Sort Order")));
     $model->SetFieldType('resolution_type_record_status', 'db_only');
+    // delete button
+    if($delete_enabled) {
+        $model->SetLogicalDeleteParams('resolution_type_record_status');
+    }
 
-  $view = new ADOdb_QuickForm_View($con, addslashes(_("Activity Resolution Type")));
-  $view->SetReturnButton(_("Return to List"), $return_url);
-  $view->EnableDeleteButton();
+$view = new ADOdb_QuickForm_View($con, addslashes(_("Activity Resolution Type")));
+    $view->SetReturnButton(_("Return to List"), $return_url);
+    $view->SetReturnAfterUpdate($return_url);
+    // delete button
+    if($delete_enabled) {
+        $view->EnableDeleteButton();
+    }
 
-  $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
-  $template_form_html = $controller->ProcessAndRenderForm();
+$controller = new ADOdb_QuickForm_Controller(array(&$model), $view);
+$template_form_html = $controller->ProcessAndRenderForm();
+$msg        .= $controller->GetStatusMessage();
+
+// this may not always work...
+if(!strchr($return_url,'?')) {
+    $return_url .= "?msg=$msg";
+} else {
+    $return_url .= "&msg=$msg";
+}
+
+if (!$template_form_html) {
+    header("Location: $return_url&msg=$msg");
+    exit;
+}
 
 
-
+start_page($page_title, TRUE, $msg);
 ?>
 
 <div id="Main">
@@ -77,6 +113,9 @@ start_page($page_title);
 
 /**
  * $Log: one_activity_resolution_type.php,v $
+ * Revision 1.6  2011/02/28 16:36:25  gopherit
+ * Proper use of the QuickForm class features is much more elegant.  Added basic validation of the resolution pretty name, too.
+ *
  * Revision 1.5  2011/02/25 22:10:56  gopherit
  * Added a delete button to the Activity Resolution Type edit form.
  *
