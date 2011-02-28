@@ -10,7 +10,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: updateto1.99.2.php,v 1.2 2010/11/29 14:10:14 gopherit Exp $
+ * $Id: updateto1.99.2.php,v 1.3 2011/02/28 16:50:19 gopherit Exp $
  */
 
 // where do we include from
@@ -4829,7 +4829,7 @@ if ($pager_view_pref) {
     $field_definition[]=array('NAME'=>$field_name,'TYPE'=>'I');
 
     $table_opts='';
-    $ret_bool = add_field($con, $table_name, $field_definition, $table_opts, &$upgrade_msgs);
+    $ret_bool = add_field($con, $table_name, $field_definition, $table_opts, $upgrade_msgs);
     if ($ret_bool) $msg .= _("added column company_type_id to companies table");
 
 // Add a system preference type for allowable characters in phone/fax numbers. Defaults to old XRMS
@@ -4862,14 +4862,14 @@ if (!get_user_preference_type($con, $pref_type)) {
 //  Stage 1: Add on_what_table
 $field_definition = array();
 $field_definition[] = array('NAME' => 'on_what_table', 'TYPE' => 'C', 'SIZE' => 100);
-if(add_field($con, 'addresses', $field_definition, '', &$upgrade_msgs)) {
+if(add_field($con, 'addresses', $field_definition, '', $upgrade_msgs)) {
     if($msg)
     	$msg .= '<br>';
 
     $msg .= _("added on_what_table to addresses table") . '<br>';
     
     // Stage 2: Rename company_id to on_what_id
-    if(rename_fieldname($con, 'addresses', 'company_id', 'on_what_id', &$upgrade_msgs))
+    if(rename_fieldname($con, 'addresses', 'company_id', 'on_what_id', $upgrade_msgs))
         $msg .= _("renamed company_id to on_what_id in addresses table") . '<br>';
     
     // Stage 3: Set on_what_table='companies' wherever on_what_id > 1
@@ -4955,6 +4955,9 @@ end_page();
 
 /**
  * $Log: updateto1.99.2.php,v $
+ * Revision 1.3  2011/02/28 16:50:19  gopherit
+ * FIXED Bug Artifact #3122575: Removed pass-by-reference calls, deprecated as of PHP 5.3.
+ *
  * Revision 1.2  2010/11/29 14:10:14  gopherit
  * Fixed the odd comment.
  *
