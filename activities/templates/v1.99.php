@@ -2,13 +2,8 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: v1.99.php,v 1.24 2010/12/15 17:26:37 gopherit Exp $
+ * $Id: v1.99.php,v 1.25 2011/03/01 16:45:42 gopherit Exp $
  */
-
-// set thread_id to activity_id if it's not set already.
-if(!$thread_id) {
-    $thread_id = $activity_id;
-}
 
 
 /*
@@ -280,13 +275,9 @@ $ra_extra_where = array();
 if($on_what_table && $on_what_id) {
     // changed to correctly show only related activities belonging to the same company
     if ($company_id)
-     $ra_extra_where[] = "(a.on_what_table = '$on_what_table' AND a.on_what_id = $on_what_id AND a.company_id = $company_id AND a.activity_id <> $activity_id)";
+        $ra_extra_where[] = "(a.on_what_table = '$on_what_table' AND a.on_what_id = $on_what_id AND a.company_id = $company_id AND a.activity_id <> $activity_id)";
     else
-     $ra_extra_where[] = "(a.on_what_table = '$on_what_table' AND a.on_what_id = $on_what_id AND a.activity_id <> $activity_id)";
-    //don't do anything if this activity is on companies or contacts
-    if (($on_what_table != 'companies') && ($on_what_table != 'contacts')){
-        $ra_extra_where[] = "(a.on_what_table = '$on_what_table' AND a.on_what_id = $on_what_id)";
-    }
+    $ra_extra_where[] = "(a.on_what_table = '$on_what_table' AND a.on_what_id = $on_what_id AND a.activity_id <> $activity_id)";
 }
 if($thread_id) {
     $ra_extra_where[] = "a.thread_id = $thread_id ";
@@ -955,6 +946,9 @@ function validate() {
 <?php
 /**
  * $Log: v1.99.php,v $
+ * Revision 1.25  2011/03/01 16:45:42  gopherit
+ * FIXED Bug Artifact #2998963:  Removed bizarre ''OR' clause in the Related Activities SQL which blew the focus of the query out of the water.
+ *
  * Revision 1.24  2010/12/15 17:26:37  gopherit
  * Added rendering of the appropriate status combo box for activities linked to campaigns.
  *
