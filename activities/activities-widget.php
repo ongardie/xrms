@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.72 2010/10/06 13:16:21 gopherit Exp $
+* $Id: activities-widget.php,v 1.73 2011/03/01 20:14:23 gopherit Exp $
 */
 
 global $include_directory;
@@ -428,7 +428,10 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
     if('list' != $activities_widget_type) {
 
         // begin calendar stuff
-        $activity_calendar_rst = $con->execute($activity_sql);
+
+        // Activities in the calendar views are always sorted by scheduled_at
+        $tmp = ' ORDER BY a.scheduled_at';
+        $activity_calendar_rst = $con->execute($activity_sql . $tmp);
 
         if($activity_calendar_rst) {
 
@@ -1105,6 +1108,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.73  2011/03/01 20:14:23  gopherit
+* FIXED Bug Artifact #2998959:  Activities are now properly sorted by their scheduled_at date in any of the Calendar Views.
+*
 * Revision 1.72  2010/10/06 13:16:21  gopherit
 * A couple of tweaks:
 * * Implemented default_activity_duration and default_followup_time
