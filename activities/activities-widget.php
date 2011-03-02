@@ -6,7 +6,7 @@
 *
 * @author Justin Cooper <justin@braverock.com>
 *
-* $Id: activities-widget.php,v 1.73 2011/03/01 20:14:23 gopherit Exp $
+* $Id: activities-widget.php,v 1.74 2011/03/02 14:28:28 gopherit Exp $
 */
 
 global $include_directory;
@@ -134,7 +134,7 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
 
     /**** END MINI SEARCH ***/
 
-    if('list' != $activities_widget_type) {
+    if($activities_widget_type != 'list') {
 
     /*  Calendar:
         -if this is the first pass, the calendar date should be set based on the search date
@@ -425,13 +425,12 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
 
     //echo '<pre>' . htmlentities($activity_sql) . '</pre>';
 
-    if('list' != $activities_widget_type) {
+    if($activities_widget_type != 'list') {
 
         // begin calendar stuff
 
         // Activities in the calendar views are always sorted by scheduled_at
-        $tmp = ' ORDER BY a.scheduled_at';
-        $activity_calendar_rst = $con->execute($activity_sql . $tmp);
+        $activity_calendar_rst = $con->execute($activity_sql . ' ORDER BY a.scheduled_at');
 
         if($activity_calendar_rst) {
 
@@ -456,25 +455,6 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
             }
         } else {
             db_error_handler($con, $activity_sql);
-        }
-
-        $search_date = date('Y-m-d');
-
-        switch($activities_view_type) {
-            case 'week':
-                // align it to the week's start day (e.g. Monday)
-                if(empty($calendar_start_date)) {
-                    $calendar_start_date = CalendarView::GetWeekStart($start_date, 'Monday');
-                } else {
-                    $calendar_start_date = CalendarView::GetWeekStart($calendar_start_date, 'Monday');
-                }
-                break;
-            case 'month':
-                if(empty($calendar_start_date)) {
-                    $calendar_start_date = date("Y-m-", strtotime($date_modifier . $search_date));
-                    $calendar_start_date .= '01';
-                }
-                break;
         }
 
         $widget = $calendar->Render($activity_calendar_data);
@@ -1108,6 +1088,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.74  2011/03/02 14:28:28  gopherit
+* Removed unnecessary $tmp variable & very minor code cleanup.
+*
 * Revision 1.73  2011/03/01 20:14:23  gopherit
 * FIXED Bug Artifact #2998959:  Activities are now properly sorted by their scheduled_at date in any of the Calendar Views.
 *
