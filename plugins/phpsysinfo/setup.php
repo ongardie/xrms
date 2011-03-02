@@ -4,7 +4,7 @@
 
 function xrms_plugin_init_phpsysinfo() {
     global $xrms_plugin_hooks;
-    $xrms_plugin_hooks['system_monitoring']['phpsysinfo'] = 'phpsysinfo';
+    $xrms_plugin_hooks['system_monitoring']['phpsysinfo'] = 'sysinfo';
 }
 
 function sysinfo() {
@@ -20,7 +20,7 @@ function sysinfo() {
         </td>
     </tr>
     <tr>
-        <td><a href=\"" . $http_site_root . "/plugins/phpinfo.php\">" . _("PHP Info") . "</a></td>
+        <td><a href=\"" . $http_site_root . "/plugins/phpsysinfo/phpinfo.php\">" . _("PHP Info") . "</a></td>
     </tr>
 </table>
 ";
