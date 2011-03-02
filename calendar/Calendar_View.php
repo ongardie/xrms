@@ -4,7 +4,7 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.16 2011/01/24 22:41:01 gopherit Exp $
+ * $Id: Calendar_View.php,v 1.17 2011/03/02 14:38:05 gopherit Exp $
  */
 
 global $include_directory;
@@ -70,7 +70,15 @@ class CalendarView {
             if($calendar_CGI_date) {
                 $calendar_start_date = $calendar_CGI_date;
             } else {
-                $calendar_start_date = date('Y-m-d', time());
+                switch ($calendar_type) {
+                    case 'week':
+                        $calendar_start_date = CalendarView::GetWeekStart(date('Y-m-d', time()), 'Monday');
+                        break;
+                    case 'month':
+                        $calendar_start_date = date("Y-m-", time());
+                        $calendar_start_date .= '01';
+                        break;
+                }
             }
         }
 
@@ -635,21 +643,19 @@ function GetCalendarSQLOffset() {
 
     // special case for month view...
     if('month' == $this->calendar_type) {
+
         $adjusted_start_date = CalendarView::GetWeekStart($this->start_date, 'Sunday');
-
-        $calendar_view_start =  (strtotime($adjusted_start_date) - time()) / 86400;
-        $calendar_view_end = (strtotime("$adjusted_start_date +6 weeks") - time()) / 86400;
-
+        $calendar_view_start = strtotime($adjusted_start_date);
+        $calendar_view_end = $calendar_view_start + 3628800;// 6 weeks = 60 * 60 * 24 * 7 * 6 = 3,628,800
+        // @todo Wouldn't it be better if the calendar displayed 5 weeks only?  Any month can fit in that!
+        // 5 weeks = 60 * 60 * 24 * 7 * 5 = 3,024,000
     } else {
-        $calendar_view_start =  (strtotime($this->start_date) - time()) / 86400;
-        $calendar_view_end = (strtotime("$this->start_date +1 $this->calendar_type") - time()) / 86400;
+        
+        $calendar_view_start =  strtotime($this->start_date);
+        $calendar_view_end = strtotime("$this->start_date +1 $this->calendar_type");
     }
 
-    $offset_start = $this->con->OffsetDate($calendar_view_start);
-    $offset_start = preg_replace("|,|",".",$offset_start);
-    $offset_end = $this->con->OffsetDate($calendar_view_end);
-    $offset_end = preg_replace("|,|",".",$offset_end);
-    $offset_sql = "\nAND a.ends_at > $offset_start AND a.scheduled_at < $offset_end";
+    $offset_sql = ' AND a.ends_at > '. $this->con->DBDate($calendar_view_start) .' AND a.scheduled_at < '. $this->con->DBDate($calendar_view_end);
 
     //echo "GetCalendarSQLOffset $this->calendar_type, $this->start_date range is $calendar_view_start-$calendar_view_end<br>";
 
@@ -660,6 +666,10 @@ function GetCalendarSQLOffset() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.17  2011/03/02 14:38:05  gopherit
+* FIXED Bug Artifact #3196452: Complicated offset calculation in GetCalendarSQLOffset() led to the activity SQL retrieving a result set of the wrong date range.
+* FIXED Bug Artifact #2948750: When switching from 'List' to 'Week' view, the CalendarView() class constructor kept resetting the $calendar_start_date to today's date.
+*
 * Revision 1.16  2011/01/24 22:41:01  gopherit
 * Minor HTML tweaks.
 *
