@@ -12,7 +12,7 @@ if ( !defined('IN_XRMS') )
  * Ported from the MODx CMS distributed under the GNU General Public License
  * © 2005-2009 the MODx CMS project http://modxcms.com/
  *
- * $Id
+ * $Id: protect.php,v 1.4 2011/03/03 17:46:41 gopherit Exp $
  */
 
 // Null is evil
@@ -66,6 +66,9 @@ foreach (array ('PHP_SELF', 'HTTP_USER_AGENT', 'HTTP_REFERER', 'QUERY_STRING') a
 unset ($sanitizetags, $key, $value);
 
 /**
- * $Log
+ * $Log: protect.php,v $
+ * Revision 1.4  2011/03/03 17:46:41  gopherit
+ * Egh!  CVS Keyword Syntax!
+ *
  */
 ?>
