@@ -1,10 +1,18 @@
 <?php
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 /**
  * protect.php - Protect against some common security flaws
  *
  * Ported from the MODx CMS distributed under the GNU General Public License
  * © 2005-2009 the MODx CMS project http://modxcms.com/
  *
+ * $Id
  */
 
 // Null is evil
@@ -57,4 +65,7 @@ foreach (array ('PHP_SELF', 'HTTP_USER_AGENT', 'HTTP_REFERER', 'QUERY_STRING') a
 // Unset vars
 unset ($sanitizetags, $key, $value);
 
+/**
+ * $Log
+ */
 ?>
