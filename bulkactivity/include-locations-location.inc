@@ -1,1 +1,1 @@
-<?php/** * $Id: include-locations-location.inc,v 1.4 2011/03/03 21:47:42 gopherit Exp $ */// All paths are now relative to this file ONLY$include_locations_location = '../';require_once($include_locations_location . 'include-locations.inc');/** * $Log$ */?>
+<?php// All paths are now relative to this file ONLY$include_locations_location = '../';require_once($include_locations_location . 'include-locations.inc');?>
