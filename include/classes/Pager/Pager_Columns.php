@@ -10,7 +10,7 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.30 2011/01/24 18:56:31 gopherit Exp $
+ * $Id: Pager_Columns.php,v 1.31 2011/03/04 16:40:22 gopherit Exp $
  */
 require_once('view_functions.php');
 
@@ -615,7 +615,13 @@ class Pager_Columns {
 
         // Include PEAR advmultiselect files
 		global $include_directory;
-		set_include_path(get_include_path().PATH_SEPARATOR.$include_directory."classes");
+
+                // This include path sets up the directory path to /xrms/include/classes as the primary location for the PEAR HTML QuickForm advmultiselect files.
+                set_include_path($include_directory."classes".PATH_SEPARATOR.get_include_path());
+                // If you would rather use the default PEAR installation advmultiselect (probably in a server directory resembling something like /usr/share/pear),
+                // change the line above to:
+                // set_include_path(get_include_path().PATH_SEPARATOR.$include_directory."classes");
+                
         require_once 'HTML/QuickForm.php';
         require_once 'HTML/QuickForm/advmultiselect.php';
         require_once 'HTML/QuickForm/Renderer/Default.php';
@@ -756,6 +762,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.31  2011/03/04 16:40:22  gopherit
+ * FIXED Bug Artifact #1789329: I could not evidence the bug with either of the include paths but the revised path giving priority to PEAR in /xrms/include/classes seems to make sense.  I have left the original set_include_path() call in the comments for those who would rather give priority to their server's version of PEAR instead (possibly in a location along the lines of /usr/share/pear).
+ *
  * Revision 1.30  2011/01/24 18:56:31  gopherit
  * FIXED: As of PHP 5.3, assigning the return value of new by reference is deprecated.
  *
