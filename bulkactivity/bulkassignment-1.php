@@ -2,7 +2,7 @@
 /**
 *
 *
-* $Id: bulkassignment-1.php,v 1.3 2010/12/17 21:29:05 gopherit Exp $
+* $Id: bulkassignment-1.php,v 1.4 2011/03/04 14:44:52 gopherit Exp $
 *
 */
 
@@ -88,11 +88,19 @@ if ($rst) {
 
         $company_id = $rst->fields['company_id'];
         if (($campaign_id)&&(!$unlink_campaign)){
-           $rec1['company_id'] = $company_id;
-           $rec1['campaign_id'] = $campaign_id;
-           $tbl1 = 'company_campaign_map';
-           $ins1 = $con->GetInsertSQL($tbl1, $rec1, get_magic_quotes_gpc());
-           $con->execute($ins1);
+            // Make sure this company isn't already attached to the campaign
+            $chk_sql = "SELECT 1
+                        FROM company_campaign_map
+                        WHERE company_id = $company_id
+                        AND campaign_id = $campaign_id
+                        LIMIT 1";
+            $chk = $con->Execute($chk_sql);
+            if ( $chk->EOF ) {
+                $ins_sql = "INSERT INTO company_campaign_map
+                            (company_id, campaign_id)
+                            VALUES ($company_id, $campaign_id)";
+                $con->Execute($ins_sql);
+            }
         }
         if (($campaign_id)&&($unlink_campaign)){
            $del ="DELETE FROM company_campaign_map WHERE campaign_id = $campaign_id AND company_id = $company_id LIMIT 1";
@@ -168,6 +176,9 @@ header("Location: " . $http_site_root . $return_url);
 
 /**
  * $Log: bulkassignment-1.php,v $
+ * Revision 1.4  2011/03/04 14:44:52  gopherit
+ * FIXED Bug Artifact #1848983: The script now checks whether a company has already been attached to a campaign before inserting the record.
+ *
  * Revision 1.3  2010/12/17 21:29:05  gopherit
  * General code cleanup.
  *
