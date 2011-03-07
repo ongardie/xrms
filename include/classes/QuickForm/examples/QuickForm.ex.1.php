@@ -58,7 +58,7 @@ if(check_user_role(false, $session_user_id, 'Administrator')) {
     $view->SetReturnButton('Return to List', $return_url);
     $view->SetButtonText('Your name here', 'Create', '1 2 3');
 
-    $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
+    $controller = new ADOdb_QuickForm_Controller(array(&$model), $view);
     $form_html = $controller->ProcessAndRenderForm();
 
     $con->close();

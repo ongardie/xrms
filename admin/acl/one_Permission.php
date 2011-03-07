@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Justin Cooper
- * $Id: one_Permission.php,v 1.5 2006/07/09 05:04:03 vanmer Exp $
+ * $Id: one_Permission.php,v 1.6 2011/03/07 21:36:13 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -49,7 +49,7 @@ global $symbol_precendence;
   $view = new ADOdb_QuickForm_View($con, 'Permission');
   $view->SetReturnButton('Return to List', $return_url);
 
-  $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
+  $controller = new ADOdb_QuickForm_Controller(array(&$model), $view);
   $form_html = $controller->ProcessAndRenderForm();
 
 	$con->close();
@@ -75,6 +75,9 @@ end_page();
 
 /**
  * $Log: one_Permission.php,v $
+ * Revision 1.6  2011/03/07 21:36:13  gopherit
+ * Call time pass-by-reference has been deprecated as of PHP 5.3
+ *
  * Revision 1.5  2006/07/09 05:04:03  vanmer
  * - patched ACL interface to check for admin access
  *

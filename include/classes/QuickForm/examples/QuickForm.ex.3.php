@@ -74,7 +74,7 @@ if(check_user_role(false, $session_user_id, 'Administrator')) {
     $view = new ADOdb_QuickForm_View($con, _('Edit Note'), 'POST');
     $view->SetReturnButton('Return to List', $return_url);
 
-    $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
+    $controller = new ADOdb_QuickForm_Controller(array(&$model), $view);
     $form_html = $controller->ProcessAndRenderForm();
 
     $con->close();

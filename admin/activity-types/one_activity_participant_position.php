@@ -69,7 +69,7 @@ switch ($position_action) {
   //don't run start page if updating (redirect instead)
  start_page("Edit Activity Participant Position: $participant_position_name");
   
-  $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
+  $controller = new ADOdb_QuickForm_Controller(array(&$model), $view);
   $form_html = $controller->ProcessAndRenderForm();
   echo $form_html;
  break;

@@ -3,7 +3,7 @@
  * Test harness for the XRMS GUP_QuickForm 
  *
  * @todo
- * $Id: QuickForm_test.php,v 1.4 2006/04/05 01:31:42 vanmer Exp $
+ * $Id: QuickForm_test.php,v 1.5 2011/03/07 21:36:12 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -225,7 +225,7 @@ Class XRMSQuickFormTest extends PHPUnit_TestCase {
 	    $view->SetButtonText('A B C', 'Easy As', '1 2 3');
         $view->EnableDeleteButton();
 	
-	    $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
+	    $controller = new ADOdb_QuickForm_Controller(array(&$model), $view);
 	    $qf_html = $controller->ProcessAndRenderForm();
         $msg = $controller->GetStatusMessage();
 	    $form_html = "<form name=$form_name>$msg\n$qf_html</form>";
@@ -314,6 +314,9 @@ $display->show();
  */
 /*
  * $Log: QuickForm_test.php,v $
+ * Revision 1.5  2011/03/07 21:36:12  gopherit
+ * Call time pass-by-reference has been deprecated as of PHP 5.3
+ *
  * Revision 1.4  2006/04/05 01:31:42  vanmer
  * - changed to use centralized XRMS dbconnection
  *

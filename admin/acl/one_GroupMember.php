@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Aaron van Meerten
- * $Id: one_GroupMember.php,v 1.5 2006/01/02 22:27:11 vanmer Exp $
+ * $Id: one_GroupMember.php,v 1.6 2011/03/07 21:36:12 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -57,7 +57,7 @@ if ($form_action=='delete') {
     $view->SetReturnButton('Return to List', $return_url);
     $view->EnableDeleteButton();
     
-    $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
+    $controller = new ADOdb_QuickForm_Controller(array(&$model), $view);
     $form_html = $controller->ProcessAndRenderForm();
     $render_msg=$controller->GetStatusMessage();
     if ($render_msg) { $msg.=$render_msg; }
@@ -132,6 +132,9 @@ end_page();
 
 /**
  * $Log: one_GroupMember.php,v $
+ * Revision 1.6  2011/03/07 21:36:12  gopherit
+ * Call time pass-by-reference has been deprecated as of PHP 5.3
+ *
  * Revision 1.5  2006/01/02 22:27:11  vanmer
  * - removed force of css theme for ACL interface
  * - changed to use centralized dbconnection function
