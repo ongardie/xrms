@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupUser_list.php,v 1.14 2006/07/13 00:47:20 vanmer Exp $
+ * $Id: GroupUser_list.php,v 1.15 2011/03/07 20:38:23 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -33,17 +33,17 @@ $page_title = _("Manage Group Users");
 $form_name = 'GroupUserPager';
 
 $sql="SELECT " . 
-$con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Edit")."\" onclick=\"javascript: location.href='one_GroupUser.php?form_action=edit&GroupUser_id="), 'GroupUser_id', $con->qstr("&return_url=GroupUser_list.php'\">"),$con->qstr("<input type=\"button\" class=\"button\" value=\""._("Delete") . "\" onclick=\"javascript: location.href='edit_GroupUser.php?userAction=deleteRole&return_url=GroupUser_list.php&GroupUser_id="), 'GroupUser_id', $con->qstr("'\">")) . "AS LINK, Groups.Group_name as 'UserGroup', " . 
-$con->Concat('users.last_name', $con->qstr(', '), 'users.first_names') . " AS 'User', " .  
+$con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Edit")."\" onclick=\"javascript: location.href='one_GroupUser.php?form_action=edit&GroupUser_id="), 'GroupUser_id', $con->qstr("&return_url=GroupUser_list.php'\">"),$con->qstr("<input type=\"button\" class=\"button\" value=\""._("Delete") . "\" onclick=\"javascript: location.href='edit_GroupUser.php?userAction=deleteRole&return_url=GroupUser_list.php&GroupUser_id="), 'GroupUser_id', $con->qstr("'\">")) . "AS LINK, Groups.Group_name as UserGroup, " . 
+$con->Concat('users.last_name', $con->qstr(', '), 'users.first_names') . " AS User, " .  
 "Role_name as Role, GroupUser.* FROM GroupUser LEFT OUTER JOIN Groups on Groups.Group_id=GroupUser.Group_id LEFT OUTER JOIN Role on Role.Role_id=GroupUser.Role_id LEFT OUTER JOIN users on users.user_id=GroupUser.user_id WHERE GroupUser.user_id IS NOT NULL";
 
-$user_list = "SELECT " . $con->Concat('users.last_name', $con->qstr(', '), 'users.first_names', $con->qstr(' ('), 'count(GroupUser.GroupUser_id)',$con->qstr(')')) . " AS 'User', GroupUser.user_id FROM GroupUser JOIN users ON users.user_id=GroupUser.user_id WHERE GroupUser.user_id IS NOT NULL GROUP BY GroupUser.user_id";
+$user_list = "SELECT " . $con->Concat('users.last_name', $con->qstr(', '), 'users.first_names', $con->qstr(' ('), 'count(GroupUser.GroupUser_id)',$con->qstr(')')) . " AS User, GroupUser.user_id FROM GroupUser JOIN users ON users.user_id=GroupUser.user_id WHERE GroupUser.user_id IS NOT NULL GROUP BY GroupUser.user_id";
 $user_select=$sql . " AND GroupUser.user_id= XXX-value-XXX";
 
-$group_list="SELECT " . $con->Concat('Groups.Group_name', $con->qstr(' ('), 'count(GroupUser.Group_id)',$con->qstr(')')) . " AS 'GroupName', GroupUser.Group_id FROM GroupUser JOIN Groups ON Groups.Group_id=GroupUser.Group_id WHERE GroupUser.user_id IS NOT NULL GROUP BY GroupUser.Group_id";
+$group_list="SELECT " . $con->Concat('Groups.Group_name', $con->qstr(' ('), 'count(GroupUser.Group_id)',$con->qstr(')')) . " AS GroupName, GroupUser.Group_id FROM GroupUser JOIN Groups ON Groups.Group_id=GroupUser.Group_id WHERE GroupUser.user_id IS NOT NULL GROUP BY GroupUser.Group_id";
 $group_select=$sql . " AND GroupUser.Group_id= XXX-value-XXX";
 
-$role_list="SELECT " . $con->Concat('Role.Role_name', $con->qstr(' ('), 'count(GroupUser.Role_id)',$con->qstr(')')) . " AS 'RoleName', GroupUser.Role_id FROM GroupUser JOIN Role ON GroupUser.Role_id=Role.Role_id WHERE GroupUser.user_id IS NOT NULL GROUP BY GroupUser.Role_id";
+$role_list="SELECT " . $con->Concat('Role.Role_name', $con->qstr(' ('), 'count(GroupUser.Role_id)',$con->qstr(')')) . " AS RoleName, GroupUser.Role_id FROM GroupUser JOIN Role ON GroupUser.Role_id=Role.Role_id WHERE GroupUser.user_id IS NOT NULL GROUP BY GroupUser.Role_id";
 $role_select=$sql . " AND GroupUser.Role_id= XXX-value-XXX";
 
     $columns = array();
@@ -101,6 +101,9 @@ end_page();
 
 /**
  * $Log: GroupUser_list.php,v $
+ * Revision 1.15  2011/03/07 20:38:23  gopherit
+ * FIXED Bug Artifact #1676233  Removed quotes around SQL 'AS' alias names.
+ *
  * Revision 1.14  2006/07/13 00:47:20  vanmer
  * - changed all columns/pager combinations to reference the same pager name, to allow saved views to operate properly
  *
