@@ -40,6 +40,7 @@ $state = $_REQUEST['state'];
 $country = $_REQUEST['country'];
 
 $con = get_xrms_dbconnection();
+//$con->debug = TRUE;
 
 // if pdf action was selected then output a pdf instead of html page
 if ($pdf)
@@ -124,14 +125,15 @@ $crm_status_menu = build_crm_status_menu($con, $crm_status_id, true);
 </table>
 </form>
 
-<div id="report">
 <?php
 if ($go)
-{
-    echo companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_category_id,
-            $company_source_id,$crm_status_id);
-}
-echo '</div>';
+    {
+    ?><div id="report"><?php
+        echo companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_category_id,
+                $company_source_id,$crm_status_id);
+    ?></div><?php
+    }
+
 end_page();
 exit;
 
@@ -181,47 +183,77 @@ function companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_
     $output .= "<td$w9$h>" . _("User") . "</td>";
     $output .= "<td$w10$h>" . _("Notes") . "</td>";
     $output .= "</tr>\n";
-    $sql2 = "SELECT c.company_name, c.company_id, c.company_code, a.line1, a.line2, a.postal_code, a.city, ";
-    $sql2 .= "a.province, c.phone, co.country_name, u.username from ";
-    $sql2 .= "companies c, addresses a, countries co, users u ";
+    
+    // Query based on the search parameters input from the user
+    $sql = 'SELECT
+                c.company_code,
+                c.company_id,
+                c.company_name,
+                c.phone,
+                a.line1,
+                a.line2, 
+                a.city, 
+                a.province, 
+                a.postal_code,
+                co.country_name,
+                u.username
+            FROM
+                users u, ';
     if($company_category_id)
     {
-        $sql2 .= ", categories ca, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm ";
+        $sql .= 'categories ca,
+                category_scopes cs,
+                category_category_scope_map ccsm,
+                entity_category_map ecm, ';
     }
-    $sql2 .= "where a.on_what_table='companies' and a.on_what_id=c.company_id and c.default_primary_address=a.address_id ";
-    $sql2 .= "and c.company_record_status='a' and a.address_record_status='a' and co.country_id = a.country_id ";
-    $sql2 .= "and co.country_record_status='a' and u.user_id = c.user_id ";
-    $sql2 .= "and ". multi_cond('a.city',$city);
-    $sql2 .= "and ". multi_cond('c.company_name',$name);
-    $sql2 .= "and ". multi_cond('co.country_name',$country);
-    $sql2 .= "and ". multi_cond('a.province',$state);
+    $sql .= 'companies c ';
+    $sql .= "LEFT JOIN addresses a
+                ON a.address_record_status = 'a'
+                AND ((a.on_what_table = 'companies'
+                    AND a.on_what_id = c.company_id)
+                    OR c.default_primary_address = a.address_id) ";
+    $sql .= "LEFT JOIN countries co
+                ON co.country_id = a.country_id
+                AND co.country_record_status = 'a' ";
+    
+    $sql .= "WHERE c.company_record_status = 'a'
+            AND ". multi_cond('c.company_name', $name) .' ';
     if($user_id)
     {
-        $sql2 .= "and u.user_id ='$user_id' ";
+        $sql .= "AND c.user_id ='$user_id' ";
+    }
+    $sql .= 'AND u.user_id = c.user_id ';
+    if($company_category_id)
+    {
+        $sql .= "AND ecm.on_what_table = 'companies'
+                 AND ecm.on_what_id = c.company_id ";
+        $sql .= "AND ecm.category_id = ca.category_id
+                 AND cs.category_scope_id = ccsm.category_scope_id ";
+        $sql .= "AND ca.category_id = ccsm.category_id
+                 AND cs.on_what_table = 'companies' ";
+        $sql .= "AND category_record_status = 'a'
+                 AND ca.category_id = '$company_category_id' ";
     }
     if($company_source_id)
     {
-        $sql2 .= "and c.company_source_id = $company_source_id ";
+        $sql .= "AND c.company_source_id = '$company_source_id' ";
     }
     if($crm_status_id)
     {
-        $sql2 .= "and c.crm_status_id = $crm_status_id ";
+        $sql .= "AND c.crm_status_id = '$crm_status_id' ";
     }
-    if($company_category_id)
-    {
-        $sql2 .= "and ecm.on_what_table = 'companies' and ecm.on_what_id = c.company_id ";
-        $sql2 .= "and ecm.category_id = ca.category_id and cs.category_scope_id = ccsm.category_scope_id ";
-        $sql2 .= "and ca.category_id = ccsm.category_id and cs.on_what_table = 'companies' ";
-        $sql2 .= "and category_record_status = 'a' and ca.category_id='$company_category_id' ";
-    }
-    $sql2 .= "order by 1";
-    $rst = $con->execute($sql2);
+    $sql .= "AND ". multi_cond('a.city',$city) .' ';
+    $sql .= "AND ". multi_cond('co.country_name',$country) .' ';
+    $sql .= "AND ". multi_cond('a.province',$state) .' ';
+    
+    $sql .= "ORDER BY c.company_name";
+    $rst = $con->execute($sql);
     if ($rst)
     {
         while (!$rst->EOF)
         {
-            $output .= "<tr><td$w1$l><a href=../companies/one.php?company_id=".$rst->fields['company_id'].">" . nbsp($rst->fields['company_code']) . "</a></td>";
-            $output .= "<td$w2$l>" . nbsp($rst->fields['company_name']) . "</td>";
+            $output .= "<tr><td$w1$l>" . nbsp($rst->fields['company_code']) . "</td>";
+            $output .= "<td$w2$l><a href=../companies/one.php?company_id=".$rst->fields['company_id'].">" . nbsp($rst->fields['company_name']) . "</a></td>";
             $output .= "<td$w3$l>" . nbsp($rst->fields['line1'].' '.$rst->fields['line2']) . "</td>";
             $output .= "<td$w4$l>" . nbsp($rst->fields['postal_code']) . "</td>";
             $output .= "<td$w5$l>" . nbsp($rst->fields['city']) . "</td>";
@@ -321,6 +353,9 @@ function nbsp($in)
 
 /**
  * $Log: companies-list.php,v $
+ * Revision 1.14  2011/03/07 19:12:00  gopherit
+ * FIXED Bug Artifact #1725395  Converted some of the WHERE clauses to LEFT JOIN clauses.
+ *
  * Revision 1.13  2007/05/15 23:17:31  ongardie
  * - Addresses now associate with on_what_table, on_what_id instead of company_id.
  *
