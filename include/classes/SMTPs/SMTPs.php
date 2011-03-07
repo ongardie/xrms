@@ -32,11 +32,11 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.25 $
+   * @version $Revision: 1.26 $
    * @copyright copyright information
    * @license GNU General Public Licence
    *
-   * $Id: SMTPs.php,v 1.25 2011/02/18 22:22:49 gopherit Exp $
+   * $Id: SMTPs.php,v 1.26 2011/03/07 21:54:54 gopherit Exp $
    *
    **/
 
@@ -1391,7 +1391,7 @@ class SMTPs
 
                 // Seperate "Real Name" from eMail address
                 $_tmpaddr = null;
-                $_tmpaddr = explode ( '\<', $_strAddr );
+                $_tmpaddr = explode ( '<', $_strAddr );
 
                 // We have a "Real Name" and eMail address
                 if ( count ($_tmpaddr) == 2 )
@@ -2399,6 +2399,9 @@ class SMTPs
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.26  2011/03/07 21:54:54  gopherit
+  * FIXED Bug Artifact #1594121  Fixed delimiter for explode(), formerly split().  Even when this function was split the back slash did not belong there.
+  *
   * Revision 1.25  2011/02/18 22:22:49  gopherit
   * Replaced functions split() and spliti() which have been deprecated as of PHP 5.3
   *
