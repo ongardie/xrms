@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @package XRMS_API
  *
- * $Id: utils-activities.php,v 1.38 2010/12/15 22:50:52 gopherit Exp $
+ * $Id: utils-activities.php,v 1.39 2011/03/09 14:54:30 gopherit Exp $
 
  */
 
@@ -516,8 +516,7 @@ function get_activity_participant_positions($con, $activity_participant_position
  *
  * @return integer $activity_participant_id with ID of newly created activity participant
  */
-function add_activity_participant($con, $activity_id, $contact_id, $activity_participant_position_id=false) {
-    if (!$activity_participant_position_id) $activity_participant_position_id=1;
+function add_activity_participant($con, $activity_id, $contact_id, $activity_participant_position_id=1) {
         if (!$contact_id) {  return false; }
         if (!$activity_id) { return false; }
 
@@ -787,6 +786,9 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.39  2011/03/09 14:54:30  gopherit
+  * Cleaned up the $activity_participant_position_id default parameter value
+  *
   * Revision 1.38  2010/12/15 22:50:52  gopherit
   * Implemented advancing of the campaign workflow on campaign workflow activity completion.
   *
