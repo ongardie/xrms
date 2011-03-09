@@ -9,7 +9,7 @@
  * @author Brian Peterson
  *
  * @package XRMS_API
- * $Id: utils-misc.php,v 1.198 2011/02/24 23:05:03 gopherit Exp $
+ * $Id: utils-misc.php,v 1.199 2011/03/09 14:11:48 gopherit Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -525,15 +525,20 @@ function fetch_company_id($con, $company_name) {
  * @return integer $address_id found ID or 1 if no match
  */
 function fetch_default_address($con, $company_id) {
-    $sql_fetch_address_id = "select default_primary_address from companies where company_id = $company_id";
-    if ($rst_address_id = $con->execute($sql_fetch_address_id)) {
-       // no SQL error
-       if($rst_address_id->NumRows()) {
-          // record found in in table
-          $address_id = $rst_address_id->fields['default_primary_address'];
-          $rst_address_id->close();
-      } else { $address_id = 1; }
-    } else { db_error_handler ($con,$sql_fetch_address_id);} // SQL error
+    $sql = "SELECT default_primary_address
+            FROM companies
+            WHERE company_id = $company_id";
+    $rst = $con->Execute($sql);
+    if ($rst) {
+        // no SQL error
+        if(!$rst->EOF) {
+            // record found in in table
+            $address_id = $rst->fields['default_primary_address'];
+            $rst->close();
+        } else {
+            $address_id = 1;
+        }
+    } else { db_error_handler ($con, $sql);} // SQL error
     return $address_id;
 }
 
@@ -2124,6 +2129,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.199  2011/03/09 14:11:48  gopherit
+ * Cleaned up the fetch_default_address() function.
+ *
  * Revision 1.198  2011/02/24 23:05:03  gopherit
  * FIXED Bug Artifact #3191710 Wholesale assignment of values in arr_vars_session_set() led to some unset values being assigned to the $_SESSION extention which triggers the warning.
  *
