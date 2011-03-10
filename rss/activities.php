@@ -11,7 +11,7 @@
  * status = open or scheduled or overdue or closed or current (open or closed).  Default all.
  * type = limit activity type.  Default all.
  *
- * $Id: activities.php,v 1.8 2006/04/05 01:21:51 vanmer Exp $
+ * $Id: activities.php,v 1.9 2011/03/10 14:58:06 gopherit Exp $
  */
 
 //include required files
@@ -218,15 +218,15 @@ if ($rst) {
 	$num_activities = $rst->rowcount();
 	while (!$rst->EOF) {
 		$activity_id = $rst->fields['activity_id'];
-		$activity_title = str_replace("&", "&amp;", htmlentities($rst->fields['activity_title'], ENT_COMPAT, 'UTF-8'));
-		$activity_description = str_replace("&", "&amp;", htmlentities($rst->fields['activity_description'], ENT_COMPAT, 'UTF-8'));
+		$activity_title = htmlentities($rst->fields['activity_title'], ENT_COMPAT, 'UTF-8');
+		$activity_description = htmlentities($rst->fields['activity_description'], ENT_COMPAT, 'UTF-8');
 		$activity_status = $rst->fields['activity_status'];
 		$ends_at = $rst->fields['ends_at'];
 		$last_modified_at = $rst->fields['last_modified_at'];
 		$last_modified_f = date("r", strtotime($last_modified_at));
 		$pub_date = date("r", strtotime($last_modified_at));
-		$company_name = $rst->fields['company_name'];
-		$author = $rst->fields['author'];
+		$company_name = htmlentities($rst->fields['company_name'], ENT_COMPAT, 'UTF-8');
+		$author = htmlentities($rst->fields['author'], ENT_COMPAT, 'UTF-8');
 		$description = "&lt;p&gt;&lt;b&gt;$company_name&lt;/b&gt;&lt;/p&gt;" . $activity_description;
 		$items_text .= "      <item>\n";
 		$items_text .= '         <title>' . $activity_title . '</title>' . "\n";
@@ -274,6 +274,10 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
 
 /**
  * $Log: activities.php,v $
+ * Revision 1.9  2011/03/10 14:58:06  gopherit
+ * FIXED Bug Artifact #1585901  Added htmlentities() conversion to the company_name and author fields.
+ * Also, removed overzealous conversion of the '&' sign in the activity_title and activity_description.
+ *
  * Revision 1.8  2006/04/05 01:21:51  vanmer
  * - ensure last date is provided to rss stream
  *
