@@ -2,7 +2,7 @@
 /**
  * Administration interface for managing permissions for one role
  *
- * $Id: role_permission_grid.php,v 1.13 2006/08/02 20:52:40 vanmer Exp $
+ * $Id: role_permission_grid.php,v 1.14 2011/03/29 21:11:15 gopherit Exp $
  *
  */
 
@@ -135,11 +135,12 @@ TILLEND;
                 echo "<ul><li>" . _("I - Permission is Inheritable") . '<br>';
                 echo "<li>" . _("N - Permission is Non-Inheritable") . '<br>';
                 echo "<li>" . _("empty - No Permission assigned") . '<br></ul>';
-                echo "<table class=widget><tr><th>&nbsp;</th>\n";
+                echo '<table class=widget><tr><tr><th rowspan="2" style="text-align: right; vertical-align: middle;">'
+                    . _('Parent') .' -> ' ._('Child') .' '._('Relationship')."&nbsp;</th>\n";
                 foreach ($scopes as $scope) {
                     echo "<th colspan=$permcount>$scope</th>";
                 }
-                echo "</tr><tr><th>&nbsp;</th>";
+                echo "</tr><tr>";
                 
                foreach ($scopes as $scope) {
                 foreach ($permission_names as $perm) { 
@@ -151,9 +152,9 @@ TILLEND;
                 foreach ($relationships as $cor=>$rel) {
                     if ($rel['ParentControlledObject_id']) {
                         $parentObject=$acl->get_controlled_object(false,$rel['ParentControlledObject_id']);
-                        $parent_name=" -> {$parentObject['ControlledObject_name']}";
+                        $parent_name="{$parentObject['ControlledObject_name']} -> ";
                     } else $parent_name="";
-                    echo "<tr><td class=widget_label_right>{$rel['ControlledObject_name']}{$parent_name}</td>";
+                    echo "<tr><td class=widget_label_right>{$parent_name}{$rel['ControlledObject_name']}</td>";
                     foreach ($scopes as $scope) {
                         foreach ($permissions as $perm) {
                             $inherit_selected=($current_permissions[$scope][$cor][$perm]==2) ? 'SELECTED' : '';
