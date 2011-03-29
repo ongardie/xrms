@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.24 2009/04/07 07:28:29 gopherit Exp $
+ * $Id: install.php,v 1.25 2011/03/29 22:11:14 gopherit Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -294,14 +294,20 @@ $data_sql=$schema->getDataSQL();
 //INSTALL STRUCTURE
 foreach ($structure_sql as $sql) {
 	$rst=$con->execute($sql);
-	if (!$rst) db_error_handler($con, $sql);
+	if (!$rst) {
+            db_error_handler($con, $sql);
+            $error = TRUE;
+        }
 }
 
 //INSTALL DATA
 if ($execute_data=='true') {
     foreach ($data_sql as $sql) {
 	$rst=$con->execute($sql);
-	if (!$rst) db_error_handler($con, $sql);
+	if (!$rst) {
+            db_error_handler($con, $sql);
+            $error = TRUE;
+        }
     }
 }
 
@@ -310,6 +316,12 @@ do_hook_function('xrms_install', $con);
 
 //close the connection
 $con->close();
+
+if ($error) {
+    $problem = '<p>There were problems with the database installation.</p>
+                <p>You can run the installation again after the error(s) listed above have been corrected.</p>';
+    install_fatal_error($problem);
+}
 
 // get message
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
@@ -336,6 +348,9 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.25  2011/03/29 22:11:14  gopherit
+ *FIXED Bug Artifact #1484218  /install/install.php now aborts on problems with the database tables creation and initial data population.
+ *
  *Revision 1.24  2009/04/07 07:28:29  gopherit
  *Test on line 241 was giving a false negative since get_xrms_dbconnection() returns an ADOdb object and is never null.  Modified to check for an actual ADOdb error message instead.
  *
