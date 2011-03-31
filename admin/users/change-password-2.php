@@ -5,7 +5,7 @@
  * Check that new password entries are identical
  * Then save in the database.
  *
- * $Id: change-password-2.php,v 1.14 2006/11/25 15:48:34 jnhayart Exp $
+ * $Id: change-password-2.php,v 1.15 2011/03/31 14:48:15 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -57,7 +57,7 @@ if ($password == $confirm_password) {
             $con->close();
 
             $msg = urlencode(_("There was a problem with the user ID.(Or not new password). Password not Changed."));
-            header("Location: change-password.php?msg=$msg");
+            header("Location: change-password.php?edit_user_id=$edit_user_id&msg=$msg");
         }
     } else { // no result set on finding the user
         db_error_handler ($con, $sql);
@@ -66,11 +66,14 @@ if ($password == $confirm_password) {
     }
 
 } else {
-    header("Location: change-password.php?msg=password_no_match");
+    header("Location: change-password.php?edit_user_id=$edit_user_id&msg=password_no_match");
 }
 
 /**
  *$Log: change-password-2.php,v $
+ *Revision 1.15  2011/03/31 14:48:15  gopherit
+ *FIXED Bug Artifact #3264216 Fixed inaccurate URL construction in /admin/users/change-password-2.php
+ *
  *Revision 1.14  2006/11/25 15:48:34  jnhayart
  *change comment, where new password same of old one
  *
