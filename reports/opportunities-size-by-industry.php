@@ -3,7 +3,7 @@
  *
  * Opportunities size by industry report.
  *
- * $Id: opportunities-size-by-industry.php,v 1.11 2006/01/02 23:46:52 vanmer Exp $
+ * $Id: opportunities-size-by-industry.php,v 1.12 2011/03/31 17:19:44 gopherit Exp $
  */
 
 require_once('../include-locations.inc');
@@ -67,7 +67,7 @@ function GetOpportunitiesQuantityByOpportunityStatusGraph($con) {
 	
 	while (!$rst1->EOF) {
 	
-	    $sql2 = "select sum(size*probability)/100 as total, sum(size) - sum(size*probability)/100 as weighted_total 
+	    $sql2 = "select sum(size) - sum(size*probability)/100 as total, sum(size*probability)/100 as weighted_total 
 	    from opportunities, companies 
 	    where opportunities.company_id = companies.company_id 
 	    and industry_id = " . $rst1->fields['industry_id'] . " 
@@ -93,7 +93,7 @@ function GetOpportunitiesQuantityByOpportunityStatusGraph($con) {
 	    array_push($array_of_total_values, $total);
 	    array_push($array_of_total_weighted_values, $weighted_total);
 	    array_push($graph_legend_array, $rst1->fields['industry_pretty_name']);
-		array_push($graph_url_array, $http_site_root . '/opportunities/some.php?industry_id=' . $rst1->fields['industry_id']);
+            array_push($graph_url_array, $http_site_root . '/opportunities/some.php?industry_id=' . $rst1->fields['industry_id']);
 	    $rst1->movenext();
 	
 	}
@@ -104,9 +104,9 @@ function GetOpportunitiesQuantityByOpportunityStatusGraph($con) {
 	
 	$graph_info = array();
 	$graph_info['size_class']   = 'main';
-	$graph_info['graph_type']   = 'grouped_bar';
-	$graph_info['data']         = array($array_of_total_values, $array_of_total_weighted_values);
-	$graph_info['legend']       = array('Total', 'Weighted');
+	$graph_info['graph_type']   = 'accumulated_bar';
+	$graph_info['data']         = array($array_of_total_weighted_values, $array_of_total_values);
+	$graph_info['legend']       = array('Weighted', 'Total');
 	$graph_info['x_labels']     = $graph_legend_array;
 	$graph_info['xaxis_label_angle'] = 30;
 	$graph_info['xaxis_font_size'] = 7;
@@ -126,6 +126,9 @@ function GetOpportunitiesQuantityByOpportunityStatusGraph($con) {
 
 /**
  * $Log: opportunities-size-by-industry.php,v $
+ * Revision 1.12  2011/03/31 17:19:44  gopherit
+ * FIXED Bug Artifact #3264748 The graph now stacks the weighted and total opportunity sizes.
+ *
  * Revision 1.11  2006/01/02 23:46:52  vanmer
  * - changed to use centralized dbconnection function
  *
