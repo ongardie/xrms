@@ -476,8 +476,9 @@ if (!empty($email_to)) {
     $tmp['to'] = $email_to;
     $tmp['subject'] = _("Updated Activity") . ": " . $activity_title;
     $tmp['body_html'] = $output;
-
+    $tmp['charset'] = $default_charset;
     $activity_mailer = do_hook_function('activity_mailer', $tmp);
+
     if (!$activity_mailer) {
 
         require_once $include_directory . 'classes/SMTPs/SMTPs.php';
@@ -488,6 +489,7 @@ if (!empty($email_to)) {
         $objSMTP->setSubject ( _("Updated Activity") . ": " . $activity_title );
         $objSMTP->setTo ( $email_to );
         $objSMTP->setBodyContent ( $output, 'html');
+        $objSMTP->setCharSet($default_charset);
 
         $objSMTP->sendMsg ();
         $errors = $objSMTP->getErrors();
@@ -581,6 +583,9 @@ if ($followup) {
 
 /**
  * $Log: save&followup.php,v $
+ * Revision 1.9  2011/03/31 15:49:24  gopherit
+ * FIXED Bug Artifact #1247301 Passed the charset to the SMTPs class when emailing activities.
+ *
  * Revision 1.8  2010/12/15 17:18:33  gopherit
  * Added CVS log tags.
  *

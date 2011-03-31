@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.91 2010/05/05 18:28:51 gopherit Exp $
+ * $Id: edit-2.php,v 1.92 2011/03/31 15:49:24 gopherit Exp $
  */
 
 //include required files
@@ -377,6 +377,7 @@ if (!empty($email_to)) {
     $objSMTP->setSubject ( _("Updated Activity") . " " . $activity_title );
     $objSMTP->setTo ( $email_to );
     $objSMTP->setBodyContent ( $output, 'html');
+    $objSMTP->setCharSet($default_charset);
 
     $objSMTP->sendMsg ();
     $errors = $objSMTP->getErrors();
@@ -418,6 +419,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.92  2011/03/31 15:49:24  gopherit
+ * FIXED Bug Artifact #1247301 Passed the charset to the SMTPs class when emailing activities.
+ *
  * Revision 1.91  2010/05/05 18:28:51  gopherit
  * Fixed: Wrong "last modified" Date, bug item #2974290. Last modified date was not storing properly in the database when a 12-hour (am/pm) clock was used.  Fiix provided by helpfull1961@sourceforge.net
  *
