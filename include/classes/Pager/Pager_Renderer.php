@@ -12,7 +12,7 @@
  *
  * @example Pager_Renderer.doc.1.php check out
  *
- * $Id: Pager_Renderer.php,v 1.4 2008/05/17 16:44:05 randym56 Exp $
+ * $Id: Pager_Renderer.php,v 1.5 2011/03/31 21:30:12 gopherit Exp $
  */
 
 
@@ -74,10 +74,11 @@ class Pager_Renderer {
         $render_data =& $this->render_data;
 
         if($render_data['show_caption_bar']) {
+            $record_count = (int)$render_data['record_count'];
             echo "
                 <tr><td colspan={$render_data['colspan']} class=widget_header align=left>
                     <table width=\"100%\" cellspacing=0 cellpadding=0 border=0>
-                        <tr><td class=widget_header align=left>{$render_data['caption']}</td>
+                        <tr><td class=widget_header align=left>$record_count&nbsp;{$render_data['caption']}</td>
                             <td class=widget_header align=right>{$render_data['showhide_link']}{$render_data['cache_indicator']}{$render_data['size_buttons']}</td>
                         </tr>
                     </table>
@@ -95,13 +96,13 @@ class Pager_Renderer {
 
             $page_count_html = _("Page") . ' ' . $render_data['current_page'] . "/" . $render_data['last_page'];
 
-            if($render_data['record_count'] > -1) {
-                $page_count_html .= ' (' . $render_data['record_count'] . ' '. _("records found") . ')';
-            }
+//            if($render_data['record_count'] > -1) {
+//                $page_count_html .= ' (' . $render_data['record_count'] . ' '. _("records found") . ')';
+//            }
 
             echo "<tr><td colspan={$render_data['colspan']} class=widget_label>".
                         "<table border=0 cellpadding=0 cellspacing=0 width=\"100%\">".
-                        "<tr><td class=widget_label style=\"text-align: left;\">{$page_count_html} </td><td style=\"text-align: right;\" class=widget_label>{$render_data['page_nav']}</td></tr>".
+                        "<tr><td class=widget_label style=\"text-align: left;\">{$page_count_html}</td><td style=\"text-align: right;\" class=widget_label>{$render_data['page_nav']}</td></tr>".
                         "</table>".
                  "</td></tr>\n";
         }
@@ -277,6 +278,9 @@ class Pager_Renderer {
 }
 /**
  * $Log: Pager_Renderer.php,v $
+ * Revision 1.5  2011/03/31 21:30:12  gopherit
+ * FIXED Bug Artifact #1585455 the Pager_Renderer now always displays the number of record search results.
+ *
  * Revision 1.4  2008/05/17 16:44:05  randym56
  * Bug in total/subtotal fixed
  * Added currency0 and percent types
