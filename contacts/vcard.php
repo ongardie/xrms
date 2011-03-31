@@ -4,7 +4,7 @@
  *
  * This page allows for export vcard for a single contact.
  *
- * $Id: vcard.php,v 1.11 2006/05/26 19:38:02 ongardie Exp $
+ * $Id: vcard.php,v 1.12 2011/03/31 18:22:57 gopherit Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -64,19 +64,49 @@ if ($rst) {
 
 $con->close();
 
-$vcard = "BEGIN:VCARD
-VERSION:2.1
-N:".$last_name.";".$first_names."
-FN:".$first_names." ".$last_name."
-TITLE:".$title."
-ORG:".$company_name."
-ADR;WORK:;;".$line1." - ".$line2.";".$city.";".$province.";".$postal_code.";".$country."
-TEL;WORK;VOICE:".$work_phone."
-TEL;FAX:".$fax."
-EMAIL:".$email."
-TEL;CELL:".$cell_phone."
-REV:20031119T213210Z
-END:VCARD";
+// Construct the VCard output
+$vcard  = "BEGIN:VCARD\n";
+$vcard .= "VERSION:2.1\n";
+
+// Add the names
+if ($first_names OR $last_name) {
+    $vcard .= "N:$last_name;$first_names\n";
+    $vcard .= "FN:$first_names $last_name\n";
+}
+
+// Add the title
+if ($title)
+    $vcard .= "TITLE:$title\n";
+
+// Add the company name
+if ($company_name)
+    $vcard .= "ORG:$company_name\n";
+
+// Add the address
+$tmp = 'ADR;WORK:;;';
+if ($line1)
+    $tmp .= $line1;
+if ($line1 AND $line2)
+    $tmp .= ' - ';
+if ($line2)
+    $tmp .= $line2;
+if ($city OR $province OR $postal_code OR $country)
+    $tmp .=";".$city.";".$province.";".$postal_code.";".$country;
+$vcard .= "$tmp\n";
+
+// Add the phone numbers and email
+if ($work_phone)
+    $vcard .= "TEL;WORK;VOICE:".$work_phone."\n";
+if ($fax)
+    $vcard .= "TEL;FAX:".$fax."\n";
+if ($email)
+    $vcard .= "EMAIL:".$email."\n";
+if (cell_phone)
+    $vcard .= "TEL;CELL:".$cell_phone."\n";
+
+// Add the VCard end tags
+$vcard .= "REV:20031119T213210Z\n";
+$vcard .= "END:VCARD";
 
 $filesize = strlen($vcard);
 
@@ -88,6 +118,9 @@ exit;
 
 /**
  * $Log: vcard.php,v $
+ * Revision 1.12  2011/03/31 18:22:57  gopherit
+ * FIXED Bug Artifact #999518 Removed empty fields from the VCard output.
+ *
  * Revision 1.11  2006/05/26 19:38:02  ongardie
  * - Added provinces to vcard output.
  *
