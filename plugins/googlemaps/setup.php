@@ -6,7 +6,7 @@
 * polyformal ( http://www.polyformal.de/ )
 * (c) 2007 (GNU GPL - see ../../COPYING)
 * 
-* $Id: setup.php,v 1.5 2010/03/11 02:45:32 gopherit Exp $
+* $Id: setup.php,v 1.6 2011/04/05 20:09:02 gopherit Exp $
 *
 * This plugin allows show the location of the selected company in the sidebar
 * within google maps.
@@ -148,7 +148,7 @@ if (window.attachEvent) {
 // END NEW CODE TO AVOID USING BODY TAG FOR LOAD/UNLOAD
 
     </script>
-     <a target="_blank" href="http://maps.google.com/maps?daddr='. $html_address .'&geocode=&saddr='.$user_html_address.'&f=d&ie=UTF8&z=12&om=1">Show Route</a>
+     <a target="_blank" href="http://maps.google.com/maps?daddr='. $html_address .'&geocode=&saddr='.$user_html_address.'&f=d&z=12&om=1">Show Route</a>
       <div id="map" style="width: 100%; height: 300px"></div>
     </form>          
 
@@ -179,6 +179,9 @@ function get_gm_address($sql) {
 }
 /*
  * $Log: setup.php,v $
+ * Revision 1.6  2011/04/05 20:09:02  gopherit
+ * FIXED Bug Artifact #2973756  Removed charset encoding parameter from the URL to enable users with extended character sets to make GET requests to GoogleMaps.
+ *
  * Revision 1.5  2010/03/11 02:45:32  gopherit
  * The plugin route URL defaulted to http://maps.google.de/ and German language.  Switched it to point to http://maps.google.com/ and removed the language reference to allow Google Maps to self-determine the user's language.
  *
