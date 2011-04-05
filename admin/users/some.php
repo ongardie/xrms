@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.25 2008/06/10 20:24:17 randym56 Exp $
+ * $Id: some.php,v 1.26 2011/04/05 19:11:28 gopherit Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -160,7 +160,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Password"); ?></td>
-                <td class=widget_content_form_element><input type=password name=password> <?php echo $required_indicator; ?></td>
+                <td class=widget_content_form_element><input type=password name=password> <?php if(!$xrms_use_ldap) echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("E-Mail"); ?></td>
@@ -205,10 +205,12 @@ function validate() {
         msgToDisplay += '\n<?php echo addslashes(_("You must enter a last name.")); ?>';
     }
 
+<?php if(!$xrms_use_ldap) { ?>
     if (document.forms[0].password.value == '') {
         numberOfErrors ++;
         msgToDisplay += '\n<?php echo addslashes(_("You must enter a password.")); ?>';
     }
+<?php } ?>
 
     if (numberOfErrors > 0) {
         alert(msgToDisplay);
@@ -227,6 +229,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.26  2011/04/05 19:11:28  gopherit
+ * FIXED Bug Artifact #1119512  If $xrms_use_ldap is set to TRUE in vars.php, it is now possible to create a user without entering a password for them.
+ *
  * Revision 1.25  2008/06/10 20:24:17  randym56
  * - Add ability to deactivate users without setting the 'd'elete flag (set to 'b') so that the records don't get purged.
  * - Add function to move all Company, Contact & Activity records to alternate user when deleting the user to maintain DB integrity.
@@ -243,7 +248,7 @@ end_page();
  *
  * Revision 1.21  2006/04/11 01:15:31  vanmer
  * - applied patch to split users tables into Active and Disabled
- * - thanks to Jean-Noël HAYART for the patch
+ * - thanks to Jean-Noï¿½l HAYART for the patch
  *
  * Revision 1.20  2006/01/02 22:09:39  vanmer
  * - changed to use centralized dbconnection function

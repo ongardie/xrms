@@ -4,7 +4,7 @@
  *
  * @package XRMS_API
  *
- * $Id: utils-users.php,v 1.5 2007/01/12 00:17:39 ongardie Exp $
+ * $Id: utils-users.php,v 1.6 2011/04/05 19:11:27 gopherit Exp $
  */
 
 /**
@@ -25,10 +25,13 @@
  * @return integer $user_id with user_id of new user
  */
 function add_xrms_user($con, $new_username, $password, $role_id, $first_names, $last_name, $email, $gmt_offset, $user_enabled=true, $user_id=false, &$error_msg) {
+
+    global $xrms_use_ldap;
+    
     if (!$new_username) { $error_msg=_("No username specified"); return false; }
     $current_user=get_xrms_user($con, $new_username);
     if ($current_user) { $error_msg=_("User") . ' ' . $new_username . ' ' . _("already exists in the system, please choose a different username"); return false; }
-    if (!$password) { $error_msg=_("You must enter a password"); return false; }
+    if (!$password AND !$xrms_use_ldap) { $error_msg=_("You must enter a password"); return false; }
     if (!$last_name) { $error_msg=_("You must enter a last name"); return false; }
     $gmt_offset = ($gmt_offset < 0) || ($gmt_offset > 0) ? $gmt_offset : 0;
     $password = md5($password);
@@ -112,6 +115,9 @@ function get_xrms_user_string($user_id) {
 
 /**
  * $Log: utils-users.php,v $
+ * Revision 1.6  2011/04/05 19:11:27  gopherit
+ * FIXED Bug Artifact #1119512  If $xrms_use_ldap is set to TRUE in vars.php, it is now possible to create a user without entering a password for them.
+ *
  * Revision 1.5  2007/01/12 00:17:39  ongardie
  * - Added get_xrms_user_string()
  *
