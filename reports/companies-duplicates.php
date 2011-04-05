@@ -79,7 +79,7 @@ $user_menu = get_user_menu($con, $user_id, true);
 */
 $sql = "SELECT  
 CONCAT('<a href=../companies/one.php?company_id=',c1.company_id,'>',c1.company_name,'</a>') as company_name,
-c1.company_code,CONCAT('Possible Dupe with ','<a href=../companies/one.php?company_id=',c2.company_id,'>',c2.company_name,' ',c2.company_code,'</a>') as 'Possible Dupe Name',
+c1.company_code,CONCAT('Possible Dupe with ','<a href=../companies/one.php?company_id=',c2.company_id,'>',c2.company_name,' ',c2.company_code,'</a>') as 'PossibleDupeName',
 c1.profile,
 c1.phone,
 c1.url,
@@ -89,32 +89,39 @@ WHERE c1.company_name LIKE c2.company_name AND c1.company_id<>c2.company_id AND 
 //ORDER BY c1.company_name";
 				
 ?>
-<div id="report"><form name="CompanyForm">
+<p>&nbsp;</p>
+<div id="report">
+    <form name="CompanyForm" method="POST" action="companies-duplicates.php">
 
-<?	 
-//$pager = new ADODB_Pager($con,$sql);
-//$pager->Render(); 
+    <?
+    //$pager = new ADODB_Pager($con,$sql);
+    //$pager->Render();
 
-$pager_id='CompanyPager';
-$form_id='CompanyForm';
-$columns = array();
-$columns[] = array('name' => _("Company Name"), 'index_sql' => 'company_name','default_sort' => 'asc');
-$columns[] = array('name' => _("Possible Dupe Name"), 'index_sql' => 'Possible Dupe Name');
-$columns[] = array('name' => _("Company Code"), 'index_sql' => 'company_code');
-$columns[] = array('name' => _("Profile"), 'index_sql' => 'profile');
-$columns[] = array('name' => _("Phone"), 'index_sql' => 'phone');
-$columns[] = array('name' => _("URL"), 'index_sql' => 'url', 'type' => 'html');
-$columns[] = array('name' => _("Entered at"), 'index_sql' => 'entered_at');
-$pager2 = new GUP_Pager($con, $sql, null, _('Duplicate Search Results'), $form_id, $pager_id, $columns);
-$pager2->Render(100);
-?>
-</form>
+    $pager_id='CompanyPager';
+    $form_id='CompanyForm';
+    $columns = array();
+    $columns[] = array('name' => _("Company Name"), 'index_sql' => 'company_name','default_sort' => 'asc');
+    $columns[] = array('name' => _("Possible Dupe Name"), 'index_sql' => 'PossibleDupeName');
+    $columns[] = array('name' => _("Company Code"), 'index_sql' => 'company_code');
+    $columns[] = array('name' => _("Profile"), 'index_sql' => 'profile');
+    $columns[] = array('name' => _("Phone"), 'index_sql' => 'phone');
+    $columns[] = array('name' => _("URL"), 'index_sql' => 'url', 'type' => 'html');
+    $columns[] = array('name' => _("Entered at"), 'index_sql' => 'entered_at');
+    $pager2 = new GUP_Pager($con, $sql, null, _('Duplicate Companies Search Results'), $form_id, $pager_id, $columns);
+    $pager2->Render(100);
+    ?>
+    </form>
+</div>
 <?
 end_page();
 exit;
 
 /**
  * $Log: companies-duplicates.php,v $
+ * Revision 1.3  2011/04/05 18:25:29  gopherit
+ * FIXED Bug Artifact #3276491 Field name spaces in "Possible Dupe Name" caused the error when passed to the GUP_Pager.
+ * Fixed mismatched <div> tag.
+ *
  * Revision 1.2  2006/11/02 14:19:25  niclowe
  * initial upload of de-dupe reports
  *
