@@ -40,7 +40,7 @@ This mirror was created using these steps:
     ```sh
     mkdir xrms-git
     cd xrms-git
-    git cvsimport -d ../xrms
+    git cvsimport -d ../xrms xrms
     ```
 
 3. Clean up the branch names:
